@@ -1,45 +1,49 @@
 # Prefacio {.unnumbered}
 
-La estadística es una disciplina fundamental en el mundo moderno, permitiendo a los profesionales extraer conocimientos valiosos a partir de datos. En un entorno donde la cantidad de datos disponibles crece exponencialmente, la capacidad de tomar decisiones informadas basadas en estos datos se vuelve crucial. Este libro, preparado para el **Grado en Ciencia e Ingeniería de Datos**, pretende proporcionar una comprensión profunda de los principios y métodos que subyacen en esta área esencial.
+La ciencia y la ingeniería de datos han emergido como campos fundamentales en la era de la información, donde la capacidad de analizar y predecir comportamientos a partir de datos se ha convertido en una habilidad esencial. En este contexto, los modelos de regresión juegan un papel crucial al permitirnos describir y cuantificar las relaciones entre variables, así como predecir resultados futuros basados en datos históricos. Este libro está diseñado para proporcionar una comprensión profunda y práctica de las diversas técnicas de regresión utilizadas en la ciencia de datos. Basado en el contenido de la asignatura impartida en el **Grado en Ciencia e Ingeniería de Datos**, este texto abarca desde los modelos de regresión lineal más simples hasta los modelos no lineales y generalizados más complejos.
 
-La **inferencia estadística** es una metodología poderosa y bien fundamentada matemáticamente que permite a los especialistas en datos hacer predicciones, estimaciones y decisiones basadas en información incompleta o incierta. Esta capacidad es vital para cualquier profesional de la ciencia de datos, ya que los conceptos de inferencia estadística forman el núcleo del análisis de datos y la toma de decisiones basada en datos.
+A lo largo de los capítulos, los alumnos encontrarán una combinación de teoría rigurosa y aplicaciones prácticas. Se abordarán temas como el modelo de regresión lineal simple y múltiple, métodos de selección de variables, problemas de regularización, transformación de variables, ingeniería de características, y modelos de regresión generalizada, entre otros. Además, se incluirán ejemplos y ejercicios prácticos utilizando el software R, que permitirán a los lectores aplicar los conceptos aprendidos a conjuntos de datos reales.
 
-Este libro ha sido diseñado con el propósito de servir como una guía comprensible y completa para estudiantes de Ciencia e Ingeniería de Datos. A lo largo de sus capítulos, los alumnos serán introducidos a los conceptos clave de la inferencia estadística, desde las bases teóricas hasta las aplicaciones prácticas. Se cubrirán temas como la estimación de parámetros, pruebas de hipótesis, análisis de la varianza y más, siempre con un enfoque en la aplicación práctica y la interpretación de los resultados en contextos reales.
+El objetivo de este libro es equipar a los estudiantes con las herramientas necesarias para modelar la dependencia entre variables en conjuntos de datos complejos, evaluar la calidad de los modelos, interpretarlos y proponer mejoras. Al finalizar la lectura, los alumnos habrán desarrollado una comprensión sólida de los modelos de regresión y estarán preparados para enfrentar desafíos en el ámbito de la ciencia e ingeniería de datos con confianza y creatividad.
 
-La estructura del libro está cuidadosamente planeada para facilitar el aprendizaje progresivo. Cada capítulo incluye ejemplos prácticos, ejercicios y aplicaciones en el mundo real, que no solo ilustran los conceptos teóricos, sino que también permiten a los estudiantes practicar y consolidar sus conocimientos. Además, se ha hecho un esfuerzo consciente para conectar los temas tratados con las herramientas y técnicas que los estudiantes encontrarán en sus futuras asignaturas y en su vida profesional.
+Agradecemos a los profesores y colegas que han contribuido al desarrollo de esta asignatura y a la elaboración de este libro. Su dedicación y conocimiento han sido fundamentales para la creación de este recurso educativo.
 
-El objetivo final de este libro es prepararos para enfrentar los desafíos del análisis y la ciencia de datos con confianza y competencia. La inferencia estadística es una habilidad indispensable para cualquier especialista en datos, y dominarla os abrirá innumerables puertas en el ámbito profesional.
-
-Esperamos que este libro sea una fuente valiosa de conocimiento y que os sirva de inspiración para profundizar en el fascinante campo de la inferencia estadística.
+Esperamos que este libro sea una guía útil y enriquecedora en tu viaje por el fascinante mundo de los modelos de regresión.
 
 ¡Comenzamos!
 
 ::: {.callout-caution collapse="true"}
 ## Resultados de aprendizaje.
 
-1.  Entender el concepto de población estadística en relación a los modelos probabilísticos.
+1. Que los estudiantes hayan demostrado poseer y comprender conocimientos en un área de estudio que parte de la base de la educación secundaria general, y se suele encontrar a un nivel que, si bien se apoya en libros de texto avanzados, incluye también algunos aspectos que implican conocimientos procedentes de la vanguardia de su campo de estudio.
 
-2.  Entender el concepto de muestreo y distinguir si los datos bajo análisis proceden de un muestreo aleatorio simple.
+2. Que los estudiantes hayan desarrollado aquellas habilidades de aprendizaje necesarias para emprender estudios posteriores con un alto grado de autonomía.
 
-3.  Realizar inferencias sobre parámetros de interés de la población, tanto puntualmente como por intervalos.
+3. Comprender y utilizar materias, modelos y herramientas en el ámbito de la ciencia e ingeniería de datos que permitan comprender los problemas científico-técnicos fundamentales en este campo, así como evaluar las ventajas e inconvenientes de diferentes alternativas metodológicas.
 
-4.  Plantear y resolver contrastes de hipótesis para la toma de decisiones sobre características de la población bajo estudio.
+4. Resolver problemas con iniciativa y creatividad.
 
-5.  Valorar si el modelo paramétrico asumido se ajusta adecuadamente a los datos.
+5. Tomar decisiones de forma autónoma, elaborando de forma adecuada y original, argumentos razonados, pudiendo obtener así hipótesis razonables y contrastables y derivando conclusiones apropiadas.
+
+6. Modelar la dependencia entre una variable respuesta y varias variables explicativas, en conjuntos de datos complejos, mediante técnicas de estadística avanzada (incluyendo métodos de regresión, inferencia bayesiana, etc.) y métodos de aprendizaje automático, evaluando e interpretando los resultados obtenidos.
+
+7. Emplear distintas técnicas de modelado de datos, análisis de datos y aprendizaje automático: elegir y emplear técnicas adecuadas, evaluando la calidad de los modelos, validándolos, interpretándolos y proponiendo mejoras.
+
 :::
 
 ::: {.callout-important title="Grado en Ciencia e Ingeniería de Datos"}
-Este libro presenta el material de la asignatura de Inferencia Estadística del grado en Ciencia e Ingeniería de Datos de la Universidad Rey Juan Carlos. Os recordamos que en próximos cursos os encontraréis con las asiganturas de Regresión, Aprendizaje Automático I y Aprendizaje Automático II, donde aplicaréis muchas de las técnicas y herramientas que vamos a estudiar aquí.
+Este libro presenta el material de la asignatura de Modelos de Regresión del grado en Ciencia e Ingeniería de Datos de la Universidad Rey Juan Carlos. Su contenido está fuertemente relacionado con las asignaturas de Inferencia Estadística, Aprendizaje Automático I y Aprendizaje Automático II.
 :::
 
 ::: {.callout-important title="Conocimientos previos"}
-Es conveniente haber superado con éxito las asignaturas de Cálculo, Herramientas Matemáticas para la Ciencia de Datos I y Probabilidad y Simulación, del grado en Ciencia e Ingeniería de Datos.
+Es conveniente haber superado con éxito las asignaturas de Cálculo, Herramientas Matemáticas para la Ciencia de Datos I y Probabilidad y Simulación e Inferencia Estadística, del grado en Ciencia e Ingeniería de Datos.
 :::
 
 ::: {.callout-note title="Sobre los autores"}
+**Víctor Aceña Gil** es graduado en Matemáticas por la UNED, máster en Tratamiento Estadístico y Computacional de la Información por la UCM y la UPM, doctor en Tecnologías de la Información y las Comunicaciones por la URJC y profesor del departamento de Informática y Estadística de la URJC. Miembro del grupo de investigación de alto rendimiento en Fundamentos y Aplicaciones de la Ciencia de Datos, DSLAB, de la URJC. Pertenece al grupo de innovación docente, DSLAB-TI.
+
 **Carmen Lancho Martín** es graduada en Matemáticas y Estadística por la Universidad Complutense de Madrid (UCM), máster en Tratamiento Estadístico y Computacional de la Información por la UCM y la Universidad Politécnica de Madrid (UPM), doctora en Tecnologías de la Información y las Comunicaciones por la Universidad Rey Juan Carlos (URJC) y profesora del departamento de Informática y Estadística de la URJC. Miembro del grupo de investigación de alto rendimiento en Fundamentos y Aplicaciones de la Ciencia de Datos, DSLAB, de la URJC. Pertenece al grupo de innovación docente, DSLAB-TI.
 
-**Víctor Aceña Gil** es graduado en Matemáticas por la UNED, máster en Tratamiento Estadístico y Computacional de la Información por la UCM y la UPM, doctor en Tecnologías de la Información y las Comunicaciones por la URJC y profesor del departamento de Informática y Estadística de la URJC. Miembro del grupo de investigación de alto rendimiento en Fundamentos y Aplicaciones de la Ciencia de Datos, DSLAB, de la URJC. Pertenece al grupo de innovación docente, DSLAB-TI.
 
 **Isaac Martín de Diego** es diplomado en Estadística por la Universidad de Valladolid (UVA), licenciado en Ciencias y Técnicas Estadísticas por la Universidad Carlos III de Madrid (UC3M), doctor en Ingeniería Matemática por la UC3M, catedrático de Ciencias de la Computación e Inteligencia Artificial del departamento de Informática y Estadística de la URJC. Es fundador y coordinador del DSLAB y del DSLAB-TI.
 :::

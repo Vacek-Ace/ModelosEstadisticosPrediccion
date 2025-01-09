@@ -1,4 +1,4 @@
-# Análisis Exploratorio de Datos {#sec-eda}
+# Modelo de regresión lineal: simple y múltiple {#sec-tema1}
 
 En el @sec-intro presentamos las dos ramas fundamentales de la estadística:
 

@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Víctor Aceña - Carmen Lancho - Isaac Martín">
 
-<title>Modelos de Regresión</title>
+<title>1&nbsp; Modelo de regresión lineal: simple y múltiple – Modelos de Regresión</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -31,7 +64,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./tema1.html" rel="next">
+<link href="./conclusiones.html" rel="next">
+<link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -82,7 +116,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Prefacio</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema1.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Modelo de regresión lineal: simple y múltiple</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -109,13 +143,13 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Prefacio</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema1.html" class="sidebar-item-text sidebar-link">
+  <a href="./tema1.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Modelo de regresión lineal: simple y múltiple</span></span></a>
   </div>
 </li>
@@ -141,7 +175,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#prefacio" id="toc-prefacio" class="nav-link active" data-scroll-target="#prefacio">Prefacio</a></li>
+  <li><a href="#modelización-estadística" id="toc-modelización-estadística" class="nav-link active" data-scroll-target="#modelización-estadística"><span class="header-section-number">1.1</span> Modelización estadística</a>
+  <ul class="collapse">
+  <li><a href="#contextualización-del-problema" id="toc-contextualización-del-problema" class="nav-link" data-scroll-target="#contextualización-del-problema"><span class="header-section-number">1.1.1</span> Contextualización del problema</a></li>
+  <li><a href="#inspección-gráfica-e-identificación-de-tendencias" id="toc-inspección-gráfica-e-identificación-de-tendencias" class="nav-link" data-scroll-target="#inspección-gráfica-e-identificación-de-tendencias"><span class="header-section-number">1.1.2</span> Inspección gráfica e identificación de tendencias</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -150,26 +188,14 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Modelos de Regresión</h1>
+<h1 class="title"><span id="sec-tema1" class="quarto-section-identifier"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Modelo de regresión lineal: simple y múltiple</span></span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Autor/a</div>
-    <div class="quarto-title-meta-contents">
-             <p>Víctor Aceña - Carmen Lancho - Isaac Martín </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Fecha de publicación</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">23 de enero de 2025</p>
-    </div>
-  </div>
   
     
   </div>
@@ -179,83 +205,179 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-
-<section id="prefacio" class="level1 unnumbered">
-<h1 class="unnumbered">Prefacio</h1><p><img src="DSLab_logo_2.png" title="Modelos de Regresión" class="quarto-cover-image img-fluid"></p>
-<p>La ciencia y la ingeniería de datos han emergido como campos fundamentales en la era de la información, donde la capacidad de analizar y predecir comportamientos a partir de datos se ha convertido en una habilidad esencial. En este contexto, los modelos de regresión juegan un papel crucial al permitirnos describir y cuantificar las relaciones entre variables, así como predecir resultados futuros basados en datos históricos. Este libro está diseñado para proporcionar una comprensión profunda y práctica de las diversas técnicas de regresión utilizadas en la ciencia de datos. Basado en el contenido de la asignatura impartida en el <strong>Grado en Ciencia e Ingeniería de Datos</strong>, este texto abarca desde los modelos de regresión lineal más simples hasta los modelos no lineales y generalizados más complejos.</p>
-<p>A lo largo de los capítulos, los alumnos encontrarán una combinación de teoría rigurosa y aplicaciones prácticas. Se abordarán temas como el modelo de regresión lineal simple y múltiple, métodos de selección de variables, problemas de regularización, transformación de variables, ingeniería de características, y modelos de regresión generalizada, entre otros. Además, se incluirán ejemplos y ejercicios prácticos utilizando el software R, que permitirán a los lectores aplicar los conceptos aprendidos a conjuntos de datos reales.</p>
-<p>El objetivo de este libro es equipar a los estudiantes con las herramientas necesarias para modelar la dependencia entre variables en conjuntos de datos complejos, evaluar la calidad de los modelos, interpretarlos y proponer mejoras. Al finalizar la lectura, los alumnos habrán desarrollado una comprensión sólida de los modelos de regresión y estarán preparados para enfrentar desafíos en el ámbito de la ciencia e ingeniería de datos con confianza y creatividad.</p>
-<p>Agradecemos a los profesores y colegas que han contribuido al desarrollo de esta asignatura y a la elaboración de este libro. Su dedicación y conocimiento han sido fundamentales para la creación de este recurso educativo.</p>
-<p>Esperamos que este libro sea una guía útil y enriquecedora en tu viaje por el fascinante mundo de los modelos de regresión.</p>
-<p>¡Comenzamos!</p>
-<div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<p>La regresión lineal constituye uno de los pilares fundamentales de la modelización estadística y es ampliamente utilizada en múltiples disciplinas para analizar relaciones entre variables. Este modelo permite explorar cómo una o varias variables explicativas (independientes) influyen sobre una variable respuesta (dependiente), proporcionando no solo descripciones útiles sino también herramientas para la predicción y la inferencia.</p>
+<p>El <strong>modelo de regresión lineal simple</strong> se centra en analizar la relación entre una única variable explicativa y una respuesta, mientras que el <strong>modelo de regresión lineal múltiple</strong> extiende este concepto al considerar múltiples variables explicativas, permitiendo capturar relaciones más complejas y realistas. Ambos modelos comparten principios fundamentales, como el ajuste de una recta mediante el criterio de mínimos cuadrados y la interpretación de sus parámetros, pero difieren en su alcance y en los retos que presentan.</p>
+<p>En este capítulo, abordaremos los fundamentos de la regresión lineal simple, incluyendo sus suposiciones clave, el procedimiento de estimación de parámetros y el uso de herramientas de diagnóstico. A través de ejemplos prácticos, como los estudios clásicos de Galton sobre la herencia de estaturas o el análisis de datos de inversión en publicidad, se ilustrará el poder descriptivo y predictivo de este modelo.</p>
+<p>Este tema también prepara las bases para comprender el modelo de regresión lineal múltiple, presentado como una generalización del simple, y para abordar las complejidades adicionales que surgen, como la colinealidad entre variables explicativas y la selección de modelos óptimos.</p>
+<p>La comprensión y aplicación correcta de estos modelos es esencial no solo para su utilidad en contextos prácticos, sino también porque representan el punto de partida para técnicas más avanzadas en la ciencia de datos y el aprendizaje automático.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Objetivos">
+<div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Resultados de aprendizaje.
+Objetivos
 </div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
+<p>Los siguiente objetivos buscan sentar las bases teóricas y prácticas necesarias para entender y aplicar modelos de regresión, preparando al estudiante para explorar modelos más complejos en los temas posteriores.</p>
 <ol type="1">
-<li><p>Que los estudiantes hayan demostrado poseer y comprender conocimientos en un área de estudio que parte de la base de la educación secundaria general, y se suele encontrar a un nivel que, si bien se apoya en libros de texto avanzados, incluye también algunos aspectos que implican conocimientos procedentes de la vanguardia de su campo de estudio.</p></li>
-<li><p>Que los estudiantes hayan desarrollado aquellas habilidades de aprendizaje necesarias para emprender estudios posteriores con un alto grado de autonomía.</p></li>
-<li><p>Comprender y utilizar materias, modelos y herramientas en el ámbito de la ciencia e ingeniería de datos que permitan comprender los problemas científico-técnicos fundamentales en este campo, así como evaluar las ventajas e inconvenientes de diferentes alternativas metodológicas.</p></li>
-<li><p>Resolver problemas con iniciativa y creatividad.</p></li>
-<li><p>Tomar decisiones de forma autónoma, elaborando de forma adecuada y original, argumentos razonados, pudiendo obtener así hipótesis razonables y contrastables y derivando conclusiones apropiadas.</p></li>
-<li><p>Modelar la dependencia entre una variable respuesta y varias variables explicativas, en conjuntos de datos complejos, mediante técnicas de estadística avanzada (incluyendo métodos de regresión, inferencia bayesiana, etc.) y métodos de aprendizaje automático, evaluando e interpretando los resultados obtenidos.</p></li>
-<li><p>Emplear distintas técnicas de modelado de datos, análisis de datos y aprendizaje automático: elegir y emplear técnicas adecuadas, evaluando la calidad de los modelos, validándolos, interpretándolos y proponiendo mejoras.</p></li>
+<li><strong>Introducción a la Modelización estadística</strong>:
+<ul>
+<li>Comprender el proceso de modelización estadística, desde la definición de objetivos y variables hasta el ajuste y evaluación del modelo.</li>
+</ul></li>
+<li><strong>Relación lineal y correlación</strong>:
+<ul>
+<li>Introducir conceptos como la correlación y la relación lineal entre variables.<br>
+</li>
+<li>Analizar cómo identificar y medir la fuerza de la relación entre dos variables.</li>
+</ul></li>
+<li><strong>Comprensión del modelo de regresión lineal simple</strong>:
+<ul>
+<li>Describir la estructura del modelo de regresión lineal simple y entender su formulación matemática.<br>
+</li>
+<li>Interpretar los parámetros del modelo (intercepto y pendiente) y su significado en un contexto práctico.</li>
+</ul></li>
+<li><strong>Procedimiento de inferencia estadística</strong>:
+<ul>
+<li>Estimar los coeficientes del modelo mediante el método de mínimos cuadrados.<br>
+</li>
+<li>Realizar inferencias sobre los parámetros, incluyendo contrastes de hipótesis y predicciones.</li>
+</ul></li>
+<li><strong>Diagnóstico del modelo</strong>:
+<ul>
+<li>Introducir herramientas para diagnosticar la adecuación del modelo ajustado.<br>
+</li>
+<li>Evaluar la validez de los supuestos del modelo, como la linealidad, homocedasticidad e independencia de errores.</li>
+</ul></li>
+<li><strong>Aplicación práctica</strong>:
+<ul>
+<li>Implementar el modelo en contextos reales, como el análisis de la influencia de inversiones en ganancias o la herencia de características biológicas (ejemplo de Galton).<br>
+</li>
+<li>Visualizar y analizar gráficamente las relaciones para facilitar la interpretación de los resultados.</li>
+</ul></li>
 </ol>
 </div>
 </div>
-</div>
-<div class="callout callout-style-default callout-important callout-titled" title="Grado en Ciencia e Ingeniería de Datos">
+<section id="modelización-estadística" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="modelización-estadística"><span class="header-section-number">1.1</span> Modelización estadística</h2>
+<p>La modelización estadística es un proceso estructurado que permite analizar y describir relaciones entre variables mediante modelos matemáticos. Este enfoque es fundamental en la estadística aplicada y proporciona herramientas para interpretar datos, realizar predicciones y tomar decisiones fundamentadas. A continuación, se describen los pasos clave de este proceso.</p>
+<section id="contextualización-del-problema" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="contextualización-del-problema"><span class="header-section-number">1.1.1</span> Contextualización del problema</h3>
+<p>El primer paso en la modelización estadística es definir el problema que se busca analizar. Esto incluye identificar el contexto, establecer objetivos claros y determinar las variables involucradas.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Grado en Ciencia e Ingeniería de Datos
+Ejemplo
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Este libro presenta el material de la asignatura de Modelos de Regresión del grado en Ciencia e Ingeniería de Datos de la Universidad Rey Juan Carlos. Su contenido está fuertemente relacionado con las asignaturas de Inferencia Estadística, Aprendizaje Automático I y Aprendizaje Automático II.</p>
+<ul>
+<li><strong>Problema:</strong> Investigar si existe una relación positiva entre el tiempo dedicado al estudio semanal y el promedio de calificaciones de los estudiantes universitarios.<br>
+</li>
+<li><strong>Variables:</strong>
+<ul>
+<li>Variable explicativa (independiente): Tiempo de estudio semanal (en horas).<br>
+</li>
+<li>Variable respuesta (dependiente): Promedio de calificaciones al final del semestre (en una escala de 0 a 10).<br>
+</li>
+</ul></li>
+<li><strong>Objetivo:</strong> Determinar si los estudiantes que dedican más horas al estudio semanalmente obtienen mejores calificaciones en promedio.</li>
+</ul>
 </div>
 </div>
-<div class="callout callout-style-default callout-important callout-titled" title="Conocimientos previos">
+<p>Emplearemos datos simulados para este ejemplo:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Establecer la semilla para reproducibilidad</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Número de estudiantes</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Generar tiempo de estudio (en horas) como una variable independiente</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>tiempo_estudio <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">runif</span>(n, <span class="at">min =</span> <span class="dv">5</span>, <span class="at">max =</span> <span class="dv">40</span>), <span class="dv">1</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Relación lineal entre tiempo de estudio y calificaciones (con ruido)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>beta_0 <span class="ot">&lt;-</span> <span class="dv">5</span>  <span class="co"># Intercepto</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>beta_1 <span class="ot">&lt;-</span> <span class="fl">0.1</span>  <span class="co"># Pendiente (efecto del tiempo de estudio)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fl">0.5</span>  <span class="co"># Varianza del ruido</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>calificaciones <span class="ot">&lt;-</span> <span class="fu">round</span>(beta_0 <span class="sc">+</span> beta_1 <span class="sc">*</span> tiempo_estudio <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> sigma), <span class="dv">2</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear un data frame con los datos generados</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Tiempo_Estudio =</span> tiempo_estudio, <span class="at">Calificaciones =</span> calificaciones)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizar los primeros registros</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(datos)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Tiempo_Estudio Calificaciones
+1           15.1           6.64
+2           32.6           8.25
+3           19.3           6.91
+4           35.9           9.27
+5           37.9           8.68
+6            6.6           6.42</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficar los datos</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(datos<span class="sc">$</span>Tiempo_Estudio, datos<span class="sc">$</span>Calificaciones,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Relación entre Tiempo de Estudio y Calificaciones"</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Tiempo de Estudio (horas/semana)"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Calificaciones (promedio)"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"blue"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="fu">lm</span>(Calificaciones <span class="sc">~</span> Tiempo_Estudio, <span class="at">data =</span> datos), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema1_files/figure-html/datos-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar un modelo de regresión lineal</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(Calificaciones <span class="sc">~</span> Tiempo_Estudio, <span class="at">data =</span> datos)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Calificaciones ~ Tiempo_Estudio, data = datos)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.11465 -0.30262 -0.00942  0.29509  1.10533 
+
+Coefficients:
+               Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     5.00118    0.11977   41.76   &lt;2e-16 ***
+Tiempo_Estudio  0.09875    0.00488   20.23   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.4842 on 98 degrees of freedom
+Multiple R-squared:  0.8069,    Adjusted R-squared:  0.8049 
+F-statistic: 409.5 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="inspección-gráfica-e-identificación-de-tendencias" class="level3" data-number="1.1.2">
+<h3 data-number="1.1.2" class="anchored" data-anchor-id="inspección-gráfica-e-identificación-de-tendencias"><span class="header-section-number">1.1.2</span> Inspección gráfica e identificación de tendencias</h3>
+<div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Conocimientos previos
+Ejercicio
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Es conveniente haber superado con éxito las asignaturas de Cálculo, Herramientas Matemáticas para la Ciencia de Datos I y Probabilidad y Simulación e Inferencia Estadística, del grado en Ciencia e Ingeniería de Datos.</p>
+<p>Dejamos como ejercicio para el alumno la interpretación del resultado del test.</p>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled" title="Sobre los autores">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Sobre los autores
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><strong>Víctor Aceña Gil</strong> es graduado en Matemáticas por la UNED, máster en Tratamiento Estadístico y Computacional de la Información por la UCM y la UPM, doctor en Tecnologías de la Información y las Comunicaciones por la URJC y profesor del departamento de Informática y Estadística de la URJC. Miembro del grupo de investigación de alto rendimiento en Fundamentos y Aplicaciones de la Ciencia de Datos, DSLAB, de la URJC. Pertenece al grupo de innovación docente, DSLAB-TI.</p>
-<p><strong>Carmen Lancho Martín</strong> es graduada en Matemáticas y Estadística por la Universidad Complutense de Madrid (UCM), máster en Tratamiento Estadístico y Computacional de la Información por la UCM y la Universidad Politécnica de Madrid (UPM), doctora en Tecnologías de la Información y las Comunicaciones por la Universidad Rey Juan Carlos (URJC) y profesora del departamento de Informática y Estadística de la URJC. Miembro del grupo de investigación de alto rendimiento en Fundamentos y Aplicaciones de la Ciencia de Datos, DSLAB, de la URJC. Pertenece al grupo de innovación docente, DSLAB-TI.</p>
-<p><strong>Isaac Martín de Diego</strong> es diplomado en Estadística por la Universidad de Valladolid (UVA), licenciado en Ciencias y Técnicas Estadísticas por la Universidad Carlos III de Madrid (UC3M), doctor en Ingeniería Matemática por la UC3M, catedrático de Ciencias de la Computación e Inteligencia Artificial del departamento de Informática y Estadística de la URJC. Es fundador y coordinador del DSLAB y del DSLAB-TI.</p>
-</div>
-</div>
-<p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" alt="Licencia de Creative Commons" style="border-width:0"></a><br>Esta obra está bajo una <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">licencia de Creative Commons Atribuciónn-CompartirIgual 4.0 Internacional</a>.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -681,10 +803,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="Prefacio">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Prefacio</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./tema1.html" class="pagination-link" aria-label="Modelo de regresión lineal: simple y múltiple">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Modelo de regresión lineal: simple y múltiple</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./conclusiones.html" class="pagination-link" aria-label="Conclusiones">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Conclusiones</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
