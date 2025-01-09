@@ -527,7 +527,7 @@ Galton observó que existe una relación positiva entre la estatura de los padre
 <li><p><strong>Ecuación de la recta de regresión:</strong><br>
 Galton ajustó una recta para describir la relación entre la estatura media parental (<span class="math inline">\(X\)</span>) y la estatura de los hijos (<span class="math inline">\(Y\)</span>): <span class="math display">\[
 Y = \beta_0 + \beta_1 X
-  \]</span> Donde:</p>
+\]</span> Donde:</p>
 <ul>
 <li><span class="math inline">\(\beta_0\)</span>: Intercepto, representa la estatura promedio de los hijos cuando la estatura parental es promedio.</li>
 <li><span class="math inline">\(\beta_1\)</span>: Pendiente, indica cómo cambia la estatura de los hijos por cada unidad de cambio en la estatura media parental.</li>
@@ -544,6 +544,40 @@ El término y la idea detrás de “regresión a la media” surgieron de estos 
 </ol>
 <p><strong>Ejemplo Gráfico</strong></p>
 <p>Galton representó sus datos en gráficos de dispersión, mostrando cómo los puntos (pares de estatura media parental y estatura de los hijos) se agrupan alrededor de la recta de regresión, ilustrando la tendencia general de la relación.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalar y cargar los paquetes necesarios</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(HistData)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar los datos de Galton</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"GaltonFamilies"</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>galton_data <span class="ot">&lt;-</span> GaltonFamilies</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear el modelo de regresión lineal</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(childHeight <span class="sc">~</span> midparentHeight, <span class="at">data =</span> galton_data)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear el gráfico con ggplot2</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>grafico <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(galton_data, <span class="fu">aes</span>(<span class="at">x =</span> midparentHeight, <span class="at">y =</span> childHeight)) <span class="sc">+</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span>  <span class="co"># Añadir puntos de datos</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">col =</span> <span class="st">"red"</span>) <span class="sc">+</span>  <span class="co"># Añadir la recta de regresión</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Altura de Padres e Hijos (Datos de Galton)"</span>,</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Altura de los Padres"</span>,</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Altura de los Hijos"</span>) <span class="sc">+</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">70</span>, <span class="at">y =</span> <span class="dv">75</span>, <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"y ="</span>, <span class="fu">round</span>(<span class="fu">coef</span>(modelo)[<span class="dv">1</span>], <span class="dv">2</span>), <span class="st">"+"</span>, <span class="fu">round</span>(<span class="fu">coef</span>(modelo)[<span class="dv">2</span>], <span class="dv">2</span>), <span class="st">"x"</span>), <span class="at">color =</span> <span class="st">"red"</span>)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar el gráfico</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(grafico)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema1_files/figure-html/galtonn-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="callout callout-style-default callout-caution callout-titled">

@@ -222,12 +222,8 @@ $$
 Galton representó sus datos en gráficos de dispersión, mostrando cómo los puntos (pares de estatura media parental y estatura de los hijos) se agrupan alrededor de la recta de regresión, ilustrando la tendencia general de la relación.
 
 
-¡Claro! Aquí tienes el código en R para crear un gráfico con los datos analizados por Galton, añadiendo la recta de regresión y su ecuación:
-
 ```{r galtonn}
 # Instalar y cargar los paquetes necesarios
-install.packages("ggplot2")
-install.packages("HistData")
 library(ggplot2)
 library(HistData)
 
@@ -236,10 +232,10 @@ data("GaltonFamilies")
 galton_data <- GaltonFamilies
 
 # Crear el modelo de regresión lineal
-modelo <- lm(childHeight ~ parentHeight, data = galton_data)
+modelo <- lm(childHeight ~ midparentHeight, data = galton_data)
 
 # Crear el gráfico con ggplot2
-grafico <- ggplot(galton_data, aes(x = parentHeight, y = childHeight)) +
+grafico <- ggplot(galton_data, aes(x = midparentHeight, y = childHeight)) +
   geom_point() +  # Añadir puntos de datos
   geom_smooth(method = "lm", col = "red") +  # Añadir la recta de regresión
   labs(title = "Altura de Padres e Hijos (Datos de Galton)",
