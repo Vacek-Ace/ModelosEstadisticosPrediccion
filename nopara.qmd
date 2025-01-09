@@ -1,0 +1,628 @@
+# Contraste no paramétrico {#sec-nopara}
+
+## Introducción a los contrastes no paramétricos
+
+En el campo de la inferencia estadística, los contrastes no paramétricos se utilizan para comparar grupos o evaluar hipótesis cuando no se cumplen los supuestos necesarios para aplicar métodos paramétricos tradicionales como los vistos en el @sec-para. Los métodos no paramétricos no dependen de la suposición de que los datos sigan una distribución específica, como la Normal, lo que los hace especialmente útiles en situaciones donde los datos presentan sesgos, distribuciones desconocidas o tamaños de muestra pequeños.
+
+Los contrastes no paramétricos ofrecen una alternativa robusta y flexible para analizar datos en diversas circunstancias. Entre sus ventajas se incluyen la capacidad de manejar datos ordinales que no se ajustan a una escala continua y la resistencia a la influencia de valores atípicos. Esto permite obtener resultados fiables y válidos sin necesidad de transformaciones complicadas de los datos.
+
+Algunos de los contrastes no paramétricos más conocidos incluyen la prueba de Mann-Whitney, utilizada para comparar medianas entre dos grupos independientes, y la prueba de Wilcoxon para muestras relacionadas, que evalúa diferencias en medianas para datos apareados. Otros ejemplos son la prueba de Kruskal-Wallis, que extiende el análisis a más de dos grupos independientes, y la prueba de Friedman, que se aplica a diseños con medidas repetidas.
+
+## Prueba Chi-cuadrado de Independencia
+
+La prueba Chi-cuadrado de independencia se utiliza para determinar si hay una asociación significativa entre dos variables categóricas $X$ con categorías $X_1,X_2,\ldots,X_r$ e $Y$ con categorías $Y_1,Y2,\ldots,Y_c$. Esta prueba compara las frecuencias observadas en una tabla de contingencia con las frecuencias esperadas bajo la hipótesis de independencia.
+
+|          | $Y_1$     | $\ldots$ | $Y_j$     | $\ldots$ | $Y_c$     |          |
+|----------|-----------|----------|-----------|----------|-----------|----------|
+| $X_1$    | $n_{1,1}$ | $\ldots$ | $n_{1,j}$ | $\ldots$ | $n_{1,c}$ | $n_{1.}$ |
+| $\ldots$ |           |          |           |          |           | $\ldots$ |
+| $X_i$    | $n_{i,1}$ | $\ldots$ | $n_{i,j}$ | $\ldots$ | $n_{i,c}$ | $n_{i.}$ |
+| $\ldots$ |           |          |           |          |           | $\ldots$ |
+| $X_r$    | $n_{r,1}$ | $\ldots$ | $n_{r,j}$ | $\ldots$ | $n_{r,c}$ | $n_{r.}$ |
+|          | $n_{.1}$  |          | $n_{.j}$  |          | $n_{.c}$  | $n_{..}$ |
+
+La hipótesis nula $H_0$ de esta prueba es que no hay asociación entre las variables, esto es, que las variables implicadas son independientes:
+
+-   **Hipótesis nula**, $H_0$: No hay asociación entre las variables (son independientes).
+-   **Hipótesis alternativa**, $H_1$: Hay una asociación entre las variables (son dependientes).
+
+Las frecuencias observadas Las frecuencias esperadas se calculan como sigue: $$
+   E_{ij} = \frac{(n_{i.} \times n_{.j})}{N}
+   $$ donde $E_{ij}$ es la frecuencia esperada en la celda $(i,j)$, $n_{i.}$ es el total de la fila ($i$), ($n_{.j}$) es el total de la columna ($j$), y $n_{..}$ es el total general.
+
+Ahora, comparamos las frecuencias esperadas con las frecuencias observadas, definiendo con ellos el estadístico chi-cuadrado: $$
+\chi^2 = \sum \frac{(O_{ij} - E_{ij})^2}{E_{ij}} 
+$$
+
+donde ($O_{ij}$) es la frecuencia observada en la celda $(i,j)$.
+
+Bajo la hipótesis nula, el estadístico de la prueba sigue una distribución Chi-cuadrado con $(r-1)(c-1)$ grados de libertad, donde ($r$) es el número de filas y ($c$) es el número de columnas. Podemos calcular el $p-valor$ como: $$
+p-valor=P(\chi^2_{(r-1)(c-1)}\geq\chi^2)
+$$
+
+Como ocurría en los contrastes de hipótesis paramétricos, comparamos el $p-valor$ con el nivel de significancia ($\alpha$), generalmente $0.05$. Si ($p-valor < \alpha$), se rechaza la hipótesis nula.
+
+::: {.callout-tip collapse="true" title="Ejemplo práctico. Prueba Chi-cuadrado de independencia."}
+Supongamos que un investigador desea determinar si hay una asociación entre el tipo de dispositivo usado (Laptop, Tablet, Smartphone) y la satisfacción del usuario (Satisfecho, No satisfecho).
+
+Determinamos las hipótesis del problema:
+
+-   **Hipótesis nula** ($H_0$): No hay asociación entre el tipo de dispositivo y la satisfacción del usuario (son independientes).
+-   **Hipótesis alternativa** ($H_1$): Hay una asociación entre el tipo de dispositivo y la satisfacción del usuario (son dependientes).
+
+Recolectamos datos de una muestra de $150$ usuarios y construimos la siguiente tabla de contingencia:
+
+|            | Satisfecho | No satisfecho | Total |
+|------------|------------|---------------|-------|
+| Laptop     | 30         | 10            | 40    |
+| Tablet     | 20         | 20            | 40    |
+| Smartphone | 50         | 20            | 70    |
+| **Total**  | 100        | 50            | 150   |
+
+Vamos a utilizar R para realizar la prueba Chi-cuadrado de independencia.
+
+```{r chi1}
+# Crear la tabla de contingencia
+tabla <- matrix(c(30, 10, 20, 20, 50, 20), nrow = 3, byrow = TRUE)
+rownames(tabla) <- c("Laptop", "Tablet", "Smartphone")
+colnames(tabla) <- c("Satisfecho", "No Satisfecho")
+tabla <- as.table(tabla)
+
+# Mostrar la tabla de contingencia
+print(tabla)
+
+# Realizar la prueba chi-cuadrado
+chi2_test <- chisq.test(tabla)
+
+# Mostrar los resultados
+print(chi2_test)
+```
+
+El resultado de `chisq.test` en R incluye varios componentes clave:
+
+-   **Estadístico Chi-cuadrado (**$chi^2$): Este es el valor calculado del estadístico chi-cuadrado.
+-   **Grados de libertad (**$df$): Los grados de libertad de la prueba.
+-   **Valor p (**$p-value$): Este es el $p-valor$ asociado con el estadístico chi-cuadrado calculado.
+
+En este ejemplo, el valor p es `r round(chi2_test$p.value,3)`, que es menor que $0.05$. Por lo tanto, rechazamos la hipótesis nula y concluimos que hay una asociación significativa entre el tipo de dispositivo y la satisfacción del usuario.
+:::
+
+::: {.callout-tip collapse="true" title="Ejemplo práctico. Prueba Chi-cuadrado en aprendizaje automático."}
+Vamos a realizar un ejemplo de la prueba Chi-cuadrado de independencia utilizando la matriz de confusión de un modelo de aprendizaje automático. Tal y como hemos visto, la prueba Chi-cuadrado de independencia se utiliza para determinar si hay una asociación significativa entre dos variables categóricas.
+
+Supongamos que tenemos un modelo de clasificación binaria que predice si un correo electrónico es spam o no. Construiremos estos modelos en la asignatura de **Aprendizaje Automático I** del Grado en Ciencia e Ingeniería de Datos. Tras entrenar y evaluar el modelo, obtenemos la siguiente **matriz de confusión**:
+
+|                 | Predicción: No Spam | Predicción: Spam |
+|-----------------|---------------------|------------------|
+| Actual: No Spam | 50                  | 10               |
+| Actual: Spam    | 5                   | 35               |
+
+Esta tabla de doble entrada cruza la predicción del modelo de aprendiaje automático con el verdadero valor en la muestra sobre la que dicho modelo ha sido entrenado. El objetivo de todo modelo de aprendizaje automático es conseguir una matriz de confusión diagonal. En ese caso, no hay errores en la predicción. Todo son éxitos y el modelo es perfecto.
+
+Vamos a realizar la prueba Chi-cuadrado de independencia para ver si hay una asociación significativa entre las predicciones del modelo y las etiquetas reales. Si el modelo es útil, dicha asociación ha de existir. Si el modelo no es útil, entonces la prueba debería de decirnos que no podemos rechazar la hipótesis nula de independencia entre las dos variables (Predicción y Actual).
+
+```{r confusion}
+# Cargar el paquete necesario
+library(MASS)
+
+# Crear la matriz de confusión
+matriz_confusion <- matrix(c(50, 10, 5, 35), nrow = 2, byrow = TRUE)
+colnames(matriz_confusion) <- c("Predicción: No Spam", "Predicción: Spam")
+rownames(matriz_confusion) <- c("Actual: No Spam", "Actual: Spam")
+
+# Mostrar la matriz de confusión
+print(matriz_confusion)
+
+# Realizar la prueba Chi-cuadrado de independencia
+prueba_chi_cuadrado <- chisq.test(matriz_confusion)
+
+# Mostrar los resultados de la prueba
+print(prueba_chi_cuadrado)
+```
+
+El resultado de `chisq.test()` proporciona el valor de Chi-cuadrado, los grados de libertad y el valor p. En este caso, dado que el $p-valor$ de la prueba es menor que el nivel de significancia ($0.05$), podemos rechazar la hipótesis nula de independencia y concluir que hay una asociación significativa entre las predicciones del modelo y las etiquetas reales. En otras palabras, el modelo de aprendizaje automático es útil para predecir si un correo electrónico es (o no) spam.
+:::
+
+## Prueba de Chi-cuadrado de bondad de ajuste
+
+Esta prueba se utiliza para determinar si una distribución de frecuencias observadas sigue una distribución teórica esperada.
+
+-   **Hipótesis nula** ($H_0$): Las frecuencias observadas siguen la distribución esperada.
+-   **Hipótesis alternativa** ($H_1$): Las frecuencias observadas no siguen la distribución esperada.
+
+El estadístico del contraste, como en el caso anterior se calcula como sigue: $$ \chi^2 = \sum \frac{(O_i - E_i)^2}{E_i}$$ donde ($O_i$) son las frecuencias observadas y ($E_i$) son las frecuencias esperadas según la distribución teórica.
+
+Utilizando la distribución chi-cuadrado con ($k-1$) grados de libertad, donde ($k$) es el número de categorías, podemos calcular el $p-valor$. Comparamos el $p-valor$ con el nivel de significancia. Si ($p-valor < \alpha$), se rechaza la hipótesis nula.
+
+::: {.callout-tip collapse="true" title="Ejemplo Práctico. Prueba Chi-cuadrado de bondad de ajuste."}
+Supongamos que un investigador quiere determinar si los resultados de un dado son uniformemente distribuidos. El dado se lanza $60$ veces y los resultados son los siguientes:
+
+-   1: 8 veces
+-   2: 10 veces
+-   3: 9 veces
+-   4: 11 veces
+-   5: 12 veces
+-   6: 10 veces
+
+Queremos comprobar si estos resultados siguen una distribución uniforme, es decir, cada número tiene la misma probabilidad de 1/6.
+
+Formulamos las hipótesis:
+
+-   **Hipótesis nula (H0):** Los resultados del dado siguen una distribución uniforme.
+-   **Hipótesis alternativa (H1):** Los resultados del dado no siguen una distribución uniforme.
+
+A continuación se recogen los datos:
+
+```{r chi2}
+# Resultados observados
+observed <- c(8, 10, 9, 11, 12, 10)
+
+# Frecuencias esperadas si el dado es justo (distribución uniforme)
+expected <- rep(60 / 6, 6)
+```
+
+Y se realiza la prueba
+
+```{r chi3}
+# Realizar la prueba chi-cuadrado
+chi2_test <- chisq.test(observed, p = rep(1/6, 6))
+
+# Mostrar los resultados
+print(chi2_test)
+```
+
+El resultado de `chisq.test` en R incluye varios componentes clave:
+
+-   **Estadístico Chi-cuadrado ** ($\chi^2$): Este es el valor calculado del estadístico chi-cuadrado.
+-   **Grados de libertad (**$df$): Los grados de libertad de la prueba, que es $n - 1$ donde $n$ es el número de categorías.
+-   **Valor p (p-value)**: Este es el $p-valor$ asociado con el estadístico chi-cuadrado calculado.
+
+En este ejemplo, el $p-valor$ es `r round(chi2_test$p.value,3)`, que es mucho mayor que $0.05$. Por lo tanto, no rechazamos la hipótesis nula y concluimos que no hay suficiente evidencia para decir que los resultados del dado no siguen una distribución uniforme.
+:::
+
+## Pruebas de de homogeneidad
+
+La prueba no paramétrica de homogeneidad se utiliza para determinar si dos o más muestras independientes provienen de la misma distribución o de distribuciones similares. Estas pruebas son útiles cuando no se cumplen los supuestos necesarios para las pruebas paramétricas, como la normalidad de los datos. Ejemplo de pruebas no paramétricas de Homogeneidad son:
+
+-   **Prueba de Kolmogorov-Smirnov** para dos muestras: Compara dos muestras para verificar si provienen de la misma distribución.
+-   **Prueba de Mann-Whitney U** (o Wilcoxon Rank-Sum Test): Compara dos muestras independientes para determinar si tienen la misma distribución.
+-   **Prueba de Kruskal-Wallis**: Extiende la prueba de Mann-Whitney U a más de dos muestras independientes.
+
+### Prueba de Kolmogorov-Smirnov para dos muestras
+
+La Prueba de Kolmogorov-Smirnov (K-S) para dos muestras es una prueba no paramétrica utilizada para determinar si dos muestras independientes provienen de la misma distribución. A diferencia de otras pruebas que se centran en comparar medias o varianzas, la prueba K-S compara las distribuciones acumuladas de dos muestras.
+
+Las hipótesis de la prueba son:
+
+-   **Hipótesis nula** ($H_0$): Las dos muestras provienen de la misma distribución.
+-   **Hipótesis alternativa** ($H_1$): Las dos muestras provienen de distribuciones diferentes.
+
+Para cada muestra, se construyen las funciones de distribución empírica (EDF). La función de distribución empírica $F_n(x)$ es una función escalonada que aumenta en $\frac{1}{n}$ en cada punto de datos, donde $n$ es el tamaño de la muestra. Para más detalles desplegar aquí:
+
+::: {.callout-note collapse="true"}
+## Función de Distribución Empírica
+
+La función de distribución empírica (EDF, por sus siglas en inglés) es una función de distribución de probabilidad utilizada para estimar la distribución subyacente de un conjunto de datos observados. Es una herramienta no paramétrica que proporciona una estimación de la función de distribución acumulada de una muestra de datos.
+
+Dada una muestra de datos $(X_1, X_2, \ldots, X_n)$, la función de distribución empírica $F_n(x)$ se define como: $$
+ F_n(x) = \frac{1}{n} \sum_{i=1}^{n} I(X_i \leq x) 
+$$ donde $I(X_i \leq x)$ es una función indicadora que toma el valor $1$ si $X_i \leq x$ y $0$ en caso contrario.
+
+En otras palabras, $F_n(x)$ es la proporción de valores en la muestra que son menores o iguales a $x$.
+
+**Propiedades de la Función de Distribución Empírica**
+
+1.  **Escalonada**: La EDF es una función escalonada que incrementa en pasos de $1/n$ en cada punto de datos.
+2.  **No decreciente**: La EDF nunca disminuye a medida que $x$ aumenta.
+3.  **Límites**: La EDF varía entre $0$ y $1$. Específicamente, $F_n(x) = 0$ para $x$ menor que el valor mínimo de la muestra y $F_n(x) = 1$ para $x$ mayor que el valor máximo de la muestra.
+:::
+
+Calculamos el Estadístico $D$ de la prueba K-S es la máxima diferencia absoluta entre las dos funciones de distribución empírica: $$
+     D = \sup_x |F_{n_1}(x) - F_{n_2}(x)|
+$$
+
+Donde, $F_{n_1}(x)$ y $F_{n_2}(x)$ son las funciones de distribución empírica de las dos muestras.
+
+El $p-valor$ se calcula para determinar la significancia de la diferencia observada. Se utiliza la distribución asintótica del estadístico D para calcular el valor p. El valor p se determina utilizando la distribución del estadístico $D$ bajo la hipótesis nula de que ambas muestras provienen de la misma distribución. El cálculo exacto del $p-valor$ para la prueba de K-S no es trivial y generalmente se realiza mediante métodos numéricos o tablas pre-calculadas. Sin embargo, se puede aproximar utilizando la distribución asintótica del estadístico $D$.
+
+Para muestras grandes, el valor p se puede aproximar usando la fórmula: $$
+ p \approx Q_{KS}(\sqrt{n} D) 
+$$ donde:
+
+-   $n = \frac{n_1 \cdot n_2}{n_1 + n_2}$ es el número efectivo de muestras.
+-   $D$ es el valor del estadístico K-S.
+-   $Q_{KS}$ es una función que representa la cola superior de la distribución de Kolmogorov-Smirnov.
+
+La función $Q_{KS}$ para grandes valores de $n$ se puede aproximar usando la siguiente fórmula: $$
+ Q_{KS}(\lambda) = 2 \sum_{k=1}^{\infty} (-1)^{k-1} e^{-2k^2 \lambda^2} 
+ $$
+
+donde $\lambda = \sqrt{n} D$.
+
+Para valores prácticos, esta sumatoria converge rápidamente y a menudo solo se necesita calcular unos pocos términos.
+
+Como en otros contrastes, si el $p-valor$ calculado es menor que un grado de significancia estadística previamente fijado $\alpha$, entonces rechazamos la hipótesis nula en favor de la alternativa.
+
+::: {.callout-tip collapse="true" title="Ejemplo práctico. Prueba K-S"}
+Supongamos que queremos comparar dos muestras para determinar si provienen de la misma distribución.
+
+-   **Muestra 1**: 1, 2, 3, 4, 5
+-   **Muestra 2**: 2, 3, 4, 5, 6
+
+Formulamos las hipótesis
+
+-   **H0**: Las dos muestras provienen de la misma distribución.
+-   **H1**: Las dos muestras provienen de distribuciones diferentes.
+
+Calculamos las funciones de distribución empírica $F_{n_1}(x)$ y $F_{n_2}(x)$ para las dos muestras.
+
+| $x$ | $F_{n_1}(x)$ | $F_{n_2}(x)$ |
+|-----|--------------|--------------|
+| 1   | 0.2          | 0.0          |
+| 2   | 0.4          | 0.2          |
+| 3   | 0.6          | 0.4          |
+| 4   | 0.8          | 0.6          |
+| 5   | 1.0          | 0.8          |
+| 6   | 1.0          | 1.0          |
+
+Calculamos la máxima diferencia absoluta entre $F_{n_1}(x)$ y $F_{n_2}(x)$: $$
+D = \max(|0.2 - 0.0|, |0.4 - 0.2|, |0.6 - 0.4|, |0.8 - 0.6|, |1.0 - 0.8|, |1.0 - 1.0|) = 0.2
+$$
+
+El valor p se determina utilizando la distribución asintótica del estadístico $D$. Esto generalmente se hace usando tablas de referencia o software estadístico.
+
+**Implementación en R**
+
+Podemos realizar esta prueba en R utilizando la función `ks.test`:
+
+```{r ks1}
+# Datos de las dos muestras
+muestra1 <- c(1, 2, 3, 4, 5)
+muestra2 <- c(2, 3, 4, 5, 6)
+
+# Realizar la prueba de Kolmogorov-Smirnov
+ks_test <- ks.test(muestra1, muestra2)
+
+# Mostrar los resultados
+print(ks_test)
+```
+
+El resultado de `ks.test` incluye varios componentes clave:
+
+-   **Estadístico D**: Este es el valor calculado del estadístico K-S.
+-   **Valor p (p-value)**: Este es el valor p asociado con el estadístico calculado.
+-   **Descripción de las muestras**: Indica las muestras comparadas.
+
+En este ejemplo, el valor p es `r round(ks_test$p.value,2)`, que es mayor que $0.05$. Por lo tanto, no rechazamos la hipótesis nula y concluimos que no hay suficiente evidencia para decir que las dos muestras provienen de distribuciones diferentes.
+:::
+
+### Prueba de Mann-Whitney U
+
+La prueba de Mann-Whitney U, también conocida como prueba de Wilcoxon para muestras independientes, es una prueba no paramétrica que se utiliza para comparar dos muestras independientes para determinar si provienen de la misma distribución. Es una alternativa a la prueba t de Student cuando no se cumplen los supuestos de normalidad. En lugar de trabajar con los valores originales, la prueba utiliza los rangos de los datos.
+
+Las hipótesis que vamos a contrastar son:
+
+-   **Hipótesis Nula** ($H_0$): Las dos muestras provienen de la misma distribución.
+-   **Hipótesis Alternativa** ($H_1$): Las dos muestras no provienen de la misma distribución.
+
+En primer lugar se combinan los datos de ambas muestras y se ordenan los valores de menor a mayor. A continuación se asignan rangos a estos valores, manejando adecuadamente los empates (otorgando a los valores iguales el rango promedio).
+
+Se calcula el estadístico del contraste tal y como sigue: $$  U_1 = n_1n_2+ \frac{n_1 (n_1 + 1)}{2} -R_1
+$$ $$
+U_2 =U_1 = n_1n_2+ \frac{n_2 (n_2 + 1)}{2} -R_2 
+$$ donde:
+
+-   $n_1$ y $n_2$ son los tamaños de las dos muestras.
+-   $R_1$ y $R_2$ son las sumas de los rangos de las muestras $1$ y $2$, respectivamente.
+
+El estadístico $U$ final es: $$
+U=min(U_1,U_2)
+$$
+
+El $p-valor$ se determina comparando el estadístico $U$ con una distribución de referencia para U (tabla de Mann-Whitney) o mediante aproximación normal para grandes tamaños de muestra. En ese caso: $$
+Z=\frac{U-E(U)}{\sqrt{Var(U)}} \approx N(0,1)
+$$ siendo $$
+E(U)=n_1n_2+\frac{n_1(n_1+1)}{2}-E(R_1)
+$$ $$
+E(U)= n_1n_2+\frac{n_1(n_1+1)}{2}-\frac{n_1(n_1+n_2+1)}{2}=\frac{n_1n_2}{2}
+$$ y $$
+Var(U)=Var(R_1)=\frac{n_1n_2(n_1+n_2+1)}{12}
+$$ Y podemos calcular el $p-valor$ como hemos hecho en métodos anteriores: $$
+p-valor=P(Z>z)
+$$ Siendo $z$ el valor del estadístico calculado en las muestras.
+
+Comparamos el $p-valor$ p con el nivel de significancia ($\alpha$), generalmente $0.05$. Si ($p-valor < \alpha$), se rechaza la hipótesis nula.
+
+::: {.callout-tip collapse="true" title="Ejemplo práctico. Prueba Mann-Whitney"}
+Supongamos que queremos comparar los tiempos de entrega (en días) de dos proveedores distintos:
+
+-   Proveedor A: $2, 3, 5, 6, 8$
+-   Proveedor B: $1, 4, 4, 7, 9$
+
+En primer lugar combinar y ordenamos las muestra
+
+Valores combinados y ordenados: $1, 2, 3, 4, 4, 5, 6, 7, 8, 9$
+
+Asignación de rangos:
+
+-   1: rango 1
+-   2: rango 2
+-   3: rango 3
+-   4: rango 4.5 (promedio de rangos 4 y 5)
+-   4: rango 4.5
+-   5: rango 6
+-   6: rango 7
+-   7: rango 8
+-   8: rango 9
+-   9: rango 10
+
+Rangos para cada muestra:
+
+-   Proveedor A: $2, 3, 6, 7, 9$ (sumados dan $R_1 = 27$)
+-   Proveedor B: $1, 4.5, 4.5, 8, 10$ (sumados dan $R_2 = 28$)
+
+Pasamos a calcular el estadístico $U$
+
+Tamaños de muestra:
+
+-   $n_1 = 5$
+-   $n_2 = 5$
+
+Cálculo de $U_1$ y $U_2$:
+
+$$
+U_1 = n_1n_2+ \frac{n_1 (n_1 + 1)}{2} -R_1  =5\cdot 5+ \frac{5 \cdot 6}{2} -27 = 23
+$$
+
+$$
+U_2 =n_1n_2+ \frac{n_2 (n_2 + 1)}{2} -R_2  =5\cdot 5+  \frac{5 \cdot 6}{2}-28 = 12
+$$
+
+El estadístico U es el menor de $U_1$ y $U_2$: $U = 12$.
+
+Para determinar el valor p, utilizamos una tabla de referencia para U o una aproximación normal si las muestras son grandes. En este caso, consultamos una tabla para $n_1 = 5$ y $n_2 = 5$. Si no se dispone de la tabla, se puede utilizar software estadístico para calcular el $p-valor$ como sigue:
+
+```{r mw1}
+# Datos de ejemplo
+proveedorA <- c(2, 3, 5, 6, 8)
+proveedorB <- c(1, 4, 4, 7, 9)
+
+# Realizar la prueba de Mann-Whitney U
+test <- wilcox.test(proveedorA, proveedorB, alternative = "two.sided")
+
+# Mostrar los resultados
+print(test)
+```
+
+Los resultados muestra:
+
+-   **Estadístico W**: El valor calculado del estadístico U.
+-   **Valor p (p-value)**: El valor p asociado con el estadístico.
+-   **Hipótesis alternativa**: La prueba es de dos lados, lo que significa que estamos probando si las distribuciones son diferentes en cualquier dirección.
+
+En este ejemplo, el $p-valor$ es `r round(test$p.value,3)`, que es mayor que $0.05$, lo que indica que no hay suficiente evidencia para rechazar la hipótesis nula. Por lo tanto, no podemos concluir que las dos muestras provienen de diferentes distribuciones.
+:::
+
+### Prueba de Kruskal-Wallis
+
+La prueba de Kruskal-Wallis es una prueba no paramétrica utilizada para comparar tres o más muestras independientes para determinar si provienen de la misma distribución. Es una extensión de la prueba de Mann-Whitney U a más de dos grupos y una alternativa robusta a la ANOVA que veremos en el @sec-anova cuando no se cumplen los supuestos de normalidad y homogeneidad de varianzas.
+
+Dado que es una prueba no paramétrica, no requiere que los datos provengan de una distribución normal. Al igual que la prueba de Mann-Whitney, la prueba de Kruskal-Wallis trabaja con los rangos de los datos en lugar de los valores originales.
+
+Las hipótesis son:
+
+-   **Hipótesis Nula** ($H_0$): Todas las muestras provienen de la misma distribución.
+-   **Hipótesis Alternativa** ($H_1$): Al menos una de las muestras proviene de una distribución diferente.
+
+A continuación, se combinan los datos de todas las muestras y se ordenan los valores de menor a mayor. Se asignan rangos a estos valores, manejando adecuadamente los empates (otorgando a los valores iguales el rango promedio).
+
+Calculamos el estadístico H utilizando la siguiente fórmula: $$
+     H = \frac{12}{N(N+1)} \sum_{i=1}^{k} \frac{R_i^2}{n_i} - 3(N+1)
+$$ donde:
+
+-   $N$ es el tamaño total de la muestra (suma de los tamaños de las $k$ muestras).
+-   $R_i$ es la suma de los rangos de la $i$-ésima muestra.
+-   $n_i$ es el tamaño de la $i$-ésima muestra.
+-   $k$ es el número de muestras.
+
+Para tamaños de muestra relativamente grandes el estadístico $H$ sigue una distriniución $\chi^2$ con $k-1$ grados de libertdad. El $p-valor$ se determina, por tanto como $$
+p-valor=P(H>h)
+$$ donde h es el valor calculado para un caso particular.
+
+::: {.callout-tip collapse="true" title="Ejemplo práctico. Prueba Kruskal-Wallis"}
+Supongamos que queremos comparar los tiempos de espera (en días) de tres proveedores diferentes:
+
+-   Proveedor A: $2, 3, 5, 6, 8$
+-   Proveedor B: $1, 4, 4, 7, 9$
+-   Proveedor C: $3, 4, 6, 8, 10$
+
+Valores combinados y ordenados: $1, 2, 3, 3, 4, 4, 4, 5, 6, 6, 7, 8, 8, 9, 10$
+
+Asignación de rangos:
+
+-   1: rango 1
+-   2: rango 2
+-   3: rango 3.5 (promedio de rangos 3 y 4)
+-   3: rango 3.5
+-   4: rango 6 (promedio de rangos 5, 6 y 7)
+-   4: rango 6
+-   4: rango 6
+-   5: rango 8
+-   6: rango 9.5 (promedio de rangos 9 y 10)
+-   6: rango 9.5
+-   7: rango 11
+-   8: rango 12.5 (promedio de rangos 12 y 13)
+-   8: rango 12.5
+-   9: rango 14
+-   10: rango 15
+
+Rangos para cada muestra:
+
+-   Proveedor A: $2, 3.5, 8, 9.5, 12.5$ (sumados dan $R_1 = 35.5$)
+-   Proveedor B: $1, 6, 6, 11, 14$ (sumados dan $R_2 = 38$)
+-   Proveedor C: $3.5, 6, 9.5, 12.5, 15$ (sumados dan $R_3 = 46.5$)
+
+Calculamos el Estadístico $H$
+
+Tamaños de muestra:
+
+-   $n_1 = 5$
+-   $n_2 = 5$
+-   $n_3 = 5$
+
+Tamaño total de la muestra: $N = 15$
+
+$$
+H = \frac{12}{N(N+1)} \sum_{i=1}^{k} \frac{R_i^2}{n_i} - 3(N+1)
+$$
+
+$$
+H = \frac{12}{15 \cdot 16} \left( \frac{35.5^2}{5} + \frac{38^2}{5} + \frac{46.5^2}{5} \right) - 3 \cdot 16 = 0.665
+$$
+
+Para determinar el $p-valor$, utilizamos una tabla de distribución chi-cuadrado con $k-1 = 3-1 = 2$ grados de libertad.
+
+```{r kw1}
+# Datos de ejemplo
+proveedorA <- c(2, 3, 5, 6, 8)
+proveedorB <- c(1, 4, 4, 7, 9)
+proveedorC <- c(3, 4, 6, 8, 10)
+
+# Realizar la prueba de Kruskal-Wallis
+test <- kruskal.test(list(proveedorA, proveedorB, proveedorC))
+
+# Mostrar los resultados
+print(test)
+```
+
+de donde obtenemos
+
+-   **Kruskal-Wallis chi-squared**: El valor calculado del estadístico $H$.
+-   **df**: Los grados de libertad.
+-   **Valor p (p-value)**: El $p-valor$ asociado con el estadístico $H$.
+
+En este ejemplo, el $p-valor$ es `r round(test$p.value,3)`, que es mayor que $0.05$, lo que indica que no hay suficiente evidencia para rechazar la hipótesis nula. Por lo tanto, no podemos concluir que las tres muestras provienen de diferentes distribuciones; podrían provenir de la misma distribución.
+:::
+
+## Prueba sobre muestras pareadas
+
+### Prueba del signo
+
+La prueba del signo es una prueba no paramétrica utilizada para comparar dos muestras relacionadas o emparejadas. Se emplea cuando se tienen dos conjuntos de datos dependientes y se desea determinar si hay una diferencia significativa en sus medianas. Es particularmente útil cuando los supuestos de normalidad necesarios para pruebas paramétricas como la prueba t para muestras pareadas no se cumplen.
+
+Supongamos que tenemos dos muestras relacionadas $X$ e $Y$ de tamaño $n$:
+
+**Formular las hipótesis**: 
+
+- **Hipótesis Nula (**$H_0$): Las medianas de las dos muestras son iguales. 
+- **Hipótesis Alternativa (**$H_1$): Las medianas de las dos muestras son diferentes.
+
+**Calcular las diferencias**: Para cada par $(X_i, Y_i)$, calcular la diferencia $D_i = X_i - Y_i$.
+
+**Contar los signos**: - Contar cuántas diferencias son positivas ($D_i > 0$). - Contar cuántas diferencias son negativas ($D_i < 0$). - Ignorar las diferencias que son cero ($D_i = 0$).
+
+**Estadístico de prueba**:
+
+-   Denotar el número de diferencias positivas por $S_+$.
+-   Denotar el número de diferencias negativas por $S_-$.
+
+El estadístico de la prueba del signo es el menor entre $S_+$ y $S_-$:$$
+   s=min(S_+,S_-)
+   $$
+
+**Determinar el valor crítico**: Consultar una tabla de la distribución binomial o la tabla de la prueba del signo para obtener el valor crítico correspondiente al nivel de significancia $\alpha$ y el tamaño de la muestra efectiva $n$ (número de pares no nulos). Podemos calcular el valor crítico como sigue: $$
+p-valor=P(S\leq s)
+$$ donde $S$ es binomial $n$, $p=0.5$.
+
+**Decisión**:
+
+-   Rechazar $H_0$ si el estadístico de la prueba es menor o igual al valor crítico.
+
+-   No rechazar $H_0$ si el estadístico de la prueba es mayor que el valor crítico.
+
+::: {.callout-tip collapse="true" title="Ejemplo práctico. Prueba del signo"}
+Supongamos que un investigador quiere comparar los tiempos de reacción antes y después de un tratamiento en 10 sujetos. Los datos son los siguientes:
+
+| Sujeto | Antes (X) | Después (Y) |
+|--------|-----------|-------------|
+| 1      | 15        | 10          |
+| 2      | 20        | 18          |
+| 3      | 25        | 20          |
+| 4      | 30        | 30          |
+| 5      | 18        | 15          |
+| 6      | 22        | 19          |
+| 7      | 26        | 21          |
+| 8      | 28        | 26          |
+| 9      | 24        | 22          |
+| 10     | 20        | 20          |
+
+**Formular las hipótesis**: 
+
+- $H_0$: No hay diferencia en los tiempos de reacción antes y después del tratamiento. 
+- $H_1$: Hay una diferencia en los tiempos de reacción antes y después del tratamiento.
+
+**Calcular las diferencias**:
+
+| Sujeto | Diferencia (D = X - Y) | Signo |
+|--------|------------------------|-------|
+| 1      | 5                      | \+    |
+| 2      | 2                      | \+    |
+| 3      | 5                      | \+    |
+| 4      | 0                      | 0     |
+| 5      | 3                      | \+    |
+| 6      | 3                      | \+    |
+| 7      | 5                      | \+    |
+| 8      | 2                      | \+    |
+| 9      | 2                      | \+    |
+| 10     | 0                      | 0     |
+
+**Contar los signos**: 
+
+- $S_+ = 8$ 
+- $S_- = 0$ 
+- Pares nulos ($D = 0$): 2
+
+**Estadístico de prueba**: El estadístico de la prueba del signo es el menor entre $S_+$ y $S_-$, que es 0 en este caso.
+
+**Determinar el valor crítico**: Para un nivel de significancia $\alpha = 0.05$ y $n = 8$ (solo los pares no nulos se consideran), consultamos la tabla de la prueba del signo y encontramos que el valor crítico es 1.
+
+**Decisión**: Como el estadístico de la prueba (0) es menor que el valor crítico (1), rechazamos la hipótesis nula $H_0$. Hay suficiente evidencia para concluir que hay una diferencia significativa en los tiempos de reacción antes y después del tratamiento.
+:::
+
+### Prueba de rangos de signos de Wilcoxon
+
+Para comparar muestras pareadas la opción no paramétrica más común es la **prueba de Wilcoxon de rangos de signos (Wilcoxon signed-rank test)**. La prueba de Wilcoxon de rangos de signos es una alternativa no paramétrica a la prueba t de muestras pareadas. Se utiliza cuando los datos no cumplen con los supuestos de normalidad necesarios para la prueba t. En lugar de comparar medias, esta prueba compara las medianas de las diferencias entre las dos muestras pareadas. Es una prueba ideal para muestras pequeñas y para datos ordinales o de razón/intervalo cuando la normalidad no puede ser asumida.
+
+Procedimiento:
+
+1.  **Calcular las diferencias** entre cada par de observaciones.
+
+2.  **Ordenar las diferencias** absolutas y asignarles rangos, ignorando las diferencias que sean cero.
+
+3.  **Asignar signos** a los rangos de acuerdo con el signo de las diferencias originales.
+
+4.  **Calcular la suma de los rangos positivos** y la suma de los rangos negativos.
+
+5.  **Determinar el estadístico de prueba**: El estadístico de Wilcoxon es el menor de las dos sumas de rangos.
+
+6.  **Comparar el estadístico de prueba** con los valores críticos de la tabla de Wilcoxon para determinar la significancia estadística.
+
+La prueba de Wilcoxon de signos y rangos es robusta y fácil de implementar, lo que la convierte en una herramienta valiosa para el análisis de muestras pareadas en situaciones donde los supuestos de normalidad no se cumplen.
+
+::: {.callout-tip collapse="true" title="Ejemplo práctico. Prueba sobre datos emparejados"}
+Supongamos que tenemos dos conjuntos de datos emparejados que representan las puntuaciones antes y después de una intervención:
+
+```{r wilcoxon1, warning=FALSE}
+# Datos de ejemplo
+antes <- c(10, 20, 30, 40, 50)
+despues <- c(12, 18, 33, 35, 55)
+
+# Realizar la prueba de Wilcoxon de signos y rangos
+resultado <- wilcox.test(antes, despues, paired = TRUE)
+
+# Mostrar el resultado
+print(resultado)
+```
+
+El estadístico V es `r resultado$statistic` y el $p-valor$ es `r round(resultado$p.value,3)`. En este caso, dado que el valor p es mayor que un nivel de significancia común (como $0.05$), no se rechaza la hipótesis nula de que no hay una diferencia significativa entre las puntuaciones antes y después de la intervención.
+:::

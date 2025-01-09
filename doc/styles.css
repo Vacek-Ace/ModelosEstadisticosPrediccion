@@ -1,0 +1,29 @@
+```{scss echo=FALSE}
+div {
+  &.callout-note {
+    background-color: #f4f8fc !important;
+  }
+   &.callout-tip {
+    background-color: #f9fcf5 !important;
+  }
+   &.callout-caution {
+    background-color: #faf5f5 !important;
+  }
+  &.callout-important {
+    background-color: #f6f1f2 !important;
+  }
+   &.callout-warning {
+    background-color: #fefaf7 !important;
+    border: 2px solid #ffeeba;
+      }
+  
+}
+```
+    border: 20px solid #ffeeba;
+    padding: 0 0 0 15%;
+    margin-bottom: 10px;
+    background: 10px center/3em no-repeat;
+    background-color: #fefaf7 !important;
+    background-image: url("./images/practice.png");
+    border-left-color: #ffeeba;
+

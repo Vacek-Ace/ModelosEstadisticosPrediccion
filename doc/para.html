@@ -1,0 +1,2139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3&nbsp; Estimación y contraste paramétrico – Inferencia Estadística</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./nopara.html" rel="next">
+<link href="./eda.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sin resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./para.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Estimación y contraste paramétrico</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Inferencia Estadística</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Buscar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prefacio</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./eda.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Análisis Exploratorio de Datos</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./para.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Estimación y contraste paramétrico</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nopara.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Contraste no paramétrico</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./anova.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Análisis de varianza</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./conclusiones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bibliografía</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#definición-de-estadístico" id="toc-definición-de-estadístico" class="nav-link active" data-scroll-target="#definición-de-estadístico"><span class="header-section-number">3.1</span> Definición de estadístico</a></li>
+  <li><a href="#estimación-puntual" id="toc-estimación-puntual" class="nav-link" data-scroll-target="#estimación-puntual"><span class="header-section-number">3.2</span> Estimación puntual</a>
+  <ul class="collapse">
+  <li><a href="#conceptos-clave-en-la-estimación-puntual" id="toc-conceptos-clave-en-la-estimación-puntual" class="nav-link" data-scroll-target="#conceptos-clave-en-la-estimación-puntual"><span class="header-section-number">3.2.1</span> Conceptos clave en la estimación puntual</a></li>
+  <li><a href="#ejemplos-de-estimadores-puntuales" id="toc-ejemplos-de-estimadores-puntuales" class="nav-link" data-scroll-target="#ejemplos-de-estimadores-puntuales"><span class="header-section-number">3.2.2</span> Ejemplos de estimadores puntuales</a></li>
+  </ul></li>
+  <li><a href="#propiedades-de-los-estimadores" id="toc-propiedades-de-los-estimadores" class="nav-link" data-scroll-target="#propiedades-de-los-estimadores"><span class="header-section-number">3.3</span> Propiedades de los estimadores</a>
+  <ul class="collapse">
+  <li><a href="#distribuciones-muestrales" id="toc-distribuciones-muestrales" class="nav-link" data-scroll-target="#distribuciones-muestrales"><span class="header-section-number">3.3.1</span> Distribuciones muestrales</a></li>
+  </ul></li>
+  <li><a href="#método-de-los-momentos" id="toc-método-de-los-momentos" class="nav-link" data-scroll-target="#método-de-los-momentos"><span class="header-section-number">3.4</span> Método de los momentos</a>
+  <ul class="collapse">
+  <li><a href="#definición-de-momentos" id="toc-definición-de-momentos" class="nav-link" data-scroll-target="#definición-de-momentos"><span class="header-section-number">3.4.1</span> Definición de Momentos</a></li>
+  <li><a href="#pasos-del-método-de-los-momentos" id="toc-pasos-del-método-de-los-momentos" class="nav-link" data-scroll-target="#pasos-del-método-de-los-momentos"><span class="header-section-number">3.4.2</span> Pasos del Método de los Momentos</a></li>
+  <li><a href="#ventajas-y-limitaciones" id="toc-ventajas-y-limitaciones" class="nav-link" data-scroll-target="#ventajas-y-limitaciones"><span class="header-section-number">3.4.3</span> Ventajas y limitaciones</a></li>
+  </ul></li>
+  <li><a href="#método-de-la-máxima-verosimilud" id="toc-método-de-la-máxima-verosimilud" class="nav-link" data-scroll-target="#método-de-la-máxima-verosimilud"><span class="header-section-number">3.5</span> Método de la máxima verosimilud</a>
+  <ul class="collapse">
+  <li><a href="#conceptos-básicos" id="toc-conceptos-básicos" class="nav-link" data-scroll-target="#conceptos-básicos"><span class="header-section-number">3.5.1</span> Conceptos básicos</a></li>
+  <li><a href="#procedimiento-del-método-de-máxima-verosimilitud" id="toc-procedimiento-del-método-de-máxima-verosimilitud" class="nav-link" data-scroll-target="#procedimiento-del-método-de-máxima-verosimilitud"><span class="header-section-number">3.5.2</span> Procedimiento del método de Máxima Verosimilitud</a></li>
+  <li><a href="#ventajas-y-limitaciones-1" id="toc-ventajas-y-limitaciones-1" class="nav-link" data-scroll-target="#ventajas-y-limitaciones-1"><span class="header-section-number">3.5.3</span> Ventajas y limitaciones</a></li>
+  </ul></li>
+  <li><a href="#estimación-por-intervalo" id="toc-estimación-por-intervalo" class="nav-link" data-scroll-target="#estimación-por-intervalo"><span class="header-section-number">3.6</span> Estimación por intervalo</a>
+  <ul class="collapse">
+  <li><a href="#conceptos-clave-en-la-estimación-por-intervalo" id="toc-conceptos-clave-en-la-estimación-por-intervalo" class="nav-link" data-scroll-target="#conceptos-clave-en-la-estimación-por-intervalo"><span class="header-section-number">3.6.1</span> Conceptos clave en la estimación por intervalo</a></li>
+  <li><a href="#cálculo-del-intervalo-de-confianza" id="toc-cálculo-del-intervalo-de-confianza" class="nav-link" data-scroll-target="#cálculo-del-intervalo-de-confianza"><span class="header-section-number">3.6.2</span> Cálculo del Intervalo de Confianza</a></li>
+  <li><a href="#importancia-de-la-estimación-por-intervalos" id="toc-importancia-de-la-estimación-por-intervalos" class="nav-link" data-scroll-target="#importancia-de-la-estimación-por-intervalos"><span class="header-section-number">3.6.3</span> Importancia de la estimación por intervalos</a></li>
+  <li><a href="#intervalo-de-confianza-para-la-media-cuando-la-varianza-es-conocida" id="toc-intervalo-de-confianza-para-la-media-cuando-la-varianza-es-conocida" class="nav-link" data-scroll-target="#intervalo-de-confianza-para-la-media-cuando-la-varianza-es-conocida"><span class="header-section-number">3.6.4</span> Intervalo de Confianza para la media (cuando la varianza es conocida)</a></li>
+  <li><a href="#intervalo-de-confianza-para-la-media-cuando-la-varianza-es-desconocida" id="toc-intervalo-de-confianza-para-la-media-cuando-la-varianza-es-desconocida" class="nav-link" data-scroll-target="#intervalo-de-confianza-para-la-media-cuando-la-varianza-es-desconocida"><span class="header-section-number">3.6.5</span> Intervalo de Confianza para la media (cuando la varianza es desconocida)</a></li>
+  <li><a href="#media-poblacional-para-muestras-grandes" id="toc-media-poblacional-para-muestras-grandes" class="nav-link" data-scroll-target="#media-poblacional-para-muestras-grandes"><span class="header-section-number">3.6.6</span> Media poblacional para muestras grandes</a></li>
+  <li><a href="#intervalo-de-confianza-para-la-proporción" id="toc-intervalo-de-confianza-para-la-proporción" class="nav-link" data-scroll-target="#intervalo-de-confianza-para-la-proporción"><span class="header-section-number">3.6.7</span> Intervalo de Confianza para la proporción</a></li>
+  <li><a href="#interpretación-de-los-intervalos-de-confianza" id="toc-interpretación-de-los-intervalos-de-confianza" class="nav-link" data-scroll-target="#interpretación-de-los-intervalos-de-confianza"><span class="header-section-number">3.6.8</span> Interpretación de los intervalos de confianza</a></li>
+  <li><a href="#determinación-del-tamaño-muestral" id="toc-determinación-del-tamaño-muestral" class="nav-link" data-scroll-target="#determinación-del-tamaño-muestral"><span class="header-section-number">3.6.9</span> Determinación del tamaño muestral</a></li>
+  </ul></li>
+  <li><a href="#contraste-de-hipótesis" id="toc-contraste-de-hipótesis" class="nav-link" data-scroll-target="#contraste-de-hipótesis"><span class="header-section-number">3.7</span> Contraste de hipótesis</a>
+  <ul class="collapse">
+  <li><a href="#conceptos-básicos-1" id="toc-conceptos-básicos-1" class="nav-link" data-scroll-target="#conceptos-básicos-1"><span class="header-section-number">3.7.1</span> Conceptos básicos</a></li>
+  <li><a href="#pasos-en-un-contraste-de-hipótesis" id="toc-pasos-en-un-contraste-de-hipótesis" class="nav-link" data-scroll-target="#pasos-en-un-contraste-de-hipótesis"><span class="header-section-number">3.7.2</span> Pasos en un Contraste de Hipótesis</a></li>
+  <li><a href="#errores-tipo-i-y-tipo-ii.-potencia" id="toc-errores-tipo-i-y-tipo-ii.-potencia" class="nav-link" data-scroll-target="#errores-tipo-i-y-tipo-ii.-potencia"><span class="header-section-number">3.7.3</span> Errores tipo I y tipo II. Potencia</a></li>
+  <li><a href="#contraste-para-la-media-de-una-población-normal-con-varianza-conocida" id="toc-contraste-para-la-media-de-una-población-normal-con-varianza-conocida" class="nav-link" data-scroll-target="#contraste-para-la-media-de-una-población-normal-con-varianza-conocida"><span class="header-section-number">3.7.4</span> Contraste para la media de una población normal con varianza conocida</a></li>
+  <li><a href="#contraste-para-la-media-de-una-población-normal-con-varianza-desconocida" id="toc-contraste-para-la-media-de-una-población-normal-con-varianza-desconocida" class="nav-link" data-scroll-target="#contraste-para-la-media-de-una-población-normal-con-varianza-desconocida"><span class="header-section-number">3.7.5</span> Contraste para la media de una población normal con varianza desconocida</a></li>
+  <li><a href="#contraste-de-hipótesis-para-la-igualdad-de-medias-de-dos-muestras-independientes" id="toc-contraste-de-hipótesis-para-la-igualdad-de-medias-de-dos-muestras-independientes" class="nav-link" data-scroll-target="#contraste-de-hipótesis-para-la-igualdad-de-medias-de-dos-muestras-independientes"><span class="header-section-number">3.7.6</span> Contraste de hipótesis para la igualdad de medias de dos muestras independientes</a></li>
+  <li><a href="#contraste-de-hipótesis-para-la-diferencia-de-proporciones" id="toc-contraste-de-hipótesis-para-la-diferencia-de-proporciones" class="nav-link" data-scroll-target="#contraste-de-hipótesis-para-la-diferencia-de-proporciones"><span class="header-section-number">3.7.7</span> Contraste de hipótesis para la diferencia de proporciones</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-para" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Estimación y contraste paramétrico</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="definición-de-estadístico" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="definición-de-estadístico"><span class="header-section-number">3.1</span> Definición de estadístico</h2>
+<p>Un <strong>estadístico</strong> es una medida calculada a partir de una muestra de datos que se utiliza para describir o resumir características de la muestra. En otras palabras, un estadístico es un valor numérico que resume o describe algún aspecto de los datos recolectados. Los estadísticos se utilizan ampliamente en análisis de datos, inferencia estadística y para hacer estimaciones sobre poblaciones más grandes basadas en la información obtenida de una muestra.</p>
+<p>Si te fijas bien, verás que en el <a href="eda.html" class="quarto-xref"><span>Capítulo 2</span></a> ya hemos estado trabajando con estadísticos. Los estadísticos juegan un papel crucial en la inferencia estadística, donde se utilizan para hacer estimaciones o probar hipótesis sobre una población a partir de la información contenida en una muestra.</p>
+<p>Ejemplos comunes de estadísticos incluyen:</p>
+<ul>
+<li>Media: Promedio aritmético de los valores de una variable en la muestra.</li>
+<li>Mediana: Valor que divide la muestra en dos partes iguales respecto a una variable.</li>
+<li>Moda: Valor de una variable que aparece con mayor frecuencia en la muestra.</li>
+<li>Varianza: Medida de la dispersión de los datos respecto a la media.</li>
+<li>Desviación estándar: Raíz cuadrada de la varianza, que también mide la dispersión.</li>
+<li>Coeficiente de correlación: Medida de la relación entre dos variables.</li>
+</ul>
+</section>
+<section id="estimación-puntual" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="estimación-puntual"><span class="header-section-number">3.2</span> Estimación puntual</h2>
+<p>La <strong>estimación puntual</strong> es una técnica estadística que consiste en utilizar los datos de una muestra para calcular un valor único, denominado <strong>estimador puntual</strong>, que se usa como mejor aproximación de un parámetro desconocido de la población. Este parámetro puede ser, por ejemplo, la media, la varianza, la proporción, entre otros. La estimación puntual proporciona una forma simple y directa de hacer inferencias sobre parámetros poblacionales a partir de una muestra, aunque su simplicidad también implica que no proporciona información sobre la precisión o variabilidad de la estimación, aspectos que se abordan mediante la <strong>estimación por intervalos</strong> y otras técnicas inferenciales.</p>
+<section id="conceptos-clave-en-la-estimación-puntual" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="conceptos-clave-en-la-estimación-puntual"><span class="header-section-number">3.2.1</span> Conceptos clave en la estimación puntual</h3>
+<p><strong>Estimador</strong>: Es una fórmula o función que se aplica a los datos de la muestra para obtener la estimación puntual. Por ejemplo, la media muestral (<span class="math inline">\(\bar{x}\)</span>) es un estimador de la media poblacional (<span class="math inline">\(\mu\)</span>). Formalmente, dada una variable aleatoria <span class="math inline">\(X\)</span> con función de distribución <span class="math inline">\(F_\theta\)</span>, con parámetro <span class="math inline">\(\theta\)</span> desconocido, un estadístico o estimador <span class="math inline">\(T = T(X_1,\ldots,X_n)\)</span> es una función real de la muestra aleatoria simple (m.a.s.) <span class="math inline">\((X_1,\ldots, X_n)\)</span> que estima el valor del parámetro desconocido. <span class="math display">\[
+T = T(X_1,\ldots, X_n) = \hat{\theta}
+\]</span> Un estadístico es una variable aleatoria, y por lo tanto, tiene asociada una distribución que se denomina distribución muestral.</p>
+<p>Por ejemplo, la media <span class="math display">\[T_1(X_1,\ldots,X_n)=\bar{X}=\frac{X_1+\ldots+X_n}{n}\]</span> y la mediana <span class="math display">\[T_2(X_1,\ldots,X_n)=\frac{X_{(n/2)}+X_{(n/2+1)}}{2}\]</span> son estimadores.</p>
+<p><strong>Estimación</strong>: Es el valor numérico específico obtenido al aplicar el estimador a una muestra concreta de datos. Por ejemplo, si <span class="math inline">\(\bar{x} = 5.4\)</span>, esa es la estimación puntual de <span class="math inline">\(\mu\)</span>.</p>
+</section>
+<section id="ejemplos-de-estimadores-puntuales" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="ejemplos-de-estimadores-puntuales"><span class="header-section-number">3.2.2</span> Ejemplos de estimadores puntuales</h3>
+<ul>
+<li><p><strong>Media muestral</strong> (<span class="math inline">\(\bar{x}\)</span>): Utilizada para estimar la media poblacional (<span class="math inline">\(\mu\)</span>). Aplicamos el estimador a una realización de la muestra (<span class="math inline">\(x_1,\ldots,x_n\)</span>), obteniendo el estimador muestral: <span class="math display">\[
+\bar{x} = T_1(x_1,\ldots,x_n)= \frac{1}{n} \sum_{i=1}^n x_i
+\]</span></p></li>
+<li><p><strong>Varianza muestral</strong> (<span class="math inline">\(s^2\)</span>): Utilizada para estimar la varianza poblacional (<span class="math inline">\(\sigma^2\)</span>). <span class="math display">\[
+s^2 = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2
+\]</span></p></li>
+<li><p><strong>Desviación típica muestral</strong> (<span class="math inline">\(s\)</span>). Es la raíz cuadrada de la varianza muestral. Tiene las mismas unidades de medida que la variable original.</p></li>
+<li><p><strong>Proporción muestral</strong> (<span class="math inline">\(\hat{p}\)</span>): Utilizada para estimar la proporción poblacional (<span class="math inline">\(p\)</span>). <span class="math display">\[
+\hat{p} = \frac{x}{n}
+\]</span> donde <span class="math inline">\(x\)</span> es el número de éxitos en la muestra y <span class="math inline">\(n\)</span> es el tamaño de la muestra.</p></li>
+</ul>
+</section>
+</section>
+<section id="propiedades-de-los-estimadores" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="propiedades-de-los-estimadores"><span class="header-section-number">3.3</span> Propiedades de los estimadores</h2>
+<p>Existen diferentes métodos para obtener estimadores de un parámetro poblacional. ¿Cómo elegir el estimador más adecuado para un parámetro desconocido? ¿Cuáles son las propiedades de un buen estimador?</p>
+<p>Para que un estimador sea considerado adecuado, generalmente debe cumplir con ciertas propiedades:</p>
+<ul>
+<li><strong>Insesgadez</strong>: Un estimador es insesgado (o centrado) si, en promedio, coincide con el valor verdadero del parámetro que se estima. Es decir, el valor esperado del estimador es igual al parámetro poblacional.</li>
+</ul>
+<p><span class="math display">\[E(\hat{\theta}) = \theta\]</span> La comparaciones que implican estimadores sesgados a menudo se basan en el <em>error cuadrático medio</em> definido como: <span class="math display">\[
+ECM(\hat{\theta})=E[(\hat{\theta}- \theta)^2]=Var(\hat{\theta})+(E(\hat{\theta})- \theta)^2=Eficiencia+  Sesgo
+\]</span> En este grado vas a volver a oir hablar de esta medida en la asignatura de regresión. En ese caso, la medida de error más empleada es: <span class="math display">\[
+ECM=\frac{1}{n}\sum_{i=1}^n(y_i-\hat{f}(x_i))^2
+\]</span> donde <span class="math inline">\(\hat{f}(x_i)\)</span> e sla predicción que hace un modelo de regresión mediante una función <span class="math inline">\(\hat{f}\)</span> para la i-ésima observación muestral <span class="math inline">\(x_i\)</span>.</p>
+<ul>
+<li><p><strong>Consistencia</strong>: Un estimador es consistente si, a medida que el tamaño de la muestra aumenta, la estimación se aproxima al valor verdadero del parámetro. Es decir: <span class="math display">\[
+lim_{n  \rightarrow \infty}P(|\hat{\theta}-\theta|\geq\delta)=0, \forall\delta&gt;0
+\]</span> donde <span class="math inline">\(n\)</span> es el tamaño muestral.</p></li>
+<li><p><strong>Eficiencia</strong>: La varianza de un estimador debe ser lo más pequeña posible. Entre dos estimadores insesgados, el más eficiente es el que tiene menor varianza, es decir, el que proporciona estimaciones más precisas.</p></li>
+<li><p><strong>Suficiencia</strong>: Un estimador es suficiente si utiliza toda la información contenida en la muestra sobre el parámetro que se está estimando.</p></li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo Práctico. Insesgadez">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo Práctico. Insesgadez
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Para entender la propiedad de insesgadez en inferencia estadística, es útil realizar una simulación en <code>R</code>. Como hemos visto, la insesgadez de un estimador significa que, en promedio, el estimador coincide con el parámetro verdadero de la población.</p>
+<p>Vamos a realizar una simulación para ilustrar esta propiedad utilizando la media muestral como estimador de la media poblacional. Generaremos muchas muestras aleatorias de una distribución normal y compararemos la media de las medias muestrales con la media verdadera de la población.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar la librería ggplot2</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Parámetros de la simulación</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)  <span class="co"># Para reproducibilidad</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>n_muestras <span class="ot">&lt;-</span> <span class="dv">1000</span>  <span class="co"># Número de muestras</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>tamano_muestra <span class="ot">&lt;-</span> <span class="dv">30</span>  <span class="co"># Tamaño de cada muestra</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>media_poblacional <span class="ot">&lt;-</span> <span class="dv">50</span>  <span class="co"># Media verdadera de la población</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>desviacion_estandar <span class="ot">&lt;-</span> <span class="dv">10</span>  <span class="co"># Desviación estándar de la población</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Generar muestras y calcular medias muestrales</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>medias_muestrales <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_muestras)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_muestras) {</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  muestra <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(tamano_muestra, <span class="at">mean =</span> media_poblacional, <span class="at">sd =</span> desviacion_estandar)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  medias_muestrales[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(muestra)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular la media de las medias muestrales</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>media_de_medias_muestrales <span class="ot">&lt;-</span> <span class="fu">mean</span>(medias_muestrales)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Imprimir resultados</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Media verdadera de la población:"</span>, media_poblacional, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Media verdadera de la población: 50 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Media de las medias muestrales:"</span>, media_de_medias_muestrales, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Media de las medias muestrales: 49.93807 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear un data frame para ggplot</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(medias_muestrales)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficar las medias muestrales usando ggplot2</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos, <span class="fu">aes</span>(<span class="at">x =</span> medias_muestrales)) <span class="sc">+</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill =</span> <span class="st">"lightblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> media_poblacional), <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> media_de_medias_muestrales), <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribución de las Medias Muestrales"</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Medias Muestrales"</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frecuencia"</span>) <span class="sc">+</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> media_poblacional, <span class="at">y =</span> <span class="fu">max</span>(<span class="fu">table</span>(datos<span class="sc">$</span>medias_muestrales)) <span class="sc">*</span> <span class="fl">0.9</span>, <span class="at">label =</span> <span class="st">"Media Verdadera"</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> media_de_medias_muestrales, <span class="at">y =</span> <span class="fu">max</span>(<span class="fu">table</span>(datos<span class="sc">$</span>medias_muestrales)) <span class="sc">*</span> <span class="fl">0.9</span>, <span class="at">label =</span> <span class="st">"Media de las Medias Muestrales"</span>, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">1.5</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="para_files/figure-html/inses1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Hemos creado un bucle para generar <code>n_muestras</code> muestras aleatorias de una distribución normal con la media y desviación estándar especificadas. Para cada muestra, calculamos la media muestral y la almacenamos en el vector <code>medias_muestrales</code>. Calculamos la media de todas las medias muestrales generadas y mostramos la media verdadera de la población y la media de las medias muestrales.</p>
+<p>El gráfico resultante muestra un histograma de las medias muestrales con líneas verticales indicando la media verdadera de la población y la media de las medias muestrales. Esto ilustra visualmente la propiedad de insesgadez del estimador de la media.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo Práctico. Consistencia">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo Práctico. Consistencia
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Para ilustrar la propiedad de consistencia de un estimador, podemos realizar una simulación similar a la anterior, pero en lugar de enfocarnos en la media de las medias muestrales, nos centraremos en cómo el estimador se aproxima a la verdadera media poblacional a medida que aumenta el tamaño de la muestra. En otras palabras, mostraremos cómo el estimador se vuelve más preciso a medida que se incrementa el tamaño de la muestra.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar la librería ggplot2</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Parámetros de la simulación</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12443</span>)  <span class="co"># Para reproducibilidad</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>n_simulaciones <span class="ot">&lt;-</span> <span class="dv">1000</span>  <span class="co"># Número de simulaciones</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>tamanos_muestra <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">1000</span>, <span class="at">by =</span> <span class="dv">10</span>)  <span class="co"># Tamaños de las muestras</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>media_poblacional <span class="ot">&lt;-</span> <span class="dv">50</span>  <span class="co"># Media verdadera de la población</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>desviacion_estandar <span class="ot">&lt;-</span> <span class="dv">10</span>  <span class="co"># Desviación estándar de la población</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>medias_estimadas <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(tamanos_muestra))  <span class="co"># Vector para almacenar medias estimadas</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Realizar simulaciones para diferentes tamaños de muestra</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(tamanos_muestra)) {</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generar muestras y calcular medias muestrales</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  medias_muestrales <span class="ot">&lt;-</span> <span class="fu">replicate</span>(n_simulaciones, <span class="fu">mean</span>(<span class="fu">rnorm</span>(tamanos_muestra[i], <span class="at">mean =</span> media_poblacional, <span class="at">sd =</span> desviacion_estandar)))</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calcular la media de las medias muestrales</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  medias_estimadas[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(medias_muestrales)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear un data frame para ggplot</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(tamanos_muestra, medias_estimadas)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficar las medias estimadas vs. el tamaño de la muestra usando ggplot2</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos, <span class="fu">aes</span>(<span class="at">x =</span> tamanos_muestra, <span class="at">y =</span> medias_estimadas)) <span class="sc">+</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> media_poblacional, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Convergencia del Estimador a la Media Verdadera"</span>,</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Tamaño de la Muestra"</span>,</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Media Estimada"</span>) <span class="sc">+</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="para_files/figure-html/consis1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>El gráfico resultante muestra cómo las medias estimadas convergen hacia la media verdadera de la población a medida que aumenta el tamaño de la muestra. Esto ilustra la propiedad de consistencia del estimador. La línea roja representa la media verdadera de la población, mientras que la línea azul representa las medias estimadas en función del tamaño de la muestra. A medida que el tamaño de la muestra aumenta, las medias estimadas se acercan cada vez más a la media verdadera.</p>
+</div>
+</div>
+</div>
+<section id="distribuciones-muestrales" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="distribuciones-muestrales"><span class="header-section-number">3.3.1</span> Distribuciones muestrales</h3>
+<p>Hemos visto que usamos estadísticos para estimar los parámetros desconocidos de la población. Estamos interesados en estadísticos con buenas propiedades. Además, estos estadísticos son variables aleatorias con distribución de probabilidad.</p>
+<p>Sabemos, por el TCL visto en la Introducción, que, teniendo el tamaño muestral adecuado, la distribución de los estadísticos será una Normal.</p>
+<p>Por ejemplo, dadas <span class="math inline">\(X_1,\ldots,X_n\)</span> variables aleatorias independientes e idénticamente distribuidas con media <span class="math inline">\(\mu\)</span> y varianza <span class="math inline">\(\sigma^2\)</span> conocida, la media muestral: <span class="math display">\[
+\bar{X}=\frac{X_1+\ldots+X_n}{n}
+\]</span> tiene media igual a <span class="math inline">\(E[\bar{X}]=\mu\)</span> y varianza igual a <span class="math inline">\(V[\bar{X}]=\sigma^2/n\)</span>.</p>
+<p>Entonces, por el TCL, con <span class="math inline">\(n\)</span> suficientemente grande: <span class="math display">\[
+\bar{X} \sim N \left ( \mu,\frac{\sigma^2}{n} \right )
+\]</span></p>
+<p>Otro ejemplo sería, dadas <span class="math inline">\(X_1,\ldots,X_n\)</span> variables aleatorias independientes e idénticamente distribuidas con una distribución Bernoulli de parámetro <span class="math inline">\(p\)</span>. Para <span class="math inline">\(n\)</span> suficientemente grande se tiene que: <span class="math display">\[
+\hat{p} \sim N \left (p,\frac{p(1-p)}{n} \right ) \Leftrightarrow \frac{\hat{p}-p}{\sqrt{p(1-p)/n}} \sim N(0,1)
+\]</span></p>
+</section>
+</section>
+<section id="método-de-los-momentos" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="método-de-los-momentos"><span class="header-section-number">3.4</span> Método de los momentos</h2>
+<p>El método de los momentos es una técnica utilizada en estadística para estimar los parámetros desconocidos de una distribución de probabilidad. Fue introducido por el estadístico <em>Karl Pearson</em> en 1984. Este método se basa en igualar los momentos muestrales (calculados a partir de los datos observados) con los momentos teóricos (expresados en términos de los parámetros de la distribución).</p>
+<section id="definición-de-momentos" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="definición-de-momentos"><span class="header-section-number">3.4.1</span> Definición de Momentos</h3>
+<p>En estadística, los <strong>momentos</strong> de una distribución son medidas que describen diversas características de la distribución, como su media, varianza, simetría y curtosis. Los momentos más comunes son:</p>
+<ol type="1">
+<li><strong>Primer Momento (Media)</strong>: <span class="math inline">\(\mu = E[X]\)</span></li>
+<li><strong>Segundo Momento (Varianza)</strong>:<span class="math inline">\(\mu_2 = E[X^2]\)</span></li>
+<li><strong>Tercer Momento (Asimetría)</strong>:<span class="math inline">\(\mu_3 = E[X^3]\)</span></li>
+<li><strong>Cuarto Momento (Curtosis)</strong>:<span class="math inline">\(\mu_4 = E[X^4]\)</span></li>
+</ol>
+<!-- -->
+<ol start="11" type="a">
+<li><strong>k-esimo Momento</strong>:<span class="math inline">\(\mu_k = E[X^k]\)</span></li>
+</ol>
+<p>Los momentos poblacionales pueden ser vistos como funciones de los parámetros desconocidos <span class="math inline">\(\theta_1,\ldots,\theta_k\)</span>. Se asume que se conoce el modelo de probabilidad de la variable objeto de estudio.</p>
+</section>
+<section id="pasos-del-método-de-los-momentos" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="pasos-del-método-de-los-momentos"><span class="header-section-number">3.4.2</span> Pasos del Método de los Momentos</h3>
+<p>El método de los momentos consiste en resolver un conjunto de ecuaciones y tiene los siguientes pasos:</p>
+<ol type="1">
+<li><p><strong>Calcular momentos muestrales</strong>: Se calculan los momentos muestrales de los datos observados. El (k)-ésimo momento muestral se define como: <span class="math inline">\(m_k = \frac{1}{n} \sum_{i=1}^{n}X_i^k\)</span> donde <span class="math inline">\(n\)</span> es el tamaño de la muestra y <span class="math inline">\(X_i\)</span> son los valores de la muestra.</p></li>
+<li><p><strong>Igualar momentos muestrales y teóricos</strong>: Se igualan los momentos muestrales con los momentos teóricos de la distribución. Los momentos teóricos se expresan en términos de los parámetros desconocidos que se desean estimar.</p></li>
+<li><p><strong>Resolver el sistema de ecuaciones</strong>: Se resuelve el sistema de ecuaciones resultante para encontrar los estimadores de los parámetros desconocidos. Fíjate que tenemos <span class="math inline">\(k\)</span> ecuaciones y <span class="math inline">\(k\)</span> parámetros (<span class="math inline">\(\theta_1,\ldots,\theta_k\)</span>). De modo que es posible despejar los parámetros de estas ecuaciones, que quedando estos parámetros en función de los momentos. En estas ecuaciones se sustituyen los momentos poblacionales por sus correspondientes momentos poblacionales. Esto da como resultado estimaciones de esos parámetros.</p></li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo, distribución Normal
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que deseamos estimar los parámetros (<span class="math inline">\(\mu\)</span>) y (<span class="math inline">\(\sigma^2\)</span>) de una distribución Normal (<span class="math inline">\(N(\mu, \sigma^2)\)</span>).</p>
+<ol type="1">
+<li><p><strong>Calcular los momentos muestrales</strong>: <span class="math display">\[m_1 = \frac{1}{n} \sum_{i=1}^n X_i \]</span> <span class="math display">\[m_2 = \frac{1}{n}\sum_{i=1}^nX_i^2 \]</span></p></li>
+<li><p><strong>Igualar los momentos muestrales con los momentos teóricos</strong>: Para una distribución Normal, el primer momento teórico (media) es</p></li>
+</ol>
+<p><span class="math display">\[\mu_1=E(X)=\mu\]</span></p>
+<p>y el segundo momento teórico es:</p>
+<p><span class="math display">\[\mu_2=E(X^2)=Var(X)+E(X)^2=\mu^2 + \sigma^2\]</span></p>
+<p>Igualando estos con los momentos muestrales obtenidos de los datos: <span class="math display">\[m_1 = \bar{X}=\mu\]</span> <span class="math display">\[m_2 = \frac{1}{n}\sum_{i=1}^n X_i^2=\mu_2= \mu^2 + \sigma^2\]</span></p>
+<ol start="3" type="1">
+<li><strong>Resolver el sistema de ecuaciones</strong>: De la primera ecuación, tenemos:</li>
+</ol>
+<p><span class="math display">\[\hat{\mu} = \bar{X}\]</span></p>
+<p>Sustituyendo en la segunda ecuación: <span class="math display">\[\hat{\sigma}^2=\frac{1}{n}\sum_{i=1}^n X_i^2-\bar{X}^2=\frac{1}{n}\sum_{i=1}^n (X_i-\bar{X})^2\]</span></p>
+<p>Que son los estimadores de los parámetros.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo, distribución Binomial
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Sea <span class="math inline">\(X_1,\ldots,X_n\)</span> una muestra aleatoria simple de una <span class="math inline">\(Binom(k,p)\)</span>, con <span class="math inline">\(k\)</span> y <span class="math inline">\(p\)</span> desconocidos. Entonces, los momentos poblacionales son:</p>
+<p><span class="math display">\[\mu_1=E(X)=kp\]</span> <span class="math display">\[\mu_2=E(X^2)=Var(X)+E(X)^2=kp(1-p)+k^2p^2\]</span> Los momentos muestrales son:</p>
+<p><span class="math display">\[
+m_1=\bar{X}
+\]</span> <span class="math display">\[
+m_2=\frac{1}{n}\sum_{i=1}^nX_i^2
+\]</span> Igualando los momentos poblacionales a los muestrales, obtenemos:</p>
+<p><span class="math display">\[
+m_1=\bar{X}=kp
+\]</span></p>
+<p><span class="math display">\[
+m_2=\frac{1}{n}\sum_{i=1}^nX_i^2=\mu_2=kp(1-p)+k^2p^2
+\]</span> Despejando <span class="math inline">\(k\)</span> y <span class="math inline">\(p\)</span>, obtenemos los estimadores:</p>
+<p><span class="math display">\[
+\hat{k}^2=\frac{\bar{X}^2}{\bar{X}-(1/n)\sum_{i=1}^n(X_i- \bar{X})^2}
+\]</span> <span class="math display">\[\hat{p}=\frac{\bar{X}}{\hat{k}}\]</span></p>
+</div>
+</div>
+</div>
+</section>
+<section id="ventajas-y-limitaciones" class="level3" data-number="3.4.3">
+<h3 data-number="3.4.3" class="anchored" data-anchor-id="ventajas-y-limitaciones"><span class="header-section-number">3.4.3</span> Ventajas y limitaciones</h3>
+<p>Los estimadores de los momentos presentan interesantes propiedades estadísticas, aunqeu también tienen sus limitaciones.</p>
+<p><strong>Ventajas</strong>:</p>
+<ul>
+<li><strong>Simplicidad</strong>: El método de los momentos es relativamente sencillo de aplicar y no requiere técnicas complejas de optimización.</li>
+<li><strong>Intuición</strong>: Ofrece una interpretación intuitiva de los parámetros en términos de momentos.</li>
+</ul>
+<p><strong>Limitaciones</strong>:</p>
+<ul>
+<li><strong>Precisión</strong>: Los estimadores de los momentos no siempre son los estimadores más eficientes (no tienen la mínima varianza posible).</li>
+<li><strong>Aplicabilidad</strong>: En algunas distribuciones complejas, los momentos pueden no existir o ser difíciles de calcular.</li>
+<li><strong>Consistencia</strong>: Los estimadores de momentos no siempre son consistentes, especialmente en muestras pequeñas.</li>
+</ul>
+</section>
+</section>
+<section id="método-de-la-máxima-verosimilud" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="método-de-la-máxima-verosimilud"><span class="header-section-number">3.5</span> Método de la máxima verosimilud</h2>
+<p>El método de la <strong>máxima verosimilitud</strong> es una técnica estadística ampliamente utilizada para estimar los parámetros desconocidos de una distribución de probabilidad. Este método se basa en encontrar los valores de los parámetros que maximicen la función de verosimilitud, la cual mide la probabilidad de observar los datos dados los parámetros. El método de máxima verosimilitud es el método más popular para obtener un estimador. La idea básica es seleccionar el valor del parámetro que hace que los datos sean más probables.</p>
+<p>Dado un modelo estadiıstico (es decir, una familia de distribuciones <span class="math inline">\(f(·|\theta)| \theta \in \Theta\)</span> donde <span class="math inline">\(\theta\)</span> es el parámetro del modelo), el método de máxima verosimilitud encuentra el valor del parámetro del modelo <span class="math inline">\(\theta\)</span> que maximiza la función de verosimilitud:</p>
+<p><span class="math display">\[
+\hat{\theta}(x)= \max_{\theta \in \Theta}L(\theta|\mathbf{x})
+\]</span></p>
+<p>Para una muestra aleatoria <span class="math inline">\(\mathbf{x}=(x_1,\ldots,x_n)\)</span> de una variable aleatoria <span class="math inline">\(X\)</span>, la <em>verosimilitud</em> es proporcional al producto de las probabilidades asociadas a los valores individuales: <span class="math display">\[
+\prod_jP(X=x_j)
+\]</span> El término verosimilitud fue acuñado por <em>Sir Roland Fisher</em>.</p>
+<p>Cuando <span class="math inline">\(X\)</span> es una variable aleatoria continua, un valor muestral <span class="math inline">\(x_j\)</span> debe considerarse como que está (en general) en el intervalo <span class="math inline">\((x_j-\delta,x_j+\delta)\)</span>, donde <span class="math inline">\(\delta\)</span> representa la precisión de la medición. La verosimilutd es entonces proporcional a: <span class="math display">\[
+\prod_jP(x_j-\delta&lt;X&lt;x_j+\delta).
+\]</span> Si <span class="math inline">\(\delta\)</span> es suficientemente pequeño, esta expresión es aproximadamente proporcional a: <span class="math display">\[
+\prod_jf(x_j).
+\]</span> donde <span class="math inline">\(f\)</span> es la función de densidad de <span class="math inline">\(X\)</span>. Por lo tanto, la <em>verosimilitd</em> describe lo plausible que es un valor del parámetro poblacional, dadas unas observaciones concretas de la muestra.</p>
+<section id="conceptos-básicos" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="conceptos-básicos"><span class="header-section-number">3.5.1</span> Conceptos básicos</h3>
+<ol type="1">
+<li><p><strong>Función de verosimilitud</strong>: La función de verosimilitud, <span class="math inline">\(L(\theta|\mathbf{x})\)</span>, para un conjunto de datos <span class="math inline">\(\mathbf{x} = (x_1, x_2, \ldots, x_n)\)</span> y un vector de parámetros <span class="math inline">\(\theta\)</span>, es el producto de las funciones de densidad (o de probabilidad) de los datos observados, dadas las posibles realizaciones de <span class="math inline">\(\theta\)</span>: <span class="math display">\[
+L(\theta|\mathbf{x}) = f(\mathbf{x}|\theta)=f(x_1,\ldots,x_n|\theta)=f(x_1|\theta)f(x_2|\theta)\ldots f(x_n|\theta)=\prod_{i=1}^n f(x_i| \theta)
+\]</span> donde <span class="math inline">\(f(x_i|\theta)\)</span> es la función de densidad (o de probabilidad) de <span class="math inline">\(x_i\)</span> dado <span class="math inline">\(\theta\)</span>.</p></li>
+<li><p><strong>Log-Verosimilitud</strong>: Debido a que la función de verosimilitud puede implicar productos de muchos términos, es más práctico trabajar con su logaritmo natural, conocido como la log-verosimilitud: <span class="math display">\[
+\ell(\theta|\mathbf{x}) = \log L(\theta|\mathbf{x}) = \sum_{i=1}^n \log f(x_i|\theta)
+\]</span></p></li>
+</ol>
+</section>
+<section id="procedimiento-del-método-de-máxima-verosimilitud" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="procedimiento-del-método-de-máxima-verosimilitud"><span class="header-section-number">3.5.2</span> Procedimiento del método de Máxima Verosimilitud</h3>
+<ol type="1">
+<li><p><strong>Especificar la función de verosimilitud</strong>: Identificar la función de verosimilitud correspondiente a los datos observados y a la distribución supuesta.</p></li>
+<li><p><strong>Calcular la Log-Verosimilitud</strong>: Tomar el logaritmo natural de la función de verosimilitud para obtener la función de log-verosimilitud.</p></li>
+<li><p><strong>Derivar y resolver</strong>: Derivar la función de log-verosimilitud con respecto a cada parámetro y resolver las ecuaciones obtenidas igualando a cero (puntos críticos) para encontrar los estimadores de máxima verosimilitud (EMV).</p></li>
+<li><p><strong>Verificar máximos</strong>: Asegurarse de que las soluciones encontradas corresponden a máximos y no a mínimos o puntos de inflexión, típicamente verificando la segunda derivada.</p></li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo, distribución Normal
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que tenemos una muestra <span class="math inline">\(\mathbf{x} = (x_1, x_2, \ldots, x_n)\)</span> de una distribución Normal con media <span class="math inline">\(\mu\)</span> y varianza <span class="math inline">\(\sigma^2\)</span>, y queremos estimar estos parámetros.</p>
+<ol type="1">
+<li><p><strong>Función de verosimilitud</strong>: La función de densidad para una distribución normal es: <span class="math display">\[
+f(x_i|\mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x_i - \mu)^2}{2\sigma^2}\right)
+\]</span> Por lo tanto, la función de verosimilitud es: <span class="math display">\[
+L(\mu, \sigma^2| \mathbf{x}) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x_i - \mu)^2}{2\sigma^2}\right)
+\]</span></p></li>
+<li><p><strong>Log-Verosimilitud</strong>: Tomamos el logaritmo natural de la función de verosimilitud: <span class="math display">\[
+\ell(\mu, \sigma^2|\mathbf{x}) = \sum_{i=1}^n \left[ -\frac{1}{2} \log(2\pi\sigma^2) - \frac{(x_i - \mu)^2}{2\sigma^2} \right]
+\]</span></p></li>
+<li><p><strong>Derivadas y resolución</strong>: Derivamos la log-verosimilitud con respecto a <span class="math inline">\(\mu\)</span> y <span class="math inline">\(\sigma^2\)</span> y las igualamos a cero: <span class="math display">\[
+\frac{\partial \ell}{\partial \mu} = \sum_{i=1}^n \frac{x_i - \mu}{\sigma^2} = 0 \implies \hat{\mu} = \frac{1}{n} \sum_{i=1}^n x_i
+\]</span> <span class="math display">\[
+\frac{\partial \ell}{\partial \sigma^2} = -\frac{n}{2\sigma^2} + \frac{1}{2\sigma^4} \sum_{i=1}^n (x_i - \mu)^2 = 0 \implies \hat{\sigma}^2 = \frac{1}{n} \sum_{i=1}^n (x_i - \hat{\mu})^2
+\]</span></p>
+<p>Así, los estimadores de máxima verosimilitud para <span class="math inline">\(\mu\)</span> y <span class="math inline">\(\sigma^2\)</span> son la media muestral y la varianza muestral, respectivamente.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo, distribución Binomial
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que tenemos una muestra de tamaño <span class="math inline">\(\mathbf{x} = (x_1, x_2, \ldots, x_n)\)</span> de una variable aleatoria Binomial con parámetro <span class="math inline">\(p\)</span> que deseamos estimar. Se emplea dicha variable para describir el número de errores en las <span class="math inline">\(n\)</span> pruebas asociadas. Se realiza un experimento y se obtienen un total de <span class="math inline">\(4\)</span> errores en las <span class="math inline">\(10\)</span> pruebas.</p>
+<ol type="1">
+<li><strong>Función de verosimilitud</strong>: La verosimilud viene dada por:</li>
+</ol>
+<p><span class="math display">\[
+L(p|\mathbf{x}) = {10 \choose 4}p^4(1-p)^6
+\]</span></p>
+<ol start="2" type="1">
+<li><p><strong>Log-Verosimilitud</strong>: Tomamos el logaritmo natural de la función de verosimilitud: <span class="math display">\[
+\ell(p|\mathbf{x}) = log\left({10 \choose 4}\right) +4log(p)+6log(1-p)
+\]</span></p></li>
+<li><p><strong>Derivadas y resolución</strong>: Derivamos la log-verosimilitud con respecto a <span class="math inline">\(p\)</span> y las igualamos a cero: <span class="math display">\[
+\frac{\partial \ell}{\partial p} =\frac{4}{p} -\frac{6}{1-p}= 0 \implies \frac{4}{p}=\frac{6}{1-p}\implies 4-4p=6p\implies 4=10p \implies p=4/10=0.4
+\]</span></p></li>
+</ol>
+<p>La función de verosimilud nos informa, dados los datos, sobre los valores más plausibles (o creíbles) para el parámetroo <span class="math inline">\(p\)</span>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="ventajas-y-limitaciones-1" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="ventajas-y-limitaciones-1"><span class="header-section-number">3.5.3</span> Ventajas y limitaciones</h3>
+<p>Los estimadores de máxima verosimilutd presentan buenas propiedades estadísticas.</p>
+<p><strong>Ventajas</strong>:</p>
+<ul>
+<li><strong>Consistencia</strong>: Los estimadores de máxima verosimilitud son consistentes, es decir, convergen en probabilidad al valor verdadero del parámetro a medida que el tamaño de la muestra aumenta.</li>
+<li><strong>Eficiencia</strong>: En muchos casos, los estimadores de máxima verosimilitud son eficientes, alcanzando la varianza mínima entre los estimadores insesgados (cumplen la igualdad de Cramér-Rao). El estimador máximo verosimil es asintóticamente eficiente y su distribución converge a la distribución Normal con valor esperado <span class="math inline">\(\theta\)</span> y la varianza es igual al inverso de la información de Fisher. La informacioon de Fisher es la cantidad de información que una muestra proporciona sobre el valor de un parámetro desconocido.</li>
+<li><strong>Flexibilidad</strong>: Se puede aplicar a una amplia gama de distribuciones y modelos complejos.</li>
+<li><strong>Invariantes</strong>: Si <span class="math inline">\(T\)</span> es el estimador de máxima verosimilitud para <span class="math inline">\(\theta\)</span>, entonces <span class="math inline">\(\tau(T)\)</span> es el estimador de máxima verosimilutd para <span class="math inline">\(\tau(\theta)\)</span> para cualquier función <span class="math inline">\(\tau\)</span>.</li>
+</ul>
+<p><strong>Limitaciones</strong>:</p>
+<ul>
+<li><strong>Complejidad computacional</strong>: Encontrar los estimadores de máxima verosimilitud puede implicar resolver ecuaciones no lineales, lo cual puede ser complejo y requerir técnicas numéricas.</li>
+<li><strong>Existencia y unicidad</strong>: Los estimadores de máxima verosimilitud no siempre existen y, si existen, no siempre son únicos. En problemas reales, la derivada de la función de verosimilitud es, a veces, analíticamente intratable. En esos casos, se utilizan métodos iterativos para encontrar soluciones numéricas para las estimaciones de los parámetros.</li>
+<li><strong>Sesgo en muestras pequeñas</strong>: Los estimadores pueden ser sesgados en muestras pequeñas, aunque el sesgo disminuye a medida que el tamaño de la muestra aumenta.</li>
+</ul>
+</section>
+</section>
+<section id="estimación-por-intervalo" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="estimación-por-intervalo"><span class="header-section-number">3.6</span> Estimación por intervalo</h2>
+<p>La estimación puntual proporciona una aproximación razonable para un parámetro de la población, pero no tiene en cuenta la variabilidad debido al tamaño muestral, la variabilidad en la población, el conocimiento de otros parámetros, etc.</p>
+<p>La <strong>estimación por intervalo</strong> es una técnica en estadística que, a diferencia de la estimación puntual que proporciona un único valor, ofrece un rango de valores dentro del cual se espera que se encuentre el verdadero parámetro poblacional desconocido con un cierto nivel de confianza. Este rango se denomina <strong>intervalo de confianza</strong>.</p>
+<p>La estimación por intervalos es una herramienta esencial en la Inferencia Estadística, ya que no solo ofrece una estimación del parámetro poblacional, sino que también proporciona un marco para entender la precisión y confiabilidad de esa estimación. Esto la convierte en una técnica poderosa para hacer inferencias más robustas y útiles basadas en datos muestrales.</p>
+<section id="conceptos-clave-en-la-estimación-por-intervalo" class="level3" data-number="3.6.1">
+<h3 data-number="3.6.1" class="anchored" data-anchor-id="conceptos-clave-en-la-estimación-por-intervalo"><span class="header-section-number">3.6.1</span> Conceptos clave en la estimación por intervalo</h3>
+<p><strong>Intervalo de Confianza (IC)</strong>: Es un rango de valores calculado a partir de los datos de la muestra, que se utiliza para estimar el parámetro poblacional desconocido. Se expresa comúnmente como <span class="math inline">\((\text{Límite Inferior}, \text{Límite Superior})\)</span>.</p>
+<p>Dada una muestra aleatoria simple <span class="math inline">\(\mathbf{X}=(X_1,X_2,\ldots,X_n)\)</span> de una población <span class="math inline">\(X\)</span> con función de distribución <span class="math inline">\(F\)</span> que depende de un parámetro desconocido <span class="math inline">\(\theta\)</span>, diremos que un estimador por intervalos de confianza del parámetro <span class="math inline">\(\theta\)</span> con un nivel de confianza de <span class="math inline">\((1-\alpha)=100*(1-\alpha)\%\)</span> es un intervalo de la forma <span class="math inline">\((T_{inf}(\mathbf{X}),T_{sup}(\mathbf{X}))\)</span> que satisface: <span class="math display">\[P(\theta \in (T_{inf}(\mathbf{X}),T_{sup}(\mathbf{X})))=1-\alpha\]</span></p>
+<p><strong>Nivel de Confianza</strong>: Es la probabilidad de que el intervalo de confianza contenga el verdadero valor del parámetro poblacional. Se denota como <span class="math inline">\(1 - \alpha\)</span>, donde <span class="math inline">\(\alpha\)</span> es el nivel de significancia. Un nivel de confianza común es el <span class="math inline">\(95\%\)</span>, lo que significa que estamos un <span class="math inline">\(95\%\)</span> seguros de que el intervalo contiene el parámetro verdadero. Si repetimos el experimento <span class="math inline">\(N\)</span> veces, en el <span class="math inline">\(95\%\)</span> de las ocasiones el verdadero valor del parámetro estará incluido en el intervalo proporcionado. Sin embargo es importante señalar que, dado que el experimento solo suele realizarse en una ocasión, no podemos estar seguros de que el verdadero valor del parámetro está incluido en nuestro intervalo. Estará incluido o no estará incluido, pero no podemos saber en qué situación nos encontramos. Estar seguro sería tanto como decir que conocemos el verdadero valor del parámetro. En ese caso, obviamente, no necesitaríamos estimación ninguna.</p>
+<p><strong>Error Estándar (SE)</strong>: Es una medida de la variabilidad de un estimador. Se utiliza para calcular los límites del intervalo de confianza.</p>
+</section>
+<section id="cálculo-del-intervalo-de-confianza" class="level3" data-number="3.6.2">
+<h3 data-number="3.6.2" class="anchored" data-anchor-id="cálculo-del-intervalo-de-confianza"><span class="header-section-number">3.6.2</span> Cálculo del Intervalo de Confianza</h3>
+<p>El cálculo de un intervalo de confianza generalmente sigue la fórmula:</p>
+<p><span class="math display">\[
+\text{Estimación Puntual} \pm (\text{Valor Crítico} \times \text{Error Estándar})
+\]</span> Para alcanzar el intervalo de confianza, generalmente se busca una cantidad (aleatoria) <span class="math inline">\(C(\mathbf{X},\theta)\)</span> relacionada con el parámetro desconocido <span class="math inline">\(\theta\)</span> y con la muestras <span class="math inline">\(\mathbf{X}\)</span>, cuya distribución sea conocida y no dependa del valor del parámetro. Esta cantidad recibe el nombre de <em>pivote</em> o <em>cantidad pivotal</em> para <span class="math inline">\(\theta\)</span>.</p>
+<p>Dado que conocemos la distribución del pivote, podemos usar los cuartiles <span class="math inline">\(1-\alpha/2\)</span> y <span class="math inline">\(\alpha/2\)</span> de dicha distribución, y la desviación estándar dle estimador por intervalos de confianza, para plantear la siguiente ecuación: <span class="math display">\[
+P(1-\alpha/2 \text{ cuantil}&lt; C(\mathbf{X},\theta)&lt;\alpha/2 \text{ cuantil}) = 1- \alpha
+\]</span>Para obtener los extremos (inferior y superior) del estimador por intervalos de confianza <span class="math inline">\(T_{inf}(\mathbf{X})\)</span> y <span class="math inline">\(T_{sup}(\mathbf{X})\)</span>, se resuelve la doble desigualdad en <span class="math inline">\(\theta\)</span>. De este modo el intervalo de confianza al <span class="math inline">\(100(1-\alpha)\%\)</span> para <span class="math inline">\(\theta\)</span> es <span class="math inline">\((T_{inf}(\mathbf{x}),T_{sup}(\mathbf{x}))\)</span></p>
+</section>
+<section id="importancia-de-la-estimación-por-intervalos" class="level3" data-number="3.6.3">
+<h3 data-number="3.6.3" class="anchored" data-anchor-id="importancia-de-la-estimación-por-intervalos"><span class="header-section-number">3.6.3</span> Importancia de la estimación por intervalos</h3>
+<p>A diferencia de la estimación puntual, el intervalo de confianza proporciona información sobre la precisión de la estimación y la variabilidad inherente en los datos muestrales.</p>
+<p>Además, la estimación por intervalo proporciona un rango de valores que es útil para la toma de decisiones en el dominio de aplicación.</p>
+<p>Podemos señalar que la estimación por intervalos es menos susceptible a errores muestrales y proporciona una medida más realista del parámetro poblacional que la obtenida con la estimación puntual.</p>
+</section>
+<section id="intervalo-de-confianza-para-la-media-cuando-la-varianza-es-conocida" class="level3" data-number="3.6.4">
+<h3 data-number="3.6.4" class="anchored" data-anchor-id="intervalo-de-confianza-para-la-media-cuando-la-varianza-es-conocida"><span class="header-section-number">3.6.4</span> Intervalo de Confianza para la media (cuando la varianza es conocida)</h3>
+<p>Sea una muestra aleatoria simple <span class="math inline">\(\mathbf{X}\)</span> de tamaño <span class="math inline">\(n\)</span> obtenida de <span class="math inline">\(X\)</span>. Supongamos que <span class="math inline">\(X\)</span> sigue una distribución Normal con parámetros (<span class="math inline">\(\mu\)</span>) y varianza conocida (<span class="math inline">\(\sigma^2\)</span>). Fijate que este último supuesto es muy poco realista (no conocemos la media, pero conocemos la varianza). En este caso, el estadístico <span class="math inline">\(\bar{X}\)</span> tiene una distribución normal: <span class="math display">\[
+\bar{X} \sim N \left( \mu,\sigma_{\bar{X}}=\frac{\sigma}{\sqrt{n}}\right )
+\]</span>La desviación típica de <span class="math inline">\(\bar{X}\)</span> ( o de cualquier otro estadístico) se conoce como su <strong>error estándar</strong>.</p>
+<p>La cantidad pivotal para <span class="math inline">\(\mu\)</span> es: <span class="math display">\[
+Z=\frac{\bar{X}-\mu}{\sigma/\sqrt{n}} \sim N \left( 0,1 \right )
+\]</span> Ahora, si <span class="math inline">\(z_{1-\alpha/2}\)</span> y <span class="math inline">\(z_{\alpha/2}\)</span> son los cuartiles <span class="math inline">\((1-\alpha/2)\)</span> y <span class="math inline">\(\alpha/2\)</span> de la distribución <span class="math inline">\(N(0,1\)</span>, entonces tenemos: <span class="math display">\[
+P(z_{1-\alpha/2}&lt;Z&lt;z_{\alpha/2})=1-\alpha
+\]</span> Es decir: <span class="math display">\[
+P\left (z_{1-\alpha/2}&lt;\frac{\bar{X}-\mu}{\sigma/\sqrt{n}}&lt;z_{\alpha/2} \right)=1-\alpha
+\]</span> Hay que notar que para la distribución Normal: <span class="math inline">\(z_{1-\alpha/2}=-z_{\alpha/2}\)</span></p>
+<p>Resolvemos la doble desigualdad para <span class="math inline">\(\mu\)</span>: <span class="math display">\[
+-z_{\alpha/2}&lt;\frac{\bar{X}-\mu}{\sigma/\sqrt{n}}&lt;z_{\alpha/2}
+\]</span> <span class="math display">\[
+-z_{\alpha/2}\frac{\sigma}{\sqrt{n}}&lt;\bar{X}-\mu&lt;z_{\alpha/2}\frac{\sigma}{\sqrt{n}}
+\]</span> <span class="math display">\[ -z_{\alpha/2}\frac{\sigma}{\sqrt{n}}-\bar{X}&lt;-\mu&lt;-\bar{X}+z_{\alpha/2}\frac{\sigma}{\sqrt{n}} \]</span> <span class="math display">\[ -z_{\alpha/2}\frac{\sigma}{\sqrt{n}}+\bar{X}&gt;\mu&gt;\bar{X}-z_{\alpha/2}\frac{\sigma}{\sqrt{n}}
+\]</span> De modo que el estimador por intervalos de confianza es: <span class="math display">\[
+\left ( \bar{X}-z_{\alpha/2}\frac{\sigma}{\sqrt{n}},\bar{X}+z_{\alpha/2}\frac{\sigma}{\sqrt{n}} \right)
+\]</span> y por tanto, el intervalo de confianza para la media se calcula como: <span class="math display">\[     
+IC_{1-\alpha}(\mu)=\left (\bar{x} -z_{\alpha/2} \frac{\sigma}{\sqrt{n}},\bar{x} +z_{\alpha/2}  \frac{\sigma}{\sqrt{n}} \right )= \left( \bar{x} \pm z_{\alpha/2} \frac{\sigma}{\sqrt{n}} \right)
+\]</span> donde <span class="math inline">\(\bar{x}\)</span> es la media muestral, <span class="math inline">\(z_{\alpha/2}\)</span> es el valor crítico del estadístico <span class="math inline">\(z\)</span> para el nivel de confianza deseado, <span class="math inline">\(\sigma\)</span> es la desviación estándar poblacional, y <span class="math inline">\(n\)</span> es el tamaño de la muestra.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo. Intervalo de confianza para la media de una distribución normal">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo. Intervalo de confianza para la media de una distribución normal
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Se ha probado que la altura de los alumnas de primer curso de la URJC se puede aproximar mediante una variable aleatoria con distribución normal con desviación típica <span class="math inline">\(\sigma=10\)</span> cm pero la media <span class="math inline">\((\mu)\)</span> desconocida. En un estudio con <span class="math inline">\(50\)</span> alumnas se obtiene una media de <span class="math inline">\(166\)</span> cm. Vamos a construir un intervalo de confianza al <span class="math inline">\(95\%\)</span> para <span class="math inline">\(\mu\)</span>.</p>
+<p>Sea <span class="math inline">\(X\)</span> la altura, y sabemos que las variables independientes y identicamente distribuidas: <span class="math display">\[
+X_1,X_2,\ldots,X_{50}\sim N(\mu,\sigma^2=10^2).
+\]</span> Dado que: <span class="math display">\[
+\frac{\sigma^2}{n}=\frac{10^2}{50}=2,
+\]</span> sabemos que: <span class="math display">\[
+\bar{X}\sim N(\mu,2),
+\]</span> y por tanto: <span class="math display">\[
+\frac{\bar{X}-\mu}{\sqrt{2}}\sim N(0,1).
+\]</span> Además los cuartiles de la distribución normal nos dicen que si <span class="math inline">\(Z\sim N(0,1)\)</span>, entonces: <span class="math display">\[
+P(-1,96&lt;Z&lt;1,96)=0,95.
+\]</span> Por tanto: <span class="math display">\[
+P\left(-1,96&lt;\frac{\bar{X}-\mu}{\sqrt{2}}&lt;1,96\right)=0,95.
+\]</span> Despejamos <span class="math inline">\(\mu\)</span>:</p>
+<p><span class="math display">\[
+P\left(\bar{X}-1,96\sqrt{2}&lt;\mu&lt;\bar{X}+1,96\sqrt{2}\right)=0,95.
+\]</span> Por tanto, si <span class="math inline">\(\bar{x}\)</span> es una realización particular de la variable aleatoria <span class="math inline">\(\bar{X}\)</span> en la muestra observada, el intervalo de confianza al <span class="math inline">\(95\%\)</span> será: <span class="math display">\[
+IC_{0.5}(\mu)=\bar{x}\pm1.96 \sqrt{2} = \bar{x}\pm2.77
+\]</span> En nuestro caso particular como la media era <span class="math inline">\(\bar{x}=166\)</span> cm, tenemos: <span class="math display">\[
+IC_{0.5}(\mu)= 166\pm2.77=(163.23 , 168.77)
+\]</span></p>
+</div>
+</div>
+</div>
+</section>
+<section id="intervalo-de-confianza-para-la-media-cuando-la-varianza-es-desconocida" class="level3" data-number="3.6.5">
+<h3 data-number="3.6.5" class="anchored" data-anchor-id="intervalo-de-confianza-para-la-media-cuando-la-varianza-es-desconocida"><span class="header-section-number">3.6.5</span> Intervalo de Confianza para la media (cuando la varianza es desconocida)</h3>
+<p>Sea una muestra aleatoria simple <span class="math inline">\(\mathbf{X}\)</span> de tamaño <span class="math inline">\(n\)</span> obtenida de <span class="math inline">\(X\)</span>. Supongamos que <span class="math inline">\(X\)</span> sigue una distribución Normal con parámetros (<span class="math inline">\(\mu\)</span>) y varianza desconocida (<span class="math inline">\(\sigma^2\)</span>). Este supuesto es más realista que el caso anterior. Lo habitual es no disponer de información sobre la varianza poblacional.</p>
+<p>La cantidad pivotal para <span class="math inline">\(\mu\)</span> es: <span class="math display">\[
+T=\frac{\bar{X}-\mu}{s/\sqrt{n}}\sim t_{n-1}
+\]</span> donde <span class="math inline">\(s^2\)</span> es la es la cuasi-varianza muestral: <span class="math inline">\(s^2=\frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2\)</span> y <span class="math inline">\(t_n\)</span> es la distribución <span class="math inline">\(t\)</span> de Student con <span class="math inline">\(n\)</span> grados de libertad.</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Repaso">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Repaso
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Es posible que hayas estudiado la distribución <span class="math inline">\(t\)</span> de Student en la asignatura de <em>Probabilidad</em> del primer curso del grado en Ciencia e Ingeniería de datos. En cualquier caso, repasamos: Si <span class="math inline">\(T\sim t_n\)</span> entonces: <span class="math display">\[
+E[T]=0
+\]</span> y <span class="math display">\[
+Var[T]=\frac{n}{n-2}
+\]</span></p>
+</div>
+</div>
+<p>Si <span class="math inline">\(t_{n-1;1-\alpha/2}\)</span> y <span class="math inline">\(t_{n-1;\alpha/2}\)</span> son los cuantiles <span class="math inline">\((1-\alpha/2)\)</span> y <span class="math inline">\((\alpha/2)\)</span> respectivamente de una distribución <span class="math inline">\(t\)</span> de Student con <span class="math inline">\(n-1\)</span> grados de libertad: <span class="math display">\[
+P(t_{n-1;1-\alpha/2}&lt;T&lt;t_{n-1;\alpha/2})=1-\alpha
+\]</span> Es decir: <span class="math display">\[
+P(-t_{n-1;\alpha/2}&lt;\frac{\bar{X}-\mu}{s/\sqrt{n}}&lt;t_{n-1;\alpha/2})=1-\alpha
+\]</span> Se resuelve la doble desigualdad para <span class="math inline">\(\mu\)</span> y se obtiene el estimador por intervalos de confianza: <span class="math display">\[
+\left ( \bar{X}-t_{n-1;\alpha/2}\frac{s}{\sqrt{n}}, \bar{X}+t_{n-1;\alpha/2}\frac{s}{\sqrt{n}} \right )
+\]</span> Resultando el intervalo de confianza: <span class="math display">\[
+IC_{1-\alpha}(\mu) = \left ( \bar{\mathbf{x}}-t_{n-1;\alpha/2}\frac{s}{\sqrt{n}}, \bar{\mathbf{x}}+t_{n-1;\alpha/2}\frac{s}{\sqrt{n}} \right )
+\]</span></p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo. Intervalo de confianza para la media de una distribución normal con varianza desconocida">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo. Intervalo de confianza para la media de una distribución normal con varianza desconocida
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Se ha medido la temperatura media de una muestra aleatoria de <span class="math inline">\(10\)</span> soluciones salinas, obteniendo los siguiente resultados:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 37.2 34.1 35.5 34.5 32.9 37.3 32.0 33.1 42.0 34.8</code></pre>
+</div>
+</div>
+<p>Se nos mide calcular el IC al <span class="math inline">\(90\%\)</span> para la temperatura media, suponiendo que la temperatura de la solución salina se puede aproximar mediante una variable aleatoria con distribución normal.</p>
+<p>Vemos que la población a estudiar es “X=temperatura de una solución salina” donde <span class="math inline">\(X \sim N(\mu,\sigma^2)\)</span> con <span class="math inline">\(\sigma^{2}\)</span> desconocida.</p>
+<p>Tenemos: <span class="math inline">\(n=10\)</span>, <span class="math inline">\(\bar{x}=\)</span> 35.3, <span class="math inline">\(s^2=\)</span> 8.5, <span class="math inline">\(s=\)</span> 2.9. Además: <span class="math inline">\(t_{n-1;\alpha/2}=t_{9;0.05}=1.83\)</span>.</p>
+<p>Por tanto el intervalo de confianza que buscamos es: <span class="math display">\[
+IC_{0.9}(\mu)=\left (35.3\pm 1.83\frac{2.91}{\sqrt{10}} \right )=(35.3\pm 1.68)=(33.62;36.98)
+\]</span></p>
+</div>
+</div>
+</div>
+</section>
+<section id="media-poblacional-para-muestras-grandes" class="level3" data-number="3.6.6">
+<h3 data-number="3.6.6" class="anchored" data-anchor-id="media-poblacional-para-muestras-grandes"><span class="header-section-number">3.6.6</span> Media poblacional para muestras grandes</h3>
+<p>Sea <span class="math inline">\(\mathbf{X}=(X_1,\ldots,X_n)\)</span> una muestra aleatoria simple de tamaño <span class="math inline">\(n\)</span> de una variable aleatoria <span class="math inline">\(X\)</span>. Supongamos que <span class="math inline">\(X\)</span> sigue una distribución (conocida o no) con parámetros <span class="math inline">\(\mu\)</span> y <span class="math inline">\(\sigma^2\)</span>. Además, supongamos que <span class="math inline">\(n \geq 30\)</span>. Entonces, por el <em>Teorema Central del Límite</em> se tiene que la cantidad pivotal para <span class="math inline">\(\mu\)</span> cumple la siguiente propiedad:</p>
+<p><span class="math display">\[
+Z=\frac{\bar{X}-\mu}{\hat{\sigma}/\sqrt{n}}\sim  N(0,1)
+\]</span> Si <span class="math inline">\(z_{1-\alpha/2}\)</span> y <span class="math inline">\(z_{\alpha/2}\)</span> son los cuantiles <span class="math inline">\((1-\alpha/2)\)</span> y <span class="math inline">\(\alpha/2\)</span> de <span class="math inline">\(N(0,1)\)</span>, tenemos: <span class="math display">\[
+P(z_{1-\alpha/2}&lt;Z&lt;z_{\alpha/2})=1-\alpha
+\]</span></p>
+<p>Y así, tenemos la condición: <span class="math display">\[
+P\left ( -z_{\alpha/2}&lt;\frac{\bar{X}-\mu}{\hat{\sigma}/\sqrt{n}}&lt;z_{\alpha/2} \right )=1-\alpha
+\]</span> Obtenemos el estimador por intervalos de confianza resolviendo la doble desigualdad para <span class="math inline">\(\mu\)</span>: <span class="math display">\[
+\left ( \bar{X}-z_{\alpha/2}\frac{\hat{\sigma}}{\sqrt{n}}, \bar{X}+z_{\alpha/2}\frac{\hat{\sigma}}{\sqrt{n}} \right )
+\]</span> El intervalo de confianza es: <span class="math display">\[
+IC_{1-\alpha}(\mu)=\left ( \bar{\mathbf{x}}-z_{\alpha/2}\frac{\hat{\sigma}}{\sqrt{n}}, \bar{\mathbf{x}}+z_{\alpha/2}\frac{\hat{\sigma}}{\sqrt{n}} \right )
+\]</span></p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo. Intervalo de confianza para media de muestras grandes">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo. Intervalo de confianza para media de muestras grandes
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que estamos interesados en estimar la media del tiempo diario que las personas pasan en redes sociales en la URJC. Hemos tomado una muestra aleatoria de <span class="math inline">\(200\)</span> estudiantes y medido el tiempo que pasan en redes sociales. Los resultados muestran una media muestral <span class="math inline">\(\bar{x}\)</span> de <span class="math inline">\(2.5\)</span> horas al día con una desviación estándar muestral <span class="math inline">\(s\)</span> de <span class="math inline">\(0.8\)</span> horas. Es decir, de <span class="math inline">\(2\)</span> horas y <span class="math inline">\(30\)</span> minutos.</p>
+<p>Queremos calcular un intervalo de confianza del <span class="math inline">\(95\%\)</span> para la media del tiempo que la población pasa en redes sociales.</p>
+<p>Calculamos el error estándar de la media (SE):</p>
+<p><span class="math display">\[
+SE = \frac{s}{\sqrt{n}}= \frac{0.8}{\sqrt{200}} \approx 0.0566
+\]</span></p>
+<p>De este modo el IC al <span class="math inline">\(95\%\)</span> queda como sigue: <span class="math display">\[
+IC_{0.95}(\mu)=\left ( 2.5\pm1.96 * 0.0566\right) =(2.389, 2.611)
+\]</span></p>
+<p>Con un <span class="math inline">\(95\%\)</span> de confianza, podemos decir que la media del tiempo diario que las personas pasan en redes sociales en la población está entre <span class="math inline">\(2.389\)</span> y <span class="math inline">\(2.611\)</span> horas. Esto es, entre <span class="math inline">\(2\)</span> horas y <span class="math inline">\(23\)</span> minutos y <span class="math inline">\(2\)</span> horas y <span class="math inline">\(37\)</span> minutos, aproximadamente.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="intervalo-de-confianza-para-la-proporción" class="level3" data-number="3.6.7">
+<h3 data-number="3.6.7" class="anchored" data-anchor-id="intervalo-de-confianza-para-la-proporción"><span class="header-section-number">3.6.7</span> Intervalo de Confianza para la proporción</h3>
+<p>Sea <span class="math inline">\(\mathbf{X}=(X_1,\ldots,X_n)\)</span> una muestra aleatoria simple de tamaño <span class="math inline">\(n\)</span> de una variable aleatoria <span class="math inline">\(X\)</span>. Supongamos que <span class="math inline">\(X\)</span> sigue una distribución de Bernoulli con parámetro <span class="math inline">\(p\)</span>. Esto es: <span class="math display">\[
+\mu=E[X]=p
+\]</span> y <span class="math display">\[
+\sigma^2=Var[X]=p(1-p)
+\]</span> Además, supongamos que <span class="math inline">\(n \geq 30\)</span>. Entonces, por el <em>Teorema Central del Límite</em> se tiene que la cantidad pivotal para <span class="math inline">\(\hat{p}=\bar{X}\)</span> cumple la siguiente propiedad:</p>
+<p><span class="math display">\[
+Z=\frac{\hat{p}-p}{\sqrt{\hat{p}(1-\hat{p})/n}}\sim  N(0,1)
+\]</span> EL intervalo de confianza para estimar una proporción poblacional (<span class="math inline">\(p\)</span>) es: <span class="math display">\[
+IC_{1-\alpha}(p)=\left ( \hat{p} \pm z_{\alpha/2} \sqrt{\frac{\hat{p}(1 - \hat{p})}{n}} \right )
+\]</span></p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo. Intervalo de confianza para proporción">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo. Intervalo de confianza para proporción
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que estamos realizando una encuesta para determinar la proporción de personas que apoyan una nueva política ambiental en una ciudad. Hemos encuestado a <span class="math inline">\(1000\)</span> personas, y <span class="math inline">\(560\)</span> de ellas han respondido que apoyan la nueva política.</p>
+<p>Es decir, la proporción muestral es: <span class="math inline">\(\hat{p} = \frac{560}{1000} = 0.56\)</span></p>
+<p>Queremos calcular un intervalo de confianza del <span class="math inline">\(95\%\)</span> para la proporción de apoyo en toda la población.</p>
+<p>El error estándar para la proporción es:</p>
+<p><span class="math display">\[
+SE = \sqrt{\frac{\hat{p}(1 - \hat{p})}{n}}=\sqrt{\frac{0.56 \times (1 - 0.56)}{1000}}  \approx 0.016
+\]</span></p>
+<p>Obteniendo: <span class="math display">\[
+IC_{0.95}(p)= 56 \pm 1.96 * 0.016 =  (0.529, 0.591)
+\]</span></p>
+<p>Con un <span class="math inline">\(95\%\)</span> de confianza, podemos decir que la proporción de personas en la población que apoyan la nueva política ambiental está entre el <span class="math inline">\(52.9\%\)</span> y el <span class="math inline">\(59.1\%\)</span>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretación-de-los-intervalos-de-confianza" class="level3" data-number="3.6.8">
+<h3 data-number="3.6.8" class="anchored" data-anchor-id="interpretación-de-los-intervalos-de-confianza"><span class="header-section-number">3.6.8</span> Interpretación de los intervalos de confianza</h3>
+<p>Si calculamos un intervalo de confianza del <span class="math inline">\(95\%\)</span> para la media poblacional y, por ejemplo, obtenemos un intervalo de <span class="math inline">\((5, 10)\)</span>, esto no significa que hay un <span class="math inline">\(95\%\)</span> de probabilidad de que la media poblacional esté en ese intervalo en un caso particular, sino que, si repetimos este procedimiento muchas veces, el <span class="math inline">\(95\%\)</span> de los intervalos construidos contendrán la verdadera media poblacional. Podríamos decir que estamos un <span class="math inline">\(95\%\)</span> seguros de que la media poblacional se encuentra entre <span class="math inline">\(5\)</span> y <span class="math inline">\(10\)</span>, pero ¡ojo!, la media poblacional (cuyo valor desconocemos) estará o no estará en ese intervalo.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Simulación Intervalo de Confianza">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Simulación Intervalo de Confianza
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Vamos a realizar un ejercicio de simulación para interpretar correctamente el concepto frecuentista de <strong>intervalo de confianza</strong>. Para ello, generamos <span class="math inline">\(100\)</span>muestras de tamaño <span class="math inline">\(n=50\)</span> de una distribución <span class="math inline">\(X\sim N(\mu=10,sigma^2=1)\)</span>. Para cada una de estas muestras, se construye un intervalo de confianza para la media con <span class="math inline">\(\alpha=0.05\)</span>. Y representamos todos esos intervalos de confianza en un único gráfico. En verde se pintan los intervalos de confianza que incluyen el verdadero valor del parámetro <span class="math inline">\(10\)</span>. En rojo los que no.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Click para ver el código</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3983</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>ic<span class="ot">=</span><span class="fu">matrix</span>(<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">5</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>ic[,<span class="dv">1</span>]<span class="ot">=</span><span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>ic<span class="ot">=</span><span class="fu">as.data.frame</span>(ic)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(ic)<span class="ot">=</span><span class="fu">c</span>(<span class="st">"id"</span>,<span class="st">"estimador"</span>,<span class="st">"inferior"</span>,<span class="st">"superior"</span>,<span class="st">"resultado"</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>ic<span class="sc">$</span>resultado<span class="ot">=</span><span class="st">"in"</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>){</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  muestra<span class="ot">=</span><span class="fu">rnorm</span>(<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">1</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  ic[i,<span class="dv">2</span>]<span class="ot">=</span><span class="fu">mean</span>(muestra)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  ic[i,<span class="dv">3</span>]<span class="ot">=</span><span class="fu">mean</span>(muestra)<span class="sc">-</span><span class="fl">1.96</span><span class="sc">*</span><span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">50</span>)   </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  ic[i,<span class="dv">4</span>]<span class="ot">=</span><span class="fu">mean</span>(muestra)<span class="sc">+</span><span class="fl">1.96</span><span class="sc">*</span><span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">50</span>) </span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>ic<span class="sc">$</span>resultado<span class="ot">=</span><span class="sc">!</span>(ic[,<span class="dv">3</span>]<span class="sc">&gt;</span><span class="dv">10</span> <span class="sc">|</span> ic[,<span class="dv">4</span>]<span class="sc">&lt;</span><span class="dv">10</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>ic <span class="sc">%&gt;%</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(estimador, id, <span class="at">color =</span> resultado)) <span class="sc">+</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span>inferior, <span class="at">y =</span> id, <span class="at">xend =</span> superior, <span class="at">yend =</span> id, <span class="at">color =</span> resultado))<span class="sc">+</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">10</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Varios Intervalos de Confianza"</span>) <span class="sc">+</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#FF3333"</span>, <span class="st">"#009900"</span>)) <span class="sc">+</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title.position =</span> <span class="st">"plot"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="para_files/figure-html/ic1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>¿Cuántos intervalos de confianza, de entre los <span class="math inline">\(100\)</span>, contienen al verdadero valor del parámetro? Razona ese resultado.</li>
+<li>¿Cuándo se toma una única muestra, cómo podrías estar seguro de estar en uno de los intervalos de confianza que recoge el verdadero valor del parámetro?</li>
+<li>¿Cómo crees que afecta a la longitud del intervalo de confianza los siguientes aspectos:?
+<ul>
+<li>Tamaño muestral</li>
+<li>Nivel de confianza</li>
+</ul></li>
+</ul>
+<p>Discute estas cuestiones con tu profesor.</p>
+</div>
+</div>
+</section>
+<section id="determinación-del-tamaño-muestral" class="level3" data-number="3.6.9">
+<h3 data-number="3.6.9" class="anchored" data-anchor-id="determinación-del-tamaño-muestral"><span class="header-section-number">3.6.9</span> Determinación del tamaño muestral</h3>
+<p>Determinar el tamaño adecuado de una muestra es crucial en la inferencia estadística, ya que un tamaño muestral adecuado garantiza que los intervalos de confianza sean precisos y que las conclusiones obtenidas sean representativas de la población. Las técnicas para determinar el tamaño muestral están relacionadas directamente con los intervalos de confianza y se basan en varios factores, entre los que se incluyen el nivel de confianza deseado, la precisión (o margen de error) deseada y la variabilidad esperada en la población.</p>
+<p>Los factores clave para determinar el <strong>tamaño muestral</strong> son:</p>
+<ol type="1">
+<li><strong>Nivel de confianza (</strong><span class="math inline">\(1-\alpha\)</span>):
+<ul>
+<li>El nivel de confianza indica el grado de certeza de que el intervalo de confianza contiene el parámetro poblacional. Tal y como hemos indicado anteriormente, niveles de confianza comunes son <span class="math inline">\(90\%\)</span>, <span class="math inline">\(95\%\)</span> y <span class="math inline">\(99\%\)</span>. Un nivel de confianza más alto requiere una muestra más grande para asegurar la misma precisión.</li>
+</ul></li>
+<li><strong>Margen de error (E)</strong>:
+<ul>
+<li>El margen de error es la máxima diferencia tolerable entre la estimación muestral y el valor real del parámetro poblacional. Un margen de error más pequeño requiere una muestra más grande para asegurar una estimación precisa.</li>
+</ul></li>
+<li><strong>Variabilidad poblacional (</strong><span class="math inline">\(\sigma\)</span>):
+<ul>
+<li>La variabilidad en la población, medida por la desviación estándar, afecta directamente al tamaño muestral. Una mayor variabilidad requiere una muestra más grande para obtener una estimación precisa.</li>
+</ul></li>
+</ol>
+<p>A continuación mostramos algunos ejemplos del cálculo del tamaño muestral para diferentes situaciones.</p>
+<section id="tamaño-muestral-para-estimar-una-media-poblacional-de-una-normal" class="level4" data-number="3.6.9.1">
+<h4 data-number="3.6.9.1" class="anchored" data-anchor-id="tamaño-muestral-para-estimar-una-media-poblacional-de-una-normal"><span class="header-section-number">3.6.9.1</span> Tamaño muestral para estimar una media poblacional de una Normal</h4>
+<p>El tamaño muestral <span class="math inline">\(n\)</span> necesario para estimar una media poblacional con un margen de error <span class="math inline">\(E\)</span> y un nivel de confianza <span class="math inline">\(1 - \alpha\)</span> se puede calcular usando la fórmula:</p>
+<p><span class="math display">\[
+n = \left( \frac{z_{\alpha/2} \cdot \sigma}{E} \right)^2
+\]</span></p>
+<p>donde:</p>
+<ul>
+<li><span class="math inline">\(z_{\alpha/2}\)</span> es el valor crítico del estadístico <span class="math inline">\(z\)</span> correspondiente al nivel de confianza deseado.</li>
+<li><span class="math inline">\(\sigma\)</span> es la desviación estándar de la población (si es desconocida, se puede usar la desviación estándar de la muestra <span class="math inline">\(s\)</span>).</li>
+</ul>
+<p>Efectivamente, teníamos que el intervalo de confianza para la media se obtenía mediante la fórmula: <span class="math display">\[
+\left ( \bar{x} \pm z_{\alpha/2}\frac{\sigma}{\sqrt{n}} \right )
+\]</span> Y buscamos el <span class="math inline">\(n\)</span> tal que la desviación respecto a la media sea menor que <span class="math inline">\(E\)</span>, es decir: <span class="math display">\[
+z_{\alpha/2}\frac{\sigma}{\sqrt{n}}  &lt; E
+\]</span> Esto es: <span class="math display">\[
+n &gt;  \left ( \frac{z_{\alpha/2} \sigma}{\sqrt{n}} \right )^2
+\]</span></p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo. Tamaño muestral para la estimación de una Media">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo. Tamaño muestral para la estimación de una Media
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que deseamos estimar la media de una población con un nivel de confianza del <span class="math inline">\(95\%\)</span>, un margen de error de <span class="math inline">\(5\)</span> unidades y se estima que la desviación estándar de la población es <span class="math inline">\(15\)</span> unidades. El valor crítico <span class="math inline">\(z_{\alpha/2}\)</span> para un nivel de confianza del <span class="math inline">\(95\%\)</span> es aproximadamente <span class="math inline">\(1.96\)</span>.</p>
+<p><span class="math display">\[
+n = \left( \frac{1.96 \cdot 15}{5} \right)^2 = \left( \frac{29.4}{5} \right)^2 \approx 34.57
+\]</span></p>
+<p>Por lo tanto, necesitamos una muestra de al menos <span class="math inline">\(35\)</span> individuos.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="tamaño-muestral-para-estimar-una-proporción-poblacional" class="level4" data-number="3.6.9.2">
+<h4 data-number="3.6.9.2" class="anchored" data-anchor-id="tamaño-muestral-para-estimar-una-proporción-poblacional"><span class="header-section-number">3.6.9.2</span> Tamaño muestral para estimar una proporción poblacional</h4>
+<p>El tamaño muestral <span class="math inline">\(n\)</span> necesario para estimar una proporción poblacional <span class="math inline">\(p\)</span> con un margen de error <span class="math inline">\(E\)</span> y un nivel de confianza <span class="math inline">\(1 - \alpha\)</span> se puede calcular usando la fórmula:</p>
+<p><span class="math display">\[
+n = \frac{z_{\alpha/2}^2 \cdot p \cdot (1 - p)}{E^2}
+\]</span></p>
+<p>donde:</p>
+<ul>
+<li><span class="math inline">\(p\)</span> es la proporción esperada (si no se conoce, se usa <span class="math inline">\(p = 0.5\)</span> para maximizar el tamaño muestral).</li>
+<li><span class="math inline">\(z_{\alpha/2}\)</span> es el valor crítico del estadístico <span class="math inline">\(z\)</span> correspondiente al nivel de confianza deseado.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo. Tamaño muestral para la estimación de una proporción">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo. Tamaño muestral para la estimación de una proporción
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que deseamos estimar la proporción de personas que aprueban una nueva ley con un nivel de confianza del <span class="math inline">\(95\%\)</span>, un margen de error del <span class="math inline">\(3\%\)</span> <span class="math inline">\((0.03)\)</span> y se estima que la proporción esperada es <span class="math inline">\(p = 0.5\)</span>. El valor crítico <span class="math inline">\(z_{\alpha/2}\)</span> para un nivel de confianza del <span class="math inline">\(95\%\)</span> es aproximadamente <span class="math inline">\(1.96\)</span>.</p>
+<p><span class="math display">\[
+n = \frac{1.96^2 \cdot 0.5 \cdot (1 - 0.5)}{0.03^2} = \frac{3.8416 \cdot 0.25}{0.0009} = \frac{0.9604}{0.0009} \approx 1067.11
+\]</span></p>
+<p>Por lo tanto, necesitamos una muestra de al menos <span class="math inline">\(1068\)</span> individuos.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="contraste-de-hipótesis" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="contraste-de-hipótesis"><span class="header-section-number">3.7</span> Contraste de hipótesis</h2>
+<p>Los contrastes de hipótesis son una herramienta fundamental en la inferencia estadística utilizada para tomar decisiones basadas en datos muestrales. Permiten evaluar si los datos disponibles proporcionan suficiente evidencia en contra de una hipótesis previamente establecida sobre una población.</p>
+<p>El contraste de hipótesis es un proceso estructurado para evaluar afirmaciones sobre parámetros poblacionales utilizando datos muestrales. Mediante la formulación de hipótesis, selección de niveles de significancia, elección de estadísticas de prueba y evaluación del valor p, podemos tomar decisiones informadas y cuantitativamente justificadas. Este enfoque es fundamental en muchas áreas de investigación y análisis de datos, proporcionando un marco riguroso para la Inferencia Estadística.</p>
+<section id="conceptos-básicos-1" class="level3" data-number="3.7.1">
+<h3 data-number="3.7.1" class="anchored" data-anchor-id="conceptos-básicos-1"><span class="header-section-number">3.7.1</span> Conceptos básicos</h3>
+<p><strong>Hipótesis Nula</strong> <span class="math inline">\((H_0)\)</span>:</p>
+<ul>
+<li><p>La hipótesis nula es una afirmación sobre un parámetro poblacional que se asume verdadera hasta que se presente suficiente evidencia en contra. Se asume inicialmente que la hipótesis nula es correcta (semejante a suponer inocencia en un juicio a menos que se pruebe la culpabilidad). Habitualmente corresponde al estatus quo. Esto es, generalmente, la hipótesis nula representa un estado de “no efecto” o “no diferencia”.</p>
+<ul>
+<li>Ejemplo: <span class="math inline">\((H_0: \mu = 50)\)</span> (la media poblacional es <span class="math inline">\(50\)</span>). En este ejemplo, la idea fundamental del contraste sería toma una muestra aleatoria simple de la población, estudiar su media, y ver si hay evidencia suficiente como para rechazar la hipótesis nula establecida. La probabilidad de que la media sea <em>exactamente</em> igual a <span class="math inline">\(50\)</span> en la muestra es muy baja. Es decir, probablemente <span class="math inline">\(\bar{\mathbf{x}} \neq 50\)</span>. Sin embargo, lo importante para rechazar la hipótesis nula es si la diferencia encontrada entre la media muestral y <span class="math inline">\(50\)</span> es tan grande como para rechazar que podría ser <span class="math inline">\(50\)</span>. Esto va a depender fuertemente del tamaño muestral y de la variabilidad de las observaciones en la muestra.</li>
+</ul></li>
+</ul>
+<p><strong>Hipótesis Alternativa</strong> <span class="math inline">\((H_1)\)</span>:</p>
+<ul>
+<li><p>La hipótesis alternativa es una afirmación que contrasta con la hipótesis nula y representa el efecto o diferencia que se desea detectar.</p>
+<ul>
+<li>Ejemplo: <span class="math inline">\((H_1: \mu \neq 50)\)</span> (la media poblacional no es 50).</li>
+<li>Ejemplo: <span class="math inline">\((H_1: \mu \geq 50)\)</span> (la media poblacional es mayor o igual que 50).</li>
+</ul></li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo $H_0$ vs $H_1$. Media poblacional">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo <span class="math inline">\(H_0\)</span> vs <span class="math inline">\(H_1\)</span>. Media poblacional
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que una empresa de educación en línea afirma que sus estudiantes pasan en promedio al menos <span class="math inline">\(4\)</span> horas diarias estudiando en su plataforma. Queremos comprobar si esta afirmación es cierta basándonos en una muestra de estudiantes.</p>
+<ul>
+<li><p>La hipótesis nula es la afirmación que queremos poner a prueba y que asumimos verdadera inicialmente. En este caso, la hipótesis nula es que la media del tiempo de estudio diario es de <span class="math inline">\(4\)</span> horas. <span class="math display">\[
+H_0: \mu \geq 4 \text{ horas}
+\]</span></p></li>
+<li><p>La hipótesis alternativa es lo que queremos demostrar y se contrapone a la hipótesis nula. En este caso, queremos ver si el tiempo de estudio diario es menor de <span class="math inline">\(4\)</span> horas. Fíjate que la empresa podría estar “inflando” sus resultados y lo “intersante” en este caso es “demostrar” que realmente los alumnos pasan menos tiempo en la plataforma. <span class="math display">\[
+H_1: \mu &lt; 4 \text{ horas}
+\]</span></p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo $H_0$ vs $H_1$. Proporción poblacional">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo <span class="math inline">\(H_0\)</span> vs <span class="math inline">\(H_1\)</span>. Proporción poblacional
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que el rectorado de la URJC afirma que menos del <span class="math inline">\(20\%\)</span> de los estudiantes de sus grados, fuman. Queremos verificar si la proporción de fumadores es mayor al <span class="math inline">\(20\%\)</span>.</p>
+<ul>
+<li><p>La hipótesis nula es la afirmación que queremos poner a prueba y que asumimos verdadera inicialmente. En este caso, la hipótesis nula es que la proporción de fumadores es menor o igual al <span class="math inline">\(20\%\)</span>. <span class="math display">\[
+H_0: p \leq 0.20
+\]</span></p></li>
+<li><p>La hipótesis alternativa es lo que queremos demostrar y se contrapone a la hipótesis nula. En este caso, queremos ver si la proporción de fumadores es mayor al <span class="math inline">\(20\%\)</span>. <span class="math display">\[
+H_1: p &gt; 0.20
+\]</span></p></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="pasos-en-un-contraste-de-hipótesis" class="level3" data-number="3.7.2">
+<h3 data-number="3.7.2" class="anchored" data-anchor-id="pasos-en-un-contraste-de-hipótesis"><span class="header-section-number">3.7.2</span> Pasos en un Contraste de Hipótesis</h3>
+<ol type="1">
+<li><strong>Formular las hipótesis</strong>:
+<ul>
+<li>Definir <span class="math inline">\(H_0\)</span> y <span class="math inline">\(H_1\)</span> claramente.</li>
+</ul></li>
+<li><strong>Seleccionar el nivel de significatividad estadística</strong> <span class="math inline">\((\alpha)\)</span>:
+<ul>
+<li>El nivel de significatividad estadística es la probabilidad de rechazar <span class="math inline">\(H_0\)</span> cuando es verdadera. Comúnmente, se utilizan <span class="math inline">\(\alpha = 0.05\)</span>, <span class="math inline">\(\alpha = 0.01\)</span>, o <span class="math inline">\(\alpha = 0.10\)</span>.</li>
+</ul></li>
+<li><strong>Elegir el estadístico de prueba</strong>:
+<ul>
+<li>Seleccionar un estadístico que siga una distribución conocida bajo <span class="math inline">\(H_0\)</span> (por ejemplo, la distribución Normal, t de Student o Chi-cuadrado).</li>
+</ul></li>
+<li><strong>Calcular el</strong> <span class="math inline">\(p-valor\)</span>:
+<ul>
+<li>El <span class="math inline">\(p-valor\)</span> es la probabilidad de observar un valor tan extremo o más extremo que el observado, bajo la suposición de que <span class="math inline">\(H_0\)</span> es verdadera. Después volveremos sobre este valor.</li>
+</ul></li>
+<li><strong>Tomar una decisión</strong>:
+<ul>
+<li>La regla de decisión de un contraste de hipótesis se basa en la “distancia” entre los datos muestrales y los valores esperados si <span class="math inline">\(H_0\)</span> es cierta. Esta distancia se calcula a partir de un estadístico del contraste y se considera “grande” o no, en base a la distribución del mismo y a la probabilidad de observar realizaciones “más extremas” de dicho estadístico. Para tomar la decisión, comparamos el valor p con <span class="math inline">\(\alpha\)</span>:</li>
+<li>Si <span class="math inline">\(p-valor \leq \alpha\)</span>, se rechaza <span class="math inline">\(H_0\)</span>. Hay suficiente evidencia en la muestra como para rechazar la hipótesis nula. El valor del parámetro establecido en <span class="math inline">\(H_0\)</span> es poco creíble dada la muestra observada.</li>
+<li>Si <span class="math inline">\(p-valor &gt; \alpha\)</span>, no se rechaza <span class="math inline">\(H_0\)</span>.</li>
+</ul></li>
+</ol>
+<div class="justify callout callout-style-default callout-important callout-titled" title="¡Importante!">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+¡Importante!
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>No rechazar la hipótesis nula no significa que la hipótesis nula sea cierta. La interpretación es que no existe, en la muestra que hemos observado, suficiente evidencia en contra de la hipótesis nula como para recharzarla.</p>
+</div>
+</div>
+<p>Tenemos por tanto que el <span class="math inline">\(p-valor\)</span> es una medida que nos dice cuán probable sería obtener nuestros datos observados si la hipótesis nula fuera verdadera. En otras palabras, mide la evidencia en contra <span class="math inline">\(H_0\)</span>. Si el <span class="math inline">\(p-valor\)</span> es pequeño (generalmente menor que <span class="math inline">\(0.05\)</span>), tenemos razones para rechazar <span class="math inline">\(H_0\)</span>. Si es grande, no tenemos suficiente evidencia para rechazarla.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo Práctico. Contraste de Hipótesis">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo Práctico. Contraste de Hipótesis
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que una empresa afirma que el tiempo promedio de espera en su servicio al cliente es de <span class="math inline">\(10\)</span> minutos. Queremos probar esta afirmación con una muestra de <span class="math inline">\(30\)</span> clientes que tienen un tiempo promedio de espera de <span class="math inline">\(12\)</span> minutos y una desviación estándar de <span class="math inline">\(3\)</span> minutos.</p>
+<p>Formulamos las hipótesis: - <span class="math inline">\(H_0: \mu = 10\)</span> - <span class="math inline">\(H_1: \mu \neq 10\)</span></p>
+<p>Seleccionamos el nivel de significancia estadística deseado: <span class="math inline">\(\alpha = 0.05\)</span>.</p>
+<p>Elegimos el estadístico de prueba: usamos una prueba <span class="math inline">\(t\)</span> (dado que la muestra es pequeña y no conocemos la desviación estándar poblacional) y calculamos su valor:</p>
+<p><span class="math display">\[
+   t = \frac{\bar{x} - \mu_0}{s / \sqrt{n}} = \frac{12 - 10}{3 / \sqrt{30}} \approx \frac{2}{0.5477} \approx 3.65
+\]</span></p>
+<p>A continuación, obtenemos el <span class="math inline">\(p-valor\)</span> correspondiente al estadístico para la distribución <span class="math inline">\(t\)</span> de Studento con <span class="math inline">\(29\)</span> grados de libertad. Para <span class="math inline">\(t = 3.65\)</span>, el <span class="math inline">\(p-valor\)</span> es menor que <span class="math inline">\(0.001\)</span>.</p>
+<p>Dado que <span class="math inline">\(p &lt; 0.05\)</span>, rechazamos la hipótesis nula <span class="math inline">\(H_0\)</span>. Podemos afirmar que los resultados muestrales son “demasiado extraños” para aceptar la hipótesis nula.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="errores-tipo-i-y-tipo-ii.-potencia" class="level3" data-number="3.7.3">
+<h3 data-number="3.7.3" class="anchored" data-anchor-id="errores-tipo-i-y-tipo-ii.-potencia"><span class="header-section-number">3.7.3</span> Errores tipo I y tipo II. Potencia</h3>
+<p>Como hemos visto, una vez especificadas las hipótesis nula y alternativa y recogida la información muestral, se toma una decisión sobre la hipótesis nula (rechazar o no rechazar <span class="math inline">\(H_0\)</span>). Sin embargo, existe la posibilidad de llegar a una conclusión equivocada, porque solo se dispone de una muestra aleatoria y no se puede tener la certeza de que <span class="math inline">\(H_0\)</span> sea correcta o no.</p>
+<p>En la Inferencia Estadística, cuando realizamos un contraste de hipótesis, hay dos tipos de errores que pueden ocurrir: el <strong>error de tipo I o</strong> <span class="math inline">\(\alpha\)</span> y el <strong>error de tipo II o</strong> <span class="math inline">\(\beta\)</span>. Entender estos errores es fundamental para interpretar correctamente los resultados de cualquier prueba estadística. El balance entre <span class="math inline">\(\alpha\)</span> y <span class="math inline">\(\beta\)</span>, así como el tamaño de la muestra, juegan un papel importante en la fiabilidad de los resultados obtenidos.</p>
+<section id="error-de-tipo-i-alpha" class="level4" data-number="3.7.3.1">
+<h4 data-number="3.7.3.1" class="anchored" data-anchor-id="error-de-tipo-i-alpha"><span class="header-section-number">3.7.3.1</span> Error de Tipo I <span class="math inline">\((\alpha)\)</span></h4>
+<p>El error de tipo I ocurre cuando rechazamos la hipótesis nula <span class="math inline">\(H_0\)</span> siendo esta verdadera. En otras palabras, concluimos que hay un efecto o una diferencia cuando, en realidad, no la hay. El nivel de significancia <span class="math inline">\(\alpha\)</span> es la probabilidad de cometer un error de tipo I.</p>
+<p><span class="math display">\[
+\alpha=P(\text{rechazar } H_0 \text{ | } H_0 \text{ es correcta})
+\]</span></p>
+<p>Recuerda que establecemos de antemano esta valor, comúnmente <span class="math inline">\(0.05\)</span>, <span class="math inline">\(0.01\)</span> o <span class="math inline">\(0.10\)</span>. Si el <span class="math inline">\(p-valor\)</span> de nuestra prueba es menor o igual a <span class="math inline">\(\alpha\)</span>, rechazamos <span class="math inline">\(H_0\)</span>.</p>
+<p>Así, por ejemplo, Si <span class="math inline">\(\alpha = 0.05\)</span>, esto significa que estamos dispuestos a aceptar un <span class="math inline">\(5\%\)</span> de probabilidad de rechazar <span class="math inline">\(H_0\)</span> cuando es verdadera.</p>
+<div class="justify callout callout-style-default callout-caution callout-titled" title="Atención">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Atención
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>¿Qué relación existe entre el error de tipo I y el <span class="math inline">\(\%\)</span> de un IC?</p>
+</div>
+</div>
+</section>
+<section id="error-de-tipo-ii-beta" class="level4" data-number="3.7.3.2">
+<h4 data-number="3.7.3.2" class="anchored" data-anchor-id="error-de-tipo-ii-beta"><span class="header-section-number">3.7.3.2</span> Error de Tipo II <span class="math inline">\((\beta)\)</span></h4>
+<p>El error de tipo II ocurre cuando no rechazamos la hipótesis nula <span class="math inline">\(H_0\)</span> siendo esta falsa. En otras palabras, concluimos que no hay un efecto o una diferencia cuando, en realidad, sí la hay.</p>
+<p><span class="math display">\[
+\beta=P(\text{No rechazar } H_0 \text{ | } H_0 \text{ es incorrecta})
+\]</span></p>
+<p><strong>Potencia del test</strong>: La potencia de una prueba estadística es la probabilidad de rechazar <span class="math inline">\(H_0\)</span> cuando <span class="math inline">\(H_0\)</span> es falsa. Se calcula como <span class="math inline">\(1 - \beta\)</span>. Una alta potencia es deseable ya que indica una mayor probabilidad de detectar un efecto o diferencia cuando realmente existe.</p>
+<p><span class="math display">\[
+Potencia=1-\beta=P(\text{Rechazar } H_0 \text{ | } H_1 \text{ es correcta})
+\]</span></p>
+<p>Así, por ejemplo, si <span class="math inline">\(\beta = 0.20\)</span>, esto significa que hay un <span class="math inline">\(20\%\)</span> de probabilidad de no rechazar <span class="math inline">\(H_0\)</span> cuando es falsa. La potencia de la prueba sería <span class="math inline">\(0.80\)</span> (o del <span class="math inline">\(80\%\)</span>). La probabilidad de detectar un efecto cuando relamente existe es del <span class="math inline">\(80\%\)</span></p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo Práctico. Errores Tipo I y II">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo Práctico. Errores Tipo I y II
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que estamos evaluando la efectividad de un nuevo medicamento.</p>
+<ul>
+<li>Hipótesis Nula <span class="math inline">\(H_0\)</span>: El medicamento no tiene efecto <span class="math inline">\((\mu = 0)\)</span>.</li>
+<li>Hipótesis Alternativa <span class="math inline">\(H_1\)</span>: El medicamento tiene un efecto <span class="math inline">\((\mu \neq 0)\)</span>.</li>
+</ul>
+<ol type="1">
+<li><p>Error de Tipo I: Si el medicamento no tiene ningún efecto pero el estudio concluye que sí lo tiene, hemos cometido un error de tipo I. Esto podría llevar a la aprobación y uso de un medicamento ineficaz.</p></li>
+<li><p>Error de Tipo II: Si el medicamento tiene un efecto, pero el estudio concluye que no lo tiene, hemos cometido un error de tipo II. Esto podría llevar a la no aprobación de un medicamento potencialmente beneficioso.</p></li>
+</ol>
+</div>
+</div>
+</div>
+</section>
+<section id="relación-entre-errores-de-tipo-i-y-ii" class="level4" data-number="3.7.3.3">
+<h4 data-number="3.7.3.3" class="anchored" data-anchor-id="relación-entre-errores-de-tipo-i-y-ii"><span class="header-section-number">3.7.3.3</span> Relación entre errores de tipo I y II</h4>
+<ul>
+<li><strong>Inversamente proporcionales</strong>: Reducir <span class="math inline">\(\alpha\)</span> (haciendo la prueba más conservadora y menos propensa a rechazar <span class="math inline">\(H_0\)</span> generalmente aumenta <span class="math inline">\(\beta\)</span> (haciendo la prueba más propensa a no detectar un efecto cuando realmente existe), y viceversa. Fíjate que los errores de Tipo I y de Tipo II no se pueden comenter simultáneamente:
+<ul>
+<li>El error de Tipo I solo puede darse si <span class="math inline">\(H_0\)</span> es correcta.</li>
+<li>El error de Tipo II solo puede darse si <span class="math inline">\(H_0\)</span> es incorrecta.</li>
+</ul></li>
+<li><strong>Tamaño de la muestra</strong>: Aumentar el tamaño de la muestra puede reducir ambos tipos de errores, incrementando la precisión de la prueba.</li>
+</ul>
+<p>La siguiente tabla refleja la relación entre los dos tipos de errores en relación con la decisión del contraste y la verdadera situación en la población:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Verdadera situación</strong></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Decisión</strong></td>
+<td><span class="math inline">\(H_0\)</span> correcta</td>
+<td><span class="math inline">\(H_0\)</span> incorrecta</td>
+</tr>
+<tr class="even">
+<td>No rechazar <span class="math inline">\(H_0\)</span></td>
+<td>Sin error (<span class="math inline">\(1-\alpha\)</span>)</td>
+<td>Error de Tipo II (<span class="math inline">\(\beta\)</span>)</td>
+</tr>
+<tr class="odd">
+<td>Rechazar <span class="math inline">\(H_0\)</span></td>
+<td>Error de Tipo I (<span class="math inline">\(\alpha\)</span>)</td>
+<td>Sin error (<span class="math inline">\(1-\beta\)</span>=potencia)</td>
+</tr>
+</tbody>
+</table>
+<p>Es importante notar que, si todo lo demás no cambia, entonces la potencia del contraste disminuye cuando:</p>
+<ul>
+<li>La diferencia entre el valor supuesto para el parámetro y el valor real disminuye.</li>
+<li>La variabilidad de la población aumenta.</li>
+<li>El tamaño muestra disminuye.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo Práctico. Errores Tipo I y II">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo Práctico. Errores Tipo I y II
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Los errores de tipo I y tipo II son inversamente proporcionales. Al disminuir la probabilidad de cometer un error de tipo I (haciendo la prueba más conservadora), aumentamos la probabilidad de cometer un error de tipo II (haciendo la prueba menos sensible), y viceversa.</p>
+<p>Supongamos que estamos evaluando la efectividad de un nuevo medicamento para reducir la presión arterial. Queremos probar la siguiente hipótesis:</p>
+<ul>
+<li>Hipótesis Nula <span class="math inline">\((H_0)\)</span>: El nuevo medicamento no reduce la presión arterial (<span class="math inline">\(\mu = 0\)</span>).</li>
+<li>Hipótesis Alternativa <span class="math inline">\((H_1)\)</span>: El nuevo medicamento reduce la presión arterial <span class="math inline">\((\mu \neq 0)\)</span>.</li>
+</ul>
+<p>Inicialmente fijamos el nivel de significancia (<span class="math inline">\(\alpha\)</span>) en <span class="math inline">\(0.05\)</span>. Consideramos un tamaño de muestra inicial de <span class="math inline">\(100\)</span> pacientes.</p>
+<p>En este caso el error de Tipo I, significa que estamos dispuestos a aceptar un <span class="math inline">\(5\%\)</span> de probabilidad de concluir que el medicamento es efectivo cuando en realidad no lo es.</p>
+<p>La probabilidad de error de Tipo II (<span class="math inline">\(\beta\)</span>) y, por tanto, la pontencia del contraste depende de varios factores, incluidos el tamaño del efecto, el tamaño de la muestra y el nivel de significancia.</p>
+<p><strong>Caso 1: (</strong><span class="math inline">\(\alpha = 0.05\)</span>)</p>
+<p>En este caso somos bastante conservadores con el riesgo de falso positivo. Supongamos que el poder estadístico de la prueba con <span class="math inline">\((\alpha = 0.05)\)</span> y una muestra de <span class="math inline">\(100\)</span> es <span class="math inline">\(0.80\)</span>, lo que significa que (<span class="math inline">\(\beta = 0.20\)</span>).</p>
+<p><strong>Caso 2: (</strong><span class="math inline">\(\alpha = 0.01\)</span>)</p>
+<p>Ahora somos más conservadores, reduciendo la probabilidad de cometer un error de tipo I. Al ser más conservadores y reducir (<span class="math inline">\(\alpha\)</span>), la prueba se vuelve menos sensible a detectar el efecto real. Esto aumenta la probabilidad de cometer un error de tipo II, por ejemplo, supongamos que (<span class="math inline">\(\beta\)</span>) aumenta a <span class="math inline">\(0.30\)</span>. Se reduce la potencia del contraste.</p>
+<p><strong>Caso 3: (</strong><span class="math inline">\(\alpha = 0.10\)</span>)</p>
+<p>Ahora somos menos conservadores, aumentando la probabilidad de cometer un error de tipo I. Al ser menos conservadores y aumentar (<span class="math inline">\(\alpha\)</span>), la prueba se vuelve más sensible a detectar el efecto real. Esto disminuye la probabilidad de cometer un error de tipo II, por ejemplo, supongamos que (<span class="math inline">\(\beta\)</span>) disminuye a 0.10 y, por tanto, aumenta la potencia del contraste.</p>
+<p>En resumen:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\(\alpha\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(\beta\)</span></th>
+<th style="text-align: center;">Potencia (<span class="math inline">\(1-\beta\)</span>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.05</td>
+<td style="text-align: center;">0.20</td>
+<td style="text-align: center;">0.80</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">0.01</td>
+<td style="text-align: center;">0.30</td>
+<td style="text-align: center;">0.70</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">0.10</td>
+<td style="text-align: center;">0.10</td>
+<td style="text-align: center;">0.90</td>
+</tr>
+</tbody>
+</table>
+<p>y como conclusión</p>
+<ul>
+<li><strong>Caso 1 (</strong><span class="math inline">\(\alpha = 0.05\)</span>): Balance estándar entre el riesgo de falso positivo y falso negativo.</li>
+<li><strong>Caso 2 (</strong><span class="math inline">\(\alpha = 0.01\)</span>): Reducimos el riesgo de falso positivo (<span class="math inline">\(\alpha\)</span>), pero aumentamos el riesgo de falso negativo (()).</li>
+<li><strong>Caso 3 (</strong><span class="math inline">\(\alpha = 0.10\)</span>): Aumentamos el riesgo de falso positivo (<span class="math inline">\(\alpha\)</span>), pero reducimos el riesgo de falso negativo (<span class="math inline">\(\beta\)</span>).</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="contraste-para-la-media-de-una-población-normal-con-varianza-conocida" class="level3" data-number="3.7.4">
+<h3 data-number="3.7.4" class="anchored" data-anchor-id="contraste-para-la-media-de-una-población-normal-con-varianza-conocida"><span class="header-section-number">3.7.4</span> Contraste para la media de una población normal con varianza conocida</h3>
+<p>El contraste para la media de una población normal con varianza conocida es un procedimiento estadístico utilizado para determinar si la media de una población difiere de un valor específico (hipótesis nula). Sin embargo, como hemos indicado anteriormente, es poco realista pensar que conocemos la varianza de una variable aleatoria en la población.</p>
+<p>El parámetro de estudio es la media de la variable aleatoria:</p>
+<p><span class="math display">\[ X \sim N(\mu,\sigma^2) \]</span></p>
+<p>En primer lugar fijamos las hipótesis:</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: <span class="math inline">\(\mu = \mu_0\)</span> (La media de la población es igual a <span class="math inline">\(\mu_0\)</span>)</li>
+</ul>
+<p>Tenemos varias opciones para la hipótesis alternativa:</p>
+<ul>
+<li><span class="math inline">\(H_1\)</span>: <span class="math inline">\(\mu \neq \mu_0\)</span> (Contraste bilateral)</li>
+<li><span class="math inline">\(H_1\)</span>: <span class="math inline">\(\mu &gt; \mu_0\)</span> (Contraste unilateral derecho)</li>
+<li><span class="math inline">\(H_1\)</span>: <span class="math inline">\(\mu &lt; \mu_0\)</span> (Contraste unilateral izquierdo)</li>
+</ul>
+<p>Debemos fijar el nivel de el nivel de significación (<span class="math inline">\(\alpha\)</span>). Recordemos, <span class="math inline">\(\alpha\)</span> es la probabilidad de rechazar la hipótesis nula cuando esta es verdadera.</p>
+<p>El estadístico de prueba se calcula utilizando la distribución Normal estándar (<span class="math inline">\(Z\)</span>), dado que la varianza (<span class="math inline">\(\sigma^2\)</span>) es conocida. La fórmula para el estadístico de prueba es:</p>
+<p><span class="math display">\[ Z = \frac{\bar{\mathbf{X}} - \mu_0}{\sigma/\sqrt{n}} \sim N(0,1) \]</span></p>
+<p>Donde <span class="math inline">\(\bar{\mathbf{X}}\)</span> es la media poblacional. Calculamos el valor observado del estadístico: <span class="math display">\[ z = \frac{\bar{\mathbf{x}} - \mu_0}{\sigma/\sqrt{n}} \]</span> donde <span class="math inline">\(\bar{\mathbf{x}}\)</span> es la media muestral.</p>
+<p>Después calculamos el <span class="math inline">\(p-valor\)</span> como sigue:</p>
+<ul>
+<li><p>Contraste bilateral: <span class="math inline">\(p-valor=P(|Z|\geq z)\)</span></p></li>
+<li><p>Contraste unilateral derecho: <span class="math inline">\(p-valor=P(Z\geq z)\)</span></p></li>
+<li><p>Contraste unilateral izquierdo: <span class="math inline">\(p-valor=P(Z\leq z)\)</span></p></li>
+</ul>
+<p>Si esta probabilidad es menor o igual que el valor de referencia <span class="math inline">\(\alpha\)</span>, entonces rechazamos la hipótesis nula en favor de la alternativa.</p>
+<p>Otra forma práctica de plantear el contraste de hipótesis es determinando el rechazo de <span class="math inline">\(H_0\)</span>. Para ello, debemos comparar el valor del estadístico <span class="math inline">\(Z\)</span> con los valores críticos de la distribución Normal estándar.</p>
+<ul>
+<li>Para un contraste bilateral (dos colas):
+<ul>
+<li>Rechaza <span class="math inline">\(H_0\)</span> si <span class="math inline">\(|z| &gt; z_{\alpha/2}\)</span>.</li>
+</ul></li>
+<li>Para un contraste unilateral derecho (una cola):
+<ul>
+<li>Rechaza <span class="math inline">\(H_0\)</span> si <span class="math inline">\(z &gt; z_{\alpha}\)</span>.</li>
+</ul></li>
+<li>Para un contraste unilateral izquierdo (una cola):
+<ul>
+<li>Rechaza <span class="math inline">\(H_0\)</span> si <span class="math inline">\(z &lt; -z_{\alpha}\)</span>.</li>
+</ul></li>
+</ul>
+<p>Aquí, <span class="math inline">\(z_{\alpha}\)</span> y <span class="math inline">\(z_{\alpha/2}\)</span> son los valores críticos de la distribución Normal estándar correspondientes al nivel de significación <span class="math inline">\(\alpha\)</span>.</p>
+<p>Es decir, decidimos si rechazamos o no la hipótesis nula del siguiente modo:</p>
+<ul>
+<li>Si el valor del estadístico de prueba está en la región crítica, rechaza (H_0).</li>
+<li>Si el valor del estadístico de prueba no está en la región crítica, no rechaces (H_0).</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo Práctico. Contraste de hipótesis media normal, varianza conocida">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo Práctico. Contraste de hipótesis media normal, varianza conocida
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-22" class="callout-22-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supón que queremos probar si la edad media de los profesores de la URJC es igual a <span class="math inline">\(50\)</span> años con una desviación estándar conocida de <span class="math inline">\(10\)</span> años, y tienes una muestra de <span class="math inline">\(36\)</span> observaciones con una media muestral de <span class="math inline">\(52\)</span>.</p>
+<p>Formulamos las hipótesis:</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: <span class="math inline">\(\mu = 50\)</span></li>
+<li><span class="math inline">\(H_1\)</span>: <span class="math inline">\(\mu \neq 50\)</span></li>
+</ul>
+<p>Fijamos el nivel de significación: <span class="math inline">\(\alpha = 0.05\)</span>.</p>
+<p>Calculamos el estadístico de prueba: <span class="math display">\[ z = \frac{52 - 50}{10/\sqrt{36}}  \approx 1.20 \]</span></p>
+<p>Para <span class="math inline">\(\alpha = 0.05\)</span> en un contraste bilateral, los valores críticos son <span class="math inline">\(z_{0.05/2}=\pm 1.96\)</span>. Como <span class="math inline">\(|1.20| &lt; 1.96\)</span>, no tenemos evidencia en la muestra como para rechazar <span class="math inline">\(H_0\)</span>.</p>
+<p>Si hubiéramos calculado el <span class="math inline">\(p-valor\)</span>: <span class="math display">\[p-valor=P(|Z| \geq 1.20)=2*P(Z \geq 1.20)=2*0.115\approx0.23\]</span> Como el <span class="math inline">\(p-valor\)</span> es mayor que el nivel de significatividad estadística, no podemos rechazar la hipótesis nula en favor de la alternativa.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="contraste-para-la-media-de-una-población-normal-con-varianza-desconocida" class="level3" data-number="3.7.5">
+<h3 data-number="3.7.5" class="anchored" data-anchor-id="contraste-para-la-media-de-una-población-normal-con-varianza-desconocida"><span class="header-section-number">3.7.5</span> Contraste para la media de una población normal con varianza desconocida</h3>
+<p>El contraste de hipótesis para la media de una población normal con varianza desconocida es similar al caso con varianza conocida, pero utilizamos la distribución <span class="math inline">\(t\)</span> de Student en lugar de la distribución Normal estándar.</p>
+<p>En este caso, el cuando la varianza poblacional es desconocida, se utiliza la desviación estándar muestral (<span class="math inline">\(s\)</span>) y el estadístico de prueba se basa en la distribución <span class="math inline">\(t\)</span> de Student con (<span class="math inline">\(n - 1\)</span>) grados de libertad. La fórmula es:</p>
+<p><span class="math display">\[ T=\frac{\bar{X} - \mu_0}{s/\sqrt{n}} \]</span></p>
+<p>Donde <span class="math inline">\(\bar{\mathbf{X}}\)</span> es la media poblacional. Calculamos el valor observado del estadístico: <span class="math display">\[ t = \frac{\bar{x} - \mu_0}{s/\sqrt{n}}  \]</span></p>
+<p>El p-valor es la probabilidad de obtener un valor del estadístico de prueba al menos tan extremo como el observado, bajo la suposición de que <span class="math inline">\(H_0\)</span> es verdadera. Dependiendo del tipo de contraste, el p-valor se calcula de diferentes formas:</p>
+<ul>
+<li>Para un contraste bilateral:
+<ul>
+<li>p-valor = <span class="math inline">\(2 \cdot P(T_{n-1} &gt; |t|)\)</span></li>
+</ul></li>
+<li>Para un contraste unilateral derecho:
+<ul>
+<li>p-valor = <span class="math inline">\(P(T_{n-1} &gt; t)\)</span></li>
+</ul></li>
+<li>Para un contraste unilateral izquierdo:
+<ul>
+<li>p-valor = <span class="math inline">\(P(T_{n-1} &lt; t)\)</span></li>
+</ul></li>
+</ul>
+<p>Aquí, <span class="math inline">\(T_{n-1}\)</span> es una variable aleatoria con una distribución <span class="math inline">\(t\)</span> de Student con <span class="math inline">\(n - 1\)</span> grados de libertad.</p>
+<p>La decisión asociada al contraste es:</p>
+<ul>
+<li>Si el <span class="math inline">\(p-valor \leq \alpha\)</span>, rechazar <span class="math inline">\(H_0\)</span>.</li>
+<li>Si el <span class="math inline">\(p-valor &gt; \alpha\)</span>, no rechazar <span class="math inline">\(H_0\)</span>.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo Práctico. Contraste de hipótesis media normal, varianza desconocida">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo Práctico. Contraste de hipótesis media normal, varianza desconocida
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-23" class="callout-23-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supón que una empresa quiere verificar si el tiempo promedio de entrega de sus pedidos es mayor de <span class="math inline">\(30\)</span> minutos. Toma una muestra aleatoria de <span class="math inline">\(16\)</span> entregas y encuentra que el tiempo promedio de entrega es de <span class="math inline">\(32\)</span> minutos con una desviación estándar muestral de <span class="math inline">\(4\)</span> minutos. Realiza un contraste de hipótesis con un nivel de significación del <span class="math inline">\(0.05\)</span> para ver si el tiempo promedio de entrega es mayor de <span class="math inline">\(30\)</span> minutos.</p>
+<p>En primer lugar establecemos las hipótesis: - <span class="math inline">\(H_0\)</span>: $= 30 (El tiempo promedio de entrega es de 30 minutos) - <span class="math inline">\(H_1\)</span>: $&gt; 30 (El tiempo promedio de entrega es mayor de 30 minutos)</p>
+<p>Calculamos el estadístico de Prueba <span class="math display">\[ t = \frac{\bar{X} - \mu_0}{s/\sqrt{n}} = \frac{32 - 30}{4/\sqrt{16}} = \frac{2}{1} = 2.00 \]</span></p>
+<p>Estamos ante un contraste unilateral derecho con <span class="math inline">\(n - 1 = 16 - 1 = 15\)</span> grados de libertad. El <span class="math inline">\(p-valor\)</span> es: <span class="math display">\[P(T_{15} &gt; 2.00) \approx 0.031\]</span></p>
+<p>Como el <span class="math inline">\(p-valor\)</span> es menor que el grado de significatividad estadística <span class="math inline">\(0.05\)</span>, entonces podemos rechazar la hipótesis nula en favor de la alternativa. Hay suficiente evidencia para rechazar la hipótesis nula y concluir que el tiempo promedio de entrega es mayor de <span class="math inline">\(30\)</span> minutos con un nivel de significación del <span class="math inline">\(5\%\)</span>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="contraste-de-hipótesis-para-la-igualdad-de-medias-de-dos-muestras-independientes" class="level3" data-number="3.7.6">
+<h3 data-number="3.7.6" class="anchored" data-anchor-id="contraste-de-hipótesis-para-la-igualdad-de-medias-de-dos-muestras-independientes"><span class="header-section-number">3.7.6</span> Contraste de hipótesis para la igualdad de medias de dos muestras independientes</h3>
+<p>Cuando se desea comparar las medias de dos muestras independientes asumiendo que los datos siguen una distribución normal, se puede usar el contraste de hipótesis paramétrico conocido como la prueba <span class="math inline">\(t\)</span> de Student para muestras independientes. Este método es robusto y se basa en suposiciones claras acerca de la normalidad de las distribuciones subyacentes.</p>
+<p><strong>Suposiciones:</strong></p>
+<ul>
+<li>Las dos muestras son independientes.</li>
+<li>Los datos de cada muestra se distribuyen normalmente. Si las muestras son suficientemente grandes, se puede invocar el <em>Teorema Central del Límite</em>, que establece que la distribución de la media muestral se aproxima a una distribución normal independientemente de la forma de la distribución original.</li>
+<li>Las varianzas poblacionales son desconocidas, pero se pueden asumir iguales para una versión específica del test t (si esta suposición es razonable).</li>
+</ul>
+<p>Supongamos m.a.s. independientes con medias, desviaciones típicas y tamaño muestral igual a: <span class="math inline">\(\bar{\mathbf{x}}_1\)</span>,<span class="math inline">\(\bar{\mathbf{x}}_2\)</span>,<span class="math inline">\(s_1^2\)</span>,<span class="math inline">\(s_2^2\)</span>,<span class="math inline">\(n_1\)</span>,y <span class="math inline">\(n_2\)</span>, respectivamente.</p>
+<p>Formulamos las hipótesis:</p>
+<ul>
+<li><strong>Hipótesis nula (</strong><span class="math inline">\(H_0\)</span>): Las medias de las dos poblaciones son iguales (<span class="math inline">\(\mu_1=\mu_2\)</span>).</li>
+<li><strong>Hipótesis alternativa (</strong><span class="math inline">\(H_1\)</span>): Las medias de las dos poblaciones son diferentes (<span class="math inline">\(\mu_1 \neq \mu_2\)</span>).</li>
+</ul>
+<p>Consideramos un nivel de significancia estadística <span class="math inline">\(\alpha\)</span>. Típicamente <span class="math inline">\(\alpha=0.05\)</span>.</p>
+<p>Calculamos el estadístico muestras, en este caso: <span class="math display">\[
+t = \frac{\bar{\mathbf{x}}_1-\bar{\mathbf{x}}_2 - \mu_1 - \mu_2}{SE}
+\]</span> donde: <span class="math display">\[
+SE = \sqrt{S^2_p \left( \frac{1}{n₁} + \frac{1}{n₂} \right)}
+\]</span> siendo <span class="math inline">\(S_p\)</span> la desviación típica combinada: <span class="math display">\[
+S^2_p= \frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2}
+\]</span></p>
+<p>Para un nivel de significancia <span class="math inline">\(\alpha= 0.05\)</span> y grados de libertad <span class="math inline">\(df = n_1+n_2-2\)</span>, buscamos el valor crítico <span class="math inline">\(t\)</span> para la distribución <span class="math inline">\(t\)</span> de Student para una prueba de dos colas.</p>
+<p>Comparamos el valor del estadístico <span class="math inline">\(t\)</span> calculado con el valor crítico:</p>
+<ul>
+<li>Si <span class="math inline">\(|t| &gt; T_{df,1-\alpha/2}\)</span>, rechazamos <span class="math inline">\(H_0\)</span>.</li>
+<li>Si <span class="math inline">\(|t| \leq T_{df,1-\alpha/2}\)</span>, no rechazamos <span class="math inline">\(H_0\)</span>.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo Práctico. Contraste de hipótesis igualdad de medias">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo Práctico. Contraste de hipótesis igualdad de medias
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-24" class="callout-24-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que un investigador quiere comparar la efectividad de dos métodos de enseñanza de matemáticas. Se seleccionan dos grupos de estudiantes al azar, uno para cada método. Después de un semestre, se mide el puntaje de un examen final de matemáticas.</p>
+<p><strong>Datos:</strong></p>
+<ul>
+<li><strong>Grupo A (Método 1):</strong>
+<ul>
+<li>Tamaño de la muestra (<span class="math inline">\(n_1\)</span>) = 12</li>
+<li>Puntajes: 85, 78, 92, 88, 75, 84, 90, 91, 83, 79, 87, 86</li>
+</ul></li>
+<li><strong>Grupo B (Método 2):</strong>
+<ul>
+<li>Tamaño de la muestra (<span class="math inline">\(n_2\)</span>) = 10</li>
+<li>Puntajes: 82, 77, 85, 80, 79, 81, 83, 78, 82, 76</li>
+</ul></li>
+</ul>
+<p>Las hipótesis del contraste son:</p>
+<ul>
+<li><strong>Hipótesis nula (</strong><span class="math inline">\(H_0\)</span>): Las medias de las dos poblaciones son iguales (<span class="math inline">\(\mu_1=\mu_2\)</span>).</li>
+<li><strong>Hipótesis alternativa (</strong><span class="math inline">\(H_1\)</span>): Las medias de las dos poblaciones son diferentes (<span class="math inline">\(\mu_1 \neq \mu_2\)</span>).</li>
+</ul>
+<p>Consideramos un nivel de significancia <span class="math inline">\(\alpha=0.05\)</span>.</p>
+<p>Para el Grupo A, se tiene:</p>
+<ul>
+<li>Tamaño de la muestra (<span class="math inline">\(n_1= 12\)</span>)</li>
+<li>Media (<span class="math inline">\(\bar{\mathbf{x}}_1 = 84.83\)</span>)</li>
+<li>Desviación estándar (<span class="math inline">\(s_1=5.33\)</span>)</li>
+</ul>
+<p>Para el Grupo B:</p>
+<ul>
+<li>Tamaño de la muestra (<span class="math inline">\(n_2= 10\)</span>)</li>
+<li>Media (<span class="math inline">\(\bar{\mathbf{x}}_2 = 80.3\)</span>)</li>
+<li>Desviación estándar (<span class="math inline">\(s_2=2.83\)</span>)</li>
+</ul>
+<p>Usaremos la prueba t para muestras independientes. Calculamos la varianza combinada: <span class="math display">\[
+S^2_p=  \frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2}=\frac{(12-1)5.33^2 + (10-1)2.83^2}{12+10-2} \approx 19.288
+\]</span> El erro estándar combinados: <span class="math display">\[
+SE = \sqrt{S^2_p \left( \frac{1}{n₁} + \frac{1}{n₂} \right)}= \sqrt{19.288 \left( \frac{1}{12} + \frac{1}{10} \right)}\approx 1.88
+\]</span> Para calcular el estadístico <span class="math inline">\(t\)</span>: <span class="math display">\[
+t = \frac{\bar{\mathbf{x}}_1-\bar{\mathbf{x}}_2}{SE}=\frac{84.83-80.3}{1.88}\approx 2.41
+\]</span></p>
+<p>Para un nivel de significancia <span class="math inline">\(\alpha= 0.05\)</span> y grados de libertad <span class="math inline">\(df = n_1+n_2- 2 = 20\)</span>, el valor crítico t de t de Student para una prueba de dos colas es aproximadamente <span class="math inline">\(\pm 2.086\)</span>.</p>
+<p>En nuestro caso, <span class="math inline">\(|t| = 2.41\)</span>, que es mayor que <span class="math inline">\(2.086\)</span> y por tanto, eechazamos la hipótesis nula (<span class="math inline">\(H_0\)</span>). Esto indica que hay evidencia suficiente para afirmar que existe una diferencia significativa en los puntajes de los exámenes de matemáticas entre los dos grupos de estudiantes.</p>
+</div>
+</div>
+</div>
+<p>En el caso en el que no se pueda asumir que las varianzas son iguales, el test cambia ligeramente. Es decir, cuando se quieren comparar las <strong>medias de dos muestras independientes con varianzas distintas</strong>, el estadístico del contraste bajo la hipótesis nula es</p>
+<p><span class="math display">\[
+t = \frac{\bar{\mathbf{x}}_1-\bar{\mathbf{x}}_2 - \mu_1 - \mu_2}{\sqrt{\frac{s_{1}^{2}}{n_1}+\frac{s^{2}_2}{n_2}}} \sim t_{q, \alpha/2}
+\]</span> siendo <span class="math display">\[q = \frac{\left(\frac{s_{1}^{2}}{n_1} + \frac{s_{2}^{2}}{n_2}\right)^{2}}{\frac{\frac{s_{1}^{2}}{n_1}}{n_1 -1} + \frac{\frac{s_{2}^{2}}{n_2}}{n_2 -1}} \]</span> que se calculan mediante la aproximación de Welch-Satterthwaite.</p>
+</section>
+<section id="contraste-de-hipótesis-para-la-diferencia-de-proporciones" class="level3" data-number="3.7.7">
+<h3 data-number="3.7.7" class="anchored" data-anchor-id="contraste-de-hipótesis-para-la-diferencia-de-proporciones"><span class="header-section-number">3.7.7</span> Contraste de hipótesis para la diferencia de proporciones</h3>
+<p>El contraste de hipótesis para la diferencia de proporciones se utiliza para determinar si hay una diferencia significativa entre las proporciones de éxito en dos grupos independientes. Supongamos dos variables aleatorias <span class="math inline">\(X\)</span> e <span class="math inline">\(Y\)</span> que siguen una distribución binomial de parámetros <span class="math inline">\(p_1\)</span> y <span class="math inline">\(p_2\)</span> respectivamente.</p>
+<p>Formulamos las hipótesis:</p>
+<ul>
+<li><strong>Hipótesis nula (</strong><span class="math inline">\(H_0\)</span>): Las proporciones de las dos poblaciones son iguales (<span class="math inline">\(p_1=p_2\)</span>).</li>
+<li><strong>Hipótesis alternativa (</strong><span class="math inline">\(H_1\)</span>): Las proporciones de las dos poblaciones son diferentes (<span class="math inline">\(p_1 \neq p_2\)</span>).</li>
+</ul>
+<p>Consideremos dos m.a.s. de tamaño <span class="math inline">\(n_1\)</span> y <span class="math inline">\(n_2\)</span>, siendo <span class="math inline">\(\mathbf{x}\)</span> y <span class="math inline">\(\mathbf{y}\)</span> el número de observaciones que cumplen un criterio, de modo que: <span class="math display">\[
+\hat{p}_1=\frac{\mathbf{x}}{n_1}, \hat{p}_2=\frac{\mathbf{y}}{n_2}
+\]</span> son los estimadores de máxima verosimilitud de <span class="math inline">\(p_1\)</span> y <span class="math inline">\(p_2\)</span> respectivamente.</p>
+<p>Consideramos un nivel de significancia estadística <span class="math inline">\(\alpha\)</span>. Típicamente <span class="math inline">\(\alpha=0.05\)</span>.</p>
+<p>Calculamos el estadístico muestral, en este caso: <span class="math display">\[
+Z = \frac{\hat{p}_1-\hat{p_2}}{SE}
+\]</span></p>
+<p>dónde <span class="math display">\[
+SE=\sqrt{\hat{p}(1-\hat{p})}\left ( \sqrt{\frac{1}{n_1}+\frac{1}{n_2}}\right )
+\]</span> Donde <span class="math inline">\(\hat{p}=\frac{\mathbf{x}+\mathbf{y}}{n_1+n_2}\)</span>.</p>
+<p>Para valores grandes de <span class="math inline">\(n_1\)</span> y <span class="math inline">\(n_2\)</span>, la distribución de <span class="math inline">\(Z\)</span> es Normal de media <span class="math inline">\(0\)</span> y desviación típica <span class="math inline">\(1\)</span>.</p>
+<p>Para un nivel de significancia <span class="math inline">\(\alpha= 0.05\)</span>, buscamos el valor crítico <span class="math inline">\(Z\)</span> para la distribución Normal.</p>
+<p>Comparamos el valor del estadístico <span class="math inline">\(Z\)</span> calculado con el valor crítico:</p>
+<ul>
+<li>Si <span class="math inline">\(|Z| &gt; Z_{1-\alpha/2}\)</span>, rechazamos <span class="math inline">\(H_0\)</span>.</li>
+<li>Si <span class="math inline">\(|Z| \leq Z_{1-\alpha/2}\)</span>, no rechazamos <span class="math inline">\(H_0\)</span>.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo Práctico. Contraste de hipótesis igualdad de proporciones">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo Práctico. Contraste de hipótesis igualdad de proporciones
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-25" class="callout-25-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que una empresa de marketing quiere evaluar la efectividad de dos campañas publicitarias diferentes (Campaña A y Campaña B) para atraer clientes. La empresa desea saber si hay una diferencia significativa en la proporción de clientes que responden positivamente a cada campaña.</p>
+<ul>
+<li><strong>Campaña A</strong>:
+<ul>
+<li>Número de personas que recibieron la campaña: <span class="math inline">\(500\)</span></li>
+<li>Número de personas que respondieron positivamente: <span class="math inline">\(75\)</span></li>
+</ul></li>
+<li><strong>Campaña B</strong>:
+<ul>
+<li>Número de personas que recibieron la campaña: <span class="math inline">\(600\)</span></li>
+<li>Número de personas que respondieron positivamente: <span class="math inline">\(120\)</span></li>
+</ul></li>
+</ul>
+<p>Las hipótesis son:</p>
+<ul>
+<li><strong>Hipótesis Nula</strong> (<span class="math inline">\(H_0\)</span>): No hay diferencia en la proporción de éxito entre las dos campañas <span class="math inline">\((p_1 = p_2)\)</span>.</li>
+<li><strong>Hipótesis Alternativa</strong> (<span class="math inline">\(H_1\)</span>): Hay una diferencia en la proporción de éxito entre las dos campañas <span class="math inline">\((p_1 \neq p_2)\)</span>.</li>
+</ul>
+<p>Calculamos las proporciones muestrales:</p>
+<p><span class="math display">\[\hat{p}_1 = \frac{75}{500} = 0.15, \hat{p}_2 = \frac{120}{600} = 0.20\]</span> calculamos la proporción combinada: <span class="math display">\[  \hat{p} = \frac{x_1 + x_2}{n_1 + n_2} = \frac{75 + 120}{500 + 600} = \frac{195}{1100} = 0.1773
+\]</span></p>
+<p>Calcular el Error Estándar de la diferencia de proporciones <span class="math display">\[  SE = \sqrt{\hat{p} (1 - \hat{p}) \left( \frac{1}{n_1} + \frac{1}{n_2} \right)} = \sqrt{0.1733 \times 0.8227 \left( \frac{1}{500} + \frac{1}{600} \right)} \approx 0.0231
+\]</span></p>
+<p>A continuación calculamos el estadístico de prueba: <span class="math display">\[z = \frac{\hat{p}_1 - \hat{p}_2}{SE} = \frac{0.15 - 0.20}{0.0231} \approx -2.16\]</span> El <span class="math inline">\(p-valor\)</span> asociado para una prueba bilateral es aproximadamente <span class="math inline">\(P(|Z|\geq 2.16)\approx 0.031\)</span>.</p>
+<p>Dado que el <span class="math inline">\(p-valor\)</span> es menor que el nivel de significancia típico (<span class="math inline">\(\alpha = 0.05\)</span>), rechazamos la hipótesis nula. Por tanto, hay evidencia suficiente para afirmar que existe una diferencia significativa en las proporciones de éxito entre la Campaña A y la Campaña B.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiado");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiado");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./eda.html" class="pagination-link" aria-label="Análisis Exploratorio de Datos">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Análisis Exploratorio de Datos</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./nopara.html" class="pagination-link" aria-label="Contraste no paramétrico">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Contraste no paramétrico</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

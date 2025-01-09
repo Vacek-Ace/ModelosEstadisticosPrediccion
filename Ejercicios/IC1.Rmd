@@ -1,0 +1,55 @@
+---
+title: "Ejercicio: Intervalos de Confianza"
+date: "`r format(Sys.time(), '%B, %Y')`"
+author: "DSLab"
+mainfont: Roboto
+fontsize: 12pt
+output:
+   pdf_document:
+     latex_engine: xelatex
+     includes:
+       in_header: header.tex    
+---
+
+
+**Ejercicio 1: Conceptos Básicos**
+
+**Pregunta**: Explica brevemente qué es un intervalo de confianza y por qué es importante en la estadística inferencial. Da un ejemplo sencillo de un intervalo de confianza.
+
+**Ejercicio 2: Intervalo de Confianza Básico**
+
+**Pregunta**: Dada una muestra aleatoria de tamaño 30 de una población normal con media muestral \(\bar{x} = 50\) y desviación estándar \(\sigma = 10\), calcula el intervalo de confianza del 95% para la media poblacional.
+
+**Ejercicio 3: Nivel de Confianza Diferente**
+
+**Pregunta**: Utilizando la misma muestra del ejercicio anterior, calcula el intervalo de confianza del 99% para la media poblacional. Compara ambos intervalos y explica las diferencias.
+
+**Ejercicio 4: Interpretación Práctica**
+
+**Pregunta**: Un investigador encuentra que el intervalo de confianza del 95% para la media de una variable es (45, 55). Explica qué significa este intervalo en términos prácticos y cómo debería interpretarlo el investigador.
+
+
+**Ejercicio 5: Varianza Conocida**
+
+**Pregunta**: Se sabe que la desviación estándar de las alturas de una población es de 5 cm. Se toma una muestra aleatoria de 40 individuos con una media muestral de 170 cm. Calcula el intervalo de confianza del 95% para la media poblacional.
+
+**Ejercicio 6: Varianza Desconocida**
+
+**Pregunta**: En un estudio de satisfacción laboral, se toma una muestra de 25 empleados y se encuentra una media muestral de 78 puntos con una desviación estándar muestral de 12 puntos. Calcula el intervalo de confianza del 95% para la media poblacional.
+
+
+**Ejercicio 7: Muestra Grande**
+
+**Pregunta**: Una encuesta a 200 estudiantes universitarios encuentra que el gasto promedio mensual en libros es de $100 con una desviación estándar de $20. Calcula el intervalo de confianza del 95% para la media del gasto mensual en libros para todos los estudiantes universitarios.
+
+**Ejercicio 8: Proporción**
+
+**Pregunta**: En una muestra de 150 votantes, 90 indican que planean votar por el candidato A. Calcula el intervalo de confianza del 95% para la proporción de votantes que planean votar por el candidato A.
+
+**Ejercicio 9: Comparación de Proporciones**
+
+**Pregunta**: Dos empresas están interesadas en la proporción de empleados que están satisfechos con su trabajo. En una muestra de 100 empleados de la empresa A, 60 se declaran satisfechos. En una muestra de 120 empleados de la empresa B, 90 se declaran satisfechos. Calcula el intervalo de confianza del 95% para la diferencia en las proporciones de empleados satisfechos entre las dos empresas.
+
+**Ejercicio 10: Interpretación Crítica**
+
+**Pregunta**: Un informe estadístico presenta el intervalo de confianza del 95% para la media de una variable como (75, 85). El informe concluye que la media poblacional es 80. ¿Es esta conclusión válida? Explica por qué o por qué no, utilizando conceptos de la interpretación de intervalos de confianza.

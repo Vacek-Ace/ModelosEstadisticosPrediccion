@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>4&nbsp; Contraste no paramétrico – Inferencia Estadística</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./anova.html" rel="next">
+<link href="./para.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sin resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./nopara.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Contraste no paramétrico</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Inferencia Estadística</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Buscar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prefacio</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./eda.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Análisis Exploratorio de Datos</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./para.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Estimación y contraste paramétrico</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./nopara.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Contraste no paramétrico</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./anova.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Análisis de varianza</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./conclusiones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bibliografía</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#introducción-a-los-contrastes-no-paramétricos" id="toc-introducción-a-los-contrastes-no-paramétricos" class="nav-link active" data-scroll-target="#introducción-a-los-contrastes-no-paramétricos"><span class="header-section-number">4.1</span> Introducción a los contrastes no paramétricos</a></li>
+  <li><a href="#prueba-chi-cuadrado-de-independencia" id="toc-prueba-chi-cuadrado-de-independencia" class="nav-link" data-scroll-target="#prueba-chi-cuadrado-de-independencia"><span class="header-section-number">4.2</span> Prueba Chi-cuadrado de Independencia</a></li>
+  <li><a href="#prueba-de-chi-cuadrado-de-bondad-de-ajuste" id="toc-prueba-de-chi-cuadrado-de-bondad-de-ajuste" class="nav-link" data-scroll-target="#prueba-de-chi-cuadrado-de-bondad-de-ajuste"><span class="header-section-number">4.3</span> Prueba de Chi-cuadrado de bondad de ajuste</a></li>
+  <li><a href="#pruebas-de-de-homogeneidad" id="toc-pruebas-de-de-homogeneidad" class="nav-link" data-scroll-target="#pruebas-de-de-homogeneidad"><span class="header-section-number">4.4</span> Pruebas de de homogeneidad</a>
+  <ul class="collapse">
+  <li><a href="#prueba-de-kolmogorov-smirnov-para-dos-muestras" id="toc-prueba-de-kolmogorov-smirnov-para-dos-muestras" class="nav-link" data-scroll-target="#prueba-de-kolmogorov-smirnov-para-dos-muestras"><span class="header-section-number">4.4.1</span> Prueba de Kolmogorov-Smirnov para dos muestras</a></li>
+  <li><a href="#prueba-de-mann-whitney-u" id="toc-prueba-de-mann-whitney-u" class="nav-link" data-scroll-target="#prueba-de-mann-whitney-u"><span class="header-section-number">4.4.2</span> Prueba de Mann-Whitney U</a></li>
+  <li><a href="#prueba-de-kruskal-wallis" id="toc-prueba-de-kruskal-wallis" class="nav-link" data-scroll-target="#prueba-de-kruskal-wallis"><span class="header-section-number">4.4.3</span> Prueba de Kruskal-Wallis</a></li>
+  </ul></li>
+  <li><a href="#prueba-sobre-muestras-pareadas" id="toc-prueba-sobre-muestras-pareadas" class="nav-link" data-scroll-target="#prueba-sobre-muestras-pareadas"><span class="header-section-number">4.5</span> Prueba sobre muestras pareadas</a>
+  <ul class="collapse">
+  <li><a href="#prueba-del-signo" id="toc-prueba-del-signo" class="nav-link" data-scroll-target="#prueba-del-signo"><span class="header-section-number">4.5.1</span> Prueba del signo</a></li>
+  <li><a href="#prueba-de-rangos-de-signos-de-wilcoxon" id="toc-prueba-de-rangos-de-signos-de-wilcoxon" class="nav-link" data-scroll-target="#prueba-de-rangos-de-signos-de-wilcoxon"><span class="header-section-number">4.5.2</span> Prueba de rangos de signos de Wilcoxon</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-nopara" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Contraste no paramétrico</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introducción-a-los-contrastes-no-paramétricos" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="introducción-a-los-contrastes-no-paramétricos"><span class="header-section-number">4.1</span> Introducción a los contrastes no paramétricos</h2>
+<p>En el campo de la inferencia estadística, los contrastes no paramétricos se utilizan para comparar grupos o evaluar hipótesis cuando no se cumplen los supuestos necesarios para aplicar métodos paramétricos tradicionales como los vistos en el <a href="para.html" class="quarto-xref"><span>Capítulo 3</span></a>. Los métodos no paramétricos no dependen de la suposición de que los datos sigan una distribución específica, como la Normal, lo que los hace especialmente útiles en situaciones donde los datos presentan sesgos, distribuciones desconocidas o tamaños de muestra pequeños.</p>
+<p>Los contrastes no paramétricos ofrecen una alternativa robusta y flexible para analizar datos en diversas circunstancias. Entre sus ventajas se incluyen la capacidad de manejar datos ordinales que no se ajustan a una escala continua y la resistencia a la influencia de valores atípicos. Esto permite obtener resultados fiables y válidos sin necesidad de transformaciones complicadas de los datos.</p>
+<p>Algunos de los contrastes no paramétricos más conocidos incluyen la prueba de Mann-Whitney, utilizada para comparar medianas entre dos grupos independientes, y la prueba de Wilcoxon para muestras relacionadas, que evalúa diferencias en medianas para datos apareados. Otros ejemplos son la prueba de Kruskal-Wallis, que extiende el análisis a más de dos grupos independientes, y la prueba de Friedman, que se aplica a diseños con medidas repetidas.</p>
+</section>
+<section id="prueba-chi-cuadrado-de-independencia" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="prueba-chi-cuadrado-de-independencia"><span class="header-section-number">4.2</span> Prueba Chi-cuadrado de Independencia</h2>
+<p>La prueba Chi-cuadrado de independencia se utiliza para determinar si hay una asociación significativa entre dos variables categóricas <span class="math inline">\(X\)</span> con categorías <span class="math inline">\(X_1,X_2,\ldots,X_r\)</span> e <span class="math inline">\(Y\)</span> con categorías <span class="math inline">\(Y_1,Y2,\ldots,Y_c\)</span>. Esta prueba compara las frecuencias observadas en una tabla de contingencia con las frecuencias esperadas bajo la hipótesis de independencia.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 15%">
+<col style="width: 13%">
+<col style="width: 15%">
+<col style="width: 13%">
+<col style="width: 15%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><span class="math inline">\(Y_1\)</span></th>
+<th><span class="math inline">\(\ldots\)</span></th>
+<th><span class="math inline">\(Y_j\)</span></th>
+<th><span class="math inline">\(\ldots\)</span></th>
+<th><span class="math inline">\(Y_c\)</span></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(X_1\)</span></td>
+<td><span class="math inline">\(n_{1,1}\)</span></td>
+<td><span class="math inline">\(\ldots\)</span></td>
+<td><span class="math inline">\(n_{1,j}\)</span></td>
+<td><span class="math inline">\(\ldots\)</span></td>
+<td><span class="math inline">\(n_{1,c}\)</span></td>
+<td><span class="math inline">\(n_{1.}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\ldots\)</span></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><span class="math inline">\(\ldots\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(X_i\)</span></td>
+<td><span class="math inline">\(n_{i,1}\)</span></td>
+<td><span class="math inline">\(\ldots\)</span></td>
+<td><span class="math inline">\(n_{i,j}\)</span></td>
+<td><span class="math inline">\(\ldots\)</span></td>
+<td><span class="math inline">\(n_{i,c}\)</span></td>
+<td><span class="math inline">\(n_{i.}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\ldots\)</span></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><span class="math inline">\(\ldots\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(X_r\)</span></td>
+<td><span class="math inline">\(n_{r,1}\)</span></td>
+<td><span class="math inline">\(\ldots\)</span></td>
+<td><span class="math inline">\(n_{r,j}\)</span></td>
+<td><span class="math inline">\(\ldots\)</span></td>
+<td><span class="math inline">\(n_{r,c}\)</span></td>
+<td><span class="math inline">\(n_{r.}\)</span></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><span class="math inline">\(n_{.1}\)</span></td>
+<td></td>
+<td><span class="math inline">\(n_{.j}\)</span></td>
+<td></td>
+<td><span class="math inline">\(n_{.c}\)</span></td>
+<td><span class="math inline">\(n_{..}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>La hipótesis nula <span class="math inline">\(H_0\)</span> de esta prueba es que no hay asociación entre las variables, esto es, que las variables implicadas son independientes:</p>
+<ul>
+<li><strong>Hipótesis nula</strong>, <span class="math inline">\(H_0\)</span>: No hay asociación entre las variables (son independientes).</li>
+<li><strong>Hipótesis alternativa</strong>, <span class="math inline">\(H_1\)</span>: Hay una asociación entre las variables (son dependientes).</li>
+</ul>
+<p>Las frecuencias observadas Las frecuencias esperadas se calculan como sigue: <span class="math display">\[
+   E_{ij} = \frac{(n_{i.} \times n_{.j})}{N}
+   \]</span> donde <span class="math inline">\(E_{ij}\)</span> es la frecuencia esperada en la celda <span class="math inline">\((i,j)\)</span>, <span class="math inline">\(n_{i.}\)</span> es el total de la fila (<span class="math inline">\(i\)</span>), (<span class="math inline">\(n_{.j}\)</span>) es el total de la columna (<span class="math inline">\(j\)</span>), y <span class="math inline">\(n_{..}\)</span> es el total general.</p>
+<p>Ahora, comparamos las frecuencias esperadas con las frecuencias observadas, definiendo con ellos el estadístico chi-cuadrado: <span class="math display">\[
+\chi^2 = \sum \frac{(O_{ij} - E_{ij})^2}{E_{ij}}
+\]</span></p>
+<p>donde (<span class="math inline">\(O_{ij}\)</span>) es la frecuencia observada en la celda <span class="math inline">\((i,j)\)</span>.</p>
+<p>Bajo la hipótesis nula, el estadístico de la prueba sigue una distribución Chi-cuadrado con <span class="math inline">\((r-1)(c-1)\)</span> grados de libertad, donde (<span class="math inline">\(r\)</span>) es el número de filas y (<span class="math inline">\(c\)</span>) es el número de columnas. Podemos calcular el <span class="math inline">\(p-valor\)</span> como: <span class="math display">\[
+p-valor=P(\chi^2_{(r-1)(c-1)}\geq\chi^2)
+\]</span></p>
+<p>Como ocurría en los contrastes de hipótesis paramétricos, comparamos el <span class="math inline">\(p-valor\)</span> con el nivel de significancia (<span class="math inline">\(\alpha\)</span>), generalmente <span class="math inline">\(0.05\)</span>. Si (<span class="math inline">\(p-valor &lt; \alpha\)</span>), se rechaza la hipótesis nula.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo práctico. Prueba Chi-cuadrado de independencia.">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo práctico. Prueba Chi-cuadrado de independencia.
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que un investigador desea determinar si hay una asociación entre el tipo de dispositivo usado (Laptop, Tablet, Smartphone) y la satisfacción del usuario (Satisfecho, No satisfecho).</p>
+<p>Determinamos las hipótesis del problema:</p>
+<ul>
+<li><strong>Hipótesis nula</strong> (<span class="math inline">\(H_0\)</span>): No hay asociación entre el tipo de dispositivo y la satisfacción del usuario (son independientes).</li>
+<li><strong>Hipótesis alternativa</strong> (<span class="math inline">\(H_1\)</span>): Hay una asociación entre el tipo de dispositivo y la satisfacción del usuario (son dependientes).</li>
+</ul>
+<p>Recolectamos datos de una muestra de <span class="math inline">\(150\)</span> usuarios y construimos la siguiente tabla de contingencia:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th>Satisfecho</th>
+<th>No satisfecho</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Laptop</td>
+<td>30</td>
+<td>10</td>
+<td>40</td>
+</tr>
+<tr class="even">
+<td>Tablet</td>
+<td>20</td>
+<td>20</td>
+<td>40</td>
+</tr>
+<tr class="odd">
+<td>Smartphone</td>
+<td>50</td>
+<td>20</td>
+<td>70</td>
+</tr>
+<tr class="even">
+<td><strong>Total</strong></td>
+<td>100</td>
+<td>50</td>
+<td>150</td>
+</tr>
+</tbody>
+</table>
+<p>Vamos a utilizar R para realizar la prueba Chi-cuadrado de independencia.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear la tabla de contingencia</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>tabla <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">20</span>, <span class="dv">50</span>, <span class="dv">20</span>), <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(tabla) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Laptop"</span>, <span class="st">"Tablet"</span>, <span class="st">"Smartphone"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(tabla) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Satisfecho"</span>, <span class="st">"No Satisfecho"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>tabla <span class="ot">&lt;-</span> <span class="fu">as.table</span>(tabla)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar la tabla de contingencia</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tabla)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           Satisfecho No Satisfecho
+Laptop             30            10
+Tablet             20            20
+Smartphone         50            20</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Realizar la prueba chi-cuadrado</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>chi2_test <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(tabla)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar los resultados</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(chi2_test)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  tabla
+X-squared = 6.9643, df = 2, p-value = 0.03074</code></pre>
+</div>
+</div>
+<p>El resultado de <code>chisq.test</code> en R incluye varios componentes clave:</p>
+<ul>
+<li><strong>Estadístico Chi-cuadrado (</strong><span class="math inline">\(chi^2\)</span>): Este es el valor calculado del estadístico chi-cuadrado.</li>
+<li><strong>Grados de libertad (</strong><span class="math inline">\(df\)</span>): Los grados de libertad de la prueba.</li>
+<li><strong>Valor p (</strong><span class="math inline">\(p-value\)</span>): Este es el <span class="math inline">\(p-valor\)</span> asociado con el estadístico chi-cuadrado calculado.</li>
+</ul>
+<p>En este ejemplo, el valor p es 0.031, que es menor que <span class="math inline">\(0.05\)</span>. Por lo tanto, rechazamos la hipótesis nula y concluimos que hay una asociación significativa entre el tipo de dispositivo y la satisfacción del usuario.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo práctico. Prueba Chi-cuadrado en aprendizaje automático.">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo práctico. Prueba Chi-cuadrado en aprendizaje automático.
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Vamos a realizar un ejemplo de la prueba Chi-cuadrado de independencia utilizando la matriz de confusión de un modelo de aprendizaje automático. Tal y como hemos visto, la prueba Chi-cuadrado de independencia se utiliza para determinar si hay una asociación significativa entre dos variables categóricas.</p>
+<p>Supongamos que tenemos un modelo de clasificación binaria que predice si un correo electrónico es spam o no. Construiremos estos modelos en la asignatura de <strong>Aprendizaje Automático I</strong> del Grado en Ciencia e Ingeniería de Datos. Tras entrenar y evaluar el modelo, obtenemos la siguiente <strong>matriz de confusión</strong>:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th>Predicción: No Spam</th>
+<th>Predicción: Spam</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Actual: No Spam</td>
+<td>50</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td>Actual: Spam</td>
+<td>5</td>
+<td>35</td>
+</tr>
+</tbody>
+</table>
+<p>Esta tabla de doble entrada cruza la predicción del modelo de aprendiaje automático con el verdadero valor en la muestra sobre la que dicho modelo ha sido entrenado. El objetivo de todo modelo de aprendizaje automático es conseguir una matriz de confusión diagonal. En ese caso, no hay errores en la predicción. Todo son éxitos y el modelo es perfecto.</p>
+<p>Vamos a realizar la prueba Chi-cuadrado de independencia para ver si hay una asociación significativa entre las predicciones del modelo y las etiquetas reales. Si el modelo es útil, dicha asociación ha de existir. Si el modelo no es útil, entonces la prueba debería de decirnos que no podemos rechazar la hipótesis nula de independencia entre las dos variables (Predicción y Actual).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar el paquete necesario</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear la matriz de confusión</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>matriz_confusion <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">35</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(matriz_confusion) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Predicción: No Spam"</span>, <span class="st">"Predicción: Spam"</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(matriz_confusion) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Actual: No Spam"</span>, <span class="st">"Actual: Spam"</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar la matriz de confusión</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(matriz_confusion)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                Predicción: No Spam Predicción: Spam
+Actual: No Spam                  50               10
+Actual: Spam                      5               35</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Realizar la prueba Chi-cuadrado de independencia</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>prueba_chi_cuadrado <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(matriz_confusion)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar los resultados de la prueba</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(prueba_chi_cuadrado)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test with Yates' continuity correction
+
+data:  matriz_confusion
+X-squared = 45.833, df = 1, p-value = 1.288e-11</code></pre>
+</div>
+</div>
+<p>El resultado de <code>chisq.test()</code> proporciona el valor de Chi-cuadrado, los grados de libertad y el valor p.&nbsp;En este caso, dado que el <span class="math inline">\(p-valor\)</span> de la prueba es menor que el nivel de significancia (<span class="math inline">\(0.05\)</span>), podemos rechazar la hipótesis nula de independencia y concluir que hay una asociación significativa entre las predicciones del modelo y las etiquetas reales. En otras palabras, el modelo de aprendizaje automático es útil para predecir si un correo electrónico es (o no) spam.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="prueba-de-chi-cuadrado-de-bondad-de-ajuste" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="prueba-de-chi-cuadrado-de-bondad-de-ajuste"><span class="header-section-number">4.3</span> Prueba de Chi-cuadrado de bondad de ajuste</h2>
+<p>Esta prueba se utiliza para determinar si una distribución de frecuencias observadas sigue una distribución teórica esperada.</p>
+<ul>
+<li><strong>Hipótesis nula</strong> (<span class="math inline">\(H_0\)</span>): Las frecuencias observadas siguen la distribución esperada.</li>
+<li><strong>Hipótesis alternativa</strong> (<span class="math inline">\(H_1\)</span>): Las frecuencias observadas no siguen la distribución esperada.</li>
+</ul>
+<p>El estadístico del contraste, como en el caso anterior se calcula como sigue: <span class="math display">\[ \chi^2 = \sum \frac{(O_i - E_i)^2}{E_i}\]</span> donde (<span class="math inline">\(O_i\)</span>) son las frecuencias observadas y (<span class="math inline">\(E_i\)</span>) son las frecuencias esperadas según la distribución teórica.</p>
+<p>Utilizando la distribución chi-cuadrado con (<span class="math inline">\(k-1\)</span>) grados de libertad, donde (<span class="math inline">\(k\)</span>) es el número de categorías, podemos calcular el <span class="math inline">\(p-valor\)</span>. Comparamos el <span class="math inline">\(p-valor\)</span> con el nivel de significancia. Si (<span class="math inline">\(p-valor &lt; \alpha\)</span>), se rechaza la hipótesis nula.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo Práctico. Prueba Chi-cuadrado de bondad de ajuste.">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo Práctico. Prueba Chi-cuadrado de bondad de ajuste.
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que un investigador quiere determinar si los resultados de un dado son uniformemente distribuidos. El dado se lanza <span class="math inline">\(60\)</span> veces y los resultados son los siguientes:</p>
+<ul>
+<li>1: 8 veces</li>
+<li>2: 10 veces</li>
+<li>3: 9 veces</li>
+<li>4: 11 veces</li>
+<li>5: 12 veces</li>
+<li>6: 10 veces</li>
+</ul>
+<p>Queremos comprobar si estos resultados siguen una distribución uniforme, es decir, cada número tiene la misma probabilidad de 1/6.</p>
+<p>Formulamos las hipótesis:</p>
+<ul>
+<li><strong>Hipótesis nula (H0):</strong> Los resultados del dado siguen una distribución uniforme.</li>
+<li><strong>Hipótesis alternativa (H1):</strong> Los resultados del dado no siguen una distribución uniforme.</li>
+</ul>
+<p>A continuación se recogen los datos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Resultados observados</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>observed <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">9</span>, <span class="dv">11</span>, <span class="dv">12</span>, <span class="dv">10</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Frecuencias esperadas si el dado es justo (distribución uniforme)</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>expected <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">60</span> <span class="sc">/</span> <span class="dv">6</span>, <span class="dv">6</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Y se realiza la prueba</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Realizar la prueba chi-cuadrado</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>chi2_test <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(observed, <span class="at">p =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">6</span>, <span class="dv">6</span>))</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar los resultados</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(chi2_test)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Chi-squared test for given probabilities
+
+data:  observed
+X-squared = 1, df = 5, p-value = 0.9626</code></pre>
+</div>
+</div>
+<p>El resultado de <code>chisq.test</code> en R incluye varios componentes clave:</p>
+<ul>
+<li><strong>Estadístico Chi-cuadrado </strong> (<span class="math inline">\(\chi^2\)</span>): Este es el valor calculado del estadístico chi-cuadrado.</li>
+<li><strong>Grados de libertad (</strong><span class="math inline">\(df\)</span>): Los grados de libertad de la prueba, que es <span class="math inline">\(n - 1\)</span> donde <span class="math inline">\(n\)</span> es el número de categorías.</li>
+<li><strong>Valor p (p-value)</strong>: Este es el <span class="math inline">\(p-valor\)</span> asociado con el estadístico chi-cuadrado calculado.</li>
+</ul>
+<p>En este ejemplo, el <span class="math inline">\(p-valor\)</span> es 0.963, que es mucho mayor que <span class="math inline">\(0.05\)</span>. Por lo tanto, no rechazamos la hipótesis nula y concluimos que no hay suficiente evidencia para decir que los resultados del dado no siguen una distribución uniforme.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="pruebas-de-de-homogeneidad" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="pruebas-de-de-homogeneidad"><span class="header-section-number">4.4</span> Pruebas de de homogeneidad</h2>
+<p>La prueba no paramétrica de homogeneidad se utiliza para determinar si dos o más muestras independientes provienen de la misma distribución o de distribuciones similares. Estas pruebas son útiles cuando no se cumplen los supuestos necesarios para las pruebas paramétricas, como la normalidad de los datos. Ejemplo de pruebas no paramétricas de Homogeneidad son:</p>
+<ul>
+<li><strong>Prueba de Kolmogorov-Smirnov</strong> para dos muestras: Compara dos muestras para verificar si provienen de la misma distribución.</li>
+<li><strong>Prueba de Mann-Whitney U</strong> (o Wilcoxon Rank-Sum Test): Compara dos muestras independientes para determinar si tienen la misma distribución.</li>
+<li><strong>Prueba de Kruskal-Wallis</strong>: Extiende la prueba de Mann-Whitney U a más de dos muestras independientes.</li>
+</ul>
+<section id="prueba-de-kolmogorov-smirnov-para-dos-muestras" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="prueba-de-kolmogorov-smirnov-para-dos-muestras"><span class="header-section-number">4.4.1</span> Prueba de Kolmogorov-Smirnov para dos muestras</h3>
+<p>La Prueba de Kolmogorov-Smirnov (K-S) para dos muestras es una prueba no paramétrica utilizada para determinar si dos muestras independientes provienen de la misma distribución. A diferencia de otras pruebas que se centran en comparar medias o varianzas, la prueba K-S compara las distribuciones acumuladas de dos muestras.</p>
+<p>Las hipótesis de la prueba son:</p>
+<ul>
+<li><strong>Hipótesis nula</strong> (<span class="math inline">\(H_0\)</span>): Las dos muestras provienen de la misma distribución.</li>
+<li><strong>Hipótesis alternativa</strong> (<span class="math inline">\(H_1\)</span>): Las dos muestras provienen de distribuciones diferentes.</li>
+</ul>
+<p>Para cada muestra, se construyen las funciones de distribución empírica (EDF). La función de distribución empírica <span class="math inline">\(F_n(x)\)</span> es una función escalonada que aumenta en <span class="math inline">\(\frac{1}{n}\)</span> en cada punto de datos, donde <span class="math inline">\(n\)</span> es el tamaño de la muestra. Para más detalles desplegar aquí:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Función de Distribución Empírica
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>La función de distribución empírica (EDF, por sus siglas en inglés) es una función de distribución de probabilidad utilizada para estimar la distribución subyacente de un conjunto de datos observados. Es una herramienta no paramétrica que proporciona una estimación de la función de distribución acumulada de una muestra de datos.</p>
+<p>Dada una muestra de datos <span class="math inline">\((X_1, X_2, \ldots, X_n)\)</span>, la función de distribución empírica <span class="math inline">\(F_n(x)\)</span> se define como: <span class="math display">\[
+F_n(x) = \frac{1}{n} \sum_{i=1}^{n} I(X_i \leq x)
+\]</span> donde <span class="math inline">\(I(X_i \leq x)\)</span> es una función indicadora que toma el valor <span class="math inline">\(1\)</span> si <span class="math inline">\(X_i \leq x\)</span> y <span class="math inline">\(0\)</span> en caso contrario.</p>
+<p>En otras palabras, <span class="math inline">\(F_n(x)\)</span> es la proporción de valores en la muestra que son menores o iguales a <span class="math inline">\(x\)</span>.</p>
+<p><strong>Propiedades de la Función de Distribución Empírica</strong></p>
+<ol type="1">
+<li><strong>Escalonada</strong>: La EDF es una función escalonada que incrementa en pasos de <span class="math inline">\(1/n\)</span> en cada punto de datos.</li>
+<li><strong>No decreciente</strong>: La EDF nunca disminuye a medida que <span class="math inline">\(x\)</span> aumenta.</li>
+<li><strong>Límites</strong>: La EDF varía entre <span class="math inline">\(0\)</span> y <span class="math inline">\(1\)</span>. Específicamente, <span class="math inline">\(F_n(x) = 0\)</span> para <span class="math inline">\(x\)</span> menor que el valor mínimo de la muestra y <span class="math inline">\(F_n(x) = 1\)</span> para <span class="math inline">\(x\)</span> mayor que el valor máximo de la muestra.</li>
+</ol>
+</div>
+</div>
+</div>
+<p>Calculamos el Estadístico <span class="math inline">\(D\)</span> de la prueba K-S es la máxima diferencia absoluta entre las dos funciones de distribución empírica: <span class="math display">\[
+     D = \sup_x |F_{n_1}(x) - F_{n_2}(x)|
+\]</span></p>
+<p>Donde, <span class="math inline">\(F_{n_1}(x)\)</span> y <span class="math inline">\(F_{n_2}(x)\)</span> son las funciones de distribución empírica de las dos muestras.</p>
+<p>El <span class="math inline">\(p-valor\)</span> se calcula para determinar la significancia de la diferencia observada. Se utiliza la distribución asintótica del estadístico D para calcular el valor p.&nbsp;El valor p se determina utilizando la distribución del estadístico <span class="math inline">\(D\)</span> bajo la hipótesis nula de que ambas muestras provienen de la misma distribución. El cálculo exacto del <span class="math inline">\(p-valor\)</span> para la prueba de K-S no es trivial y generalmente se realiza mediante métodos numéricos o tablas pre-calculadas. Sin embargo, se puede aproximar utilizando la distribución asintótica del estadístico <span class="math inline">\(D\)</span>.</p>
+<p>Para muestras grandes, el valor p se puede aproximar usando la fórmula: <span class="math display">\[
+p \approx Q_{KS}(\sqrt{n} D)
+\]</span> donde:</p>
+<ul>
+<li><span class="math inline">\(n = \frac{n_1 \cdot n_2}{n_1 + n_2}\)</span> es el número efectivo de muestras.</li>
+<li><span class="math inline">\(D\)</span> es el valor del estadístico K-S.</li>
+<li><span class="math inline">\(Q_{KS}\)</span> es una función que representa la cola superior de la distribución de Kolmogorov-Smirnov.</li>
+</ul>
+<p>La función <span class="math inline">\(Q_{KS}\)</span> para grandes valores de <span class="math inline">\(n\)</span> se puede aproximar usando la siguiente fórmula: <span class="math display">\[
+Q_{KS}(\lambda) = 2 \sum_{k=1}^{\infty} (-1)^{k-1} e^{-2k^2 \lambda^2}
+\]</span></p>
+<p>donde <span class="math inline">\(\lambda = \sqrt{n} D\)</span>.</p>
+<p>Para valores prácticos, esta sumatoria converge rápidamente y a menudo solo se necesita calcular unos pocos términos.</p>
+<p>Como en otros contrastes, si el <span class="math inline">\(p-valor\)</span> calculado es menor que un grado de significancia estadística previamente fijado <span class="math inline">\(\alpha\)</span>, entonces rechazamos la hipótesis nula en favor de la alternativa.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo práctico. Prueba K-S">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo práctico. Prueba K-S
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que queremos comparar dos muestras para determinar si provienen de la misma distribución.</p>
+<ul>
+<li><strong>Muestra 1</strong>: 1, 2, 3, 4, 5</li>
+<li><strong>Muestra 2</strong>: 2, 3, 4, 5, 6</li>
+</ul>
+<p>Formulamos las hipótesis</p>
+<ul>
+<li><strong>H0</strong>: Las dos muestras provienen de la misma distribución.</li>
+<li><strong>H1</strong>: Las dos muestras provienen de distribuciones diferentes.</li>
+</ul>
+<p>Calculamos las funciones de distribución empírica <span class="math inline">\(F_{n_1}(x)\)</span> y <span class="math inline">\(F_{n_2}(x)\)</span> para las dos muestras.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(x\)</span></th>
+<th><span class="math inline">\(F_{n_1}(x)\)</span></th>
+<th><span class="math inline">\(F_{n_2}(x)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>0.2</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>0.4</td>
+<td>0.2</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>0.6</td>
+<td>0.4</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>0.8</td>
+<td>0.6</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>1.0</td>
+<td>0.8</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>1.0</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+<p>Calculamos la máxima diferencia absoluta entre <span class="math inline">\(F_{n_1}(x)\)</span> y <span class="math inline">\(F_{n_2}(x)\)</span>: <span class="math display">\[
+D = \max(|0.2 - 0.0|, |0.4 - 0.2|, |0.6 - 0.4|, |0.8 - 0.6|, |1.0 - 0.8|, |1.0 - 1.0|) = 0.2
+\]</span></p>
+<p>El valor p se determina utilizando la distribución asintótica del estadístico <span class="math inline">\(D\)</span>. Esto generalmente se hace usando tablas de referencia o software estadístico.</p>
+<p><strong>Implementación en R</strong></p>
+<p>Podemos realizar esta prueba en R utilizando la función <code>ks.test</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Datos de las dos muestras</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>muestra1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>muestra2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Realizar la prueba de Kolmogorov-Smirnov</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>ks_test <span class="ot">&lt;-</span> <span class="fu">ks.test</span>(muestra1, muestra2)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar los resultados</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ks_test)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Exact two-sample Kolmogorov-Smirnov test
+
+data:  muestra1 and muestra2
+D = 0.2, p-value = 1
+alternative hypothesis: two-sided</code></pre>
+</div>
+</div>
+<p>El resultado de <code>ks.test</code> incluye varios componentes clave:</p>
+<ul>
+<li><strong>Estadístico D</strong>: Este es el valor calculado del estadístico K-S.</li>
+<li><strong>Valor p (p-value)</strong>: Este es el valor p asociado con el estadístico calculado.</li>
+<li><strong>Descripción de las muestras</strong>: Indica las muestras comparadas.</li>
+</ul>
+<p>En este ejemplo, el valor p es 1, que es mayor que <span class="math inline">\(0.05\)</span>. Por lo tanto, no rechazamos la hipótesis nula y concluimos que no hay suficiente evidencia para decir que las dos muestras provienen de distribuciones diferentes.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="prueba-de-mann-whitney-u" class="level3" data-number="4.4.2">
+<h3 data-number="4.4.2" class="anchored" data-anchor-id="prueba-de-mann-whitney-u"><span class="header-section-number">4.4.2</span> Prueba de Mann-Whitney U</h3>
+<p>La prueba de Mann-Whitney U, también conocida como prueba de Wilcoxon para muestras independientes, es una prueba no paramétrica que se utiliza para comparar dos muestras independientes para determinar si provienen de la misma distribución. Es una alternativa a la prueba t de Student cuando no se cumplen los supuestos de normalidad. En lugar de trabajar con los valores originales, la prueba utiliza los rangos de los datos.</p>
+<p>Las hipótesis que vamos a contrastar son:</p>
+<ul>
+<li><strong>Hipótesis Nula</strong> (<span class="math inline">\(H_0\)</span>): Las dos muestras provienen de la misma distribución.</li>
+<li><strong>Hipótesis Alternativa</strong> (<span class="math inline">\(H_1\)</span>): Las dos muestras no provienen de la misma distribución.</li>
+</ul>
+<p>En primer lugar se combinan los datos de ambas muestras y se ordenan los valores de menor a mayor. A continuación se asignan rangos a estos valores, manejando adecuadamente los empates (otorgando a los valores iguales el rango promedio).</p>
+<p>Se calcula el estadístico del contraste tal y como sigue: <span class="math display">\[  U_1 = n_1n_2+ \frac{n_1 (n_1 + 1)}{2} -R_1
+\]</span> <span class="math display">\[
+U_2 =U_1 = n_1n_2+ \frac{n_2 (n_2 + 1)}{2} -R_2
+\]</span> donde:</p>
+<ul>
+<li><span class="math inline">\(n_1\)</span> y <span class="math inline">\(n_2\)</span> son los tamaños de las dos muestras.</li>
+<li><span class="math inline">\(R_1\)</span> y <span class="math inline">\(R_2\)</span> son las sumas de los rangos de las muestras <span class="math inline">\(1\)</span> y <span class="math inline">\(2\)</span>, respectivamente.</li>
+</ul>
+<p>El estadístico <span class="math inline">\(U\)</span> final es: <span class="math display">\[
+U=min(U_1,U_2)
+\]</span></p>
+<p>El <span class="math inline">\(p-valor\)</span> se determina comparando el estadístico <span class="math inline">\(U\)</span> con una distribución de referencia para U (tabla de Mann-Whitney) o mediante aproximación normal para grandes tamaños de muestra. En ese caso: <span class="math display">\[
+Z=\frac{U-E(U)}{\sqrt{Var(U)}} \approx N(0,1)
+\]</span> siendo <span class="math display">\[
+E(U)=n_1n_2+\frac{n_1(n_1+1)}{2}-E(R_1)
+\]</span> <span class="math display">\[
+E(U)= n_1n_2+\frac{n_1(n_1+1)}{2}-\frac{n_1(n_1+n_2+1)}{2}=\frac{n_1n_2}{2}
+\]</span> y <span class="math display">\[
+Var(U)=Var(R_1)=\frac{n_1n_2(n_1+n_2+1)}{12}
+\]</span> Y podemos calcular el <span class="math inline">\(p-valor\)</span> como hemos hecho en métodos anteriores: <span class="math display">\[
+p-valor=P(Z&gt;z)
+\]</span> Siendo <span class="math inline">\(z\)</span> el valor del estadístico calculado en las muestras.</p>
+<p>Comparamos el <span class="math inline">\(p-valor\)</span> p con el nivel de significancia (<span class="math inline">\(\alpha\)</span>), generalmente <span class="math inline">\(0.05\)</span>. Si (<span class="math inline">\(p-valor &lt; \alpha\)</span>), se rechaza la hipótesis nula.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo práctico. Prueba Mann-Whitney">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo práctico. Prueba Mann-Whitney
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que queremos comparar los tiempos de entrega (en días) de dos proveedores distintos:</p>
+<ul>
+<li>Proveedor A: <span class="math inline">\(2, 3, 5, 6, 8\)</span></li>
+<li>Proveedor B: <span class="math inline">\(1, 4, 4, 7, 9\)</span></li>
+</ul>
+<p>En primer lugar combinar y ordenamos las muestra</p>
+<p>Valores combinados y ordenados: <span class="math inline">\(1, 2, 3, 4, 4, 5, 6, 7, 8, 9\)</span></p>
+<p>Asignación de rangos:</p>
+<ul>
+<li>1: rango 1</li>
+<li>2: rango 2</li>
+<li>3: rango 3</li>
+<li>4: rango 4.5 (promedio de rangos 4 y 5)</li>
+<li>4: rango 4.5</li>
+<li>5: rango 6</li>
+<li>6: rango 7</li>
+<li>7: rango 8</li>
+<li>8: rango 9</li>
+<li>9: rango 10</li>
+</ul>
+<p>Rangos para cada muestra:</p>
+<ul>
+<li>Proveedor A: <span class="math inline">\(2, 3, 6, 7, 9\)</span> (sumados dan <span class="math inline">\(R_1 = 27\)</span>)</li>
+<li>Proveedor B: <span class="math inline">\(1, 4.5, 4.5, 8, 10\)</span> (sumados dan <span class="math inline">\(R_2 = 28\)</span>)</li>
+</ul>
+<p>Pasamos a calcular el estadístico <span class="math inline">\(U\)</span></p>
+<p>Tamaños de muestra:</p>
+<ul>
+<li><span class="math inline">\(n_1 = 5\)</span></li>
+<li><span class="math inline">\(n_2 = 5\)</span></li>
+</ul>
+<p>Cálculo de <span class="math inline">\(U_1\)</span> y <span class="math inline">\(U_2\)</span>:</p>
+<p><span class="math display">\[
+U_1 = n_1n_2+ \frac{n_1 (n_1 + 1)}{2} -R_1  =5\cdot 5+ \frac{5 \cdot 6}{2} -27 = 23
+\]</span></p>
+<p><span class="math display">\[
+U_2 =n_1n_2+ \frac{n_2 (n_2 + 1)}{2} -R_2  =5\cdot 5+  \frac{5 \cdot 6}{2}-28 = 12
+\]</span></p>
+<p>El estadístico U es el menor de <span class="math inline">\(U_1\)</span> y <span class="math inline">\(U_2\)</span>: <span class="math inline">\(U = 12\)</span>.</p>
+<p>Para determinar el valor p, utilizamos una tabla de referencia para U o una aproximación normal si las muestras son grandes. En este caso, consultamos una tabla para <span class="math inline">\(n_1 = 5\)</span> y <span class="math inline">\(n_2 = 5\)</span>. Si no se dispone de la tabla, se puede utilizar software estadístico para calcular el <span class="math inline">\(p-valor\)</span> como sigue:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Datos de ejemplo</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>proveedorA <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">8</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>proveedorB <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">9</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Realizar la prueba de Mann-Whitney U</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">wilcox.test</span>(proveedorA, proveedorB, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in wilcox.test.default(proveedorA, proveedorB, alternative =
+"two.sided"): cannot compute exact p-value with ties</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar los resultados</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(test)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Wilcoxon rank sum test with continuity correction
+
+data:  proveedorA and proveedorB
+W = 12, p-value = 1
+alternative hypothesis: true location shift is not equal to 0</code></pre>
+</div>
+</div>
+<p>Los resultados muestra:</p>
+<ul>
+<li><strong>Estadístico W</strong>: El valor calculado del estadístico U.</li>
+<li><strong>Valor p (p-value)</strong>: El valor p asociado con el estadístico.</li>
+<li><strong>Hipótesis alternativa</strong>: La prueba es de dos lados, lo que significa que estamos probando si las distribuciones son diferentes en cualquier dirección.</li>
+</ul>
+<p>En este ejemplo, el <span class="math inline">\(p-valor\)</span> es 1, que es mayor que <span class="math inline">\(0.05\)</span>, lo que indica que no hay suficiente evidencia para rechazar la hipótesis nula. Por lo tanto, no podemos concluir que las dos muestras provienen de diferentes distribuciones.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="prueba-de-kruskal-wallis" class="level3" data-number="4.4.3">
+<h3 data-number="4.4.3" class="anchored" data-anchor-id="prueba-de-kruskal-wallis"><span class="header-section-number">4.4.3</span> Prueba de Kruskal-Wallis</h3>
+<p>La prueba de Kruskal-Wallis es una prueba no paramétrica utilizada para comparar tres o más muestras independientes para determinar si provienen de la misma distribución. Es una extensión de la prueba de Mann-Whitney U a más de dos grupos y una alternativa robusta a la ANOVA que veremos en el <a href="anova.html" class="quarto-xref"><span>Capítulo 5</span></a> cuando no se cumplen los supuestos de normalidad y homogeneidad de varianzas.</p>
+<p>Dado que es una prueba no paramétrica, no requiere que los datos provengan de una distribución normal. Al igual que la prueba de Mann-Whitney, la prueba de Kruskal-Wallis trabaja con los rangos de los datos en lugar de los valores originales.</p>
+<p>Las hipótesis son:</p>
+<ul>
+<li><strong>Hipótesis Nula</strong> (<span class="math inline">\(H_0\)</span>): Todas las muestras provienen de la misma distribución.</li>
+<li><strong>Hipótesis Alternativa</strong> (<span class="math inline">\(H_1\)</span>): Al menos una de las muestras proviene de una distribución diferente.</li>
+</ul>
+<p>A continuación, se combinan los datos de todas las muestras y se ordenan los valores de menor a mayor. Se asignan rangos a estos valores, manejando adecuadamente los empates (otorgando a los valores iguales el rango promedio).</p>
+<p>Calculamos el estadístico H utilizando la siguiente fórmula: <span class="math display">\[
+     H = \frac{12}{N(N+1)} \sum_{i=1}^{k} \frac{R_i^2}{n_i} - 3(N+1)
+\]</span> donde:</p>
+<ul>
+<li><span class="math inline">\(N\)</span> es el tamaño total de la muestra (suma de los tamaños de las <span class="math inline">\(k\)</span> muestras).</li>
+<li><span class="math inline">\(R_i\)</span> es la suma de los rangos de la <span class="math inline">\(i\)</span>-ésima muestra.</li>
+<li><span class="math inline">\(n_i\)</span> es el tamaño de la <span class="math inline">\(i\)</span>-ésima muestra.</li>
+<li><span class="math inline">\(k\)</span> es el número de muestras.</li>
+</ul>
+<p>Para tamaños de muestra relativamente grandes el estadístico <span class="math inline">\(H\)</span> sigue una distriniución <span class="math inline">\(\chi^2\)</span> con <span class="math inline">\(k-1\)</span> grados de libertdad. El <span class="math inline">\(p-valor\)</span> se determina, por tanto como <span class="math display">\[
+p-valor=P(H&gt;h)
+\]</span> donde h es el valor calculado para un caso particular.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo práctico. Prueba Kruskal-Wallis">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo práctico. Prueba Kruskal-Wallis
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que queremos comparar los tiempos de espera (en días) de tres proveedores diferentes:</p>
+<ul>
+<li>Proveedor A: <span class="math inline">\(2, 3, 5, 6, 8\)</span></li>
+<li>Proveedor B: <span class="math inline">\(1, 4, 4, 7, 9\)</span></li>
+<li>Proveedor C: <span class="math inline">\(3, 4, 6, 8, 10\)</span></li>
+</ul>
+<p>Valores combinados y ordenados: <span class="math inline">\(1, 2, 3, 3, 4, 4, 4, 5, 6, 6, 7, 8, 8, 9, 10\)</span></p>
+<p>Asignación de rangos:</p>
+<ul>
+<li>1: rango 1</li>
+<li>2: rango 2</li>
+<li>3: rango 3.5 (promedio de rangos 3 y 4)</li>
+<li>3: rango 3.5</li>
+<li>4: rango 6 (promedio de rangos 5, 6 y 7)</li>
+<li>4: rango 6</li>
+<li>4: rango 6</li>
+<li>5: rango 8</li>
+<li>6: rango 9.5 (promedio de rangos 9 y 10)</li>
+<li>6: rango 9.5</li>
+<li>7: rango 11</li>
+<li>8: rango 12.5 (promedio de rangos 12 y 13)</li>
+<li>8: rango 12.5</li>
+<li>9: rango 14</li>
+<li>10: rango 15</li>
+</ul>
+<p>Rangos para cada muestra:</p>
+<ul>
+<li>Proveedor A: <span class="math inline">\(2, 3.5, 8, 9.5, 12.5\)</span> (sumados dan <span class="math inline">\(R_1 = 35.5\)</span>)</li>
+<li>Proveedor B: <span class="math inline">\(1, 6, 6, 11, 14\)</span> (sumados dan <span class="math inline">\(R_2 = 38\)</span>)</li>
+<li>Proveedor C: <span class="math inline">\(3.5, 6, 9.5, 12.5, 15\)</span> (sumados dan <span class="math inline">\(R_3 = 46.5\)</span>)</li>
+</ul>
+<p>Calculamos el Estadístico <span class="math inline">\(H\)</span></p>
+<p>Tamaños de muestra:</p>
+<ul>
+<li><span class="math inline">\(n_1 = 5\)</span></li>
+<li><span class="math inline">\(n_2 = 5\)</span></li>
+<li><span class="math inline">\(n_3 = 5\)</span></li>
+</ul>
+<p>Tamaño total de la muestra: <span class="math inline">\(N = 15\)</span></p>
+<p><span class="math display">\[
+H = \frac{12}{N(N+1)} \sum_{i=1}^{k} \frac{R_i^2}{n_i} - 3(N+1)
+\]</span></p>
+<p><span class="math display">\[
+H = \frac{12}{15 \cdot 16} \left( \frac{35.5^2}{5} + \frac{38^2}{5} + \frac{46.5^2}{5} \right) - 3 \cdot 16 = 0.665
+\]</span></p>
+<p>Para determinar el <span class="math inline">\(p-valor\)</span>, utilizamos una tabla de distribución chi-cuadrado con <span class="math inline">\(k-1 = 3-1 = 2\)</span> grados de libertad.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Datos de ejemplo</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>proveedorA <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">8</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>proveedorB <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">9</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>proveedorC <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">10</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Realizar la prueba de Kruskal-Wallis</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">kruskal.test</span>(<span class="fu">list</span>(proveedorA, proveedorB, proveedorC))</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar los resultados</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(test)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Kruskal-Wallis rank sum test
+
+data:  list(proveedorA, proveedorB, proveedorC)
+Kruskal-Wallis chi-squared = 0.67342, df = 2, p-value = 0.7141</code></pre>
+</div>
+</div>
+<p>de donde obtenemos</p>
+<ul>
+<li><strong>Kruskal-Wallis chi-squared</strong>: El valor calculado del estadístico <span class="math inline">\(H\)</span>.</li>
+<li><strong>df</strong>: Los grados de libertad.</li>
+<li><strong>Valor p (p-value)</strong>: El <span class="math inline">\(p-valor\)</span> asociado con el estadístico <span class="math inline">\(H\)</span>.</li>
+</ul>
+<p>En este ejemplo, el <span class="math inline">\(p-valor\)</span> es 0.714, que es mayor que <span class="math inline">\(0.05\)</span>, lo que indica que no hay suficiente evidencia para rechazar la hipótesis nula. Por lo tanto, no podemos concluir que las tres muestras provienen de diferentes distribuciones; podrían provenir de la misma distribución.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="prueba-sobre-muestras-pareadas" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="prueba-sobre-muestras-pareadas"><span class="header-section-number">4.5</span> Prueba sobre muestras pareadas</h2>
+<section id="prueba-del-signo" class="level3" data-number="4.5.1">
+<h3 data-number="4.5.1" class="anchored" data-anchor-id="prueba-del-signo"><span class="header-section-number">4.5.1</span> Prueba del signo</h3>
+<p>La prueba del signo es una prueba no paramétrica utilizada para comparar dos muestras relacionadas o emparejadas. Se emplea cuando se tienen dos conjuntos de datos dependientes y se desea determinar si hay una diferencia significativa en sus medianas. Es particularmente útil cuando los supuestos de normalidad necesarios para pruebas paramétricas como la prueba t para muestras pareadas no se cumplen.</p>
+<p>Supongamos que tenemos dos muestras relacionadas <span class="math inline">\(X\)</span> e <span class="math inline">\(Y\)</span> de tamaño <span class="math inline">\(n\)</span>:</p>
+<p><strong>Formular las hipótesis</strong>:</p>
+<ul>
+<li><strong>Hipótesis Nula (</strong><span class="math inline">\(H_0\)</span>): Las medianas de las dos muestras son iguales.</li>
+<li><strong>Hipótesis Alternativa (</strong><span class="math inline">\(H_1\)</span>): Las medianas de las dos muestras son diferentes.</li>
+</ul>
+<p><strong>Calcular las diferencias</strong>: Para cada par <span class="math inline">\((X_i, Y_i)\)</span>, calcular la diferencia <span class="math inline">\(D_i = X_i - Y_i\)</span>.</p>
+<p><strong>Contar los signos</strong>: - Contar cuántas diferencias son positivas (<span class="math inline">\(D_i &gt; 0\)</span>). - Contar cuántas diferencias son negativas (<span class="math inline">\(D_i &lt; 0\)</span>). - Ignorar las diferencias que son cero (<span class="math inline">\(D_i = 0\)</span>).</p>
+<p><strong>Estadístico de prueba</strong>:</p>
+<ul>
+<li>Denotar el número de diferencias positivas por <span class="math inline">\(S_+\)</span>.</li>
+<li>Denotar el número de diferencias negativas por <span class="math inline">\(S_-\)</span>.</li>
+</ul>
+<p>El estadístico de la prueba del signo es el menor entre <span class="math inline">\(S_+\)</span> y <span class="math inline">\(S_-\)</span>:<span class="math display">\[
+   s=min(S_+,S_-)
+   \]</span></p>
+<p><strong>Determinar el valor crítico</strong>: Consultar una tabla de la distribución binomial o la tabla de la prueba del signo para obtener el valor crítico correspondiente al nivel de significancia <span class="math inline">\(\alpha\)</span> y el tamaño de la muestra efectiva <span class="math inline">\(n\)</span> (número de pares no nulos). Podemos calcular el valor crítico como sigue: <span class="math display">\[
+p-valor=P(S\leq s)
+\]</span> donde <span class="math inline">\(S\)</span> es binomial <span class="math inline">\(n\)</span>, <span class="math inline">\(p=0.5\)</span>.</p>
+<p><strong>Decisión</strong>:</p>
+<ul>
+<li><p>Rechazar <span class="math inline">\(H_0\)</span> si el estadístico de la prueba es menor o igual al valor crítico.</p></li>
+<li><p>No rechazar <span class="math inline">\(H_0\)</span> si el estadístico de la prueba es mayor que el valor crítico.</p></li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo práctico. Prueba del signo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo práctico. Prueba del signo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que un investigador quiere comparar los tiempos de reacción antes y después de un tratamiento en 10 sujetos. Los datos son los siguientes:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Sujeto</th>
+<th>Antes (X)</th>
+<th>Después (Y)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>15</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>20</td>
+<td>18</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>25</td>
+<td>20</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>30</td>
+<td>30</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>18</td>
+<td>15</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>22</td>
+<td>19</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>26</td>
+<td>21</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>28</td>
+<td>26</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>24</td>
+<td>22</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>20</td>
+<td>20</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Formular las hipótesis</strong>:</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: No hay diferencia en los tiempos de reacción antes y después del tratamiento.</li>
+<li><span class="math inline">\(H_1\)</span>: Hay una diferencia en los tiempos de reacción antes y después del tratamiento.</li>
+</ul>
+<p><strong>Calcular las diferencias</strong>:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Sujeto</th>
+<th>Diferencia (D = X - Y)</th>
+<th>Signo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>5</td>
+<td>+</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>2</td>
+<td>+</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>5</td>
+<td>+</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>3</td>
+<td>+</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>3</td>
+<td>+</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>5</td>
+<td>+</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>2</td>
+<td>+</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>2</td>
+<td>+</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Contar los signos</strong>:</p>
+<ul>
+<li><span class="math inline">\(S_+ = 8\)</span></li>
+<li><span class="math inline">\(S_- = 0\)</span></li>
+<li>Pares nulos (<span class="math inline">\(D = 0\)</span>): 2</li>
+</ul>
+<p><strong>Estadístico de prueba</strong>: El estadístico de la prueba del signo es el menor entre <span class="math inline">\(S_+\)</span> y <span class="math inline">\(S_-\)</span>, que es 0 en este caso.</p>
+<p><strong>Determinar el valor crítico</strong>: Para un nivel de significancia <span class="math inline">\(\alpha = 0.05\)</span> y <span class="math inline">\(n = 8\)</span> (solo los pares no nulos se consideran), consultamos la tabla de la prueba del signo y encontramos que el valor crítico es 1.</p>
+<p><strong>Decisión</strong>: Como el estadístico de la prueba (0) es menor que el valor crítico (1), rechazamos la hipótesis nula <span class="math inline">\(H_0\)</span>. Hay suficiente evidencia para concluir que hay una diferencia significativa en los tiempos de reacción antes y después del tratamiento.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="prueba-de-rangos-de-signos-de-wilcoxon" class="level3" data-number="4.5.2">
+<h3 data-number="4.5.2" class="anchored" data-anchor-id="prueba-de-rangos-de-signos-de-wilcoxon"><span class="header-section-number">4.5.2</span> Prueba de rangos de signos de Wilcoxon</h3>
+<p>Para comparar muestras pareadas la opción no paramétrica más común es la <strong>prueba de Wilcoxon de rangos de signos (Wilcoxon signed-rank test)</strong>. La prueba de Wilcoxon de rangos de signos es una alternativa no paramétrica a la prueba t de muestras pareadas. Se utiliza cuando los datos no cumplen con los supuestos de normalidad necesarios para la prueba t. En lugar de comparar medias, esta prueba compara las medianas de las diferencias entre las dos muestras pareadas. Es una prueba ideal para muestras pequeñas y para datos ordinales o de razón/intervalo cuando la normalidad no puede ser asumida.</p>
+<p>Procedimiento:</p>
+<ol type="1">
+<li><p><strong>Calcular las diferencias</strong> entre cada par de observaciones.</p></li>
+<li><p><strong>Ordenar las diferencias</strong> absolutas y asignarles rangos, ignorando las diferencias que sean cero.</p></li>
+<li><p><strong>Asignar signos</strong> a los rangos de acuerdo con el signo de las diferencias originales.</p></li>
+<li><p><strong>Calcular la suma de los rangos positivos</strong> y la suma de los rangos negativos.</p></li>
+<li><p><strong>Determinar el estadístico de prueba</strong>: El estadístico de Wilcoxon es el menor de las dos sumas de rangos.</p></li>
+<li><p><strong>Comparar el estadístico de prueba</strong> con los valores críticos de la tabla de Wilcoxon para determinar la significancia estadística.</p></li>
+</ol>
+<p>La prueba de Wilcoxon de signos y rangos es robusta y fácil de implementar, lo que la convierte en una herramienta valiosa para el análisis de muestras pareadas en situaciones donde los supuestos de normalidad no se cumplen.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo práctico. Prueba sobre datos emparejados">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo práctico. Prueba sobre datos emparejados
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que tenemos dos conjuntos de datos emparejados que representan las puntuaciones antes y después de una intervención:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Datos de ejemplo</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>antes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>despues <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">18</span>, <span class="dv">33</span>, <span class="dv">35</span>, <span class="dv">55</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Realizar la prueba de Wilcoxon de signos y rangos</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>resultado <span class="ot">&lt;-</span> <span class="fu">wilcox.test</span>(antes, despues, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar el resultado</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(resultado)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Wilcoxon signed rank test with continuity correction
+
+data:  antes and despues
+V = 6, p-value = 0.7855
+alternative hypothesis: true location shift is not equal to 0</code></pre>
+</div>
+</div>
+<p>El estadístico V es 6 y el <span class="math inline">\(p-valor\)</span> es 0.785. En este caso, dado que el valor p es mayor que un nivel de significancia común (como <span class="math inline">\(0.05\)</span>), no se rechaza la hipótesis nula de que no hay una diferencia significativa entre las puntuaciones antes y después de la intervención.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiado");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiado");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./para.html" class="pagination-link" aria-label="Estimación y contraste paramétrico">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Estimación y contraste paramétrico</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./anova.html" class="pagination-link" aria-label="Análisis de varianza">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Análisis de varianza</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

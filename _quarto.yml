@@ -1,0 +1,38 @@
+project:
+  type: book
+  output-dir: doc
+
+book:
+  title: "Inferencia Estadística"
+  author: "Carmen Lancho - Víctor Aceña - Isaac Martín"
+  date: "2024-05-21"
+  search: true
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - eda.qmd
+    - para.qmd
+    - nopara.qmd
+    - anova.qmd
+    - conclusiones.qmd
+    - references.qmd
+  cover-image: DSLab_logo_2.png
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cerulean
+    lang: es
+    css: styles.css
+  pdf:
+    documentclass: scrreprt
+
+editor: visual
+
+
+
+
+
+
+

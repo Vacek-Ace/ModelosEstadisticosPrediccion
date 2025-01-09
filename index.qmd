@@ -1,0 +1,53 @@
+# Prefacio {.unnumbered}
+
+La estadística es una disciplina fundamental en el mundo moderno, permitiendo a los profesionales extraer conocimientos valiosos a partir de datos. En un entorno donde la cantidad de datos disponibles crece exponencialmente, la capacidad de tomar decisiones informadas basadas en estos datos se vuelve crucial. Este libro, preparado para el **Grado en Ciencia e Ingeniería de Datos**, pretende proporcionar una comprensión profunda de los principios y métodos que subyacen en esta área esencial.
+
+La **inferencia estadística** es una metodología poderosa y bien fundamentada matemáticamente que permite a los especialistas en datos hacer predicciones, estimaciones y decisiones basadas en información incompleta o incierta. Esta capacidad es vital para cualquier profesional de la ciencia de datos, ya que los conceptos de inferencia estadística forman el núcleo del análisis de datos y la toma de decisiones basada en datos.
+
+Este libro ha sido diseñado con el propósito de servir como una guía comprensible y completa para estudiantes de Ciencia e Ingeniería de Datos. A lo largo de sus capítulos, los alumnos serán introducidos a los conceptos clave de la inferencia estadística, desde las bases teóricas hasta las aplicaciones prácticas. Se cubrirán temas como la estimación de parámetros, pruebas de hipótesis, análisis de la varianza y más, siempre con un enfoque en la aplicación práctica y la interpretación de los resultados en contextos reales.
+
+La estructura del libro está cuidadosamente planeada para facilitar el aprendizaje progresivo. Cada capítulo incluye ejemplos prácticos, ejercicios y aplicaciones en el mundo real, que no solo ilustran los conceptos teóricos, sino que también permiten a los estudiantes practicar y consolidar sus conocimientos. Además, se ha hecho un esfuerzo consciente para conectar los temas tratados con las herramientas y técnicas que los estudiantes encontrarán en sus futuras asignaturas y en su vida profesional.
+
+El objetivo final de este libro es prepararos para enfrentar los desafíos del análisis y la ciencia de datos con confianza y competencia. La inferencia estadística es una habilidad indispensable para cualquier especialista en datos, y dominarla os abrirá innumerables puertas en el ámbito profesional.
+
+Esperamos que este libro sea una fuente valiosa de conocimiento y que os sirva de inspiración para profundizar en el fascinante campo de la inferencia estadística.
+
+¡Comenzamos!
+
+::: {.callout-caution collapse="true"}
+## Resultados de aprendizaje.
+
+1.  Entender el concepto de población estadística en relación a los modelos probabilísticos.
+
+2.  Entender el concepto de muestreo y distinguir si los datos bajo análisis proceden de un muestreo aleatorio simple.
+
+3.  Realizar inferencias sobre parámetros de interés de la población, tanto puntualmente como por intervalos.
+
+4.  Plantear y resolver contrastes de hipótesis para la toma de decisiones sobre características de la población bajo estudio.
+
+5.  Valorar si el modelo paramétrico asumido se ajusta adecuadamente a los datos.
+:::
+
+::: {.callout-important title="Grado en Ciencia e Ingeniería de Datos"}
+Este libro presenta el material de la asignatura de Inferencia Estadística del grado en Ciencia e Ingeniería de Datos de la Universidad Rey Juan Carlos. Os recordamos que en próximos cursos os encontraréis con las asiganturas de Regresión, Aprendizaje Automático I y Aprendizaje Automático II, donde aplicaréis muchas de las técnicas y herramientas que vamos a estudiar aquí.
+:::
+
+::: {.callout-important title="Conocimientos previos"}
+Es conveniente haber superado con éxito las asignaturas de Cálculo, Herramientas Matemáticas para la Ciencia de Datos I y Probabilidad y Simulación, del grado en Ciencia e Ingeniería de Datos.
+:::
+
+::: {.callout-note title="Sobre los autores"}
+**Carmen Lancho Martín** es graduada en Matemáticas y Estadística por la Universidad Complutense de Madrid (UCM), máster en Tratamiento Estadístico y Computacional de la Información por la UCM y la Universidad Politécnica de Madrid (UPM), doctora en Tecnologías de la Información y las Comunicaciones por la Universidad Rey Juan Carlos (URJC) y profesora del departamento de Informática y Estadística de la URJC. Miembro del grupo de investigación de alto rendimiento en Fundamentos y Aplicaciones de la Ciencia de Datos, DSLAB, de la URJC. Pertenece al grupo de innovación docente, DSLAB-TI.
+
+**Víctor Aceña Gil** es graduado en Matemáticas por la UNED, máster en Tratamiento Estadístico y Computacional de la Información por la UCM y la UPM, doctor en Tecnologías de la Información y las Comunicaciones por la URJC y profesor del departamento de Informática y Estadística de la URJC. Miembro del grupo de investigación de alto rendimiento en Fundamentos y Aplicaciones de la Ciencia de Datos, DSLAB, de la URJC. Pertenece al grupo de innovación docente, DSLAB-TI.
+
+**Isaac Martín de Diego** es diplomado en Estadística por la Universidad de Valladolid (UVA), licenciado en Ciencias y Técnicas Estadísticas por la Universidad Carlos III de Madrid (UC3M), doctor en Ingeniería Matemática por la UC3M, catedrático de Ciencias de la Computación e Inteligencia Artificial del departamento de Informática y Estadística de la URJC. Es fundador y coordinador del DSLAB y del DSLAB-TI.
+:::
+
+```{r, echo=FALSE}
+if (knitr::is_latex_output()){
+knitr::include_graphics("by-sa.png")
+}
+```
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" alt="Licencia de Creative Commons" style="border-width:0"/></a><br />Esta obra está bajo una <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">licencia de Creative Commons Atribuciónn-CompartirIgual 4.0 Internacional</a>.
