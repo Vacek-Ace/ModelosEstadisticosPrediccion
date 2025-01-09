@@ -58,6 +58,11 @@ El primer paso en la modelización estadística es definir el problema que se bu
 
 
 Emplearemos datos simulados para este ejemplo:
+
+
+
+
+
 ```{r datos, warning=FALSE}
 # Establecer la semilla para reproducibilidad
 set.seed(123)
@@ -83,6 +88,11 @@ datos <- data.frame(Tiempo_Estudio = tiempo_estudio, Calificaciones = calificaci
 head(datos)
 
 ```
+
+
+
+
+
 :::
 ### Inspección gráfica e identificación de tendencias
 
@@ -90,6 +100,11 @@ Antes de ajustar un modelo, es esencial realizar una inspección visual de los d
 
 ::: {.callout-tip title="Ejemplo"  collapse="true"}
 En el ejemplo, representamos el tiempo de estudio frente a las calificaciones. De este modo podemos analizar si los puntos siguen un patrón lineal o si muestran comportamientos más complejos.
+
+
+
+
+
 
 ```{r grafico1, warning=FALSE}
 
@@ -101,6 +116,11 @@ plot(datos$Tiempo_Estudio, datos$Calificaciones,
      pch = 19, col = "blue")
 
 ```
+
+
+
+
+
 :::
 
 ### Propuesta y ajuste del modelo
@@ -131,6 +151,11 @@ $$DATOS = MODELO + ERROR$$
   - **Ajuste:** Calcular los valores de \( \beta_0 \) y \( \beta_1 \) mediante el método de mínimos cuadrados. Este método busca minimizar la suma de los errores cuadrados entre los valores observados y los predichos por el modelo.  
 
 
+
+
+
+
+
 ```{r ajuste1, warning=FALSE}
 
 # Ajustar un modelo de regresión lineal
@@ -145,6 +170,11 @@ plot(datos$Tiempo_Estudio, datos$Calificaciones,
      pch = 19, col = "blue")
 abline(lm(Calificaciones ~ Tiempo_Estudio, data = datos), col = "red", lwd = 2)
 ```
+
+
+
+
+
 
 A la vista de los estimadores de los parámetros del modelo, tenemos la siguiente interpretación:
 
@@ -224,6 +254,11 @@ Galton representó sus datos en gráficos de dispersión, mostrando cómo los pu
 
 ¡Claro! Aquí tienes el código en R para crear un gráfico con los datos analizados por Galton, añadiendo la recta de regresión y su ecuación:
 
+
+
+
+
+
 ```{r galtonn}
 # Instalar y cargar los paquetes necesarios
 install.packages("ggplot2")
@@ -251,6 +286,11 @@ grafico <- ggplot(galton_data, aes(x = parentHeight, y = childHeight)) +
 print(grafico)
 ```
 
+
+
+
+
+
 :::
 
 ::: callout-caution
@@ -258,3 +298,4 @@ print(grafico)
 
 Dejamos como ejercicio para el alumno la interpretación del resultado del test.
 :::
+
