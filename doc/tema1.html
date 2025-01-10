@@ -241,8 +241,13 @@ window.Quarto = {
   <li><a href="#regresión-lineal-simple" id="toc-regresión-lineal-simple" class="nav-link" data-scroll-target="#regresión-lineal-simple"><span class="header-section-number">1.3</span> Regresión lineal simple</a>
   <ul class="collapse">
   <li><a href="#estimación-de-los-parámetros-del-modelo" id="toc-estimación-de-los-parámetros-del-modelo" class="nav-link" data-scroll-target="#estimación-de-los-parámetros-del-modelo"><span class="header-section-number">1.3.1</span> Estimación de los parámetros del modelo</a></li>
-  <li><a href="#bondad-del-ajuste-coeficiente-de-determinación-r2" id="toc-bondad-del-ajuste-coeficiente-de-determinación-r2" class="nav-link" data-scroll-target="#bondad-del-ajuste-coeficiente-de-determinación-r2"><span class="header-section-number">1.3.2</span> Bondad del ajuste: coeficiente de determinación (<span class="math inline">\(R^2\)</span>)</a></li>
+  <li><a href="#propiedades-de-los-estimadores" id="toc-propiedades-de-los-estimadores" class="nav-link" data-scroll-target="#propiedades-de-los-estimadores"><span class="header-section-number">1.3.2</span> Propiedades de los estimadores</a></li>
+  <li><a href="#inferencia-sobre-los-parámetros-del-modelo" id="toc-inferencia-sobre-los-parámetros-del-modelo" class="nav-link" data-scroll-target="#inferencia-sobre-los-parámetros-del-modelo"><span class="header-section-number">1.3.3</span> Inferencia sobre los parámetros del modelo</a></li>
+  <li><a href="#descomposición-de-la-varianza-anova" id="toc-descomposición-de-la-varianza-anova" class="nav-link" data-scroll-target="#descomposición-de-la-varianza-anova"><span class="header-section-number">1.3.4</span> Descomposición de la varianza: ANOVA</a></li>
+  <li><a href="#bondad-del-ajuste-coeficiente-de-determinación" id="toc-bondad-del-ajuste-coeficiente-de-determinación" class="nav-link" data-scroll-target="#bondad-del-ajuste-coeficiente-de-determinación"><span class="header-section-number">1.3.5</span> Bondad del ajuste: coeficiente de determinación</a></li>
+  <li><a href="#diagnóstico-del-modelo" id="toc-diagnóstico-del-modelo" class="nav-link" data-scroll-target="#diagnóstico-del-modelo"><span class="header-section-number">1.3.6</span> Diagnóstico del modelo</a></li>
   </ul></li>
+  <li><a href="#diagnóstico-del-modelo.-análisis-de-residuos" id="toc-diagnóstico-del-modelo.-análisis-de-residuos" class="nav-link" data-scroll-target="#diagnóstico-del-modelo.-análisis-de-residuos"><span class="header-section-number">1.4</span> <strong>Diagnóstico del Modelo. Análisis de Residuos</strong></a></li>
   </ul>
 </nav>
     </div>
@@ -1005,8 +1010,9 @@ L(\beta; Y)=exp \left ( -\frac{\sum_{i=1}^{n}(Y_i-\beta_0-\beta_1X_i)^2}{2\sigma
 </div>
 </div>
 </div>
-<section id="propiedades-de-los-estimadores" class="level4" data-number="1.3.1.1">
-<h4 data-number="1.3.1.1" class="anchored" data-anchor-id="propiedades-de-los-estimadores"><span class="header-section-number">1.3.1.1</span> Propiedades de los estimadores</h4>
+</section>
+<section id="propiedades-de-los-estimadores" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="propiedades-de-los-estimadores"><span class="header-section-number">1.3.2</span> Propiedades de los estimadores</h3>
 <p>Estudiemos algunas de las propiedades de los estimadores de mı́nimos cuadrados y del modelo de regresión ajustado.</p>
 <ul>
 <li><p>Sean: <span class="math display">\[
@@ -1107,8 +1113,8 @@ tiempo_estudio 0.09874923 0.00488005 20.23529 9.033965e-37</code></pre>
 </ul>
 <p>Todas estas cuestiones serán analizadas antes de adoptar el modelo como válido. Una herramienta muy importante en la validación del modelo será el estudio de los residuos. Lo veremos más adelante.</p>
 </section>
-<section id="inferencia-sobre-los-parámetros-del-modelo" class="level4" data-number="1.3.1.2">
-<h4 data-number="1.3.1.2" class="anchored" data-anchor-id="inferencia-sobre-los-parámetros-del-modelo"><span class="header-section-number">1.3.1.2</span> Inferencia sobre los parámetros del modelo</h4>
+<section id="inferencia-sobre-los-parámetros-del-modelo" class="level3" data-number="1.3.3">
+<h3 data-number="1.3.3" class="anchored" data-anchor-id="inferencia-sobre-los-parámetros-del-modelo"><span class="header-section-number">1.3.3</span> Inferencia sobre los parámetros del modelo</h3>
 <p>En regresión, con frecuencia interesa realizar contraste de hipótesis o construir intervalos de confianza para los parámetros del modelo.</p>
 <p>Para hacer inferencias consideramos la distribución en el muestreo de los estimadores de dichos parámetros. Este procedimiento requiere que tengamos en cuenta la suposición de normalidad sobre los errores <span class="math inline">\(\varepsilon_i\)</span> , es decir: <span class="math display">\[
     \varepsilon_i \overset{\mathrm{iid}}{\sim} N(0, \sigma^2)
@@ -1122,11 +1128,14 @@ Y_i\sim N(\beta_0+\beta_1X,\sigma^2),
 <p>Puesto que las varianzas de los parámetros1 dependen de <span class="math inline">\(\sigma^2\)</span> , cuando el modelo de regresión es adecuado, podemos estimarlas sustituyendo dicho valor por su estimador insesgado <span class="math inline">\(s^2\)</span>. En este caso, la distribución de los parámetros ya no será normal, al igual que ocurrı́a en la distribución del valor esperado <span class="math inline">\(\mu\)</span> en una población i.i.d., aparece la distribución t-Student: <span class="math display">\[
 t=\frac{\hat{\beta_1}-\beta_1}{SE({\hat{\beta_1}})}\sim t_{n-2},
 \]</span> siendo <span class="math inline">\(SE(\hat{\beta_1})=\frac{s}{\sqrt{S_{xx}}}\)</span>, es una t-Student con <span class="math inline">\(n-2\)</span> grados de ligertad.</p>
-<p><strong>Intervalo de confianza</strong></p>
+<section id="intervalo-de-confianza" class="level4" data-number="1.3.3.1">
+<h4 data-number="1.3.3.1" class="anchored" data-anchor-id="intervalo-de-confianza"><span class="header-section-number">1.3.3.1</span> Intervalo de confianza</h4>
 <p>Así, su intervalo de confianza al <span class="math inline">\(1-\alpha\%\)</span> calculado a partir de la distribución en el muestro es: <span class="math display">\[
 IC(\beta_1;1-\alpha)=\hat{\beta_1} \pm t_{1-\alpha/2,n-2}\sqrt{\frac{s^2}{S_{xx}}},
 \]</span> donde <span class="math inline">\(t_{1-\alpha/2,n-2}\)</span> es el cuantil <span class="math inline">\(1-\alpha/2\)</span> de una distribución <span class="math inline">\(t\)</span> con <span class="math inline">\(n-2\)</span> grados de libertad (los correspondientes a <span class="math inline">\(s^2\)</span>).</p>
-<p><strong>Contraste de hipótesis</strong></p>
+</section>
+<section id="contraste-de-hipótesis" class="level4" data-number="1.3.3.2">
+<h4 data-number="1.3.3.2" class="anchored" data-anchor-id="contraste-de-hipótesis"><span class="header-section-number">1.3.3.2</span> Contraste de hipótesis</h4>
 <p>En regresión, normalmente estamos interesado en realizar el siguiente contraste de hipótesis: <span class="math display">\[
 H_0:\beta_1=0 \text{ frente a } H_1: \beta_1\neq 0.
 \]</span> De este modo, si no podemos rechazar la hipótesis nula, podemos concluir que no existe prueba (en los datos) de una relación lineal significativa entre las variables estudiadas. Este tipo de contraste nos será muy útil cuando trabajemos con modelos con más de una variable para eliminar aquellas que no son importantes dentro del mismo.</p>
@@ -1197,8 +1206,150 @@ F-statistic: 409.5 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </section>
 </section>
-<section id="bondad-del-ajuste-coeficiente-de-determinación-r2" class="level3" data-number="1.3.2">
-<h3 data-number="1.3.2" class="anchored" data-anchor-id="bondad-del-ajuste-coeficiente-de-determinación-r2"><span class="header-section-number">1.3.2</span> Bondad del ajuste: coeficiente de determinación (<span class="math inline">\(R^2\)</span>)</h3>
+<section id="descomposición-de-la-varianza-anova" class="level3" data-number="1.3.4">
+<h3 data-number="1.3.4" class="anchored" data-anchor-id="descomposición-de-la-varianza-anova"><span class="header-section-number">1.3.4</span> Descomposición de la varianza: ANOVA</h3>
+<p>La descomposición de la varianza es un paso crucial para evaluar la calidad del ajuste del modelo de regresión lineal simple. A través de un análisis de varianza (ANOVA), se divide la variabilidad total de la variable respuesta (<span class="math inline">\(Y\)</span>) en componentes atribuibles al modelo y al error, proporcionando un marco para evaluar si la relación entre <span class="math inline">\(X\)</span> e <span class="math inline">\(Y\)</span> es estadísticamente significativa. Un modelo es bueno si la variabilidad explicada es mucha, o lo que es lo mismo, si las diferencias entre los datos y las predicciones según el modelo son pequeñas.</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Repaso">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Repaso
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Es conveniente repasar el tema de <em>Análisis de la Varianza</em> estudiado en la asignatura de Inferencia.</p>
+</div>
+</div>
+<section id="variabilidad-total" class="level4" data-number="1.3.4.1">
+<h4 data-number="1.3.4.1" class="anchored" data-anchor-id="variabilidad-total"><span class="header-section-number">1.3.4.1</span> Variabilidad total</h4>
+<p>La variabilidad total de<span class="math inline">\(Y\)</span> se mide mediante la <strong>Suma Total de los Cuadrados (SST)</strong>:<br>
+<span class="math display">\[
+SST = \sum_{i=1}^n (Y_i - \bar{Y})^2,
+\]</span><br>
+donde <span class="math inline">\(\bar{Y}\)</span> es la media de <span class="math inline">\(Y\)</span>. <span class="math inline">\(SST\)</span> refleja la dispersión general de <span class="math inline">\(Y\)</span> respecto a su media.</p>
+<p><strong>Descomposición de la variabilidad</strong></p>
+<p>El modelo de regresión lineal permite descomponer<span class="math inline">\(SST\)</span> en dos componentes principales:<br>
+<span class="math display">\[
+SST = SSR + SSE,
+\]</span><br>
+donde:</p>
+<ul>
+<li><p><span class="math inline">\(SSR\)</span> (Suma de los Cuadrados del Modelo): Representa la variabilidad explicada por la regresión, es decir, la parte de <span class="math inline">\(Y\)</span> que se puede predecir a partir de <span class="math inline">\(X\)</span>:<br>
+<span class="math display">\[
+  SSR = \sum_{i=1}^n (\hat{Y}_i - \bar{Y})^2,
+\]</span> donde <span class="math inline">\(\hat{Y}_i\)</span> es el valor predicho por el modelo para el <span class="math inline">\(i\)</span>-ésimo dato.</p></li>
+<li><p><span class="math inline">\(SSE\)</span> (Suma de los Cuadrados de los Errores): Como hemos visto al inicio de esta sección, representa la variabilidad no explicada por el modelo, es decir, la dispersión de los valores observados respecto a los valores predichos:<br>
+<span class="math display">\[
+  SSE = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2.
+\]</span></p></li>
+</ul>
+</section>
+<section id="tabla-anova" class="level4" data-number="1.3.4.2">
+<h4 data-number="1.3.4.2" class="anchored" data-anchor-id="tabla-anova"><span class="header-section-number">1.3.4.2</span> Tabla ANOVA</h4>
+<p>El análisis de varianza organiza la descomposición de la varianza en una tabla, donde cada componente se asocia con sus grados de libertad (<span class="math inline">\(df\)</span>), suma de cuadrados (<span class="math inline">\(SS\)</span>), media cuadrática (<span class="math inline">\(MS\)</span>) y el estadístico <span class="math inline">\(F\)</span>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 17%">
+<col style="width: 18%">
+<col style="width: 22%">
+<col style="width: 27%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Fuente</th>
+<th><span class="math inline">\(df\)</span></th>
+<th><span class="math inline">\(SS\)</span></th>
+<th><span class="math inline">\(MS = SS/df\)</span></th>
+<th>Estadístico<span class="math inline">\(F\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Regresión</td>
+<td>1</td>
+<td><span class="math inline">\(SSR\)</span></td>
+<td><span class="math inline">\(MSR = SSR/1\)</span></td>
+<td><span class="math inline">\(F = MSR/MSE\)</span></td>
+</tr>
+<tr class="even">
+<td>Error</td>
+<td><span class="math inline">\(n-2\)</span></td>
+<td><span class="math inline">\(SSE\)</span></td>
+<td><span class="math inline">\(MSE = SSE/(n-2)\)</span></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Total</td>
+<td><span class="math inline">\(n-1\)</span></td>
+<td><span class="math inline">\(SST\)</span></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="prueba-de-significancia-global" class="level4" data-number="1.3.4.3">
+<h4 data-number="1.3.4.3" class="anchored" data-anchor-id="prueba-de-significancia-global"><span class="header-section-number">1.3.4.3</span> Prueba de significancia global</h4>
+<p>Para evaluar si <span class="math inline">\(X\)</span> tiene un efecto significativo sobre <span class="math inline">\(Y\)</span>, se utiliza el estadístico <span class="math inline">\(F\)</span>:<br>
+<span class="math display">\[
+F = \frac{MSR}{MSE}.
+\]</span></p>
+<ul>
+<li>Bajo la hipótesis nula (<span class="math inline">\(H_0: \beta_1 = 0\)</span>), <span class="math inline">\(F\)</span> sigue una distribución <span class="math inline">\(F\)</span> con 1 y <span class="math inline">\(n-2\)</span> grados de libertad.</li>
+<li>Si el valor <span class="math inline">\(p\)</span> asociado al estadístico <span class="math inline">\(F\)</span> es pequeño (<span class="math inline">\(p &lt; \alpha\)</span>), se rechaza <span class="math inline">\(H_0\)</span>, indicando que <span class="math inline">\(X\)</span> tiene un efecto significativo sobre <span class="math inline">\(Y\)</span>.</li>
+</ul>
+<p>El análisis ANOVA permite responder preguntas clave:</p>
+<ul>
+<li>¿Qué proporción de la variabilidad de <span class="math inline">\(Y\)</span> es explicada por <span class="math inline">\(X\)</span>?<br>
+</li>
+<li>¿Es significativa esta relación desde el punto de vista estadístico?</li>
+</ul>
+<p>En el contexto de la regresión lineal simple, esta herramienta no solo cuantifica el ajuste del modelo, sino que también valida su relevancia estadística.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>A continuación se presenta la tabla ANOVA correspondiente al modelo de horas de estudio y calificaciones, previamente entrenado.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión lineal</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(calificaciones <span class="sc">~</span> tiempo_estudio)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener y mostrar la tabla ANOVA</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>tabla_anova <span class="ot">&lt;-</span> <span class="fu">anova</span>(modelo)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Tabla ANOVA:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Tabla ANOVA:</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tabla_anova)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: calificaciones
+               Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+tiempo_estudio  1 96.016  96.016  409.47 &lt; 2.2e-16 ***
+Residuals      98 22.980   0.234                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="bondad-del-ajuste-coeficiente-de-determinación" class="level3" data-number="1.3.5">
+<h3 data-number="1.3.5" class="anchored" data-anchor-id="bondad-del-ajuste-coeficiente-de-determinación"><span class="header-section-number">1.3.5</span> Bondad del ajuste: coeficiente de determinación</h3>
 <p>El coeficiente de determinación (<span class="math inline">\(R^2\)</span>) mide qué proporción de la variabilidad total en <span class="math inline">\(Y\)</span> es explicada por <span class="math inline">\(X\)</span> a través del modelo:</p>
 <p><span class="math display">\[
 R^2 = 1 - \frac{\text{Suma de los Cuadrados de los Residuos (SSE)}}{\text{Suma Total de los Cuadrados (SST)}} = \frac{\text{Suma de los Cuadrados del Modelo (SSR)}}{\text{Suma Total de los Cuadrados (SST)}}.
@@ -1213,7 +1364,7 @@ R^2 = 1 - \frac{\text{Suma de los Cuadrados de los Residuos (SSE)}}{\text{Suma T
 </ul>
 <p>Un <span class="math inline">\(R^2\)</span> cercano a 1 indica que el modelo ajusta bien los datos, mientras que un <span class="math inline">\(R^2\)</span> cercano a 0 indica un ajuste pobre.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1222,12 +1373,60 @@ Ejemplo
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>En el resumen del modelo anterior hemos obtenido el siguiente valor para el coeficiente de determinación <span class="math inline">\(R^2=0.8069\)</span>. ¿Cómo evaluas el ajuste obtenido en este modelo? ```</p>
+<p>En el resumen del modelo anterior hemos obtenido el siguiente valor para el coeficiente de determinación <span class="math inline">\(R^2=0.8069\)</span>. ¿Cómo evaluas el ajuste obtenido en este modelo?</p>
 </div>
 </div>
 </div>
+<div class="callout callout-style-default callout-note callout-titled" title="Observaciones">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Observaciones
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-21" class="callout-21-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ul>
+<li><span class="math inline">\(R^2\)</span> debe ser interpretado con cautela, ya que resultará con frecuencia grande a pesar de que la relación entre <span class="math inline">\(X\)</span> e <span class="math inline">\(Y\)</span> no sea lineal.</li>
+<li>Ası́ por ejemplo, la magnitud d $R^2$2 depende del rango de variabilidad de la variable explicativa, <span class="math inline">\(X\)</span>. Siendo el modelo de regresión adecuado, la magnitud de <span class="math inline">\(R^2\)</span> aumenta (o disminuye) cuando lo hace la dispersión de <span class="math inline">\(X\)</span>.</li>
+<li>Además <span class="math inline">\(R^2\)</span> podrı́a ser un valor muy pequeño debido a que el rango de variación de <span class="math inline">\(X\)</span> es demasiado pequeño e impide que se detecte la relación con <span class="math inline">\(Y\)</span>.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="diagnóstico-del-modelo" class="level3" data-number="1.3.6">
+<h3 data-number="1.3.6" class="anchored" data-anchor-id="diagnóstico-del-modelo"><span class="header-section-number">1.3.6</span> Diagnóstico del modelo</h3>
+<p>El diagnóstico del modelo de regresión es un paso esencial para evaluar si los supuestos subyacentes se cumplen y garantizar la validez de las inferencias. El análisis de residuos proporciona información clave sobre la calidad del ajuste del modelo y la adecuación de los datos a los supuestos de la regresión lineal.</p>
+<p>El análisis de residuos ayuda a verificar los siguientes supuestos del modelo:</p>
+<ul>
+<li>Linealidad: La relación entre <span class="math inline">\(X\)</span> e <span class="math inline">\(Y\)</span>es lineal.</li>
+<li>Independencia: Los residuos son independientes entre sí.</li>
+<li>Homocedasticidad: Los residuos tienen varianza constante.</li>
+<li>Normalidad: Los residuos se distribuyen de manera aproximadamente normal.</li>
+</ul>
+<p>Una vez ajustado el modelo, hemos de detectar desviaciones de las hipótesis: proceder al diagnóstico del modelo. El análisis de los residuos nos permitirá identificar deficiencias en la verificación de estas hipótesis, ası́ como observaciones anómalas o influyentes.</p>
+<p>Aquí tienes el desarrollo de la sección <strong>“Diagnóstico del modelo. Análisis de residuos”</strong>:</p>
+<hr>
+</section>
+</section>
+<section id="diagnóstico-del-modelo.-análisis-de-residuos" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="diagnóstico-del-modelo.-análisis-de-residuos"><span class="header-section-number">1.4</span> <strong>Diagnóstico del Modelo. Análisis de Residuos</strong></h2>
+<p>El diagnóstico del modelo de regresión es un paso esencial para evaluar si los supuestos subyacentes se cumplen y garantizar la validez de las inferencias. El análisis de residuos proporciona información clave sobre la calidad del ajuste del modelo y la adecuación de los datos a los supuestos de la regresión lineal.</p>
+<p>Recordemos que los residuos del modelo (<span class="math inline">\(e_i\)</span>) son las diferencias entre los valores observados (<span class="math inline">\(Y_i\)</span>) y los valores predichos (<span class="math inline">\(\hat{Y}_i\)</span>) por el modelo: <span class="math display">\[
+e_i = Y_i - \hat{Y}_i.
+\]</span> Representan la parte de la variabilidad en <span class="math inline">\(Y\)</span> no explicada por el modelo.</p>
+<p>En ocasiones, es preferible trabakar con los <strong>residuos estandarizados</strong>, que tienen media cero y varianza aproximadamente unidad: <span class="math display">\[
+d_i = \frac{e_i}{\sqrt{MSE}},  \hspace{0.5cm} i=1,\ldots,n.
+\]</span> Otro tipo de residuos habitual es el de los llamados <strong>residuos estudentizados</strong>: <span class="math display">\[
+d_i = \frac{e_i}{\sqrt{MSE \left ( 1-\frac{1}{n}-\frac{(X_i-\bar{X})^2}{S_xx} \right )}}, \hspace{0.5cm} i=1,\ldots,n.
+\]</span></p>
+<p>Estos residuos son preferibles a los estandarizados cuando <span class="math inline">\(n\)</span> es pequeño.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
@@ -1235,7 +1434,6 @@ Ejemplo
 Kutner, Michael H, Christopher J Nachtsheim, John Neter, y William Li. 2005. <em>Applied linear statistical models</em>. McGraw-hill.
 </div>
 </div>
-</section>
 </section>
 
 </main> <!-- /main -->
