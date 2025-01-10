@@ -1041,14 +1041,6 @@ El análisis de residuos ayuda a verificar los siguientes supuestos del modelo:
 
 Una vez ajustado el modelo, hemos de detectar desviaciones de las hipótesis: proceder al diagnóstico del modelo. El análisis de los residuos nos permitirá identificar deficiencias en la verificación de estas hipótesis, ası́ como observaciones anómalas o influyentes.
 
-Aquí tienes el desarrollo de la sección **"Diagnóstico del modelo. Análisis de residuos"**:
-
----
-
-## **Diagnóstico del Modelo. Análisis de Residuos**
-
-El diagnóstico del modelo de regresión es un paso esencial para evaluar si los supuestos subyacentes se cumplen y garantizar la validez de las inferencias. El análisis de residuos proporciona información clave sobre la calidad del ajuste del modelo y la adecuación de los datos a los supuestos de la regresión lineal.
-
 Recordemos que los residuos del modelo ($e_i$) son las diferencias entre los valores observados ($Y_i$) y los valores predichos ($\hat{Y}_i$) por el modelo:
 $$
 e_i = Y_i - \hat{Y}_i.
