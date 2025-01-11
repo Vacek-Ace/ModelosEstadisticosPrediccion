@@ -1060,5 +1060,140 @@ Estos residuos son preferibles a los estandarizados cuando $n$ es pequeño.
 
 #### Herramientas para el análisis de los residuos
 
+En primer lugar emplearemos gráficos de los residuos para visualizar cómo se comportan las discrepancias entre los valores observados y los predichos  en relación con diversas variables o aspectos del modelo. 
 
+A continuación se ejecutarán pruebas estadísticas para confirmar los hallazgos visuales. 
+
+Corregir los problemas detectados será el último paso. Para ello, y dependiendo del problema, será necesario transformar la variable respuesta, considerar modificaciones del modelo, o el uso de modelos alternativos.
+
+
+**Gráficos de residuos** 
+
+La utilidad de los gráficos radica en que ofrecen una manera intuitiva de evaluar si los supuestos clave del modelo de regresión se cumplen, ayudando a identificar problemas que podrían comprometer la validez de las conclusiones. Los gráficos de residuos no solo permiten diagnosticar problemas en el ajuste del modelo, sino también identificar áreas donde el modelo puede ser mejorado. Su uso sistemático en el análisis de regresión asegura un modelo más robusto, fiable y ajustado a los datos, mejorando la calidad de las conclusiones y predicciones. 
+
+Loas principales utilidades de estos gráficos son:
+
+1. **Evaluación de la linealidad:**  
+
+Un gráfico de residuos versus valores ajustados ayuda a identificar si la  relación entre la variable explicativa y la variable respuesta es lineal. La ausencia de patrones sistemáticos indica que el supuesto de linealidad se cumple.
+
+2. **Detección de heterocedasticidad:**  
+
+Se detectan problemas de heterocedasticidad, si en el gráfico de residuos versus valores ajustados se observa un patrón de "embudo" o una variación creciente/disminuyente, es decir, cuando se observa que la varianza de los residuos no es constante para todos los valores de $X$.. 
+
+3. **Verificación de normalidad:**  
+
+Recordemos que la hipótesis de normalidad de los residuos es esencial para realizar inferencias estadísticas fiables (intervalos de confianza, pruebas de hipótesis). Los histogramas de residuos o los gráficos QQ-plot permiten detectar desviaciones respecto a la distribución normal. Los residuos estandarizados y estudentizados también son útiles para detectar desviaciones de la normalidad, Si los errores se distribuyen según una normal, entonces aproximadamente el $68\%$
+de los residuos estandarizados (estudentizados) quedarán entre $−1$ y
+$+1$, y el $95\%$ entre $−2$ y $+2$.
+
+4. **Detección de Observaciones Influyentes:**  
+
+Los gráficos de residuos ayudan a identificar puntos atípicos (outliers) o valores con alta influencia que podrían afectar de manera desproporcionada el modelo.  Esto es especialmente útil para decidir si ajustar el modelo o realizar un análisis más detallado de estos puntos.
+
+5. **Facilidad para Diagnóstico Rápido:**  
+
+Los gráficos de residuos son intuitivos y ofrecen una evaluación visual inmediata de posibles problemas, complementando las pruebas estadísticas formales.
+
+Los gráficos más comunes para llevar a cabo todos los análisis anteriores son:
+
+  - Residuos vs. Valores Ajustados: Este gráfico permite verificar la linealidad y la homocedasticidad. Los residuos deben distribuirse aleatoriamente alrededor del cero sin patrones discernibles. Cuando aparece alguna tendencia como una forma de embudo o un abombamiento, etc., podemos tener algún problema con
+la violación de la hipótesis de varianza constante para los residuos (heterocedasticidad). También pueden aparecer gráficos con cierta tendencia cuando la relación entre $X$ e $Y$ es no lineal. Aunque esto se podrı́a
+ver en un gráfico de dispersión de ($X$ , $Y$ ), suele ser más evidente en
+un gráfico con los residuos.
+  - Histograma de Residuos: Muestra si los residuos tienen una distribución aproximadamente normal.
+  - QQ-Plot (Gráfico Cuantil-Cuantil): Compara la distribución de los residuos con una distribución normal. Si los puntos se alinean con la diagonal, se cumple la normalidad. Se dibujan los residuos ordenados $e[i]$ frente a los cuantiles
+correspondientes de una normal estándar, $\phi^{−1}[(i − 1)/n]$. Si es
+cierta la normalidad de los residuos, el gráfico resultante deberı́a
+corresponderse con una recta.
+  - Residuos vs. Variables Predictoras: Verifica si hay patrones entre los residuos y $X$, lo que indicaría problemas de linealidad o varianza no constante.
+
+::: {.callout-important title="Para recordar"}
+Es análogo hacer el gráfico de los $e_i$ frente a $\hat{Y_i}$ o $X_i$, ya que los valores ajustados $\hat{Y_i}$ son función lineal de $X_i$.
+:::
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+Estudiamos los residuos del ejemplo de calificaciones de estudiantes.
+```{r residuos1}
+# Ajustar el modelo de regresión lineal
+modelo <- lm(calificaciones ~ tiempo_estudio)
+
+# Obtener los residuos
+residuos <- resid(modelo)
+
+# Estudiar los residuos
+
+# 1. Gráfico de residuos vs. valores ajustados
+valores_ajustados <- fitted(modelo)
+plot(valores_ajustados, residuos,
+     main = "Residuos vs Valores Ajustados",
+     xlab = "Valores Ajustados",
+     ylab = "Residuos",
+     pch = 19, col = "blue")
+abline(h = 0, col = "red", lwd = 2)
+
+# 2. Histograma de los residuos
+hist(residuos,
+     main = "Histograma de Residuos",
+     xlab = "Residuos",
+     col = "lightblue", border = "black")
+
+# 3. QQ-Plot de residuos
+qqnorm(residuos, main = "QQ-Plot de los Residuos")
+qqline(residuos, col = "red", lwd = 2)
+
+# 4. Pruebas de normalidad de los residuos
+shapiro_test <- shapiro.test(residuos)
+cat("Prueba de Shapiro-Wilk para normalidad de los residuos:\n")
+print(shapiro_test)
+
+# 5. Gráfico de residuos vs. tiempo de estudio
+plot(tiempo_estudio, residuos,
+     main = "Residuos vs Tiempo de Estudio",
+     xlab = "Tiempo de Estudio (horas/semana)",
+     ylab = "Residuos",
+     pch = 19, col = "purple")
+abline(h = 0, col = "red", lwd = 2)
+
+```
+:::
+
+
+**Estadísticas para el diagnóstico de los residuos**
+
+Las pruebas estadísticas son útiles para confirmar los hallazgos visuales obtenidos al analizar los gráficos de los residuos. Las principales pruebas formales a considerar son:
+
+  - Prueba de normalidad (Shapiro-Wilk): Confirma si los residuos siguen una distribución normal. Un p-valor por debajo del grado de significatividad elegido (típicamente $0.05$), indica que no podemos rechazar la hipótesis nula de normalidad de los residuos.
+  - Prueba de autocorrelación (Durbin-Watson): Evalúa la independencia de los residuos.
+  - Prueba de homocedasticidad (Breusch-Pagan): Detecta si los residuos presentan varianza constante. Un p-valor pequeño (típicamente menor que $0.05$) sugiere heterocedasticidad.
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+Estudiamos los residuos del ejemplo de calificaciones de estudiantes.
+```{r residuos2}
+# Ajustar el modelo de regresión lineal
+modelo <- lm(calificaciones ~ tiempo_estudio)
+
+# Obtener los residuos
+residuos <- resid(modelo)
+
+# Estadísticas para diagnóstico
+
+# 1. Prueba de normalidad de los residuos (Shapiro-Wilk)
+shapiro_test <- shapiro.test(residuos)
+cat("Prueba de Shapiro-Wilk para normalidad de los residuos:\n")
+print(shapiro_test)
+
+# 2. Prueba de homocedasticidad (Breusch-Pagan)
+library(lmtest)
+breusch_pagan <- bptest(modelo)
+cat("\nPrueba de Breusch-Pagan para homocedasticidad:\n")
+print(breusch_pagan)
+
+# 3. Estadística Durbin-Watson para autocorrelación de los residuos
+durbin_watson <- dwtest(modelo)
+cat("\nPrueba de Durbin-Watson para autocorrelación de los residuos:\n")
+print(durbin_watson)
+
+```
+:::
 
