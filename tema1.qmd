@@ -1160,6 +1160,45 @@ abline(h = 0, col = "red", lwd = 2)
 :::
 
 
+#### Estadísticas para el diagnóstico
+
+Las pruebas estadísticas son útiles para confirmar los hallazgos visuales obtenidos al analizar los gráficos de los residuos. Las principales pruebas formales a considerar son:
+
+  - Prueba de normalidad (Shapiro-Wilk): Confirma si los residuos siguen una distribución normal. Un p-valor por debajo del grado de significatividad elegido (típicamente $0.05$), indica que no podemos rechazar la hipótesis nula de normalidad de los residuos.
+  - Prueba de autocorrelación (Durbin-Watson): Evalúa la independencia de los residuos.
+  - Prueba de homocedasticidad (Breusch-Pagan): Detecta si los residuos presentan varianza constante. Un p-valor pequeño (típicamente menor que $0.05$) sugiere heterocedasticidad.
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+Estudiamos los residuos del ejemplo de calificaciones de estudiantes.
+```{r residuos2}
+# Ajustar el modelo de regresión lineal
+modelo <- lm(calificaciones ~ tiempo_estudio)
+
+# Obtener los residuos
+residuos <- resid(modelo)
+
+# Estadísticas para diagnóstico
+
+# 1. Prueba de normalidad de los residuos (Shapiro-Wilk)
+shapiro_test <- shapiro.test(residuos)
+cat("Prueba de Shapiro-Wilk para normalidad de los residuos:\n")
+print(shapiro_test)
+
+# 2. Prueba de homocedasticidad (Breusch-Pagan)
+library(lmtest)
+breusch_pagan <- bptest(modelo)
+cat("\nPrueba de Breusch-Pagan para homocedasticidad:\n")
+print(breusch_pagan)
+
+# 3. Estadística Durbin-Watson para autocorrelación de los residuos
+durbin_watson <- dwtest(modelo)
+cat("\nPrueba de Durbin-Watson para autocorrelación de los residuos:\n")
+print(durbin_watson)
+
+```
+:::
+
+
 ### Observaciones atípicas (outliers)
 
 En el contexto de la regresión lineal simple, una observación atípica es un punto de datos que se aleja notablemente del patrón general observado entre la variable independiente (\(X\)) y la variable dependiente (\(Y\)). Estas observaciones pueden surgir por errores en la recopilación de datos, valores extremos naturales o situaciones especiales que no están representadas en el modelo.  
@@ -1240,64 +1279,93 @@ Las **medidas de influencia** son herramientas que evalúan el impacto que tiene
   - **DFBETAS:** Evalúa cuánto cambia un coeficiente del modelo si se elimina una observación. Valores absolutos mayores a $2/\sqrt{n}$ sugieren influencia significativa.
   - **DFFITS:** Mide el impacto de una observación en el valor ajustado. Valores absolutos mayores a $2\sqrt{p/n}$ sugieren influencia significativa.
 
-
-
-
-### **Manejo de Observaciones Atípicas**
-1. **Verificación de Datos:**
-   - Confirmar si las observaciones atípicas son errores de registro o si representan casos válidos pero raros.
-
-2. **Transformación de Datos:**
-   - Aplicar transformaciones como logaritmos o raíces cuadradas para reducir la influencia de los valores atípicos.
-
-3. **Modelos Robustos:**
-   - Considerar modelos de regresión robusta, que son menos sensibles a los valores atípicos.
-
-4. **Eliminación Justificada:**
-   - En casos donde los valores atípicos son errores claros o no representativos, pueden eliminarse del análisis, siempre documentando esta decisión.
-
----
-
-### **Conclusión**
-Las observaciones atípicas son inevitables en análisis de datos, pero es crucial detectarlas y manejarlas adecuadamente. Una evaluación cuidadosa asegura que los modelos sean representativos y fiables, minimizando el impacto negativo de estas observaciones en las conclusiones y predicciones. 
-
-
-
-#### Estadísticas para el diagnóstico
-
-Las pruebas estadísticas son útiles para confirmar los hallazgos visuales obtenidos al analizar los gráficos de los residuos. Las principales pruebas formales a considerar son:
-
-  - Prueba de normalidad (Shapiro-Wilk): Confirma si los residuos siguen una distribución normal. Un p-valor por debajo del grado de significatividad elegido (típicamente $0.05$), indica que no podemos rechazar la hipótesis nula de normalidad de los residuos.
-  - Prueba de autocorrelación (Durbin-Watson): Evalúa la independencia de los residuos.
-  - Prueba de homocedasticidad (Breusch-Pagan): Detecta si los residuos presentan varianza constante. Un p-valor pequeño (típicamente menor que $0.05$) sugiere heterocedasticidad.
-
 ::: {.callout-tip title="Ejemplo" collapse="true"}
-Estudiamos los residuos del ejemplo de calificaciones de estudiantes.
-```{r residuos2}
+Estudiamos los valores de leverage del ejemplo de calificaciones de estudiantes.
+```{r influyentes1}
 # Ajustar el modelo de regresión lineal
 modelo <- lm(calificaciones ~ tiempo_estudio)
 
-# Obtener los residuos
-residuos <- resid(modelo)
+# 1. Calcular Distancia de Cook
+cooks_distance <- cooks.distance(modelo)
 
-# Estadísticas para diagnóstico
+# 2. Calcular DFBETAS
+dfbetas_values <- dfbetas(modelo)
 
-# 1. Prueba de normalidad de los residuos (Shapiro-Wilk)
-shapiro_test <- shapiro.test(residuos)
-cat("Prueba de Shapiro-Wilk para normalidad de los residuos:\n")
-print(shapiro_test)
+# 3. Calcular DFFITS
+dffits_values <- dffits(modelo)
 
-# 2. Prueba de homocedasticidad (Breusch-Pagan)
-library(lmtest)
-breusch_pagan <- bptest(modelo)
-cat("\nPrueba de Breusch-Pagan para homocedasticidad:\n")
-print(breusch_pagan)
+# Umbrales sugeridos
+cooks_threshold <- 4 / n  # Umbral para Distancia de Cook
+dffits_threshold <- 2 * sqrt(length(coef(modelo)) / n)  # Umbral para DFFITS
 
-# 3. Estadística Durbin-Watson para autocorrelación de los residuos
-durbin_watson <- dwtest(modelo)
-cat("\nPrueba de Durbin-Watson para autocorrelación de los residuos:\n")
-print(durbin_watson)
+# Resultados
+cat("Distancia de Cook (primeras 10 observaciones):\n")
+print(head(cooks_distance, 10))
+
+cat("\nObservaciones con Distancia de Cook alta (> ", cooks_threshold, "):\n")
+print(which(cooks_distance > cooks_threshold))
+
+cat("\nDFBETAS (primeras 10 observaciones):\n")
+print(head(dfbetas_values, 10))
+
+cat("\nDFFITS (primeras 10 observaciones):\n")
+print(head(dffits_values, 10))
+cat("\nObservaciones con DFFITS alto (> ", dffits_threshold, "):\n")
+print(which(abs(dffits_values) > dffits_threshold))
+
+# Graficar Distancia de Cook
+plot(cooks_distance,
+     main = "Distancia de Cook",
+     xlab = "Índice de Observación",
+     ylab = "Distancia de Cook",
+     pch = 19, col = "blue", ylim=c(min(cooks_distance)*.9,max(cooks_distance)*1.05))
+abline(h = cooks_threshold, col = "red", lwd = 2, lty = 2)
+text(which(cooks_distance > cooks_threshold), cooks_distance[cooks_distance > cooks_threshold],
+     labels = which(cooks_distance > cooks_threshold), pos = 3, col = "red")
+
+# Graficar DFFITS
+plot(dffits_values,
+     main = "DFFITS",
+     xlab = "Índice de Observación",
+     ylab = "DFFITS",
+     pch = 19, col = "green", ylim=c(min(dffits_values)*.85,max(dffits_values)*1.07))
+abline(h = c(dffits_threshold, -dffits_threshold), col = "red", lwd = 2, lty = 2)
+text(which(abs(dffits_values) > dffits_threshold), dffits_values[abs(dffits_values) > dffits_threshold],
+     labels = which(abs(dffits_values) > dffits_threshold), pos = 3, col = "red")
 
 ```
 :::
+
+
+#### Tratamiento de observaciones atípicas
+
+Hemos visto que las observaciones atípicas son inevitables en el análisis de datos y pueden surgir por diversas razones, como errores en la recopilación de datos, fenómenos extremos o situaciones únicas en el conjunto de datos. Aunque estas observaciones pueden proporcionar información valiosa, también tienen el potencial de distorsionar los resultados del análisis, afectando la validez de los modelos ajustados y las conclusiones derivadas.
+
+El manejo adecuado de las observaciones atípicas es esencial para garantizar que el modelo represente de manera precisa y robusta el comportamiento general de los datos. Este proceso no implica simplemente eliminar valores problemáticos, sino evaluar cuidadosamente su naturaleza y decidir una estrategia adecuada para tratarlos.
+
+Consideramos cuatro enfoques principales para el manejo de observaciones atípicas:
+
+1. **Verificación de datos:**
+   - Confirmar si las observaciones atípicas son errores de registro o si representan casos válidos pero raros.
+
+2. **Transformación de datos:**
+   - Aplicar transformaciones como logaritmos o raíces cuadradas para reducir la influencia de los valores atípicos.
+
+3. **Modelos robustos:**
+   - Considerar modelos de regresión robusta, que son menos sensibles a los valores atípicos.
+
+4. **Eliminación justificada:**
+   - En casos donde los valores atípicos son errores claros o no representativos, pueden eliminarse del análisis, siempre documentando esta decisión.
+
+
+### Tratamiento de problemas
+
+Si el modelo de regresión lineal simple no es apropiado porque se
+incumplen algunas de las suposiciones, algunas opciones básicas
+son:
+  1. Abandonar el modelo de regresión y desarrollar otro más
+apropiado, según las suposiciones incumplidas.
+  2. Emplear alguna transformación de los datos de forma que el
+modelo de regresión sea válido para los datos transformados.
+---
 
