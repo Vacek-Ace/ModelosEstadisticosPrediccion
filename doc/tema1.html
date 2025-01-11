@@ -246,6 +246,9 @@ window.Quarto = {
   <li><a href="#descomposición-de-la-varianza-anova" id="toc-descomposición-de-la-varianza-anova" class="nav-link" data-scroll-target="#descomposición-de-la-varianza-anova"><span class="header-section-number">1.3.4</span> Descomposición de la varianza: ANOVA</a></li>
   <li><a href="#bondad-del-ajuste-coeficiente-de-determinación" id="toc-bondad-del-ajuste-coeficiente-de-determinación" class="nav-link" data-scroll-target="#bondad-del-ajuste-coeficiente-de-determinación"><span class="header-section-number">1.3.5</span> Bondad del ajuste: coeficiente de determinación</a></li>
   <li><a href="#diagnóstico-del-modelo" id="toc-diagnóstico-del-modelo" class="nav-link" data-scroll-target="#diagnóstico-del-modelo"><span class="header-section-number">1.3.6</span> Diagnóstico del modelo</a></li>
+  <li><a href="#observaciones-atípicas-outliers" id="toc-observaciones-atípicas-outliers" class="nav-link" data-scroll-target="#observaciones-atípicas-outliers"><span class="header-section-number">1.3.7</span> Observaciones atípicas (outliers)</a></li>
+  <li><a href="#manejo-de-observaciones-atípicas" id="toc-manejo-de-observaciones-atípicas" class="nav-link" data-scroll-target="#manejo-de-observaciones-atípicas"><span class="header-section-number">1.3.8</span> <strong>Manejo de Observaciones Atípicas</strong></a></li>
+  <li><a href="#conclusión" id="toc-conclusión" class="nav-link" data-scroll-target="#conclusión"><span class="header-section-number">1.3.9</span> <strong>Conclusión</strong></a></li>
   </ul></li>
   </ul>
 </nav>
@@ -1419,14 +1422,16 @@ d_i = \frac{e_i}{\sqrt{MSE}},  \hspace{0.5cm} i=1,\ldots,n.
 d_i = \frac{e_i}{\sqrt{MSE \left ( 1-\frac{1}{n}-\frac{(X_i-\bar{X})^2}{S_xx} \right )}}, \hspace{0.5cm} i=1,\ldots,n.
 \]</span></p>
 <p>Estos residuos son preferibles a los estandarizados cuando <span class="math inline">\(n\)</span> es pequeño.</p>
-<section id="herramientas-para-el-análisis-de-los-residuos" class="level4" data-number="1.3.6.1">
-<h4 data-number="1.3.6.1" class="anchored" data-anchor-id="herramientas-para-el-análisis-de-los-residuos"><span class="header-section-number">1.3.6.1</span> Herramientas para el análisis de los residuos</h4>
+<section id="pasos-en-el-diagnóstico" class="level4" data-number="1.3.6.1">
+<h4 data-number="1.3.6.1" class="anchored" data-anchor-id="pasos-en-el-diagnóstico"><span class="header-section-number">1.3.6.1</span> Pasos en el diagnóstico</h4>
 <p>En primer lugar emplearemos gráficos de los residuos para visualizar cómo se comportan las discrepancias entre los valores observados y los predichos en relación con diversas variables o aspectos del modelo.</p>
 <p>A continuación se ejecutarán pruebas estadísticas para confirmar los hallazgos visuales.</p>
 <p>Corregir los problemas detectados será el último paso. Para ello, y dependiendo del problema, será necesario transformar la variable respuesta, considerar modificaciones del modelo, o el uso de modelos alternativos.</p>
-<p><strong>Gráficos de residuos</strong></p>
+</section>
+<section id="gráficos-de-residuos" class="level4" data-number="1.3.6.2">
+<h4 data-number="1.3.6.2" class="anchored" data-anchor-id="gráficos-de-residuos"><span class="header-section-number">1.3.6.2</span> Gráficos de residuos</h4>
 <p>La utilidad de los gráficos radica en que ofrecen una manera intuitiva de evaluar si los supuestos clave del modelo de regresión se cumplen, ayudando a identificar problemas que podrían comprometer la validez de las conclusiones. Los gráficos de residuos no solo permiten diagnosticar problemas en el ajuste del modelo, sino también identificar áreas donde el modelo puede ser mejorado. Su uso sistemático en el análisis de regresión asegura un modelo más robusto, fiable y ajustado a los datos, mejorando la calidad de las conclusiones y predicciones.</p>
-<p>Loas principales utilidades de estos gráficos son:</p>
+<p>Las principales utilidades de estos gráficos son:</p>
 <ol type="1">
 <li><strong>Evaluación de la linealidad:</strong></li>
 </ol>
@@ -1440,11 +1445,11 @@ d_i = \frac{e_i}{\sqrt{MSE \left ( 1-\frac{1}{n}-\frac{(X_i-\bar{X})^2}{S_xx} \r
 </ol>
 <p>Recordemos que la hipótesis de normalidad de los residuos es esencial para realizar inferencias estadísticas fiables (intervalos de confianza, pruebas de hipótesis). Los histogramas de residuos o los gráficos QQ-plot permiten detectar desviaciones respecto a la distribución normal. Los residuos estandarizados y estudentizados también son útiles para detectar desviaciones de la normalidad, Si los errores se distribuyen según una normal, entonces aproximadamente el <span class="math inline">\(68\%\)</span> de los residuos estandarizados (estudentizados) quedarán entre <span class="math inline">\(−1\)</span> y <span class="math inline">\(+1\)</span>, y el <span class="math inline">\(95\%\)</span> entre <span class="math inline">\(−2\)</span> y <span class="math inline">\(+2\)</span>.</p>
 <ol start="4" type="1">
-<li><strong>Detección de Observaciones Influyentes:</strong></li>
+<li><strong>Detección de observaciones atípicas e influyentes:</strong></li>
 </ol>
 <p>Los gráficos de residuos ayudan a identificar puntos atípicos (outliers) o valores con alta influencia que podrían afectar de manera desproporcionada el modelo. Esto es especialmente útil para decidir si ajustar el modelo o realizar un análisis más detallado de estos puntos.</p>
 <ol start="5" type="1">
-<li><strong>Facilidad para Diagnóstico Rápido:</strong></li>
+<li><strong>Facilidad para diagnóstico rápido:</strong></li>
 </ol>
 <p>Los gráficos de residuos son intuitivos y ofrecen una evaluación visual inmediata de posibles problemas, complementando las pruebas estadísticas formales.</p>
 <p>Los gráficos más comunes para llevar a cabo todos los análisis anteriores son:</p>
@@ -1558,13 +1563,46 @@ W = 0.99008, p-value = 0.671</code></pre>
 </div>
 </div>
 </div>
-<p><strong>Estadísticas para el diagnóstico de los residuos</strong></p>
-<p>Las pruebas estadísticas son útiles para confirmar los hallazgos visuales obtenidos al analizar los gráficos de los residuos. Las principales pruebas formales a considerar son:</p>
+</section>
+</section>
+<section id="observaciones-atípicas-outliers" class="level3" data-number="1.3.7">
+<h3 data-number="1.3.7" class="anchored" data-anchor-id="observaciones-atípicas-outliers"><span class="header-section-number">1.3.7</span> Observaciones atípicas (outliers)</h3>
+<p>En el contexto de la regresión lineal simple, una observación atípica es un punto de datos que se aleja notablemente del patrón general observado entre la variable independiente ((X)) y la variable dependiente ((Y)). Estas observaciones pueden surgir por errores en la recopilación de datos, valores extremos naturales o situaciones especiales que no están representadas en el modelo.</p>
+<p>Las observaciones atípicas pueden tener un impacto significativo en el ajuste del modelo, afectando las estimaciones de los coeficientes de regresión, el análisis de residuos y la validez de las conclusiones. Las observaciones atípicas pueden distorsionar los coeficientes <span class="math inline">\(\hat{\beta}_0\)</span> y <span class="math inline">\(\hat{\beta}_1\)</span>, añadiendo sesgos a las estimaciones. Además, pueden conducir a diagnóticos incorrectos, al alterae la normalidad y homocedasticidad de los residuos, afectando las pruebas estadísticas. Por último, conducen a predicciones inexactas, puesto que los modelos ajustados en presencia de valores atípicos pueden no ser representativos del conjunto de datos general.</p>
+<section id="tipos-de-observaciones-atípicas" class="level4" data-number="1.3.7.1">
+<h4 data-number="1.3.7.1" class="anchored" data-anchor-id="tipos-de-observaciones-atípicas"><span class="header-section-number">1.3.7.1</span> Tipos de observaciones atípicas</h4>
+<ol type="1">
+<li>Outliers en <span class="math inline">\(Y\)</span>:</li>
+</ol>
 <ul>
-<li>Prueba de normalidad (Shapiro-Wilk): Confirma si los residuos siguen una distribución normal. Un p-valor por debajo del grado de significatividad elegido (típicamente <span class="math inline">\(0.05\)</span>), indica que no podemos rechazar la hipótesis nula de normalidad de los residuos.</li>
-<li>Prueba de autocorrelación (Durbin-Watson): Evalúa la independencia de los residuos.</li>
-<li>Prueba de homocedasticidad (Breusch-Pagan): Detecta si los residuos presentan varianza constante. Un p-valor pequeño (típicamente menor que <span class="math inline">\(0.05\)</span>) sugiere heterocedasticidad.</li>
+<li>Son puntos que tienen valores de <span class="math inline">\(Y\)</span> mucho mayores o menores en comparación con lo predicho por el modelo.<br>
+</li>
+<li>Estos puntos suelen detectarse como residuos grandes.</li>
 </ul>
+<ol start="2" type="1">
+<li>Outliers en <span class="math inline">\(X\)</span>:</li>
+</ol>
+<ul>
+<li>Son puntos con valores extremos de <span class="math inline">\(X\)</span> que no están bien representados en el rango principal de los datos.<br>
+</li>
+<li>Si bien pueden no afectar directamente la regresión, pueden influir en los coeficientes del modelo si tienen alta “leverage” (potencial para influir en el ajuste).</li>
+</ul>
+<ol start="3" type="1">
+<li>Observaciones Influyentes:</li>
+</ol>
+<ul>
+<li>Son puntos que, debido a su posición, tienen un impacto desproporcionado en el ajuste del modelo. Pueden ser outliers en <span class="math inline">\(X\)</span>, <span class="math inline">\(Y\)</span>, o ambos.</li>
+</ul>
+</section>
+<section id="detección-de-observaciones-atípicas" class="level4" data-number="1.3.7.2">
+<h4 data-number="1.3.7.2" class="anchored" data-anchor-id="detección-de-observaciones-atípicas"><span class="header-section-number">1.3.7.2</span> Detección de observaciones atípicas</h4>
+<p>Un gráfico de dispersión entre la variables respuesta y la variable explicativa permite identificar qué puntos se desvían claramente del patrón general. Además, en un gráfico de los residuos frente a los valores ajutados, los outliers en <span class="math inline">\(Y\)</span> aparecen como residuos grandes.</p>
+<p>Generalmente, residuos estudentizados con valores mayores a <span class="math inline">\(|3|\)</span> indican outliers.</p>
+<p>El <strong>leverage</strong>, o apalancamiento mide el grado en el que una observación individual influye en el ajuste del modelo. En términos simples, el leverage cuantifica cómo de “lejos” está un punto de datos de la media de la variable explicativa <span class="math inline">\(X\)</span> y, por lo tanto, cuánto contribuye al ajuste del modelo.</p>
+<p>El leverage se calcula a partir de la matriz de proyección <span class="math inline">\(H\)</span> (también llamada matriz “hat”), que transforma los valores observados en valores ajustados. La diagonal de esta matriz (<span class="math inline">\(h_{ii}\)</span>) mide el leverage para cada observación: <span class="math display">\[
+h_{ii}=\frac{1}{n}+\frac{(X_i-\bar{X})^2}{\sum_{j=1}^n (X_j-\bar{X})^2}
+\]</span></p>
+<p>El leverage (<span class="math inline">\(h_{ii}\)</span>) toma valores entre <span class="math inline">\(0\)</span> y <span class="math inline">\(1\)</span>. Un leverage cercano a <span class="math inline">\(0\)</span> indica que el punto está muy cerca del centro de los datos, mientras que un leverage alto sugiere que el punto está lejos. Valores de leverage altos (<span class="math inline">\(h_{ii} &gt; \frac{2p}{n}\)</span>, donde <span class="math inline">\(p\)</span> es el número de parámetros del modelo) son sospechosos.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -1577,23 +1615,163 @@ Ejemplo
 </div>
 <div id="callout-24" class="callout-24-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Estudiamos los residuos del ejemplo de calificaciones de estudiantes.</p>
+<p>Estudiamos los valores de leverage del ejemplo de calificaciones de estudiantes.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión lineal</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(calificaciones <span class="sc">~</span> tiempo_estudio)</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener los residuos</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>residuos <span class="ot">&lt;-</span> <span class="fu">resid</span>(modelo)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular leverage</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>leverage <span class="ot">&lt;-</span> <span class="fu">hatvalues</span>(modelo)</span>
 <span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Estadísticas para diagnóstico</span></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Prueba de normalidad de los residuos (Shapiro-Wilk)</span></span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>shapiro_test <span class="ot">&lt;-</span> <span class="fu">shapiro.test</span>(residuos)</span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Prueba de Shapiro-Wilk para normalidad de los residuos:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Umbral para leverage alto</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">coef</span>(modelo))  <span class="co"># Número de parámetros (incluyendo el intercepto)</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>leverage_threshold <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> p <span class="sc">/</span> n</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Identificar observaciones con leverage alto</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>leverage_high <span class="ot">&lt;-</span> <span class="fu">which</span>(leverage <span class="sc">&gt;</span> leverage_threshold)</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Resultados</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Valores de leverage:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Valores de leverage:</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(leverage)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         1          2          3          4          5          6          7 
+0.01548204 0.02046914 0.01100581 0.02838063 0.03425201 0.03550447 0.01011261 
+         8          9         10         11         12         13         14 
+0.02920954 0.01034872 0.01021265 0.03617186 0.01024305 0.01397099 0.01066195 
+        15         16         17         18         19         20         21 
+0.02947303 0.03005673 0.01794903 0.03582737 0.01359185 0.03584680 0.02893121 
+        22         23         24         25         26         27         28 
+0.01463144 0.01249149 0.04058238 0.01301990 0.01549100 0.01024494 0.01114180 
+        29         30         31         32         33         34         35 
+0.01548204 0.02548264 0.03682806 0.03034319 0.01463144 0.02088565 0.03780742 
+        36         37         38         39         40         41         42 
+0.01005667 0.01832352 0.01984759 0.01409128 0.01887292 0.02573445 0.01088203 
+        43         44         45         46         47         48         49 
+0.01088203 0.01209977 0.02498512 0.02598829 0.01868408 0.01013361 0.01674089 
+        50         51         52         53         54         55         56 
+0.02600358 0.03550447 0.01038499 0.02131030 0.02755397 0.01047077 0.02066389 
+        57         58         59         60         61         62         63 
+0.02702395 0.01814065 0.02948991 0.01191912 0.01347920 0.03032595 0.01166337 
+        64         65         66         67         68         69         70 
+0.01625359 0.02240745 0.01030996 0.02218396 0.02218396 0.02088565 0.01042556 
+        71         72         73         74         75         76         77 
+0.01814065 0.01210532 0.01564137 0.04091460 0.01007286 0.01964859 0.01174659 
+        78         79         80         81         82         83         84 
+0.01158700 0.01269048 0.02863839 0.01812975 0.01359910 0.01082318 0.02046914 
+        85         86         87         88         89         90         91 
+0.02947303 0.01051278 0.03953410 0.02948991 0.02865490 0.02307628 0.02676199 
+        92         93         94         95         96         97         98 
+0.01301990 0.01301326 0.01313168 0.01396337 0.02194927 0.02006074 0.03032595 
+        99        100 
+0.01013361 0.01002084 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Umbral para leverage alto:"</span>, leverage_threshold, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Umbral para leverage alto: 0.04 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Observaciones con leverage alto (si las hay):</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Observaciones con leverage alto (si las hay):</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(leverage_high)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>24 74 
+24 74 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de leverage</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(leverage, </span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Leverage de las Observaciones"</span>,</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Índice de Observación"</span>,</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Leverage"</span>,</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="fu">min</span>(leverage)<span class="sc">*</span>.<span class="dv">9</span>,<span class="fu">max</span>(leverage)<span class="sc">*</span><span class="fl">1.05</span>))</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> leverage_threshold, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)  <span class="co"># Línea del umbral</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(leverage_high, leverage[leverage_high], <span class="at">labels =</span> leverage_high, <span class="at">pos =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema1_files/figure-html/leverage-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Las <strong>medidas de influencia</strong> son herramientas que evalúan el impacto que tiene cada observación individual en el ajuste del modelo. Mientras que conceptos como los residuos y el leverage analizan diferentes aspectos de las observaciones, las medidas de influencia integran esta información para determinar qué tan decisiva es una observación en la estimación de los coeficientes y en las predicciones del modelo:</p>
+<ul>
+<li><strong>Distancia de Cook:</strong> Combina leverage y residuos para medir el impacto de una observación en el ajuste del modelo. Valores mayores a <span class="math inline">\(1\)</span> son indicativos de observaciones influyentes.</li>
+<li><strong>DFBETAS:</strong> Evalúa cuánto cambia un coeficiente del modelo si se elimina una observación. Valores absolutos mayores a <span class="math inline">\(2/\sqrt{n}\)</span> sugieren influencia significativa.</li>
+<li><strong>DFFITS:</strong> Mide el impacto de una observación en el valor ajustado. Valores absolutos mayores a <span class="math inline">\(2\sqrt{p/n}\)</span> sugieren influencia significativa.</li>
+</ul>
+</section>
+</section>
+<section id="manejo-de-observaciones-atípicas" class="level3" data-number="1.3.8">
+<h3 data-number="1.3.8" class="anchored" data-anchor-id="manejo-de-observaciones-atípicas"><span class="header-section-number">1.3.8</span> <strong>Manejo de Observaciones Atípicas</strong></h3>
+<ol type="1">
+<li><strong>Verificación de Datos:</strong>
+<ul>
+<li>Confirmar si las observaciones atípicas son errores de registro o si representan casos válidos pero raros.</li>
+</ul></li>
+<li><strong>Transformación de Datos:</strong>
+<ul>
+<li>Aplicar transformaciones como logaritmos o raíces cuadradas para reducir la influencia de los valores atípicos.</li>
+</ul></li>
+<li><strong>Modelos Robustos:</strong>
+<ul>
+<li>Considerar modelos de regresión robusta, que son menos sensibles a los valores atípicos.</li>
+</ul></li>
+<li><strong>Eliminación Justificada:</strong>
+<ul>
+<li>En casos donde los valores atípicos son errores claros o no representativos, pueden eliminarse del análisis, siempre documentando esta decisión.</li>
+</ul></li>
+</ol>
+<hr>
+</section>
+<section id="conclusión" class="level3" data-number="1.3.9">
+<h3 data-number="1.3.9" class="anchored" data-anchor-id="conclusión"><span class="header-section-number">1.3.9</span> <strong>Conclusión</strong></h3>
+<p>Las observaciones atípicas son inevitables en análisis de datos, pero es crucial detectarlas y manejarlas adecuadamente. Una evaluación cuidadosa asegura que los modelos sean representativos y fiables, minimizando el impacto negativo de estas observaciones en las conclusiones y predicciones.</p>
+<section id="estadísticas-para-el-diagnóstico" class="level4" data-number="1.3.9.1">
+<h4 data-number="1.3.9.1" class="anchored" data-anchor-id="estadísticas-para-el-diagnóstico"><span class="header-section-number">1.3.9.1</span> Estadísticas para el diagnóstico</h4>
+<p>Las pruebas estadísticas son útiles para confirmar los hallazgos visuales obtenidos al analizar los gráficos de los residuos. Las principales pruebas formales a considerar son:</p>
+<ul>
+<li>Prueba de normalidad (Shapiro-Wilk): Confirma si los residuos siguen una distribución normal. Un p-valor por debajo del grado de significatividad elegido (típicamente <span class="math inline">\(0.05\)</span>), indica que no podemos rechazar la hipótesis nula de normalidad de los residuos.</li>
+<li>Prueba de autocorrelación (Durbin-Watson): Evalúa la independencia de los residuos.</li>
+<li>Prueba de homocedasticidad (Breusch-Pagan): Detecta si los residuos presentan varianza constante. Un p-valor pequeño (típicamente menor que <span class="math inline">\(0.05\)</span>) sugiere heterocedasticidad.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-25" class="callout-25-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Estudiamos los residuos del ejemplo de calificaciones de estudiantes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión lineal</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(calificaciones <span class="sc">~</span> tiempo_estudio)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener los residuos</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>residuos <span class="ot">&lt;-</span> <span class="fu">resid</span>(modelo)</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Estadísticas para diagnóstico</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Prueba de normalidad de los residuos (Shapiro-Wilk)</span></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>shapiro_test <span class="ot">&lt;-</span> <span class="fu">shapiro.test</span>(residuos)</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Prueba de Shapiro-Wilk para normalidad de los residuos:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Prueba de Shapiro-Wilk para normalidad de los residuos:</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(shapiro_test)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(shapiro_test)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Shapiro-Wilk normality test
@@ -1601,8 +1779,8 @@ Ejemplo
 data:  residuos
 W = 0.99008, p-value = 0.671</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Prueba de homocedasticidad (Breusch-Pagan)</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Prueba de homocedasticidad (Breusch-Pagan)</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Cargando paquete requerido: zoo</code></pre>
 </div>
@@ -1615,13 +1793,13 @@ Adjuntando el paquete: 'zoo'</code></pre>
 
     as.Date, as.Date.numeric</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>breusch_pagan <span class="ot">&lt;-</span> <span class="fu">bptest</span>(modelo)</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Prueba de Breusch-Pagan para homocedasticidad:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>breusch_pagan <span class="ot">&lt;-</span> <span class="fu">bptest</span>(modelo)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Prueba de Breusch-Pagan para homocedasticidad:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Prueba de Breusch-Pagan para homocedasticidad:</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(breusch_pagan)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(breusch_pagan)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     studentized Breusch-Pagan test
@@ -1629,14 +1807,14 @@ Prueba de Breusch-Pagan para homocedasticidad:</code></pre>
 data:  modelo
 BP = 0.019638, df = 1, p-value = 0.8886</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Estadística Durbin-Watson para autocorrelación de los residuos</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>durbin_watson <span class="ot">&lt;-</span> <span class="fu">dwtest</span>(modelo)</span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Prueba de Durbin-Watson para autocorrelación de los residuos:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Estadística Durbin-Watson para autocorrelación de los residuos</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>durbin_watson <span class="ot">&lt;-</span> <span class="fu">dwtest</span>(modelo)</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Prueba de Durbin-Watson para autocorrelación de los residuos:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Prueba de Durbin-Watson para autocorrelación de los residuos:</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(durbin_watson)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(durbin_watson)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Durbin-Watson test

@@ -1058,7 +1058,7 @@ $$
 
 Estos residuos son preferibles a los estandarizados cuando $n$ es pequeño. 
 
-#### Herramientas para el análisis de los residuos
+#### Pasos en el diagnóstico
 
 En primer lugar emplearemos gráficos de los residuos para visualizar cómo se comportan las discrepancias entre los valores observados y los predichos  en relación con diversas variables o aspectos del modelo. 
 
@@ -1067,11 +1067,11 @@ A continuación se ejecutarán pruebas estadísticas para confirmar los hallazgo
 Corregir los problemas detectados será el último paso. Para ello, y dependiendo del problema, será necesario transformar la variable respuesta, considerar modificaciones del modelo, o el uso de modelos alternativos.
 
 
-**Gráficos de residuos** 
+#### Gráficos de residuos
 
 La utilidad de los gráficos radica en que ofrecen una manera intuitiva de evaluar si los supuestos clave del modelo de regresión se cumplen, ayudando a identificar problemas que podrían comprometer la validez de las conclusiones. Los gráficos de residuos no solo permiten diagnosticar problemas en el ajuste del modelo, sino también identificar áreas donde el modelo puede ser mejorado. Su uso sistemático en el análisis de regresión asegura un modelo más robusto, fiable y ajustado a los datos, mejorando la calidad de las conclusiones y predicciones. 
 
-Loas principales utilidades de estos gráficos son:
+Las principales utilidades de estos gráficos son:
 
 1. **Evaluación de la linealidad:**  
 
@@ -1087,11 +1087,11 @@ Recordemos que la hipótesis de normalidad de los residuos es esencial para real
 de los residuos estandarizados (estudentizados) quedarán entre $−1$ y
 $+1$, y el $95\%$ entre $−2$ y $+2$.
 
-4. **Detección de Observaciones Influyentes:**  
+4. **Detección de observaciones atípicas e influyentes:**  
 
 Los gráficos de residuos ayudan a identificar puntos atípicos (outliers) o valores con alta influencia que podrían afectar de manera desproporcionada el modelo.  Esto es especialmente útil para decidir si ajustar el modelo o realizar un análisis más detallado de estos puntos.
 
-5. **Facilidad para Diagnóstico Rápido:**  
+5. **Facilidad para diagnóstico rápido:**  
 
 Los gráficos de residuos son intuitivos y ofrecen una evaluación visual inmediata de posibles problemas, complementando las pruebas estadísticas formales.
 
@@ -1111,6 +1111,7 @@ corresponderse con una recta.
 ::: {.callout-important title="Para recordar"}
 Es análogo hacer el gráfico de los $e_i$ frente a $\hat{Y_i}$ o $X_i$, ya que los valores ajustados $\hat{Y_i}$ son función lineal de $X_i$.
 :::
+
 
 ::: {.callout-tip title="Ejemplo" collapse="true"}
 Estudiamos los residuos del ejemplo de calificaciones de estudiantes.
@@ -1159,7 +1160,110 @@ abline(h = 0, col = "red", lwd = 2)
 :::
 
 
-**Estadísticas para el diagnóstico de los residuos**
+### Observaciones atípicas (outliers)
+
+En el contexto de la regresión lineal simple, una observación atípica es un punto de datos que se aleja notablemente del patrón general observado entre la variable independiente (\(X\)) y la variable dependiente (\(Y\)). Estas observaciones pueden surgir por errores en la recopilación de datos, valores extremos naturales o situaciones especiales que no están representadas en el modelo.  
+
+Las observaciones atípicas pueden tener un impacto significativo en el ajuste del modelo, afectando las estimaciones de los coeficientes de regresión, el análisis de residuos y la validez de las conclusiones. Las observaciones atípicas pueden distorsionar los coeficientes $\hat{\beta}_0$ y $\hat{\beta}_1$, añadiendo sesgos a las estimaciones. Además, pueden conducir a diagnóticos incorrectos, al alterae la normalidad y homocedasticidad de los residuos, afectando las pruebas estadísticas.  Por último, conducen a predicciones inexactas, puesto que los modelos ajustados en presencia de valores atípicos pueden no ser representativos del conjunto de datos general.
+
+
+#### Tipos de observaciones atípicas
+
+1. Outliers en $Y$:
+
+  - Son puntos que tienen valores de $Y$ mucho mayores o menores en comparación con lo predicho por el modelo.  
+  - Estos puntos suelen detectarse como residuos grandes.
+
+2. Outliers en $X$:
+
+  - Son puntos con valores extremos de $X$ que no están bien representados en el rango principal de los datos.  
+  - Si bien pueden no afectar directamente la regresión, pueden influir en los coeficientes del modelo si tienen alta "leverage" (potencial para influir en el ajuste).
+
+3. Observaciones Influyentes:
+  - Son puntos que, debido a su posición, tienen un impacto desproporcionado en el ajuste del modelo. Pueden ser outliers en $X$, $Y$, o ambos.
+
+#### Detección de observaciones atípicas
+
+Un gráfico de dispersión entre la variables respuesta y la variable explicativa permite identificar qué puntos se desvían claramente del patrón general. Además, en un gráfico de los residuos frente a los valores ajutados, los outliers en $Y$ aparecen como residuos grandes.
+
+Generalmente, residuos estudentizados con valores mayores a $|3|$ indican outliers.
+
+El **leverage**, o apalancamiento mide el grado en el que una observación individual influye en el ajuste del modelo. En términos simples, el leverage cuantifica cómo de "lejos" está un punto de datos de la media de la variable explicativa $X$ y, por lo tanto, cuánto contribuye al ajuste del modelo. 
+
+El leverage se calcula a partir de la matriz de proyección $H$ (también llamada matriz "hat"), que transforma los valores observados en valores ajustados. La diagonal de esta matriz ($h_{ii}$) mide el leverage para cada observación:
+$$
+h_{ii}=\frac{1}{n}+\frac{(X_i-\bar{X})^2}{\sum_{j=1}^n (X_j-\bar{X})^2}
+$$
+
+El leverage ($h_{ii}$) toma valores entre $0$ y $1$. Un leverage cercano a 
+$0$ indica que el punto está muy cerca del centro de los datos, mientras que un leverage alto sugiere que el punto está lejos.
+Valores de leverage altos ($h_{ii} > \frac{2p}{n}$, donde $p$ es el número de parámetros del modelo) son sospechosos.
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+Estudiamos los valores de leverage del ejemplo de calificaciones de estudiantes.
+```{r leverage}
+# Ajustar el modelo de regresión lineal
+modelo <- lm(calificaciones ~ tiempo_estudio)
+
+# Calcular leverage
+leverage <- hatvalues(modelo)
+
+# Umbral para leverage alto
+p <- length(coef(modelo))  # Número de parámetros (incluyendo el intercepto)
+leverage_threshold <- 2 * p / n
+
+# Identificar observaciones con leverage alto
+leverage_high <- which(leverage > leverage_threshold)
+
+# Resultados
+cat("Valores de leverage:\n")
+print(leverage)
+
+cat("\nUmbral para leverage alto:", leverage_threshold, "\n")
+cat("\nObservaciones con leverage alto (si las hay):\n")
+print(leverage_high)
+
+# Gráfico de leverage
+plot(leverage, 
+     main = "Leverage de las Observaciones",
+     xlab = "Índice de Observación",
+     ylab = "Leverage",
+     pch = 19, col = "blue", ylim=c(min(leverage)*.9,max(leverage)*1.05))
+abline(h = leverage_threshold, col = "red", lwd = 2, lty = 2)  # Línea del umbral
+text(leverage_high, leverage[leverage_high], labels = leverage_high, pos = 3, col = "red")
+```
+:::
+
+Las **medidas de influencia** son herramientas que evalúan el impacto que tiene cada observación individual en el ajuste del modelo. Mientras que conceptos como los residuos y el leverage analizan diferentes aspectos de las observaciones, las medidas de influencia integran esta información para determinar qué tan decisiva es una observación en la estimación de los coeficientes y en las predicciones del modelo:
+
+  - **Distancia de Cook:** Combina leverage y residuos para medir el impacto de una observación en el ajuste del modelo. Valores mayores a $1$ son indicativos de observaciones influyentes.
+  - **DFBETAS:** Evalúa cuánto cambia un coeficiente del modelo si se elimina una observación. Valores absolutos mayores a $2/\sqrt{n}$ sugieren influencia significativa.
+  - **DFFITS:** Mide el impacto de una observación en el valor ajustado. Valores absolutos mayores a $2\sqrt{p/n}$ sugieren influencia significativa.
+
+
+
+
+### **Manejo de Observaciones Atípicas**
+1. **Verificación de Datos:**
+   - Confirmar si las observaciones atípicas son errores de registro o si representan casos válidos pero raros.
+
+2. **Transformación de Datos:**
+   - Aplicar transformaciones como logaritmos o raíces cuadradas para reducir la influencia de los valores atípicos.
+
+3. **Modelos Robustos:**
+   - Considerar modelos de regresión robusta, que son menos sensibles a los valores atípicos.
+
+4. **Eliminación Justificada:**
+   - En casos donde los valores atípicos son errores claros o no representativos, pueden eliminarse del análisis, siempre documentando esta decisión.
+
+---
+
+### **Conclusión**
+Las observaciones atípicas son inevitables en análisis de datos, pero es crucial detectarlas y manejarlas adecuadamente. Una evaluación cuidadosa asegura que los modelos sean representativos y fiables, minimizando el impacto negativo de estas observaciones en las conclusiones y predicciones. 
+
+
+
+#### Estadísticas para el diagnóstico
 
 Las pruebas estadísticas son útiles para confirmar los hallazgos visuales obtenidos al analizar los gráficos de los residuos. Las principales pruebas formales a considerar son:
 
