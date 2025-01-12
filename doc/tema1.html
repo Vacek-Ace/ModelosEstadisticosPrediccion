@@ -249,6 +249,13 @@ window.Quarto = {
   <li><a href="#observaciones-atípicas-outliers" id="toc-observaciones-atípicas-outliers" class="nav-link" data-scroll-target="#observaciones-atípicas-outliers"><span class="header-section-number">1.3.7</span> Observaciones atípicas (outliers)</a></li>
   <li><a href="#tratamiento-de-problemas" id="toc-tratamiento-de-problemas" class="nav-link" data-scroll-target="#tratamiento-de-problemas"><span class="header-section-number">1.3.8</span> Tratamiento de problemas</a></li>
   </ul></li>
+  <li><a href="#regresión-lineal-múltiple" id="toc-regresión-lineal-múltiple" class="nav-link" data-scroll-target="#regresión-lineal-múltiple"><span class="header-section-number">1.4</span> Regresión lineal múltiple</a>
+  <ul class="collapse">
+  <li><a href="#variables-regresoras-cualitativas" id="toc-variables-regresoras-cualitativas" class="nav-link" data-scroll-target="#variables-regresoras-cualitativas"><span class="header-section-number">1.4.1</span> Variables regresoras cualitativas</a></li>
+  <li><a href="#estimación-de-los-coeficientes-de-regresión" id="toc-estimación-de-los-coeficientes-de-regresión" class="nav-link" data-scroll-target="#estimación-de-los-coeficientes-de-regresión"><span class="header-section-number">1.4.2</span> Estimación de los coeficientes de regresión</a></li>
+  <li><a href="#varianza-del-error" id="toc-varianza-del-error" class="nav-link" data-scroll-target="#varianza-del-error"><span class="header-section-number">1.4.3</span> Varianza del error</a></li>
+  <li><a href="#inferencia-sobre-los-parámetros-del-modelo-1" id="toc-inferencia-sobre-los-parámetros-del-modelo-1" class="nav-link" data-scroll-target="#inferencia-sobre-los-parámetros-del-modelo-1"><span class="header-section-number">1.4.4</span> Inferencia sobre los parámetros del modelo</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -1251,13 +1258,6 @@ donde:</p>
 <h4 data-number="1.3.4.2" class="anchored" data-anchor-id="tabla-anova"><span class="header-section-number">1.3.4.2</span> Tabla ANOVA</h4>
 <p>El análisis de varianza organiza la descomposición de la varianza en una tabla, donde cada componente se asocia con sus grados de libertad (<span class="math inline">\(df\)</span>), suma de cuadrados (<span class="math inline">\(SS\)</span>), media cuadrática (<span class="math inline">\(MS\)</span>) y el estadístico <span class="math inline">\(F\)</span>:</p>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 14%">
-<col style="width: 17%">
-<col style="width: 18%">
-<col style="width: 22%">
-<col style="width: 27%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Fuente</th>
@@ -1957,7 +1957,228 @@ Observaciones con DFFITS alto (&gt;  0.2828427 ):</code></pre>
 </section>
 <section id="tratamiento-de-problemas" class="level3" data-number="1.3.8">
 <h3 data-number="1.3.8" class="anchored" data-anchor-id="tratamiento-de-problemas"><span class="header-section-number">1.3.8</span> Tratamiento de problemas</h3>
-<p>Si el modelo de regresión lineal simple no es apropiado porque se incumplen algunas de las suposiciones, algunas opciones básicas son: 1. Abandonar el modelo de regresión y desarrollar otro más apropiado, según las suposiciones incumplidas. 2. Emplear alguna transformación de los datos de forma que el modelo de regresión sea válido para los datos transformados.</p>
+<p>Si el modelo de regresión lineal simple no es apropiado porque se incumplen algunas de las suposiciones, algunas opciones básicas son:</p>
+<ol type="1">
+<li>Abandonar el modelo de regresión y desarrollar otro más apropiado, según las suposiciones incumplidas.</li>
+<li>Emplear alguna transformación de los datos de forma que el modelo de regresión sea válido para los datos transformados.</li>
+</ol>
+<p>Trataremos estas técnicas en próximos capítulos de este libro.</p>
+</section>
+</section>
+<section id="regresión-lineal-múltiple" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="regresión-lineal-múltiple"><span class="header-section-number">1.4</span> Regresión lineal múltiple</h2>
+<p>El modelo de regresión lineal múltiple es una extensión natural del modelo de regresión lineal simple, diseñada para analizar la relación entre una variable respuesta (<span class="math inline">\(Y\)</span>) y múltiples variables explicativas (<span class="math inline">\(X_1, X_2, \dots, X_p\)</span>). Este modelo permite capturar interacciones más complejas entre las variables y mejora la capacidad de explicar y predecir fenómenos en contextos donde una sola variable explicativa no es suficiente para describir la variabilidad en <span class="math inline">\(Y\)</span>.</p>
+<p>La ecuación general del modelo de regresión lineal múltiple se expresa como: <span class="math display">\[
+Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon,
+\]</span> donde:</p>
+<ul>
+<li><span class="math inline">\(\beta_0\)</span>: Intercepto, representa el valor esperado de <span class="math inline">\(Y\)</span> cuando todas las variables explicativas son cero.</li>
+<li><span class="math inline">\(\beta_1, \beta_2, \dots, \beta_p\)</span>: Coeficientes de regresión, que miden el efecto promedio de cada variable explicativa sobre <span class="math inline">\(Y\)</span>, manteniendo las demás constantes.</li>
+<li><span class="math inline">\(\varepsilon\)</span>: Término de error aleatorio, que captura la variabilidad en <span class="math inline">\(Y\)</span> no explicada por las variables <span class="math inline">\(X_1, X_2, \dots, X_p\)</span>.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-27-contents" aria-controls="callout-27" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-27" class="callout-27-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Generamos nuevos datos para regresión lineal múltiple.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generar dos nuevas variables explicativas</span></span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Establecer la semilla para reproducibilidad</span></span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Generar datos base</span></span>
+<span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb83-7"><a href="#cb83-7" aria-hidden="true" tabindex="-1"></a>tiempo_estudio <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">runif</span>(n, <span class="at">min =</span> <span class="dv">5</span>, <span class="at">max =</span> <span class="dv">40</span>), <span class="dv">1</span>)  <span class="co"># Tiempo de estudio (horas/semana)</span></span>
+<span id="cb83-8"><a href="#cb83-8" aria-hidden="true" tabindex="-1"></a>beta_0_true <span class="ot">&lt;-</span> <span class="dv">5</span>  <span class="co"># Intercepto verdadero</span></span>
+<span id="cb83-9"><a href="#cb83-9" aria-hidden="true" tabindex="-1"></a>beta_1_true <span class="ot">&lt;-</span> <span class="fl">0.1</span>  <span class="co"># Pendiente verdadera</span></span>
+<span id="cb83-10"><a href="#cb83-10" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fl">0.5</span>  <span class="co"># Desviación estándar del ruido</span></span>
+<span id="cb83-11"><a href="#cb83-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-12"><a href="#cb83-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Generar calificaciones dependientes del tiempo de estudio con ruido</span></span>
+<span id="cb83-13"><a href="#cb83-13" aria-hidden="true" tabindex="-1"></a>calificaciones <span class="ot">&lt;-</span> <span class="fu">round</span>(beta_0_true <span class="sc">+</span> beta_1_true <span class="sc">*</span> tiempo_estudio <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> sigma), <span class="dv">2</span>)</span>
+<span id="cb83-14"><a href="#cb83-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-15"><a href="#cb83-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-16"><a href="#cb83-16" aria-hidden="true" tabindex="-1"></a>distraccion <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">size =</span> n, <span class="at">replace =</span> <span class="cn">TRUE</span>)  <span class="co"># Nivel de distracción (0 bajo, 1 alto)</span></span>
+<span id="cb83-17"><a href="#cb83-17" aria-hidden="true" tabindex="-1"></a>interacciones_clase <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">20</span>, <span class="at">size =</span> n, <span class="at">replace =</span> <span class="cn">TRUE</span>)  <span class="co"># Interacciones en clase</span></span>
+<span id="cb83-18"><a href="#cb83-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-19"><a href="#cb83-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear un data frame</span></span>
+<span id="cb83-20"><a href="#cb83-20" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb83-21"><a href="#cb83-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">Tiempo_Estudio =</span> tiempo_estudio,</span>
+<span id="cb83-22"><a href="#cb83-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">Distraccion =</span> distraccion,</span>
+<span id="cb83-23"><a href="#cb83-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">Interacciones_Clase =</span> interacciones_clase,</span>
+<span id="cb83-24"><a href="#cb83-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">Calificaciones =</span> calificaciones</span>
+<span id="cb83-25"><a href="#cb83-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb83-26"><a href="#cb83-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-27"><a href="#cb83-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar los primeros registros</span></span>
+<span id="cb83-28"><a href="#cb83-28" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(datos)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Tiempo_Estudio Distraccion Interacciones_Clase Calificaciones
+1           15.1           1                  14           6.64
+2           32.6           1                   2           8.25
+3           19.3           0                   8           6.91
+4           35.9           1                   6           9.27
+5           37.9           0                   8           8.68
+6            6.6           0                   3           6.42</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>El modelo de regresión lineal múltiple es fundamental para analizar fenómenos que dependen de múltiples factores, ya que permite explicar variabilidad compleja al identificar la contribución individual de cada variable explicativa. Al incluir diversas variables relevantes, este modelo mejora significativamente la precisión de las predicciones en comparación con modelos más simples. Además, proporciona una herramienta poderosa para controlar variables confusoras, evaluando el efecto de cada variable explicativa mientras ajusta por la influencia de las demás, lo que garantiza un análisis más robusto y detallado.</p>
+<p>El modelo de regresión lineal múltiple se basa en los mismos supuestos fundamentales que el modelo simple: linealidad, independencia, homocedasticidad y normalidad de los errores. Sin embargo, la presencia de múltiples variables explicativas introduce nuevos desafíos, como la <em>multicolinealidad</em>, que deben ser diagnosticados y manejados para garantizar la fiabilidad del modelo.</p>
+<p>En esta sección, exploraremos los fundamentos teóricos del modelo de regresión lineal múltiple, sus aplicaciones prácticas y las técnicas de diagnóstico necesarias para evaluar su calidad y validez. También abordaremos cómo interpretar los coeficientes y realizar predicciones útiles en contextos reales.</p>
+<section id="variables-regresoras-cualitativas" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="variables-regresoras-cualitativas"><span class="header-section-number">1.4.1</span> Variables regresoras cualitativas</h3>
+<p>El modelo de regresión lineal múltiple no se limita al uso de variables cuantitativas, sino que también permite incorporar variables predictoras cualitativas. Por ejemplo, se pueden incluir características como el género (masculino o femenino) o el grado de satisfacción (nada satisfecho, poco satisfecho, satisfecho, muy satisfecho). Para representar estas variables en el modelo de regresión lineal, se utilizan variables binarias que indican a qué categoría pertenece cada individuo.</p>
+<p>Por ejemplo, consideremos un modelo de regresión lineal para predecir las calificaciones de los estudiantes, <span class="math inline">\(Y\)</span> , en función del tiempo de estudio <span class="math inline">\(X_1\)</span>, las interacciones en clase, <span class="math inline">\(X_2\)</span> y el grado de distracción <span class="math inline">\(X_3\)</span>.</p>
+<p>En este caso definimos <span class="math inline">\(X_3\)</span> como sigue:</p>
+<p><span class="math display">\[
+X_3 =
+\begin{cases}
+0 &amp; \text{si el grado de distracción es bajo} \\
+1 &amp; \text{si el grado de distracción es alto}
+\end{cases}
+\]</span> En general, una variable cualitativa con <span class="math inline">\(c\)</span> niveles, se puede codificar mediante <span class="math inline">\(c − 1\)</span> variables binarias o variables indicadoras (también llamadas dummy).</p>
+<p>Trataremos ampliamente el tema de creación de variables en temas posteriores.</p>
+</section>
+<section id="estimación-de-los-coeficientes-de-regresión" class="level3" data-number="1.4.2">
+<h3 data-number="1.4.2" class="anchored" data-anchor-id="estimación-de-los-coeficientes-de-regresión"><span class="header-section-number">1.4.2</span> Estimación de los coeficientes de regresión</h3>
+<p>Es más conveniente trabajar con los modelos de regresión lineal múltiple si los expresamos en notación matricial. En ese caso, el modelo de regresión lineal múltiple se escribe como:</p>
+<p><span class="math display">\[
+\mathbf{Y} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon},
+\]</span></p>
+<p>donde:</p>
+<ul>
+<li><p><span class="math inline">\(\mathbf{Y}\)</span> es el vector de observaciones de la variable dependiente (respuesta), de dimensión <span class="math inline">\(n \times 1\)</span>: <span class="math display">\[
+  \mathbf{Y} =
+  \begin{bmatrix}
+  Y_1 \\
+  Y_2 \\
+  \vdots \\
+  Y_n
+  \end{bmatrix}.
+  \]</span></p></li>
+<li><p><span class="math inline">\(\mathbf{X}\)</span> es la matriz de diseño de las variables explicativas (predictoras), de dimensión <span class="math inline">\(n \times (p+1)\)</span>, donde <span class="math inline">\(p\)</span> es el número de variables explicativas. Incluye una columna de unos para el término independiente (<span class="math inline">\(\beta_0\)</span>): <span class="math display">\[
+  \mathbf{X} =
+  \begin{bmatrix}
+  1 &amp; X_{11} &amp; X_{12} &amp; \cdots &amp; X_{1p} \\
+  1 &amp; X_{21} &amp; X_{22} &amp; \cdots &amp; X_{2p} \\
+  \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+  1 &amp; X_{n1} &amp; X_{n2} &amp; \cdots &amp; X_{np}
+  \end{bmatrix}.
+  \]</span></p></li>
+<li><p><span class="math inline">\(\boldsymbol{\beta}\)</span> es el vector de coeficientes de regresión, de dimensión <span class="math inline">\((p+1) \times 1\)</span>: <span class="math display">\[
+  \boldsymbol{\beta} =
+  \begin{bmatrix}
+  \beta_0 \\
+  \beta_1 \\
+  \vdots \\
+  \beta_p
+  \end{bmatrix}.
+  \]</span></p></li>
+<li><p><span class="math inline">\(\boldsymbol{\varepsilon}\)</span> es el vector de errores aleatorios, de dimensión <span class="math inline">\(n \times 1\)</span>: <span class="math display">\[
+  \boldsymbol{\varepsilon} =
+  \begin{bmatrix}
+  \varepsilon_1 \\
+  \varepsilon_2 \\
+  \vdots \\
+  \varepsilon_n
+  \end{bmatrix}.
+  \]</span></p></li>
+</ul>
+<p>En esta formulación, el modelo expresa que cada observación de la variable dependiente es una combinación lineal de las variables predictoras, más un término de error aleatorio. La notación matricial es compacta y facilita la manipulación algebraica para obtener estimaciones y realizar inferencias.</p>
+<p>Como en el caso de la regresión lineal simple, asumimos que los errores <span class="math inline">\(\varepsilon\)</span> son i.i.d. según una normal:</p>
+<p><span class="math display">\[
+\boldsymbol{\varepsilon} \overset{i.i.d.}{\sim} \mathcal{N}(\mathbf{0}, \sigma^2 \mathbf{I}),
+\]</span></p>
+<p>donde <span class="math inline">\(\mathbf{I}\)</span> denota la matriz identidad,</p>
+<p><span class="math display">\[
+\mathbf{I} =
+\begin{pmatrix}
+1 &amp; 0 &amp; \cdots &amp; 0 \\
+0 &amp; 1 &amp; \cdots &amp; 0 \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+0 &amp; 0 &amp; \cdots &amp; 1
+\end{pmatrix}.
+\]</span></p>
+<p>El criterio de <strong>mínimos cuadrados </strong> es el método más común para estimar los parámetros del modelo de regresión lineal múltiple. Este método busca minimizar la suma de los cuadrados de los residuos. Es decir, la suma de los cuadrados de las diferencias entre los valores observados de la variable dependiente y los valores predichos por el modelo.</p>
+<p>El objetivo es estimar <span class="math inline">\(\boldsymbol{\beta}\)</span>, el conjunto de coeficientes de regresión.</p>
+<p>La <strong>función de pérdida</strong> que se minimiza es la suma de los cuadrados de los residuos (<span class="math inline">\(S(\boldsymbol{\beta})\)</span>): <span class="math display">\[
+S(\boldsymbol{\beta}) = \sum_{i=1}^n (Y_i - \mathbf{X}_i \boldsymbol{\beta})^2,
+\]</span> o en notación matricial: <span class="math display">\[
+S(\boldsymbol{\beta}) = (\mathbf{Y} - \mathbf{X} \boldsymbol{\beta})^\top (\mathbf{Y} - \mathbf{X} \boldsymbol{\beta}),
+\]</span> donde <span class="math inline">\((\mathbf{Y} - \mathbf{X} \boldsymbol{\beta})\)</span> es el vector de residuos.</p>
+<p>Para encontrar el valor de <span class="math inline">\(\boldsymbol{\beta}\)</span> que minimiza <span class="math inline">\(S(\boldsymbol{\beta})\)</span>, derivamos <span class="math inline">\(S(\boldsymbol{\beta})\)</span> con respecto a <span class="math inline">\(\boldsymbol{\beta}\)</span> y la igualamos a cero:</p>
+<ul>
+<li><p>Expandimos <span class="math inline">\(S(\boldsymbol{\beta})\)</span>: <span class="math display">\[
+S(\boldsymbol{\beta}) = \mathbf{Y}^\top \mathbf{Y} - 2 \mathbf{Y}^\top \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\beta}^\top \mathbf{X}^\top \mathbf{X} \boldsymbol{\beta}.
+\]</span></p></li>
+<li><p>Derivamos con respecto a <span class="math inline">\(\boldsymbol{\beta}\)</span>: <span class="math display">\[
+\frac{\partial S(\boldsymbol{\beta})}{\partial \boldsymbol{\beta}} = -2 \mathbf{X}^\top \mathbf{Y} + 2 \mathbf{X}^\top \mathbf{X} \boldsymbol{\beta}.
+\]</span></p></li>
+<li><p>Igualamos a cero: <span class="math display">\[
+-2 \mathbf{X}^\top \mathbf{Y} + 2 \mathbf{X}^\top \mathbf{X} \boldsymbol{\beta} = 0.
+\]</span></p></li>
+<li><p>Resolviendo para <span class="math inline">\(\boldsymbol{\beta}\)</span>: <span class="math display">\[
+\mathbf{X}^\top \mathbf{X} \boldsymbol{\beta} = \mathbf{X}^\top \mathbf{Y}.
+\]</span></p></li>
+<li><p>Finalmente, el estimador de mínimos cuadrados es: <span class="math display">\[
+\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{Y}.
+\]</span></p></li>
+</ul>
+<p>El criterio de mínimos cuadrados ajusta un plano en el espacio multidimensional de las variables explicativas que mejor representa los datos en términos de minimizar los residuos al cuadrado. Este estimador es ampliamente usado por su simplicidad y eficacia bajo los supuestos de normalidad y homocedasticidad.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Para recordar">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Para recordar
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Cuando se trata de un modelo de regresión con múltiples regresores, el análisis visual mediante diagramas de dispersión puede resultar engañoso. Construir gráficos que muestren la relación entre la variable respuesta y cada regresor de forma aislada no siempre proporciona una representación precisa de la realidad. Esto ocurre porque los efectos conjuntos de los regresores no se reflejan en estos gráficos individuales. Incluso en un caso ideal, donde existe una relación perfecta entre la variable respuesta y los regresores, sin ningún tipo de ruido o error, los diagramas de dispersión individuales pueden sugerir una relación débil o inexistente si no se tiene en cuenta el contexto multivariado.</p>
+<p>En situaciones más comunes, donde los datos incluyen errores en los valores observados de la variable respuesta y los regresores interactúan de manera compleja, los gráficos univariantes tienden a complicar aún más la interpretación. Pueden surgir aparentes inconsistencias o patrones confusos, ya que no se está considerando la influencia simultánea de todos los regresores en la respuesta. Por esta razón, es fundamental adoptar enfoques que analicen las relaciones de manera conjunta, como los coeficientes estimados en un modelo de regresión múltiple, que capturan el impacto parcial de cada regresor ajustando por los efectos de los demás.</p>
+</div>
+</div>
+<section id="propiedades-del-estimador" class="level4" data-number="1.4.2.1">
+<h4 data-number="1.4.2.1" class="anchored" data-anchor-id="propiedades-del-estimador"><span class="header-section-number">1.4.2.1</span> Propiedades del estimador</h4>
+<p>Estas son las propiedades del estimador de mínimos cuadrados:</p>
+<ul>
+<li><strong>Linealidad:</strong> El estimador es una combinación lineal de los valores observados (<span class="math inline">\(\mathbf{Y}\)</span>).</li>
+<li><strong>Insesgado:</strong> En ausencia de errores correlacionados y bajo supuestos estándar, <span class="math inline">\(E[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta}\)</span>.</li>
+<li><strong>Varianza mínima:</strong> Entre los estimadores lineales insesgados, <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> tiene la menor varianza posible (propiedad BLUE: Best Linear Unbiased Estimator).</li>
+</ul>
+</section>
+</section>
+<section id="varianza-del-error" class="level3" data-number="1.4.3">
+<h3 data-number="1.4.3" class="anchored" data-anchor-id="varianza-del-error"><span class="header-section-number">1.4.3</span> Varianza del error</h3>
+<p>La varianza de los errores (<span class="math inline">\(\sigma^2\)</span>) mide cuánto varían las observaciones reales (<span class="math inline">\(Y_i\)</span>) con respecto a los valores predichos por el modelo (<span class="math inline">\(\hat{Y}_i\)</span>). En el modelo de regresión múltiple, esta varianza puede ser estimada utilizando la <strong>suma de los cuadrados de los residuos (SSE)</strong>.</p>
+<p>La estimación de <span class="math inline">\(\sigma^2\)</span>, denotada como <span class="math inline">\(\hat{\sigma}^2\)</span>, se calcula como: <span class="math display">\[
+\hat{\sigma}^2 = \frac{\text{SSE}}{n - p - 1},
+\]</span> donde:</p>
+<ul>
+<li><span class="math inline">\(\text{SSE} = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2 = \mathbf{e}^\top \mathbf{e}\)</span> es la suma de los cuadrados de los residuos.</li>
+<li><span class="math inline">\(\mathbf{e} = \mathbf{Y} - \hat{\mathbf{Y}} = \mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}}\)</span> es el vector de residuos.</li>
+</ul>
+<p>La cantidad <span class="math inline">\(n - p - 1\)</span> es conocida como los <strong>grados de libertad residuales</strong>, que reflejan el número de datos disponibles para estimar la varianza de los errores después de ajustar los parámetros del modelo.</p>
+<p>En términos matriciales, <span class="math inline">\(\hat{\sigma}^2\)</span> se expresa como: <span class="math display">\[
+\hat{\sigma}^2 = \frac{1}{n - p - 1} (\mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}})^\top (\mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}}),
+\]</span> o de forma más compacta: <span class="math display">\[
+\hat{\sigma}^2 = \frac{1}{n - p - 1} \mathbf{e}^\top \mathbf{e}.
+\]</span></p>
+<p>La varianza estimada <span class="math inline">\(\hat{\sigma}^2\)</span> se encuentra en las mismas unidades al cuadrado que la variable dependiente (<span class="math inline">\(\mathbf{Y}\)</span>). Este valor es crucial para construir intervalos de confianza y realizar pruebas de hipótesis sobre los coeficientes del modelo (<span class="math inline">\(\boldsymbol{\beta}\)</span>). La raíz cuadrada de <span class="math inline">\(\hat{\sigma}^2\)</span> proporciona el error estándar de los residuos.</p>
+<p>Este valor permite cuantificar la variabilidad no explicada por el modelo ajustado y es un componente esencial en la evaluación de la calidad del ajuste.</p>
+</section>
+<section id="inferencia-sobre-los-parámetros-del-modelo-1" class="level3" data-number="1.4.4">
+<h3 data-number="1.4.4" class="anchored" data-anchor-id="inferencia-sobre-los-parámetros-del-modelo-1"><span class="header-section-number">1.4.4</span> Inferencia sobre los parámetros del modelo</h3>
 <hr>
 
 
