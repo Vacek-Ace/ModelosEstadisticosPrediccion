@@ -1,0 +1,9 @@
+---
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+# Métodos de selección de variables y problemas de regularización {#sec-tema2}
+
+

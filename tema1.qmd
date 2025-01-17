@@ -23,7 +23,7 @@ fundamentales, como el ajuste de una recta mediante el criterio de
 mínimos cuadrados y la interpretación de sus parámetros, pero difieren
 en su alcance y en los retos que presentan.
 
-En este capítulo, abordaremos los fundamentos de la regresión lineal
+En este tema, abordaremos los fundamentos de la regresión lineal
 simple, incluyendo sus suposiciones clave, el procedimiento de
 estimación de parámetros y el uso de herramientas de diagnóstico. A
 través de ejemplos prácticos, como los estudios clásicos de Galton sobre
@@ -32,7 +32,7 @@ publicidad, se ilustrará el poder descriptivo y predictivo de este
 modelo.
 
 Este tema también prepara las bases para comprender el modelo de
-regresión lineal múltiple, presentado como unageneralización del simple,
+regresión lineal múltiple, presentado como una generalización del simple,
 y para abordar las complejidades adicionales que surgen, como la
 colinealidad entre variables explicativas y la selección de modelos
 óptimos.
@@ -47,7 +47,7 @@ Los siguiente objetivos buscan sentar las bases teóricas y prácticas
 necesarias para entender y aplicar modelos de regresión, preparando al
 estudiante para explorar modelos más complejos en los temas posteriores.
 
-1.  **Introducción a la Modelización estadística**:
+1.  **Introducción a la modelización estadística**:
     -   Comprender el proceso de modelización estadística, desde la
         definición de objetivos y variables hasta el ajuste y evaluación
         del modelo.
