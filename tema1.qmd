@@ -4,7 +4,7 @@ editor:
     wrap: 72
 ---
 
-# Mowdelo de regresión lineal: simple y múltiple {#sec-tema1}
+# Modelo de regresión lineal: simple y múltiple {#sec-tema1}
 
 La regresión lineal constituye uno de los pilares fundamentales de la
 modelización estadística y es ampliamente utilizada en múltiples
