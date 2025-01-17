@@ -4,7 +4,7 @@ editor:
     wrap: 72
 ---
 
-# Modelo de regresión lineal: simple y múltiple {#sec-tema1}
+# Mowdelo de regresión lineal: simple y múltiple {#sec-tema1}
 
 La regresión lineal constituye uno de los pilares fundamentales de la
 modelización estadística y es ampliamente utilizada en múltiples
@@ -644,32 +644,32 @@ errores cuadráticos (residuos) entre los valores observados de $Y$ y los
 valores predichos ($\hat{Y}$):
 
 $$
-\text{$$E} = \sum_{i=1}^n e_i^2 =\sum_{i=1}^{n} (Y_i - \hat{Y}_i)^2 = \sum_{i=1}^{n} \left(Y_i - (\hat{\beta_0} + \hat{\beta_1} X_i)\right)^2.
-$$
+\text{$$E} = \sum*{i=1}\^n e_i\^2 =*\sum{i=1}\^{n} (Y_i - \hat{Y}*i)\^2
+=* \sum{i=1}\^{n} \left(Y_i - (\hat{\beta_0} + \hat{\beta_1}
+X_i)\right)\^2. \$\$
 
 ::: {.callout-note title="Minimización de $$E" collapse="true"}
 La obtención de los estimadores de mínimos cuadrados para la regresión
 lineal simple se basa en minimizar la suma de los cuadrados de los
-residuos ($$$E$). Aquí está el proceso paso a paso:
+residuos (\$\$$E$). Aquí está el proceso paso a paso:
 
-Para minimizar $$$E$, derivamos parcialmente con respecto a $\beta_0$ y
-$\beta_1$ y resolvemos el sistema de ecuaciones.
+Para minimizar \$\$$E$, derivamos parcialmente con respecto a $\beta_0$
+y $\beta_1$ y resolvemos el sistema de ecuaciones.
 
 1.  **Primera derivada con respecto a** $\beta_0$: $$
-    \frac{\partial $$E}{\partial \beta_0} = -2 \sum_{i=1}^n \left(Y_i - (\beta_0 + \beta_1 X_i)\right).
-    $$ Igualando a cero: $$
-    \sum_{i=1}^n \left(Y_i - \beta_0 - \beta_1 X_i\right) = 0.
-    $$
+    \frac{\partial $$E}{\partial \beta*0} = -2* \sum{i=1}\^n \left(Y_i -
+    (\beta\_0 + \beta*1 X_i)*\right). $$ Igualando a cero: $$
+    \sum{i=1}\^n \left(Y_i - \beta\_0 - \beta\_1 X_i\right) = 0. \$\$
 
     Reordenando: $$
     n\beta_0 + \beta_1 \sum_{i=1}^n X_i = \sum_{i=1}^n Y_i. \tag{1}
     $$
 
 2.  **Primera derivada con respecto a** $\beta_1$: $$
-    \frac{\partial $$E}{\partial \beta_1} = -2 \sum_{i=1}^n X_i \left(Y_i - (\beta_0 + \beta_1 X_i)\right).
-    $$ Igualando a cero: $$
-    \sum_{i=1}^n X_i \left(Y_i - \beta_0 - \beta_1 X_i\right) = 0.
-    $$
+    \frac{\partial $$E}{\partial \beta*1} = -2* \sum{i=1}\^n X_i
+    \left(Y_i - (\beta\_0 + \beta*1 X_i)*\right).
+    $$ Igualando a cero: $$ \sum{i=1}\^n X_i \left(Y_i - \beta\_0 -
+    \beta\_1 X_i\right) = 0. \$\$
 
     Reordenando: $$
     \beta_0 \sum_{i=1}^n X_i + \beta_1 \sum_{i=1}^n X_i^2 = \sum_{i=1}^n X_i Y_i. \tag{2}
@@ -726,10 +726,9 @@ respectivamente.
 ::: {.callout-caution title="Ejercicio" collapse="true"}
 Asumiendo la normalidad de la variable respuesta: $$
     \varepsilon_i \overset{\mathrm{iid}}{\sim} N(0, \sigma^2) \Leftrightarrow Y_i \overset{\mathrm{iid}}{\sim} N(\beta_0+\beta_1X_i,\sigma^2), \hspace{0.5cm} i=1,\ldots,n.
-    $$ 
+    $$
 
-Se tiene entonces la verosimilud para $\beta=(\beta_0,\beta_1)$, 
-$$
+Se tiene entonces la verosimilud para $\beta=(\beta_0,\beta_1)$, $$
 L(\beta; Y)=exp \left ( -\frac{\sum_{i=1}^{n}(Y_i-\beta_0-\beta_1X_i)^2}{2\sigma^2} \right).
 $$
 
@@ -772,8 +771,7 @@ $$
 Var(\hat{\beta_1}) \approx \frac{\hat{\sigma}^2}{S_{xx}}
 $$
 
-De igual modo tenemos: 
-$$
+De igual modo tenemos: $$
 Var(\hat{\beta_0}) \approx \hat{\sigma}^2 \left ( \frac{1}{n}+\frac{\bar{X}^2}{S_{xx}}\right )
 $$
 
@@ -784,14 +782,12 @@ $$
     [@kutner2005applied].
 
 ::: {.callout-note title="Propiedades adicionales para las predicciones y para los residuos" collapse="false"}
--   La suma de los residuos es cero: 
-$$
+-   La suma de los residuos es cero: $$
       \sum_{i=1}^n e_i=\sum_{i=1}^n(Y_i-\hat{Y_i})=0
       $$
 
 -   La suma de los valores observados es igual a la suma de los valores
-    ajustados: 
-    $$
+    ajustados: $$
       \sum_{i=1}^n Y_i=\sum_{i=1}^n \hat{Y_i}
       $$
 
@@ -799,8 +795,7 @@ $$
       \sum_{i=1}^n X_ie_i=0
       $$
 
--   La suma de los residuos ponderados por las predicciones es cero: 
-$$
+-   La suma de los residuos ponderados por las predicciones es cero: $$
       \sum_{i=1}^n \hat{Y_i}e_i=0
       $$
 
@@ -947,28 +942,25 @@ la asignatura de Inferencia.
 
 #### Variabilidad total
 
-La variabilidad total de$Y$ se mide mediante la **Suma Total de los
+La variabilidad total de$Y$ se mide mediante la \*\*Suma Total de los
 Cuadrados ($$T)**:\
-$$
-$$T = \sum_{i=1}^n (Y_i - \bar{Y})^2,
+$$ $$T = \sum_{i=1}^n (Y_i - \bar{Y})^2,
 $$\
-donde $\bar{Y}$ es la media de $Y$. $$$T$ refleja la dispersión general
-de $Y$ respecto a su media.
+donde $\bar{Y}$ es la media de $Y$. \$\$$T$ refleja la dispersión
+general de $Y$ respecto a su media.
 
 **Descomposición de la variabilidad**
 
 El modelo de regresión lineal permite descomponer$$$T$ en dos
 componentes principales:\
-$$
-$$T = $$R + $$E,
+$$ $$T = $$R + $$E,
 $$\
 donde:
 
 -   $$$R$ (Suma de los Cuadrados del Modelo): Representa la variabilidad
     explicada por la regresión, es decir, la parte de $Y$ que se puede
     predecir a partir de $X$:\
-    $$
-      $$R = \sum_{i=1}^n (\hat{Y}_i - \bar{Y})^2,
+    $$ $$R = \sum_{i=1}^n (\hat{Y}_i - \bar{Y})^2,
      $$ donde $\hat{Y}_i$ es el valor predicho por el modelo para el
     $i$-ésimo dato.
 
@@ -976,22 +968,21 @@ donde:
     inicio de esta sección, representa la variabilidad no explicada por
     el modelo, es decir, la dispersión de los valores observados
     respecto a los valores predichos:\
-    $$
-      $$E = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2.
+    $$ $$E = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2.
      $$
 
 #### Tabla ANOVA
 
 El análisis de varianza organiza la descomposición de la varianza en una
 tabla, donde cada componente se asocia con sus grados de libertad
-($df$), suma de cuadrados ($$$$), media cuadrática ($MS$) y el
+($df$), suma de cuadrados (\$\$\$$), media cuadrática ($MS\$) y el
 estadístico $F$:
 
-| Fuente    | $df$  | $$$$  | $MS = $$/df$      | Estadístico$F$ |
-|-----------|-------|-------|-------------------|----------------|
-| Regresión | 1     | $$$R$ | $MSR = $$R/1$     | $F = MSR/MSE$  |
-| Error     | $n-2$ | $$$E$ | $MSE = $$E/(n-2)$ |                |
-| Total     | $n-1$ | $$$T$ |                   |                |
+| Fuente    | $df$  | \$$$$  | $MS = $$/df\$     | Estadístico$F$ |     |
+|-----------|-------|----------------------------|----------------|-----|
+| Regresión | 1     | $$$R$ | $MSR = $$R/1\$     | $F = MSR/MSE$  |     |
+| Error     | $n-2$ | $$$E$ | $MSE = $$E/(n-2)\$ |                |     |
+| Total     | $n-1$ | \$\$$T$                    |                |     |
 
 #### Prueba de significancia global
 
@@ -1038,8 +1029,10 @@ El coeficiente de determinación ($R^2$) mide qué proporción de la
 variabilidad total en $Y$ es explicada por $X$ a través del modelo:
 
 $$
-R^2 = 1 - \frac{\text{Suma de los Cuadrados de los Residuos ($$E)}}{\text{Suma Total de los Cuadrados ($$T)}} = \frac{\text{Suma de los Cuadrados del Modelo ($$R)}}{\text{Suma Total de los Cuadrados ($$T)}}.
-$$
+R^2 = 1 - \frac{\text{Suma de los Cuadrados de los Residuos ($$E)}}{\text{Suma Total de los Cuadrados ($$T)}}
+=
+\frac{\text{Suma de los Cuadrados del Modelo ($$R)}}{\text{Suma Total de los Cuadrados ($$T)}}.
+\$\$
 
 Donde:
 
@@ -1710,7 +1703,8 @@ predictoras, más un término de error aleatorio. La notación matricial es
 compacta y facilita la manipulación algebraica para obtener estimaciones
 y realizar inferencias.
 
-Como en el caso de la regresión lineal simple, asumimos que los errores $\varepsilon$ son i.i.d. según una normal:
+Como en el caso de la regresión lineal simple, asumimos que los errores
+$\varepsilon$ son i.i.d. según una normal:
 
 $$
 \boldsymbol{\varepsilon} \overset{i.i.d.}{\sim} \mathcal{N}(\mathbf{0}, \sigma^2 \mathbf{I}),
@@ -1728,205 +1722,257 @@ $$
 \end{pmatrix}.
 $$
 
-El criterio de **mínimos cuadrados ** es el método más común para estimar los parámetros del modelo de regresión lineal múltiple. Este método busca minimizar la suma de los cuadrados de los residuos. Es decir, la suma de los cuadrados de las diferencias entre los valores observados de la variable dependiente y los valores predichos por el modelo. 
+El criterio de **mínimos cuadrados** es el método más común para estimar
+los parámetros del modelo de regresión lineal múltiple. Este método
+busca minimizar la suma de los cuadrados de los residuos. Es decir, la
+suma de los cuadrados de las diferencias entre los valores observados de
+la variable dependiente y los valores predichos por el modelo.
 
+El objetivo es estimar $\boldsymbol{\beta}$, el conjunto de coeficientes
+de regresión.
 
-El objetivo es estimar $\boldsymbol{\beta}$, el conjunto de coeficientes de regresión.
-
-La **función de pérdida** que se minimiza es la suma de los cuadrados de los residuos ($S(\boldsymbol{\beta})$):
-$$
+La **función de pérdida** que se minimiza es la suma de los cuadrados de
+los residuos ($S(\boldsymbol{\beta})$): $$
 S(\boldsymbol{\beta}) = \sum_{i=1}^n (Y_i - \mathbf{X}_i \boldsymbol{\beta})^2,
-$$
-o en notación matricial:
-$$
+$$ o en notación matricial: $$
 S(\boldsymbol{\beta}) = (\mathbf{Y} - \mathbf{X} \boldsymbol{\beta})^\top (\mathbf{Y} - \mathbf{X} \boldsymbol{\beta}),
-$$
-donde $(\mathbf{Y} - \mathbf{X} \boldsymbol{\beta})$ es el vector de residuos.
+$$ donde $(\mathbf{Y} - \mathbf{X} \boldsymbol{\beta})$ es el vector de
+residuos.
 
-Para encontrar el valor de $\boldsymbol{\beta}$ que minimiza $S(\boldsymbol{\beta})$, derivamos $S(\boldsymbol{\beta})$ con respecto a $\boldsymbol{\beta}$ y la igualamos a cero:
+Para encontrar el valor de $\boldsymbol{\beta}$ que minimiza
+$S(\boldsymbol{\beta})$, derivamos $S(\boldsymbol{\beta})$ con respecto
+a $\boldsymbol{\beta}$ y la igualamos a cero:
 
-  - Expandimos $S(\boldsymbol{\beta})$:
-$$
-S(\boldsymbol{\beta}) = \mathbf{Y}^\top \mathbf{Y} - 2 \mathbf{Y}^\top \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\beta}^\top \mathbf{X}^\top \mathbf{X} \boldsymbol{\beta}.
-$$
+-   Expandimos $S(\boldsymbol{\beta})$: $$
+    S(\boldsymbol{\beta}) = \mathbf{Y}^\top \mathbf{Y} - 2 \mathbf{Y}^\top \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\beta}^\top \mathbf{X}^\top \mathbf{X} \boldsymbol{\beta}.
+    $$
 
-  - Derivamos con respecto a $\boldsymbol{\beta}$:
-$$
-\frac{\partial S(\boldsymbol{\beta})}{\partial \boldsymbol{\beta}} = -2 \mathbf{X}^\top \mathbf{Y} + 2 \mathbf{X}^\top \mathbf{X} \boldsymbol{\beta}.
-$$
+-   Derivamos con respecto a $\boldsymbol{\beta}$: $$
+    \frac{\partial S(\boldsymbol{\beta})}{\partial \boldsymbol{\beta}} = -2 \mathbf{X}^\top \mathbf{Y} + 2 \mathbf{X}^\top \mathbf{X} \boldsymbol{\beta}.
+    $$
 
-  - Igualamos a cero:
-$$
--2 \mathbf{X}^\top \mathbf{Y} + 2 \mathbf{X}^\top \mathbf{X} \boldsymbol{\beta} = 0.
-$$
+-   Igualamos a cero: $$
+    -2 \mathbf{X}^\top \mathbf{Y} + 2 \mathbf{X}^\top \mathbf{X} \boldsymbol{\beta} = 0.
+    $$
 
-  - Resolviendo para $\boldsymbol{\beta}$:
-$$
-\mathbf{X}^\top \mathbf{X} \boldsymbol{\beta} = \mathbf{X}^\top \mathbf{Y}.
-$$
+-   Resolviendo para $\boldsymbol{\beta}$: $$
+    \mathbf{X}^\top \mathbf{X} \boldsymbol{\beta} = \mathbf{X}^\top \mathbf{Y}.
+    $$
 
-  - Finalmente, el estimador de mínimos cuadrados es:
-$$
-\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{Y}.
-$$
+-   Finalmente, el estimador de mínimos cuadrados es: $$
+    \hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{Y}.
+    $$
 
-El criterio de mínimos cuadrados ajusta un plano en el espacio multidimensional de las variables explicativas que mejor representa los datos en términos de minimizar los residuos al cuadrado. Este estimador es ampliamente usado por su simplicidad y eficacia bajo los supuestos de normalidad y homocedasticidad.
+El criterio de mínimos cuadrados ajusta un plano en el espacio
+multidimensional de las variables explicativas que mejor representa los
+datos en términos de minimizar los residuos al cuadrado. Este estimador
+es ampliamente usado por su simplicidad y eficacia bajo los supuestos de
+normalidad y homocedasticidad.
 
 ::: {.callout-important title="Para recordar"}
-Cuando se trata de un modelo de regresión con múltiples regresores, el análisis visual mediante diagramas de dispersión puede resultar engañoso. Construir gráficos que muestren la relación entre la variable respuesta y cada regresor de forma aislada no siempre proporciona una representación precisa de la realidad. Esto ocurre porque los efectos conjuntos de los regresores no se reflejan en estos gráficos individuales. Incluso en un caso ideal, donde existe una relación perfecta entre la variable respuesta y los regresores, sin ningún tipo de ruido o error, los diagramas de dispersión individuales pueden sugerir una relación débil o inexistente si no se tiene en cuenta el contexto multivariado.  
+Cuando se trata de un modelo de regresión con múltiples regresores, el
+análisis visual mediante diagramas de dispersión puede resultar
+engañoso. Construir gráficos que muestren la relación entre la variable
+respuesta y cada regresor de forma aislada no siempre proporciona una
+representación precisa de la realidad. Esto ocurre porque los efectos
+conjuntos de los regresores no se reflejan en estos gráficos
+individuales. Incluso en un caso ideal, donde existe una relación
+perfecta entre la variable respuesta y los regresores, sin ningún tipo
+de ruido o error, los diagramas de dispersión individuales pueden
+sugerir una relación débil o inexistente si no se tiene en cuenta el
+contexto multivariado.
 
-En situaciones más comunes, donde los datos incluyen errores en los valores observados de la variable respuesta y los regresores interactúan de manera compleja, los gráficos univariantes tienden a complicar aún más la interpretación. Pueden surgir aparentes inconsistencias o patrones confusos, ya que no se está considerando la influencia simultánea de todos los regresores en la respuesta. Por esta razón, es fundamental adoptar enfoques que analicen las relaciones de manera conjunta, como los coeficientes estimados en un modelo de regresión múltiple, que capturan el impacto parcial de cada regresor ajustando por los efectos de los demás.
+En situaciones más comunes, donde los datos incluyen errores en los
+valores observados de la variable respuesta y los regresores interactúan
+de manera compleja, los gráficos univariantes tienden a complicar aún
+más la interpretación. Pueden surgir aparentes inconsistencias o
+patrones confusos, ya que no se está considerando la influencia
+simultánea de todos los regresores en la respuesta. Por esta razón, es
+fundamental adoptar enfoques que analicen las relaciones de manera
+conjunta, como los coeficientes estimados en un modelo de regresión
+múltiple, que capturan el impacto parcial de cada regresor ajustando por
+los efectos de los demás.
 :::
-
 
 #### Propiedades del estimador
 
 Estas son las propiedades del estimador de mínimos cuadrados:
 
-  - **Linealidad:** El estimador es una combinación lineal de los valores observados ($\mathbf{Y}$).
-  - **Insesgado:** En ausencia de errores correlacionados y bajo supuestos estándar, $E[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta}$.
-  - **Varianza mínima:** Entre los estimadores lineales insesgados, $\hat{\boldsymbol{\beta}}$ tiene la menor varianza posible (propiedad BLUE: Best Linear Unbiased Estimator).
+-   **Linealidad:** El estimador es una combinación lineal de los
+    valores observados ($\mathbf{Y}$).
+-   **Insesgado:** En ausencia de errores correlacionados y bajo
+    supuestos estándar,
+    $E[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta}$.
+-   **Varianza mínima:** Entre los estimadores lineales insesgados,
+    $\hat{\boldsymbol{\beta}}$ tiene la menor varianza posible
+    (propiedad BLUE: Best Linear Unbiased Estimator).
 
 ### Varianza del error
 
-La varianza de los errores ($\sigma^2$) mide cuánto varían las observaciones reales ($Y_i$) con respecto a los valores predichos por el modelo ($\hat{Y}_i$). En el modelo de regresión múltiple, esta varianza puede ser estimada utilizando la **suma de los cuadrados de los residuos ($$E)**.
+La varianza de los errores ($\sigma^2$) mide cuánto varían las
+observaciones reales ($Y_i$) con respecto a los valores predichos por el
+modelo ($\hat{Y}_i$). En el modelo de regresión múltiple, esta varianza
+puede ser estimada utilizando la **suma de los cuadrados de los residuos
+(\$\$E)**.
 
+La estimación de $\sigma^2$, denotada como $\hat{\sigma}^2$, se calcula
+como: $$
+\hat{\sigma}^2 = \frac{\text{$$E}}{n - p - 1}, \$\$ donde:
 
-La estimación de $\sigma^2$, denotada como $\hat{\sigma}^2$, se calcula como:
-$$
-\hat{\sigma}^2 = \frac{\text{$$E}}{n - p - 1},
-$$
-donde:
+-   $\text{$$E} = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2 = \mathbf{e}^\top \mathbf{e}$
+    es la suma de los cuadrados de los residuos.
+-   $\mathbf{e} = \mathbf{Y} - \hat{\mathbf{Y}} = \mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}}$
+    es el vector de residuos.
 
-  - $\text{$$E} = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2 = \mathbf{e}^\top \mathbf{e}$ es la suma de los cuadrados de los residuos.
-  - $\mathbf{e} = \mathbf{Y} - \hat{\mathbf{Y}} = \mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}}$ es el vector de residuos.
+La cantidad $n - p - 1$ es conocida como los **grados de libertad
+residuales**, que reflejan el número de datos disponibles para estimar
+la varianza de los errores después de ajustar los parámetros del modelo.
 
-La cantidad $n - p - 1$ es conocida como los **grados de libertad residuales**, que reflejan el número de datos disponibles para estimar la varianza de los errores después de ajustar los parámetros del modelo.
-
-En términos matriciales, $\hat{\sigma}^2$ se expresa como:
-$$
+En términos matriciales, $\hat{\sigma}^2$ se expresa como: $$
 \hat{\sigma}^2 = \frac{1}{n - p - 1} (\mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}})^\top (\mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}}),
-$$
-o de forma más compacta:
-$$
+$$ o de forma más compacta: $$
 \hat{\sigma}^2 = \frac{1}{n - p - 1} \mathbf{e}^\top \mathbf{e}.
 $$
 
-La varianza estimada $\hat{\sigma}^2$ se encuentra en las mismas unidades al cuadrado que la variable dependiente ($\mathbf{Y}$). Este valor es crucial para construir intervalos de confianza y realizar pruebas de hipótesis sobre los coeficientes del modelo ($\boldsymbol{\beta}$). La raíz cuadrada de $\hat{\sigma}^2$ proporciona el error estándar de los residuos.
+La varianza estimada $\hat{\sigma}^2$ se encuentra en las mismas
+unidades al cuadrado que la variable dependiente ($\mathbf{Y}$). Este
+valor es crucial para construir intervalos de confianza y realizar
+pruebas de hipótesis sobre los coeficientes del modelo
+($\boldsymbol{\beta}$). La raíz cuadrada de $\hat{\sigma}^2$ proporciona
+el error estándar de los residuos.
 
-
-
-Este valor permite cuantificar la variabilidad no explicada por el modelo ajustado y es un componente esencial en la evaluación de la calidad del ajuste.
-
+Este valor permite cuantificar la variabilidad no explicada por el
+modelo ajustado y es un componente esencial en la evaluación de la
+calidad del ajuste.
 
 ### Inferencia sobre los parámetros del modelo
 
-
-Tal como indicamos en el modelo de regresión simple, en el análisis de regresión lineal múltiple, la inferencia estadística permite evaluar la significancia de los parámetros estimados y del modelo completo. Estas evaluaciones son cruciales para determinar si el modelo ajustado es útil para explicar y predecir la variable respuesta.
+Tal como indicamos en el modelo de regresión simple, en el análisis de
+regresión lineal múltiple, la inferencia estadística permite evaluar la
+significancia de los parámetros estimados y del modelo completo. Estas
+evaluaciones son cruciales para determinar si el modelo ajustado es útil
+para explicar y predecir la variable respuesta.
 
 #### Intervalos de confianza para los coeficientes de regresión
 
-Los intervalos de confianza proporcionan un rango plausible para los valores verdaderos de los coeficientes de regresión ($\beta_j$), permitiendo evaluar su significancia.
+Los intervalos de confianza proporcionan un rango plausible para los
+valores verdaderos de los coeficientes de regresión ($\beta_j$),
+permitiendo evaluar su significancia.
 
-Para construir intervalos de confianza para los coeficientes de la regresión, 
-$\beta_0, \beta_1, \ldots, \beta_k$, procedemos de forma análoga a como 
-hacíamos en el caso de la regresión lineal simple. Usamos la distribución en 
-el muestreo de los estimadores, $\hat{\beta}$:
-$$
+Para construir intervalos de confianza para los coeficientes de la
+regresión, $\beta_0, \beta_1, \ldots, \beta_k$, procedemos de forma
+análoga a como hacíamos en el caso de la regresión lineal simple. Usamos
+la distribución en el muestreo de los estimadores, $\hat{\beta}$: $$
 \hat{\beta} \sim N_p(\beta, \sigma^2 (\mathbf{X}^\top \mathbf{X})^{-1}).
 $$
 
-Esto implica que cada coeficiente $\hat{\beta}_j$ es normal con media 
-$\beta_j$ y varianza $\sigma^2 C_{jj}$, con $C_{jj}$ el elemento $j$-ésimo 
-de la diagonal de la matriz $(\mathbf{X}^\top \mathbf{X})^{-1}$.
+Esto implica que cada coeficiente $\hat{\beta}_j$ es normal con media
+$\beta_j$ y varianza $\sigma^2 C_{jj}$, con $C_{jj}$ el elemento
+$j$-ésimo de la diagonal de la matriz
+$(\mathbf{X}^\top \mathbf{X})^{-1}$.
 
-De este modo, los estadísticos:
-$$
+De este modo, los estadísticos: $$
 t_j=\frac{\hat{\beta_j}-\beta_j}{\sqrt{\hat{\sigma^2}C_{jj}}} \hspace{0.5cm} j=0,1,\ldots,p
-$$
-se distribuye como una t-Student, con $n-p$ grados de libertad.
+$$ se distribuye como una t-Student, con $n-p$ grados de libertad.
 
-Po tanto, el intervalo de confianza para cada coeficiente $\beta_j$ se calcula como:
+Po tanto, el intervalo de confianza para cada coeficiente $\beta_j$ se
+calcula como:
 
 $$
 \hat{\beta}_j \pm t_{n-p-1,\alpha/2} \cdot \text{SE}(\hat{\beta}_j) \hspace{0.5cm} j=0,1,\ldots,p
 $$
 
-
 donde:
 
-  $$
+$$
   \text{SE}(\hat{\beta}_j) = \sqrt{\sigma^2 (\mathbf{X}^\top \mathbf{X})^{-1}_{jj}}.
   $$
-  
-  es el error estándar del estimador $\hat{\beta}_j$.
+
+es el error estándar del estimador $\hat{\beta}_j$.
 
 #### Contraste global sobre lo significativo que es el modelo de regresión lineal múltiple
 
-El contraste global evalúa si el modelo de regresión, como un todo, explica una proporción significativa de la variabilidad de la variable respuesta. Esto se realiza mediante un **test F** y una tabla ANOVA.
+El contraste global evalúa si el modelo de regresión, como un todo,
+explica una proporción significativa de la variabilidad de la variable
+respuesta. Esto se realiza mediante un **test F** y una tabla ANOVA.
 
-La tabla ANOVA para la regresión múltiple descompone la variabilidad total de la variable respuesta ($\text{SCT}$) en dos componentes principales:
+La tabla ANOVA para la regresión múltiple descompone la variabilidad
+total de la variable respuesta ($\text{SCT}$) en dos componentes
+principales:
 
-1. **Suma de Cuadrados del Modelo de Regresión (SSR):** Variabilidad explicada por los regresores.
-2. **Suma de Cuadrados de los Residuos (SSE):** Variabilidad no explicada por el modelo.
+1.  **Suma de Cuadrados del Modelo de Regresión (SSR):** Variabilidad
+    explicada por los regresores.
+2.  **Suma de Cuadrados de los Residuos (SSE):** Variabilidad no
+    explicada por el modelo.
 
-La descomposición se expresa como:
-$$
+La descomposición se expresa como: $$
 \text{SST} = \text{SSE} + \text{SSR}.
 $$
 
 Los términos involucrados son:
 
-  - $\text{SSR} = \sum_{i=1}^n (\hat{Y}_i - \bar{Y})^2$, donde $\hat{Y}_i$ son los valores predichos por el modelo y $\bar{Y}$ es la media de $Y$.
-  - $\text{SSE} = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2$, la suma de los cuadrados de los residuos.
-  - $\text{SST} = \sum_{i=1}^n (Y_i - \bar{Y})^2$, la suma total de los cuadrados.
+-   $\text{SSR} = \sum_{i=1}^n (\hat{Y}_i - \bar{Y})^2$, donde
+    $\hat{Y}_i$ son los valores predichos por el modelo y $\bar{Y}$ es
+    la media de $Y$.
+-   $\text{SSE} = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2$, la suma de los
+    cuadrados de los residuos.
+-   $\text{SST} = \sum_{i=1}^n (Y_i - \bar{Y})^2$, la suma total de los
+    cuadrados.
 
 La tabla ANOVA incluye los siguientes elementos:
 
 | Fuente de Variación | Suma de Cuadrados | Grados de Libertad | Cuadrados Medios | Estadístico F |
-|---------------------|-------------------|--------------------|------------------|---------------|
-| Modelo              | $\text{SSR}$  | $p$              | $MSR=\text{SSR}/p$ | $F = \frac{\text{SCM}/p}{\text{SCR}/(n-p-1)}$ |
-| Residuos            | $\text{SSE}$  | $n-p-1$          | $MSE=\text{SSE}/(n-p-1)$ |               |
-| Total               | $\text{SST}$  | $n-1$            |                  |               |
+|---------------|---------------|---------------|---------------|---------------|
+| Modelo | $\text{SSR}$ | $p$ | $MSR=\text{SSR}/p$ | $F = \frac{\text{SCM}/p}{\text{SCR}/(n-p-1)}$ |
+| Residuos | $\text{SSE}$ | $n-p-1$ | $MSE=\text{SSE}/(n-p-1)$ |  |
+| Total | $\text{SST}$ | $n-1$ |  |  |
 
-La hipótesis del test F global es:
-  - $H_0: \beta_1 = \beta_2 = \dots = \beta_p = 0$ (el modelo no es significativo),
-  - $H_1:$ al menos uno de los $\beta_j \neq 0$.
+La hipótesis del test F global es: -
+$H_0: \beta_1 = \beta_2 = \dots = \beta_p = 0$ (el modelo no es
+significativo), - $H_1:$ al menos uno de los $\beta_j \neq 0$.
 
-El estadístico F se calcula como:
-$$
+El estadístico F se calcula como: $$
 F = \frac{\text{SSR}/p}{\text{SSE}/(n-p-1)}=\frac{MSR}{MSE}.
-$$
-Se compara con un valor crítico de la distribución $F_{p, n-p-1}$. Si $F$ es grande o el valor $p$ asociado es pequeño, se rechaza $H_0$.
+$$ Se compara con un valor crítico de la distribución $F_{p, n-p-1}$. Si
+$F$ es grande o el valor $p$ asociado es pequeño, se rechaza $H_0$.
 
 #### Test global sobre el ajuste del modelo
 
-El test global evalúa si la proporción de la variabilidad total explicada por el modelo ($R^2$) es significativa. Esto se relaciona con el test F global presentado en la sección anterior. 
+El test global evalúa si la proporción de la variabilidad total
+explicada por el modelo ($R^2$) es significativa. Esto se relaciona con
+el test F global presentado en la sección anterior.
 
-El coeficiente de determinación $R^2$ se define como:
-$$
+El coeficiente de determinación $R^2$ se define como: $$
 R^2 = \frac{\text{SSR}}{\text{SST}}.
-$$
-El test F analiza si este valor es significativamente distinto de cero, como se muestra en la tabla ANOVA.
+$$ El test F analiza si este valor es significativamente distinto de
+cero, como se muestra en la tabla ANOVA.
 
 #### Test sobre coeficientes individuales
 
-El objetivo aquí es determinar si cada variable explicativa tiene un efecto significativo en la variable respuesta, después de ajustar por las demás.
+El objetivo aquí es determinar si cada variable explicativa tiene un
+efecto significativo en la variable respuesta, después de ajustar por
+las demás.
 
 Para cada coeficiente $\beta_j$:
 
-  - $H_0: \beta_j = 0$ (la variable $X_j$ no contribuye al modelo),
-  - $H_1: \beta_j \neq 0$ (la variable $X_j$ tiene un efecto significativo).
+-   $H_0: \beta_j = 0$ (la variable $X_j$ no contribuye al modelo),
+-   $H_1: \beta_j \neq 0$ (la variable $X_j$ tiene un efecto
+    significativo).
 
-El estadístico $t$ para cada $\beta_j$ se calcula como:
-$$
+El estadístico $t$ para cada $\beta_j$ se calcula como: $$
 t_j = \frac{\hat{\beta}_j}{\text{SE}(\hat{\beta}_j)},
-$$
-donde $\text{SE}(\hat{\beta}_j)$ es el error estándar del coeficiente. Este estadístico sigue una distribución $t_{n-p-1}$.
+$$ donde $\text{SE}(\hat{\beta}_j)$ es el error estándar del
+coeficiente. Este estadístico sigue una distribución $t_{n-p-1}$.
 
-Se compara $|t_j|$ con el valor crítico de $t$ para un nivel de significancia $\alpha$, o se evalúa el valor $p$. Si $|t_j|$ es suficientemente grande (o $p$ es pequeño), se rechaza $H_0$, indicando que $X_j$ contribuye significativamente al modelo.
+Se compara $|t_j|$ con el valor crítico de $t$ para un nivel de
+significancia $\alpha$, o se evalúa el valor $p$. Si $|t_j|$ es
+suficientemente grande (o $p$ es pequeño), se rechaza $H_0$, indicando
+que $X_j$ contribuye significativamente al modelo.
 
-El test sobre los coeficientes individuales permite identificar qué variables son más importantes en la explicación de la variabilidad de la variable respuesta, ajustando por las demás. Esto ayuda a interpretar y refinar el modelo.
+El test sobre los coeficientes individuales permite identificar qué
+variables son más importantes en la explicación de la variabilidad de la
+variable respuesta, ajustando por las demás. Esto ayuda a interpretar y
+refinar el modelo.
 
 ::: {.callout-tip title="Ejemplo" collapse="true"}
 Para los datos de calificaciones y tiempo de estudio, estos son los
