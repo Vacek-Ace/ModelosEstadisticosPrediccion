@@ -84,7 +84,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./conclusiones.html" rel="next">
+<link href="./tema2.html" rel="next">
 <link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -204,8 +204,14 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./tema2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Métodos de selección de variables y problemas de regularización</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./conclusiones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -283,8 +289,8 @@ window.Quarto = {
 
 <p>La regresión lineal constituye uno de los pilares fundamentales de la modelización estadística y es ampliamente utilizada en múltiples disciplinas para analizar relaciones entre variables. Este modelo permite explorar cómo una o varias variables explicativas (independientes) influyen sobre una variable respuesta (dependiente), proporcionando no solo descripciones útiles sino también herramientas para la predicción y la inferencia.</p>
 <p>El <strong>modelo de regresión lineal simple</strong> se centra en analizar la relación entre una única variable explicativa y una respuesta, mientras que el <strong>modelo de regresión lineal múltiple</strong> extiende este concepto al considerar múltiples variables explicativas, permitiendo capturar relaciones más complejas y realistas. Ambos modelos comparten principios fundamentales, como el ajuste de una recta mediante el criterio de mínimos cuadrados y la interpretación de sus parámetros, pero difieren en su alcance y en los retos que presentan.</p>
-<p>En este capítulo, abordaremos los fundamentos de la regresión lineal simple, incluyendo sus suposiciones clave, el procedimiento de estimación de parámetros y el uso de herramientas de diagnóstico. A través de ejemplos prácticos, como los estudios clásicos de Galton sobre la herencia de estaturas o el análisis de datos de inversión en publicidad, se ilustrará el poder descriptivo y predictivo de este modelo.</p>
-<p>Este tema también prepara las bases para comprender el modelo de regresión lineal múltiple, presentado como unageneralización del simple, y para abordar las complejidades adicionales que surgen, como la colinealidad entre variables explicativas y la selección de modelos óptimos.</p>
+<p>En este tema, abordaremos los fundamentos de la regresión lineal simple, incluyendo sus suposiciones clave, el procedimiento de estimación de parámetros y el uso de herramientas de diagnóstico. A través de ejemplos prácticos, como los estudios clásicos de Galton sobre la herencia de estaturas o el análisis de datos de inversión en publicidad, se ilustrará el poder descriptivo y predictivo de este modelo.</p>
+<p>Este tema también prepara las bases para comprender el modelo de regresión lineal múltiple, presentado como una generalización del simple, y para abordar las complejidades adicionales que surgen, como la colinealidad entre variables explicativas y la selección de modelos óptimos.</p>
 <p>La comprensión y aplicación correcta de estos modelos es esencial no solo para su utilidad en contextos prácticos, sino también porque representan el punto de partida para técnicas más avanzadas en la ciencia de datos y el aprendizaje automático.</p>
 <div class="callout callout-style-default callout-important callout-titled" title="Objetivos">
 <div class="callout-header d-flex align-content-center">
@@ -298,7 +304,7 @@ Objetivos
 <div class="callout-body-container callout-body">
 <p>Los siguiente objetivos buscan sentar las bases teóricas y prácticas necesarias para entender y aplicar modelos de regresión, preparando al estudiante para explorar modelos más complejos en los temas posteriores.</p>
 <ol type="1">
-<li><strong>Introducción a la Modelización estadística</strong>:
+<li><strong>Introducción a la modelización estadística</strong>:
 <ul>
 <li>Comprender el proceso de modelización estadística, desde la definición de objetivos y variables hasta el ajuste y evaluación del modelo.</li>
 </ul></li>
@@ -703,14 +709,6 @@ Ejemplo
 <p><span class="math display">\[
 r(X, Y) = \frac{\text{Cov}(X, Y)}{\sigma_X \cdot \sigma_Y}
 \]</span></p>
-<p><strong>Valores de</strong> <span class="math inline">\(r\)</span>:</p>
-<ul>
-<li><span class="math inline">\(r = 1\)</span>: Correlación perfectamente positiva (todos los puntos caen en una línea recta creciente).<br>
-</li>
-<li><span class="math inline">\(r = -1\)</span>: Correlación perfectamente negativa (todos los puntos caen en una línea recta decreciente).<br>
-</li>
-<li><span class="math inline">\(r = 0\)</span>: Ausencia de correlación lineal.</li>
-</ul>
 <p>El coeficiente de correlación es adimensional y toma valores entre <span class="math inline">\(-1\)</span> y <span class="math inline">\(1\)</span>, facilitando su interpretación sin importar las unidades de las variables.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
@@ -888,10 +886,13 @@ Propiedades Clave
 <li><strong>Homocedasticidad:</strong> La varianza de los términos de error <span class="math inline">\(\varepsilon\)</span> es constante para todos los valores de <span class="math inline">\(X\)</span>. Es decir, la varianza de <span class="math inline">\(Y\)</span> es constante, no depende <span class="math inline">\(X\)</span>.<br>
 </li>
 </ol>
-<p>Cuando el objetivo no es sólo estimar la recta, sino inferir con ella, entonces se asume una hipótesis más: la normalidad de la variable respuesta, o lo que es lo mismo, del error aleatorio: 4. <strong>Normalidad:</strong> Los términos de error <span class="math inline">\(\varepsilon\)</span> siguen una distribución normal con media cero y varianza constante:<br>
+<p>Cuando el objetivo no es sólo estimar la recta, sino inferir con ella, entonces se asume una hipótesis más: la normalidad de la variable respuesta, o lo que es lo mismo, del error aleatorio:</p>
+<ol start="4" type="1">
+<li><strong>Normalidad:</strong> Los términos de error <span class="math inline">\(\varepsilon\)</span> siguen una distribución normal con media cero y varianza constante:<br>
 <span class="math display">\[
     \varepsilon_i \overset{\mathrm{iid}}{\sim} N(0, \sigma^2) , \hspace{0.5cm} i=1,\ldots,n
-    \]</span></p>
+    \]</span></li>
+</ol>
 <p>Estos supuestos son esenciales para garantizar la validez de las estimaciones y conclusiones derivadas del modelo.</p>
 </div>
 </div>
@@ -921,33 +922,56 @@ E[Y_i|X_i]=\beta_0+\beta_1X_i \hspace{.5cm} i=1,\dots,n,
   \]</span> para medir la discrepancia entre el valor observado <span class="math inline">\(Y_i\)</span> y el valor predicho <span class="math inline">\(\hat{Y}_i\)</span>.</p>
 <p>El método de los mínimos cuadrados busca minimizar la suma de los errores cuadráticos (residuos) entre los valores observados de <span class="math inline">\(Y\)</span> y los valores predichos (<span class="math inline">\(\hat{Y}\)</span>):</p>
 <p><span class="math display">\[
-\text{\]</span>E} = ^n e_i^2 =<em>^{n} (Y_i - </em>i)^2 =* ^{n} (Y_i - ( + X_i))^2. $$</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Minimización de $$E">
+\text{SSE} = \sum_{i=1}^n e_i^2 =\sum_{i=1}^{n} (Y_i - \hat{Y}_i)^2
+= \sum_{i=1}^{n} \left(Y_i - (\hat{\beta_0} + \hat{\beta_1}
+X_i)\right)^2.
+\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled" title="Minimización de SSE">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Minimización de $$E
+Minimización de SSE
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>La obtención de los estimadores de mínimos cuadrados para la regresión lineal simple se basa en minimizar la suma de los cuadrados de los residuos ($$<span class="math inline">\(E\)</span>). Aquí está el proceso paso a paso:</p>
-<p>Para minimizar $$<span class="math inline">\(E\)</span>, derivamos parcialmente con respecto a <span class="math inline">\(\beta_0\)</span> y <span class="math inline">\(\beta_1\)</span> y resolvemos el sistema de ecuaciones.</p>
+<p>La obtención de los estimadores de mínimos cuadrados para la regresión lineal simple se basa en minimizar la suma de los cuadrados de los residuos (<span class="math inline">\(SSE\)</span>). Aquí está el proceso paso a paso:</p>
+<p>Para minimizar <span class="math inline">\(SSE\)</span>, derivamos parcialmente con respecto a <span class="math inline">\(\beta_0\)</span> y <span class="math inline">\(\beta_1\)</span> y resolvemos el sistema de ecuaciones.</p>
 <ol type="1">
-<li><p><strong>Primera derivada con respecto a</strong> <span class="math inline">\(\beta_0\)</span>: <span class="math display">\[
-\frac{\partial \]</span>E}{} = -2* ^n (Y_i - (_0 + X_i)*). <span class="math display">\[ Igualando a cero: \]</span> ^n (Y_i - _0 - _1 X_i) = 0. $$</p>
-<p>Reordenando: <span class="math display">\[
-n\beta_0 + \beta_1 \sum_{i=1}^n X_i = \sum_{i=1}^n Y_i. \tag{1}
-\]</span></p></li>
-<li><p><strong>Primera derivada con respecto a</strong> <span class="math inline">\(\beta_1\)</span>: <span class="math display">\[
-\frac{\partial \]</span>E}{} = -2* ^n X_i (Y_i - (_0 + X_i)*). <span class="math display">\[ Igualando a cero: \]</span> ^n X_i (Y_i - _0 - _1 X_i) = 0. $$</p>
-<p>Reordenando: <span class="math display">\[
-\beta_0 \sum_{i=1}^n X_i + \beta_1 \sum_{i=1}^n X_i^2 = \sum_{i=1}^n X_i Y_i. \tag{2}
-\]</span></p></li>
+<li><strong>Primera derivada con respecto a</strong> <span class="math inline">\(\beta_0\)</span>:</li>
 </ol>
+<p><span class="math display">\[
+    \frac{\partial SSE}{\partial \beta_0} = -2\sum_{i=1}^n
+    \left(Y_i - (\beta_0 + \beta_1 X_i)\right).
+  \]</span></p>
+<pre><code>Igualando a cero: </code></pre>
+<p><span class="math display">\[
+    \sum_{i=1}^n \left(Y_i - \beta_0 - \beta_1
+    X_i\right) = 0.
+  \]</span></p>
+<pre><code>Reordenando: </code></pre>
+<p><span class="math display">\[
+    n\beta_0 + \beta_1 \sum_{i=1}^n X_i = \sum_{i=1}^n Y_i. \tag{1}
+  \]</span></p>
+<ol start="2" type="1">
+<li><strong>Primera derivada con respecto a</strong> <span class="math inline">\(\beta_1\)</span>:</li>
+</ol>
+<p><span class="math display">\[
+    \frac{\partial SSE}{\partial \beta_1} = -2\sum_{i=1}^n X_i
+    \left(Y_i - (\beta_0 + \beta_1 X_i)\right).
+    \]</span></p>
+<pre><code>Igualando a cero: </code></pre>
+<p><span class="math display">\[
+    \sum_{i=1}^n X_i \left(Y_i - \beta_0 -
+    \beta_1 X_i\right) = 0.
+   \]</span></p>
+<pre><code>Reordenando: </code></pre>
+<p><span class="math display">\[
+    \beta_0 \sum_{i=1}^n X_i + \beta_1 \sum_{i=1}^n X_i^2 = \sum_{i=1}^n X_i Y_i. \tag{2}
+   \]</span></p>
 <p><strong>Resolución del Sistema de Ecuaciones</strong></p>
 <p>El sistema está dado por las ecuaciones (1) y (2):</p>
 <ol type="1">
@@ -984,8 +1008,8 @@ n\beta_0 + \beta_1 \sum_{i=1}^n X_i = \sum_{i=1}^n Y_i. \tag{1}
 </div>
 </div>
 </div>
-<p>Las fórmulas para los estimadores de mínimos cuadrados son:<br>
-<span class="math display">\[
+<p>Las fórmulas para los estimadores de mínimos cuadrados son:</p>
+<p><span class="math display">\[
 \hat{\beta}_1 = \frac{\text{Cov}(X, Y)}{\text{Var}(X)} = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{\sum_{i=1}^n (X_i - \bar{X})^2},
 \]</span> <span class="math display">\[
 \hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{X},
@@ -1030,7 +1054,8 @@ E[\hat{\beta_0}]=\beta_0, \space E[\hat{\beta_1}]=\beta_1
 <li><p>Las varianzas de los estimadores de <span class="math inline">\(\beta_0\)</span> y <span class="math inline">\(\beta_1\)</span> son: <span class="math display">\[
 Var(\hat{\beta_1})=\frac{\sigma^2}{S_{xx}}
 \]</span> donde <span class="math inline">\(\sigma^2\)</span> es la varianza del error <span class="math inline">\(\varepsilon\)</span>. En la práctica, como <span class="math inline">\(\sigma^2\)</span> no se conoce, se estima con la varianza residual (<span class="math inline">\(\hat{\sigma}^2\)</span>): <span class="math display">\[
-\hat{\sigma}^2=\frac{\]</span>E}{n-2}, <span class="math display">\[ siendo \]</span><span class="math inline">\(E=\sum_{i=1}^{n}(Y_i-\hat{Y_i})^2\)</span>, la suma de los cuadrados de los residos y <span class="math inline">\(n-2\)</span> los grados de libertad (por estimar dos parámetros). De modo que:</p></li>
+\hat{\sigma}^2=\frac{SSE}{n-2},
+\]</span> siendo <span class="math inline">\(SSE=\sum_{i=1}^{n}(Y_i-\hat{Y_i})^2\)</span>, la suma de los cuadrados de los residos y <span class="math inline">\(n-2\)</span> los grados de libertad (por estimar dos parámetros). De modo que:</p></li>
 </ul>
 <p><span class="math display">\[
 Var(\hat{\beta_1}) \approx \frac{\hat{\sigma}^2}{S_{xx}}
@@ -1085,18 +1110,18 @@ Ejemplo
 <div class="callout-body-container callout-body">
 <p>Para los datos de calificaciones y tiempo de estudio, estos son los estimadores de los parámetros del modelo de regresión:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión lineal</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(calificaciones <span class="sc">~</span> tiempo_estudio)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener estimadores de los parámetros y errores estándar</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>estimadores <span class="ot">&lt;-</span> <span class="fu">coef</span>(<span class="fu">summary</span>(modelo))  <span class="co"># Incluye estimadores y errores estándar</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Imprimir los resultados</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Estimadores para los parámetros del modelo:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión lineal</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(calificaciones <span class="sc">~</span> tiempo_estudio)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener estimadores de los parámetros y errores estándar</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>estimadores <span class="ot">&lt;-</span> <span class="fu">coef</span>(<span class="fu">summary</span>(modelo))  <span class="co"># Incluye estimadores y errores estándar</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Imprimir los resultados</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Estimadores para los parámetros del modelo:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Estimadores para los parámetros del modelo:</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(estimadores)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(estimadores)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                 Estimate Std. Error  t value     Pr(&gt;|t|)
 (Intercept)    5.00117598 0.11976840 41.75706 3.102826e-64
@@ -1176,11 +1201,11 @@ Ejemplo
 <div class="callout-body-container callout-body">
 <p>A continuación se presenta un resumen del modelo. Podemos ver los p-valores asociados a cada uno de los parámetros del modelo.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión lineal</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(calificaciones <span class="sc">~</span> tiempo_estudio)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener resumen del modelo</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión lineal</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(calificaciones <span class="sc">~</span> tiempo_estudio)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener resumen del modelo</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -1225,69 +1250,56 @@ Repaso
 </div>
 <section id="variabilidad-total" class="level4" data-number="1.3.4.1">
 <h4 data-number="1.3.4.1" class="anchored" data-anchor-id="variabilidad-total"><span class="header-section-number">1.3.4.1</span> Variabilidad total</h4>
-<p>La variabilidad total de<span class="math inline">\(Y\)</span> se mide mediante la **Suma Total de los Cuadrados (<span class="math display">\[T)**:\
-\]</span> <span class="math display">\[T = \sum_{i=1}^n (Y_i - \bar{Y})^2,
-\]</span><br>
-donde <span class="math inline">\(\bar{Y}\)</span> es la media de <span class="math inline">\(Y\)</span>. $$<span class="math inline">\(T\)</span> refleja la dispersión general de <span class="math inline">\(Y\)</span> respecto a su media.</p>
+<p>La variabilidad total de<span class="math inline">\(Y\)</span> se mide mediante la <strong>Suma Total de los Cuadrados (SST)</strong>:</p>
+<p><span class="math display">\[ SST = \sum_{i=1}^n (Y_i - \bar{Y})^2,
+\]</span></p>
+<p>donde <span class="math inline">\(\bar{Y}\)</span> es la media de <span class="math inline">\(Y\)</span>. <span class="math inline">\(SST\)</span> refleja la dispersión general de <span class="math inline">\(Y\)</span> respecto a su media.</p>
 <p><strong>Descomposición de la variabilidad</strong></p>
-<p>El modelo de regresión lineal permite descomponer<span class="math display">\[$T$ en dos
-componentes principales:\
-\]</span> <span class="math display">\[T = \]</span>R + <span class="math display">\[E,
+<p>El modelo de regresión lineal permite descomponer<span class="math inline">\(SST\)</span> en dos componentes principales:</p>
+<p><span class="math display">\[ SST = SSR + SSE,
 \]</span><br>
 donde:</p>
 <ul>
-<li><p><span class="math display">\[$R$ (Suma de los Cuadrados del Modelo): Representa la variabilidad
-explicada por la regresión, es decir, la parte de $Y$ que se puede
-predecir a partir de $X$:\
-\]</span> <span class="math display">\[R = \sum_{i=1}^n (\hat{Y}_i - \bar{Y})^2,
+<li><p><span class="math inline">\(SSR\)</span> (Suma de los Cuadrados del Modelo): Representa la variabilidad explicada por la regresión, es decir, la parte de <span class="math inline">\(Y\)</span> que se puede predecir a partir de <span class="math inline">\(X\)</span>:<br>
+<span class="math display">\[ SSR = \sum_{i=1}^n (\hat{Y}_i - \bar{Y})^2,
 \]</span> donde <span class="math inline">\(\hat{Y}_i\)</span> es el valor predicho por el modelo para el <span class="math inline">\(i\)</span>-ésimo dato.</p></li>
-<li><p><span class="math display">\[$E$ (Suma de los Cuadrados de los Errores): Como hemos visto al
-inicio de esta sección, representa la variabilidad no explicada por
-el modelo, es decir, la dispersión de los valores observados
-respecto a los valores predichos:\
-\]</span> <span class="math display">\[E = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2.
+<li><p><span class="math inline">\(SSE\)</span> (Suma de los Cuadrados de los Errores): Como hemos visto al inicio de esta sección, representa la variabilidad no explicada por el modelo, es decir, la dispersión de los valores observados respecto a los valores predichos:<br>
+<span class="math display">\[ SSE = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2.
 \]</span></p></li>
 </ul>
 </section>
 <section id="tabla-anova" class="level4" data-number="1.3.4.2">
 <h4 data-number="1.3.4.2" class="anchored" data-anchor-id="tabla-anova"><span class="header-section-number">1.3.4.2</span> Tabla ANOVA</h4>
-<p>El análisis de varianza organiza la descomposición de la varianza en una tabla, donde cada componente se asocia con sus grados de libertad (<span class="math inline">\(df\)</span>), suma de cuadrados ($$$<span class="math inline">\(), media cuadrática (\)</span>MS$) y el estadístico <span class="math inline">\(F\)</span>:</p>
+<p>El análisis de varianza organiza la descomposición de la varianza en una tabla, donde cada componente se asocia con sus grados de libertad (<span class="math inline">\(df\)</span>), suma de cuadrados (<span class="math inline">\(SS\)</span>), media cuadrática (<span class="math inline">\(MS\)</span>) y el estadístico <span class="math inline">\(F\)</span>:</p>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 16%">
-<col style="width: 10%">
-<col style="width: 41%">
-<col style="width: 23%">
-<col style="width: 7%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Fuente</th>
 <th><span class="math inline">\(df\)</span></th>
-<th>$<span class="math display">\[$  | $MS = \]</span>/df$</th>
+<th><span class="math inline">\(SS\)</span></th>
+<th><span class="math inline">\(MS = SS/df\)</span></th>
 <th>Estadístico<span class="math inline">\(F\)</span></th>
-<th></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>Regresión</td>
 <td>1</td>
-<td><span class="math display">\[$R$ | $MSR = \]</span>R/1$</td>
+<td><span class="math inline">\(SSR\)</span></td>
+<td><span class="math inline">\(MSR = SSR/1\)</span></td>
 <td><span class="math inline">\(F = MSR/MSE\)</span></td>
-<td></td>
 </tr>
 <tr class="even">
 <td>Error</td>
 <td><span class="math inline">\(n-2\)</span></td>
-<td><span class="math display">\[$E$ | $MSE = \]</span>E/(n-2)$</td>
-<td></td>
+<td><span class="math inline">\(SSE\)</span></td>
+<td><span class="math inline">\(MSE = SSE/(n-2)\)</span></td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>Total</td>
 <td><span class="math inline">\(n-1\)</span></td>
-<td>$$<span class="math inline">\(T\)</span></td>
+<td><span class="math inline">\(SST\)</span></td>
 <td></td>
 <td></td>
 </tr>
@@ -1325,16 +1337,16 @@ Ejemplo
 <div class="callout-body-container callout-body">
 <p>A continuación se presenta la tabla ANOVA correspondiente al modelo de horas de estudio y calificaciones, previamente entrenado.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión lineal</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(calificaciones <span class="sc">~</span> tiempo_estudio)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener y mostrar la tabla ANOVA</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>tabla_anova <span class="ot">&lt;-</span> <span class="fu">anova</span>(modelo)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Tabla ANOVA:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión lineal</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(calificaciones <span class="sc">~</span> tiempo_estudio)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener y mostrar la tabla ANOVA</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>tabla_anova <span class="ot">&lt;-</span> <span class="fu">anova</span>(modelo)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Tabla ANOVA:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Tabla ANOVA:</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tabla_anova)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tabla_anova)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Variance Table
 
@@ -1355,14 +1367,17 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <h3 data-number="1.3.5" class="anchored" data-anchor-id="bondad-del-ajuste-coeficiente-de-determinación"><span class="header-section-number">1.3.5</span> Bondad del ajuste: coeficiente de determinación</h3>
 <p>El coeficiente de determinación (<span class="math inline">\(R^2\)</span>) mide qué proporción de la variabilidad total en <span class="math inline">\(Y\)</span> es explicada por <span class="math inline">\(X\)</span> a través del modelo:</p>
 <p><span class="math display">\[
-R^2 = 1 - \frac{\text{Suma de los Cuadrados de los Residuos (\]</span>E)}}{} = . $$</p>
+R^2 = 1 - \frac{\text{Suma de los Cuadrados de los Residuos (SSE)}}{\text{Suma Total de los Cuadrados (SST)}}
+\]</span> <span class="math display">\[
+= \frac{\text{Suma de los Cuadrados del Modelo (SSR)}}{\text{Suma Total de los Cuadrados (SST)}}.
+\]</span></p>
 <p>Donde:</p>
 <ul>
-<li><span class="math inline">\(\text{$$T} = \sum_{i=1}^n (Y_i - \bar{Y})^2\)</span>: Variabilidad total en <span class="math inline">\(Y\)</span>.<br>
+<li><span class="math inline">\(\text{SST} = \sum_{i=1}^n (Y_i - \bar{Y})^2\)</span>: Variabilidad total en <span class="math inline">\(Y\)</span>.<br>
 </li>
-<li><span class="math inline">\(\text{$$R} = \sum_{i=1}^n (\hat{Y}_i - \bar{Y})^2\)</span>: Variabilidad explicada por el modelo.<br>
+<li><span class="math inline">\(\text{SSR} = \sum_{i=1}^n (\hat{Y}_i - \bar{Y})^2\)</span>: Variabilidad explicada por el modelo.<br>
 </li>
-<li><span class="math inline">\(\text{$$E} = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2\)</span>: Variabilidad no explicada.</li>
+<li><span class="math inline">\(\text{SSE} = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2\)</span>: Variabilidad no explicada.</li>
 </ul>
 <p>Un <span class="math inline">\(R^2\)</span> cercano a 1 indica que el modelo ajusta bien los datos, mientras que un <span class="math inline">\(R^2\)</span> cercano a 0 indica un ajuste pobre.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
@@ -1395,7 +1410,7 @@ Observaciones
 <div class="callout-body-container callout-body">
 <ul>
 <li><span class="math inline">\(R^2\)</span> debe ser interpretado con cautela, ya que resultará con frecuencia grande a pesar de que la relación entre <span class="math inline">\(X\)</span> e <span class="math inline">\(Y\)</span> no sea lineal.</li>
-<li>Ası́ por ejemplo, la magnitud d $R^2$2 depende del rango de variabilidad de la variable explicativa, <span class="math inline">\(X\)</span>. Siendo el modelo de regresión adecuado, la magnitud de <span class="math inline">\(R^2\)</span> aumenta (o disminuye) cuando lo hace la dispersión de <span class="math inline">\(X\)</span>.</li>
+<li>Ası́ por ejemplo, la magnitud de <span class="math inline">\(R^2\)</span> depende del rango de variabilidad de la variable explicativa, <span class="math inline">\(X\)</span>. Siendo el modelo de regresión adecuado, la magnitud de <span class="math inline">\(R^2\)</span> aumenta (o disminuye) cuando lo hace la dispersión de <span class="math inline">\(X\)</span>.</li>
 <li>Además <span class="math inline">\(R^2\)</span> podrı́a ser un valor muy pequeño debido a que el rango de variación de <span class="math inline">\(X\)</span> es demasiado pequeño e impide que se detecte la relación con <span class="math inline">\(Y\)</span>.</li>
 </ul>
 </div>
@@ -1486,22 +1501,22 @@ Ejemplo
 <div class="callout-body-container callout-body">
 <p>Estudiamos los residuos del ejemplo de calificaciones de estudiantes.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión lineal</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(calificaciones <span class="sc">~</span> tiempo_estudio)</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener los residuos</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>residuos <span class="ot">&lt;-</span> <span class="fu">resid</span>(modelo)</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Estudiar los residuos</span></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Gráfico de residuos vs. valores ajustados</span></span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>valores_ajustados <span class="ot">&lt;-</span> <span class="fu">fitted</span>(modelo)</span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(valores_ajustados, residuos,</span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Residuos vs Valores Ajustados"</span>,</span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Valores Ajustados"</span>,</span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Residuos"</span>,</span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"blue"</span>)</span>
-<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión lineal</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(calificaciones <span class="sc">~</span> tiempo_estudio)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener los residuos</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>residuos <span class="ot">&lt;-</span> <span class="fu">resid</span>(modelo)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Estudiar los residuos</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Gráfico de residuos vs. valores ajustados</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>valores_ajustados <span class="ot">&lt;-</span> <span class="fu">fitted</span>(modelo)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(valores_ajustados, residuos,</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Residuos vs Valores Ajustados"</span>,</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Valores Ajustados"</span>,</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Residuos"</span>,</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"blue"</span>)</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1509,11 +1524,11 @@ Ejemplo
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Histograma de los residuos</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(residuos,</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Histograma de Residuos"</span>,</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Residuos"</span>,</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">"lightblue"</span>, <span class="at">border =</span> <span class="st">"black"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Histograma de los residuos</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(residuos,</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Histograma de Residuos"</span>,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Residuos"</span>,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">"lightblue"</span>, <span class="at">border =</span> <span class="st">"black"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1521,9 +1536,9 @@ Ejemplo
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. QQ-Plot de residuos</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(residuos, <span class="at">main =</span> <span class="st">"QQ-Plot de los Residuos"</span>)</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(residuos, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. QQ-Plot de residuos</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(residuos, <span class="at">main =</span> <span class="st">"QQ-Plot de los Residuos"</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(residuos, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1531,13 +1546,13 @@ Ejemplo
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Pruebas de normalidad de los residuos</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>shapiro_test <span class="ot">&lt;-</span> <span class="fu">shapiro.test</span>(residuos)</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Prueba de Shapiro-Wilk para normalidad de los residuos:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Pruebas de normalidad de los residuos</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>shapiro_test <span class="ot">&lt;-</span> <span class="fu">shapiro.test</span>(residuos)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Prueba de Shapiro-Wilk para normalidad de los residuos:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Prueba de Shapiro-Wilk para normalidad de los residuos:</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(shapiro_test)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(shapiro_test)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Shapiro-Wilk normality test
@@ -1545,13 +1560,13 @@ Ejemplo
 data:  residuos
 W = 0.99008, p-value = 0.671</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Gráfico de residuos vs. tiempo de estudio</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(tiempo_estudio, residuos,</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Residuos vs Tiempo de Estudio"</span>,</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Tiempo de Estudio (horas/semana)"</span>,</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Residuos"</span>,</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"purple"</span>)</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Gráfico de residuos vs. tiempo de estudio</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(tiempo_estudio, residuos,</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Residuos vs Tiempo de Estudio"</span>,</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Tiempo de Estudio (horas/semana)"</span>,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Residuos"</span>,</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"purple"</span>)</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1586,21 +1601,21 @@ Ejemplo
 <div class="callout-body-container callout-body">
 <p>Estudiamos los residuos del ejemplo de calificaciones de estudiantes.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión lineal</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(calificaciones <span class="sc">~</span> tiempo_estudio)</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener los residuos</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>residuos <span class="ot">&lt;-</span> <span class="fu">resid</span>(modelo)</span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Estadísticas para diagnóstico</span></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Prueba de normalidad de los residuos (Shapiro-Wilk)</span></span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>shapiro_test <span class="ot">&lt;-</span> <span class="fu">shapiro.test</span>(residuos)</span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Prueba de Shapiro-Wilk para normalidad de los residuos:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión lineal</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(calificaciones <span class="sc">~</span> tiempo_estudio)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtener los residuos</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>residuos <span class="ot">&lt;-</span> <span class="fu">resid</span>(modelo)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Estadísticas para diagnóstico</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Prueba de normalidad de los residuos (Shapiro-Wilk)</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>shapiro_test <span class="ot">&lt;-</span> <span class="fu">shapiro.test</span>(residuos)</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Prueba de Shapiro-Wilk para normalidad de los residuos:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Prueba de Shapiro-Wilk para normalidad de los residuos:</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(shapiro_test)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(shapiro_test)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Shapiro-Wilk normality test
@@ -1608,8 +1623,8 @@ Ejemplo
 data:  residuos
 W = 0.99008, p-value = 0.671</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Prueba de homocedasticidad (Breusch-Pagan)</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Prueba de homocedasticidad (Breusch-Pagan)</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: zoo</code></pre>
 </div>
@@ -1622,13 +1637,13 @@ Attaching package: 'zoo'</code></pre>
 
     as.Date, as.Date.numeric</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>breusch_pagan <span class="ot">&lt;-</span> <span class="fu">bptest</span>(modelo)</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Prueba de Breusch-Pagan para homocedasticidad:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>breusch_pagan <span class="ot">&lt;-</span> <span class="fu">bptest</span>(modelo)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Prueba de Breusch-Pagan para homocedasticidad:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Prueba de Breusch-Pagan para homocedasticidad:</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(breusch_pagan)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(breusch_pagan)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     studentized Breusch-Pagan test
@@ -1636,14 +1651,14 @@ Prueba de Breusch-Pagan para homocedasticidad:</code></pre>
 data:  modelo
 BP = 0.019638, df = 1, p-value = 0.8886</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Estadística Durbin-Watson para autocorrelación de los residuos</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>durbin_watson <span class="ot">&lt;-</span> <span class="fu">dwtest</span>(modelo)</span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Prueba de Durbin-Watson para autocorrelación de los residuos:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Estadística Durbin-Watson para autocorrelación de los residuos</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>durbin_watson <span class="ot">&lt;-</span> <span class="fu">dwtest</span>(modelo)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Prueba de Durbin-Watson para autocorrelación de los residuos:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Prueba de Durbin-Watson para autocorrelación de los residuos:</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(durbin_watson)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(durbin_watson)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Durbin-Watson test
@@ -1710,25 +1725,25 @@ Ejemplo
 <div class="callout-body-container callout-body">
 <p>Estudiamos los valores de leverage del ejemplo de calificaciones de estudiantes.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión lineal</span></span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(calificaciones <span class="sc">~</span> tiempo_estudio)</span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular leverage</span></span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>leverage <span class="ot">&lt;-</span> <span class="fu">hatvalues</span>(modelo)</span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Umbral para leverage alto</span></span>
-<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">coef</span>(modelo))  <span class="co"># Número de parámetros (incluyendo el intercepto)</span></span>
-<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>leverage_threshold <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> p <span class="sc">/</span> n</span>
-<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Identificar observaciones con leverage alto</span></span>
-<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>leverage_high <span class="ot">&lt;-</span> <span class="fu">which</span>(leverage <span class="sc">&gt;</span> leverage_threshold)</span>
-<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Resultados</span></span>
-<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Valores de leverage:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión lineal</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(calificaciones <span class="sc">~</span> tiempo_estudio)</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular leverage</span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>leverage <span class="ot">&lt;-</span> <span class="fu">hatvalues</span>(modelo)</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Umbral para leverage alto</span></span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">coef</span>(modelo))  <span class="co"># Número de parámetros (incluyendo el intercepto)</span></span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>leverage_threshold <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> p <span class="sc">/</span> n</span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Identificar observaciones con leverage alto</span></span>
+<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a>leverage_high <span class="ot">&lt;-</span> <span class="fu">which</span>(leverage <span class="sc">&gt;</span> leverage_threshold)</span>
+<span id="cb54-13"><a href="#cb54-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-14"><a href="#cb54-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Resultados</span></span>
+<span id="cb54-15"><a href="#cb54-15" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Valores de leverage:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Valores de leverage:</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(leverage)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(leverage)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         1          2          3          4          5          6          7 
 0.01548204 0.02046914 0.01100581 0.02838063 0.03425201 0.03550447 0.01011261 
@@ -1761,29 +1776,29 @@ Ejemplo
         99        100 
 0.01013361 0.01002084 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Umbral para leverage alto:"</span>, leverage_threshold, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Umbral para leverage alto:"</span>, leverage_threshold, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Umbral para leverage alto: 0.04 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Observaciones con leverage alto (si las hay):</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Observaciones con leverage alto (si las hay):</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Observaciones con leverage alto (si las hay):</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(leverage_high)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(leverage_high)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>24 74 
 24 74 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de leverage</span></span>
-<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(leverage, </span>
-<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Leverage de las Observaciones"</span>,</span>
-<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Índice de Observación"</span>,</span>
-<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Leverage"</span>,</span>
-<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="fu">min</span>(leverage)<span class="sc">*</span>.<span class="dv">9</span>,<span class="fu">max</span>(leverage)<span class="sc">*</span><span class="fl">1.05</span>))</span>
-<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> leverage_threshold, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)  <span class="co"># Línea del umbral</span></span>
-<span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(leverage_high, leverage[leverage_high], <span class="at">labels =</span> leverage_high, <span class="at">pos =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de leverage</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(leverage, </span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Leverage de las Observaciones"</span>,</span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Índice de Observación"</span>,</span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Leverage"</span>,</span>
+<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="fu">min</span>(leverage)<span class="sc">*</span>.<span class="dv">9</span>,<span class="fu">max</span>(leverage)<span class="sc">*</span><span class="fl">1.05</span>))</span>
+<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> leverage_threshold, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)  <span class="co"># Línea del umbral</span></span>
+<span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(leverage_high, leverage[leverage_high], <span class="at">labels =</span> leverage_high, <span class="at">pos =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1815,50 +1830,50 @@ Ejemplo
 <div class="callout-body-container callout-body">
 <p>Estudiamos los valores de leverage del ejemplo de calificaciones de estudiantes.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión lineal</span></span>
-<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(calificaciones <span class="sc">~</span> tiempo_estudio)</span>
-<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Calcular Distancia de Cook</span></span>
-<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>cooks_distance <span class="ot">&lt;-</span> <span class="fu">cooks.distance</span>(modelo)</span>
-<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Calcular DFBETAS</span></span>
-<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a>dfbetas_values <span class="ot">&lt;-</span> <span class="fu">dfbetas</span>(modelo)</span>
-<span id="cb61-9"><a href="#cb61-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Calcular DFFITS</span></span>
-<span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a>dffits_values <span class="ot">&lt;-</span> <span class="fu">dffits</span>(modelo)</span>
-<span id="cb61-12"><a href="#cb61-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-13"><a href="#cb61-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Umbrales sugeridos</span></span>
-<span id="cb61-14"><a href="#cb61-14" aria-hidden="true" tabindex="-1"></a>cooks_threshold <span class="ot">&lt;-</span> <span class="dv">4</span> <span class="sc">/</span> n  <span class="co"># Umbral para Distancia de Cook</span></span>
-<span id="cb61-15"><a href="#cb61-15" aria-hidden="true" tabindex="-1"></a>dffits_threshold <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(<span class="fu">coef</span>(modelo)) <span class="sc">/</span> n)  <span class="co"># Umbral para DFFITS</span></span>
-<span id="cb61-16"><a href="#cb61-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-17"><a href="#cb61-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Resultados</span></span>
-<span id="cb61-18"><a href="#cb61-18" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Distancia de Cook (primeras 10 observaciones):</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión lineal</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(calificaciones <span class="sc">~</span> tiempo_estudio)</span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Calcular Distancia de Cook</span></span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>cooks_distance <span class="ot">&lt;-</span> <span class="fu">cooks.distance</span>(modelo)</span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Calcular DFBETAS</span></span>
+<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a>dfbetas_values <span class="ot">&lt;-</span> <span class="fu">dfbetas</span>(modelo)</span>
+<span id="cb65-9"><a href="#cb65-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-10"><a href="#cb65-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Calcular DFFITS</span></span>
+<span id="cb65-11"><a href="#cb65-11" aria-hidden="true" tabindex="-1"></a>dffits_values <span class="ot">&lt;-</span> <span class="fu">dffits</span>(modelo)</span>
+<span id="cb65-12"><a href="#cb65-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-13"><a href="#cb65-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Umbrales sugeridos</span></span>
+<span id="cb65-14"><a href="#cb65-14" aria-hidden="true" tabindex="-1"></a>cooks_threshold <span class="ot">&lt;-</span> <span class="dv">4</span> <span class="sc">/</span> n  <span class="co"># Umbral para Distancia de Cook</span></span>
+<span id="cb65-15"><a href="#cb65-15" aria-hidden="true" tabindex="-1"></a>dffits_threshold <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(<span class="fu">coef</span>(modelo)) <span class="sc">/</span> n)  <span class="co"># Umbral para DFFITS</span></span>
+<span id="cb65-16"><a href="#cb65-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-17"><a href="#cb65-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Resultados</span></span>
+<span id="cb65-18"><a href="#cb65-18" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Distancia de Cook (primeras 10 observaciones):</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Distancia de Cook (primeras 10 observaciones):</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(cooks_distance, <span class="dv">10</span>))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(cooks_distance, <span class="dv">10</span>))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           1            2            3            4            5            6 
 7.431009e-04 3.985310e-05 2.107588e-07 3.357548e-02 3.184641e-04 4.788575e-02 
            7            8            9           10 
 1.210846e-02 7.376917e-03 1.793360e-04 4.056442e-04 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Observaciones con Distancia de Cook alta (&gt; "</span>, cooks_threshold, <span class="st">"):</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Observaciones con Distancia de Cook alta (&gt; "</span>, cooks_threshold, <span class="st">"):</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Observaciones con Distancia de Cook alta (&gt;  0.04 ):</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">which</span>(cooks_distance <span class="sc">&gt;</span> cooks_threshold))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">which</span>(cooks_distance <span class="sc">&gt;</span> cooks_threshold))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> 6 20 47 85 87 89 
  6 20 47 85 87 89 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">DFBETAS (primeras 10 observaciones):</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">DFBETAS (primeras 10 observaciones):</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 DFBETAS (primeras 10 observaciones):</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(dfbetas_values, <span class="dv">10</span>))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(dfbetas_values, <span class="dv">10</span>))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     (Intercept) tiempo_estudio
 1   0.0333531373  -0.0228338026
@@ -1872,37 +1887,37 @@ DFBETAS (primeras 10 observaciones):</code></pre>
 9   0.0043259263   0.0034593203
 10  0.0150833337  -0.0040906772</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">DFFITS (primeras 10 observaciones):</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">DFFITS (primeras 10 observaciones):</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 DFFITS (primeras 10 observaciones):</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(dffits_values, <span class="dv">10</span>))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(dffits_values, <span class="dv">10</span>))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            1             2             3             4             5 
  0.0383726006  0.0088823393  0.0006459231  0.2608877009 -0.0251106446 
             6             7             8             9            10 
  0.3120568093 -0.1567290069  0.1211475166  0.0188450608  0.0283488066 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Observaciones con DFFITS alto (&gt; "</span>, dffits_threshold, <span class="st">"):</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Observaciones con DFFITS alto (&gt; "</span>, dffits_threshold, <span class="st">"):</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Observaciones con DFFITS alto (&gt;  0.2828427 ):</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">which</span>(<span class="fu">abs</span>(dffits_values) <span class="sc">&gt;</span> dffits_threshold))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">which</span>(<span class="fu">abs</span>(dffits_values) <span class="sc">&gt;</span> dffits_threshold))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> 6 20 22 47 85 87 89 
  6 20 22 47 85 87 89 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficar Distancia de Cook</span></span>
-<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cooks_distance,</span>
-<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Distancia de Cook"</span>,</span>
-<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Índice de Observación"</span>,</span>
-<span id="cb81-5"><a href="#cb81-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Distancia de Cook"</span>,</span>
-<span id="cb81-6"><a href="#cb81-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="fu">min</span>(cooks_distance)<span class="sc">*</span>.<span class="dv">9</span>,<span class="fu">max</span>(cooks_distance)<span class="sc">*</span><span class="fl">1.05</span>))</span>
-<span id="cb81-7"><a href="#cb81-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> cooks_threshold, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
-<span id="cb81-8"><a href="#cb81-8" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="fu">which</span>(cooks_distance <span class="sc">&gt;</span> cooks_threshold), cooks_distance[cooks_distance <span class="sc">&gt;</span> cooks_threshold],</span>
-<span id="cb81-9"><a href="#cb81-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">labels =</span> <span class="fu">which</span>(cooks_distance <span class="sc">&gt;</span> cooks_threshold), <span class="at">pos =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficar Distancia de Cook</span></span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cooks_distance,</span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Distancia de Cook"</span>,</span>
+<span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Índice de Observación"</span>,</span>
+<span id="cb85-5"><a href="#cb85-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Distancia de Cook"</span>,</span>
+<span id="cb85-6"><a href="#cb85-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="fu">min</span>(cooks_distance)<span class="sc">*</span>.<span class="dv">9</span>,<span class="fu">max</span>(cooks_distance)<span class="sc">*</span><span class="fl">1.05</span>))</span>
+<span id="cb85-7"><a href="#cb85-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> cooks_threshold, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb85-8"><a href="#cb85-8" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="fu">which</span>(cooks_distance <span class="sc">&gt;</span> cooks_threshold), cooks_distance[cooks_distance <span class="sc">&gt;</span> cooks_threshold],</span>
+<span id="cb85-9"><a href="#cb85-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">labels =</span> <span class="fu">which</span>(cooks_distance <span class="sc">&gt;</span> cooks_threshold), <span class="at">pos =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1910,15 +1925,15 @@ Observaciones con DFFITS alto (&gt;  0.2828427 ):</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficar DFFITS</span></span>
-<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dffits_values,</span>
-<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"DFFITS"</span>,</span>
-<span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Índice de Observación"</span>,</span>
-<span id="cb82-5"><a href="#cb82-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"DFFITS"</span>,</span>
-<span id="cb82-6"><a href="#cb82-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"green"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="fu">min</span>(dffits_values)<span class="sc">*</span>.<span class="dv">85</span>,<span class="fu">max</span>(dffits_values)<span class="sc">*</span><span class="fl">1.07</span>))</span>
-<span id="cb82-7"><a href="#cb82-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">c</span>(dffits_threshold, <span class="sc">-</span>dffits_threshold), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
-<span id="cb82-8"><a href="#cb82-8" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="fu">which</span>(<span class="fu">abs</span>(dffits_values) <span class="sc">&gt;</span> dffits_threshold), dffits_values[<span class="fu">abs</span>(dffits_values) <span class="sc">&gt;</span> dffits_threshold],</span>
-<span id="cb82-9"><a href="#cb82-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">labels =</span> <span class="fu">which</span>(<span class="fu">abs</span>(dffits_values) <span class="sc">&gt;</span> dffits_threshold), <span class="at">pos =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficar DFFITS</span></span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dffits_values,</span>
+<span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"DFFITS"</span>,</span>
+<span id="cb86-4"><a href="#cb86-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Índice de Observación"</span>,</span>
+<span id="cb86-5"><a href="#cb86-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"DFFITS"</span>,</span>
+<span id="cb86-6"><a href="#cb86-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"green"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="fu">min</span>(dffits_values)<span class="sc">*</span>.<span class="dv">85</span>,<span class="fu">max</span>(dffits_values)<span class="sc">*</span><span class="fl">1.07</span>))</span>
+<span id="cb86-7"><a href="#cb86-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">c</span>(dffits_threshold, <span class="sc">-</span>dffits_threshold), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb86-8"><a href="#cb86-8" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="fu">which</span>(<span class="fu">abs</span>(dffits_values) <span class="sc">&gt;</span> dffits_threshold), dffits_values[<span class="fu">abs</span>(dffits_values) <span class="sc">&gt;</span> dffits_threshold],</span>
+<span id="cb86-9"><a href="#cb86-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">labels =</span> <span class="fu">which</span>(<span class="fu">abs</span>(dffits_values) <span class="sc">&gt;</span> dffits_threshold), <span class="at">pos =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1991,34 +2006,34 @@ Ejemplo
 <div class="callout-body-container callout-body">
 <p>Generamos nuevos datos para regresión lineal múltiple.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generar dos nuevas variables explicativas</span></span>
-<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Establecer la semilla para reproducibilidad</span></span>
-<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Generar datos base</span></span>
-<span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb83-7"><a href="#cb83-7" aria-hidden="true" tabindex="-1"></a>tiempo_estudio <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">runif</span>(n, <span class="at">min =</span> <span class="dv">5</span>, <span class="at">max =</span> <span class="dv">40</span>), <span class="dv">1</span>)  <span class="co"># Tiempo de estudio (horas/semana)</span></span>
-<span id="cb83-8"><a href="#cb83-8" aria-hidden="true" tabindex="-1"></a>beta_0_true <span class="ot">&lt;-</span> <span class="dv">5</span>  <span class="co"># Intercepto verdadero</span></span>
-<span id="cb83-9"><a href="#cb83-9" aria-hidden="true" tabindex="-1"></a>beta_1_true <span class="ot">&lt;-</span> <span class="fl">0.1</span>  <span class="co"># Pendiente verdadera</span></span>
-<span id="cb83-10"><a href="#cb83-10" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fl">0.5</span>  <span class="co"># Desviación estándar del ruido</span></span>
-<span id="cb83-11"><a href="#cb83-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb83-12"><a href="#cb83-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Generar calificaciones dependientes del tiempo de estudio con ruido</span></span>
-<span id="cb83-13"><a href="#cb83-13" aria-hidden="true" tabindex="-1"></a>calificaciones <span class="ot">&lt;-</span> <span class="fu">round</span>(beta_0_true <span class="sc">+</span> beta_1_true <span class="sc">*</span> tiempo_estudio <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> sigma), <span class="dv">2</span>)</span>
-<span id="cb83-14"><a href="#cb83-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb83-15"><a href="#cb83-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb83-16"><a href="#cb83-16" aria-hidden="true" tabindex="-1"></a>distraccion <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">size =</span> n, <span class="at">replace =</span> <span class="cn">TRUE</span>)  <span class="co"># Nivel de distracción (0 bajo, 1 alto)</span></span>
-<span id="cb83-17"><a href="#cb83-17" aria-hidden="true" tabindex="-1"></a>interacciones_clase <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">20</span>, <span class="at">size =</span> n, <span class="at">replace =</span> <span class="cn">TRUE</span>)  <span class="co"># Interacciones en clase</span></span>
-<span id="cb83-18"><a href="#cb83-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb83-19"><a href="#cb83-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear un data frame</span></span>
-<span id="cb83-20"><a href="#cb83-20" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb83-21"><a href="#cb83-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">Tiempo_Estudio =</span> tiempo_estudio,</span>
-<span id="cb83-22"><a href="#cb83-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">Distraccion =</span> distraccion,</span>
-<span id="cb83-23"><a href="#cb83-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">Interacciones_Clase =</span> interacciones_clase,</span>
-<span id="cb83-24"><a href="#cb83-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">Calificaciones =</span> calificaciones</span>
-<span id="cb83-25"><a href="#cb83-25" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb83-26"><a href="#cb83-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb83-27"><a href="#cb83-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar los primeros registros</span></span>
-<span id="cb83-28"><a href="#cb83-28" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(datos)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generar dos nuevas variables explicativas</span></span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Establecer la semilla para reproducibilidad</span></span>
+<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb87-4"><a href="#cb87-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb87-5"><a href="#cb87-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Generar datos base</span></span>
+<span id="cb87-6"><a href="#cb87-6" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb87-7"><a href="#cb87-7" aria-hidden="true" tabindex="-1"></a>tiempo_estudio <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">runif</span>(n, <span class="at">min =</span> <span class="dv">5</span>, <span class="at">max =</span> <span class="dv">40</span>), <span class="dv">1</span>)  <span class="co"># Tiempo de estudio (horas/semana)</span></span>
+<span id="cb87-8"><a href="#cb87-8" aria-hidden="true" tabindex="-1"></a>beta_0_true <span class="ot">&lt;-</span> <span class="dv">5</span>  <span class="co"># Intercepto verdadero</span></span>
+<span id="cb87-9"><a href="#cb87-9" aria-hidden="true" tabindex="-1"></a>beta_1_true <span class="ot">&lt;-</span> <span class="fl">0.1</span>  <span class="co"># Pendiente verdadera</span></span>
+<span id="cb87-10"><a href="#cb87-10" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fl">0.5</span>  <span class="co"># Desviación estándar del ruido</span></span>
+<span id="cb87-11"><a href="#cb87-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb87-12"><a href="#cb87-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Generar calificaciones dependientes del tiempo de estudio con ruido</span></span>
+<span id="cb87-13"><a href="#cb87-13" aria-hidden="true" tabindex="-1"></a>calificaciones <span class="ot">&lt;-</span> <span class="fu">round</span>(beta_0_true <span class="sc">+</span> beta_1_true <span class="sc">*</span> tiempo_estudio <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> sigma), <span class="dv">2</span>)</span>
+<span id="cb87-14"><a href="#cb87-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb87-15"><a href="#cb87-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb87-16"><a href="#cb87-16" aria-hidden="true" tabindex="-1"></a>distraccion <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">size =</span> n, <span class="at">replace =</span> <span class="cn">TRUE</span>)  <span class="co"># Nivel de distracción (0 bajo, 1 alto)</span></span>
+<span id="cb87-17"><a href="#cb87-17" aria-hidden="true" tabindex="-1"></a>interacciones_clase <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">20</span>, <span class="at">size =</span> n, <span class="at">replace =</span> <span class="cn">TRUE</span>)  <span class="co"># Interacciones en clase</span></span>
+<span id="cb87-18"><a href="#cb87-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb87-19"><a href="#cb87-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear un data frame</span></span>
+<span id="cb87-20"><a href="#cb87-20" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb87-21"><a href="#cb87-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">Tiempo_Estudio =</span> tiempo_estudio,</span>
+<span id="cb87-22"><a href="#cb87-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">Distraccion =</span> distraccion,</span>
+<span id="cb87-23"><a href="#cb87-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">Interacciones_Clase =</span> interacciones_clase,</span>
+<span id="cb87-24"><a href="#cb87-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">Calificaciones =</span> calificaciones</span>
+<span id="cb87-25"><a href="#cb87-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb87-26"><a href="#cb87-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb87-27"><a href="#cb87-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar los primeros registros</span></span>
+<span id="cb87-28"><a href="#cb87-28" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(datos)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Tiempo_Estudio Distraccion Interacciones_Clase Calificaciones
 1           15.1           1                  14           6.64
@@ -2163,9 +2178,9 @@ Para recordar
 <h3 data-number="1.4.3" class="anchored" data-anchor-id="varianza-del-error"><span class="header-section-number">1.4.3</span> Varianza del error</h3>
 <p>La varianza de los errores (<span class="math inline">\(\sigma^2\)</span>) mide cuánto varían las observaciones reales (<span class="math inline">\(Y_i\)</span>) con respecto a los valores predichos por el modelo (<span class="math inline">\(\hat{Y}_i\)</span>). En el modelo de regresión múltiple, esta varianza puede ser estimada utilizando la <strong>suma de los cuadrados de los residuos ($$E)</strong>.</p>
 <p>La estimación de <span class="math inline">\(\sigma^2\)</span>, denotada como <span class="math inline">\(\hat{\sigma}^2\)</span>, se calcula como: <span class="math display">\[
-\hat{\sigma}^2 = \frac{\text{\]</span>E}}{n - p - 1}, $$ donde:</p>
+\hat{\sigma}^2 = \frac{\text{SSE}}{n - p - 1}, \]</span> donde:</p>
 <ul>
-<li><span class="math inline">\(\text{$$E} = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2 = \mathbf{e}^\top \mathbf{e}\)</span> es la suma de los cuadrados de los residuos.</li>
+<li><span class="math inline">\(\text{SSE} = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2 = \mathbf{e}^\top \mathbf{e}\)</span> es la suma de los cuadrados de los residuos.</li>
 <li><span class="math inline">\(\mathbf{e} = \mathbf{Y} - \hat{\mathbf{Y}} = \mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}}\)</span> es el vector de residuos.</li>
 </ul>
 <p>La cantidad <span class="math inline">\(n - p - 1\)</span> es conocida como los <strong>grados de libertad residuales</strong>, que reflejan el número de datos disponibles para estimar la varianza de los errores después de ajustar los parámetros del modelo.</p>
@@ -2259,7 +2274,11 @@ t_j=\frac{\hat{\beta_j}-\beta_j}{\sqrt{\hat{\sigma^2}C_{jj}}} \hspace{0.5cm} j=0
 </tr>
 </tbody>
 </table>
-<p>La hipótesis del test F global es: - <span class="math inline">\(H_0: \beta_1 = \beta_2 = \dots = \beta_p = 0\)</span> (el modelo no es significativo), - <span class="math inline">\(H_1:\)</span> al menos uno de los <span class="math inline">\(\beta_j \neq 0\)</span>.</p>
+<p>La hipótesis del test F global es:</p>
+<ul>
+<li><span class="math inline">\(H_0: \beta_1 = \beta_2 = \dots = \beta_p = 0\)</span> (el modelo no es significativo),</li>
+<li><span class="math inline">\(H_1:\)</span> al menos uno de los <span class="math inline">\(\beta_j \neq 0\)</span>.</li>
+</ul>
 <p>El estadístico F se calcula como: <span class="math display">\[
 F = \frac{\text{SSR}/p}{\text{SSE}/(n-p-1)}=\frac{MSR}{MSE}.
 \]</span> Se compara con un valor crítico de la distribución <span class="math inline">\(F_{p, n-p-1}\)</span>. Si <span class="math inline">\(F\)</span> es grande o el valor <span class="math inline">\(p\)</span> asociado es pequeño, se rechaza <span class="math inline">\(H_0\)</span>.</p>
@@ -2281,7 +2300,8 @@ R^2 = \frac{\text{SSR}}{\text{SST}}.
 </ul>
 <p>El estadístico <span class="math inline">\(t\)</span> para cada <span class="math inline">\(\beta_j\)</span> se calcula como: <span class="math display">\[
 t_j = \frac{\hat{\beta}_j}{\text{SE}(\hat{\beta}_j)},
-\]</span> donde <span class="math inline">\(\text{SE}(\hat{\beta}_j)\)</span> es el error estándar del coeficiente. Este estadístico sigue una distribución <span class="math inline">\(t_{n-p-1}\)</span>.</p>
+\]</span></p>
+<p>donde <span class="math inline">\(\text{SE}(\hat{\beta}_j)\)</span> es el error estándar del coeficiente. Este estadístico sigue una distribución <span class="math inline">\(t_{n-p-1}\)</span>.</p>
 <p>Se compara <span class="math inline">\(|t_j|\)</span> con el valor crítico de <span class="math inline">\(t\)</span> para un nivel de significancia <span class="math inline">\(\alpha\)</span>, o se evalúa el valor <span class="math inline">\(p\)</span>. Si <span class="math inline">\(|t_j|\)</span> es suficientemente grande (o <span class="math inline">\(p\)</span> es pequeño), se rechaza <span class="math inline">\(H_0\)</span>, indicando que <span class="math inline">\(X_j\)</span> contribuye significativamente al modelo.</p>
 <p>El test sobre los coeficientes individuales permite identificar qué variables son más importantes en la explicación de la variabilidad de la variable respuesta, ajustando por las demás. Esto ayuda a interpretar y refinar el modelo.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
@@ -2298,11 +2318,11 @@ Ejemplo
 <div class="callout-body-container callout-body">
 <p>Para los datos de calificaciones y tiempo de estudio, estos son los estimadores de los parámetros del modelo de regresión:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión lineal</span></span>
-<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>modelo_regresion <span class="ot">&lt;-</span> <span class="fu">lm</span>(Calificaciones <span class="sc">~</span> Tiempo_Estudio <span class="sc">+</span> Distraccion <span class="sc">+</span> Interacciones_Clase, <span class="at">data =</span> datos)</span>
-<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar los resultados del modelo</span></span>
-<span id="cb85-5"><a href="#cb85-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_regresion)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión lineal</span></span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>modelo_regresion <span class="ot">&lt;-</span> <span class="fu">lm</span>(Calificaciones <span class="sc">~</span> Tiempo_Estudio <span class="sc">+</span> Distraccion <span class="sc">+</span> Interacciones_Clase, <span class="at">data =</span> datos)</span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-4"><a href="#cb89-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar los resultados del modelo</span></span>
+<span id="cb89-5"><a href="#cb89-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_regresion)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -2769,8 +2789,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./conclusiones.html" class="pagination-link" aria-label="Conclusiones">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Conclusiones</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./tema2.html" class="pagination-link" aria-label="Métodos de selección de variables y problemas de regularización">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Métodos de selección de variables y problemas de regularización</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

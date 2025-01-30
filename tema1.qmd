@@ -23,17 +23,16 @@ fundamentales, como el ajuste de una recta mediante el criterio de
 mínimos cuadrados y la interpretación de sus parámetros, pero difieren
 en su alcance y en los retos que presentan.
 
-En este tema, abordaremos los fundamentos de la regresión lineal
-simple, incluyendo sus suposiciones clave, el procedimiento de
-estimación de parámetros y el uso de herramientas de diagnóstico. A
-través de ejemplos prácticos, como los estudios clásicos de Galton sobre
-la herencia de estaturas o el análisis de datos de inversión en
-publicidad, se ilustrará el poder descriptivo y predictivo de este
-modelo.
+En este tema, abordaremos los fundamentos de la regresión lineal simple,
+incluyendo sus suposiciones clave, el procedimiento de estimación de
+parámetros y el uso de herramientas de diagnóstico. A través de ejemplos
+prácticos, como los estudios clásicos de Galton sobre la herencia de
+estaturas o el análisis de datos de inversión en publicidad, se
+ilustrará el poder descriptivo y predictivo de este modelo.
 
 Este tema también prepara las bases para comprender el modelo de
-regresión lineal múltiple, presentado como una generalización del simple,
-y para abordar las complejidades adicionales que surgen, como la
+regresión lineal múltiple, presentado como una generalización del
+simple, y para abordar las complejidades adicionales que surgen, como la
 colinealidad entre variables explicativas y la selección de modelos
 óptimos.
 
@@ -436,13 +435,6 @@ $$
 r(X, Y) = \frac{\text{Cov}(X, Y)}{\sigma_X \cdot \sigma_Y}
 $$
 
-**Valores de** $r$:
-
--   $r = 1$: Correlación perfectamente positiva (todos los puntos caen
-    en una línea recta creciente).\
--   $r = -1$: Correlación perfectamente negativa (todos los puntos caen
-    en una línea recta decreciente).\
--   $r = 0$: Ausencia de correlación lineal.
 
 El coeficiente de correlación es adimensional y toma valores entre $-1$
 y $1$, facilitando su interpretación sin importar las unidades de las
@@ -586,12 +578,13 @@ supuestos sobre los datos y el término de error $\varepsilon$:
 
 Cuando el objetivo no es sólo estimar la recta, sino inferir con ella,
 entonces se asume una hipótesis más: la normalidad de la variable
-respuesta, o lo que es lo mismo, del error aleatorio: 4. **Normalidad:**
-Los términos de error $\varepsilon$ siguen una distribución normal con
-media cero y varianza constante:\
-$$
-    \varepsilon_i \overset{\mathrm{iid}}{\sim} N(0, \sigma^2) , \hspace{0.5cm} i=1,\ldots,n
+respuesta, o lo que es lo mismo, del error aleatorio:
+
+4.  **Normalidad:** Los términos de error $\varepsilon$ siguen una
+    distribución normal con media cero y varianza constante:\
     $$
+        \varepsilon_i \overset{\mathrm{iid}}{\sim} N(0, \sigma^2) , \hspace{0.5cm} i=1,\ldots,n
+        $$
 
 Estos supuestos son esenciales para garantizar la validez de las
 estimaciones y conclusiones derivadas del modelo.
@@ -644,36 +637,66 @@ errores cuadráticos (residuos) entre los valores observados de $Y$ y los
 valores predichos ($\hat{Y}$):
 
 $$
-\text{$$E} = \sum*{i=1}\^n e_i\^2 =*\sum{i=1}\^{n} (Y_i - \hat{Y}*i)\^2
-=* \sum{i=1}\^{n} \left(Y_i - (\hat{\beta_0} + \hat{\beta_1}
-X_i)\right)\^2. \$\$
+\text{SSE} = \sum_{i=1}^n e_i^2 =\sum_{i=1}^{n} (Y_i - \hat{Y}_i)^2
+= \sum_{i=1}^{n} \left(Y_i - (\hat{\beta_0} + \hat{\beta_1}
+X_i)\right)^2. 
+$$
 
-::: {.callout-note title="Minimización de $$E" collapse="true"}
+::: {.callout-note title="Minimización de SSE" collapse="true"}
 La obtención de los estimadores de mínimos cuadrados para la regresión
 lineal simple se basa en minimizar la suma de los cuadrados de los
-residuos (\$\$$E$). Aquí está el proceso paso a paso:
+residuos ($SSE$). Aquí está el proceso paso a paso:
 
-Para minimizar \$\$$E$, derivamos parcialmente con respecto a $\beta_0$
-y $\beta_1$ y resolvemos el sistema de ecuaciones.
+Para minimizar $SSE$, derivamos parcialmente con respecto a $\beta_0$ y
+$\beta_1$ y resolvemos el sistema de ecuaciones.
 
-1.  **Primera derivada con respecto a** $\beta_0$: $$
-    \frac{\partial $$E}{\partial \beta*0} = -2* \sum{i=1}\^n \left(Y_i -
-    (\beta\_0 + \beta*1 X_i)*\right). $$ Igualando a cero: $$
-    \sum{i=1}\^n \left(Y_i - \beta\_0 - \beta\_1 X_i\right) = 0. \$\$
+1.  **Primera derivada con respecto a** $\beta_0$:
 
-    Reordenando: $$
+$$
+    \frac{\partial SSE}{\partial \beta_0} = -2\sum_{i=1}^n
+    \left(Y_i - (\beta_0 + \beta_1 X_i)\right).
+  $$
+
+```         
+Igualando a cero: 
+```
+
+$$ 
+    \sum_{i=1}^n \left(Y_i - \beta_0 - \beta_1
+    X_i\right) = 0. 
+  $$
+
+```         
+Reordenando: 
+```
+
+$$
     n\beta_0 + \beta_1 \sum_{i=1}^n X_i = \sum_{i=1}^n Y_i. \tag{1}
+  $$
+
+2.  **Primera derivada con respecto a** $\beta_1$:
+
+$$
+    \frac{\partial SSE}{\partial \beta_1} = -2\sum_{i=1}^n X_i
+    \left(Y_i - (\beta_0 + \beta_1 X_i)\right).
     $$
 
-2.  **Primera derivada con respecto a** $\beta_1$: $$
-    \frac{\partial $$E}{\partial \beta*1} = -2* \sum{i=1}\^n X_i
-    \left(Y_i - (\beta\_0 + \beta*1 X_i)*\right).
-    $$ Igualando a cero: $$ \sum{i=1}\^n X_i \left(Y_i - \beta\_0 -
-    \beta\_1 X_i\right) = 0. \$\$
+```         
+Igualando a cero: 
+```
 
-    Reordenando: $$
+$$ 
+    \sum_{i=1}^n X_i \left(Y_i - \beta_0 -
+    \beta_1 X_i\right) = 0. 
+   $$
+
+```         
+Reordenando: 
+```
+
+$$
     \beta_0 \sum_{i=1}^n X_i + \beta_1 \sum_{i=1}^n X_i^2 = \sum_{i=1}^n X_i Y_i. \tag{2}
-    $$
+   $$
 
 **Resolución del Sistema de Ecuaciones**
 
@@ -715,7 +738,8 @@ Resolviendo para $\beta_0$ y $\beta_1$:
     $$ donde $\bar{X}$ y $\bar{Y}$ son las medias de $X$ y $Y$.
 :::
 
-Las fórmulas para los estimadores de mínimos cuadrados son:\
+Las fórmulas para los estimadores de mínimos cuadrados son:
+
 $$
 \hat{\beta}_1 = \frac{\text{Cov}(X, Y)}{\text{Var}(X)} = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{\sum_{i=1}^n (X_i - \bar{X})^2},
 $$ $$
@@ -762,8 +786,8 @@ cuadrados y del modelo de regresión ajustado.
     $$ donde $\sigma^2$ es la varianza del error $\varepsilon$. En la
     práctica, como $\sigma^2$ no se conoce, se estima con la varianza
     residual ($\hat{\sigma}^2$): $$
-    \hat{\sigma}^2=\frac{$$E}{n-2},
-    $$ siendo $$$E=\sum_{i=1}^{n}(Y_i-\hat{Y_i})^2$, la suma de los
+    \hat{\sigma}^2=\frac{SSE}{n-2},
+    $$ siendo $SSE=\sum_{i=1}^{n}(Y_i-\hat{Y_i})^2$, la suma de los
     cuadrados de los residos y $n-2$ los grados de libertad (por estimar
     dos parámetros). De modo que:
 
@@ -942,47 +966,50 @@ la asignatura de Inferencia.
 
 #### Variabilidad total
 
-La variabilidad total de$Y$ se mide mediante la \*\*Suma Total de los
-Cuadrados ($$T)**:\
-$$ $$T = \sum_{i=1}^n (Y_i - \bar{Y})^2,
-$$\
-donde $\bar{Y}$ es la media de $Y$. \$\$$T$ refleja la dispersión
-general de $Y$ respecto a su media.
+La variabilidad total de$Y$ se mide mediante la **Suma Total de los
+Cuadrados (SST)**:
+
+$$ SST = \sum_{i=1}^n (Y_i - \bar{Y})^2,
+$$
+
+donde $\bar{Y}$ es la media de $Y$. $SST$ refleja la dispersión general
+de $Y$ respecto a su media.
 
 **Descomposición de la variabilidad**
 
-El modelo de regresión lineal permite descomponer$$$T$ en dos
-componentes principales:\
-$$ $$T = $$R + $$E,
+El modelo de regresión lineal permite descomponer$SST$ en dos
+componentes principales:
+
+$$ SST = SSR + SSE,
 $$\
 donde:
 
--   $$$R$ (Suma de los Cuadrados del Modelo): Representa la variabilidad
+-   $SSR$ (Suma de los Cuadrados del Modelo): Representa la variabilidad
     explicada por la regresión, es decir, la parte de $Y$ que se puede
     predecir a partir de $X$:\
-    $$ $$R = \sum_{i=1}^n (\hat{Y}_i - \bar{Y})^2,
+    $$ SSR = \sum_{i=1}^n (\hat{Y}_i - \bar{Y})^2,
      $$ donde $\hat{Y}_i$ es el valor predicho por el modelo para el
     $i$-ésimo dato.
 
--   $$$E$ (Suma de los Cuadrados de los Errores): Como hemos visto al
+-   $SSE$ (Suma de los Cuadrados de los Errores): Como hemos visto al
     inicio de esta sección, representa la variabilidad no explicada por
     el modelo, es decir, la dispersión de los valores observados
     respecto a los valores predichos:\
-    $$ $$E = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2.
+    $$ SSE = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2.
      $$
 
 #### Tabla ANOVA
 
 El análisis de varianza organiza la descomposición de la varianza en una
 tabla, donde cada componente se asocia con sus grados de libertad
-($df$), suma de cuadrados (\$\$\$$), media cuadrática ($MS\$) y el
+($df$), suma de cuadrados ($SS$), media cuadrática ($MS$) y el
 estadístico $F$:
 
-| Fuente    | $df$  | \$$$$  | $MS = $$/df\$     | Estadístico$F$ |     |
-|-----------|-------|----------------------------|----------------|-----|
-| Regresión | 1     | $$$R$ | $MSR = $$R/1\$     | $F = MSR/MSE$  |     |
-| Error     | $n-2$ | $$$E$ | $MSE = $$E/(n-2)\$ |                |     |
-| Total     | $n-1$ | \$\$$T$                    |                |     |
+| Fuente    | $df$  | $SS$  | $MS = SS/df$      | Estadístico$F$ |
+|-----------|-------|-------|-------------------|----------------|
+| Regresión | 1     | $SSR$ | $MSR = SSR/1$     | $F = MSR/MSE$  |
+| Error     | $n-2$ | $SSE$ | $MSE = SSE/(n-2)$ |                |
+| Total     | $n-1$ | $SST$ |                   |                |
 
 #### Prueba de significancia global
 
@@ -1029,18 +1056,20 @@ El coeficiente de determinación ($R^2$) mide qué proporción de la
 variabilidad total en $Y$ es explicada por $X$ a través del modelo:
 
 $$
-R^2 = 1 - \frac{\text{Suma de los Cuadrados de los Residuos ($$E)}}{\text{Suma Total de los Cuadrados ($$T)}}
-=
-\frac{\text{Suma de los Cuadrados del Modelo ($$R)}}{\text{Suma Total de los Cuadrados ($$T)}}.
-\$\$
+R^2 = 1 - \frac{\text{Suma de los Cuadrados de los Residuos (SSE)}}{\text{Suma Total de los Cuadrados (SST)}}
+$$
+$$
+= \frac{\text{Suma de los Cuadrados del Modelo (SSR)}}{\text{Suma Total de los Cuadrados (SST)}}.
+$$
+
 
 Donde:
 
--   $\text{$$T} = \sum_{i=1}^n (Y_i - \bar{Y})^2$: Variabilidad total en
+-   $\text{SST} = \sum_{i=1}^n (Y_i - \bar{Y})^2$: Variabilidad total en
     $Y$.\
--   $\text{$$R} = \sum_{i=1}^n (\hat{Y}_i - \bar{Y})^2$: Variabilidad
+-   $\text{SSR} = \sum_{i=1}^n (\hat{Y}_i - \bar{Y})^2$: Variabilidad
     explicada por el modelo.\
--   $\text{$$E} = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2$: Variabilidad no
+-   $\text{SSE} = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2$: Variabilidad no
     explicada.
 
 Un $R^2$ cercano a 1 indica que el modelo ajusta bien los datos,
@@ -1056,7 +1085,7 @@ obtenido en este modelo?
 -   $R^2$ debe ser interpretado con cautela, ya que resultará con
     frecuencia grande a pesar de que la relación entre $X$ e $Y$ no sea
     lineal.
--   Ası́ por ejemplo, la magnitud d \$R\^2\$2 depende del rango de
+-   Ası́ por ejemplo, la magnitud de $R^2$ depende del rango de
     variabilidad de la variable explicativa, $X$. Siendo el modelo de
     regresión adecuado, la magnitud de $R^2$ aumenta (o disminuye)
     cuando lo hace la dispersión de $X$.
@@ -1817,9 +1846,9 @@ puede ser estimada utilizando la **suma de los cuadrados de los residuos
 
 La estimación de $\sigma^2$, denotada como $\hat{\sigma}^2$, se calcula
 como: $$
-\hat{\sigma}^2 = \frac{\text{$$E}}{n - p - 1}, \$\$ donde:
+\hat{\sigma}^2 = \frac{\text{SSE}}{n - p - 1}, $$ donde:
 
--   $\text{$$E} = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2 = \mathbf{e}^\top \mathbf{e}$
+-   $\text{SSE} = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2 = \mathbf{e}^\top \mathbf{e}$
     es la suma de los cuadrados de los residuos.
 -   $\mathbf{e} = \mathbf{Y} - \hat{\mathbf{Y}} = \mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}}$
     es el vector de residuos.
@@ -1922,14 +1951,16 @@ Los términos involucrados son:
 La tabla ANOVA incluye los siguientes elementos:
 
 | Fuente de Variación | Suma de Cuadrados | Grados de Libertad | Cuadrados Medios | Estadístico F |
-|---------------|---------------|---------------|---------------|---------------|
+|----|----|----|----|----|
 | Modelo | $\text{SSR}$ | $p$ | $MSR=\text{SSR}/p$ | $F = \frac{\text{SCM}/p}{\text{SCR}/(n-p-1)}$ |
 | Residuos | $\text{SSE}$ | $n-p-1$ | $MSE=\text{SSE}/(n-p-1)$ |  |
 | Total | $\text{SST}$ | $n-1$ |  |  |
 
-La hipótesis del test F global es: -
-$H_0: \beta_1 = \beta_2 = \dots = \beta_p = 0$ (el modelo no es
-significativo), - $H_1:$ al menos uno de los $\beta_j \neq 0$.
+La hipótesis del test F global es:
+
+-   $H_0: \beta_1 = \beta_2 = \dots = \beta_p = 0$ (el modelo no es
+    significativo),
+-   $H_1:$ al menos uno de los $\beta_j \neq 0$.
 
 El estadístico F se calcula como: $$
 F = \frac{\text{SSR}/p}{\text{SSE}/(n-p-1)}=\frac{MSR}{MSE}.
@@ -1955,13 +1986,16 @@ las demás.
 
 Para cada coeficiente $\beta_j$:
 
--   $H_0: \beta_j = 0$ (la variable $X_j$ no contribuye al modelo),
--   $H_1: \beta_j \neq 0$ (la variable $X_j$ tiene un efecto
+  - $H_0: \beta_j = 0$ (la variable $X_j$ no contribuye al modelo),
+  - $H_1: \beta_j \neq 0$ (la variable $X_j$ tiene un efecto
     significativo).
 
-El estadístico $t$ para cada $\beta_j$ se calcula como: $$
+El estadístico $t$ para cada $\beta_j$ se calcula como: 
+$$
 t_j = \frac{\hat{\beta}_j}{\text{SE}(\hat{\beta}_j)},
-$$ donde $\text{SE}(\hat{\beta}_j)$ es el error estándar del
+$$ 
+
+donde $\text{SE}(\hat{\beta}_j)$ es el error estándar del
 coeficiente. Este estadístico sigue una distribución $t_{n-p-1}$.
 
 Se compara $|t_j|$ con el valor crítico de $t$ para un nivel de

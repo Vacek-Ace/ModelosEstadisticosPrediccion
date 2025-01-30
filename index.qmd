@@ -15,20 +15,19 @@ Esperamos que este libro sea una guía útil y enriquecedora en tu viaje por el 
 ::: {.callout-caution collapse="true"}
 ## Resultados de aprendizaje.
 
-1. Que los estudiantes hayan demostrado poseer y comprender conocimientos en un área de estudio que parte de la base de la educación secundaria general, y se suele encontrar a un nivel que, si bien se apoya en libros de texto avanzados, incluye también algunos aspectos que implican conocimientos procedentes de la vanguardia de su campo de estudio.
+1.  Que los estudiantes hayan demostrado poseer y comprender conocimientos en un área de estudio que parte de la base de la educación secundaria general, y se suele encontrar a un nivel que, si bien se apoya en libros de texto avanzados, incluye también algunos aspectos que implican conocimientos procedentes de la vanguardia de su campo de estudio.
 
-2. Que los estudiantes hayan desarrollado aquellas habilidades de aprendizaje necesarias para emprender estudios posteriores con un alto grado de autonomía.
+2.  Que los estudiantes hayan desarrollado aquellas habilidades de aprendizaje necesarias para emprender estudios posteriores con un alto grado de autonomía.
 
-3. Comprender y utilizar materias, modelos y herramientas en el ámbito de la ciencia e ingeniería de datos que permitan comprender los problemas científico-técnicos fundamentales en este campo, así como evaluar las ventajas e inconvenientes de diferentes alternativas metodológicas.
+3.  Comprender y utilizar materias, modelos y herramientas en el ámbito de la ciencia e ingeniería de datos que permitan comprender los problemas científico-técnicos fundamentales en este campo, así como evaluar las ventajas e inconvenientes de diferentes alternativas metodológicas.
 
-4. Resolver problemas con iniciativa y creatividad.
+4.  Resolver problemas con iniciativa y creatividad.
 
-5. Tomar decisiones de forma autónoma, elaborando de forma adecuada y original, argumentos razonados, pudiendo obtener así hipótesis razonables y contrastables y derivando conclusiones apropiadas.
+5.  Tomar decisiones de forma autónoma, elaborando de forma adecuada y original, argumentos razonados, pudiendo obtener así hipótesis razonables y contrastables y derivando conclusiones apropiadas.
 
-6. Modelar la dependencia entre una variable respuesta y varias variables explicativas, en conjuntos de datos complejos, mediante técnicas de estadística avanzada (incluyendo métodos de regresión, inferencia bayesiana, etc.) y métodos de aprendizaje automático, evaluando e interpretando los resultados obtenidos.
+6.  Modelar la dependencia entre una variable respuesta y varias variables explicativas, en conjuntos de datos complejos, mediante técnicas de estadística avanzada (incluyendo métodos de regresión, inferencia bayesiana, etc.) y métodos de aprendizaje automático, evaluando e interpretando los resultados obtenidos.
 
-7. Emplear distintas técnicas de modelado de datos, análisis de datos y aprendizaje automático: elegir y emplear técnicas adecuadas, evaluando la calidad de los modelos, validándolos, interpretándolos y proponiendo mejoras.
-
+7.  Emplear distintas técnicas de modelado de datos, análisis de datos y aprendizaje automático: elegir y emplear técnicas adecuadas, evaluando la calidad de los modelos, validándolos, interpretándolos y proponiendo mejoras.
 :::
 
 ::: {.callout-important title="Grado en Ciencia e Ingeniería de Datos"}
@@ -43,7 +42,6 @@ Es conveniente haber superado con éxito las asignaturas de Cálculo, Herramient
 **Víctor Aceña Gil** es graduado en Matemáticas por la UNED, máster en Tratamiento Estadístico y Computacional de la Información por la UCM y la UPM, doctor en Tecnologías de la Información y las Comunicaciones por la URJC y profesor del departamento de Informática y Estadística de la URJC. Miembro del grupo de investigación de alto rendimiento en Fundamentos y Aplicaciones de la Ciencia de Datos, DSLAB, de la URJC. Pertenece al grupo de innovación docente, DSLAB-TI.
 
 **Carmen Lancho Martín** es graduada en Matemáticas y Estadística por la Universidad Complutense de Madrid (UCM), máster en Tratamiento Estadístico y Computacional de la Información por la UCM y la Universidad Politécnica de Madrid (UPM), doctora en Tecnologías de la Información y las Comunicaciones por la Universidad Rey Juan Carlos (URJC) y profesora del departamento de Informática y Estadística de la URJC. Miembro del grupo de investigación de alto rendimiento en Fundamentos y Aplicaciones de la Ciencia de Datos, DSLAB, de la URJC. Pertenece al grupo de innovación docente, DSLAB-TI.
-
 
 **Isaac Martín de Diego** es diplomado en Estadística por la Universidad de Valladolid (UVA), licenciado en Ciencias y Técnicas Estadísticas por la Universidad Carlos III de Madrid (UC3M), doctor en Ingeniería Matemática por la UC3M, catedrático de Ciencias de la Computación e Inteligencia Artificial del departamento de Informática y Estadística de la URJC. Es fundador y coordinador del DSLAB y del DSLAB-TI.
 :::

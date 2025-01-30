@@ -10,6 +10,7 @@ book:
   chapters:
     - index.qmd
     - tema1.qmd
+    - tema2.qmd
     - conclusiones.qmd
     - references.qmd
   cover-image: DSLab_logo_2.png
