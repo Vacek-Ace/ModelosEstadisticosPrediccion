@@ -1129,7 +1129,7 @@ unidad: $$
 d_i = \frac{e_i}{\sqrt{MSE}},  \hspace{0.5cm} i=1,\ldots,n.
 $$ Otro tipo de residuos habitual es el de los llamados **residuos
 estudentizados**: $$
-d_i = \frac{e_i}{\sqrt{MSE \left ( 1-\frac{1}{n}-\frac{(X_i-\bar{X})^2}{S_{xx}} \right )}}, \hspace{0.5cm} i=1,\ldots,n.
+r_i = \frac{e_i}{\sqrt{MSE \left ( 1-\frac{1}{n}-\frac{(X_i-\bar{X})^2}{S_{xx}} \right )}}, \hspace{0.5cm} i=1,\ldots,n.
 $$
 
 Estos residuos son preferibles a los estandarizados cuando $n$ es
