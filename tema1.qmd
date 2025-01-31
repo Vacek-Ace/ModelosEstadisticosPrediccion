@@ -1842,7 +1842,7 @@ La varianza de los errores ($\sigma^2$) mide cuánto varían las
 observaciones reales ($Y_i$) con respecto a los valores predichos por el
 modelo ($\hat{Y}_i$). En el modelo de regresión múltiple, esta varianza
 puede ser estimada utilizando la **suma de los cuadrados de los residuos
-(\$\$E)**.
+(SSE)**.
 
 La estimación de $\sigma^2$, denotada como $\hat{\sigma}^2$, se calcula
 como: $$
@@ -2020,3 +2020,5 @@ modelo_regresion <- lm(Calificaciones ~ Tiempo_Estudio + Distraccion + Interacci
 summary(modelo_regresion)
 ```
 :::
+
+---
