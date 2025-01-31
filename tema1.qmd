@@ -1174,7 +1174,7 @@ linealidad se cumple.
 Se detectan problemas de heterocedasticidad, si en el gráfico de
 residuos versus valores ajustados se observa un patrón de "embudo" o una
 variación creciente/disminuyente, es decir, cuando se observa que la
-varianza de los residuos no es constante para todos los valores de $X$..
+varianza de los residuos no es constante para todos los valores de $X$.
 
 3.  **Verificación de normalidad:**
 
@@ -1219,8 +1219,8 @@ anteriores son:
 -   QQ-Plot (Gráfico Cuantil-Cuantil): Compara la distribución de los
     residuos con una distribución normal. Si los puntos se alinean con
     la diagonal, se cumple la normalidad. Se dibujan los residuos
-    ordenados $e[i]$ frente a los cuantiles correspondientes de una
-    normal estándar, $\phi^{−1}[(i − 1)/n]$. Si es cierta la normalidad
+    ordenados $e_{[i]}$ frente a los cuantiles correspondientes de una
+    normal estándar, $\phi^{−1}_{[(i − 1)/n]}$. Si es cierta la normalidad
     de los residuos, el gráfico resultante deberı́a corresponderse con
     una recta.
 -   Residuos vs. Variables Predictoras: Verifica si hay patrones entre
@@ -1330,7 +1330,7 @@ print(durbin_watson)
 
 En el contexto de la regresión lineal simple, una observación atípica es
 un punto de datos que se aleja notablemente del patrón general observado
-entre la variable independiente ((X)) y la variable dependiente ((Y)).
+entre la variable independiente ($X$) y la variable dependiente ($Y$).
 Estas observaciones pueden surgir por errores en la recopilación de
 datos, valores extremos naturales o situaciones especiales que no están
 representadas en el modelo.
