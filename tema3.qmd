@@ -53,7 +53,7 @@ plot(x, y, main = "Regresión Polinómica de Segundo Grado", pch = 19, col = "bl
 lines(x, predict(modelo_polinomico), col = "red", lwd = 2)
 ```
 :::
----
+
 
 ### Modelos de Regresión Exponencial y Logarítmica
 
@@ -114,15 +114,67 @@ lines(x, exp(predicciones), col = "red", lwd = 2)
 
 Los **splines** y los **modelos segmentados** son técnicas que permiten ajustar relaciones no lineales mediante la división de los datos en segmentos y el ajuste de funciones lineales o polinómicas en cada segmento. Estos métodos son especialmente útiles cuando la relación entre las variables cambia en diferentes rangos de los datos.
 
-**Splines**
-
-Un **spline** es una pieza de polinomios ajustados en diferentes tramos del dominio de la variable independiente. Los puntos donde cambian los tramos se llaman **nudos**. Los **splines cúbicos** son los más utilizados, ya que garantizan suavidad en las transiciones entre tramos.
 
 **Modelos por tramos (Piecewise Regression)**
 
 En este enfoque, se ajustan diferentes regresiones lineales a distintos rangos de la variable independiente. A diferencia de los splines, las transiciones entre segmentos no necesariamente son suaves.
 
 Estos modelos permiten capturar relaciones complejas con menor riesgo de sobreajuste en comparación con polinomios de alto grado.
+
+**Splines**
+
+Los **splines** son una poderosa herramienta en el análisis de regresión para modelar relaciones no lineales entre variables. A diferencia de los modelos polinómicos tradicionales, que ajustan un solo polinomio a todos los datos, los splines permiten dividir el rango de la variable independiente en diferentes **tramos** y ajustar polinomios separados en cada uno de ellos. Esto proporciona mayor flexibilidad para capturar patrones complejos en los datos, sin los problemas de inestabilidad y sobreajuste que pueden surgir al utilizar polinomios de alto grado.
+
+Un **spline** es una función que está compuesta por múltiples **polinomios por tramos** que se ajustan en diferentes intervalos del dominio de la variable independiente. Estos polinomios están conectados en puntos específicos llamados **nudos** (*knots*), que marcan el final de un tramo y el inicio de otro. La principal característica de los splines es que estos polinomios están diseñados para unirse de manera **suave** en los nudos, asegurando que la función resultante sea continua y, en muchos casos, que sus derivadas también sean continuas.
+
+::: {.callout-note title="Elementos clave" collapse="false"}
+
+  - **Tramos:** Intervalos del dominio de la variable independiente en los que se ajusta un polinomio distinto.
+  - **Nudos:** Puntos donde los tramos se conectan. Los nudos definen la estructura del spline y determinan dónde la función puede cambiar de forma.
+  - **Continuidad:** Los splines están construidos para que no haya saltos abruptos en la función o en sus derivadas en los nudos. Por ejemplo, un spline cúbico asegura continuidad en la función, la primera derivada (pendiente) y la segunda derivada (curvatura).
+:::
+
+
+::: {.callout-note title="Tipos de Splines" collapse="false"}
+
+**Splines Lineales:**  
+
+   - Se ajustan líneas rectas entre los nudos.
+   - Garantizan la continuidad en los puntos de unión, pero no necesariamente en la pendiente.
+   - Son simples, pero pueden generar ángulos abruptos en los nudos.
+
+**Splines Cuadráticos:**  
+
+   - Se utilizan polinomios de segundo grado en cada tramo.
+   - Aseguran continuidad en la función y en la pendiente, pero no en la curvatura.
+
+**Splines Cúbicos:**  
+
+   - Los **splines cúbicos** son los más utilizados en análisis de regresión.
+   - Utilizan polinomios de tercer grado en cada tramo.
+   - Garantizan suavidad en la función y en sus primeras dos derivadas, lo que significa que la función es continua, su pendiente es continua y la curvatura es suave.
+   - Evitan el sobreajuste que puede ocurrir con polinomios de alto grado, proporcionando un ajuste flexible sin perder estabilidad.
+   -   A diferencia de los polinomios globales de alto grado, los splines cúbicos pueden capturar patrones complejos sin oscilar de manera excesiva entre los puntos de datos.
+  -   Los splines permiten que el modelo se adapte localmente a diferentes patrones en distintos tramos del dominio de la variable independiente.
+
+**Splines Naturales:**  
+
+   - Son una variante de los splines cúbicos que imponen condiciones adicionales en los extremos del rango de los datos, forzando la segunda derivada a ser cero en los extremos. Esto ayuda a evitar oscilaciones no deseadas fuera del rango de los datos.
+
+:::
+
+
+El uso de splines en regresión permite modelar relaciones no lineales de manera flexible. La elección del número y la ubicación de los **nudos** es un aspecto fundamental del ajuste con splines:
+
+  - Número de nudos: Demasiados nudos pueden llevar a un sobreajuste, mientras que muy pocos pueden no capturar adecuadamente la relación entre las variables. El uso de técnicas de validación cruzada puede ayudar a encontrar el equilibrio adecuado.
+
+  - Ubicación de los nudos: Los nudos pueden colocarse en puntos equidistantes, en cuantiles de la variable independiente, o en puntos donde se sospecha que la relación entre las variables cambia. La colocación de nudos es clave para obtener un buen ajuste. Los nudos pueden seleccionarse de manera automática (por ejemplo, en los cuantiles de la variable independiente) o manualmente según el conocimiento del problema.
+
+::: {.callout-caution title="Aviso"}
+
+A diferencia de la regresión lineal simple, los coeficientes de los splines no tienen una interpretación directa. El enfoque se centra en la forma general del ajuste en lugar de en el valor de los coeficientes individuales.
+:::
+
 
 ::: {.callout-tip title="Ejemplo" collapse="true"}
 ```{r regresión_splines}
@@ -137,8 +189,13 @@ y <- ifelse(x <= 50, 2 * x + rnorm(100, 0, 10), 0.5 * x + rnorm(100, 0, 10))
 # Ajuste del modelo spline
 modelo_spline <- lm(y ~ bs(x, knots = c(30, 60, 80)))
 
-# En este caso se ha ajustado un spline cúbico con nudos en 30,60 y 80
-summary(modelo_spline)
+# Visualización
+plot(x, y, main = "Regresión Spline", pch = 19, col = "blue")
+lines(x, predict(modelo_spline), col = "red", lwd = 2)
+
+# Cambio en la posición de los nodos
+# Ajuste del modelo spline
+modelo_spline <- lm(y ~ bs(x, knots = c(40, 50)))
 
 # Visualización
 plot(x, y, main = "Regresión Spline", pch = 19, col = "blue")
@@ -150,12 +207,210 @@ lines(x, predict(modelo_spline), col = "red", lwd = 2)
 # Ajuste del modelo spline
 modelo_spline <- lm(y ~ bs(x, degree=2, knots = c(30, 60, 80)))
 
-# En este caso se ha ajustado un spline cúbico con nudos en 30,60 y 80
-summary(modelo_spline)
-
 # Visualización
 plot(x, y, main = "Regresión Spline", pch = 19, col = "blue")
 lines(x, predict(modelo_spline), col = "red", lwd = 2)
 ```
 :::
 
+## Transformación de variables
+
+En el análisis de datos y la construcción de modelos estadísticos, no siempre es posible capturar adecuadamente la relación entre las variables independientes y la variable dependiente utilizando modelos lineales en su forma original. Aquí es donde entran en juego las **transformaciones de variables**, que permiten modificar la estructura de los datos para mejorar el ajuste del modelo, cumplir con los supuestos de la regresión y, en muchos casos, facilitar la interpretación.
+
+Las transformaciones de variables son una herramienta fundamental para mejorar el rendimiento y la precisión de los modelos estadísticos. Estas transformaciones pueden aplicarse tanto a la variable dependiente como a las variables independientes.
+
+
+::: {.callout-note title="Objetivos" collapse="false"}
+
+**Linearizar relaciones no lineales:** 
+
+Muchas relaciones entre variables no son lineales en su forma original. Aplicar una transformación adecuada puede **convertir una relación no lineal en lineal**, permitiendo el uso de técnicas de regresión lineal. Por ejemplo, una relación exponencial $$Y = \beta_0 e^{\beta_1 X}$$ puede linearizarse tomando el logaritmo de $Y$:  
+   $$
+   \log(Y) = \log(\beta_0) + \beta_1 X
+   $$
+
+**Corregir problemas de heterocedasticidad:** 
+
+La regresión lineal asume que los errores tienen **varianza constante** (homocedasticidad). Sin embargo, en la práctica, es común encontrar datos con **heterocedasticidad** (la varianza de los errores cambia con el nivel de la variable independiente). Las transformaciones pueden ayudar a estabilizar la varianza. Por ejemplo, transformar la variable dependiente $Y$ usando un logaritmo o una raíz cuadrada puede reducir la heterocedasticidad.
+
+**Normalizar la distribución de los errores:** 
+
+La regresión lineal también asume que los errores están **normalmente distribuidos**. Las transformaciones pueden ayudar a que los residuos del modelo se ajusten mejor a una distribución normal, lo que mejora la validez de los intervalos de confianza y las pruebas de hipótesis.
+
+**Reducir la influencia de valores atípicos:** 
+
+Algunas transformaciones pueden disminuir la influencia de los **valores atípicos** en el modelo, haciendo que el ajuste sea más robusto.
+
+**Mejorar la interpretabilidad del modelo:**
+
+Aunque algunas transformaciones pueden complicar la interpretación directa de los coeficientes, otras pueden facilitar el entendimiento de la relación entre variables (por ejemplo, tasas de crecimiento constantes).
+:::
+
+### Tipos de transformaciones comunes
+
+Existen diversas transformaciones que pueden aplicarse a los datos según el problema que se desea abordar. A continuación, se describen las transformaciones más utilizadas en el análisis de regresión.
+
+---
+
+**Transformación Logarítmica ($\log$)**
+
+Se emplea para linearizar relaciones exponenciales, reducir la heterocedasticidad, y estabilizar la varianza: 
+  - $$ Y = \log(Y) $$ o $$ X = \log(X) $$
+
+Es una transformación adecuada cuando la variable tiene una distribución sesgada a la derecha o cuando el efecto marginal disminuye con el valor de la variable (Ingresos, crecimiento poblacional, y tasas de interés, etc).
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r log}
+# Datos simulados con crecimiento exponencial
+set.seed(123)
+x <- 1:20
+y <- exp(0.3 * x) + rnorm(20, mean = 0, sd = 20)
+
+
+# Transformación logarítmica para linearizar la relación
+modelo_log <- lm(log(y) ~ x)
+summary(modelo_log)
+
+# Visualización
+plot(x, y, main = "Transformación Log", pch = 19, col = "blue", ylab = "y", xlab = "x")
+
+# Predicciones para los mismos valores de x
+predicciones <- predict(modelo_log, newdata = data.frame(x = x))
+
+# Convertir predicciones a la escala original (exponencial inverso del log)
+lines(x, exp(predicciones), col = "red", lwd = 2)
+
+```
+:::
+
+
+**Transformación de Raíz Cuadrada ($\sqrt{}$)**
+
+Se emplea para reducir la heterocedasticidad, especialmente cuando la varianza aumenta linealmente con la media:
+$$Y = \sqrt{Y}$$ o $$X = \sqrt{X}$$
+  
+Se emplea comúnmente en conteos de eventos o variables positivas (número de llamadas, defectos, etc.).
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r sqrt}
+# Datos simulados con variabilidad creciente
+set.seed(123)
+x <- 1:50
+y <- x + rnorm(50, mean = 0, sd = x)
+
+# Aplicando raíz cuadrada a la variable dependiente
+modelo_sqrt <- lm(sqrt(y) ~ x)
+summary(modelo_sqrt)
+
+# Visualización
+plot(x, y, main = "Transformación SQRT", pch = 19, col = "blue", ylab = "y", xlab = "x")
+
+# Predicciones para los mismos valores de x
+predicciones <- predict(modelo_sqrt, newdata = data.frame(x = x))
+
+# Convertir predicciones a la escala original
+lines(x, predicciones^2, col = "red", lwd = 2)
+```
+:::
+
+
+**Transformación Inversa ($\frac{1}{X}$)**
+
+Se emplea la tranformación inversa para modelar relaciones donde el efecto de la variable independiente disminuye rápidamente.
+$$ Y = \frac{1}{X} $$
+  
+Es especialmente útil cuando se espera que un aumento en $X$ tenga un efecto decreciente en $Y$ (Relaciones físicas como la ley de la gravitación, velocidad vs. tiempo en fricción, etc).
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r inv}
+# Datos simulados con relación inversa
+set.seed(123)
+x <- 1:50
+y <- 1 / x + rnorm(50, mean = 0, sd = 0.05)
+
+# Ajuste del modelo con transformación inversa
+modelo_inverso <- lm(y ~ I(1/x))
+summary(modelo_inverso)
+
+# Visualización
+plot(x, y, main = "Transformación Inversa", pch = 19, col = "blue", ylab = "y", xlab = "x")
+
+# Predicciones para los mismos valores de x
+predicciones <- predict(modelo_inverso, newdata = data.frame(x = x))
+
+# Convertir predicciones a la escala original
+lines(x, predicciones, col = "red", lwd = 2)
+```
+:::
+
+### Transformación de Box-Cox
+
+La **transformación de Box-Cox** es un método que busca automáticamente la mejor transformación para estabilizar la varianza y aproximar la normalidad de los errores. La transformación se define como:
+
+$$
+Y(\lambda) = 
+\begin{cases}
+\frac{Y^\lambda - 1}{\lambda}, & \lambda \neq 0 \\
+\log(Y), & \lambda = 0
+\end{cases}
+$$
+
+Se emplea para encontrar la transformación óptima para los datos. Se utiliza cuando no está claro qué transformación aplicar. Por ejemplo, en caso de variables continuas con varianza no constante o distribución no normal.
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r boxcox}
+# Cargar librería para Box-Cox
+library(MASS)
+
+# Datos simulados
+set.seed(123)
+x <- 1:20
+y <- x^2 + rnorm(20, mean = 0, sd = 5)
+
+# Verificar si hay valores negativos
+min(y)
+
+# Si hay valores negativos, sumar una constante para que todos los valores sean positivos
+if (min(y) <= 0) {
+  y <- y + abs(min(y)) + 1  # Desplaza todos los valores para que sean positivos
+}
+
+# Ajuste de un modelo lineal simple
+modelo_bc <- lm(y ~ x)
+
+# Aplicación de la transformación de Box-Cox
+boxcox(modelo_bc)
+
+```
+:::
+
+La gráfica de **Box-Cox** mostrará el valor óptimo de $\lambda$, que indica la mejor transformación para los datos.
+
+---
+
+### Consideracione sobre las transformaciones
+
+Antes de aplicar transformaciones, es importante diagnosticar si realmente son necesarias. Existen varias herramientas para identificar problemas en los datos que pueden solucionarse con transformaciones:
+
+  - **Gráficos de Dispersión:** Visualizar la relación entre la variable dependiente y las independientes puede revelar patrones no lineales o heterocedasticidad.
+
+  - **Análisis de Residuos:**  Un gráfico de los residuos frente a los valores ajustados debe mostrar una distribución aleatoria. Patrones sistemáticos o "abanicos" indican la necesidad de transformación. El gráfico de **QQ-Plot** de los residuos ayuda a evaluar la normalidad.
+
+  - **Pruebas Estadísticas:**  Pruebas de normalidad como **Shapiro-Wilk** para los residuos. Pruebas de heterocedasticidad como **Breusch-Pagan**.
+
+
+Si bien las transformaciones pueden mejorar el ajuste del modelo, también pueden afectar la **interpretación de los coeficientes**. Es importante tener en cuenta cómo cambia el significado de los resultados:
+
+  - **Transformaciones en la variable dependiente:**  
+  
+     - Si aplicas $\log(Y)$, los coeficientes representan **cambios proporcionales** en $Y$.
+    - Si aplicas $\sqrt{Y}$, los coeficientes representan la tasa de cambio en la raíz cuadrada de $Y$.
+
+  - **Transformaciones en la variable independiente:**  
+  
+     - Si transformas $X$ con $\log(X)$, los coeficientes indican cómo cambia $Y$ por cada **incremento porcentual** en $X$.
+    - Si transformas $X$ con $\frac{1}{X}$, los coeficientes representan el cambio en $Y$ por cada unidad de **disminución** en $X$.
+
+  - **Revertir Transformaciones para Interpretación:** Después de ajustar un modelo, es posible transformar las predicciones de nuevo a la escala original para facilitar la interpretación.
+
+--- 
