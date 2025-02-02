@@ -1,161 +1,81 @@
 # Métodos de selección de variables y problemas de regularización {#sec-tema2}
 
-En los modelos de regresión, especialmente cuando se trabaja con
-conjuntos de datos que incluyen un gran número de variables predictoras,
-es común enfrentarse al desafío de identificar qué variables son
-realmente relevantes para explicar la variable respuesta. La inclusión
-de demasiadas variables en un modelo puede llevar a problemas como el
-sobreajuste, pérdida de interpretabilidad y complejidad innecesaria,
-mientras que la exclusión de variables importantes puede resultar en
-modelos subóptimos.
+En los modelos de regresión, especialmente cuando se trabaja con conjuntos de datos que incluyen un gran número de variables predictoras, es común enfrentarse al desafío de identificar qué variables son realmente relevantes para explicar la variable respuesta. La inclusión de demasiadas variables en un modelo puede llevar a problemas como el sobreajuste, pérdida de interpretabilidad y complejidad innecesaria, mientras que la exclusión de variables importantes puede resultar en modelos subóptimos.
 
 ## Proceso de construcción del modelo de regresión
 
-La construcción de un modelo de regresión múltiple es un proceso
-sistemático que busca explicar la relación entre una variable respuesta
-($Y$) y múltiples variables predictoras ($X_1, X_2, \dots, X_k$). Este
-proceso consta de varias etapas clave [@kutner2005applied]:
+La construcción de un modelo de regresión múltiple es un proceso sistemático que busca explicar la relación entre una variable respuesta ($Y$) y múltiples variables predictoras ($X_1, X_2, \dots, X_k$). Este proceso consta de varias etapas clave [@kutner2005applied]:
 
 1.  **Definición del problema y variables de interés:**
-    -   Identificar claramente el objetivo del análisis, ya sea realizar
-        predicciones, evaluar relaciones o controlar por efectos de
-        variables confusoras.
-    -   Seleccionar las variables predictoras potenciales en función de
-        su relevancia teórica, conocimiento previo o exploración inicial
-        de los datos.
+    -   Identificar claramente el objetivo del análisis, ya sea realizar predicciones, evaluar relaciones o controlar por efectos de variables confusoras.
+    -   Seleccionar las variables predictoras potenciales en función de su relevancia teórica, conocimiento previo o exploración inicial de los datos.
 2.  **Recogida de datos:**
 
--   La calidad de los datos recogidos influye directamente en la validez
-    de los resultados y conclusiones obtenidas. El proceso de recogida
-    de datos consiste en recopilar información de manera organizada y
-    sistemática para responder a las preguntas de investigación
-    planteadas. Dependiendo del diseño del estudio y los objetivos del
-    análisis, se pueden emplear diferentes tipos de experimentos o
-    métodos de recogida de datos.
+-   La calidad de los datos recogidos influye directamente en la validez de los resultados y conclusiones obtenidas. El proceso de recogida de datos consiste en recopilar información de manera organizada y sistemática para responder a las preguntas de investigación planteadas. Dependiendo del diseño del estudio y los objetivos del análisis, se pueden emplear diferentes tipos de experimentos o métodos de recogida de datos.
 -   Debemos asegurar las siguientes características sobre los datos.
-    -   **Fiabilidad:** Asegurar que los datos sean consistentes y
-        puedan reproducirse bajo condiciones similares.
-    -   **Validez:** Garantizar que los datos recojan realmente la
-        información necesaria para responder a las preguntas de
-        investigación.
-    -   **Ética:** Asegurar la privacidad y el consentimiento informado
-        de los participantes.
-    -   **Control de Sesgos:** Diseñar el estudio de manera que se
-        minimicen los sesgos que puedan distorsionar los resultados.
+    -   **Fiabilidad:** Asegurar que los datos sean consistentes y puedan reproducirse bajo condiciones similares.
+    -   **Validez:** Garantizar que los datos recojan realmente la información necesaria para responder a las preguntas de investigación.
+    -   **Ética:** Asegurar la privacidad y el consentimiento informado de los participantes.
+    -   **Control de Sesgos:** Diseñar el estudio de manera que se minimicen los sesgos que puedan distorsionar los resultados.
 
 ::: {.callout-note collapse="true" title="Tipos de experimentos"}
-La elección del tipo de experimento o método de recogida de datos
-dependerá de la naturaleza del problema a investigar, los recursos
-disponibles y las limitaciones del estudio. Una correcta planificación y
-ejecución de esta etapa sienta las bases para un análisis robusto y
-confiable.
+La elección del tipo de experimento o método de recogida de datos dependerá de la naturaleza del problema a investigar, los recursos disponibles y las limitaciones del estudio. Una correcta planificación y ejecución de esta etapa sienta las bases para un análisis robusto y confiable.
 
 1.  **Experimentos controlados:**
-    -   Los experimentos controlados son diseñados de manera que los
-        investigadores manipulan deliberadamente una o más variables
-        independientes (llamadas factores o variables controladas) para observar su efecto en la variable
-        dependiente.
-    -   Incluyen la aleatorización de sujetos entre grupos (por ejemplo,
-        grupos de control y tratamiento) para minimizar sesgos y
-        asegurar comparabilidad.
+    -   Los experimentos controlados son diseñados de manera que los investigadores manipulan deliberadamente una o más variables independientes (llamadas factores o variables controladas) para observar su efecto en la variable dependiente.
+    -   Incluyen la aleatorización de sujetos entre grupos (por ejemplo, grupos de control y tratamiento) para minimizar sesgos y asegurar comparabilidad.
     -   En muchas ocasiones la información suplementaria no se puede incorporar en el diseño del experimento. A esas variables, no controladas, se les suel llamar covariables.
-    -   **Ejemplo:** Un estudio clínico donde se prueba un nuevo
-        medicamento y se compara su efecto con un placebo.
+    -   **Ejemplo:** Un estudio clínico donde se prueba un nuevo medicamento y se compara su efecto con un placebo.
 2.  **Estudios observacionales exploratorios:**
-    -   En este enfoque, los datos se recogen sin intervenir ni
-        manipular las condiciones. Los investigadores observan y
-        registran los fenómenos tal como ocurren en la naturaleza.
+    -   En este enfoque, los datos se recogen sin intervenir ni manipular las condiciones. Los investigadores observan y registran los fenómenos tal como ocurren en la naturaleza.
     -   Pueden clasificarse en:
-        -   **Estudios transversales:** Los datos se recogen en un único
-            punto temporal.
-        -   **Estudios longitudinales:** Los datos se recogen durante un
-            periodo para analizar cambios a lo largo del tiempo.
-    -   **Ejemplo:** Investigar los hábitos alimenticios y su asociación
-        con enfermedades cardiovasculares en una población.
+        -   **Estudios transversales:** Los datos se recogen en un único punto temporal.
+        -   **Estudios longitudinales:** Los datos se recogen durante un periodo para analizar cambios a lo largo del tiempo.
+    -   **Ejemplo:** Investigar los hábitos alimenticios y su asociación con enfermedades cardiovasculares en una población.
 3.  **Estudios observacionales confirmatorios:**
     -   En este enfoque, los datos se recogen para testear (confirmar o no) hipótesis derivadas de estudios previos o de ideas que pueden tener los investigadores.
     -   En este contexto, las variables que aparecen involucradas en la hipótesis que se quiere confirmar se denominan variables primarias, y las variables explicativas que se sabe inluyen en la respuesta se llaman variables de control (en Epidemiología nos referimos a ellas como factores de riesgo)
     -   **Ejemplo:** Un equipo de investigadores, basándose en estudios previos, plantea la hipótesis de que existe una relación positiva entre el hábito de fumar (variable explicativa principal) y la incidencia de cáncer de pulmón (variable respuesta). Para confirmar esta hipótesis, realizan un estudio observacional en el que recopilan datos de una población durante un periodo determinado. Dado que no es ético inducir a las personas a fumar para realizar un experimento controlado, este estudio se realiza de forma observacional. Los datos se analizan para evaluar la asociación entre las variables, permitiendo confirmar (o refutar) la hipótesis planteada con un diseño adecuado y controlando los posibles factores de confusión.
-    
 4.  **Encuestas y cuestionarios:**
-    -   Las encuestas son una técnica común para recoger datos de manera
-        estructurada sobre actitudes, opiniones, comportamientos o
-        características demográficas.
-    -   Pueden aplicarse en formato presencial, en línea, por teléfono o
-        mediante correo.
-    -   **Ejemplo:** Una encuesta para medir el grado de satisfacción de
-        los clientes con un servicio.
+    -   Las encuestas son una técnica común para recoger datos de manera estructurada sobre actitudes, opiniones, comportamientos o características demográficas.
+    -   Pueden aplicarse en formato presencial, en línea, por teléfono o mediante correo.
+    -   **Ejemplo:** Una encuesta para medir el grado de satisfacción de los clientes con un servicio.
 5.  **Experimentos naturales:**
-    -   Se producen cuando un fenómeno natural o social actúa como una
-        intervención en un entorno sin que los investigadores tengan
-        control sobre el experimento.
-    -   Este tipo de estudio aprovecha eventos únicos para analizar sus
-        impactos.
-    -   **Ejemplo:** Estudiar los efectos económicos de una nueva
-        política fiscal aplicada en una región específica.
+    -   Se producen cuando un fenómeno natural o social actúa como una intervención en un entorno sin que los investigadores tengan control sobre el experimento.
+    -   Este tipo de estudio aprovecha eventos únicos para analizar sus impactos.
+    -   **Ejemplo:** Estudiar los efectos económicos de una nueva política fiscal aplicada en una región específica.
 6.  **Estudios de simulación:**
-    -   Los datos se generan a través de modelos matemáticos o
-        computacionales que representan un sistema real o hipotético.
-    -   Este método se usa cuando es difícil o costoso realizar
-        experimentos reales.
-    -   **Ejemplo:** Simular el comportamiento de un mercado financiero
-        bajo diferentes escenarios económicos.
+    -   Los datos se generan a través de modelos matemáticos o computacionales que representan un sistema real o hipotético.
+    -   Este método se usa cuando es difícil o costoso realizar experimentos reales.
+    -   **Ejemplo:** Simular el comportamiento de un mercado financiero bajo diferentes escenarios económicos.
 7.  **Recogida de datos secundarios:**
-    -   En lugar de recoger datos nuevos, se utilizan datos ya
-        existentes recopilados por terceros, como censos, registros
-        administrativos o bases de datos públicas.
-    -   Aunque es eficiente en tiempo y costos, el investigador tiene
-        menor control sobre la calidad y las características de los
-        datos.
-    -   **Ejemplo:** Analizar datos de encuestas nacionales para
-        estudiar tendencias sociales.
+    -   En lugar de recoger datos nuevos, se utilizan datos ya existentes recopilados por terceros, como censos, registros administrativos o bases de datos públicas.
+    -   Aunque es eficiente en tiempo y costos, el investigador tiene menor control sobre la calidad y las características de los datos.
+    -   **Ejemplo:** Analizar datos de encuestas nacionales para estudiar tendencias sociales.
 :::
 
 3.  **Análisis Exploratorio de Datos (EDA):**
-    -   Inspeccionar los datos mediante análisis descriptivo y visual
-        para identificar posibles problemas como valores atípicos, datos
-        faltantes y multicolinealidad.
-    -   Escalar o transformar las variables si es necesario,
-        especialmente si están en diferentes escalas o presentan
-        distribuciones no lineales.
+    -   Inspeccionar los datos mediante análisis descriptivo y visual para identificar posibles problemas como valores atípicos, datos faltantes y multicolinealidad.
+    -   Escalar o transformar las variables si es necesario, especialmente si están en diferentes escalas o presentan distribuciones no lineales.
 4.  **Ajuste del modelo:**
-    -   Especificar el modelo de regresión múltiple en su forma
-        general:\
+    -   Especificar el modelo de regresión múltiple en su forma general:\
         $$
         Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p + \varepsilon,
          $$ donde $\varepsilon$ representa los errores aleatorios.
-    -   Estimar los coeficientes del modelo
-        ($\beta_0, \beta_1, \dots, \beta_p$) utilizando el método de
-        mínimos cuadrados, que minimiza la suma de los errores al
-        cuadrado.
+    -   Estimar los coeficientes del modelo ($\beta_0, \beta_1, \dots, \beta_p$) utilizando el método de mínimos cuadrados, que minimiza la suma de los errores al cuadrado.
 5.  **Evaluación del modelo:**
-    -   Analizar el ajuste general del modelo utilizando métricas como
-        $R^2$ y $R^2$ ajustado, que miden la proporción de la
-        variabilidad explicada.
-    -   Examinar la tabla ANOVA para evaluar la significancia global del
-        modelo.
-    -   Realizar pruebas de hipótesis para los coeficientes
-        individuales, verificando si las variables predictoras tienen un
-        efecto significativo en la variable respuesta.
+    -   Analizar el ajuste general del modelo utilizando métricas como $R^2$ y $R^2$ ajustado, que miden la proporción de la variabilidad explicada.
+    -   Examinar la tabla ANOVA para evaluar la significancia global del modelo.
+    -   Realizar pruebas de hipótesis para los coeficientes individuales, verificando si las variables predictoras tienen un efecto significativo en la variable respuesta.
 6.  **Diagnóstico del modelo:**
-    -   Examinar los residuos para evaluar supuestos como la linealidad,
-        homocedasticidad, normalidad de los errores y ausencia de
-        autocorrelación.
-    -   Identificar observaciones atípicas, leverage y puntos de
-        influencia utilizando herramientas como la distancia de Cook,
-        DFBETAS y DFFITS.
+    -   Examinar los residuos para evaluar supuestos como la linealidad, homocedasticidad, normalidad de los errores y ausencia de autocorrelación.
+    -   Identificar observaciones atípicas, leverage y puntos de influencia utilizando herramientas como la distancia de Cook, DFBETAS y DFFITS.
 7.  **Reducción de variables:**
     -   En análisis de regresión, especialmente cuando se trabaja con conjuntos de datos de alta dimensionalidad, es común enfrentar situaciones en las que el número de variables explicativas es muy grande. Esto puede llevar a problemas como el sobreajuste, dificultades en la interpretación del modelo y una mayor complejidad computacional. Por ello, reducir el número de variables explicativas, sin perder información relevante, se convierte en un paso crucial para construir modelos más eficientes y robustos.
 8.  **Validación del modelo:**
-    -   Evaluar el desempeño del modelo con datos de validación o
-        mediante técnicas como validación cruzada para garantizar su
-        capacidad predictiva en nuevos conjuntos de datos.
+    -   Evaluar el desempeño del modelo con datos de validación o mediante técnicas como validación cruzada para garantizar su capacidad predictiva en nuevos conjuntos de datos.
 
-El objetivo principal de este tema es presentar las técnicas más
-relevantes para la selección de variables y regularización, entender sus
-fundamentos teóricos, y aplicarlas a casos prácticos. Esto no solo
-permitirá construir modelos más robustos y eficientes, sino que también
-ayudará a obtener insights más claros y útiles a partir de los datos.
+El objetivo principal de este tema es presentar las técnicas más relevantes para la selección de variables y regularización, entender sus fundamentos teóricos, y aplicarlas a casos prácticos. Esto no solo permitirá construir modelos más robustos y eficientes, sino que también ayudará a obtener insights más claros y útiles a partir de los datos.
 
 ## Reducción de variables
 
@@ -169,38 +89,34 @@ La **reducción de variables explicativas** busca simplificar el modelo al selec
 
 Al limitar el número de predictores, no solo se simplifica el modelo, sino que también se optimizan diversos aspectos fundamentales en el análisis.
 
-1. **Evitar el zobreajuste:**
-   - Cuando hay demasiadas variables en relación al número de observaciones, el modelo puede ajustarse demasiado a los datos de entrenamiento y perder capacidad predictiva en nuevos conjuntos de datos.
-2. **Mejorar la interpretabilidad:**
-   - Un modelo con menos variables es más fácil de interpretar, lo que resulta fundamental en aplicaciones como ciencias sociales, biomedicina o economía.
-3. **Reducción de complejidad computacional:**
-   - Al disminuir el número de variables, se reducen los costos de tiempo y memoria en el ajuste y evaluación del modelo.
-4. **Manejo de multicolinealidad:**
-   - La reducción puede eliminar variables redundantes que presentan una alta correlación entre sí, estabilizando las estimaciones del modelo.
+1.  **Evitar el zobreajuste:**
+    -   Cuando hay demasiadas variables en relación al número de observaciones, el modelo puede ajustarse demasiado a los datos de entrenamiento y perder capacidad predictiva en nuevos conjuntos de datos.
+2.  **Mejorar la interpretabilidad:**
+    -   Un modelo con menos variables es más fácil de interpretar, lo que resulta fundamental en aplicaciones como ciencias sociales, biomedicina o economía.
+3.  **Reducción de complejidad computacional:**
+    -   Al disminuir el número de variables, se reducen los costos de tiempo y memoria en el ajuste y evaluación del modelo.
+4.  **Manejo de multicolinealidad:**
+    -   La reducción puede eliminar variables redundantes que presentan una alta correlación entre sí, estabilizando las estimaciones del modelo.
 
 ### Métodos de reducción de variables
 
-Algunas de las ideas más comunes para tratar de reducir el número de variables de un modelo son: 
+Algunas de las ideas más comunes para tratar de reducir el número de variables de un modelo son:
 
-1. **Selección de variables:**
-   - Utiliza estrategias como selección directa, métodos automáticos (forward, backward o stepwise), o técnicas basadas en regularización (Lasso, Elastic Net) para seleccionar las variables más relevantes.
-   
-2. **Técnicas de transformación de datos:**
-   - Se proyectan las variables explicativas en un nuevo espacio de menor dimensionalidad, manteniendo la mayor cantidad posible de información. Algunas de estas técnicas se estudian en la asignatura de Aprendizaje Automático:
-     - **Análisis de Componentes Principales (PCA):** Reduce las variables explicativas a un conjunto de componentes ortogonales que explican la mayor parte de la varianza.
-     - **Análisis de Factores:** Agrupa variables relacionadas en factores latentes que capturan la esencia de la información.
-
-3. **Filtrado basado en información:**
-   - Identifica y descarta variables con baja variabilidad o poca relación con la variable respuesta, utilizando métricas como la correlación o importancia estadística.
-
-4. **Métodos de selección basados en modelos:**
-   - Ajusta modelos iterativamente para evaluar la contribución de cada variable explicativa y descartar aquellas con menor relevancia según criterios como el $p$-valor, AIC o BIC.
+1.  **Selección de variables:**
+    -   Utiliza estrategias como selección directa, métodos automáticos (forward, backward o stepwise), o técnicas basadas en regularización (Lasso, Elastic Net) para seleccionar las variables más relevantes.
+2.  **Técnicas de transformación de datos:**
+    -   Se proyectan las variables explicativas en un nuevo espacio de menor dimensionalidad, manteniendo la mayor cantidad posible de información. Algunas de estas técnicas se estudian en la asignatura de Aprendizaje Automático:
+        -   **Análisis de Componentes Principales (PCA):** Reduce las variables explicativas a un conjunto de componentes ortogonales que explican la mayor parte de la varianza.
+        -   **Análisis de Factores:** Agrupa variables relacionadas en factores latentes que capturan la esencia de la información.
+3.  **Filtrado basado en información:**
+    -   Identifica y descarta variables con baja variabilidad o poca relación con la variable respuesta, utilizando métricas como la correlación o importancia estadística.
+4.  **Métodos de selección basados en modelos:**
+    -   Ajusta modelos iterativamente para evaluar la contribución de cada variable explicativa y descartar aquellas con menor relevancia según criterios como el $p$-valor, AIC o BIC.
 
 ::: {.callout-important title="Consideraciones importantes"}
-
-- La reducción de variables debe realizarse cuidadosamente para evitar la pérdida de información clave que pueda comprometer la calidad del modelo.
-- Es fundamental validar el modelo resultante, asegurándose de que mantenga su capacidad predictiva mediante técnicas como validación cruzada.
-- En algunos casos, la selección o transformación de variables puede implicar compromisos entre simplicidad e interpretabilidad.
+-   La reducción de variables debe realizarse cuidadosamente para evitar la pérdida de información clave que pueda comprometer la calidad del modelo.
+-   Es fundamental validar el modelo resultante, asegurándose de que mantenga su capacidad predictiva mediante técnicas como validación cruzada.
+-   En algunos casos, la selección o transformación de variables puede implicar compromisos entre simplicidad e interpretabilidad.
 :::
 
 ## Selección de variables
@@ -211,105 +127,297 @@ Cuando se dispone de $p$ variables explicativas, es posible construir hasta $2^p
 
 Para superar este desafío, se han desarrollado criterios específicos de selección de variables que ayudan a los analistas a identificar un pequeño subconjunto de modelos que cumplan con los estándares de calidad deseados. Este enfoque permite centrar el análisis en un grupo reducido de modelos “buenos”, generalmente entre 4 y 6, y realizar un estudio más profundo y detallado de ellos. Esta estrategia facilita tanto la interpretación como la eficiencia del proceso analítico, optimizando el uso de recursos computacionales y asegurando que los resultados sean robustos y fiables.
 
-
 ## Métodos de selección directa
 
-Los métodos de selección directa son un enfoque fundamental en la
-búsqueda de un subconjunto óptimo de variables predictoras en modelos de
-regresión. Este enfoque evalúa de manera sistemática diferentes
-combinaciones de variables para identificar cuál de ellas proporciona el
-mejor ajuste al modelo en función de un criterio predefinido, como el
-coeficiente de determinación ajustado ($R^2$ ajustado), el error
-cuadrático medio (ECM) o criterios de información como AIC o BIC.
+Los métodos de selección directa son un enfoque fundamental en la búsqueda de un subconjunto óptimo de variables predictoras en modelos de regresión. Este enfoque evalúa de manera sistemática diferentes combinaciones de variables para identificar cuál de ellas proporciona el mejor ajuste al modelo en función de un criterio predefinido, como el coeficiente de determinación ajustado ($R^2$ ajustado), el error cuadrático medio (ECM) o criterios de información como AIC o BIC.
 
-A diferencia de los métodos automáticos, los métodos de selección
-directa no dependen de un proceso iterativo de adición o eliminación de
-variables. En cambio, buscan exhaustivamente (o mediante aproximaciones
-computacionalmente más eficientes) entre todas las posibles
-combinaciones de variables, lo que garantiza un análisis completo de las
-interacciones y relevancias potenciales.
+A diferencia de los métodos automáticos, los métodos de selección directa no dependen de un proceso iterativo de adición o eliminación de variables. En cambio, buscan exhaustivamente (o mediante aproximaciones computacionalmente más eficientes) entre todas las posibles combinaciones de variables, lo que garantiza un análisis completo de las interacciones y relevancias potenciales.
 
-Estos métodos son especialmente útiles cuando el número de predictores
-no es demasiado grande, ya que el esfuerzo computacional crece
-exponencialmente con el número de variables. Aunque el costo
-computacional puede ser elevado en datasets amplios, los métodos de
-selección directa proporcionan una referencia sólida y transparente para
-evaluar qué variables son fundamentales en el modelo.
+Estos métodos son especialmente útiles cuando el número de predictores no es demasiado grande, ya que el esfuerzo computacional crece exponencialmente con el número de variables. Aunque el costo computacional puede ser elevado en datasets amplios, los métodos de selección directa proporcionan una referencia sólida y transparente para evaluar qué variables son fundamentales en el modelo.
 
-En esta sección, analizaremos los métodos de selección directa más
-comunes, su implementación práctica y las métricas utilizadas para
-comparar modelos, destacando sus ventajas y limitaciones.
+En esta sección, analizaremos los métodos de selección directa más comunes, su implementación práctica y las métricas utilizadas para comparar modelos, destacando sus ventajas y limitaciones.
 
 ## Métodos automáticos
 
-Los métodos automáticos de selección de variables son herramientas
-prácticas y eficientes diseñadas para identificar subconjuntos
-relevantes de predictores en un modelo de regresión. A diferencia de los
-métodos de selección directa, que exploran exhaustivamente todas las
-combinaciones posibles de variables, los métodos automáticos siguen un
-enfoque iterativo que simplifica el proceso de selección. Estos métodos
-son especialmente útiles en situaciones donde el número de predictores
-es elevado, ya que reducen significativamente el esfuerzo computacional.
+Los métodos automáticos de selección de variables son herramientas prácticas y eficientes diseñadas para identificar subconjuntos relevantes de predictores en un modelo de regresión. A diferencia de los métodos de selección directa, que exploran exhaustivamente todas las combinaciones posibles de variables, los métodos automáticos siguen un enfoque iterativo que simplifica el proceso de selección. Estos métodos son especialmente útiles en situaciones donde el número de predictores es elevado, ya que reducen significativamente el esfuerzo computacional.
 
-El principio clave detrás de los métodos automáticos es el ajuste
-dinámico del conjunto de variables en función de criterios estadísticos,
-como $p$-valores, coeficientes de determinación ajustados ($R^2$)
-ajustado), o criterios de información como AIC y BIC. Entre las
-estrategias más comunes se encuentran:
+El principio clave detrás de los métodos automáticos es el ajuste dinámico del conjunto de variables en función de criterios estadísticos, como $p$-valores, coeficientes de determinación ajustados ($R^2$) ajustado), o criterios de información como AIC y BIC. Entre las estrategias más comunes se encuentran:
 
--   **Método Forward (selección progresiva):** Parte de un modelo vacío
-    e incorpora variables de manera secuencial, añadiendo en cada paso
-    la variable que mejora más el modelo.
+-   **Método Forward (selección progresiva):** Parte de un modelo vacío e incorpora variables de manera secuencial, añadiendo en cada paso la variable que mejora más el modelo.
 
--   **Método Backward (eliminación regresiva):** Comienza con todas las
-    variables en el modelo y elimina iterativamente aquellas que tienen
-    menor impacto.
+-   **Método Backward (eliminación regresiva):** Comienza con todas las variables en el modelo y elimina iterativamente aquellas que tienen menor impacto.
 
--   **Método Stepwise:** Combina las estrategias forward y backward,
-    permitiendo tanto la inclusión como la exclusión de variables en
-    cada iteración.
+-   **Método Stepwise:** Combina las estrategias forward y backward, permitiendo tanto la inclusión como la exclusión de variables en cada iteración.
 
-Estos métodos ofrecen una manera estructurada y ágil de seleccionar
-variables, aunque no garantizan encontrar el mejor modelo global debido
-a su naturaleza secuencial. A lo largo de esta sección, examinaremos
-cada uno de estos métodos, sus ventajas, limitaciones y aplicaciones en
-diferentes contextos de análisis.
+Estos métodos ofrecen una manera estructurada y ágil de seleccionar variables, aunque no garantizan encontrar el mejor modelo global debido a su naturaleza secuencial. A lo largo de esta sección, examinaremos cada uno de estos métodos, sus ventajas, limitaciones y aplicaciones en diferentes contextos de análisis.
 
 ## Métodos basados en regularización
 
+En los modelos de regresión, especialmente cuando se trabaja con un gran número de variables predictoras o con datos multicolineales, los métodos tradicionales de selección de variables pueden resultar ineficaces o inestables. En estos casos, los métodos basados en regularización surgen como una alternativa poderosa que no solo selecciona variables, sino que también mejora la estabilidad y la precisión del modelo.
 
-En los modelos de regresión, especialmente cuando se trabaja con un gran
-número de variables predictoras o con datos multicolineales, los métodos
-tradicionales de selección de variables pueden resultar ineficaces o
-inestables. En estos casos, los métodos basados en regularización surgen
-como una alternativa poderosa que no solo selecciona variables, sino que
-también mejora la estabilidad y la precisión del modelo.
-
-La regularización consiste en introducir una penalización en la función
-de ajuste del modelo, lo que tiene dos efectos principales: controlar el
-sobreajuste al reducir la complejidad del modelo y forzar la selección
-de un subconjunto más parsimonioso de predictores. Estas penalizaciones
-ajustan los coeficientes de las variables predictoras, favoreciendo
-soluciones más simples y robustas.
+La regularización consiste en introducir una penalización en la función de ajuste del modelo, lo que tiene dos efectos principales: controlar el sobreajuste al reducir la complejidad del modelo y forzar la selección de un subconjunto más parsimonioso de predictores. Estas penalizaciones ajustan los coeficientes de las variables predictoras, favoreciendo soluciones más simples y robustas.
 
 Entre los métodos de regularización más destacados se encuentran:
 
--   **Ridge Regression:** Aplica una penalización proporcional al
-    cuadrado de los coeficientes, lo que permite manejar problemas de
-    multicolinealidad pero no conduce a la eliminación completa de
-    variables.
--   **Lasso (Least Absolute Shrinkage and Selection Operator):**
-    Introduce una penalización basada en el valor absoluto de los
-    coeficientes, lo que no solo reduce su magnitud, sino que también
-    puede anularlos completamente, realizando una selección automática
-    de variables.
--   **Elastic Net:** Combina las penalizaciones de Ridge y Lasso,
-    ofreciendo mayor flexibilidad en situaciones donde hay una gran
-    correlación entre los predictores.
+-   **Ridge Regression:** Aplica una penalización proporcional al cuadrado de los coeficientes, lo que permite manejar problemas de multicolinealidad pero no conduce a la eliminación completa de variables.
+-   **Lasso (Least Absolute Shrinkage and Selection Operator):** Introduce una penalización basada en el valor absoluto de los coeficientes, lo que no solo reduce su magnitud, sino que también puede anularlos completamente, realizando una selección automática de variables.
+-   **Elastic Net:** Combina las penalizaciones de Ridge y Lasso, ofreciendo mayor flexibilidad en situaciones donde hay una gran correlación entre los predictores.
 
-Estos métodos son especialmente útiles en problemas donde el número de
-variables predictoras excede el número de observaciones, o cuando se
-desea un modelo más interpretable. En esta sección, exploraremos en
-detalle los fundamentos teóricos, la implementación práctica y las
-aplicaciones de cada uno de estos métodos, destacando sus ventajas en
-escenarios complejos y desafiantes.
+Estos métodos son especialmente útiles en problemas donde el número de variables predictoras excede el número de observaciones, o cuando se desea un modelo más interpretable. En esta sección, exploraremos en detalle los fundamentos teóricos, la implementación práctica y las aplicaciones de cada uno de estos métodos, destacando sus ventajas en escenarios complejos y desafiantes.
+
+### Ridge regression
+
+La regresión Ridge introduce una penalización en la estimación de los coeficientes de regresión, lo que ayuda a reducir la varianza del modelo y mejora su capacidad predictiva en presencia de datos altamente correlacionados o con muchas variables. 333 El modelo de regresión Ridge es una extensión de la regresión lineal estándar. Dado un conjunto de datos con $n$ observaciones y $p$ predictores, expresamos el modelo de regresión lineal múltiple como:
+
+$$
+\mathbf{Y}= \mathbf{X} \beta + \boldsymbol{\varepsilon}
+$$
+
+donde:
+
+-   $\mathbf{Y}$ es el vector de respuesta de dimensión $n \times 1$.
+-   $\mathbf{X}$ es la matriz de diseño de dimensión $n \times p$.
+-   $\beta$ es el vector de coeficientes de regresión de dimensión $p \times 1$.
+-   $\boldsymbol{\varepsilon}$ es el vector de errores aleatorios.
+
+En mínimos cuadrados ordinarios (OLS), los coeficientes se estiman minimizando la suma de los errores al cuadrado:
+
+$$
+SSE = \sum_{i=1}^{n} (Y_i - \hat{Y}_i)^2 = \| \mathbf{Y} - \mathbf{X} \beta \|^2.
+$$
+
+Sin embargo, cuando hay multicolinealidad, la matriz $X^T X$ puede ser casi singular, generando coeficientes inestables. Para evitar esto, la regresión Ridge añade un **término de penalización** $\lambda$, de la siguiente manera:
+
+$$
+SSE_{ridge} = \| \mathbf{Y} - \mathbf{X} \beta \|^2 + \lambda \sum_{j=1}^{p} \beta_j^2.
+$$
+
+Este término adicional, es un **término de penalización** ($L_2=\sum \beta_j^2$) impone una restricción sobre los coeficientes, evitando que tomen valores excesivamente grandes. La estimación de $\beta$ en Ridge se obtiene resolviendo:
+
+$$
+\hat{\beta}_{ridge} = (\mathbf{X}^T \mathbf{X} + \lambda I)^{-1} \mathbf{X}^T \mathbf{Y}.
+$$
+
+donde $I$ es la matriz identidad y $\lambda \geq 0$ es un hiperparámetro que controla la cantidad de penalización aplicada.
+
+**Interpretación del parámetro** $\lambda$
+
+-   Si $\lambda = 0$, el modelo Ridge es equivalente a la regresión lineal tradicional (OLS).
+-   A medida que $\lambda$ aumenta, los coeficientes $\beta_j$ se reducen en magnitud, lo que ayuda a controlar la varianza del modelo y a prevenir el sobreajuste.
+-   Si $\lambda$ es demasiado grande, los coeficientes se acercan a cero y el modelo puede perder interpretabilidad.
+
+La elección óptima de $\lambda$ se determina generalmente mediante **validación cruzada**.
+
+::: {.callout-caution title="Aviso"}
+Los detalles de la validación cruzada son tratados en la asignatura de Aprendizaje Automático.
+:::
+
+::: {.callout-note title="Propiedades Clave" collapse="false"}
+-   **Manejo de la multicolinealidad:** La regularización reduce la sensibilidad del modelo cuando los predictores están altamente correlacionados.
+
+-   **Menor varianza en las predicciones:** El modelo Ridge tiende a ser más estable en comparación con OLS, lo que mejora la capacidad de generalización en conjuntos de datos nuevos.
+
+-   **No realiza selección de variables:** A diferencia de Lasso, Ridge **no anula coeficientes**, sino que reduce su magnitud. Esto es útil cuando se sospecha que todas las variables tienen algún grado de importancia en el modelo.
+:::
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r ridge}
+# Cargar librerías
+library(glmnet)
+
+# Datos simulados
+set.seed(123)
+X <- matrix(rnorm(100 * 10), 100, 10)  # 100 observaciones, 10 predictores
+Y <- X %*% rnorm(10) + rnorm(100)  # Variable de respuesta con ruido
+
+# Ajustar modelo Ridge
+modelo_ridge <- glmnet(X, Y, alpha = 0)  # alpha = 0 indica regresión Ridge
+
+# Seleccionar lambda óptimo con validación cruzada
+cv_ridge <- cv.glmnet(X, Y, alpha = 0)
+lambda_optimo <- cv_ridge$lambda.min  # Mejor valor de lambda
+
+print(lambda_optimo)
+
+# Ajustar modelo final con lambda óptimo
+modelo_ridge_final <- glmnet(X, Y, alpha = 0, lambda = lambda_optimo)
+
+modelo_ridge_final
+
+# Comparación modelo clásico
+
+modelo_lm <- lm(Y~X)
+
+# Mostrar coeficientes
+output=cbind(round(coef(modelo_ridge_final),3),
+            round(coef(modelo_lm),3))
+
+colnames(output)=c("RIDGE","OLS")
+
+output
+
+```
+:::
+
+------------------------------------------------------------------------
+
+La regresión Ridge es una técnica poderosa para mejorar la estabilidad de los modelos de regresión en presencia de multicolinealidad. A diferencia de OLS, que puede generar coeficientes inestables, Ridge introduce una penalización que reduce la magnitud de los coeficientes, evitando valores extremos. Aunque Ridge no realiza selección de variables, su capacidad para reducir la varianza y mejorar la capacidad predictiva lo convierte en una herramienta esencial en el análisis de datos modernos.
+
+En la siguiente sección, exploraremos la **regresión Lasso**, que extiende este concepto permitiendo la eliminación de variables irrelevantes del modelo.
+
+### Regresión Lasso
+
+Cuando se tiene un conjunto de predictores con posibles redundancias o ruido, Lasso permite identificar cuáles son las variables más relevantes para el modelo, lo que facilita la interpretación y reduce la complejidad del análisis.
+
+Al igual que ocurría en Ridge Regression, el modelo de regresión Lasso se basa en la minimización de la siguiente función de error:33 $$
+SSE_{lasso} = \| \mathbf{Y}- \mathbf{X} \beta \|^2 + \lambda \sum_{j=1}^{p} |\beta_j|
+$$
+
+donde el **término de penalización**, ($L_1=\sum |\beta_j|$) hace que algunos coeficientes se reduzcan exactamente a **cero**, lo que significa que esas variables son eliminadas del modelo.
+
+La diferencia clave con **Ridge Regressión**, visto anteriormente, es que Ridge reduce la magnitud de los coeficientes pero no los anula, mientras que **Lasso puede eliminar variables por completo**.
+
+**Interpretación del parámetro** $\lambda$
+
+-   Si $\lambda = 0$, el modelo es equivalente a la regresión lineal tradicional (OLS).
+-   A medida que $\lambda$ aumenta, más coeficientes se reducen a cero, lo que equivale a realizar **selección de variables**.
+-   Si $\lambda$ es demasiado grande, se eliminan demasiadas variables, lo que puede resultar en un modelo subóptimo.
+
+Al igual que en el método *Risge*, la selección óptima de $\lambda$ se realiza generalmente mediante **validación cruzada**.
+
+------------------------------------------------------------------------
+
+::: {.callout-note title="Propiedades Clave" collapse="false"}
+-   **Selección de variables automática:** Lasso no solo regulariza, sino que también selecciona las variables más importantes eliminando aquellas menos relevantes.
+-   **Manejo de la multicolinealidad:** Puede mejorar la interpretación del modelo cuando hay muchas variables correlacionadas.
+-   **Simplicidad y interpretabilidad:** Un modelo con menos variables es más fácil de interpretar y aplicar en la práctica.
+-   **Reduce el sobreajuste:** La penalización $L_1$ evita que el modelo se ajuste demasiado a los datos de entrenamiento, mejorando su capacidad predictiva en datos nuevos.
+:::
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r lasso}
+
+# Ajustar modelo Lasso
+modelo_lasso <- glmnet(X, Y, alpha = 1)  # alpha = 1 indica regresión Lasso
+
+# Seleccionar lambda óptimo con validación cruzada
+cv_lasso <- cv.glmnet(X, Y, alpha = 1)
+lambda_optimo <- cv_lasso$lambda.min  # Mejor valor de lambda
+
+print(lambda_optimo)
+
+# Ajustar modelo final con lambda óptimo
+modelo_lasso_final <- glmnet(X, Y, alpha = 1, lambda = lambda_optimo)
+
+
+# Mostrar coeficientes
+output=cbind(round(coef(modelo_lasso_final),3),output)
+
+colnames(output)=c("LASSO","RIDGE","OLS")
+
+output
+
+
+```
+:::
+
+**Consideraciones Importantes**
+
+La regresión Lasso es una poderosa técnica de regularización que no solo mejora la estabilidad del modelo en presencia de muchas variables predictoras, sino que también realiza una selección automática de las más relevantes. Su capacidad para reducir coeficientes a cero la convierte en una herramienta esencial en el análisis de datos de alta dimensión.
+
+-   **Lasso puede eliminar demasiadas variables si** $\lambda$ es demasiado grande, lo que puede llevar a la pérdida de información importante.
+-   **No maneja bien grupos de predictores altamente correlacionados**, ya que selecciona solo uno de ellos y elimina los demás.
+-   **Elastic Net**, que combina Ridge y Lasso, puede ser una mejor opción cuando hay **multicolinealidad fuerte** en los datos.
+
+En la siguiente sección, exploraremos **Elastic Net**, una técnica híbrida que combina las ventajas de Ridge y Lasso para mejorar la selección de variables en presencia de predictores altamente correlacionados.
+
+### Elastic Net
+
+La regresión **Elastic Net** es una técnica de regularización que combina las propiedades de **Ridge** y **Lasso**, abordando algunas de sus limitaciones individuales. Mientras que Ridge es útil para manejar la multicolinealidad sin eliminar variables y Lasso selecciona un subconjunto de predictores, Elastic Net equilibra ambos enfoques permitiendo la selección de variables en presencia de alta correlación entre los predictores.
+
+Este método es particularmente efectivo cuando el número de predictores es grande y existe **multicolinealidad**, ya que permite controlar simultáneamente la **reducción de la magnitud de los coeficientes** y la **eliminación de variables irrelevantes**.
+
+Elastic Net introduce una penalización que combina los términos de Ridge ($L_2$) y Lasso ($L_1$):
+
+$$
+SSE_{\text{Elastic Net}} = \| Y - X \beta \|^2 + \lambda_1 \sum_{j=1}^{p} |\beta_j| + \lambda_2 \sum_{j=1}^{p} \beta_j^2
+$$
+
+donde:
+
+-   $\lambda_1$ (asociado a Lasso) controla la cantidad de coeficientes que se reducen a **cero**.
+-   $\lambda_2$ (asociado a Ridge) controla la **reducción de magnitud** de los coeficientes sin anularlos.
+-   $\alpha$ es un parámetro adicional que pondera la combinación entre Lasso y Ridge, con:
+    -   $\alpha = 1$ → Elastic Net se comporta como Lasso.
+    -   $\alpha = 0$ → Elastic Net se comporta como Ridge.
+    -   $0 < \alpha < 1$ → Elastic Net combina ambos métodos.
+
+La estimación de los coeficientes en Elastic Net se obtiene resolviendo:
+
+$$
+\hat{\beta}_{\text{Elastic Net}} = \arg \min_{\beta} \left( \| Y - X \beta \|^2 + \lambda \left( \alpha \sum |\beta_j| + (1 - \alpha) \sum \beta_j^2 \right) \right)
+$$
+
+------------------------------------------------------------------------
+
+::: {.callout-note title="Propiedades Clave" collapse="false"}
+-   **Manejo de la Multicolinealidad:** A diferencia de Lasso, que selecciona solo una de las variables correlacionadas y elimina las demás, Elastic Net distribuye la penalización entre todas las variables correlacionadas, evitando una selección arbitraria.
+
+-   **Selección de variables más estable:** La combinación de Lasso y Ridge permite una selección más robusta, manteniendo información relevante del modelo sin eliminar predictores clave.
+
+-   **Mejora del rendimiento predictivo:** Al utilizar validación cruzada para seleccionar los hiperparámetros $\lambda_1$, $\lambda_2$ y $\alpha$, se optimiza la capacidad del modelo para generalizar a nuevos datos.
+:::
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r elastic}
+
+# Ajustar modelo Elastic Net
+modelo_elastic_net <- glmnet(X, Y, alpha = 0.5)  # Alpha = 0.5 (50% Ridge, 50% Lasso)
+
+# Seleccionar lambda óptimo con validación cruzada
+cv_elastic_net <- cv.glmnet(X, Y, alpha = 0.5)
+lambda_optimo <- cv_elastic_net$lambda.min  # Mejor valor de lambda
+
+print(lambda_optimo)
+# Ajustar modelo final con lambda óptimo
+modelo_elastic_final <- glmnet(X, Y, alpha = 0.5, lambda = lambda_optimo)
+
+# Mostrar coeficientes
+output=cbind(round(coef(modelo_elastic_final),3),output)
+
+colnames(output)=c("ELASTIC","LASSO","RIDGE","OLS")
+
+output
+```
+:::
+
+Para determinar el mejor valor de $\alpha$, se usa **validación cruzada** probando distintos valores entre $0$ y 1. Algunas estrategias comunes incluyen:
+
+-   **Si hay muchas variables irrelevantes**, se recomienda $\alpha$ cercano a 1 (Lasso).
+-   **Si hay fuerte multicolinealidad**, se recomienda $\alpha$ cercano a 0 (Ridge).
+-   **Si se desea un balance entre selección y estabilidad**, se suele usar $\alpha = 0.5$.
+
+La regresión Elastic Net combina lo mejor de Ridge y Lasso, ofreciendo un método de regularización robusto para modelos con muchas variables predictoras y posible multicolinealidad. Su capacidad para seleccionar variables sin eliminar información clave lo convierte en una opción ideal para modelos complejos y de alta dimensionalidad.
+
+### Comparación de los métodos de Regularización
+
+| Método | Penalización | Efecto sobre los coeficientes |
+|------------------|------------------|-------------------------------------|
+| **OLS** | Ninguna | Sin restricción, puede haber multicolinealidad |
+| **Ridge** | $L_2$ | Reduce la magnitud de los coeficientes, pero no los anula |
+| **Lasso** | $L_1$ | Puede anular coeficientes, permitiendo selección de variables |
+| **Elastic Net** | $L_1 + L_2$ | Combinación de Ridge y Lasso |
+
+------------------------------------------------------------------------
+
+Lasso es especialmente útil cuando se sospecha que muchas variables son irrelevantes, mientras que Ridge es preferido cuando se espera que todas las variables aporten información al modelo.
+
+Elastic Net es ideal cuando hay **muchas variables correlacionadas** y se desea un modelo **estable y parsimonioso**.
+
+-   Elastic Net mejora la estabilidad del modelo en comparación con Lasso, especialmente cuando hay variables predictoras altamente correlacionadas.
+
+-   Es más flexible que Ridge y Lasso individualmente, permitiendo un ajuste más fino a distintos tipos de problemas.
+
+-   Requiere la selección de hiperparámetros ($\lambda$ y $\alpha$), por lo que debe usarse validación cruzada para encontrar la combinación óptima.
+
+------------------------------------------------------------------------

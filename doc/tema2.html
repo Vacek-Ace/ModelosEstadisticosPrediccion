@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -50,7 +84,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./conclusiones.html" rel="next">
+<link href="./tema3.html" rel="next">
 <link href="./tema1.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -176,8 +210,14 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./tema3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Métodos de selección de variables y problemas de regularización</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./conclusiones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -205,7 +245,13 @@ window.Quarto = {
   <li><a href="#selección-de-variables" id="toc-selección-de-variables" class="nav-link" data-scroll-target="#selección-de-variables"><span class="header-section-number">2.3</span> Selección de variables</a></li>
   <li><a href="#métodos-de-selección-directa" id="toc-métodos-de-selección-directa" class="nav-link" data-scroll-target="#métodos-de-selección-directa"><span class="header-section-number">2.4</span> Métodos de selección directa</a></li>
   <li><a href="#métodos-automáticos" id="toc-métodos-automáticos" class="nav-link" data-scroll-target="#métodos-automáticos"><span class="header-section-number">2.5</span> Métodos automáticos</a></li>
-  <li><a href="#métodos-basados-en-regularización" id="toc-métodos-basados-en-regularización" class="nav-link" data-scroll-target="#métodos-basados-en-regularización"><span class="header-section-number">2.6</span> Métodos basados en regularización</a></li>
+  <li><a href="#métodos-basados-en-regularización" id="toc-métodos-basados-en-regularización" class="nav-link" data-scroll-target="#métodos-basados-en-regularización"><span class="header-section-number">2.6</span> Métodos basados en regularización</a>
+  <ul class="collapse">
+  <li><a href="#ridge-regression" id="toc-ridge-regression" class="nav-link" data-scroll-target="#ridge-regression"><span class="header-section-number">2.6.1</span> Ridge regression</a></li>
+  <li><a href="#regresión-lasso" id="toc-regresión-lasso" class="nav-link" data-scroll-target="#regresión-lasso"><span class="header-section-number">2.6.2</span> Regresión Lasso</a></li>
+  <li><a href="#elastic-net" id="toc-elastic-net" class="nav-link" data-scroll-target="#elastic-net"><span class="header-section-number">2.6.3</span> Elastic Net</a></li>
+  <li><a href="#comparación-de-los-métodos-de-regularización" id="toc-comparación-de-los-métodos-de-regularización" class="nav-link" data-scroll-target="#comparación-de-los-métodos-de-regularización"><span class="header-section-number">2.6.4</span> Comparación de los métodos de Regularización</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -460,6 +506,404 @@ Consideraciones importantes
 <li><strong>Elastic Net:</strong> Combina las penalizaciones de Ridge y Lasso, ofreciendo mayor flexibilidad en situaciones donde hay una gran correlación entre los predictores.</li>
 </ul>
 <p>Estos métodos son especialmente útiles en problemas donde el número de variables predictoras excede el número de observaciones, o cuando se desea un modelo más interpretable. En esta sección, exploraremos en detalle los fundamentos teóricos, la implementación práctica y las aplicaciones de cada uno de estos métodos, destacando sus ventajas en escenarios complejos y desafiantes.</p>
+<section id="ridge-regression" class="level3" data-number="2.6.1">
+<h3 data-number="2.6.1" class="anchored" data-anchor-id="ridge-regression"><span class="header-section-number">2.6.1</span> Ridge regression</h3>
+<p>La regresión Ridge introduce una penalización en la estimación de los coeficientes de regresión, lo que ayuda a reducir la varianza del modelo y mejora su capacidad predictiva en presencia de datos altamente correlacionados o con muchas variables. 333 El modelo de regresión Ridge es una extensión de la regresión lineal estándar. Dado un conjunto de datos con <span class="math inline">\(n\)</span> observaciones y <span class="math inline">\(p\)</span> predictores, expresamos el modelo de regresión lineal múltiple como:</p>
+<p><span class="math display">\[
+\mathbf{Y}= \mathbf{X} \beta + \boldsymbol{\varepsilon}
+\]</span></p>
+<p>donde:</p>
+<ul>
+<li><span class="math inline">\(\mathbf{Y}\)</span> es el vector de respuesta de dimensión <span class="math inline">\(n \times 1\)</span>.</li>
+<li><span class="math inline">\(\mathbf{X}\)</span> es la matriz de diseño de dimensión <span class="math inline">\(n \times p\)</span>.</li>
+<li><span class="math inline">\(\beta\)</span> es el vector de coeficientes de regresión de dimensión <span class="math inline">\(p \times 1\)</span>.</li>
+<li><span class="math inline">\(\boldsymbol{\varepsilon}\)</span> es el vector de errores aleatorios.</li>
+</ul>
+<p>En mínimos cuadrados ordinarios (OLS), los coeficientes se estiman minimizando la suma de los errores al cuadrado:</p>
+<p><span class="math display">\[
+SSE = \sum_{i=1}^{n} (Y_i - \hat{Y}_i)^2 = \| \mathbf{Y} - \mathbf{X} \beta \|^2.
+\]</span></p>
+<p>Sin embargo, cuando hay multicolinealidad, la matriz <span class="math inline">\(X^T X\)</span> puede ser casi singular, generando coeficientes inestables. Para evitar esto, la regresión Ridge añade un <strong>término de penalización</strong> <span class="math inline">\(\lambda\)</span>, de la siguiente manera:</p>
+<p><span class="math display">\[
+SSE_{ridge} = \| \mathbf{Y} - \mathbf{X} \beta \|^2 + \lambda \sum_{j=1}^{p} \beta_j^2.
+\]</span></p>
+<p>Este término adicional, es un <strong>término de penalización</strong> (<span class="math inline">\(L_2=\sum \beta_j^2\)</span>) impone una restricción sobre los coeficientes, evitando que tomen valores excesivamente grandes. La estimación de <span class="math inline">\(\beta\)</span> en Ridge se obtiene resolviendo:</p>
+<p><span class="math display">\[
+\hat{\beta}_{ridge} = (\mathbf{X}^T \mathbf{X} + \lambda I)^{-1} \mathbf{X}^T \mathbf{Y}.
+\]</span></p>
+<p>donde <span class="math inline">\(I\)</span> es la matriz identidad y <span class="math inline">\(\lambda \geq 0\)</span> es un hiperparámetro que controla la cantidad de penalización aplicada.</p>
+<p><strong>Interpretación del parámetro <span class="math inline">\(\lambda\)</span></strong></p>
+<ul>
+<li>Si <span class="math inline">\(\lambda = 0\)</span>, el modelo Ridge es equivalente a la regresión lineal tradicional (OLS).</li>
+<li>A medida que <span class="math inline">\(\lambda\)</span> aumenta, los coeficientes <span class="math inline">\(\beta_j\)</span> se reducen en magnitud, lo que ayuda a controlar la varianza del modelo y a prevenir el sobreajuste.</li>
+<li>Si <span class="math inline">\(\lambda\)</span> es demasiado grande, los coeficientes se acercan a cero y el modelo puede perder interpretabilidad.</li>
+</ul>
+<p>La elección óptima de <span class="math inline">\(\lambda\)</span> se determina generalmente mediante <strong>validación cruzada</strong>.</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Aviso">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Aviso
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Los detalles de la validación cruzada son tratados en la asignatura de Aprendizaje Automático.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Propiedades Clave">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Propiedades Clave
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ul>
+<li><p><strong>Manejo de la multicolinealidad:</strong> La regularización reduce la sensibilidad del modelo cuando los predictores están altamente correlacionados.</p></li>
+<li><p><strong>Menor varianza en las predicciones:</strong> El modelo Ridge tiende a ser más estable en comparación con OLS, lo que mejora la capacidad de generalización en conjuntos de datos nuevos.</p></li>
+<li><p><strong>No realiza selección de variables:</strong> A diferencia de Lasso, Ridge <strong>no anula coeficientes</strong>, sino que reduce su magnitud. Esto es útil cuando se sospecha que todas las variables tienen algún grado de importancia en el modelo.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar librerías</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmnet)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Matrix</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loaded glmnet 4.1-8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Datos simulados</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">100</span> <span class="sc">*</span> <span class="dv">10</span>), <span class="dv">100</span>, <span class="dv">10</span>)  <span class="co"># 100 observaciones, 10 predictores</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> X <span class="sc">%*%</span> <span class="fu">rnorm</span>(<span class="dv">10</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)  <span class="co"># Variable de respuesta con ruido</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo Ridge</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>modelo_ridge <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="dv">0</span>)  <span class="co"># alpha = 0 indica regresión Ridge</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Seleccionar lambda óptimo con validación cruzada</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>cv_ridge <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="dv">0</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>lambda_optimo <span class="ot">&lt;-</span> cv_ridge<span class="sc">$</span>lambda.min  <span class="co"># Mejor valor de lambda</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(lambda_optimo)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2583753</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo final con lambda óptimo</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>modelo_ridge_final <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lambda =</span> lambda_optimo)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>modelo_ridge_final</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:  glmnet(x = X, y = Y, alpha = 0, lambda = lambda_optimo) 
+
+  Df  %Dev Lambda
+1 10 93.55 0.2584</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Comparación modelo clásico</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>modelo_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y<span class="sc">~</span>X)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar coeficientes</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>output<span class="ot">=</span><span class="fu">cbind</span>(<span class="fu">round</span>(<span class="fu">coef</span>(modelo_ridge_final),<span class="dv">3</span>),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">round</span>(<span class="fu">coef</span>(modelo_lm),<span class="dv">3</span>))</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(output)<span class="ot">=</span><span class="fu">c</span>(<span class="st">"RIDGE"</span>,<span class="st">"OLS"</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>output</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>11 x 2 sparse Matrix of class "dgCMatrix"
+             RIDGE    OLS
+(Intercept)  0.118  0.132
+V1          -0.874 -0.995
+V2          -1.019 -1.131
+V3           0.040  0.039
+V4           0.002  0.001
+V5          -2.500 -2.703
+V6           1.001  1.104
+V7           0.247  0.274
+V8           2.125  2.244
+V9           0.635  0.658
+V10         -0.390 -0.427</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr>
+<p>La regresión Ridge es una técnica poderosa para mejorar la estabilidad de los modelos de regresión en presencia de multicolinealidad. A diferencia de OLS, que puede generar coeficientes inestables, Ridge introduce una penalización que reduce la magnitud de los coeficientes, evitando valores extremos. Aunque Ridge no realiza selección de variables, su capacidad para reducir la varianza y mejorar la capacidad predictiva lo convierte en una herramienta esencial en el análisis de datos modernos.</p>
+<p>En la siguiente sección, exploraremos la <strong>regresión Lasso</strong>, que extiende este concepto permitiendo la eliminación de variables irrelevantes del modelo.</p>
+</section>
+<section id="regresión-lasso" class="level3" data-number="2.6.2">
+<h3 data-number="2.6.2" class="anchored" data-anchor-id="regresión-lasso"><span class="header-section-number">2.6.2</span> Regresión Lasso</h3>
+<p>Cuando se tiene un conjunto de predictores con posibles redundancias o ruido, Lasso permite identificar cuáles son las variables más relevantes para el modelo, lo que facilita la interpretación y reduce la complejidad del análisis.</p>
+<p>Al igual que ocurría en Ridge Regression, el modelo de regresión Lasso se basa en la minimización de la siguiente función de error:33 <span class="math display">\[
+SSE_{lasso} = \| \mathbf{Y}- \mathbf{X} \beta \|^2 + \lambda \sum_{j=1}^{p} |\beta_j|
+\]</span></p>
+<p>donde el <strong>término de penalización</strong>, (<span class="math inline">\(L_1=\sum |\beta_j|\)</span>) hace que algunos coeficientes se reduzcan exactamente a <strong>cero</strong>, lo que significa que esas variables son eliminadas del modelo.</p>
+<p>La diferencia clave con <strong>Ridge Regressión</strong>, visto anteriormente, es que Ridge reduce la magnitud de los coeficientes pero no los anula, mientras que <strong>Lasso puede eliminar variables por completo</strong>.</p>
+<p><strong>Interpretación del parámetro <span class="math inline">\(\lambda\)</span></strong></p>
+<ul>
+<li>Si <span class="math inline">\(\lambda = 0\)</span>, el modelo es equivalente a la regresión lineal tradicional (OLS).</li>
+<li>A medida que <span class="math inline">\(\lambda\)</span> aumenta, más coeficientes se reducen a cero, lo que equivale a realizar <strong>selección de variables</strong>.</li>
+<li>Si <span class="math inline">\(\lambda\)</span> es demasiado grande, se eliminan demasiadas variables, lo que puede resultar en un modelo subóptimo.</li>
+</ul>
+<p>Al igual que en el método <em>Risge</em>, la selección óptima de <span class="math inline">\(\lambda\)</span> se realiza generalmente mediante <strong>validación cruzada</strong>.</p>
+<hr>
+<div class="callout callout-style-default callout-note callout-titled" title="Propiedades Clave">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Propiedades Clave
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Selección de variables automática:</strong> Lasso no solo regulariza, sino que también selecciona las variables más importantes eliminando aquellas menos relevantes.</li>
+<li><strong>Manejo de la multicolinealidad:</strong> Puede mejorar la interpretación del modelo cuando hay muchas variables correlacionadas.</li>
+<li><strong>Simplicidad y interpretabilidad:</strong> Un modelo con menos variables es más fácil de interpretar y aplicar en la práctica.</li>
+<li><strong>Reduce el sobreajuste:</strong> La penalización <span class="math inline">\(L_1\)</span> evita que el modelo se ajuste demasiado a los datos de entrenamiento, mejorando su capacidad predictiva en datos nuevos.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo Lasso</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>modelo_lasso <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="dv">1</span>)  <span class="co"># alpha = 1 indica regresión Lasso</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Seleccionar lambda óptimo con validación cruzada</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>cv_lasso <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="dv">1</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>lambda_optimo <span class="ot">&lt;-</span> cv_lasso<span class="sc">$</span>lambda.min  <span class="co"># Mejor valor de lambda</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(lambda_optimo)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.03260326</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo final con lambda óptimo</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>modelo_lasso_final <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">lambda =</span> lambda_optimo)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar coeficientes</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>output<span class="ot">=</span><span class="fu">cbind</span>(<span class="fu">round</span>(<span class="fu">coef</span>(modelo_lasso_final),<span class="dv">3</span>),output)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(output)<span class="ot">=</span><span class="fu">c</span>(<span class="st">"LASSO"</span>,<span class="st">"RIDGE"</span>,<span class="st">"OLS"</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>output</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>11 x 3 sparse Matrix of class "dgCMatrix"
+             LASSO  RIDGE    OLS
+(Intercept)  0.131  0.118  0.132
+V1          -0.950 -0.874 -0.995
+V2          -1.078 -1.019 -1.131
+V3           0.006  0.040  0.039
+V4           .      0.002  0.001
+V5          -2.652 -2.500 -2.703
+V6           1.058  1.001  1.104
+V7           0.235  0.247  0.274
+V8           2.213  2.125  2.244
+V9           0.629  0.635  0.658
+V10         -0.392 -0.390 -0.427</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>Consideraciones Importantes</strong></p>
+<p>La regresión Lasso es una poderosa técnica de regularización que no solo mejora la estabilidad del modelo en presencia de muchas variables predictoras, sino que también realiza una selección automática de las más relevantes. Su capacidad para reducir coeficientes a cero la convierte en una herramienta esencial en el análisis de datos de alta dimensión.</p>
+<ul>
+<li><strong>Lasso puede eliminar demasiadas variables si <span class="math inline">\(\lambda\)</span> es demasiado grande</strong>, lo que puede llevar a la pérdida de información importante.</li>
+<li><strong>No maneja bien grupos de predictores altamente correlacionados</strong>, ya que selecciona solo uno de ellos y elimina los demás.</li>
+<li><strong>Elastic Net</strong>, que combina Ridge y Lasso, puede ser una mejor opción cuando hay <strong>multicolinealidad fuerte</strong> en los datos.</li>
+</ul>
+<p>En la siguiente sección, exploraremos <strong>Elastic Net</strong>, una técnica híbrida que combina las ventajas de Ridge y Lasso para mejorar la selección de variables en presencia de predictores altamente correlacionados.</p>
+</section>
+<section id="elastic-net" class="level3" data-number="2.6.3">
+<h3 data-number="2.6.3" class="anchored" data-anchor-id="elastic-net"><span class="header-section-number">2.6.3</span> Elastic Net</h3>
+<p>La regresión <strong>Elastic Net</strong> es una técnica de regularización que combina las propiedades de <strong>Ridge</strong> y <strong>Lasso</strong>, abordando algunas de sus limitaciones individuales. Mientras que Ridge es útil para manejar la multicolinealidad sin eliminar variables y Lasso selecciona un subconjunto de predictores, Elastic Net equilibra ambos enfoques permitiendo la selección de variables en presencia de alta correlación entre los predictores.</p>
+<p>Este método es particularmente efectivo cuando el número de predictores es grande y existe <strong>multicolinealidad</strong>, ya que permite controlar simultáneamente la <strong>reducción de la magnitud de los coeficientes</strong> y la <strong>eliminación de variables irrelevantes</strong>.</p>
+<p>Elastic Net introduce una penalización que combina los términos de Ridge (<span class="math inline">\(L_2\)</span>) y Lasso (<span class="math inline">\(L_1\)</span>):</p>
+<p><span class="math display">\[
+SSE_{\text{Elastic Net}} = \| Y - X \beta \|^2 + \lambda_1 \sum_{j=1}^{p} |\beta_j| + \lambda_2 \sum_{j=1}^{p} \beta_j^2
+\]</span></p>
+<p>donde:</p>
+<ul>
+<li><span class="math inline">\(\lambda_1\)</span> (asociado a Lasso) controla la cantidad de coeficientes que se reducen a <strong>cero</strong>.</li>
+<li><span class="math inline">\(\lambda_2\)</span> (asociado a Ridge) controla la <strong>reducción de magnitud</strong> de los coeficientes sin anularlos.</li>
+<li><span class="math inline">\(\alpha\)</span> es un parámetro adicional que pondera la combinación entre Lasso y Ridge, con:
+<ul>
+<li><span class="math inline">\(\alpha = 1\)</span> → Elastic Net se comporta como Lasso.</li>
+<li><span class="math inline">\(\alpha = 0\)</span> → Elastic Net se comporta como Ridge.</li>
+<li><span class="math inline">\(0 &lt; \alpha &lt; 1\)</span> → Elastic Net combina ambos métodos.</li>
+</ul></li>
+</ul>
+<p>La estimación de los coeficientes en Elastic Net se obtiene resolviendo:</p>
+<p><span class="math display">\[
+\hat{\beta}_{\text{Elastic Net}} = \arg \min_{\beta} \left( \| Y - X \beta \|^2 + \lambda \left( \alpha \sum |\beta_j| + (1 - \alpha) \sum \beta_j^2 \right) \right)
+\]</span></p>
+<hr>
+<div class="callout callout-style-default callout-note callout-titled" title="Propiedades Clave">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Propiedades Clave
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ul>
+<li><p><strong>Manejo de la Multicolinealidad:</strong> A diferencia de Lasso, que selecciona solo una de las variables correlacionadas y elimina las demás, Elastic Net distribuye la penalización entre todas las variables correlacionadas, evitando una selección arbitraria.</p></li>
+<li><p><strong>Selección de variables más estable:</strong> La combinación de Lasso y Ridge permite una selección más robusta, manteniendo información relevante del modelo sin eliminar predictores clave.</p></li>
+<li><p><strong>Mejora del rendimiento predictivo:</strong> Al utilizar validación cruzada para seleccionar los hiperparámetros <span class="math inline">\(\lambda_1\)</span>, <span class="math inline">\(\lambda_2\)</span> y <span class="math inline">\(\alpha\)</span>, se optimiza la capacidad del modelo para generalizar a nuevos datos.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo Elastic Net</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>modelo_elastic_net <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="fl">0.5</span>)  <span class="co"># Alpha = 0.5 (50% Ridge, 50% Lasso)</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Seleccionar lambda óptimo con validación cruzada</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>cv_elastic_net <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="fl">0.5</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>lambda_optimo <span class="ot">&lt;-</span> cv_elastic_net<span class="sc">$</span>lambda.min  <span class="co"># Mejor valor de lambda</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(lambda_optimo)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0213522</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo final con lambda óptimo</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>modelo_elastic_final <span class="ot">&lt;-</span> <span class="fu">glmnet</span>(X, Y, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">lambda =</span> lambda_optimo)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar coeficientes</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>output<span class="ot">=</span><span class="fu">cbind</span>(<span class="fu">round</span>(<span class="fu">coef</span>(modelo_elastic_final),<span class="dv">3</span>),output)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(output)<span class="ot">=</span><span class="fu">c</span>(<span class="st">"ELASTIC"</span>,<span class="st">"LASSO"</span>,<span class="st">"RIDGE"</span>,<span class="st">"OLS"</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>output</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>11 x 4 sparse Matrix of class "dgCMatrix"
+            ELASTIC  LASSO  RIDGE    OLS
+(Intercept)   0.131  0.131  0.118  0.132
+V1           -0.975 -0.950 -0.874 -0.995
+V2           -1.108 -1.078 -1.019 -1.131
+V3            0.028  0.006  0.040  0.039
+V4            .      .      0.002  0.001
+V5           -2.677 -2.652 -2.500 -2.703
+V6            1.084  1.058  1.001  1.104
+V7            0.260  0.235  0.247  0.274
+V8            2.229  2.213  2.125  2.244
+V9            0.647  0.629  0.635  0.658
+V10          -0.414 -0.392 -0.390 -0.427</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Para determinar el mejor valor de <span class="math inline">\(\alpha\)</span>, se usa <strong>validación cruzada</strong> probando distintos valores entre <span class="math inline">\(0\)</span> y 1. Algunas estrategias comunes incluyen:</p>
+<ul>
+<li><strong>Si hay muchas variables irrelevantes</strong>, se recomienda <span class="math inline">\(\alpha\)</span> cercano a 1 (Lasso).</li>
+<li><strong>Si hay fuerte multicolinealidad</strong>, se recomienda <span class="math inline">\(\alpha\)</span> cercano a 0 (Ridge).</li>
+<li><strong>Si se desea un balance entre selección y estabilidad</strong>, se suele usar <span class="math inline">\(\alpha = 0.5\)</span>.</li>
+</ul>
+<p>La regresión Elastic Net combina lo mejor de Ridge y Lasso, ofreciendo un método de regularización robusto para modelos con muchas variables predictoras y posible multicolinealidad. Su capacidad para seleccionar variables sin eliminar información clave lo convierte en una opción ideal para modelos complejos y de alta dimensionalidad.</p>
+</section>
+<section id="comparación-de-los-métodos-de-regularización" class="level3" data-number="2.6.4">
+<h3 data-number="2.6.4" class="anchored" data-anchor-id="comparación-de-los-métodos-de-regularización"><span class="header-section-number">2.6.4</span> Comparación de los métodos de Regularización</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 21%">
+<col style="width: 53%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Método</th>
+<th>Penalización</th>
+<th>Efecto sobre los coeficientes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>OLS</strong></td>
+<td>Ninguna</td>
+<td>Sin restricción, puede haber multicolinealidad</td>
+</tr>
+<tr class="even">
+<td><strong>Ridge</strong></td>
+<td><span class="math inline">\(L_2\)</span></td>
+<td>Reduce la magnitud de los coeficientes, pero no los anula</td>
+</tr>
+<tr class="odd">
+<td><strong>Lasso</strong></td>
+<td><span class="math inline">\(L_1\)</span></td>
+<td>Puede anular coeficientes, permitiendo selección de variables</td>
+</tr>
+<tr class="even">
+<td><strong>Elastic Net</strong></td>
+<td><span class="math inline">\(L_1 + L_2\)</span></td>
+<td>Combinación de Ridge y Lasso</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p>Lasso es especialmente útil cuando se sospecha que muchas variables son irrelevantes, mientras que Ridge es preferido cuando se espera que todas las variables aporten información al modelo.</p>
+<p>Elastic Net es ideal cuando hay <strong>muchas variables correlacionadas</strong> y se desea un modelo <strong>estable y parsimonioso</strong>.</p>
+<ul>
+<li><p>Elastic Net mejora la estabilidad del modelo en comparación con Lasso, especialmente cuando hay variables predictoras altamente correlacionadas.</p></li>
+<li><p>Es más flexible que Ridge y Lasso individualmente, permitiendo un ajuste más fino a distintos tipos de problemas.</p></li>
+<li><p>Requiere la selección de hiperparámetros (<span class="math inline">\(\lambda\)</span> y <span class="math inline">\(\alpha\)</span>), por lo que debe usarse validación cruzada para encontrar la combinación óptima.</p></li>
+</ul>
+<hr>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
@@ -467,6 +911,7 @@ Consideraciones importantes
 Kutner, Michael H, Christopher J Nachtsheim, John Neter, y William Li. 2005. <em>Applied linear statistical models</em>. McGraw-hill.
 </div>
 </div>
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -897,8 +1342,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./conclusiones.html" class="pagination-link" aria-label="Conclusiones">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Conclusiones</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./tema3.html" class="pagination-link" aria-label="Métodos de selección de variables y problemas de regularización">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Métodos de selección de variables y problemas de regularización</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

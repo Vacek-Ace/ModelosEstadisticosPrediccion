@@ -1,0 +1,161 @@
+# Modelos no lineales. Transformación de variables. Ingeniería de características. {#sec-tema3}
+
+En el análisis de datos, muchas relaciones entre variables no pueden ser capturadas adecuadamente mediante modelos de regresión lineal. Aunque la regresión lineal es una herramienta poderosa por su simplicidad e interpretabilidad, existen numerosos escenarios donde las relaciones entre las variables son inherentemente **no lineales**. 
+
+
+Limitaciones de la regresión lineal:
+
+  - Relaciones no lineales: En muchos casos, la relación entre las variables no es proporcional ni constante. Por ejemplo, el crecimiento poblacional o la desintegración radiactiva siguen patrones exponenciales.
+  - Interacciones no consideradas: La regresión lineal simple no capta interacciones entre variables a menos que se incluyan explícitamente.
+  - Sensibilidad a valores atípicos: Los modelos lineales pueden verse influenciados por outliers, afectando la precisión del modelo.
+  - Supuestos estrictos: La regresión lineal asume homocedasticidad, normalidad de los errores e independencia, lo cual no siempre se cumple en la práctica.
+
+Estas limitaciones abren la puerta a la necesidad de modelos más flexibles (**modelos no lineales**) que puedan capturar relaciones complejas entre las variables.
+
+Además de utilizar modelos no lineales, otra estrategia fundamental es la **transformación de variables**. Mediante transformaciones matemáticas (como logaritmos, potencias o funciones exponenciales), es posible linearizar relaciones no lineales o mejorar la adecuación del modelo. Estas transformaciones pueden también ayudar a cumplir con los supuestos de normalidad y homocedasticidad en los modelos.
+
+Finalmente, la **ingeniería de características** juega un papel crucial en la mejora del rendimiento de los modelos predictivos. Este proceso implica la creación, modificación o combinación de variables explicativas para extraer mayor información de los datos. La ingeniería de características es clave para mejorar la capacidad predictiva de los modelos, especialmente en entornos de alta dimensionalidad o con datos complejos.
+
+A lo largo de este tema, exploraremos estos tres pilares: cómo identificar y ajustar modelos no lineales, cómo aplicar transformaciones efectivas a las variables y cómo desarrollar nuevas características que potencien el análisis y la predicción.
+
+## Modelos no lineales
+
+
+Los modelos de regresión no lineal son herramientas esenciales cuando las relaciones entre las variables no pueden capturarse adecuadamente con modelos lineales. La regresión polinómica, exponencial, logarítmica y los modelos por tramos ofrecen diferentes enfoques para representar patrones complejos en los datos. Comprender cuándo y cómo aplicar estos modelos es fundamental para mejorar la precisión y la interpretabilidad en el análisis de datos.
+
+### Regresión Polinómica
+
+La **regresión polinómica** es una extensión de la regresión lineal que permite capturar relaciones no lineales mediante la inclusión de términos polinómicos (cuadráticos, cúbicos, etc.). Aunque sigue siendo un modelo lineal en los parámetros, la inclusión de potencias de las variables independientes permite ajustar curvas en lugar de líneas rectas.
+
+$$
+Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \beta_3 X^3 + \dots + \beta_k X^k + \varepsilon
+$$
+
+Donde $k$ es el grado del polinomio. A medida que aumenta el grado, el modelo se vuelve más flexible y puede ajustarse a relaciones más complejas.
+
+Este tipo de modelos son capaces de capturar curvaturas suaves en los datos. Se trata de modelos fáciles de implementar y comprender, aunque la interpretación de los coeficientes asociados a altos grados del polinomio puede ser compleja. 
+De hecho, exite un claro riesgo de sobreajuste cuando se utilizan polinomios de alto grado.
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r regresión_polinomica}
+# Datos simulados
+set.seed(123)
+x <- 1:20
+y <- 3 + 2 * x + 0.5 * x^2 + rnorm(20, mean = 0, sd = 10)
+
+# Ajuste del modelo polinómico de grado 2
+modelo_polinomico <- lm(y ~ poly(x, 2))
+
+summary(modelo_polinomico)
+
+# Visualización
+plot(x, y, main = "Regresión Polinómica de Segundo Grado", pch = 19, col = "blue")
+lines(x, predict(modelo_polinomico), col = "red", lwd = 2)
+```
+:::
+---
+
+### Modelos de Regresión Exponencial y Logarítmica
+
+Cuando la relación entre la variable dependiente y la independiente sigue un **crecimiento o decaimiento exponencial**, o una relación logarítmica, los modelos lineales tradicionales no son suficientes. En estos casos, se pueden utilizar transformaciones exponenciales o logarítmicas.
+
+**Regresión Exponencial**
+
+Este modelo es útil cuando la variable dependiente crece (o decrece) a una tasa proporcional a su valor actual.
+
+$$
+Y = \beta_0 e^{\beta_1 X} + \varepsilon
+$$
+
+Este modelo puede **linearizarse** tomando el logaritmo de la variable dependiente:
+
+$$
+\log(Y) = \log(\beta_0) + \beta_1 X + \varepsilon
+$$
+
+**Regresión Logarítmica**
+
+Útil cuando la tasa de cambio de la variable dependiente disminuye a medida que aumenta la variable independiente.
+
+$$
+Y = \beta_0 + \beta_1 \log(X) + \varepsilon
+$$
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r regresión_exp}
+# Datos simulados para un modelo exponencial
+set.seed(123)
+x <- 1:20
+y <- exp(0.3 * x) + rnorm(20, mean = 0, sd = 20)
+
+# Asegurarse de que todos los valores de 'y' sean positivos para aplicar logaritmo
+y[y <= 0] <- min(y[y > 0]) * 0.5  # Reemplaza valores no positivos por un valor pequeño positivo
+
+# Ajuste del modelo exponencial (transformación logarítmica)
+modelo_exponencial <- lm(log(y) ~ x)
+
+# Resumen del modelo
+summary(modelo_exponencial)
+
+# Visualización
+plot(x, y, main = "Regresión Exponencial", pch = 19, col = "blue", ylab = "y", xlab = "x")
+
+# Predicciones para los mismos valores de x
+predicciones <- predict(modelo_exponencial, newdata = data.frame(x = x))
+
+# Convertir predicciones a la escala original (exponencial inverso del log)
+lines(x, exp(predicciones), col = "red", lwd = 2)
+
+```
+:::
+
+
+### Regresión Spline y modelos basados en Segmentos
+
+Los **splines** y los **modelos segmentados** son técnicas que permiten ajustar relaciones no lineales mediante la división de los datos en segmentos y el ajuste de funciones lineales o polinómicas en cada segmento. Estos métodos son especialmente útiles cuando la relación entre las variables cambia en diferentes rangos de los datos.
+
+**Splines**
+
+Un **spline** es una pieza de polinomios ajustados en diferentes tramos del dominio de la variable independiente. Los puntos donde cambian los tramos se llaman **nudos**. Los **splines cúbicos** son los más utilizados, ya que garantizan suavidad en las transiciones entre tramos.
+
+**Modelos por tramos (Piecewise Regression)**
+
+En este enfoque, se ajustan diferentes regresiones lineales a distintos rangos de la variable independiente. A diferencia de los splines, las transiciones entre segmentos no necesariamente son suaves.
+
+Estos modelos permiten capturar relaciones complejas con menor riesgo de sobreajuste en comparación con polinomios de alto grado.
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r regresión_splines}
+# Cargar librería para splines
+library(splines)
+
+# Datos simulados
+set.seed(123)
+x <- seq(1, 100, by = 1)
+y <- ifelse(x <= 50, 2 * x + rnorm(100, 0, 10), 0.5 * x + rnorm(100, 0, 10))
+
+# Ajuste del modelo spline
+modelo_spline <- lm(y ~ bs(x, knots = c(30, 60, 80)))
+
+# En este caso se ha ajustado un spline cúbico con nudos en 30,60 y 80
+summary(modelo_spline)
+
+# Visualización
+plot(x, y, main = "Regresión Spline", pch = 19, col = "blue")
+lines(x, predict(modelo_spline), col = "red", lwd = 2)
+
+
+# Ajustamos un spline cuadrático 
+
+# Ajuste del modelo spline
+modelo_spline <- lm(y ~ bs(x, degree=2, knots = c(30, 60, 80)))
+
+# En este caso se ha ajustado un spline cúbico con nudos en 30,60 y 80
+summary(modelo_spline)
+
+# Visualización
+plot(x, y, main = "Regresión Spline", pch = 19, col = "blue")
+lines(x, predict(modelo_spline), col = "red", lwd = 2)
+```
+:::
+
