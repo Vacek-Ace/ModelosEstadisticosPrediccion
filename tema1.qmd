@@ -21,7 +21,7 @@ considerar múltiples variables explicativas, permitiendo capturar
 relaciones más complejas y realistas. Ambos modelos comparten principios
 fundamentales, como el ajuste de una recta mediante el criterio de
 mínimos cuadrados y la interpretación de sus parámetros, pero difieren
-en su alcance y en los retos que presentan.
+en su alcance y en los retos que presentan[@weisberg2005applied].
 
 En este tema, abordaremos los fundamentos de la regresión lineal simple,
 incluyendo sus suposiciones clave, el procedimiento de estimación de
@@ -748,11 +748,14 @@ $$ donde $\bar{X}$ y $\bar{Y}$ son las medias de $X$ y $Y$,
 respectivamente.
 
 ::: {.callout-caution title="Ejercicio" collapse="true"}
-Asumiendo la normalidad de la variable respuesta: $$
+Asumiendo la normalidad de la variable respuesta: 
+$$
     \varepsilon_i \overset{\mathrm{iid}}{\sim} N(0, \sigma^2) \Leftrightarrow Y_i \overset{\mathrm{iid}}{\sim} N(\beta_0+\beta_1X_i,\sigma^2), \hspace{0.5cm} i=1,\ldots,n.
     $$
 
-Se tiene entonces la verosimilud para $\beta=(\beta_0,\beta_1)$, $$
+Se tiene entonces la verosimilud para $\beta=(\beta_0,\beta_1)$, 
+
+$$
 L(\beta; Y)=exp \left ( -\frac{\sum_{i=1}^{n}(Y_i-\beta_0-\beta_1X_i)^2}{2\sigma^2} \right).
 $$
 
