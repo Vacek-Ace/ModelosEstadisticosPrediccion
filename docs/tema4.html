@@ -228,6 +228,12 @@ window.Quarto = {
   <li><a href="#componentes-de-un-modelo-lineal-generalizado" id="toc-componentes-de-un-modelo-lineal-generalizado" class="nav-link" data-scroll-target="#componentes-de-un-modelo-lineal-generalizado"><span class="header-section-number">4.1.2</span> Componentes de un Modelo Lineal Generalizado</a></li>
   <li><a href="#diferencias-clave-entre-la-regresión-lineal-y-los-glm" id="toc-diferencias-clave-entre-la-regresión-lineal-y-los-glm" class="nav-link" data-scroll-target="#diferencias-clave-entre-la-regresión-lineal-y-los-glm"><span class="header-section-number">4.1.3</span> Diferencias clave entre la Regresión Lineal y los GLM</a></li>
   </ul></li>
+  <li><a href="#regresión-logística" id="toc-regresión-logística" class="nav-link" data-scroll-target="#regresión-logística"><span class="header-section-number">4.2</span> Regresión Logística</a>
+  <ul class="collapse">
+  <li><a href="#fundamentos-de-la-regresión-logística" id="toc-fundamentos-de-la-regresión-logística" class="nav-link" data-scroll-target="#fundamentos-de-la-regresión-logística"><span class="header-section-number">4.2.1</span> Fundamentos de la Regresión Logística</a></li>
+  <li><a href="#interpretación-de-coeficientes-y-odds-ratios" id="toc-interpretación-de-coeficientes-y-odds-ratios" class="nav-link" data-scroll-target="#interpretación-de-coeficientes-y-odds-ratios"><span class="header-section-number">4.2.2</span> Interpretación de coeficientes y Odds Ratios</a></li>
+  <li><a href="#evaluación-del-modelo-logístico" id="toc-evaluación-del-modelo-logístico" class="nav-link" data-scroll-target="#evaluación-del-modelo-logístico"><span class="header-section-number">4.2.3</span> Evaluación del modelo Logístico</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -450,8 +456,231 @@ Number of Fisher Scoring iterations: 5</code></pre>
 </div>
 </div>
 </div>
-<p>Los <strong>Modelos Lineales Generalizados (GLM)</strong> amplían el alcance de la regresión lineal clásica, proporcionando herramientas para modelar una amplia variedad de tipos de datos, desde variables binarias hasta datos de conteo y variables continuas no normales. A través del uso de funciones de enlace y distribuciones flexibles, los GLM permiten resolver problemas complejos del mundo real en campos tan diversos como la medicina, el marketing, la ingeniería y las ciencias sociales.</p>
+<hr>
+<p>Los <strong>Modelos Lineales Generalizados</strong> amplían el alcance de la regresión lineal clásica, proporcionando herramientas para modelar una amplia variedad de tipos de datos, desde variables binarias hasta datos de conteo y variables continuas no normales. A través del uso de funciones de enlace y distribuciones flexibles, los GLM permiten resolver problemas complejos del mundo real en campos tan diversos como la medicina, el marketing, la ingeniería y las ciencias sociales.</p>
 <p>En las próximas secciones, exploraremos en detalle cómo aplicar estos modelos específicos, como la <strong>regresión logística</strong> y la <strong>regresión de Poisson</strong>, y cómo interpretar sus resultados en diferentes contextos.</p>
+</section>
+</section>
+<section id="regresión-logística" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="regresión-logística"><span class="header-section-number">4.2</span> Regresión Logística</h2>
+<p>La <strong>regresión logística</strong> es una herramienta fundamental para modelar la probabilidad de eventos binarios en una variedad de contextos, desde la medicina hasta la economía y el marketing. La correcta interpretación de los coeficientes mediante <strong>odds ratios</strong>, así como la evaluación del ajuste del modelo mediante curvas <strong>ROC</strong> y matrices de confusión, son esenciales para extraer conclusiones válidas de los datos.</p>
+<section id="fundamentos-de-la-regresión-logística" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="fundamentos-de-la-regresión-logística"><span class="header-section-number">4.2.1</span> Fundamentos de la Regresión Logística</h3>
+<p>La <strong>regresión logística</strong> es una técnica estadística utilizada para modelar la probabilidad de ocurrencia de un evento binario, es decir, cuando la variable dependiente toma solo dos posibles valores (por ejemplo, <strong>éxito/fracaso</strong>, <strong>sí/no</strong>, <strong>enfermo/sano</strong>). A diferencia de la regresión lineal, que modela una relación lineal entre variables, la regresión logística utiliza una <strong>función logística</strong> para asegurar que las predicciones estén en el rango [0,1], lo cual es necesario para interpretar los resultados como probabilidades.</p>
+<p><strong>La función Logística (Sigmoide)</strong></p>
+<p>La función logística transforma cualquier valor real en un valor comprendido entre 0 y 1. La forma matemática de la función logística es:</p>
+<p><span class="math display">\[
+P(Y = 1 | X) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p)}}
+\]</span></p>
+<p>Donde:</p>
+<ul>
+<li><span class="math inline">\(P(Y = 1 | X)\)</span> es la probabilidad de que el evento ocurra.</li>
+<li><span class="math inline">\(\beta_0\)</span> es el intercepto y <span class="math inline">\(\beta_1, \beta_2, \dots, \beta_p\)</span> son los coeficientes asociados a las variables independientes <span class="math inline">\(X_1, X_2, \dots, X_p\)</span>.</li>
+</ul>
+<p>La <strong>curva sigmoide</strong> que representa esta función tiene forma de “S”, lo que refleja que para valores muy pequeños o muy grandes del predictor, la probabilidad se aplana hacia 0 o 1, respectivamente.</p>
+<p><strong>Función de Enlace Logit</strong></p>
+<p>En la regresión logística, la relación entre el predictor lineal y la probabilidad se establece mediante la <strong>función de enlace logit</strong>. El logit de una probabilidad <span class="math inline">\(p\)</span> se define como:</p>
+<p><span class="math display">\[
+\text{logit}(p) = \log\left(\frac{p}{1 - p}\right)
+\]</span></p>
+<p>Esta transformación convierte una probabilidad en una escala que va de <span class="math inline">\(-\infty\)</span> a <span class="math inline">\(+\infty\)</span>, lo que permite ajustar un modelo lineal a los datos. El modelo logístico puede expresarse como:</p>
+<p><span class="math display">\[
+\log\left(\frac{p}{1 - p}\right) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p
+\]</span></p>
+</section>
+<section id="interpretación-de-coeficientes-y-odds-ratios" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="interpretación-de-coeficientes-y-odds-ratios"><span class="header-section-number">4.2.2</span> Interpretación de coeficientes y Odds Ratios</h3>
+<p>Uno de los aspectos más importantes de la regresión logística es la interpretación de los coeficientes. Dado que los coeficientes están en la escala del logit, su interpretación directa no es tan intuitiva como en la regresión lineal. Sin embargo, podemos interpretarlos utilizando <strong>odds</strong> y <strong>odds ratios</strong>.</p>
+<p>El <strong>odds</strong> o razón de probabilidades de que ocurra un evento es el cociente entre la probabilidad de que ocurra el evento y la probabilidad de que no ocurra:</p>
+<p><span class="math display">\[
+\text{odds} = \frac{p}{1 - p}
+\]</span></p>
+<p>Por ejemplo, si la probabilidad de éxito es 0.8, el odds sería:</p>
+<p><span class="math display">\[
+\text{odds} = \frac{0.8}{1 - 0.8} = 4
+\]</span></p>
+<p>Esto significa que el evento es <strong>4 veces más probable</strong> que no ocurra.</p>
+<p>El <strong>odds ratio (OR)</strong> mide el cambio en los odds cuando una variable independiente aumenta en una unidad. Se calcula como el exponencial del coeficiente de la regresión logística:</p>
+<p><span class="math display">\[
+\text{OR} = e^{\beta}
+\]</span></p>
+<p><strong>Interpretación de OR:</strong></p>
+<ul>
+<li>Si <strong>OR &gt; 1</strong>, el evento es más probable a medida que aumenta la variable independiente.</li>
+<li>Si <strong>OR &lt; 1</strong>, el evento es menos probable a medida que aumenta la variable independiente.</li>
+<li>Si <strong>OR = 1</strong>, no hay efecto.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Supongamos que ajustamos un modelo de regresión logística para predecir la probabilidad de tener diabetes en función del índice de masa corporal (BMI). El coeficiente asociado a <strong>BMI</strong> es 0.08.</p>
+<p><span class="math display">\[
+\text{OR} = e^{0.08} \approx 1.083
+\]</span></p>
+<p>Esto significa que por cada incremento de 1 unidad en el BMI, la <strong>odds</strong> de tener diabetes aumentan en un <strong>8.3%</strong>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="evaluación-del-modelo-logístico" class="level3" data-number="4.2.3">
+<h3 data-number="4.2.3" class="anchored" data-anchor-id="evaluación-del-modelo-logístico"><span class="header-section-number">4.2.3</span> Evaluación del modelo Logístico</h3>
+<p>A diferencia de la regresión lineal, donde se usa el coeficiente de determinación (<span class="math inline">\(R^2\)</span>) para evaluar el ajuste, en la regresión logística se utilizan otros métodos para medir la calidad del modelo.</p>
+<p><strong>Matriz de Confusión</strong></p>
+<p>La <strong>matriz de confusión</strong> compara las predicciones del modelo con los valores reales, clasificando las observaciones en:</p>
+<ul>
+<li><strong>Verdaderos Positivos (VP):</strong> Predijo positivo y es positivo.</li>
+<li><strong>Falsos Positivos (FP):</strong> Predijo positivo pero es negativo.</li>
+<li><strong>Verdaderos Negativos (VN):</strong> Predijo negativo y es negativo.</li>
+<li><strong>Falsos Negativos (FN):</strong> Predijo negativo pero es positivo.</li>
+</ul>
+<p>A partir de esta matriz, se pueden calcular métricas importantes como:</p>
+<ul>
+<li><strong>Precisión (Accuracy):</strong> <span class="math inline">\(\frac{VP + VN}{\text{Total}}\)</span></li>
+<li><strong>Sensibilidad (Recall o Tasa de Verdaderos Positivos):</strong> <span class="math inline">\(\frac{VP}{VP + FN}\)</span></li>
+<li><strong>Especificidad (Tasa de Verdaderos Negativos):</strong> <span class="math inline">\(\frac{VN}{VN + FP}\)</span></li>
+</ul>
+<div class="callout callout-style-default callout-caution callout-titled" title="Aviso">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Aviso
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Los detalles de la evaluación de un modelo empleando la Matríz de Confusión son ampliamente tratados en la asignatura de Aprendizaje Automático.</p>
+</div>
+</div>
+<p><strong>Curva ROC y AUC</strong></p>
+<p>La <strong>Curva ROC (Receiver Operating Characteristic)</strong> muestra la relación entre la <strong>tasa de verdaderos positivos</strong> y la <strong>tasa de falsos positivos</strong> a diferentes umbrales de clasificación.</p>
+<p>El <strong>AUC (Área Bajo la Curva ROC)</strong> mide la capacidad del modelo para discriminar entre las clases. Un AUC de <span class="math inline">\(0.5\)</span> indica que el modelo no tiene capacidad predictiva, mientras que un AUC de <span class="math inline">\(1.0\)</span> indica un modelo perfecto.</p>
+<p><strong>Pseudo R² (Nagelkerke, McFadden)</strong></p>
+<p>Aunque el <span class="math inline">\(R^2\)</span> tradicional no se aplica directamente a la regresión logística, existen medidas como el <strong>pseudo <span class="math inline">\(R^2\)</span></strong> que proporcionan una idea de la bondad del ajuste del modelo.</p>
+<ul>
+<li><p><strong>McFadden’s <span class="math inline">\(R^2\)</span>:</strong><br>
+<span class="math display">\[
+R^2_{\text{McFadden}} = 1 - \frac{\log L_{\text{modelo}}}{\log L_{\text{modelo nulo}}}
+\]</span></p>
+<p>Donde <span class="math inline">\(\log L_{\text{modelo}}\)</span> es el log-likelihood del modelo ajustado y <span class="math inline">\(\log L_{\text{modelo nulo}}\)</span> es el log-likelihood de un modelo sin predictores.</p></li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Vamos a aplicar la regresión logística en R utilizando el conjunto de datos <code>Pima.tr</code> del paquete <code>MASS</code>, que contiene información sobre mujeres pima y si tienen o no diabetes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar la librería y el conjunto de datos</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(Pima.tr)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión logística</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>modelo_logistico <span class="ot">&lt;-</span> <span class="fu">glm</span>(type <span class="sc">~</span> npreg <span class="sc">+</span> glu <span class="sc">+</span> bmi, <span class="at">data =</span> Pima.tr, <span class="at">family =</span> binomial)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Resumen del modelo</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_logistico)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = type ~ npreg + glu + bmi, family = binomial, data = Pima.tr)
+
+Coefficients:
+             Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept) -8.718723   1.411080  -6.179 6.46e-10 ***
+npreg        0.149213   0.051833   2.879  0.00399 ** 
+glu          0.033879   0.006327   5.355 8.55e-08 ***
+bmi          0.094817   0.032405   2.926  0.00343 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 256.41  on 199  degrees of freedom
+Residual deviance: 189.89  on 196  degrees of freedom
+AIC: 197.89
+
+Number of Fisher Scoring iterations: 5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicciones de probabilidad</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>predicciones_prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelo_logistico, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Clasificación con un umbral de 0.5</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>predicciones_clase <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(predicciones_prob <span class="sc">&gt;</span> <span class="fl">0.5</span>, <span class="st">"Yes"</span>, <span class="st">"No"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear matriz de confusión</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>tabla_confusion <span class="ot">&lt;-</span> <span class="fu">table</span>(<span class="at">Predicted =</span> predicciones_clase, <span class="at">Actual =</span> Pima.tr<span class="sc">$</span>type)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tabla_confusion)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         Actual
+Predicted  No Yes
+      No  114  29
+      Yes  18  39</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular precisión</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>accuracy <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">diag</span>(tabla_confusion)) <span class="sc">/</span> <span class="fu">sum</span>(tabla_confusion)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Precisión:"</span>, <span class="fu">round</span>(accuracy, <span class="dv">3</span>)))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Precisión: 0.765"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar librería para curvas ROC</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pROC)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Type 'citation("pROC")' for a citation.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'pROC'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    cov, smooth, var</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Curva ROC</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>roc_obj <span class="ot">&lt;-</span> <span class="fu">roc</span>(Pima.tr<span class="sc">$</span>type, predicciones_prob)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Setting levels: control = No, case = Yes</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Setting direction: controls &lt; cases</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(roc_obj, <span class="at">main =</span> <span class="st">"Curva ROC para Regresión Logística"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema4_files/figure-html/log1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular AUC</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>auc_valor <span class="ot">&lt;-</span> <span class="fu">auc</span>(roc_obj)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"AUC:"</span>, <span class="fu">round</span>(auc_valor, <span class="dv">3</span>)))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "AUC: 0.831"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr>
+<p>En la siguiente sección, exploraremos la <strong>regresión de Poisson</strong>, una técnica diseñada para modelar datos de conteo, como el número de eventos que ocurren en un período determinado.</p>
 
 
 </section>

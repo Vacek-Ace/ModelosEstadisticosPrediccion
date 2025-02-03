@@ -135,6 +135,175 @@ head(predicciones)
 ```
 :::
 
-Los **Modelos Lineales Generalizados (GLM)** amplían el alcance de la regresión lineal clásica, proporcionando herramientas para modelar una amplia variedad de tipos de datos, desde variables binarias hasta datos de conteo y variables continuas no normales. A través del uso de funciones de enlace y distribuciones flexibles, los GLM permiten resolver problemas complejos del mundo real en campos tan diversos como la medicina, el marketing, la ingeniería y las ciencias sociales.
+---
+
+Los **Modelos Lineales Generalizados** amplían el alcance de la regresión lineal clásica, proporcionando herramientas para modelar una amplia variedad de tipos de datos, desde variables binarias hasta datos de conteo y variables continuas no normales. A través del uso de funciones de enlace y distribuciones flexibles, los GLM permiten resolver problemas complejos del mundo real en campos tan diversos como la medicina, el marketing, la ingeniería y las ciencias sociales.
 
 En las próximas secciones, exploraremos en detalle cómo aplicar estos modelos específicos, como la **regresión logística** y la **regresión de Poisson**, y cómo interpretar sus resultados en diferentes contextos.
+
+
+## Regresión Logística
+
+La **regresión logística** es una herramienta fundamental para modelar la probabilidad de eventos binarios en una variedad de contextos, desde la medicina hasta la economía y el marketing. La correcta interpretación de los coeficientes mediante **odds ratios**, así como la evaluación del ajuste del modelo mediante curvas **ROC** y matrices de confusión, son esenciales para extraer conclusiones válidas de los datos.
+
+### Fundamentos de la Regresión Logística
+
+La **regresión logística** es una técnica estadística utilizada para modelar la probabilidad de ocurrencia de un evento binario, es decir, cuando la variable dependiente toma solo dos posibles valores (por ejemplo, **éxito/fracaso**, **sí/no**, **enfermo/sano**). A diferencia de la regresión lineal, que modela una relación lineal entre variables, la regresión logística utiliza una **función logística** para asegurar que las predicciones estén en el rango [0,1], lo cual es necesario para interpretar los resultados como probabilidades.
+
+**La función Logística (Sigmoide)**
+
+La función logística transforma cualquier valor real en un valor comprendido entre 0 y 1. La forma matemática de la función logística es:
+
+$$
+P(Y = 1 | X) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p)}}
+$$
+
+Donde:
+
+  - $P(Y = 1 | X)$ es la probabilidad de que el evento ocurra.
+  - $\beta_0$ es el intercepto y $\beta_1, \beta_2, \dots, \beta_p$ son los coeficientes asociados a las variables independientes $X_1, X_2, \dots, X_p$.
+
+La **curva sigmoide** que representa esta función tiene forma de "S", lo que refleja que para valores muy pequeños o muy grandes del predictor, la probabilidad se aplana hacia 0 o 1, respectivamente.
+
+
+**Función de Enlace Logit**
+
+En la regresión logística, la relación entre el predictor lineal y la probabilidad se establece mediante la **función de enlace logit**. El logit de una probabilidad $p$ se define como:
+
+$$
+\text{logit}(p) = \log\left(\frac{p}{1 - p}\right)
+$$
+
+Esta transformación convierte una probabilidad en una escala que va de $-\infty$ a $+\infty$, lo que permite ajustar un modelo lineal a los datos. El modelo logístico puede expresarse como:
+
+$$
+\log\left(\frac{p}{1 - p}\right) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p
+$$
+
+### Interpretación de coeficientes y Odds Ratios
+
+Uno de los aspectos más importantes de la regresión logística es la interpretación de los coeficientes. Dado que los coeficientes están en la escala del logit, su interpretación directa no es tan intuitiva como en la regresión lineal. Sin embargo, podemos interpretarlos utilizando **odds** y **odds ratios**.
+
+El **odds** o razón de probabilidades de que ocurra un evento es el cociente entre la probabilidad de que ocurra el evento y la probabilidad de que no ocurra:
+
+$$
+\text{odds} = \frac{p}{1 - p}
+$$
+
+Por ejemplo, si la probabilidad de éxito es 0.8, el odds sería:
+
+$$
+\text{odds} = \frac{0.8}{1 - 0.8} = 4
+$$
+
+Esto significa que el evento es **4 veces más probable** que no ocurra.
+
+
+El **odds ratio (OR)** mide el cambio en los odds cuando una variable independiente aumenta en una unidad. Se calcula como el exponencial del coeficiente de la regresión logística:
+
+$$
+\text{OR} = e^{\beta}
+$$
+
+**Interpretación de OR:**
+
+  - Si **OR > 1**, el evento es más probable a medida que aumenta la variable independiente.
+  - Si **OR < 1**, el evento es menos probable a medida que aumenta la variable independiente.
+  - Si **OR = 1**, no hay efecto.
+
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+
+Supongamos que ajustamos un modelo de regresión logística para predecir la probabilidad de tener diabetes en función del índice de masa corporal (BMI). El coeficiente asociado a **BMI** es 0.08.
+
+$$
+\text{OR} = e^{0.08} \approx 1.083
+$$
+
+Esto significa que por cada incremento de 1 unidad en el BMI, la **odds** de tener diabetes aumentan en un **8.3%**.
+:::
+
+### Evaluación del modelo Logístico
+
+A diferencia de la regresión lineal, donde se usa el coeficiente de determinación ($R^2$) para evaluar el ajuste, en la regresión logística se utilizan otros métodos para medir la calidad del modelo.
+
+
+**Matriz de Confusión**
+
+La **matriz de confusión** compara las predicciones del modelo con los valores reales, clasificando las observaciones en:
+
+  - **Verdaderos Positivos (VP):** Predijo positivo y es positivo.
+  - **Falsos Positivos (FP):** Predijo positivo pero es negativo.
+  - **Verdaderos Negativos (VN):** Predijo negativo y es negativo.
+  - **Falsos Negativos (FN):** Predijo negativo pero es positivo.
+
+A partir de esta matriz, se pueden calcular métricas importantes como:
+
+  - **Precisión (Accuracy):** $\frac{VP + VN}{\text{Total}}$
+  - **Sensibilidad (Recall o Tasa de Verdaderos Positivos):** $\frac{VP}{VP + FN}$
+  - **Especificidad (Tasa de Verdaderos Negativos):** $\frac{VN}{VN + FP}$
+
+::: {.callout-caution title="Aviso"}
+Los detalles de la evaluación de un modelo empleando la Matríz de Confusión son ampliamente tratados en la asignatura de Aprendizaje Automático.
+:::
+
+**Curva ROC y AUC**
+
+La **Curva ROC (Receiver Operating Characteristic)** muestra la relación entre la **tasa de verdaderos positivos** y la **tasa de falsos positivos** a diferentes umbrales de clasificación.
+
+El **AUC (Área Bajo la Curva ROC)** mide la capacidad del modelo para discriminar entre las clases. Un AUC de $0.5$ indica que el modelo no tiene capacidad predictiva, mientras que un AUC de $1.0$ indica un modelo perfecto.
+
+**Pseudo R² (Nagelkerke, McFadden)**
+
+Aunque el $R^2$ tradicional no se aplica directamente a la regresión logística, existen medidas como el **pseudo $R^2$** que proporcionan una idea de la bondad del ajuste del modelo.
+
+- **McFadden’s $R^2$:**  
+  $$
+  R^2_{\text{McFadden}} = 1 - \frac{\log L_{\text{modelo}}}{\log L_{\text{modelo nulo}}}
+  $$
+
+  Donde $\log L_{\text{modelo}}$ es el log-likelihood del modelo ajustado y $\log L_{\text{modelo nulo}}$ es el log-likelihood de un modelo sin predictores.
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+Vamos a aplicar la regresión logística en R utilizando el conjunto de datos `Pima.tr` del paquete `MASS`, que contiene información sobre mujeres pima y si tienen o no diabetes.
+
+```{r log1}
+# Cargar la librería y el conjunto de datos
+library(MASS)
+data(Pima.tr)
+
+# Ajustar el modelo de regresión logística
+modelo_logistico <- glm(type ~ npreg + glu + bmi, data = Pima.tr, family = binomial)
+
+# Resumen del modelo
+summary(modelo_logistico)
+
+# Predicciones de probabilidad
+predicciones_prob <- predict(modelo_logistico, type = "response")
+
+# Clasificación con un umbral de 0.5
+predicciones_clase <- ifelse(predicciones_prob > 0.5, "Yes", "No")
+
+# Crear matriz de confusión
+tabla_confusion <- table(Predicted = predicciones_clase, Actual = Pima.tr$type)
+print(tabla_confusion)
+
+# Calcular precisión
+accuracy <- sum(diag(tabla_confusion)) / sum(tabla_confusion)
+print(paste("Precisión:", round(accuracy, 3)))
+
+# Cargar librería para curvas ROC
+library(pROC)
+
+# Curva ROC
+roc_obj <- roc(Pima.tr$type, predicciones_prob)
+plot(roc_obj, main = "Curva ROC para Regresión Logística")
+
+# Calcular AUC
+auc_valor <- auc(roc_obj)
+print(paste("AUC:", round(auc_valor, 3)))
+```
+:::
+---
+
+En la siguiente sección, exploraremos la **regresión de Poisson**, una técnica diseñada para modelar datos de conteo, como el número de eventos que ocurren en un período determinado.
