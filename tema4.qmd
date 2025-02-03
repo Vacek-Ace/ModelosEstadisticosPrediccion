@@ -304,6 +304,204 @@ auc_valor <- auc(roc_obj)
 print(paste("AUC:", round(auc_valor, 3)))
 ```
 :::
+
+## Regresión de Poisson
+
+La **regresión de Poisson** es una técnica estadística utilizada para modelar **datos de conteo**, es decir, situaciones en las que la variable dependiente representa el número de veces que ocurre un evento en un período de tiempo o espacio específico. Este tipo de modelo es adecuado cuando la variable dependiente toma valores enteros no negativos ($0, 1, 2, \dots$) y sigue una distribución de **Poisson**.
+
+La distribución de Poisson describe la probabilidad de que ocurra un número determinado de eventos en un intervalo fijo, dado que estos eventos ocurren de forma independiente y a una tasa constante.
+
+La **función de probabilidad** de la distribución de Poisson es:
+
+$$
+P(Y = y) = \frac{e^{-\lambda} \lambda^y}{y!}
+$$
+
+Donde:
+
+- $Y$ es la variable aleatoria que representa el número de eventos.
+- $\lambda$ es la **tasa media de ocurrencia** de los eventos (esperanza de $Y$).
+- $y$ es el número de eventos observados ($y = 0, 1, 2, \dots$).
+
+
+### Modelo de Regresión de Poisson
+
+En la **regresión de Poisson**, el objetivo es modelar la relación entre la **tasa de ocurrencia de los eventos** ($\lambda$) y un conjunto de variables predictoras $X_1, X_2, \dots, X_p$.
+
+La **forma funcional** del modelo de Poisson es:
+
+$$
+\log(\lambda) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p
+$$
+
+Donde:
+
+  - $\log(\lambda)$ es la **función de enlace logarítmica** que asegura que la tasa $\lambda$ sea siempre positiva.
+  - $\beta_0, \beta_1, \dots, \beta_p$ son los coeficientes del modelo que describen la influencia de cada predictor sobre la tasa de eventos.
+
+El modelo puede expresarse en términos de la **tasa esperada de eventos** como:
+
+$$
+\lambda = e^{\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p}
+$$
+
+
+### Supuestos y Limitaciones de la Regresión de Poisson
+
+tal y como ocurre en el modelo de regresión lineal, para que la regresión de Poisson sea adecuada, se deben cumplir ciertos **supuestos**:
+
+**Independencia de los Eventos:** Los eventos deben ocurrir de manera independiente unos de otros.
+
+**Distribución de Poisson de la Variable Dependiente:** La variable de respuesta debe seguir una distribución de Poisson, donde la **media** y la **varianza** son iguales:
+
+   $$
+   E(Y) = Var(Y) = \lambda
+   $$
+
+**No Sobredispersión:** Uno de los problemas comunes en los datos de conteo es la **sobredispersión**, que ocurre cuando la varianza de los datos es mayor que la media ($Var(Y) > E(Y)$). La presencia de sobredispersión indica que el modelo de Poisson puede no ser adecuado, y puede ser necesario considerar modelos alternativos como la **regresión binomial negativa**.
+
+**No Exceso de Ceros:** Si hay demasiados ceros en los datos (por ejemplo, en el número de accidentes en diferentes localidades donde muchas tienen cero accidentes), puede ser necesario utilizar modelos de **Poisson inflados en ceros (ZIP)**.
+
 ---
 
-En la siguiente sección, exploraremos la **regresión de Poisson**, una técnica diseñada para modelar datos de conteo, como el número de eventos que ocurren en un período determinado.
+#### **3.3. Interpretación de los Resultados**
+
+La interpretación de los coeficientes en la regresión de Poisson difiere de la regresión lineal debido al uso de la función de enlace logarítmica.
+
+##### **Interpretación de los Coeficientes**
+
+- Los coeficientes \( \beta \) representan el **logaritmo de la tasa** de eventos asociados con un cambio en la variable independiente.
+  
+- Para interpretar en términos de la tasa de ocurrencia, se utiliza el **exponencial de los coeficientes**:
+
+  \[
+  e^{\beta_i}
+  \]
+
+  Esto representa el **factor de cambio multiplicativo** en la tasa de eventos por cada unidad adicional en la variable \( X_i \).
+
+**Ejemplo:**
+- Si \( \beta_1 = 0.5 \), entonces \( e^{0.5} \approx 1.65 \). Esto significa que por cada unidad adicional en \( X_1 \), la tasa de ocurrencia de eventos **aumenta en un 65%**.
+- Si \( \beta_1 = -0.3 \), entonces \( e^{-0.3} \approx 0.74 \). Esto indica que por cada unidad adicional en \( X_1 \), la tasa de eventos **disminuye en un 26%**.
+
+---
+
+#### **3.4. Ejemplo Práctico en R: Modelando el Número de Accidentes**
+
+Vamos a utilizar R para ajustar un modelo de regresión de Poisson. Supongamos que tenemos datos sobre el **número de accidentes de tráfico** en diferentes intersecciones de una ciudad, junto con variables como el volumen de tráfico y la visibilidad.
+
+##### **Paso 1: Simulación de Datos**
+
+```r
+# Simulación de datos para el número de accidentes
+set.seed(123)
+n <- 100  # Número de observaciones
+
+# Variables predictoras
+trafico <- rnorm(n, mean = 1000, sd = 300)  # Volumen de tráfico en vehículos por día
+visibilidad <- rnorm(n, mean = 5, sd = 2)   # Visibilidad en kilómetros
+
+# Generar la tasa de accidentes (lambda) usando un modelo logarítmico
+lambda <- exp(0.01 * trafico - 0.2 * visibilidad)
+
+# Generar el número de accidentes como una variable de Poisson
+accidentes <- rpois(n, lambda = lambda)
+
+# Crear el data frame
+datos_accidentes <- data.frame(accidentes, trafico, visibilidad)
+head(datos_accidentes)
+```
+
+---
+
+##### **Paso 2: Ajuste del Modelo de Regresión de Poisson**
+
+```r
+# Ajustar el modelo de regresión de Poisson
+modelo_poisson <- glm(accidentes ~ trafico + visibilidad, data = datos_accidentes, family = poisson)
+
+# Resumen del modelo
+summary(modelo_poisson)
+```
+
+**Interpretación de los Resultados:**
+- El coeficiente asociado a `trafico` indica cómo el volumen de tráfico afecta la tasa de accidentes.
+- El coeficiente asociado a `visibilidad` muestra cómo la visibilidad afecta la frecuencia de accidentes.
+
+---
+
+##### **Paso 3: Interpretación de los Coeficientes**
+
+```r
+# Exponenciar los coeficientes para interpretar en términos de tasas
+exp(coef(modelo_poisson))
+```
+
+- Un coeficiente positivo implica que un aumento en la variable está asociado con un **aumento en la tasa de accidentes**.
+- Un coeficiente negativo implica que un aumento en la variable está asociado con una **disminución en la tasa de accidentes**.
+
+---
+
+##### **Paso 4: Evaluación del Modelo y Diagnóstico**
+
+1. **Evaluación de Sobredispersión:**
+
+La sobredispersión ocurre cuando la varianza de los datos es mayor que la media, lo que puede invalidar los supuestos de la regresión de Poisson.
+
+```r
+# Calcular la relación entre el deviance y los grados de libertad
+deviance <- modelo_poisson$deviance
+grados_libertad <- modelo_poisson$df.residual
+sobredispersion <- deviance / grados_libertad
+
+print(paste("Índice de Sobredispersión:", round(sobredispersion, 2)))
+```
+
+- Un valor cercano a 1 sugiere que no hay sobredispersión.
+- Un valor significativamente mayor que 1 sugiere la presencia de sobredispersión, y puede ser necesario considerar una **regresión binomial negativa**.
+
+2. **Diagnóstico de Residuos:**
+
+```r
+# Gráfico de residuos deviance para evaluar el ajuste
+plot(residuals(modelo_poisson, type = "deviance"), main = "Residuos Deviance", ylab = "Residuos", xlab = "Índice")
+abline(h = 0, col = "red")
+```
+
+---
+
+#### **Ejemplo con Datos Reales en R**
+
+También puedes aplicar la regresión de Poisson a conjuntos de datos reales. Un conjunto de datos clásico en R es **`warpbreaks`**, que contiene el número de roturas de hilo en diferentes condiciones de tensión y longitud del hilo.
+
+```r
+# Datos de ejemplo: número de roturas de hilo
+data(warpbreaks)
+
+# Ajustar un modelo de Poisson para el número de roturas en función de la tensión
+modelo_poisson_real <- glm(breaks ~ wool + tension, data = warpbreaks, family = poisson)
+
+# Resumen del modelo
+summary(modelo_poisson_real)
+
+# Interpretación de coeficientes
+exp(coef(modelo_poisson_real))
+```
+
+---
+
+#### **3.5. Limitaciones y Alternativas**
+
+1. **Sobredispersión:**  
+   Si la varianza de los datos es mayor que la media, el modelo de Poisson no será adecuado. En este caso, se recomienda utilizar la **regresión binomial negativa**, que introduce un parámetro adicional para manejar la sobredispersión.
+
+2. **Exceso de Ceros:**  
+   Si hay más ceros de los esperados (por ejemplo, muchas intersecciones con cero accidentes), puede ser necesario utilizar modelos de **Poisson inflados en ceros (ZIP)** o **binomial negativa inflada en ceros (ZINB)**.
+
+---
+
+#### **Conclusión**
+
+La **regresión de Poisson** es una herramienta fundamental para modelar **datos de conteo** y comprender cómo las variables predictoras afectan la frecuencia de eventos. Su capacidad para trabajar con tasas de ocurrencia y su flexibilidad en la interpretación de resultados la hacen ideal para una amplia gama de aplicaciones, desde el análisis de accidentes hasta estudios ecológicos y médicos.
+
+Sin embargo, es esencial verificar los supuestos del modelo, especialmente en relación con la **sobredispersión** y el **exceso de ceros**. En la siguiente sección, abordaremos cómo manejar estos desafíos utilizando la **regresión binomial negativa**, una extensión de la regresión de Poisson diseñada para datos con variabilidad excesiva.

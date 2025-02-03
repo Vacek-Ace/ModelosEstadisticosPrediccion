@@ -234,6 +234,11 @@ window.Quarto = {
   <li><a href="#interpretación-de-coeficientes-y-odds-ratios" id="toc-interpretación-de-coeficientes-y-odds-ratios" class="nav-link" data-scroll-target="#interpretación-de-coeficientes-y-odds-ratios"><span class="header-section-number">4.2.2</span> Interpretación de coeficientes y Odds Ratios</a></li>
   <li><a href="#evaluación-del-modelo-logístico" id="toc-evaluación-del-modelo-logístico" class="nav-link" data-scroll-target="#evaluación-del-modelo-logístico"><span class="header-section-number">4.2.3</span> Evaluación del modelo Logístico</a></li>
   </ul></li>
+  <li><a href="#regresión-de-poisson" id="toc-regresión-de-poisson" class="nav-link" data-scroll-target="#regresión-de-poisson"><span class="header-section-number">4.3</span> Regresión de Poisson</a>
+  <ul class="collapse">
+  <li><a href="#modelo-de-regresión-de-poisson" id="toc-modelo-de-regresión-de-poisson" class="nav-link" data-scroll-target="#modelo-de-regresión-de-poisson"><span class="header-section-number">4.3.1</span> Modelo de Regresión de Poisson</a></li>
+  <li><a href="#supuestos-y-limitaciones-de-la-regresión-de-poisson" id="toc-supuestos-y-limitaciones-de-la-regresión-de-poisson" class="nav-link" data-scroll-target="#supuestos-y-limitaciones-de-la-regresión-de-poisson"><span class="header-section-number">4.3.2</span> Supuestos y Limitaciones de la Regresión de Poisson</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -679,10 +684,167 @@ Attaching package: 'pROC'</code></pre>
 </div>
 </div>
 </div>
+</section>
+</section>
+<section id="regresión-de-poisson" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="regresión-de-poisson"><span class="header-section-number">4.3</span> Regresión de Poisson</h2>
+<p>La <strong>regresión de Poisson</strong> es una técnica estadística utilizada para modelar <strong>datos de conteo</strong>, es decir, situaciones en las que la variable dependiente representa el número de veces que ocurre un evento en un período de tiempo o espacio específico. Este tipo de modelo es adecuado cuando la variable dependiente toma valores enteros no negativos (<span class="math inline">\(0, 1, 2, \dots\)</span>) y sigue una distribución de <strong>Poisson</strong>.</p>
+<p>La distribución de Poisson describe la probabilidad de que ocurra un número determinado de eventos en un intervalo fijo, dado que estos eventos ocurren de forma independiente y a una tasa constante.</p>
+<p>La <strong>función de probabilidad</strong> de la distribución de Poisson es:</p>
+<p><span class="math display">\[
+P(Y = y) = \frac{e^{-\lambda} \lambda^y}{y!}
+\]</span></p>
+<p>Donde:</p>
+<ul>
+<li><span class="math inline">\(Y\)</span> es la variable aleatoria que representa el número de eventos.</li>
+<li><span class="math inline">\(\lambda\)</span> es la <strong>tasa media de ocurrencia</strong> de los eventos (esperanza de <span class="math inline">\(Y\)</span>).</li>
+<li><span class="math inline">\(y\)</span> es el número de eventos observados (<span class="math inline">\(y = 0, 1, 2, \dots\)</span>).</li>
+</ul>
+<section id="modelo-de-regresión-de-poisson" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="modelo-de-regresión-de-poisson"><span class="header-section-number">4.3.1</span> Modelo de Regresión de Poisson</h3>
+<p>En la <strong>regresión de Poisson</strong>, el objetivo es modelar la relación entre la <strong>tasa de ocurrencia de los eventos</strong> (<span class="math inline">\(\lambda\)</span>) y un conjunto de variables predictoras <span class="math inline">\(X_1, X_2, \dots, X_p\)</span>.</p>
+<p>La <strong>forma funcional</strong> del modelo de Poisson es:</p>
+<p><span class="math display">\[
+\log(\lambda) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p
+\]</span></p>
+<p>Donde:</p>
+<ul>
+<li><span class="math inline">\(\log(\lambda)\)</span> es la <strong>función de enlace logarítmica</strong> que asegura que la tasa <span class="math inline">\(\lambda\)</span> sea siempre positiva.</li>
+<li><span class="math inline">\(\beta_0, \beta_1, \dots, \beta_p\)</span> son los coeficientes del modelo que describen la influencia de cada predictor sobre la tasa de eventos.</li>
+</ul>
+<p>El modelo puede expresarse en términos de la <strong>tasa esperada de eventos</strong> como:</p>
+<p><span class="math display">\[
+\lambda = e^{\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p}
+\]</span></p>
+</section>
+<section id="supuestos-y-limitaciones-de-la-regresión-de-poisson" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="supuestos-y-limitaciones-de-la-regresión-de-poisson"><span class="header-section-number">4.3.2</span> Supuestos y Limitaciones de la Regresión de Poisson</h3>
+<p>tal y como ocurre en el modelo de regresión lineal, para que la regresión de Poisson sea adecuada, se deben cumplir ciertos <strong>supuestos</strong>:</p>
+<p><strong>Independencia de los Eventos:</strong> Los eventos deben ocurrir de manera independiente unos de otros.</p>
+<p><strong>Distribución de Poisson de la Variable Dependiente:</strong> La variable de respuesta debe seguir una distribución de Poisson, donde la <strong>media</strong> y la <strong>varianza</strong> son iguales:</p>
+<p><span class="math display">\[
+   E(Y) = Var(Y) = \lambda
+   \]</span></p>
+<p><strong>No Sobredispersión:</strong> Uno de los problemas comunes en los datos de conteo es la <strong>sobredispersión</strong>, que ocurre cuando la varianza de los datos es mayor que la media (<span class="math inline">\(Var(Y) &gt; E(Y)\)</span>). La presencia de sobredispersión indica que el modelo de Poisson puede no ser adecuado, y puede ser necesario considerar modelos alternativos como la <strong>regresión binomial negativa</strong>.</p>
+<p><strong>No Exceso de Ceros:</strong> Si hay demasiados ceros en los datos (por ejemplo, en el número de accidentes en diferentes localidades donde muchas tienen cero accidentes), puede ser necesario utilizar modelos de <strong>Poisson inflados en ceros (ZIP)</strong>.</p>
 <hr>
-<p>En la siguiente sección, exploraremos la <strong>regresión de Poisson</strong>, una técnica diseñada para modelar datos de conteo, como el número de eventos que ocurren en un período determinado.</p>
+<section id="interpretación-de-los-resultados" class="level4" data-number="4.3.2.1">
+<h4 data-number="4.3.2.1" class="anchored" data-anchor-id="interpretación-de-los-resultados"><span class="header-section-number">4.3.2.1</span> <strong>3.3. Interpretación de los Resultados</strong></h4>
+<p>La interpretación de los coeficientes en la regresión de Poisson difiere de la regresión lineal debido al uso de la función de enlace logarítmica.</p>
+<section id="interpretación-de-los-coeficientes" class="level5" data-number="4.3.2.1.1">
+<h5 data-number="4.3.2.1.1" class="anchored" data-anchor-id="interpretación-de-los-coeficientes"><span class="header-section-number">4.3.2.1.1</span> <strong>Interpretación de los Coeficientes</strong></h5>
+<ul>
+<li><p>Los coeficientes ( ) representan el <strong>logaritmo de la tasa</strong> de eventos asociados con un cambio en la variable independiente.</p></li>
+<li><p>Para interpretar en términos de la tasa de ocurrencia, se utiliza el <strong>exponencial de los coeficientes</strong>:</p>
+<p>[ e^{_i} ]</p>
+<p>Esto representa el <strong>factor de cambio multiplicativo</strong> en la tasa de eventos por cada unidad adicional en la variable ( X_i ).</p></li>
+</ul>
+<p><strong>Ejemplo:</strong> - Si ( _1 = 0.5 ), entonces ( e^{0.5} ). Esto significa que por cada unidad adicional en ( X_1 ), la tasa de ocurrencia de eventos <strong>aumenta en un 65%</strong>. - Si ( _1 = -0.3 ), entonces ( e^{-0.3} ). Esto indica que por cada unidad adicional en ( X_1 ), la tasa de eventos <strong>disminuye en un 26%</strong>.</p>
+<hr>
+</section>
+</section>
+<section id="ejemplo-práctico-en-r-modelando-el-número-de-accidentes" class="level4" data-number="4.3.2.2">
+<h4 data-number="4.3.2.2" class="anchored" data-anchor-id="ejemplo-práctico-en-r-modelando-el-número-de-accidentes"><span class="header-section-number">4.3.2.2</span> <strong>3.4. Ejemplo Práctico en R: Modelando el Número de Accidentes</strong></h4>
+<p>Vamos a utilizar R para ajustar un modelo de regresión de Poisson. Supongamos que tenemos datos sobre el <strong>número de accidentes de tráfico</strong> en diferentes intersecciones de una ciudad, junto con variables como el volumen de tráfico y la visibilidad.</p>
+<section id="paso-1-simulación-de-datos" class="level5" data-number="4.3.2.2.1">
+<h5 data-number="4.3.2.2.1" class="anchored" data-anchor-id="paso-1-simulación-de-datos"><span class="header-section-number">4.3.2.2.1</span> <strong>Paso 1: Simulación de Datos</strong></h5>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulación de datos para el número de accidentes</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span>  <span class="co"># Número de observaciones</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Variables predictoras</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>trafico <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">1000</span>, <span class="at">sd =</span> <span class="dv">300</span>)  <span class="co"># Volumen de tráfico en vehículos por día</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>visibilidad <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">5</span>, <span class="at">sd =</span> <span class="dv">2</span>)   <span class="co"># Visibilidad en kilómetros</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Generar la tasa de accidentes (lambda) usando un modelo logarítmico</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fl">0.01</span> <span class="sc">*</span> trafico <span class="sc">-</span> <span class="fl">0.2</span> <span class="sc">*</span> visibilidad)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Generar el número de accidentes como una variable de Poisson</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>accidentes <span class="ot">&lt;-</span> <span class="fu">rpois</span>(n, <span class="at">lambda =</span> lambda)</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear el data frame</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>datos_accidentes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(accidentes, trafico, visibilidad)</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(datos_accidentes)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<hr>
+</section>
+<section id="paso-2-ajuste-del-modelo-de-regresión-de-poisson" class="level5" data-number="4.3.2.2.2">
+<h5 data-number="4.3.2.2.2" class="anchored" data-anchor-id="paso-2-ajuste-del-modelo-de-regresión-de-poisson"><span class="header-section-number">4.3.2.2.2</span> <strong>Paso 2: Ajuste del Modelo de Regresión de Poisson</strong></h5>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar el modelo de regresión de Poisson</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>modelo_poisson <span class="ot">&lt;-</span> <span class="fu">glm</span>(accidentes <span class="sc">~</span> trafico <span class="sc">+</span> visibilidad, <span class="at">data =</span> datos_accidentes, <span class="at">family =</span> poisson)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Resumen del modelo</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_poisson)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Interpretación de los Resultados:</strong> - El coeficiente asociado a <code>trafico</code> indica cómo el volumen de tráfico afecta la tasa de accidentes. - El coeficiente asociado a <code>visibilidad</code> muestra cómo la visibilidad afecta la frecuencia de accidentes.</p>
+<hr>
+</section>
+<section id="paso-3-interpretación-de-los-coeficientes" class="level5" data-number="4.3.2.2.3">
+<h5 data-number="4.3.2.2.3" class="anchored" data-anchor-id="paso-3-interpretación-de-los-coeficientes"><span class="header-section-number">4.3.2.2.3</span> <strong>Paso 3: Interpretación de los Coeficientes</strong></h5>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exponenciar los coeficientes para interpretar en términos de tasas</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(modelo_poisson))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Un coeficiente positivo implica que un aumento en la variable está asociado con un <strong>aumento en la tasa de accidentes</strong>.</li>
+<li>Un coeficiente negativo implica que un aumento en la variable está asociado con una <strong>disminución en la tasa de accidentes</strong>.</li>
+</ul>
+<hr>
+</section>
+<section id="paso-4-evaluación-del-modelo-y-diagnóstico" class="level5" data-number="4.3.2.2.4">
+<h5 data-number="4.3.2.2.4" class="anchored" data-anchor-id="paso-4-evaluación-del-modelo-y-diagnóstico"><span class="header-section-number">4.3.2.2.4</span> <strong>Paso 4: Evaluación del Modelo y Diagnóstico</strong></h5>
+<ol type="1">
+<li><strong>Evaluación de Sobredispersión:</strong></li>
+</ol>
+<p>La sobredispersión ocurre cuando la varianza de los datos es mayor que la media, lo que puede invalidar los supuestos de la regresión de Poisson.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular la relación entre el deviance y los grados de libertad</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>deviance <span class="ot">&lt;-</span> modelo_poisson<span class="sc">$</span>deviance</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>grados_libertad <span class="ot">&lt;-</span> modelo_poisson<span class="sc">$</span>df.residual</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>sobredispersion <span class="ot">&lt;-</span> deviance <span class="sc">/</span> grados_libertad</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Índice de Sobredispersión:"</span>, <span class="fu">round</span>(sobredispersion, <span class="dv">2</span>)))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Un valor cercano a 1 sugiere que no hay sobredispersión.</li>
+<li>Un valor significativamente mayor que 1 sugiere la presencia de sobredispersión, y puede ser necesario considerar una <strong>regresión binomial negativa</strong>.</li>
+</ul>
+<ol start="2" type="1">
+<li><strong>Diagnóstico de Residuos:</strong></li>
+</ol>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de residuos deviance para evaluar el ajuste</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">residuals</span>(modelo_poisson, <span class="at">type =</span> <span class="st">"deviance"</span>), <span class="at">main =</span> <span class="st">"Residuos Deviance"</span>, <span class="at">ylab =</span> <span class="st">"Residuos"</span>, <span class="at">xlab =</span> <span class="st">"Índice"</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<hr>
+</section>
+</section>
+<section id="ejemplo-con-datos-reales-en-r" class="level4" data-number="4.3.2.3">
+<h4 data-number="4.3.2.3" class="anchored" data-anchor-id="ejemplo-con-datos-reales-en-r"><span class="header-section-number">4.3.2.3</span> <strong>Ejemplo con Datos Reales en R</strong></h4>
+<p>También puedes aplicar la regresión de Poisson a conjuntos de datos reales. Un conjunto de datos clásico en R es <strong><code>warpbreaks</code></strong>, que contiene el número de roturas de hilo en diferentes condiciones de tensión y longitud del hilo.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Datos de ejemplo: número de roturas de hilo</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(warpbreaks)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar un modelo de Poisson para el número de roturas en función de la tensión</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>modelo_poisson_real <span class="ot">&lt;-</span> <span class="fu">glm</span>(breaks <span class="sc">~</span> wool <span class="sc">+</span> tension, <span class="at">data =</span> warpbreaks, <span class="at">family =</span> poisson)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Resumen del modelo</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_poisson_real)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Interpretación de coeficientes</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(modelo_poisson_real))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<hr>
+</section>
+<section id="limitaciones-y-alternativas" class="level4" data-number="4.3.2.4">
+<h4 data-number="4.3.2.4" class="anchored" data-anchor-id="limitaciones-y-alternativas"><span class="header-section-number">4.3.2.4</span> <strong>3.5. Limitaciones y Alternativas</strong></h4>
+<ol type="1">
+<li><p><strong>Sobredispersión:</strong><br>
+Si la varianza de los datos es mayor que la media, el modelo de Poisson no será adecuado. En este caso, se recomienda utilizar la <strong>regresión binomial negativa</strong>, que introduce un parámetro adicional para manejar la sobredispersión.</p></li>
+<li><p><strong>Exceso de Ceros:</strong><br>
+Si hay más ceros de los esperados (por ejemplo, muchas intersecciones con cero accidentes), puede ser necesario utilizar modelos de <strong>Poisson inflados en ceros (ZIP)</strong> o <strong>binomial negativa inflada en ceros (ZINB)</strong>.</p></li>
+</ol>
+<hr>
+</section>
+<section id="conclusión" class="level4" data-number="4.3.2.5">
+<h4 data-number="4.3.2.5" class="anchored" data-anchor-id="conclusión"><span class="header-section-number">4.3.2.5</span> <strong>Conclusión</strong></h4>
+<p>La <strong>regresión de Poisson</strong> es una herramienta fundamental para modelar <strong>datos de conteo</strong> y comprender cómo las variables predictoras afectan la frecuencia de eventos. Su capacidad para trabajar con tasas de ocurrencia y su flexibilidad en la interpretación de resultados la hacen ideal para una amplia gama de aplicaciones, desde el análisis de accidentes hasta estudios ecológicos y médicos.</p>
+<p>Sin embargo, es esencial verificar los supuestos del modelo, especialmente en relación con la <strong>sobredispersión</strong> y el <strong>exceso de ceros</strong>. En la siguiente sección, abordaremos cómo manejar estos desafíos utilizando la <strong>regresión binomial negativa</strong>, una extensión de la regresión de Poisson diseñada para datos con variabilidad excesiva.</p>
 
 
+</section>
 </section>
 </section>
 
