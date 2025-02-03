@@ -413,4 +413,259 @@ Si bien las transformaciones pueden mejorar el ajuste del modelo, también puede
 
   - **Revertir Transformaciones para Interpretación:** Después de ajustar un modelo, es posible transformar las predicciones de nuevo a la escala original para facilitar la interpretación.
 
+
+## Ingeniería de características
+
+
+La **ingeniería de características** es el arte y la ciencia de transformar los datos brutos en representaciones que faciliten el aprendizaje y mejoren la capacidad predictiva de los modelos.  Consiste en el proceso de **crear, transformar y seleccionar** las variables que se utilizan en un modelo para mejorar su rendimiento. Una característica bien diseñada puede hacer que un modelo simple supere a modelos más complejos, mientras que características irrelevantes o mal definidas pueden degradar significativamente la calidad del análisis. Este proceso incluye:
+
+  - **Creación de nuevas variables** a partir de las existentes.
+  - **Transformación de variables** para mejorar su distribución o relación con la variable objetivo.
+  - **Selección de las características más relevantes**, eliminando aquellas que no aportan valor o introducen ruido.
+  - **Preparación de datos para modelos específicos**, asegurando que las variables cumplan con los requisitos del algoritmo (por ejemplo, escalado, normalización o codificación).
+
+
+### Creación de nuevas variables
+
+Una de las tareas más importantes en la ingeniería de características es la **creación de nuevas variables** que puedan capturar relaciones complejas entre las variables independientes y la variable objetivo.
+
+Las **interacciones entre variables** permiten capturar relaciones no lineales entre las variables al considerar cómo el efecto de una variable puede depender del valor de otra.
+Si se dispone de dos variables $X_i$ y $X_j$, es posible crear una nueva variable de interacción $X_{\text{interacción}} = X_i \times X_j $.
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r iter1}
+# Ejemplo en R de interacción de variables
+set.seed(123)
+X1 <- rnorm(100)
+X2 <- rnorm(100)
+Y <- 3 + 2 * X1 + 4 * X2 + 1.5 * X1 * X2 + rnorm(100)
+
+# Crear variable de interacción
+X_interaccion <- X1 * X2
+
+# Ajustar modelo con interacción
+modelo_interaccion <- lm(Y ~ X1 + X2 + X_interaccion)
+summary(modelo_interaccion)
+```
+:::
+
+
+Tal y como estudiamos cuando tratamos el tema de regresión polinómica, agregar **términos polinómicos** permite capturar relaciones no lineales al incluir potencias de las variables independientes. Por ejemplo, para una variable $X$, se puede crear $X^2$, $X^3$, etc.
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r pol1}
+# Datos simulados
+x <- 1:20
+y <- 5 + 2 * x + 0.5 * x^2 + rnorm(20, mean = 0, sd = 5)
+
+# Incluir término cuadrático en el modelo
+modelo_polinomico <- lm(y ~ x + I(x^2))
+summary(modelo_polinomico)
+```
+:::
+
+Crear combinaciones simples de variables puede capturar relaciones ocultas en los datos.
+Por ejemplo:
+
+  - Sumas o diferencias: $X_{\text{nuevo}} = X_1 + X_2$
+  - Ratios: $X_{\text{ratio}} = \frac{X_1}{X_2}$
+  - Variables categóricas combinadas: Fusionar categorías relacionadas en una nueva variable. Deben ser categorías que, desde un punto de vista del dominio de aplicación, tenga sentido combinar.
+
+---
+
+### Selección y Reducción de variables
+
+Una vez que se han creado nuevas características, es importante **seleccionar** las que son más relevantes para el modelo y **eliminar** aquellas que no aportan valor o introducen ruido.
+
+Se trató con detalle estos conceptos en el tema anterior. Planteamos un ejemplo de selección *Stepwise*.
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r sel1}
+# Datos simulados
+set.seed(123)
+X1 <- rnorm(100)
+X2 <- rnorm(100)
+X3 <- rnorm(100)
+Y <- 3 + 2 * X1 + 4 * X2 + rnorm(100)
+
+# Modelo completo con todas las variables
+modelo_completo <- lm(Y ~ X1 + X2 + X3)
+
+# Selección de variables usando stepwise
+modelo_seleccionado <- step(modelo_completo, direction = "both")
+summary(modelo_seleccionado)
+```
+:::
+
+---
+
+Recordemos que los métodos de regularización, estudiados en el tema 2, no solo ajustan el modelo, sino que también penalizan la complejidad, lo que ayuda a eliminar variables irrelevantes.
+
+
+
+### Escalado y Normalización de Variables
+
+Muchos algoritmos de aprendizaje automático, como la regresión, las redes neuronales y los métodos basados en distancia (k-NN, SVM), son sensibles a la **escala de las variables**. Por lo tanto, es fundamental **escalar** o **normalizar** los datos para garantizar que todas las variables contribuyan de manera equitativa al modelo.
+
+**Estandarización (Z-Score Normalization)**
+
+La estandarización consiste en restar la media y dividir por la desviación estándar, lo que produce variables con **media cero** y **desviación estándar uno**.
+
+$$
+X_{\text{estandarizado}} = \frac{X - \bar{X}}{\sigma_X}
+$$
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r std1}
+# Estandarización de una variable
+X1_estandarizado <- scale(X1)
+```
+:::
+
+---
+
+**Normalización Min-Max**
+
+La **normalización Min-Max** escala las variables a un rango específico, típicamente entre 0 y 1.
+
+$$
+X_{\text{normalizado}} = \frac{X - X_{\text{min}}}{X_{\text{max}} - X_{\text{min}}}
+$$
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r norm1}
+# Normalización Min-Max
+X1_min_max <- (X1 - min(X1)) / (max(X1) - min(X1))
+```
+:::
+
+### Técnicas avanzadas de Ingeniería de Características
+
+Cuando se trabaja con grandes conjuntos de datos o con variables altamente correlacionadas, puede ser necesario aplicar técnicas más avanzadas para reducir la dimensionalidad y extraer características relevantes.
+
+**Análisis de Componentes Principales (PCA)**
+
+El **Análisis de Componentes Principales (PCA)** es una técnica de reducción de dimensionalidad que transforma un conjunto de variables correlacionadas en un conjunto más pequeño de **componentes principales** no correlacionados que explican la mayor parte de la varianza en los datos.
+
+::: {.callout-caution title="Aviso"}
+Los detalles del Análisis de Componentes Principales son tratados en la asignatura de Aprendizaje Automático.
+:::
+
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r pca1}
+# Datos simulados
+set.seed(123)
+datos <- data.frame(X1, X2, X3)
+
+# Aplicar PCA
+pca_resultado <- prcomp(datos, scale. = TRUE)
+
+# Visualización de los resultados
+summary(pca_resultado)
+biplot(pca_resultado)
+```
+:::
+
+
+**Codificación de variables categóricas**
+
+Las variables categóricas deben convertirse en variables numéricas antes de ser utilizadas en muchos modelos. Esto puede hacerse mediante:
+
+**Codificación One-Hot** 
+
+El **One-Hot Encoding** es una técnica utilizada en el **preprocesamiento de datos** para convertir variables categóricas en variables numéricas. Muchos algoritmos de aprendizaje automático y estadística (como la regresión lineal, redes neuronales y máquinas de soporte vectorial) requieren que las variables de entrada sean numéricas, ya que no pueden manejar directamente datos categóricos. 
+
+El **One-Hot Encoding** transforma cada categoría en una nueva columna binaria (0 o 1), donde el **1** indica la presencia de una categoría específica y el **0** su ausencia.
+
+Supongamos que tienes una variable categórica llamada **Color** con tres categorías: **Rojo**, **Verde**, y **Azul**.
+
+| **ID** | **Color** |
+|--------|-----------|
+| 1      | Rojo      |
+| 2      | Verde     |
+| 3      | Azul      |
+| 4      | Rojo      |
+| 5      | Verde     |
+
+Con **One-Hot Encoding**, creamos una nueva columna para cada categoría única:
+
+| **ID** | **Color_Rojo** | **Color_Verde** | **Color_Azul** |
+|--------|----------------|-----------------|----------------|
+| 1      | 1              | 0               | 0              |
+| 2      | 0              | 1               | 0              |
+| 3      | 0              | 0               | 1              |
+| 4      | 1              | 0               | 0              |
+| 5      | 0              | 1               | 0              |
+
+Cada fila tiene un **único 1** que indica la categoría correspondiente y **ceros** en las otras columnas. Esto convierte la información categórica en un formato que los algoritmos numéricos pueden procesar.
+
+::: {.callout-note title="Propiedades Clave" collapse="false"}
+**Ventajas del One-Hot Encoding**
+
+  - Compatibilidad con algoritmos numéricos: La mayoría de los modelos de aprendizaje automático requieren variables numéricas. El One-Hot Encoding convierte las categorías en un formato adecuado.
+
+  - Evita suposiciones erróneas    A diferencia de la **codificación ordinal**, que asigna valores numéricos secuenciales a categorías (por ejemplo, Rojo = 1, Verde = 2, Azul = 3), el One-Hot Encoding **no introduce un orden artificial** entre las categorías. Esto es importante cuando no hay una jerarquía natural.
+
+  - Mejora la Interpretabilidad en Modelos Lineales: En modelos como la regresión lineal, cada columna creada mediante One-Hot Encoding representa el efecto específico de esa categoría.
+
+**Desventajas del One-Hot Encoding**
+
+  - Incremento de la Dimensionalidad:    Si la variable categórica tiene muchas categorías únicas (por ejemplo, países o códigos postales), el número de columnas creadas puede ser muy grande. Esto puede conducir a problemas de **"curse of dimensionality"** (la maldición de la dimensionalidad), afectando el rendimiento del modelo y aumentando el tiempo de computación.
+
+  - Colinealidad Perfecta (Dummy Variable Trap):    Al crear una columna para cada categoría, una de las columnas se puede representar como una combinación lineal de las demás. Esto puede causar problemas en modelos lineales. Para evitarlo, se elimina una categoría de referencia (típicamente la primera), lo que se conoce como **evitar la trampa de las variables ficticias** (*dummy variable trap*).
+:::
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r codif1}
+# Variable categórica simulada
+categoria <- factor(c("bajo", "medio", "alto", "medio", "alto"))
+
+# Codificación one-hot
+library(caret)
+dummies <- dummyVars(~ categoria, data = data.frame(categoria))
+print(dummies)
+datos_codificados <- predict(dummies, newdata = data.frame(categoria))
+```
+:::
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r onehot2}
+# Instalar y cargar la librería caret
+library(caret)
+
+# Crear un data frame
+datos <- data.frame(ID = 1:5, Color = c("Rojo", "Verde", "Azul", "Rojo", "Verde"))
+
+# Aplicar One-Hot Encoding usando dummyVars
+dummy <- dummyVars(~ Color, data = datos)
+one_hot <- predict(dummy, newdata = datos)
+
+# Ver los resultados
+print(one_hot)
+```
+
+
+::: {.callout-caution title="Aviso"}
+Cuando aplicamos One-Hot Encoding, el conjunto de variables resultantes puede generar colinealidad perfecta, lo que puede ser problemático en modelos lineales. Para evitarlo, es común eliminar una de las columnas creadas (que actuará como categoría de referencia).
+
+
+```{r ejemplo}
+# One-Hot Encoding con eliminación de una categoría (categoría de referencia)
+one_hot_ref <- model.matrix(~ Color, data = datos)[, -1]  # Eliminar la primera columna
+
+print(one_hot_ref)
+```
+
+Esto elimina una columna (por ejemplo, **ColorAzul**) y permite que las otras columnas se interpreten en relación a la categoría de referencia.
+
+:::
+
+
+- **Codificación Ordinal:** Las categorías se asignan a valores numéricos basados en su orden.
+
+:::
+
+
 --- 
+

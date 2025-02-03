@@ -228,6 +228,13 @@ window.Quarto = {
   <li><a href="#transformación-de-box-cox" id="toc-transformación-de-box-cox" class="nav-link" data-scroll-target="#transformación-de-box-cox"><span class="header-section-number">3.2.2</span> Transformación de Box-Cox</a></li>
   <li><a href="#consideracione-sobre-las-transformaciones" id="toc-consideracione-sobre-las-transformaciones" class="nav-link" data-scroll-target="#consideracione-sobre-las-transformaciones"><span class="header-section-number">3.2.3</span> Consideracione sobre las transformaciones</a></li>
   </ul></li>
+  <li><a href="#ingeniería-de-características" id="toc-ingeniería-de-características" class="nav-link" data-scroll-target="#ingeniería-de-características"><span class="header-section-number">3.3</span> Ingeniería de características</a>
+  <ul class="collapse">
+  <li><a href="#creación-de-nuevas-variables" id="toc-creación-de-nuevas-variables" class="nav-link" data-scroll-target="#creación-de-nuevas-variables"><span class="header-section-number">3.3.1</span> Creación de nuevas variables</a></li>
+  <li><a href="#selección-y-reducción-de-variables" id="toc-selección-y-reducción-de-variables" class="nav-link" data-scroll-target="#selección-y-reducción-de-variables"><span class="header-section-number">3.3.2</span> Selección y Reducción de variables</a></li>
+  <li><a href="#escalado-y-normalización-de-variables" id="toc-escalado-y-normalización-de-variables" class="nav-link" data-scroll-target="#escalado-y-normalización-de-variables"><span class="header-section-number">3.3.3</span> Escalado y Normalización de Variables</a></li>
+  <li><a href="#técnicas-avanzadas-de-ingeniería-de-características" id="toc-técnicas-avanzadas-de-ingeniería-de-características" class="nav-link" data-scroll-target="#técnicas-avanzadas-de-ingeniería-de-características"><span class="header-section-number">3.3.4</span> Técnicas avanzadas de Ingeniería de Características</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -890,6 +897,528 @@ Ejemplo
 </ul></li>
 <li><p><strong>Revertir Transformaciones para Interpretación:</strong> Después de ajustar un modelo, es posible transformar las predicciones de nuevo a la escala original para facilitar la interpretación.</p></li>
 </ul>
+</section>
+</section>
+<section id="ingeniería-de-características" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="ingeniería-de-características"><span class="header-section-number">3.3</span> Ingeniería de características</h2>
+<p>La <strong>ingeniería de características</strong> es el arte y la ciencia de transformar los datos brutos en representaciones que faciliten el aprendizaje y mejoren la capacidad predictiva de los modelos. Consiste en el proceso de <strong>crear, transformar y seleccionar</strong> las variables que se utilizan en un modelo para mejorar su rendimiento. Una característica bien diseñada puede hacer que un modelo simple supere a modelos más complejos, mientras que características irrelevantes o mal definidas pueden degradar significativamente la calidad del análisis. Este proceso incluye:</p>
+<ul>
+<li><strong>Creación de nuevas variables</strong> a partir de las existentes.</li>
+<li><strong>Transformación de variables</strong> para mejorar su distribución o relación con la variable objetivo.</li>
+<li><strong>Selección de las características más relevantes</strong>, eliminando aquellas que no aportan valor o introducen ruido.</li>
+<li><strong>Preparación de datos para modelos específicos</strong>, asegurando que las variables cumplan con los requisitos del algoritmo (por ejemplo, escalado, normalización o codificación).</li>
+</ul>
+<section id="creación-de-nuevas-variables" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="creación-de-nuevas-variables"><span class="header-section-number">3.3.1</span> Creación de nuevas variables</h3>
+<p>Una de las tareas más importantes en la ingeniería de características es la <strong>creación de nuevas variables</strong> que puedan capturar relaciones complejas entre las variables independientes y la variable objetivo.</p>
+<p>Las <strong>interacciones entre variables</strong> permiten capturar relaciones no lineales entre las variables al considerar cómo el efecto de una variable puede depender del valor de otra. Si se dispone de dos variables <span class="math inline">\(X_i\)</span> y <span class="math inline">\(X_j\)</span>, es posible crear una nueva variable de interacción $X_{} = X_i X_j $.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejemplo en R de interacción de variables</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>X1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> X1 <span class="sc">+</span> <span class="dv">4</span> <span class="sc">*</span> X2 <span class="sc">+</span> <span class="fl">1.5</span> <span class="sc">*</span> X1 <span class="sc">*</span> X2 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear variable de interacción</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>X_interaccion <span class="ot">&lt;-</span> X1 <span class="sc">*</span> X2</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo con interacción</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>modelo_interaccion <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X1 <span class="sc">+</span> X2 <span class="sc">+</span> X_interaccion)</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_interaccion)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Y ~ X1 + X2 + X_interaccion)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1.8719 -0.6777 -0.1086  0.5897  2.3166 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)    3.14098    0.09578   32.80   &lt;2e-16 ***
+X1             1.90719    0.10834   17.60   &lt;2e-16 ***
+X2             4.03434    0.09881   40.83   &lt;2e-16 ***
+X_interaccion  1.65911    0.11449   14.49   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.9468 on 96 degrees of freedom
+Multiple R-squared:  0.953, Adjusted R-squared:  0.9516 
+F-statistic: 649.2 on 3 and 96 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Tal y como estudiamos cuando tratamos el tema de regresión polinómica, agregar <strong>términos polinómicos</strong> permite capturar relaciones no lineales al incluir potencias de las variables independientes. Por ejemplo, para una variable <span class="math inline">\(X\)</span>, se puede crear <span class="math inline">\(X^2\)</span>, <span class="math inline">\(X^3\)</span>, etc.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Datos simulados</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> x <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">*</span> x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">20</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">5</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Incluir término cuadrático en el modelo</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>modelo_polinomico <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x <span class="sc">+</span> <span class="fu">I</span>(x<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_polinomico)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = y ~ x + I(x^2))
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-9.9235 -2.9142  0.6081  3.0085  9.6944 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -0.49742    4.18141  -0.119  0.90670    
+x            2.85574    0.91705   3.114  0.00631 ** 
+I(x^2)       0.47433    0.04242  11.182 2.94e-09 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 5.62 on 17 degrees of freedom
+Multiple R-squared:  0.9953,    Adjusted R-squared:  0.9947 
+F-statistic:  1792 on 2 and 17 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Crear combinaciones simples de variables puede capturar relaciones ocultas en los datos. Por ejemplo:</p>
+<ul>
+<li>Sumas o diferencias: <span class="math inline">\(X_{\text{nuevo}} = X_1 + X_2\)</span></li>
+<li>Ratios: <span class="math inline">\(X_{\text{ratio}} = \frac{X_1}{X_2}\)</span></li>
+<li>Variables categóricas combinadas: Fusionar categorías relacionadas en una nueva variable. Deben ser categorías que, desde un punto de vista del dominio de aplicación, tenga sentido combinar.</li>
+</ul>
+<hr>
+</section>
+<section id="selección-y-reducción-de-variables" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="selección-y-reducción-de-variables"><span class="header-section-number">3.3.2</span> Selección y Reducción de variables</h3>
+<p>Una vez que se han creado nuevas características, es importante <strong>seleccionar</strong> las que son más relevantes para el modelo y <strong>eliminar</strong> aquellas que no aportan valor o introducen ruido.</p>
+<p>Se trató con detalle estos conceptos en el tema anterior. Planteamos un ejemplo de selección <em>Stepwise</em>.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Datos simulados</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>X1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>X3 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> X1 <span class="sc">+</span> <span class="dv">4</span> <span class="sc">*</span> X2 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Modelo completo con todas las variables</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>modelo_completo <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X1 <span class="sc">+</span> X2 <span class="sc">+</span> X3)</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Selección de variables usando stepwise</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>modelo_seleccionado <span class="ot">&lt;-</span> <span class="fu">step</span>(modelo_completo, <span class="at">direction =</span> <span class="st">"both"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Start:  AIC=13.96
+Y ~ X1 + X2 + X3
+
+       Df Sum of Sq     RSS     AIC
+- X3    1      0.29  106.43  12.236
+&lt;none&gt;               106.15  13.964
+- X1    1    306.06  412.21 147.636
+- X2    1   1510.95 1617.09 284.321
+
+Step:  AIC=12.24
+Y ~ X1 + X2
+
+       Df Sum of Sq     RSS     AIC
+&lt;none&gt;               106.43  12.236
++ X3    1      0.29  106.15  13.964
+- X1    1    313.60  420.04 147.517
+- X2    1   1510.83 1617.26 282.332</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_seleccionado)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Y ~ X1 + X2)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.47672 -0.67285  0.09839  0.70676  2.62566 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   2.9729     0.1059   28.08   &lt;2e-16 ***
+X1            1.9522     0.1155   16.91   &lt;2e-16 ***
+X2            4.0449     0.1090   37.11   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.048 on 97 degrees of freedom
+Multiple R-squared:  0.943, Adjusted R-squared:  0.9418 
+F-statistic: 802.3 on 2 and 97 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr>
+<p>Recordemos que los métodos de regularización, estudiados en el tema 2, no solo ajustan el modelo, sino que también penalizan la complejidad, lo que ayuda a eliminar variables irrelevantes.</p>
+</section>
+<section id="escalado-y-normalización-de-variables" class="level3" data-number="3.3.3">
+<h3 data-number="3.3.3" class="anchored" data-anchor-id="escalado-y-normalización-de-variables"><span class="header-section-number">3.3.3</span> Escalado y Normalización de Variables</h3>
+<p>Muchos algoritmos de aprendizaje automático, como la regresión, las redes neuronales y los métodos basados en distancia (k-NN, SVM), son sensibles a la <strong>escala de las variables</strong>. Por lo tanto, es fundamental <strong>escalar</strong> o <strong>normalizar</strong> los datos para garantizar que todas las variables contribuyan de manera equitativa al modelo.</p>
+<p><strong>Estandarización (Z-Score Normalization)</strong></p>
+<p>La estandarización consiste en restar la media y dividir por la desviación estándar, lo que produce variables con <strong>media cero</strong> y <strong>desviación estándar uno</strong>.</p>
+<p><span class="math display">\[
+X_{\text{estandarizado}} = \frac{X - \bar{X}}{\sigma_X}
+\]</span></p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estandarización de una variable</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>X1_estandarizado <span class="ot">&lt;-</span> <span class="fu">scale</span>(X1)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<hr>
+<p><strong>Normalización Min-Max</strong></p>
+<p>La <strong>normalización Min-Max</strong> escala las variables a un rango específico, típicamente entre 0 y 1.</p>
+<p><span class="math display">\[
+X_{\text{normalizado}} = \frac{X - X_{\text{min}}}{X_{\text{max}} - X_{\text{min}}}
+\]</span></p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Normalización Min-Max</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>X1_min_max <span class="ot">&lt;-</span> (X1 <span class="sc">-</span> <span class="fu">min</span>(X1)) <span class="sc">/</span> (<span class="fu">max</span>(X1) <span class="sc">-</span> <span class="fu">min</span>(X1))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="técnicas-avanzadas-de-ingeniería-de-características" class="level3" data-number="3.3.4">
+<h3 data-number="3.3.4" class="anchored" data-anchor-id="técnicas-avanzadas-de-ingeniería-de-características"><span class="header-section-number">3.3.4</span> Técnicas avanzadas de Ingeniería de Características</h3>
+<p>Cuando se trabaja con grandes conjuntos de datos o con variables altamente correlacionadas, puede ser necesario aplicar técnicas más avanzadas para reducir la dimensionalidad y extraer características relevantes.</p>
+<p><strong>Análisis de Componentes Principales (PCA)</strong></p>
+<p>El <strong>Análisis de Componentes Principales (PCA)</strong> es una técnica de reducción de dimensionalidad que transforma un conjunto de variables correlacionadas en un conjunto más pequeño de <strong>componentes principales</strong> no correlacionados que explican la mayor parte de la varianza en los datos.</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Aviso">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Aviso
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Los detalles del Análisis de Componentes Principales son tratados en la asignatura de Aprendizaje Automático.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Datos simulados</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(X1, X2, X3)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar PCA</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>pca_resultado <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(datos, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualización de los resultados</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pca_resultado)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Importance of components:
+                          PC1    PC2    PC3
+Standard deviation     1.0726 0.9900 0.9324
+Proportion of Variance 0.3835 0.3267 0.2898
+Cumulative Proportion  0.3835 0.7102 1.0000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">biplot</span>(pca_resultado)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema3_files/figure-html/pca1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>Codificación de variables categóricas</strong></p>
+<p>Las variables categóricas deben convertirse en variables numéricas antes de ser utilizadas en muchos modelos. Esto puede hacerse mediante:</p>
+<p><strong>Codificación One-Hot</strong></p>
+<p>El <strong>One-Hot Encoding</strong> es una técnica utilizada en el <strong>preprocesamiento de datos</strong> para convertir variables categóricas en variables numéricas. Muchos algoritmos de aprendizaje automático y estadística (como la regresión lineal, redes neuronales y máquinas de soporte vectorial) requieren que las variables de entrada sean numéricas, ya que no pueden manejar directamente datos categóricos.</p>
+<p>El <strong>One-Hot Encoding</strong> transforma cada categoría en una nueva columna binaria (0 o 1), donde el <strong>1</strong> indica la presencia de una categoría específica y el <strong>0</strong> su ausencia.</p>
+<p>Supongamos que tienes una variable categórica llamada <strong>Color</strong> con tres categorías: <strong>Rojo</strong>, <strong>Verde</strong>, y <strong>Azul</strong>.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><strong>ID</strong></th>
+<th><strong>Color</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Rojo</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Verde</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Azul</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Rojo</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Verde</td>
+</tr>
+</tbody>
+</table>
+<p>Con <strong>One-Hot Encoding</strong>, creamos una nueva columna para cada categoría única:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><strong>ID</strong></th>
+<th><strong>Color_Rojo</strong></th>
+<th><strong>Color_Verde</strong></th>
+<th><strong>Color_Azul</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>Cada fila tiene un <strong>único 1</strong> que indica la categoría correspondiente y <strong>ceros</strong> en las otras columnas. Esto convierte la información categórica en un formato que los algoritmos numéricos pueden procesar.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Propiedades Clave">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Propiedades Clave
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p><strong>Ventajas del One-Hot Encoding</strong></p>
+<ul>
+<li><p>Compatibilidad con algoritmos numéricos: La mayoría de los modelos de aprendizaje automático requieren variables numéricas. El One-Hot Encoding convierte las categorías en un formato adecuado.</p></li>
+<li><p>Evita suposiciones erróneas A diferencia de la <strong>codificación ordinal</strong>, que asigna valores numéricos secuenciales a categorías (por ejemplo, Rojo = 1, Verde = 2, Azul = 3), el One-Hot Encoding <strong>no introduce un orden artificial</strong> entre las categorías. Esto es importante cuando no hay una jerarquía natural.</p></li>
+<li><p>Mejora la Interpretabilidad en Modelos Lineales: En modelos como la regresión lineal, cada columna creada mediante One-Hot Encoding representa el efecto específico de esa categoría.</p></li>
+</ul>
+<p><strong>Desventajas del One-Hot Encoding</strong></p>
+<ul>
+<li><p>Incremento de la Dimensionalidad: Si la variable categórica tiene muchas categorías únicas (por ejemplo, países o códigos postales), el número de columnas creadas puede ser muy grande. Esto puede conducir a problemas de <strong>“curse of dimensionality”</strong> (la maldición de la dimensionalidad), afectando el rendimiento del modelo y aumentando el tiempo de computación.</p></li>
+<li><p>Colinealidad Perfecta (Dummy Variable Trap): Al crear una columna para cada categoría, una de las columnas se puede representar como una combinación lineal de las demás. Esto puede causar problemas en modelos lineales. Para evitarlo, se elimina una categoría de referencia (típicamente la primera), lo que se conoce como <strong>evitar la trampa de las variables ficticias</strong> (<em>dummy variable trap</em>).</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Variable categórica simulada</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>categoria <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">"bajo"</span>, <span class="st">"medio"</span>, <span class="st">"alto"</span>, <span class="st">"medio"</span>, <span class="st">"alto"</span>))</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Codificación one-hot</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: ggplot2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lattice</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>dummies <span class="ot">&lt;-</span> <span class="fu">dummyVars</span>(<span class="sc">~</span> categoria, <span class="at">data =</span> <span class="fu">data.frame</span>(categoria))</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(dummies)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Dummy Variable Object
+
+Formula: ~categoria
+1 variables, 1 factors
+Variables and levels will be separated by '.'
+A less than full rank encoding is used</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>datos_codificados <span class="ot">&lt;-</span> <span class="fu">predict</span>(dummies, <span class="at">newdata =</span> <span class="fu">data.frame</span>(categoria))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-22" class="callout-22-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalar y cargar la librería caret</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear un data frame</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ID =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">Color =</span> <span class="fu">c</span>(<span class="st">"Rojo"</span>, <span class="st">"Verde"</span>, <span class="st">"Azul"</span>, <span class="st">"Rojo"</span>, <span class="st">"Verde"</span>))</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicar One-Hot Encoding usando dummyVars</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>dummy <span class="ot">&lt;-</span> <span class="fu">dummyVars</span>(<span class="sc">~</span> Color, <span class="at">data =</span> datos)</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>one_hot <span class="ot">&lt;-</span> <span class="fu">predict</span>(dummy, <span class="at">newdata =</span> datos)</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Ver los resultados</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(one_hot)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ColorAzul ColorRojo ColorVerde
+1         0         1          0
+2         0         0          1
+3         1         0          0
+4         0         1          0
+5         0         0          1</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled" title="Aviso">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Aviso
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Cuando aplicamos One-Hot Encoding, el conjunto de variables resultantes puede generar colinealidad perfecta, lo que puede ser problemático en modelos lineales. Para evitarlo, es común eliminar una de las columnas creadas (que actuará como categoría de referencia).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One-Hot Encoding con eliminación de una categoría (categoría de referencia)</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>one_hot_ref <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> Color, <span class="at">data =</span> datos)[, <span class="sc">-</span><span class="dv">1</span>]  <span class="co"># Eliminar la primera columna</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(one_hot_ref)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ColorRojo ColorVerde
+1         1          0
+2         0          1
+3         0          0
+4         1          0
+5         0          1</code></pre>
+</div>
+</div>
+<p>Esto elimina una columna (por ejemplo, <strong>ColorAzul</strong>) y permite que las otras columnas se interpreten en relación a la categoría de referencia.</p>
+</div>
+</div>
+<ul>
+<li><strong>Codificación Ordinal:</strong> Las categorías se asignan a valores numéricos basados en su orden.</li>
+</ul>
+</div>
+</div>
+</div>
 <hr>
 
 
