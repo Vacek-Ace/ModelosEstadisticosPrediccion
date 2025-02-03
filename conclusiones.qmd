@@ -1,35 +1,21 @@
 # Conclusiones {#sec-conclusiones}
 
-A lo largo de cinco capítulos hemos presentado el material de la asignatura de inferencia estadística del grado en Ciencia e Ingeniería de Datos de la Universidad Rey Juan Carlos.
+A lo largo de cinco capítulos hemos presentado el material de la asignatura de Modelos de Regresión del grado en Ciencia e Ingeniería de Datos de la Universidad Rey Juan Carlos.
 
-En este capítulo final, te proponemos reflexionar sobre las principales lecciones aprendidas a lo largo del curso "Inferencia Estadística" y destacaremos la importancia de las técnicas abordadas en la formación de futuros profesionales en Ciencia e Ingeniería de Datos. Además, alentaremos a los estudiantes a continuar explorando y ampliando sus conocimientos en cursos posteriores.
+En este capítulo final, te proponemos reflexionar sobre las principales lecciones aprendidas a lo largo del curso "Modelos de Regresión" y destacaremos la importancia de las técnicas abordadas en la formación de futuros profesionales en Ciencia e Ingeniería de Datos. Además, alentaremos a los estudiantes a continuar explorando y ampliando sus conocimientos en cursos posteriores.
 
-Al finalizar este recorrido por los conceptos y técnicas de la inferencia estadística, es evidente la importancia de esta disciplina en el análisis y la interpretación de datos en el mundo moderno. A lo largo de este libro, hemos explorado desde los fundamentos teóricos hasta las aplicaciones prácticas, proporcionando a los estudiantes una base sólida sobre la cual construir sus habilidades en ciencia de datos.
+Al finalizar este recorrido por los conceptos y técnicas de la Regresión, es evidente la importancia de esta disciplina en el análisis y la interpretación de datos en el mundo moderno. A lo largo de este libro, hemos explorado desde los fundamentos teóricos hasta las aplicaciones prácticas, proporcionando a los estudiantes una base sólida sobre la cual construir sus habilidades en ciencia de datos.
 
 ## Resumen de los aprendizajes
 
-1.  **Comprensión de poblaciones y muestras**: Esperamos que hayas aprendido a distinguir entre población y muestra, comprendiendo la relevancia de los modelos probabilísticos y la importancia de asegurar un muestreo adecuado para obtener resultados representativos.
-
-2.  **Estimación de parámetros**: Juntos hemos abordado diversas técnicas de estimación puntual y por intervalos, permitiendo a los estudiantes realizar inferencias sobre parámetros de la población con un nivel de confianza adecuado.
-
-3.  **Contrastes de Hipótesis**: A lo largo del curso debes haber desarrollado la habilidad de plantear y resolver contrastes de hipótesis, una herramienta fundamental para la toma de decisiones informadas basadas en datos.
-
-4.  **Contrastes no paramétricos**: Para los casos donde las suposiciones paramétricas no se cumplen, se han introducido y aplicado métodos no paramétricos, ampliando el repertorio de herramientas disponibles para el trabajo futuro del científico e ingeniero de datos.
-
-5.  **Análisis de la Varianza (ANOVA)**: Se ha presentado, por primera vez en el Grado, el ANOVA como una técnica esencial para comparar múltiples grupos y entender las variaciones entre ellos, destacando su aplicación en diferentes contextos.
-
 ## Reflexiones finales
-
-La inferencia estadística no solo es una herramienta académica, sino una metodología aplicable en múltiples campos profesionales. Desde la investigación científica hasta el análisis de mercados y la toma de decisiones en negocios, la capacidad de interpretar datos y extraer conclusiones válidas es una competencia esencial en la era de la información.
-
-Además, el enfoque en aplicaciones prácticas y el uso de R a lo largo de este libro ha proporcionado a los estudiantes una experiencia directa con herramientas de análisis de datos contemporáneas. Esta práctica no solo refuerza los conceptos teóricos, sino que también prepara a los estudiantes para enfrentar desafíos reales en su futura carrera profesional.
 
 ## Mirando hacia adelante
 
 Con el conocimiento y las habilidades adquiridas, los estudiantes están mejor equipados para explorar más a fondo el vasto campo de la ciencia de datos. La estadística y la inferencia estadística seguirán evolucionando con el avance de la tecnología y la disponibilidad de datos. Por lo tanto, es crucial que los futuros profesionales mantengan una mentalidad de aprendizaje continuo y estén abiertos a adoptar nuevas metodologías y herramientas.
 
-En conclusión, esperamos que este libro haya proporcionado una comprensión profunda y práctica de la inferencia estadística, y que inspire a los estudiantes a aplicar estos conocimientos con confianza y creatividad en sus proyectos futuros. La capacidad de analizar datos de manera crítica y tomar decisiones basadas en evidencias es una habilidad poderosa y transformadora, que sin duda abrirá numerosas oportunidades en el ámbito profesional.
+En conclusión, esperamos que este libro haya proporcionado una comprensión profunda y práctica de los Modelos de Regresión, y que inspire a los estudiantes a aplicar estos conocimientos con confianza y creatividad en sus proyectos futuros. La capacidad de analizar datos de manera crítica y tomar decisiones basadas en evidencias es una habilidad poderosa y transformadora, que sin duda abrirá numerosas oportunidades en el ámbito profesional.
 
-Os recordamos que en próximos cursos os encontraréis con las asignaturas de Regresión, Aprendizaje Automático I y Aprendizaje Automático II, donde aplicaréis muchas de las técnicas y herramientas que hemos aprendido juntos.
+Os recordamos que en próximos cursos os encontraréis con las asignaturas de Aprendizaje Automático I y Aprendizaje Automático II, donde aplicaréis muchas de las técnicas y herramientas que hemos aprendido juntos.
 
 **¡Buena suerte!**

@@ -1,0 +1,140 @@
+# Modelos de regresión generalizada {#sec-tema4}
+
+Hasta ahora hemos estuadiado la regresión lineal como una herramienta poderosa para modelar la relación entre una variable dependiente continua y un conjunto de variables independientes. Sin embargo, en muchos contextos del mundo real, las suposiciones de la regresión lineal tradicional no son adecuadas. ¿Qué sucede si la variable dependiente es binaria, como en un diagnóstico médico (enfermo/sano)? ¿O si estás modelando el número de accidentes en una intersección o la cantidad de compras realizadas por un cliente?
+
+Para abordar estos desafíos, se utilizan los llamados **Modelos Lineales Generalizados (GLM)**. Esta clase de modelos amplía la regresión lineal al permitir que la variable dependiente tenga distribuciones diferentes a la normal, como la binomial o la de Poisson. Además, los GLM utilizan funciones de enlace que transforman la relación entre la variable dependiente y los predictores, permitiendo una mayor flexibilidad en el modelado.
+
+Algunos de los modelos más comunes dentro de los GLM son:
+
+  - Regresión Logística: Ideal para variables dependientes binarias (sí/no, éxito/fracaso).
+  -  Regresión de Poisson: Utilizada para modelar datos de conteo (número de eventos).
+  - Regresión Binomial Negativa: Una extensión de la regresión de Poisson para datos de conteo con sobredispersión.
+  -  Modelos de Gamma y Inverso Gaussiano: Utilizados para modelar variables continuas positivas y sesgadas, como tiempos de espera o costos.
+
+En este tema, exploraremos cómo utilizar estos modelos para resolver problemas del mundo real, interpretar sus resultados y evaluar su ajuste.
+
+## Introducción a los GLM
+
+### ¿Qué son los Modelos Lineales Generalizados?
+
+Los **Modelos Lineales Generalizados (GLM)** son una extensión de los modelos de regresión lineal que permiten manejar una mayor variedad de tipos de datos y relaciones entre variables. Mientras que la regresión lineal tradicional asume que la variable dependiente es continua y sigue una distribución normal, los GLM permiten trabajar con variables dependientes que:
+
+  - Son **binarias** (como éxito/fracaso o sí/no).
+  - Representan **conteos** de eventos (número de llamadas, accidentes, etc.).
+  - Son **continuas positivas** y no siguen una distribución normal (como tiempos o costos).
+
+Los GLM proporcionan una estructura flexible para modelar la relación entre una o más variables independientes y una variable dependiente que sigue alguna distribución de la **familia exponencial** (binomial, Poisson, gamma, entre otras).
+
+### Componentes de un Modelo Lineal Generalizado
+
+Un GLM se define por tres componentes clave:
+
+1. **Componente Aleatorio:**  
+
+   Este componente describe la distribución de la variable dependiente. En la regresión lineal, la variable dependiente sigue una distribución normal. En los GLM, puede seguir otras distribuciones de la **familia exponencial**, como:
+
+   - **Distribución Binomial:** Para variables categóricas binarias (0/1, éxito/fracaso).
+   - **Distribución de Poisson:** Para datos de conteo (número de eventos).
+   - **Distribución Gamma:** Para variables continuas y positivas (como costos o tiempos).
+
+2. **Componente Sistemático:**  
+   Este componente describe cómo las variables independientes se combinan linealmente en el modelo. Se define como:
+
+   $$
+   \eta = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p
+   $$
+
+   Donde $\eta$ es el **predictor lineal** y $\beta$ representa los coeficientes del modelo.
+
+3. **Función de Enlace:**  
+   La función de enlace conecta el componente sistemático con la media de la variable dependiente. Mientras que en la regresión lineal la relación es directa ($Y = \eta $), en los GLM se utiliza una función de enlace $g(\mu)$ para transformar la media $\mu$ y ajustar diferentes tipos de datos.
+
+   $$
+   g(\mu) = \eta
+   $$
+
+**Ejemplos de funciones de enlace:**
+
+   - **Logística (Logit):** Para la regresión logística, que modela la probabilidad de un evento.
+     $$
+     g(\mu) = \log\left(\frac{\mu}{1 - \mu}\right)
+     $$
+   - **Logarítmica:** Para la regresión de Poisson, que modela tasas de eventos.
+     $$
+     g(\mu) = \log(\mu)
+     $$
+   - **Identidad:** Para la regresión lineal estándar.
+     $$
+     g(\mu) = \mu
+     $$
+
+
+::: {.callout-note collapse="true" title="Aplicaciones"}
+
+Los GLM se utilizan en una amplia variedad de disciplinas para resolver problemas del mundo real:
+
+**Regresión Logística (para variables binarias):**  
+
+   - **Medicina:** Predicción de la presencia o ausencia de una enfermedad basada en factores de riesgo.
+   - **Marketing:** Determinación de la probabilidad de que un cliente compre un producto.
+   - **Finanzas:** Evaluación de la probabilidad de incumplimiento de pago de un préstamo.
+
+**Regresión de Poisson (para datos de conteo):**  
+
+   - **Transporte:** Modelado del número de accidentes en una carretera en un período de tiempo.
+   - **Ecología:** Conteo de especies en un área determinada.
+   - **Telecomunicaciones:** Número de llamadas recibidas por un centro de atención.
+
+**Regresión Binomial Negativa (para conteos con sobredispersión):**  
+
+   - **Salud Pública:** Modelado del número de visitas al médico o incidentes de una enfermedad en una población.
+
+**Modelos Gamma (para variables continuas positivas):**  
+   
+   - **Seguros:** Estimación de los costos de reclamos de seguros.
+   - **Ingeniería:** Modelado de tiempos de falla en procesos industriales.
+
+:::
+
+### Diferencias clave entre la Regresión Lineal y los GLM
+
+| **Característica**       | **Regresión Lineal**                                | **Modelos Lineales Generalizados (GLM)**               |
+|--------------------------|----------------------------------------------------|-------------------------------------------------------|
+| **Distribución de la variable dependiente** | Normal                                       | Familia exponencial (binomial, Poisson, gamma, etc.)  |
+| **Tipo de variable dependiente**            | Continua                                     | Binaria, de conteo, continua positiva                 |
+| **Relación entre las variables**            | Lineal directa                               | Relación transformada mediante una función de enlace  |
+| **Función de Enlace**                       | Identidad (\( g(\mu) = \mu \))               | Logit, logarítmica, inversa, etc.                     |
+
+---
+
+Las ventajas principales de los GLM son:
+
+  - **Flexibilidad:** Los GLM permiten modelar diferentes tipos de variables dependientes, lo que amplía significativamente el rango de problemas que se pueden abordar.
+
+  - **Interpretación Coherente:** Aunque se utilizan funciones de enlace, los coeficientes de los GLM pueden interpretarse de manera similar a los modelos lineales, proporcionando información sobre el impacto de cada variable independiente.
+
+  - **Evaluación Estadística Robusta:** Los GLM permiten la realización de pruebas de hipótesis, la construcción de intervalos de confianza y la evaluación de la bondad del ajuste mediante medidas como el **AIC** y el **BIC**.
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r glm1}
+# Cargar librería y datos
+library(MASS)
+data(Pima.tr)  # Datos sobre diabetes en mujeres de origen pima
+
+# Ajustar un modelo de regresión logística
+modelo_logistico <- glm(type ~ npreg + glu + bmi, data = Pima.tr, family = binomial)
+
+# Resumen del modelo
+summary(modelo_logistico)
+
+# Predicciones de la probabilidad de tener diabetes
+predicciones <- predict(modelo_logistico, type = "response")
+
+# Ver primeras predicciones
+head(predicciones)
+```
+:::
+
+Los **Modelos Lineales Generalizados (GLM)** amplían el alcance de la regresión lineal clásica, proporcionando herramientas para modelar una amplia variedad de tipos de datos, desde variables binarias hasta datos de conteo y variables continuas no normales. A través del uso de funciones de enlace y distribuciones flexibles, los GLM permiten resolver problemas complejos del mundo real en campos tan diversos como la medicina, el marketing, la ingeniería y las ciencias sociales.
+
+En las próximas secciones, exploraremos en detalle cómo aplicar estos modelos específicos, como la **regresión logística** y la **regresión de Poisson**, y cómo interpretar sus resultados en diferentes contextos.

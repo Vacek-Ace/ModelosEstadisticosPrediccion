@@ -12,6 +12,7 @@ book:
     - tema1.qmd
     - tema2.qmd
     - tema3.qmd
+    - tema4.qmd
     - conclusiones.qmd
     - references.qmd
   cover-image: DSLab_logo_2.png

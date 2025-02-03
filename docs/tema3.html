@@ -64,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./conclusiones.html" rel="next">
+<link href="./tema4.html" rel="next">
 <link href="./tema2.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -196,8 +196,14 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./tema4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./conclusiones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -615,7 +621,7 @@ Objetivos
 <h3 data-number="3.2.1" class="anchored" data-anchor-id="tipos-de-transformaciones-comunes"><span class="header-section-number">3.2.1</span> Tipos de transformaciones comunes</h3>
 <p>Existen diversas transformaciones que pueden aplicarse a los datos según el problema que se desea abordar. A continuación, se describen las transformaciones más utilizadas en el análisis de regresión.</p>
 <hr>
-<p><strong>Transformación Logarítmica (<span class="math inline">\(\log\)</span>)</strong></p>
+<p><strong>Transformación Logarítmica (</strong><span class="math inline">\(\log\)</span>)</p>
 <p>Se emplea para linearizar relaciones exponenciales, reducir la heterocedasticidad, y estabilizar la varianza: - <span class="math display">\[ Y = \log(Y) \]</span> o <span class="math display">\[ X = \log(X) \]</span></p>
 <p>Es una transformación adecuada cuando la variable tiene una distribución sesgada a la derecha o cuando el efecto marginal disminuye con el valor de la variable (Ingresos, crecimiento poblacional, y tasas de interés, etc).</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
@@ -683,7 +689,7 @@ F-statistic: 23.42 on 1 and 15 DF,  p-value: 0.0002166</code></pre>
 </div>
 </div>
 </div>
-<p><strong>Transformación de Raíz Cuadrada (<span class="math inline">\(\sqrt{}\)</span>)</strong></p>
+<p><strong>Transformación de Raíz Cuadrada (</strong><span class="math inline">\(\sqrt{}\)</span>)</p>
 <p>Se emplea para reducir la heterocedasticidad, especialmente cuando la varianza aumenta linealmente con la media: <span class="math display">\[Y = \sqrt{Y}\]</span> o <span class="math display">\[X = \sqrt{X}\]</span></p>
 <p>Se emplea comúnmente en conteos de eventos o variables positivas (número de llamadas, defectos, etc.).</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
@@ -750,7 +756,7 @@ F-statistic: 43.22 on 1 and 40 DF,  p-value: 7.387e-08</code></pre>
 </div>
 </div>
 </div>
-<p><strong>Transformación Inversa (<span class="math inline">\(\frac{1}{X}\)</span>)</strong></p>
+<p><strong>Transformación Inversa (</strong><span class="math inline">\(\frac{1}{X}\)</span>)</p>
 <p>Se emplea la tranformación inversa para modelar relaciones donde el efecto de la variable independiente disminuye rápidamente. <span class="math display">\[ Y = \frac{1}{X} \]</span></p>
 <p>Es especialmente útil cuando se espera que un aumento en <span class="math inline">\(X\)</span> tenga un efecto decreciente en <span class="math inline">\(Y\)</span> (Relaciones físicas como la ley de la gravitación, velocidad vs.&nbsp;tiempo en fricción, etc).</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
@@ -1150,7 +1156,8 @@ Ejemplo
 <section id="técnicas-avanzadas-de-ingeniería-de-características" class="level3" data-number="3.3.4">
 <h3 data-number="3.3.4" class="anchored" data-anchor-id="técnicas-avanzadas-de-ingeniería-de-características"><span class="header-section-number">3.3.4</span> Técnicas avanzadas de Ingeniería de Características</h3>
 <p>Cuando se trabaja con grandes conjuntos de datos o con variables altamente correlacionadas, puede ser necesario aplicar técnicas más avanzadas para reducir la dimensionalidad y extraer características relevantes.</p>
-<p><strong>Análisis de Componentes Principales (PCA)</strong></p>
+<section id="análisis-de-componentes-principales-pca" class="level4" data-number="3.3.4.1">
+<h4 data-number="3.3.4.1" class="anchored" data-anchor-id="análisis-de-componentes-principales-pca"><span class="header-section-number">3.3.4.1</span> Análisis de Componentes Principales (PCA)</h4>
 <p>El <strong>Análisis de Componentes Principales (PCA)</strong> es una técnica de reducción de dimensionalidad que transforma un conjunto de variables correlacionadas en un conjunto más pequeño de <strong>componentes principales</strong> no correlacionados que explican la mayor parte de la varianza en los datos.</p>
 <div class="callout callout-style-default callout-caution callout-titled" title="Aviso">
 <div class="callout-header d-flex align-content-center">
@@ -1206,7 +1213,9 @@ Cumulative Proportion  0.3835 0.7102 1.0000</code></pre>
 </div>
 </div>
 </div>
-<p><strong>Codificación de variables categóricas</strong></p>
+</section>
+<section id="codificación-de-variables-categóricas" class="level4" data-number="3.3.4.2">
+<h4 data-number="3.3.4.2" class="anchored" data-anchor-id="codificación-de-variables-categóricas"><span class="header-section-number">3.3.4.2</span> Codificación de variables categóricas</h4>
 <p>Las variables categóricas deben convertirse en variables numéricas antes de ser utilizadas en muchos modelos. Esto puede hacerse mediante:</p>
 <p><strong>Codificación One-Hot</strong></p>
 <p>El <strong>One-Hot Encoding</strong> es una técnica utilizada en el <strong>preprocesamiento de datos</strong> para convertir variables categóricas en variables numéricas. Muchos algoritmos de aprendizaje automático y estadística (como la regresión lineal, redes neuronales y máquinas de soporte vectorial) requieren que las variables de entrada sean numéricas, ya que no pueden manejar directamente datos categóricos.</p>
@@ -1352,7 +1361,7 @@ A less than full rank encoding is used</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1361,7 +1370,7 @@ Ejemplo
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-22" class="callout-22-contents callout-collapse collapse">
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalar y cargar la librería caret</span></span>
@@ -1383,6 +1392,9 @@ Ejemplo
 3         1         0          0
 4         0         1          0
 5         0         0          1</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="callout callout-style-default callout-caution callout-titled" title="Aviso">
@@ -1413,15 +1425,255 @@ Aviso
 <p>Esto elimina una columna (por ejemplo, <strong>ColorAzul</strong>) y permite que las otras columnas se interpreten en relación a la categoría de referencia.</p>
 </div>
 </div>
+</section>
+<section id="codificación-ordinal" class="level4" data-number="3.3.4.3">
+<h4 data-number="3.3.4.3" class="anchored" data-anchor-id="codificación-ordinal"><span class="header-section-number">3.3.4.3</span> Codificación Ordinal</h4>
+<p>La <strong>codificación ordinal</strong> es una técnica de preprocesamiento de datos utilizada para convertir variables categóricas en valores numéricos <strong>manteniendo el orden natural</strong> entre las categorías. A diferencia del <strong>One-Hot Encoding</strong>, que trata a todas las categorías como independientes y sin relación entre sí, la codificación ordinal es útil cuando las categorías tienen una <strong>jerarquía</strong> o un <strong>orden lógico</strong>.</p>
+<p>En la <strong>codificación ordinal</strong>, a cada categoría se le asigna un número entero que refleja su <strong>posición</strong> o <strong>nivel</strong> en un orden determinado. Esto permite que los modelos estadísticos y de aprendizaje automático interpreten que <strong>algunas categorías son mayores o menores</strong> que otras, lo que es especialmente útil en variables que representan rangos, niveles o clasificaciones.</p>
+<p>Supongamos que tenemos una variable llamada <strong>“Nivel de Satisfacción”</strong> con las siguientes categorías:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><strong>Nivel de Satisfacción</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Muy Insatisfecho</td>
+</tr>
+<tr class="even">
+<td>Insatisfecho</td>
+</tr>
+<tr class="odd">
+<td>Neutral</td>
+</tr>
+<tr class="even">
+<td>Satisfecho</td>
+</tr>
+<tr class="odd">
+<td>Muy Satisfecho</td>
+</tr>
+</tbody>
+</table>
+<p>Aquí, hay un orden lógico desde <strong>“Muy Insatisfecho”</strong> hasta <strong>“Muy Satisfecho”</strong>. Aplicando codificación ordinal, asignamos números que reflejen esta jerarquía:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><strong>Nivel de Satisfacción</strong></th>
+<th><strong>Codificación Ordinal</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Muy Insatisfecho</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>Insatisfecho</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td>Neutral</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>Satisfecho</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>Muy Satisfecho</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<div class="callout callout-style-default callout-note callout-titled" title="Propiedades clave">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Propiedades clave
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-23" class="callout-23-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>La codificación ordinal es adecuada cuando:</p>
 <ul>
-<li><strong>Codificación Ordinal:</strong> Las categorías se asignan a valores numéricos basados en su orden.</li>
+<li><p>Las categorías tienen un orden natural: Ejemplos incluyen niveles educativos (<strong>Primaria</strong>, <strong>Secundaria</strong>, <strong>Universidad</strong>), calificaciones (<strong>Bajo</strong>, <strong>Medio</strong>, <strong>Alto</strong>), o satisfacción del cliente (<strong>Insatisfecho</strong>, <strong>Neutral</strong>, <strong>Satisfecho</strong>).</p></li>
+<li><p>El modelo puede interpretar la relación de orden: Algunos algoritmos, como la <strong>regresión lineal</strong> o las <strong>máquinas de vectores soporte (SVM)</strong>, pueden beneficiarse de la codificación ordinal si el orden es relevante para la variable objetivo.</p></li>
+<li><p>Reducción de dimensionalidad: A diferencia del One-Hot Encoding, que puede crear muchas columnas para variables con múltiples categorías, la codificación ordinal <strong>mantiene la variable en una sola columna</strong>, lo que es más eficiente para conjuntos de datos grandes.</p></li>
 </ul>
 </div>
 </div>
 </div>
+<div class="callout callout-style-default callout-note callout-titled" title="Ventajas y desventajas">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ventajas y desventajas
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-24" class="callout-24-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p><strong>Ventajas</strong></p>
+<ul>
+<li><p>Preserva la jerarquía de las categorías: Permite que el modelo entienda que ciertas categorías son <strong>mayores</strong> o <strong>menores</strong> que otras.</p></li>
+<li><p>Reducción de la dimensionalidad: A diferencia del One-Hot Encoding, no aumenta el número de columnas, lo que reduce el riesgo de la <strong>maldición de la dimensionalidad</strong>.</p></li>
+<li><p>Simplicidad Computacional: Es más eficiente en términos de almacenamiento y tiempo de computación, especialmente para variables con muchas categorías.</p></li>
+</ul>
+<p><strong>Desventajas</strong></p>
+<ul>
+<li><p>Riesgo de interpretación incorrecta del orden: Si la variable categórica <strong>no tiene un orden lógico</strong>, la codificación ordinal puede inducir al modelo a asumir relaciones que no existen. Por ejemplo, supongamos que tienes una variable <strong>Color</strong> con categorías <strong>Rojo</strong>, <strong>Verde</strong>, y <strong>Azul</strong>. Asignarles valores como Rojo = 1, Verde = 2, Azul = 3 podría inducir al modelo a pensar que Verde es “mayor” que Rojo y Azul es “mayor” que Verde, lo cual no tiene sentido en este contexto.</p></li>
+<li><p>No Captura la Magnitud de la Diferencia: Aunque las categorías están ordenadas, la codificación ordinal <strong>no refleja la magnitud real de las diferencias</strong> entre categorías. Por ejemplo, la diferencia entre “Insatisfecho” y “Neutral” puede no ser la misma que entre “Satisfecho” y “Muy Satisfecho”.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-25" class="callout-25-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear un data frame con una variable categórica ordinal</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">ID =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Satisfaccion =</span> <span class="fu">c</span>(<span class="st">"Muy Insatisfecho"</span>, <span class="st">"Insatisfecho"</span>, <span class="st">"Neutral"</span>, <span class="st">"Satisfecho"</span>, <span class="st">"Muy Satisfecho"</span>)</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Convertir la variable en un factor ordenado</span></span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>datos<span class="sc">$</span>Satisfaccion_ordinal <span class="ot">&lt;-</span> <span class="fu">factor</span>(datos<span class="sc">$</span>Satisfaccion, </span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Muy Insatisfecho"</span>, <span class="st">"Insatisfecho"</span>, <span class="st">"Neutral"</span>, <span class="st">"Satisfecho"</span>, <span class="st">"Muy Satisfecho"</span>), </span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">ordered =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Ver la estructura del factor</span></span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(datos)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   5 obs. of  3 variables:
+ $ ID                  : int  1 2 3 4 5
+ $ Satisfaccion        : chr  "Muy Insatisfecho" "Insatisfecho" "Neutral" "Satisfecho" ...
+ $ Satisfaccion_ordinal: Ord.factor w/ 5 levels "Muy Insatisfecho"&lt;..: 1 2 3 4 5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Asignar valores numéricos a las categorías ordenadas</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>datos<span class="sc">$</span>Satisfaccion_codificada <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(datos<span class="sc">$</span>Satisfaccion_ordinal)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Ver el resultado</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(datos)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ID     Satisfaccion Satisfaccion_ordinal Satisfaccion_codificada
+1  1 Muy Insatisfecho     Muy Insatisfecho                       1
+2  2     Insatisfecho         Insatisfecho                       2
+3  3          Neutral              Neutral                       3
+4  4       Satisfecho           Satisfecho                       4
+5  5   Muy Satisfecho       Muy Satisfecho                       5</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Podemos usar la variable codificada ordinalmente en un modelo de regresión para evaluar su impacto en una variable dependiente, como una <strong>puntuación de satisfacción general</strong>.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-26" class="callout-26-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simular una variable de respuesta (puntuación general)</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>datos<span class="sc">$</span>Puntuacion <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">10</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">5</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">0.5</span>)</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar un modelo de regresión lineal usando la variable codificada</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>modelo_ordinal <span class="ot">&lt;-</span> <span class="fu">lm</span>(Puntuacion <span class="sc">~</span> Satisfaccion_codificada, <span class="at">data =</span> datos)</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Resumen del modelo</span></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_ordinal)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Puntuacion ~ Satisfaccion_codificada, data = datos)
+
+Residuals:
+      1       2       3       4       5 
+-0.2090 -0.1279  0.6826 -0.1455 -0.2002 
+
+Coefficients:
+                        Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)              -0.1552     0.4640  -0.335 0.759968    
+Satisfaccion_codificada   2.0840     0.1399  14.896 0.000657 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.4424 on 3 degrees of freedom
+Multiple R-squared:  0.9867,    Adjusted R-squared:  0.9822 
+F-statistic: 221.9 on 1 and 3 DF,  p-value: 0.0006565</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>El modelo ajustará la relación entre la puntuación de satisfacción y el nivel de satisfacción codificado ordinalmente. El coeficiente de la variable <strong><code>Satisfaccion_codificada</code></strong> indicará cómo cambia la puntuación a medida que aumenta el nivel de satisfacción.</p>
+</section>
+<section id="diferencias-entre-codificación-ordinal-y-one-hot-encoding" class="level4" data-number="3.3.4.4">
+<h4 data-number="3.3.4.4" class="anchored" data-anchor-id="diferencias-entre-codificación-ordinal-y-one-hot-encoding"><span class="header-section-number">3.3.4.4</span> Diferencias entre Codificación Ordinal y One-Hot Encoding</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Característica</th>
+<th><strong>Codificación Ordinal</strong></th>
+<th><strong>One-Hot Encoding</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Preserva el orden</strong></td>
+<td>Sí, refleja la jerarquía entre categorías.</td>
+<td>No, trata cada categoría como independiente.</td>
+</tr>
+<tr class="even">
+<td><strong>Aumenta la dimensionalidad</strong></td>
+<td>No, mantiene la variable en una sola columna.</td>
+<td>Sí, crea una columna para cada categoría única.</td>
+</tr>
+<tr class="odd">
+<td><strong>Adecuado para</strong></td>
+<td>Variables con orden natural (ej. educación).</td>
+<td>Variables sin orden (ej. color, género, ciudad).</td>
+</tr>
+<tr class="even">
+<td><strong>Riesgo</strong></td>
+<td>Puede inducir al modelo a asumir relaciones falsas si no hay orden real.</td>
+<td>Incremento de la complejidad del modelo.</td>
+</tr>
+</tbody>
+</table>
 <hr>
 
 
+</section>
 </section>
 </section>
 
@@ -1853,8 +2105,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./conclusiones.html" class="pagination-link" aria-label="Conclusiones">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Conclusiones</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./tema4.html" class="pagination-link" aria-label="Modelos de regresión generalizada">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

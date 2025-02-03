@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>4&nbsp; Conclusiones – Modelos de Regresión</title>
+<title>4&nbsp; Modelos de regresión generalizada – Modelos de Regresión</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,7 +64,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
+<link href="./conclusiones.html" rel="next">
 <link href="./tema3.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -69,6 +103,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -82,7 +145,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./conclusiones.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Conclusiones</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema4.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -133,8 +196,14 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./conclusiones.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
+  <a href="./tema4.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./conclusiones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -153,9 +222,12 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#resumen-de-los-aprendizajes" id="toc-resumen-de-los-aprendizajes" class="nav-link active" data-scroll-target="#resumen-de-los-aprendizajes"><span class="header-section-number">4.1</span> Resumen de los aprendizajes</a></li>
-  <li><a href="#reflexiones-finales" id="toc-reflexiones-finales" class="nav-link" data-scroll-target="#reflexiones-finales"><span class="header-section-number">4.2</span> Reflexiones finales</a></li>
-  <li><a href="#mirando-hacia-adelante" id="toc-mirando-hacia-adelante" class="nav-link" data-scroll-target="#mirando-hacia-adelante"><span class="header-section-number">4.3</span> Mirando hacia adelante</a></li>
+  <li><a href="#introducción-a-los-glm" id="toc-introducción-a-los-glm" class="nav-link active" data-scroll-target="#introducción-a-los-glm"><span class="header-section-number">4.1</span> Introducción a los GLM</a>
+  <ul class="collapse">
+  <li><a href="#qué-son-los-modelos-lineales-generalizados" id="toc-qué-son-los-modelos-lineales-generalizados" class="nav-link" data-scroll-target="#qué-son-los-modelos-lineales-generalizados"><span class="header-section-number">4.1.1</span> ¿Qué son los Modelos Lineales Generalizados?</a></li>
+  <li><a href="#componentes-de-un-modelo-lineal-generalizado" id="toc-componentes-de-un-modelo-lineal-generalizado" class="nav-link" data-scroll-target="#componentes-de-un-modelo-lineal-generalizado"><span class="header-section-number">4.1.2</span> Componentes de un Modelo Lineal Generalizado</a></li>
+  <li><a href="#diferencias-clave-entre-la-regresión-lineal-y-los-glm" id="toc-diferencias-clave-entre-la-regresión-lineal-y-los-glm" class="nav-link" data-scroll-target="#diferencias-clave-entre-la-regresión-lineal-y-los-glm"><span class="header-section-number">4.1.3</span> Diferencias clave entre la Regresión Lineal y los GLM</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -164,7 +236,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-conclusiones" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></h1>
+<h1 class="title"><span id="sec-tema4" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span></h1>
 </div>
 
 
@@ -181,23 +253,208 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>A lo largo de cinco capítulos hemos presentado el material de la asignatura de Modelos de Regresión del grado en Ciencia e Ingeniería de Datos de la Universidad Rey Juan Carlos.</p>
-<p>En este capítulo final, te proponemos reflexionar sobre las principales lecciones aprendidas a lo largo del curso “Modelos de Regresión” y destacaremos la importancia de las técnicas abordadas en la formación de futuros profesionales en Ciencia e Ingeniería de Datos. Además, alentaremos a los estudiantes a continuar explorando y ampliando sus conocimientos en cursos posteriores.</p>
-<p>Al finalizar este recorrido por los conceptos y técnicas de la Regresión, es evidente la importancia de esta disciplina en el análisis y la interpretación de datos en el mundo moderno. A lo largo de este libro, hemos explorado desde los fundamentos teóricos hasta las aplicaciones prácticas, proporcionando a los estudiantes una base sólida sobre la cual construir sus habilidades en ciencia de datos.</p>
-<section id="resumen-de-los-aprendizajes" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="resumen-de-los-aprendizajes"><span class="header-section-number">4.1</span> Resumen de los aprendizajes</h2>
+<p>Hasta ahora hemos estuadiado la regresión lineal como una herramienta poderosa para modelar la relación entre una variable dependiente continua y un conjunto de variables independientes. Sin embargo, en muchos contextos del mundo real, las suposiciones de la regresión lineal tradicional no son adecuadas. ¿Qué sucede si la variable dependiente es binaria, como en un diagnóstico médico (enfermo/sano)? ¿O si estás modelando el número de accidentes en una intersección o la cantidad de compras realizadas por un cliente?</p>
+<p>Para abordar estos desafíos, se utilizan los llamados <strong>Modelos Lineales Generalizados (GLM)</strong>. Esta clase de modelos amplía la regresión lineal al permitir que la variable dependiente tenga distribuciones diferentes a la normal, como la binomial o la de Poisson. Además, los GLM utilizan funciones de enlace que transforman la relación entre la variable dependiente y los predictores, permitiendo una mayor flexibilidad en el modelado.</p>
+<p>Algunos de los modelos más comunes dentro de los GLM son:</p>
+<ul>
+<li>Regresión Logística: Ideal para variables dependientes binarias (sí/no, éxito/fracaso).</li>
+<li>Regresión de Poisson: Utilizada para modelar datos de conteo (número de eventos).</li>
+<li>Regresión Binomial Negativa: Una extensión de la regresión de Poisson para datos de conteo con sobredispersión.</li>
+<li>Modelos de Gamma y Inverso Gaussiano: Utilizados para modelar variables continuas positivas y sesgadas, como tiempos de espera o costos.</li>
+</ul>
+<p>En este tema, exploraremos cómo utilizar estos modelos para resolver problemas del mundo real, interpretar sus resultados y evaluar su ajuste.</p>
+<section id="introducción-a-los-glm" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="introducción-a-los-glm"><span class="header-section-number">4.1</span> Introducción a los GLM</h2>
+<section id="qué-son-los-modelos-lineales-generalizados" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="qué-son-los-modelos-lineales-generalizados"><span class="header-section-number">4.1.1</span> ¿Qué son los Modelos Lineales Generalizados?</h3>
+<p>Los <strong>Modelos Lineales Generalizados (GLM)</strong> son una extensión de los modelos de regresión lineal que permiten manejar una mayor variedad de tipos de datos y relaciones entre variables. Mientras que la regresión lineal tradicional asume que la variable dependiente es continua y sigue una distribución normal, los GLM permiten trabajar con variables dependientes que:</p>
+<ul>
+<li>Son <strong>binarias</strong> (como éxito/fracaso o sí/no).</li>
+<li>Representan <strong>conteos</strong> de eventos (número de llamadas, accidentes, etc.).</li>
+<li>Son <strong>continuas positivas</strong> y no siguen una distribución normal (como tiempos o costos).</li>
+</ul>
+<p>Los GLM proporcionan una estructura flexible para modelar la relación entre una o más variables independientes y una variable dependiente que sigue alguna distribución de la <strong>familia exponencial</strong> (binomial, Poisson, gamma, entre otras).</p>
 </section>
-<section id="reflexiones-finales" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="reflexiones-finales"><span class="header-section-number">4.2</span> Reflexiones finales</h2>
+<section id="componentes-de-un-modelo-lineal-generalizado" class="level3" data-number="4.1.2">
+<h3 data-number="4.1.2" class="anchored" data-anchor-id="componentes-de-un-modelo-lineal-generalizado"><span class="header-section-number">4.1.2</span> Componentes de un Modelo Lineal Generalizado</h3>
+<p>Un GLM se define por tres componentes clave:</p>
+<ol type="1">
+<li><p><strong>Componente Aleatorio:</strong></p>
+<p>Este componente describe la distribución de la variable dependiente. En la regresión lineal, la variable dependiente sigue una distribución normal. En los GLM, puede seguir otras distribuciones de la <strong>familia exponencial</strong>, como:</p>
+<ul>
+<li><strong>Distribución Binomial:</strong> Para variables categóricas binarias (0/1, éxito/fracaso).</li>
+<li><strong>Distribución de Poisson:</strong> Para datos de conteo (número de eventos).</li>
+<li><strong>Distribución Gamma:</strong> Para variables continuas y positivas (como costos o tiempos).</li>
+</ul></li>
+<li><p><strong>Componente Sistemático:</strong><br>
+Este componente describe cómo las variables independientes se combinan linealmente en el modelo. Se define como:</p>
+<p><span class="math display">\[
+\eta = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p
+\]</span></p>
+<p>Donde <span class="math inline">\(\eta\)</span> es el <strong>predictor lineal</strong> y <span class="math inline">\(\beta\)</span> representa los coeficientes del modelo.</p></li>
+<li><p><strong>Función de Enlace:</strong><br>
+La función de enlace conecta el componente sistemático con la media de la variable dependiente. Mientras que en la regresión lineal la relación es directa ($Y = $), en los GLM se utiliza una función de enlace <span class="math inline">\(g(\mu)\)</span> para transformar la media <span class="math inline">\(\mu\)</span> y ajustar diferentes tipos de datos.</p>
+<p><span class="math display">\[
+g(\mu) = \eta
+\]</span></p></li>
+</ol>
+<p><strong>Ejemplos de funciones de enlace:</strong></p>
+<ul>
+<li><strong>Logística (Logit):</strong> Para la regresión logística, que modela la probabilidad de un evento. <span class="math display">\[
+g(\mu) = \log\left(\frac{\mu}{1 - \mu}\right)
+\]</span></li>
+<li><strong>Logarítmica:</strong> Para la regresión de Poisson, que modela tasas de eventos. <span class="math display">\[
+g(\mu) = \log(\mu)
+\]</span></li>
+<li><strong>Identidad:</strong> Para la regresión lineal estándar. <span class="math display">\[
+g(\mu) = \mu
+\]</span></li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Aplicaciones">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Aplicaciones
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Los GLM se utilizan en una amplia variedad de disciplinas para resolver problemas del mundo real:</p>
+<p><strong>Regresión Logística (para variables binarias):</strong></p>
+<ul>
+<li><strong>Medicina:</strong> Predicción de la presencia o ausencia de una enfermedad basada en factores de riesgo.</li>
+<li><strong>Marketing:</strong> Determinación de la probabilidad de que un cliente compre un producto.</li>
+<li><strong>Finanzas:</strong> Evaluación de la probabilidad de incumplimiento de pago de un préstamo.</li>
+</ul>
+<p><strong>Regresión de Poisson (para datos de conteo):</strong></p>
+<ul>
+<li><strong>Transporte:</strong> Modelado del número de accidentes en una carretera en un período de tiempo.</li>
+<li><strong>Ecología:</strong> Conteo de especies en un área determinada.</li>
+<li><strong>Telecomunicaciones:</strong> Número de llamadas recibidas por un centro de atención.</li>
+</ul>
+<p><strong>Regresión Binomial Negativa (para conteos con sobredispersión):</strong></p>
+<ul>
+<li><strong>Salud Pública:</strong> Modelado del número de visitas al médico o incidentes de una enfermedad en una población.</li>
+</ul>
+<p><strong>Modelos Gamma (para variables continuas positivas):</strong></p>
+<ul>
+<li><strong>Seguros:</strong> Estimación de los costos de reclamos de seguros.</li>
+<li><strong>Ingeniería:</strong> Modelado de tiempos de falla en procesos industriales.</li>
+</ul>
+</div>
+</div>
+</div>
 </section>
-<section id="mirando-hacia-adelante" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="mirando-hacia-adelante"><span class="header-section-number">4.3</span> Mirando hacia adelante</h2>
-<p>Con el conocimiento y las habilidades adquiridas, los estudiantes están mejor equipados para explorar más a fondo el vasto campo de la ciencia de datos. La estadística y la inferencia estadística seguirán evolucionando con el avance de la tecnología y la disponibilidad de datos. Por lo tanto, es crucial que los futuros profesionales mantengan una mentalidad de aprendizaje continuo y estén abiertos a adoptar nuevas metodologías y herramientas.</p>
-<p>En conclusión, esperamos que este libro haya proporcionado una comprensión profunda y práctica de los Modelos de Regresión, y que inspire a los estudiantes a aplicar estos conocimientos con confianza y creatividad en sus proyectos futuros. La capacidad de analizar datos de manera crítica y tomar decisiones basadas en evidencias es una habilidad poderosa y transformadora, que sin duda abrirá numerosas oportunidades en el ámbito profesional.</p>
-<p>Os recordamos que en próximos cursos os encontraréis con las asignaturas de Aprendizaje Automático I y Aprendizaje Automático II, donde aplicaréis muchas de las técnicas y herramientas que hemos aprendido juntos.</p>
-<p><strong>¡Buena suerte!</strong></p>
+<section id="diferencias-clave-entre-la-regresión-lineal-y-los-glm" class="level3" data-number="4.1.3">
+<h3 data-number="4.1.3" class="anchored" data-anchor-id="diferencias-clave-entre-la-regresión-lineal-y-los-glm"><span class="header-section-number">4.1.3</span> Diferencias clave entre la Regresión Lineal y los GLM</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 39%">
+<col style="width: 41%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Característica</strong></th>
+<th><strong>Regresión Lineal</strong></th>
+<th><strong>Modelos Lineales Generalizados (GLM)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Distribución de la variable dependiente</strong></td>
+<td>Normal</td>
+<td>Familia exponencial (binomial, Poisson, gamma, etc.)</td>
+</tr>
+<tr class="even">
+<td><strong>Tipo de variable dependiente</strong></td>
+<td>Continua</td>
+<td>Binaria, de conteo, continua positiva</td>
+</tr>
+<tr class="odd">
+<td><strong>Relación entre las variables</strong></td>
+<td>Lineal directa</td>
+<td>Relación transformada mediante una función de enlace</td>
+</tr>
+<tr class="even">
+<td><strong>Función de Enlace</strong></td>
+<td>Identidad (( g() = ))</td>
+<td>Logit, logarítmica, inversa, etc.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p>Las ventajas principales de los GLM son:</p>
+<ul>
+<li><p><strong>Flexibilidad:</strong> Los GLM permiten modelar diferentes tipos de variables dependientes, lo que amplía significativamente el rango de problemas que se pueden abordar.</p></li>
+<li><p><strong>Interpretación Coherente:</strong> Aunque se utilizan funciones de enlace, los coeficientes de los GLM pueden interpretarse de manera similar a los modelos lineales, proporcionando información sobre el impacto de cada variable independiente.</p></li>
+<li><p><strong>Evaluación Estadística Robusta:</strong> Los GLM permiten la realización de pruebas de hipótesis, la construcción de intervalos de confianza y la evaluación de la bondad del ajuste mediante medidas como el <strong>AIC</strong> y el <strong>BIC</strong>.</p></li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar librería y datos</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(Pima.tr)  <span class="co"># Datos sobre diabetes en mujeres de origen pima</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar un modelo de regresión logística</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>modelo_logistico <span class="ot">&lt;-</span> <span class="fu">glm</span>(type <span class="sc">~</span> npreg <span class="sc">+</span> glu <span class="sc">+</span> bmi, <span class="at">data =</span> Pima.tr, <span class="at">family =</span> binomial)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Resumen del modelo</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_logistico)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = type ~ npreg + glu + bmi, family = binomial, data = Pima.tr)
+
+Coefficients:
+             Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept) -8.718723   1.411080  -6.179 6.46e-10 ***
+npreg        0.149213   0.051833   2.879  0.00399 ** 
+glu          0.033879   0.006327   5.355 8.55e-08 ***
+bmi          0.094817   0.032405   2.926  0.00343 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 256.41  on 199  degrees of freedom
+Residual deviance: 189.89  on 196  degrees of freedom
+AIC: 197.89
+
+Number of Fisher Scoring iterations: 5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicciones de la probabilidad de tener diabetes</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>predicciones <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelo_logistico, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Ver primeras predicciones</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(predicciones)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         1          2          3          4          5          6 
+0.10014804 0.78786795 0.12244031 0.80425012 0.06975347 0.21233644 </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Los <strong>Modelos Lineales Generalizados (GLM)</strong> amplían el alcance de la regresión lineal clásica, proporcionando herramientas para modelar una amplia variedad de tipos de datos, desde variables binarias hasta datos de conteo y variables continuas no normales. A través del uso de funciones de enlace y distribuciones flexibles, los GLM permiten resolver problemas complejos del mundo real en campos tan diversos como la medicina, el marketing, la ingeniería y las ciencias sociales.</p>
+<p>En las próximas secciones, exploraremos en detalle cómo aplicar estos modelos específicos, como la <strong>regresión logística</strong> y la <strong>regresión de Poisson</strong>, y cómo interpretar sus resultados en diferentes contextos.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -628,8 +885,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link" aria-label="Bibliografía">
-        <span class="nav-page-text">Bibliografía</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./conclusiones.html" class="pagination-link" aria-label="Conclusiones">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Conclusiones</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

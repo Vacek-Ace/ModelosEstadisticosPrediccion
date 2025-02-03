@@ -1,14 +1,13 @@
 # Modelos no lineales. Transformación de variables. Ingeniería de características. {#sec-tema3}
 
-En el análisis de datos, muchas relaciones entre variables no pueden ser capturadas adecuadamente mediante modelos de regresión lineal. Aunque la regresión lineal es una herramienta poderosa por su simplicidad e interpretabilidad, existen numerosos escenarios donde las relaciones entre las variables son inherentemente **no lineales**. 
-
+En el análisis de datos, muchas relaciones entre variables no pueden ser capturadas adecuadamente mediante modelos de regresión lineal. Aunque la regresión lineal es una herramienta poderosa por su simplicidad e interpretabilidad, existen numerosos escenarios donde las relaciones entre las variables son inherentemente **no lineales**.
 
 Limitaciones de la regresión lineal:
 
-  - Relaciones no lineales: En muchos casos, la relación entre las variables no es proporcional ni constante. Por ejemplo, el crecimiento poblacional o la desintegración radiactiva siguen patrones exponenciales.
-  - Interacciones no consideradas: La regresión lineal simple no capta interacciones entre variables a menos que se incluyan explícitamente.
-  - Sensibilidad a valores atípicos: Los modelos lineales pueden verse influenciados por outliers, afectando la precisión del modelo.
-  - Supuestos estrictos: La regresión lineal asume homocedasticidad, normalidad de los errores e independencia, lo cual no siempre se cumple en la práctica.
+-   Relaciones no lineales: En muchos casos, la relación entre las variables no es proporcional ni constante. Por ejemplo, el crecimiento poblacional o la desintegración radiactiva siguen patrones exponenciales.
+-   Interacciones no consideradas: La regresión lineal simple no capta interacciones entre variables a menos que se incluyan explícitamente.
+-   Sensibilidad a valores atípicos: Los modelos lineales pueden verse influenciados por outliers, afectando la precisión del modelo.
+-   Supuestos estrictos: La regresión lineal asume homocedasticidad, normalidad de los errores e independencia, lo cual no siempre se cumple en la práctica.
 
 Estas limitaciones abren la puerta a la necesidad de modelos más flexibles (**modelos no lineales**) que puedan capturar relaciones complejas entre las variables.
 
@@ -19,7 +18,6 @@ Finalmente, la **ingeniería de características** juega un papel crucial en la 
 A lo largo de este tema, exploraremos estos tres pilares: cómo identificar y ajustar modelos no lineales, cómo aplicar transformaciones efectivas a las variables y cómo desarrollar nuevas características que potencien el análisis y la predicción.
 
 ## Modelos no lineales
-
 
 Los modelos de regresión no lineal son herramientas esenciales cuando las relaciones entre las variables no pueden capturarse adecuadamente con modelos lineales. La regresión polinómica, exponencial, logarítmica y los modelos por tramos ofrecen diferentes enfoques para representar patrones complejos en los datos. Comprender cuándo y cómo aplicar estos modelos es fundamental para mejorar la precisión y la interpretabilidad en el análisis de datos.
 
@@ -33,8 +31,7 @@ $$
 
 Donde $k$ es el grado del polinomio. A medida que aumenta el grado, el modelo se vuelve más flexible y puede ajustarse a relaciones más complejas.
 
-Este tipo de modelos son capaces de capturar curvaturas suaves en los datos. Se trata de modelos fáciles de implementar y comprender, aunque la interpretación de los coeficientes asociados a altos grados del polinomio puede ser compleja. 
-De hecho, exite un claro riesgo de sobreajuste cuando se utilizan polinomios de alto grado.
+Este tipo de modelos son capaces de capturar curvaturas suaves en los datos. Se trata de modelos fáciles de implementar y comprender, aunque la interpretación de los coeficientes asociados a altos grados del polinomio puede ser compleja. De hecho, exite un claro riesgo de sobreajuste cuando se utilizan polinomios de alto grado.
 
 ::: {.callout-tip title="Ejemplo" collapse="true"}
 ```{r regresión_polinomica}
@@ -53,7 +50,6 @@ plot(x, y, main = "Regresión Polinómica de Segundo Grado", pch = 19, col = "bl
 lines(x, predict(modelo_polinomico), col = "red", lwd = 2)
 ```
 :::
-
 
 ### Modelos de Regresión Exponencial y Logarítmica
 
@@ -109,11 +105,9 @@ lines(x, exp(predicciones), col = "red", lwd = 2)
 ```
 :::
 
-
 ### Regresión Spline y modelos basados en Segmentos
 
 Los **splines** y los **modelos segmentados** son técnicas que permiten ajustar relaciones no lineales mediante la división de los datos en segmentos y el ajuste de funciones lineales o polinómicas en cada segmento. Estos métodos son especialmente útiles cuando la relación entre las variables cambia en diferentes rangos de los datos.
-
 
 **Modelos por tramos (Piecewise Regression)**
 
@@ -128,53 +122,46 @@ Los **splines** son una poderosa herramienta en el análisis de regresión para 
 Un **spline** es una función que está compuesta por múltiples **polinomios por tramos** que se ajustan en diferentes intervalos del dominio de la variable independiente. Estos polinomios están conectados en puntos específicos llamados **nudos** (*knots*), que marcan el final de un tramo y el inicio de otro. La principal característica de los splines es que estos polinomios están diseñados para unirse de manera **suave** en los nudos, asegurando que la función resultante sea continua y, en muchos casos, que sus derivadas también sean continuas.
 
 ::: {.callout-note title="Elementos clave" collapse="false"}
-
-  - **Tramos:** Intervalos del dominio de la variable independiente en los que se ajusta un polinomio distinto.
-  - **Nudos:** Puntos donde los tramos se conectan. Los nudos definen la estructura del spline y determinan dónde la función puede cambiar de forma.
-  - **Continuidad:** Los splines están construidos para que no haya saltos abruptos en la función o en sus derivadas en los nudos. Por ejemplo, un spline cúbico asegura continuidad en la función, la primera derivada (pendiente) y la segunda derivada (curvatura).
+-   **Tramos:** Intervalos del dominio de la variable independiente en los que se ajusta un polinomio distinto.
+-   **Nudos:** Puntos donde los tramos se conectan. Los nudos definen la estructura del spline y determinan dónde la función puede cambiar de forma.
+-   **Continuidad:** Los splines están construidos para que no haya saltos abruptos en la función o en sus derivadas en los nudos. Por ejemplo, un spline cúbico asegura continuidad en la función, la primera derivada (pendiente) y la segunda derivada (curvatura).
 :::
-
 
 ::: {.callout-note title="Tipos de Splines" collapse="false"}
+**Splines Lineales:**
 
-**Splines Lineales:**  
+-   Se ajustan líneas rectas entre los nudos.
+-   Garantizan la continuidad en los puntos de unión, pero no necesariamente en la pendiente.
+-   Son simples, pero pueden generar ángulos abruptos en los nudos.
 
-   - Se ajustan líneas rectas entre los nudos.
-   - Garantizan la continuidad en los puntos de unión, pero no necesariamente en la pendiente.
-   - Son simples, pero pueden generar ángulos abruptos en los nudos.
+**Splines Cuadráticos:**
 
-**Splines Cuadráticos:**  
+-   Se utilizan polinomios de segundo grado en cada tramo.
+-   Aseguran continuidad en la función y en la pendiente, pero no en la curvatura.
 
-   - Se utilizan polinomios de segundo grado en cada tramo.
-   - Aseguran continuidad en la función y en la pendiente, pero no en la curvatura.
+**Splines Cúbicos:**
 
-**Splines Cúbicos:**  
+-   Los **splines cúbicos** son los más utilizados en análisis de regresión.
+-   Utilizan polinomios de tercer grado en cada tramo.
+-   Garantizan suavidad en la función y en sus primeras dos derivadas, lo que significa que la función es continua, su pendiente es continua y la curvatura es suave.
+-   Evitan el sobreajuste que puede ocurrir con polinomios de alto grado, proporcionando un ajuste flexible sin perder estabilidad.
+-   A diferencia de los polinomios globales de alto grado, los splines cúbicos pueden capturar patrones complejos sin oscilar de manera excesiva entre los puntos de datos.
+-   Los splines permiten que el modelo se adapte localmente a diferentes patrones en distintos tramos del dominio de la variable independiente.
 
-   - Los **splines cúbicos** son los más utilizados en análisis de regresión.
-   - Utilizan polinomios de tercer grado en cada tramo.
-   - Garantizan suavidad en la función y en sus primeras dos derivadas, lo que significa que la función es continua, su pendiente es continua y la curvatura es suave.
-   - Evitan el sobreajuste que puede ocurrir con polinomios de alto grado, proporcionando un ajuste flexible sin perder estabilidad.
-   -   A diferencia de los polinomios globales de alto grado, los splines cúbicos pueden capturar patrones complejos sin oscilar de manera excesiva entre los puntos de datos.
-  -   Los splines permiten que el modelo se adapte localmente a diferentes patrones en distintos tramos del dominio de la variable independiente.
+**Splines Naturales:**
 
-**Splines Naturales:**  
-
-   - Son una variante de los splines cúbicos que imponen condiciones adicionales en los extremos del rango de los datos, forzando la segunda derivada a ser cero en los extremos. Esto ayuda a evitar oscilaciones no deseadas fuera del rango de los datos.
-
+-   Son una variante de los splines cúbicos que imponen condiciones adicionales en los extremos del rango de los datos, forzando la segunda derivada a ser cero en los extremos. Esto ayuda a evitar oscilaciones no deseadas fuera del rango de los datos.
 :::
-
 
 El uso de splines en regresión permite modelar relaciones no lineales de manera flexible. La elección del número y la ubicación de los **nudos** es un aspecto fundamental del ajuste con splines:
 
-  - Número de nudos: Demasiados nudos pueden llevar a un sobreajuste, mientras que muy pocos pueden no capturar adecuadamente la relación entre las variables. El uso de técnicas de validación cruzada puede ayudar a encontrar el equilibrio adecuado.
+-   Número de nudos: Demasiados nudos pueden llevar a un sobreajuste, mientras que muy pocos pueden no capturar adecuadamente la relación entre las variables. El uso de técnicas de validación cruzada puede ayudar a encontrar el equilibrio adecuado.
 
-  - Ubicación de los nudos: Los nudos pueden colocarse en puntos equidistantes, en cuantiles de la variable independiente, o en puntos donde se sospecha que la relación entre las variables cambia. La colocación de nudos es clave para obtener un buen ajuste. Los nudos pueden seleccionarse de manera automática (por ejemplo, en los cuantiles de la variable independiente) o manualmente según el conocimiento del problema.
+-   Ubicación de los nudos: Los nudos pueden colocarse en puntos equidistantes, en cuantiles de la variable independiente, o en puntos donde se sospecha que la relación entre las variables cambia. La colocación de nudos es clave para obtener un buen ajuste. Los nudos pueden seleccionarse de manera automática (por ejemplo, en los cuantiles de la variable independiente) o manualmente según el conocimiento del problema.
 
 ::: {.callout-caution title="Aviso"}
-
 A diferencia de la regresión lineal simple, los coeficientes de los splines no tienen una interpretación directa. El enfoque se centra en la forma general del ajuste en lugar de en el valor de los coeficientes individuales.
 :::
-
 
 ::: {.callout-tip title="Ejemplo" collapse="true"}
 ```{r regresión_splines}
@@ -219,25 +206,23 @@ En el análisis de datos y la construcción de modelos estadísticos, no siempre
 
 Las transformaciones de variables son una herramienta fundamental para mejorar el rendimiento y la precisión de los modelos estadísticos. Estas transformaciones pueden aplicarse tanto a la variable dependiente como a las variables independientes.
 
-
 ::: {.callout-note title="Objetivos" collapse="false"}
+**Linearizar relaciones no lineales:**
 
-**Linearizar relaciones no lineales:** 
-
-Muchas relaciones entre variables no son lineales en su forma original. Aplicar una transformación adecuada puede **convertir una relación no lineal en lineal**, permitiendo el uso de técnicas de regresión lineal. Por ejemplo, una relación exponencial $$Y = \beta_0 e^{\beta_1 X}$$ puede linearizarse tomando el logaritmo de $Y$:  
-   $$
+Muchas relaciones entre variables no son lineales en su forma original. Aplicar una transformación adecuada puede **convertir una relación no lineal en lineal**, permitiendo el uso de técnicas de regresión lineal. Por ejemplo, una relación exponencial $$Y = \beta_0 e^{\beta_1 X}$$ puede linearizarse tomando el logaritmo de $Y$:\
+$$
    \log(Y) = \log(\beta_0) + \beta_1 X
    $$
 
-**Corregir problemas de heterocedasticidad:** 
+**Corregir problemas de heterocedasticidad:**
 
 La regresión lineal asume que los errores tienen **varianza constante** (homocedasticidad). Sin embargo, en la práctica, es común encontrar datos con **heterocedasticidad** (la varianza de los errores cambia con el nivel de la variable independiente). Las transformaciones pueden ayudar a estabilizar la varianza. Por ejemplo, transformar la variable dependiente $Y$ usando un logaritmo o una raíz cuadrada puede reducir la heterocedasticidad.
 
-**Normalizar la distribución de los errores:** 
+**Normalizar la distribución de los errores:**
 
 La regresión lineal también asume que los errores están **normalmente distribuidos**. Las transformaciones pueden ayudar a que los residuos del modelo se ajusten mejor a una distribución normal, lo que mejora la validez de los intervalos de confianza y las pruebas de hipótesis.
 
-**Reducir la influencia de valores atípicos:** 
+**Reducir la influencia de valores atípicos:**
 
 Algunas transformaciones pueden disminuir la influencia de los **valores atípicos** en el modelo, haciendo que el ajuste sea más robusto.
 
@@ -250,12 +235,11 @@ Aunque algunas transformaciones pueden complicar la interpretación directa de l
 
 Existen diversas transformaciones que pueden aplicarse a los datos según el problema que se desea abordar. A continuación, se describen las transformaciones más utilizadas en el análisis de regresión.
 
----
+------------------------------------------------------------------------
 
-**Transformación Logarítmica ($\log$)**
+**Transformación Logarítmica (**$\log$)
 
-Se emplea para linearizar relaciones exponenciales, reducir la heterocedasticidad, y estabilizar la varianza: 
-  - $$ Y = \log(Y) $$ o $$ X = \log(X) $$
+Se emplea para linearizar relaciones exponenciales, reducir la heterocedasticidad, y estabilizar la varianza: - $$ Y = \log(Y) $$ o $$ X = \log(X) $$
 
 Es una transformación adecuada cuando la variable tiene una distribución sesgada a la derecha o cuando el efecto marginal disminuye con el valor de la variable (Ingresos, crecimiento poblacional, y tasas de interés, etc).
 
@@ -283,12 +267,10 @@ lines(x, exp(predicciones), col = "red", lwd = 2)
 ```
 :::
 
+**Transformación de Raíz Cuadrada (**$\sqrt{}$)
 
-**Transformación de Raíz Cuadrada ($\sqrt{}$)**
+Se emplea para reducir la heterocedasticidad, especialmente cuando la varianza aumenta linealmente con la media: $$Y = \sqrt{Y}$$ o $$X = \sqrt{X}$$
 
-Se emplea para reducir la heterocedasticidad, especialmente cuando la varianza aumenta linealmente con la media:
-$$Y = \sqrt{Y}$$ o $$X = \sqrt{X}$$
-  
 Se emplea comúnmente en conteos de eventos o variables positivas (número de llamadas, defectos, etc.).
 
 ::: {.callout-tip title="Ejemplo" collapse="true"}
@@ -313,12 +295,10 @@ lines(x, predicciones^2, col = "red", lwd = 2)
 ```
 :::
 
+**Transformación Inversa (**$\frac{1}{X}$)
 
-**Transformación Inversa ($\frac{1}{X}$)**
+Se emplea la tranformación inversa para modelar relaciones donde el efecto de la variable independiente disminuye rápidamente. $$ Y = \frac{1}{X} $$
 
-Se emplea la tranformación inversa para modelar relaciones donde el efecto de la variable independiente disminuye rápidamente.
-$$ Y = \frac{1}{X} $$
-  
 Es especialmente útil cuando se espera que un aumento en $X$ tenga un efecto decreciente en $Y$ (Relaciones físicas como la ley de la gravitación, velocidad vs. tiempo en fricción, etc).
 
 ::: {.callout-tip title="Ejemplo" collapse="true"}
@@ -386,51 +366,46 @@ boxcox(modelo_bc)
 
 La gráfica de **Box-Cox** mostrará el valor óptimo de $\lambda$, que indica la mejor transformación para los datos.
 
----
+------------------------------------------------------------------------
 
 ### Consideracione sobre las transformaciones
 
 Antes de aplicar transformaciones, es importante diagnosticar si realmente son necesarias. Existen varias herramientas para identificar problemas en los datos que pueden solucionarse con transformaciones:
 
-  - **Gráficos de Dispersión:** Visualizar la relación entre la variable dependiente y las independientes puede revelar patrones no lineales o heterocedasticidad.
+-   **Gráficos de Dispersión:** Visualizar la relación entre la variable dependiente y las independientes puede revelar patrones no lineales o heterocedasticidad.
 
-  - **Análisis de Residuos:**  Un gráfico de los residuos frente a los valores ajustados debe mostrar una distribución aleatoria. Patrones sistemáticos o "abanicos" indican la necesidad de transformación. El gráfico de **QQ-Plot** de los residuos ayuda a evaluar la normalidad.
+-   **Análisis de Residuos:** Un gráfico de los residuos frente a los valores ajustados debe mostrar una distribución aleatoria. Patrones sistemáticos o "abanicos" indican la necesidad de transformación. El gráfico de **QQ-Plot** de los residuos ayuda a evaluar la normalidad.
 
-  - **Pruebas Estadísticas:**  Pruebas de normalidad como **Shapiro-Wilk** para los residuos. Pruebas de heterocedasticidad como **Breusch-Pagan**.
-
+-   **Pruebas Estadísticas:** Pruebas de normalidad como **Shapiro-Wilk** para los residuos. Pruebas de heterocedasticidad como **Breusch-Pagan**.
 
 Si bien las transformaciones pueden mejorar el ajuste del modelo, también pueden afectar la **interpretación de los coeficientes**. Es importante tener en cuenta cómo cambia el significado de los resultados:
 
-  - **Transformaciones en la variable dependiente:**  
-  
-     - Si aplicas $\log(Y)$, los coeficientes representan **cambios proporcionales** en $Y$.
-    - Si aplicas $\sqrt{Y}$, los coeficientes representan la tasa de cambio en la raíz cuadrada de $Y$.
+-   **Transformaciones en la variable dependiente:**
 
-  - **Transformaciones en la variable independiente:**  
-  
-     - Si transformas $X$ con $\log(X)$, los coeficientes indican cómo cambia $Y$ por cada **incremento porcentual** en $X$.
-    - Si transformas $X$ con $\frac{1}{X}$, los coeficientes representan el cambio en $Y$ por cada unidad de **disminución** en $X$.
+    -   Si aplicas $\log(Y)$, los coeficientes representan **cambios proporcionales** en $Y$.
+    -   Si aplicas $\sqrt{Y}$, los coeficientes representan la tasa de cambio en la raíz cuadrada de $Y$.
 
-  - **Revertir Transformaciones para Interpretación:** Después de ajustar un modelo, es posible transformar las predicciones de nuevo a la escala original para facilitar la interpretación.
+-   **Transformaciones en la variable independiente:**
 
+    -   Si transformas $X$ con $\log(X)$, los coeficientes indican cómo cambia $Y$ por cada **incremento porcentual** en $X$.
+    -   Si transformas $X$ con $\frac{1}{X}$, los coeficientes representan el cambio en $Y$ por cada unidad de **disminución** en $X$.
+
+-   **Revertir Transformaciones para Interpretación:** Después de ajustar un modelo, es posible transformar las predicciones de nuevo a la escala original para facilitar la interpretación.
 
 ## Ingeniería de características
 
+La **ingeniería de características** es el arte y la ciencia de transformar los datos brutos en representaciones que faciliten el aprendizaje y mejoren la capacidad predictiva de los modelos. Consiste en el proceso de **crear, transformar y seleccionar** las variables que se utilizan en un modelo para mejorar su rendimiento. Una característica bien diseñada puede hacer que un modelo simple supere a modelos más complejos, mientras que características irrelevantes o mal definidas pueden degradar significativamente la calidad del análisis. Este proceso incluye:
 
-La **ingeniería de características** es el arte y la ciencia de transformar los datos brutos en representaciones que faciliten el aprendizaje y mejoren la capacidad predictiva de los modelos.  Consiste en el proceso de **crear, transformar y seleccionar** las variables que se utilizan en un modelo para mejorar su rendimiento. Una característica bien diseñada puede hacer que un modelo simple supere a modelos más complejos, mientras que características irrelevantes o mal definidas pueden degradar significativamente la calidad del análisis. Este proceso incluye:
-
-  - **Creación de nuevas variables** a partir de las existentes.
-  - **Transformación de variables** para mejorar su distribución o relación con la variable objetivo.
-  - **Selección de las características más relevantes**, eliminando aquellas que no aportan valor o introducen ruido.
-  - **Preparación de datos para modelos específicos**, asegurando que las variables cumplan con los requisitos del algoritmo (por ejemplo, escalado, normalización o codificación).
-
+-   **Creación de nuevas variables** a partir de las existentes.
+-   **Transformación de variables** para mejorar su distribución o relación con la variable objetivo.
+-   **Selección de las características más relevantes**, eliminando aquellas que no aportan valor o introducen ruido.
+-   **Preparación de datos para modelos específicos**, asegurando que las variables cumplan con los requisitos del algoritmo (por ejemplo, escalado, normalización o codificación).
 
 ### Creación de nuevas variables
 
 Una de las tareas más importantes en la ingeniería de características es la **creación de nuevas variables** que puedan capturar relaciones complejas entre las variables independientes y la variable objetivo.
 
-Las **interacciones entre variables** permiten capturar relaciones no lineales entre las variables al considerar cómo el efecto de una variable puede depender del valor de otra.
-Si se dispone de dos variables $X_i$ y $X_j$, es posible crear una nueva variable de interacción $X_{\text{interacción}} = X_i \times X_j $.
+Las **interacciones entre variables** permiten capturar relaciones no lineales entre las variables al considerar cómo el efecto de una variable puede depender del valor de otra. Si se dispone de dos variables $X_i$ y $X_j$, es posible crear una nueva variable de interacción \$X\_{\text{interacción}} = X_i \times X_j \$.
 
 ::: {.callout-tip title="Ejemplo" collapse="true"}
 ```{r iter1}
@@ -449,7 +424,6 @@ summary(modelo_interaccion)
 ```
 :::
 
-
 Tal y como estudiamos cuando tratamos el tema de regresión polinómica, agregar **términos polinómicos** permite capturar relaciones no lineales al incluir potencias de las variables independientes. Por ejemplo, para una variable $X$, se puede crear $X^2$, $X^3$, etc.
 
 ::: {.callout-tip title="Ejemplo" collapse="true"}
@@ -464,14 +438,13 @@ summary(modelo_polinomico)
 ```
 :::
 
-Crear combinaciones simples de variables puede capturar relaciones ocultas en los datos.
-Por ejemplo:
+Crear combinaciones simples de variables puede capturar relaciones ocultas en los datos. Por ejemplo:
 
-  - Sumas o diferencias: $X_{\text{nuevo}} = X_1 + X_2$
-  - Ratios: $X_{\text{ratio}} = \frac{X_1}{X_2}$
-  - Variables categóricas combinadas: Fusionar categorías relacionadas en una nueva variable. Deben ser categorías que, desde un punto de vista del dominio de aplicación, tenga sentido combinar.
+-   Sumas o diferencias: $X_{\text{nuevo}} = X_1 + X_2$
+-   Ratios: $X_{\text{ratio}} = \frac{X_1}{X_2}$
+-   Variables categóricas combinadas: Fusionar categorías relacionadas en una nueva variable. Deben ser categorías que, desde un punto de vista del dominio de aplicación, tenga sentido combinar.
 
----
+------------------------------------------------------------------------
 
 ### Selección y Reducción de variables
 
@@ -497,11 +470,9 @@ summary(modelo_seleccionado)
 ```
 :::
 
----
+------------------------------------------------------------------------
 
 Recordemos que los métodos de regularización, estudiados en el tema 2, no solo ajustan el modelo, sino que también penalizan la complejidad, lo que ayuda a eliminar variables irrelevantes.
-
-
 
 ### Escalado y Normalización de Variables
 
@@ -522,7 +493,7 @@ X1_estandarizado <- scale(X1)
 ```
 :::
 
----
+------------------------------------------------------------------------
 
 **Normalización Min-Max**
 
@@ -543,14 +514,13 @@ X1_min_max <- (X1 - min(X1)) / (max(X1) - min(X1))
 
 Cuando se trabaja con grandes conjuntos de datos o con variables altamente correlacionadas, puede ser necesario aplicar técnicas más avanzadas para reducir la dimensionalidad y extraer características relevantes.
 
-**Análisis de Componentes Principales (PCA)**
+#### Análisis de Componentes Principales (PCA)
 
 El **Análisis de Componentes Principales (PCA)** es una técnica de reducción de dimensionalidad que transforma un conjunto de variables correlacionadas en un conjunto más pequeño de **componentes principales** no correlacionados que explican la mayor parte de la varianza en los datos.
 
 ::: {.callout-caution title="Aviso"}
 Los detalles del Análisis de Componentes Principales son tratados en la asignatura de Aprendizaje Automático.
 :::
-
 
 ::: {.callout-tip title="Ejemplo" collapse="true"}
 ```{r pca1}
@@ -567,14 +537,13 @@ biplot(pca_resultado)
 ```
 :::
 
-
-**Codificación de variables categóricas**
+#### Codificación de variables categóricas
 
 Las variables categóricas deben convertirse en variables numéricas antes de ser utilizadas en muchos modelos. Esto puede hacerse mediante:
 
-**Codificación One-Hot** 
+**Codificación One-Hot**
 
-El **One-Hot Encoding** es una técnica utilizada en el **preprocesamiento de datos** para convertir variables categóricas en variables numéricas. Muchos algoritmos de aprendizaje automático y estadística (como la regresión lineal, redes neuronales y máquinas de soporte vectorial) requieren que las variables de entrada sean numéricas, ya que no pueden manejar directamente datos categóricos. 
+El **One-Hot Encoding** es una técnica utilizada en el **preprocesamiento de datos** para convertir variables categóricas en variables numéricas. Muchos algoritmos de aprendizaje automático y estadística (como la regresión lineal, redes neuronales y máquinas de soporte vectorial) requieren que las variables de entrada sean numéricas, ya que no pueden manejar directamente datos categóricos.
 
 El **One-Hot Encoding** transforma cada categoría en una nueva columna binaria (0 o 1), donde el **1** indica la presencia de una categoría específica y el **0** su ausencia.
 
@@ -603,17 +572,17 @@ Cada fila tiene un **único 1** que indica la categoría correspondiente y **cer
 ::: {.callout-note title="Propiedades Clave" collapse="false"}
 **Ventajas del One-Hot Encoding**
 
-  - Compatibilidad con algoritmos numéricos: La mayoría de los modelos de aprendizaje automático requieren variables numéricas. El One-Hot Encoding convierte las categorías en un formato adecuado.
+-   Compatibilidad con algoritmos numéricos: La mayoría de los modelos de aprendizaje automático requieren variables numéricas. El One-Hot Encoding convierte las categorías en un formato adecuado.
 
-  - Evita suposiciones erróneas    A diferencia de la **codificación ordinal**, que asigna valores numéricos secuenciales a categorías (por ejemplo, Rojo = 1, Verde = 2, Azul = 3), el One-Hot Encoding **no introduce un orden artificial** entre las categorías. Esto es importante cuando no hay una jerarquía natural.
+-   Evita suposiciones erróneas A diferencia de la **codificación ordinal**, que asigna valores numéricos secuenciales a categorías (por ejemplo, Rojo = 1, Verde = 2, Azul = 3), el One-Hot Encoding **no introduce un orden artificial** entre las categorías. Esto es importante cuando no hay una jerarquía natural.
 
-  - Mejora la Interpretabilidad en Modelos Lineales: En modelos como la regresión lineal, cada columna creada mediante One-Hot Encoding representa el efecto específico de esa categoría.
+-   Mejora la Interpretabilidad en Modelos Lineales: En modelos como la regresión lineal, cada columna creada mediante One-Hot Encoding representa el efecto específico de esa categoría.
 
 **Desventajas del One-Hot Encoding**
 
-  - Incremento de la Dimensionalidad:    Si la variable categórica tiene muchas categorías únicas (por ejemplo, países o códigos postales), el número de columnas creadas puede ser muy grande. Esto puede conducir a problemas de **"curse of dimensionality"** (la maldición de la dimensionalidad), afectando el rendimiento del modelo y aumentando el tiempo de computación.
+-   Incremento de la Dimensionalidad: Si la variable categórica tiene muchas categorías únicas (por ejemplo, países o códigos postales), el número de columnas creadas puede ser muy grande. Esto puede conducir a problemas de **"curse of dimensionality"** (la maldición de la dimensionalidad), afectando el rendimiento del modelo y aumentando el tiempo de computación.
 
-  - Colinealidad Perfecta (Dummy Variable Trap):    Al crear una columna para cada categoría, una de las columnas se puede representar como una combinación lineal de las demás. Esto puede causar problemas en modelos lineales. Para evitarlo, se elimina una categoría de referencia (típicamente la primera), lo que se conoce como **evitar la trampa de las variables ficticias** (*dummy variable trap*).
+-   Colinealidad Perfecta (Dummy Variable Trap): Al crear una columna para cada categoría, una de las columnas se puede representar como una combinación lineal de las demás. Esto puede causar problemas en modelos lineales. Para evitarlo, se elimina una categoría de referencia (típicamente la primera), lo que se conoce como **evitar la trampa de las variables ficticias** (*dummy variable trap*).
 :::
 
 ::: {.callout-tip title="Ejemplo" collapse="true"}
@@ -644,11 +613,10 @@ one_hot <- predict(dummy, newdata = datos)
 # Ver los resultados
 print(one_hot)
 ```
-
+:::
 
 ::: {.callout-caution title="Aviso"}
 Cuando aplicamos One-Hot Encoding, el conjunto de variables resultantes puede generar colinealidad perfecta, lo que puede ser problemático en modelos lineales. Para evitarlo, es común eliminar una de las columnas creadas (que actuará como categoría de referencia).
-
 
 ```{r ejemplo}
 # One-Hot Encoding con eliminación de una categoría (categoría de referencia)
@@ -658,14 +626,111 @@ print(one_hot_ref)
 ```
 
 Esto elimina una columna (por ejemplo, **ColorAzul**) y permite que las otras columnas se interpreten en relación a la categoría de referencia.
-
 :::
 
+#### Codificación Ordinal
 
-- **Codificación Ordinal:** Las categorías se asignan a valores numéricos basados en su orden.
+La **codificación ordinal** es una técnica de preprocesamiento de datos utilizada para convertir variables categóricas en valores numéricos **manteniendo el orden natural** entre las categorías. A diferencia del **One-Hot Encoding**, que trata a todas las categorías como independientes y sin relación entre sí, la codificación ordinal es útil cuando las categorías tienen una **jerarquía** o un **orden lógico**.
 
+En la **codificación ordinal**, a cada categoría se le asigna un número entero que refleja su **posición** o **nivel** en un orden determinado. Esto permite que los modelos estadísticos y de aprendizaje automático interpreten que **algunas categorías son mayores o menores** que otras, lo que es especialmente útil en variables que representan rangos, niveles o clasificaciones.
+
+Supongamos que tenemos una variable llamada **"Nivel de Satisfacción"** con las siguientes categorías:
+
+| **Nivel de Satisfacción** |
+|---------------------------|
+| Muy Insatisfecho          |
+| Insatisfecho              |
+| Neutral                   |
+| Satisfecho                |
+| Muy Satisfecho            |
+
+Aquí, hay un orden lógico desde **"Muy Insatisfecho"** hasta **"Muy Satisfecho"**. Aplicando codificación ordinal, asignamos números que reflejen esta jerarquía:
+
+| **Nivel de Satisfacción** | **Codificación Ordinal** |
+|---------------------------|--------------------------|
+| Muy Insatisfecho          | 1                        |
+| Insatisfecho              | 2                        |
+| Neutral                   | 3                        |
+| Satisfecho                | 4                        |
+| Muy Satisfecho            | 5                        |
+
+------------------------------------------------------------------------
+
+::: {.callout-note title="Propiedades clave" collapse="false"}
+La codificación ordinal es adecuada cuando:
+
+-   Las categorías tienen un orden natural: Ejemplos incluyen niveles educativos (**Primaria**, **Secundaria**, **Universidad**), calificaciones (**Bajo**, **Medio**, **Alto**), o satisfacción del cliente (**Insatisfecho**, **Neutral**, **Satisfecho**).
+
+-   El modelo puede interpretar la relación de orden: Algunos algoritmos, como la **regresión lineal** o las **máquinas de vectores soporte (SVM)**, pueden beneficiarse de la codificación ordinal si el orden es relevante para la variable objetivo.
+
+-   Reducción de dimensionalidad: A diferencia del One-Hot Encoding, que puede crear muchas columnas para variables con múltiples categorías, la codificación ordinal **mantiene la variable en una sola columna**, lo que es más eficiente para conjuntos de datos grandes.
 :::
 
+::: {.callout-note title="Ventajas y desventajas" collapse="false"}
+**Ventajas**
 
---- 
+-   Preserva la jerarquía de las categorías: Permite que el modelo entienda que ciertas categorías son **mayores** o **menores** que otras.
 
+-   Reducción de la dimensionalidad: A diferencia del One-Hot Encoding, no aumenta el número de columnas, lo que reduce el riesgo de la **maldición de la dimensionalidad**.
+
+-   Simplicidad Computacional: Es más eficiente en términos de almacenamiento y tiempo de computación, especialmente para variables con muchas categorías.
+
+**Desventajas**
+
+-   Riesgo de interpretación incorrecta del orden: Si la variable categórica **no tiene un orden lógico**, la codificación ordinal puede inducir al modelo a asumir relaciones que no existen. Por ejemplo, supongamos que tienes una variable **Color** con categorías **Rojo**, **Verde**, y **Azul**. Asignarles valores como Rojo = 1, Verde = 2, Azul = 3 podría inducir al modelo a pensar que Verde es "mayor" que Rojo y Azul es "mayor" que Verde, lo cual no tiene sentido en este contexto.
+
+-   No Captura la Magnitud de la Diferencia: Aunque las categorías están ordenadas, la codificación ordinal **no refleja la magnitud real de las diferencias** entre categorías. Por ejemplo, la diferencia entre "Insatisfecho" y "Neutral" puede no ser la misma que entre "Satisfecho" y "Muy Satisfecho".
+:::
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r cod_ord1}
+# Crear un data frame con una variable categórica ordinal
+datos <- data.frame(
+  ID = 1:5,
+  Satisfaccion = c("Muy Insatisfecho", "Insatisfecho", "Neutral", "Satisfecho", "Muy Satisfecho")
+)
+
+# Convertir la variable en un factor ordenado
+datos$Satisfaccion_ordinal <- factor(datos$Satisfaccion, 
+                                     levels = c("Muy Insatisfecho", "Insatisfecho", "Neutral", "Satisfecho", "Muy Satisfecho"), 
+                                     ordered = TRUE)
+
+# Ver la estructura del factor
+str(datos)
+
+# Asignar valores numéricos a las categorías ordenadas
+datos$Satisfaccion_codificada <- as.numeric(datos$Satisfaccion_ordinal)
+
+# Ver el resultado
+print(datos)
+```
+:::
+
+Podemos usar la variable codificada ordinalmente en un modelo de regresión para evaluar su impacto en una variable dependiente, como una **puntuación de satisfacción general**.
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r reg1}
+# Simular una variable de respuesta (puntuación general)
+set.seed(123)
+datos$Puntuacion <- c(2, 4, 6, 8, 10) + rnorm(5, mean = 0, sd = 0.5)
+
+# Ajustar un modelo de regresión lineal usando la variable codificada
+modelo_ordinal <- lm(Puntuacion ~ Satisfaccion_codificada, data = datos)
+
+# Resumen del modelo
+summary(modelo_ordinal)
+```
+:::
+
+El modelo ajustará la relación entre la puntuación de satisfacción y el nivel de satisfacción codificado ordinalmente. El coeficiente de la variable **`Satisfaccion_codificada`** indicará cómo cambia la puntuación a medida que aumenta el nivel de satisfacción.
+
+#### Diferencias entre Codificación Ordinal y One-Hot Encoding
+
+| Característica | **Codificación Ordinal** | **One-Hot Encoding** |
+|----|----|----|
+| **Preserva el orden** | Sí, refleja la jerarquía entre categorías. | No, trata cada categoría como independiente. |
+| **Aumenta la dimensionalidad** | No, mantiene la variable en una sola columna. | Sí, crea una columna para cada categoría única. |
+| **Adecuado para** | Variables con orden natural (ej. educación). | Variables sin orden (ej. color, género, ciudad). |
+| **Riesgo** | Puede inducir al modelo a asumir relaciones falsas si no hay orden real. | Incremento de la complejidad del modelo. |
+
+------------------------------------------------------------------------
