@@ -17,7 +17,7 @@ En este tema, exploraremos cómo utilizar estos modelos para resolver problemas 
 
 ### ¿Qué son los Modelos Lineales Generalizados?
 
-Los **Modelos Lineales Generalizados (GLM)** son una extensión de los modelos de regresión lineal que permiten manejar una mayor variedad de tipos de datos y relaciones entre variables. Mientras que la regresión lineal tradicional asume que la variable dependiente es continua y sigue una distribución normal, los GLM permiten trabajar con variables dependientes que:
+Los **Modelos Lineales Generalizados (GLM)** son una extensión de los modelos de regresión lineal que permiten manejar una mayor variedad de tipos de datos y relaciones entre variables [@nelder1972generalized]. Mientras que la regresión lineal tradicional asume que la variable dependiente es continua y sigue una distribución normal, los GLM permiten trabajar con variables dependientes que:
 
   - Son **binarias** (como éxito/fracaso o sí/no).
   - Representan **conteos** de eventos (número de llamadas, accidentes, etc.).
@@ -103,7 +103,7 @@ Los GLM se utilizan en una amplia variedad de disciplinas para resolver problema
 | **Distribución de la variable dependiente** | Normal                                       | Familia exponencial (binomial, Poisson, gamma, etc.)  |
 | **Tipo de variable dependiente**            | Continua                                     | Binaria, de conteo, continua positiva                 |
 | **Relación entre las variables**            | Lineal directa                               | Relación transformada mediante una función de enlace  |
-| **Función de Enlace**                       | Identidad (\( g(\mu) = \mu \))               | Logit, logarítmica, inversa, etc.                     |
+| **Función de Enlace**                       | Identidad ($g(\mu) = \mu$)               | Logit, logarítmica, inversa, etc.                     |
 
 ---
 
@@ -144,7 +144,7 @@ En las próximas secciones, exploraremos en detalle cómo aplicar estos modelos 
 
 ## Regresión Logística
 
-La **regresión logística** es una herramienta fundamental para modelar la probabilidad de eventos binarios en una variedad de contextos, desde la medicina hasta la economía y el marketing. La correcta interpretación de los coeficientes mediante **odds ratios**, así como la evaluación del ajuste del modelo mediante curvas **ROC** y matrices de confusión, son esenciales para extraer conclusiones válidas de los datos.
+La **regresión logística** es una herramienta fundamental para modelar la probabilidad de eventos binarios en una variedad de contextos, desde la medicina hasta la economía y el marketing [@hosmer2013applied]. La correcta interpretación de los coeficientes mediante **odds ratios**, así como la evaluación del ajuste del modelo mediante curvas **ROC** y matrices de confusión, son esenciales para extraer conclusiones válidas de los datos.
 
 ### Fundamentos de la Regresión Logística
 
@@ -307,7 +307,7 @@ print(paste("AUC:", round(auc_valor, 3)))
 
 ## Regresión de Poisson
 
-La **regresión de Poisson** es una técnica estadística utilizada para modelar **datos de conteo**, es decir, situaciones en las que la variable dependiente representa el número de veces que ocurre un evento en un período de tiempo o espacio específico. Este tipo de modelo es adecuado cuando la variable dependiente toma valores enteros no negativos ($0, 1, 2, \dots$) y sigue una distribución de **Poisson**.
+La **regresión de Poisson** es una técnica estadística utilizada para modelar **datos de conteo**, es decir, situaciones en las que la variable dependiente representa el número de veces que ocurre un evento en un período de tiempo o espacio específico [@coxe2009analysis]. Este tipo de modelo es adecuado cuando la variable dependiente toma valores enteros no negativos ($0, 1, 2, \dots$) y sigue una distribución de **Poisson**.
 
 La distribución de Poisson describe la probabilidad de que ocurra un número determinado de eventos en un intervalo fijo, dado que estos eventos ocurren de forma independiente y a una tasa constante.
 
@@ -324,7 +324,7 @@ Donde:
 - $y$ es el número de eventos observados ($y = 0, 1, 2, \dots$).
 
 
-### Modelo de Regresión de Poisson
+### Modelo de regresión de Poisson
 
 En la **regresión de Poisson**, el objetivo es modelar la relación entre la **tasa de ocurrencia de los eventos** ($\lambda$) y un conjunto de variables predictoras $X_1, X_2, \dots, X_p$.
 
@@ -346,53 +346,47 @@ $$
 $$
 
 
-### Supuestos y Limitaciones de la Regresión de Poisson
+### Supuestos y limitaciones de la regresión de Poisson
 
-tal y como ocurre en el modelo de regresión lineal, para que la regresión de Poisson sea adecuada, se deben cumplir ciertos **supuestos**:
+Tal y como ocurre en el modelo de regresión lineal, para que la regresión de Poisson sea adecuada, se deben cumplir ciertos **supuestos**:
 
-**Independencia de los Eventos:** Los eventos deben ocurrir de manera independiente unos de otros.
+  - **Independencia de los eventos:** Los eventos deben ocurrir de manera independiente unos de otros.
 
-**Distribución de Poisson de la Variable Dependiente:** La variable de respuesta debe seguir una distribución de Poisson, donde la **media** y la **varianza** son iguales:
+  - **Distribución de Poisson de la variable dependiente:** La variable de respuesta debe seguir una distribución de Poisson, donde la **media** y la **varianza** son iguales:
 
    $$
    E(Y) = Var(Y) = \lambda
    $$
 
-**No Sobredispersión:** Uno de los problemas comunes en los datos de conteo es la **sobredispersión**, que ocurre cuando la varianza de los datos es mayor que la media ($Var(Y) > E(Y)$). La presencia de sobredispersión indica que el modelo de Poisson puede no ser adecuado, y puede ser necesario considerar modelos alternativos como la **regresión binomial negativa**.
+  - **No sobredispersión:** Uno de los problemas comunes en los datos de conteo es la **sobredispersión**, que ocurre cuando la varianza de los datos es mayor que la media ($Var(Y) > E(Y)$). La presencia de sobredispersión indica que el modelo de Poisson puede no ser adecuado, y puede ser necesario considerar modelos alternativos como la **regresión binomial negativa**.
 
-**No Exceso de Ceros:** Si hay demasiados ceros en los datos (por ejemplo, en el número de accidentes en diferentes localidades donde muchas tienen cero accidentes), puede ser necesario utilizar modelos de **Poisson inflados en ceros (ZIP)**.
+ - **No exceso de ceros:** Si hay demasiados ceros en los datos (por ejemplo, en el número de accidentes en diferentes localidades donde muchas tienen cero accidentes), puede ser necesario utilizar modelos de **Poisson inflados en ceros (ZIP)** [@lambert1992zero].
 
----
 
-#### **3.3. Interpretación de los Resultados**
+### Interpretación de los resultados
 
 La interpretación de los coeficientes en la regresión de Poisson difiere de la regresión lineal debido al uso de la función de enlace logarítmica.
 
-##### **Interpretación de los Coeficientes**
+ Los coeficientes $\beta$ representan el **logaritmo de la tasa** de eventos asociados con un cambio en la variable independiente. Para interpretar en términos de la tasa de ocurrencia, se utiliza el **exponencial de los coeficientes**:
 
-- Los coeficientes \( \beta \) representan el **logaritmo de la tasa** de eventos asociados con un cambio en la variable independiente.
-  
-- Para interpretar en términos de la tasa de ocurrencia, se utiliza el **exponencial de los coeficientes**:
-
-  \[
+$$
   e^{\beta_i}
-  \]
+$$
 
-  Esto representa el **factor de cambio multiplicativo** en la tasa de eventos por cada unidad adicional en la variable \( X_i \).
+Esto representa el **factor de cambio multiplicativo** en la tasa de eventos por cada unidad adicional en la variable $X_i$.
 
-**Ejemplo:**
-- Si \( \beta_1 = 0.5 \), entonces \( e^{0.5} \approx 1.65 \). Esto significa que por cada unidad adicional en \( X_1 \), la tasa de ocurrencia de eventos **aumenta en un 65%**.
-- Si \( \beta_1 = -0.3 \), entonces \( e^{-0.3} \approx 0.74 \). Esto indica que por cada unidad adicional en \( X_1 \), la tasa de eventos **disminuye en un 26%**.
+::: {.callout-tip title="Ejemplo" collapse="true"}
 
----
+Si $\beta_1 = 0.5$, entonces $e^{0.5} \approx 1.65$. Esto significa que por cada unidad adicional en $X_1$, la tasa de ocurrencia de eventos **aumenta en un 65%**.
 
-#### **3.4. Ejemplo Práctico en R: Modelando el Número de Accidentes**
+Si $\beta_1 = -0.3$, entonces $e^{-0.3} \approx 0.74$. Esto indica que por cada unidad adicional en $X_1$, la tasa de eventos **disminuye en un 26%**.
+:::
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
 
 Vamos a utilizar R para ajustar un modelo de regresión de Poisson. Supongamos que tenemos datos sobre el **número de accidentes de tráfico** en diferentes intersecciones de una ciudad, junto con variables como el volumen de tráfico y la visibilidad.
 
-##### **Paso 1: Simulación de Datos**
-
-```r
+```{r poiss1}
 # Simulación de datos para el número de accidentes
 set.seed(123)
 n <- 100  # Número de observaciones
@@ -410,13 +404,7 @@ accidentes <- rpois(n, lambda = lambda)
 # Crear el data frame
 datos_accidentes <- data.frame(accidentes, trafico, visibilidad)
 head(datos_accidentes)
-```
 
----
-
-##### **Paso 2: Ajuste del Modelo de Regresión de Poisson**
-
-```r
 # Ajustar el modelo de regresión de Poisson
 modelo_poisson <- glm(accidentes ~ trafico + visibilidad, data = datos_accidentes, family = poisson)
 
@@ -424,31 +412,30 @@ modelo_poisson <- glm(accidentes ~ trafico + visibilidad, data = datos_accidente
 summary(modelo_poisson)
 ```
 
-**Interpretación de los Resultados:**
-- El coeficiente asociado a `trafico` indica cómo el volumen de tráfico afecta la tasa de accidentes.
-- El coeficiente asociado a `visibilidad` muestra cómo la visibilidad afecta la frecuencia de accidentes.
 
----
+El coeficiente asociado a `trafico` indica cómo el volumen de tráfico afecta la tasa de accidentes.
 
-##### **Paso 3: Interpretación de los Coeficientes**
+El coeficiente asociado a `visibilidad` muestra cómo la visibilidad afecta la frecuencia de accidentes.
 
-```r
+```{r poiss}
 # Exponenciar los coeficientes para interpretar en términos de tasas
 exp(coef(modelo_poisson))
 ```
 
-- Un coeficiente positivo implica que un aumento en la variable está asociado con un **aumento en la tasa de accidentes**.
-- Un coeficiente negativo implica que un aumento en la variable está asociado con una **disminución en la tasa de accidentes**.
 
----
+Un coeficiente positivo implica que un aumento en la variable está asociado con un **aumento en la tasa de accidentes**.
 
-##### **Paso 4: Evaluación del Modelo y Diagnóstico**
+Un coeficiente negativo implica que un aumento en la variable está asociado con una **disminución en la tasa de accidentes**.
 
-1. **Evaluación de Sobredispersión:**
+:::
 
-La sobredispersión ocurre cuando la varianza de los datos es mayor que la media, lo que puede invalidar los supuestos de la regresión de Poisson.
+### Evaluación del modelo de Poisson
 
-```r
+La **sobredispersión** ocurre cuando la varianza de los datos es mayor que la media, lo que puede invalidar los supuestos de la regresión de Poisson.
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+
+```{r poiss3}
 # Calcular la relación entre el deviance y los grados de libertad
 deviance <- modelo_poisson$deviance
 grados_libertad <- modelo_poisson$df.residual
@@ -456,25 +443,26 @@ sobredispersion <- deviance / grados_libertad
 
 print(paste("Índice de Sobredispersión:", round(sobredispersion, 2)))
 ```
+:::
 
-- Un valor cercano a 1 sugiere que no hay sobredispersión.
-- Un valor significativamente mayor que 1 sugiere la presencia de sobredispersión, y puede ser necesario considerar una **regresión binomial negativa**.
+Un valor del índice de sobredispersión cercano a $1$ sugiere que no hay sobredispersión. Por contra, un valor significativamente mayor que $1$ sugiere la presencia de sobredispersión, y puede ser necesario considerar una **regresión binomial negativa**.
 
-2. **Diagnóstico de Residuos:**
+**Diagnóstico de Residuos:**
 
-```r
+::: {.callout-tip title="Ejemplo" collapse="true"}
+
+```{r diag1}
 # Gráfico de residuos deviance para evaluar el ajuste
 plot(residuals(modelo_poisson, type = "deviance"), main = "Residuos Deviance", ylab = "Residuos", xlab = "Índice")
 abline(h = 0, col = "red")
 ```
+:::
 
----
+::: {.callout-tip title="Ejemplo sobre datos reales" collapse="true"}
 
-#### **Ejemplo con Datos Reales en R**
+Un conjunto de datos clásico en R es **`warpbreaks`**, que contiene el número de roturas de hilo en diferentes condiciones de tensión y longitud del hilo.
 
-También puedes aplicar la regresión de Poisson a conjuntos de datos reales. Un conjunto de datos clásico en R es **`warpbreaks`**, que contiene el número de roturas de hilo en diferentes condiciones de tensión y longitud del hilo.
-
-```r
+```{r pois_real1}
 # Datos de ejemplo: número de roturas de hilo
 data(warpbreaks)
 
@@ -487,21 +475,295 @@ summary(modelo_poisson_real)
 # Interpretación de coeficientes
 exp(coef(modelo_poisson_real))
 ```
+:::
+
+### Limitaciones y alternativas
+
+Si la varianza de los datos es mayor que la media, el modelo de Poisson no será adecuado. En este caso, se recomienda utilizar la **regresión binomial negativa**, que introduce un parámetro adicional para manejar la sobredispersión.
+
+Si hay más ceros de los esperados (por ejemplo, muchas intersecciones con cero accidentes), puede ser necesario utilizar modelos de **Poisson inflados en ceros (ZIP)** o **binomial negativa inflada en ceros (ZINB)**.
+
+## Otros GLMs
+
+
+La **regresión binomial negativa** y los **modelos basados en distribuciones como Gamma e Inversa Gaussiana** amplían la capacidad de los **Modelos Lineales Generalizados (GLM)** para adaptarse a una amplia variedad de situaciones del mundo real. Estos modelos son especialmente útiles cuando los datos presentan características como sobredispersión, sesgo o restricciones en el dominio (por ejemplo, solo valores positivos). La elección adecuada del modelo y la función de enlace garantiza predicciones precisas y válidas, contribuyendo a la toma de decisiones informadas en campos como la salud, la ingeniería y la economía.
+
+### Regresión Binomial Negativa
+
+Tal y como hemos visto en apartados anteriores, la **sobredispersión** ocurre cuando la varianza de los datos de conteo es **mayor que la media**, lo cual viola uno de los supuestos clave de la regresión de Poisson, que asume que la media y la varianza son iguales ($E(Y) = Var(Y)$). La sobredispersión puede surgir por varias razones:
+
+  - **Heterogeneidad no modelada:** Existen factores que afectan la variable dependiente pero no han sido incluidos en el modelo.
+  - **Dependencia entre eventos:** Los eventos no ocurren de forma independiente.
+  - **Exceso de ceros:** Hay más ceros en los datos de los que predice la distribución de Poisson.
+
+Cuando la sobredispersión está presente, la regresión de Poisson subestima los errores estándar, lo que puede llevar a conclusiones incorrectas sobre la significancia de los predictores.
+
+La **regresión binomial negativa** es una extensión de la regresión de Poisson que introduce un parámetro adicional para manejar la sobredispersión. Este modelo permite que la varianza sea mayor que la media:
+
+$$
+Var(Y) = \lambda + \alpha \lambda^2
+$$
+
+Donde $\alpha$ es el parámetro de dispersión. Si $\alpha = 0$, el modelo se reduce a la regresión de Poisson.
+
+La forma funcional del modelo binomial negativa es similar al de Poisson:
+
+$$
+\log(\lambda) = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p
+$$
+
+Pero la varianza ahora incluye el término adicional $\alpha$ para capturar la sobredispersión.
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r bin_neg1}
+# Instalar y cargar la librería MASS que contiene la función glm.nb
+library(MASS)
+
+# Ajuste de un modelo binomial negativo con los datos simulados de accidentes
+modelo_binom_neg <- glm.nb(accidentes ~ trafico + visibilidad, data = datos_accidentes)
+
+# Resumen del modelo
+summary(modelo_binom_neg)
+
+# Comparar la dispersión con el modelo de Poisson
+cat("Dispersión en Poisson:", modelo_poisson$deviance / modelo_poisson$df.residual, "\n")
+cat("Dispersión en Binomial Negativa:", modelo_binom_neg$theta, "\n")
+```
+:::
+
+- El parámetro $\theta$ (dispersión) ajustado en el modelo binomial negativa ayuda a corregir la varianza subestimada en el modelo de Poisson.
+- Si $\theta$ es significativamente mayor que 1, se confirma la presencia de sobredispersión.
 
 ---
 
-#### **3.5. Limitaciones y Alternativas**
+### Modelos para variables continuas No Normales
 
-1. **Sobredispersión:**  
-   Si la varianza de los datos es mayor que la media, el modelo de Poisson no será adecuado. En este caso, se recomienda utilizar la **regresión binomial negativa**, que introduce un parámetro adicional para manejar la sobredispersión.
+Existen situaciones en las que la variable dependiente es **continua**, pero **no sigue una distribución normal**. En estos casos, los **Modelos Lineales Generalizados (GLM)** permiten utilizar distribuciones alternativas como **Gamma** o **Inversa Gaussiana**, junto con funciones de enlace específicas.
 
-2. **Exceso de Ceros:**  
-   Si hay más ceros de los esperados (por ejemplo, muchas intersecciones con cero accidentes), puede ser necesario utilizar modelos de **Poisson inflados en ceros (ZIP)** o **binomial negativa inflada en ceros (ZINB)**.
+#### Regresión Gamma para datos positivos y sesgados
+
+La **regresión Gamma** es adecuada para modelar variables continuas que son **positivas** y tienen una distribución **sesgada a la derecha**. Ejemplos típicos incluyen tiempos de espera, costos médicos o duración de procesos.
+
+  - La distribución Gamma asume que la variable dependiente es continua y positiva.
+  - La varianza de la variable dependiente aumenta proporcionalmente al cuadrado de la media.
+
+**Función de Enlace Común:**
+$$
+\log(\mu) = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p
+$$
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r gamma_1}
+# Simulación de costos médicos
+set.seed(123)
+n <- 100
+ingresos <- rnorm(n, mean = 50000, sd = 10000)
+edad <- rnorm(n, mean = 45, sd = 10)
+costos <- rgamma(n, shape = 2, rate = 0.00005 * ingresos + 0.01 * edad)
+
+# Ajuste del modelo Gamma
+modelo_gamma <- glm(costos ~ ingresos + edad, family = Gamma(link = "log"))
+
+# Resumen del modelo
+summary(modelo_gamma)
+```
+
+
+- Los coeficientes muestran cómo los ingresos y la edad afectan los costos médicos esperados.
+- El enlace logarítmico asegura que las predicciones sean siempre positivas.
+
+:::
+
+#### Regresión Inversa Gaussiana
+
+La **regresión Inversa Gaussiana** es útil para modelar tiempos de respuesta o variables donde la varianza disminuye rápidamente a medida que la media aumenta. Este modelo se aplica en campos como la ingeniería, donde se analizan tiempos hasta fallas de sistemas.
+
+**Función de Enlace Común:**
+$$
+\frac{1}{\mu^2} = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p
+$$
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r inv_1}
+# Instalar y cargar la librería correcta
+library(statmod)
+
+# Simulación de datos
+set.seed(123)
+n <- 100
+carga_trabajo <- rnorm(n, mean = 50, sd = 10)
+
+# Generar tiempos hasta el fallo usando la distribución inversa gaussiana
+# Aseguramos que los valores de carga_trabajo sean positivos para evitar problemas numéricos
+carga_trabajo[carga_trabajo <= 0] <- 1
+tiempo_fallo <- rinvgauss(n, mean = 100 / carga_trabajo, dispersion = 1)
+
+# Ajuste del modelo Inversa Gaussiana con enlace logarítmico
+modelo_inversa_gauss <- glm(tiempo_fallo ~ carga_trabajo, family = inverse.gaussian(link = "1/mu^2"),start = c(0.01, 0.01))
+
+# Resumen del modelo
+summary(modelo_inversa_gauss)
+
+
+```
+:::
+
+
+## Comparación de modelos y evaluación del ajuste
+
+Una vez que se han ajustado varios modelos, es crucial evaluar su rendimiento y seleccionar el más adecuado para el problema en cuestión. La **evaluación del ajuste** y la **comparación de modelos** permiten identificar cuál modelo describe mejor los datos sin caer en el sobreajuste, es decir, ajustarse demasiado a los datos de entrenamiento a costa de un mal desempeño en datos nuevos.
+
+Esta sección abordará los métodos más comunes para evaluar y comparar modelos, incluyendo criterios estadísticos, técnicas de validación y análisis de residuos.
+
+### Criterios de selección de modelos (AIC, BIC)
+
+Los criterios de selección de modelos como el **AIC** y el **BIC** permiten comparar modelos que han sido ajustados a los mismos datos, penalizando la complejidad para evitar el sobreajuste.
+
+
+**Akaike Information Criterion (AIC)**
+
+El **Criterio de Información de Akaike (AIC)** es una medida que equilibra la calidad del ajuste y la complejidad del modelo. Se calcula como:
+
+$$
+AIC = -2 \log(L) + 2k
+$$
+
+Donde:
+
+  - $L$ es el **log-likelihood** del modelo (medida de la probabilidad de los datos dados los parámetros del modelo).
+  - $k$ es el número de parámetros del modelo.
+
+Respecto a su interpretación, el AIC **no tiene una interpretación absoluta**, solo es útil para comparar modelos ajustados a los mismos datos. Un **AIC menor** indica un mejor equilibrio entre ajuste y simplicidad. 
+
+
+**Bayesian Information Criterion (BIC)**
+
+El **Criterio de Información Bayesiano (BIC)** es similar al AIC, pero penaliza más severamente la complejidad del modelo, especialmente cuando el número de observaciones es grande. Se calcula como:
+
+$$
+BIC = -2 \log(L) + k \log(n)
+$$
+
+Donde:
+- $n$ es el número de observaciones.
+
+El BIC favorece modelos más simples en comparación con el AIC. Un **BIC menor** indica un mejor modelo.
+
+::: {.callout-tip title="Ejemplo: comparación de AIC y BIC" collapse="true"}
+
+```{r eval1}
+# Comparación de modelos: Poisson vs Binomial Negativa
+
+# Modelo de Poisson
+modelo_poisson <- glm(accidentes ~ trafico + visibilidad, family = poisson, data = datos_accidentes)
+
+# Modelo Binomial Negativa
+library(MASS)
+modelo_binom_neg <- glm.nb(accidentes ~ trafico + visibilidad, data = datos_accidentes)
+
+# Calcular AIC y BIC
+AIC(modelo_poisson, modelo_binom_neg)
+BIC(modelo_poisson, modelo_binom_neg)
+```
+:::
+
+El modelo con el menor **AIC** o **BIC** es preferido. Si ambos modelos tienen valores similares, se puede preferir el modelo más simple (con menos parámetros).
+
+
+### Validación cruzada y técnicas de evaluación predictiva
+
+La **validación cruzada** y otras técnicas de evaluación predictiva permiten estimar cómo se desempeñará un modelo en datos no vistos, lo que es esencial para evitar el sobreajuste.
+
+La **validación cruzada k-fold** divide el conjunto de datos en **k** subconjuntos (o "folds"). El modelo se ajusta **k** veces, cada vez utilizando $k-1$ folds para el entrenamiento y el fold restante para la prueba. El rendimiento se promedia sobre todas las iteraciones. La validación cruzada utiliza eficientemente los datos disponibles, proporcionando una estimación robusta del rendimiento del modelo. 
+
+::: {.callout-tip title="Ejemplo: Validación cruzada" collapse="true"}
+
+```{r val1}
+# Instalar y cargar la librería caret
+library(caret)
+
+# Definir la validación cruzada de 5-fold
+control <- trainControl(method = "cv", number = 5)
+
+# Ajustar un modelo de regresión logística con validación cruzada
+modelo_cv <- train(type ~ npreg + glu + bmi, data = Pima.tr, method = "glm", family = "binomial", trControl = control)
+
+# Resultados de la validación cruzada
+print(modelo_cv)
+```
+:::
+
+Otra técnica común es dividir el conjunto de datos en un **conjunto de entrenamiento** (por ejemplo, el $70\%$) y un **conjunto de prueba** ($30\%$). El modelo se ajusta en el conjunto de entrenamiento y se evalúa en el conjunto de prueba.
+
+::: {.callout-tip title="Ejemplo: Train/Test" collapse="true"}
+```{r train_test}
+# Dividir el conjunto de datos en entrenamiento y prueba
+set.seed(123)
+library(caret)
+indices <- createDataPartition(Pima.tr$type, p = 0.7, list = FALSE)
+entrenamiento <- Pima.tr[indices, ]
+prueba <- Pima.tr[-indices, ]
+
+# Ajustar el modelo en el conjunto de entrenamiento
+modelo_entrenamiento <- glm(type ~ npreg + glu + bmi, data = entrenamiento, family = binomial)
+
+# Realizar predicciones en el conjunto de prueba
+predicciones <- predict(modelo_entrenamiento, newdata = prueba, type = "response")
+
+# Evaluar precisión
+predicciones_clase <- ifelse(predicciones > 0.5, "Yes", "No")
+confusionMatrix(as.factor(predicciones_clase), as.factor(prueba$type))
+```
+:::
+
+### Diagnóstico de residuos y buenas prácticas
+
+El análisis de **residuos** es fundamental para evaluar el ajuste del modelo y detectar problemas como la falta de ajuste, valores atípicos o violaciones de los supuestos del modelo.
+
+Los **residuos deviance** son una medida común en los **Modelos Lineales Generalizados (GLM)**. Representan la diferencia entre el modelo ajustado y el modelo perfecto (donde la predicción es exactamente igual al valor observado).
+
+**Tipos de residuos:**
+
+- **Residuos Pearson:**  
+  $$
+  r_i = \frac{y_i - \hat{y}_i}{\sqrt{\hat{V}(y_i)}}
+  $$
+  Donde $\hat{V}(y_i)$ es la varianza estimada de $y_i$.
+
+- **Residuos Deviance:**  
+  Representan la contribución de cada observación al deviance total del modelo.
 
 ---
 
-#### **Conclusión**
+::: {.callout-tip title="Ejemplo: Análisis de los residuos" collapse="true"}
+```{r res1}
+# Gráfico de residuos deviance para un modelo de Poisson
+plot(residuals(modelo_poisson, type = "deviance"), 
+     main = "Residuos Deviance del Modelo Poisson", 
+     ylab = "Residuos Deviance", xlab = "Índice")
+abline(h = 0, col = "red", lwd = 2)
 
-La **regresión de Poisson** es una herramienta fundamental para modelar **datos de conteo** y comprender cómo las variables predictoras afectan la frecuencia de eventos. Su capacidad para trabajar con tasas de ocurrencia y su flexibilidad en la interpretación de resultados la hacen ideal para una amplia gama de aplicaciones, desde el análisis de accidentes hasta estudios ecológicos y médicos.
+# Gráfico de residuos para la regresión logística
+plot(residuals(modelo_entrenamiento, type = "deviance"), 
+     main = "Residuos Deviance del Modelo Logístico", 
+     ylab = "Residuos Deviance", xlab = "Índice")
+abline(h = 0, col = "blue", lwd = 2)
+```
+:::
 
-Sin embargo, es esencial verificar los supuestos del modelo, especialmente en relación con la **sobredispersión** y el **exceso de ceros**. En la siguiente sección, abordaremos cómo manejar estos desafíos utilizando la **regresión binomial negativa**, una extensión de la regresión de Poisson diseñada para datos con variabilidad excesiva.
+Para detectar valores atípicos y su influencia emplearemos:
+
+  - **Distancia de Cook:** Identifica observaciones influyentes que tienen un impacto significativo en los coeficientes del modelo.
+  - **Leverage:** Mide el impacto potencial de una observación en el ajuste del modelo.
+
+
+::: {.callout-tip title="Ejemplo: Detección de observaciones influyentes" collapse="true"}
+```{r influyentes}
+# Distancia de Cook para identificar observaciones influyentes
+cooksd <- cooks.distance(modelo_poisson)
+
+# Gráfico de la distancia de Cook
+plot(cooksd, main = "Distancia de Cook", ylab = "Influencia", xlab = "Índice")
+abline(h = 4 / length(cooksd), col = "red")  # Línea de referencia
+```
+:::

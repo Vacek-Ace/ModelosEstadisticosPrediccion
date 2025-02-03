@@ -12,7 +12,7 @@ disciplinas para analizar relaciones entre variables. Este modelo
 permite explorar cómo una o varias variables explicativas
 (independientes) influyen sobre una variable respuesta (dependiente),
 proporcionando no solo descripciones útiles sino también herramientas
-para la predicción y la inferencia.
+para la predicción y la inferencia [@draper1998applied].
 
 El **modelo de regresión lineal simple** se centra en analizar la
 relación entre una única variable explicativa y una respuesta, mientras

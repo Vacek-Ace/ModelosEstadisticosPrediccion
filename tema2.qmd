@@ -167,7 +167,7 @@ Estos métodos son especialmente útiles en problemas donde el número de variab
 
 ### Ridge regression
 
-La regresión Ridge introduce una penalización en la estimación de los coeficientes de regresión, lo que ayuda a reducir la varianza del modelo y mejora su capacidad predictiva en presencia de datos altamente correlacionados o con muchas variables. 333 El modelo de regresión Ridge es una extensión de la regresión lineal estándar. Dado un conjunto de datos con $n$ observaciones y $p$ predictores, expresamos el modelo de regresión lineal múltiple como:
+La regresión Ridge introduce una penalización en la estimación de los coeficientes de regresión, lo que ayuda a reducir la varianza del modelo y mejora su capacidad predictiva en presencia de datos altamente correlacionados o con muchas variables [@marquardt1975ridge]. El modelo de regresión Ridge es una extensión de la regresión lineal estándar. Dado un conjunto de datos con $n$ observaciones y $p$ predictores, expresamos el modelo de regresión lineal múltiple como:
 
 $$
 \mathbf{Y}= \mathbf{X} \beta + \boldsymbol{\varepsilon}
@@ -269,7 +269,8 @@ En la siguiente sección, exploraremos la **regresión Lasso**, que extiende est
 
 Cuando se tiene un conjunto de predictores con posibles redundancias o ruido, Lasso permite identificar cuáles son las variables más relevantes para el modelo, lo que facilita la interpretación y reduce la complejidad del análisis.
 
-Al igual que ocurría en Ridge Regression, el modelo de regresión Lasso se basa en la minimización de la siguiente función de error:33 $$
+Al igual que ocurría en Ridge Regression, el modelo de regresión Lasso se basa en la minimización de la siguiente función de error [@ranstam2018lasso]: 
+$$
 SSE_{lasso} = \| \mathbf{Y}- \mathbf{X} \beta \|^2 + \lambda \sum_{j=1}^{p} |\beta_j|
 $$
 
@@ -333,7 +334,7 @@ En la siguiente sección, exploraremos **Elastic Net**, una técnica híbrida qu
 
 ### Elastic Net
 
-La regresión **Elastic Net** es una técnica de regularización que combina las propiedades de **Ridge** y **Lasso**, abordando algunas de sus limitaciones individuales. Mientras que Ridge es útil para manejar la multicolinealidad sin eliminar variables y Lasso selecciona un subconjunto de predictores, Elastic Net equilibra ambos enfoques permitiendo la selección de variables en presencia de alta correlación entre los predictores.
+La regresión **Elastic Net** es una técnica de regularización que combina las propiedades de **Ridge** y **Lasso**, abordando algunas de sus limitaciones individuales [@zou2005regularization]. Mientras que Ridge es útil para manejar la multicolinealidad sin eliminar variables y Lasso selecciona un subconjunto de predictores, Elastic Net equilibra ambos enfoques permitiendo la selección de variables en presencia de alta correlación entre los predictores.
 
 Este método es particularmente efectivo cuando el número de predictores es grande y existe **multicolinealidad**, ya que permite controlar simultáneamente la **reducción de la magnitud de los coeficientes** y la **eliminación de variables irrelevantes**.
 
@@ -402,7 +403,7 @@ La regresión Elastic Net combina lo mejor de Ridge y Lasso, ofreciendo un méto
 ### Comparación de los métodos de Regularización
 
 | Método | Penalización | Efecto sobre los coeficientes |
-|------------------|------------------|-------------------------------------|
+|------------------|------------------|------------------------------------|
 | **OLS** | Ninguna | Sin restricción, puede haber multicolinealidad |
 | **Ridge** | $L_2$ | Reduce la magnitud de los coeficientes, pero no los anula |
 | **Lasso** | $L_1$ | Puede anular coeficientes, permitiendo selección de variables |
