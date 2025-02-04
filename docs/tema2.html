@@ -222,8 +222,14 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./tema5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Otros modelos de regresión: Modelos Aditivos Generalizados (GAMs)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./conclusiones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -504,7 +510,7 @@ Consideraciones importantes
 <section id="métodos-basados-en-regularización" class="level2" data-number="2.6">
 <h2 data-number="2.6" class="anchored" data-anchor-id="métodos-basados-en-regularización"><span class="header-section-number">2.6</span> Métodos basados en regularización</h2>
 <p>En los modelos de regresión, especialmente cuando se trabaja con un gran número de variables predictoras o con datos multicolineales, los métodos tradicionales de selección de variables pueden resultar ineficaces o inestables. En estos casos, los métodos basados en regularización surgen como una alternativa poderosa que no solo selecciona variables, sino que también mejora la estabilidad y la precisión del modelo.</p>
-<p>La regularización consiste en introducir una penalización en la función de ajuste del modelo, lo que tiene dos efectos principales: controlar el sobreajuste al reducir la complejidad del modelo y forzar la selección de un subconjunto más parsimonioso de predictores. Estas penalizaciones ajustan los coeficientes de las variables predictoras, favoreciendo soluciones más simples y robustas.</p>
+<p>La regularización consiste en introducir una penalización en la función de ajuste del modelo, lo que tiene dos efectos principales: controlar el sobreajuste al reducir la complejidad del modelo y forzar la selección de un subconjunto más parsimonioso de predictores. Estas penalizaciones ajustan los coeficientes de las variables predictoras, favoreciendo soluciones más simples y robustas <span class="citation" data-cites="james2013introduction">(<a href="references.html#ref-james2013introduction" role="doc-biblioref">James et&nbsp;al. 2013</a>)</span>.</p>
 <p>Entre los métodos de regularización más destacados se encuentran:</p>
 <ul>
 <li><strong>Ridge Regression:</strong> Aplica una penalización proporcional al cuadrado de los coeficientes, lo que permite manejar problemas de multicolinealidad pero no conduce a la eliminación completa de variables.</li>
@@ -913,6 +919,9 @@ V10          -0.414 -0.392 -0.390 -0.427</code></pre>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-james2013introduction" class="csl-entry" role="listitem">
+James, Gareth, Daniela Witten, Trevor Hastie, Robert Tibshirani, et&nbsp;al. 2013. <em>An introduction to statistical learning</em>. Vol. 112. Springer.
+</div>
 <div id="ref-kutner2005applied" class="csl-entry" role="listitem">
 Kutner, Michael H, Christopher J Nachtsheim, John Neter, y William Li. 2005. <em>Applied linear statistical models</em>. McGraw-hill.
 </div>
