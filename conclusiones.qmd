@@ -35,7 +35,7 @@ La **interpretabilidad** y la **validación del modelo** son pilares fundamental
 
 ## Mirando hacia adelante
 
-Con el conocimiento y las habilidades adquiridas en este curso, los estudiantes están mejor preparados para profundizar en el vasto campo de la ciencia de datos. La **estadística** y la **inferencia estadística** seguirán evolucionando con el avance de la tecnología y la creciente disponibilidad de datos. Por lo tanto, es crucial que los futuros profesionales mantengan una **mentalidad de aprendizaje continuo** y estén abiertos a adoptar nuevas metodologías y herramientas.
+Con el conocimiento y las habilidades adquiridas en este curso, los estudiantes están mejor preparados para profundizar en el vasto campo de la ciencia de datos. Los modelos de regresión seguirán evolucionando con el avance de la tecnología y la creciente disponibilidad de datos. Por lo tanto, es crucial que los futuros profesionales mantengan una **mentalidad de aprendizaje continuo** y estén abiertos a adoptar nuevas metodologías y herramientas.
 
 Los modelos de regresión son solo el comienzo de un camino más amplio en el análisis predictivo y el aprendizaje automático. En los próximos cursos, como **Aprendizaje Automático I** y **Aprendizaje Automático II**, aplicarás muchas de las técnicas y conceptos que hemos aprendido, avanzando hacia modelos más complejos como los **árboles de decisión**, las **redes neuronales** y los **modelos de ensamblaje**.
 
