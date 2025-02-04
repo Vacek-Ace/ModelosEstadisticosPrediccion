@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>4&nbsp; Conclusiones – Modelos de Regresión</title>
+<title>6&nbsp; Conclusiones – Modelos de Regresión</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -31,7 +31,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./references.html" rel="next">
-<link href="./tema3.html" rel="prev">
+<link href="./tema5.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -82,7 +82,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./conclusiones.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Conclusiones</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./conclusiones.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Conclusiones</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -133,8 +133,20 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./tema4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Otros modelos de regresión: Modelos Aditivos Generalizados (GAMs)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./conclusiones.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -153,9 +165,9 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#resumen-de-los-aprendizajes" id="toc-resumen-de-los-aprendizajes" class="nav-link active" data-scroll-target="#resumen-de-los-aprendizajes"><span class="header-section-number">4.1</span> Resumen de los aprendizajes</a></li>
-  <li><a href="#reflexiones-finales" id="toc-reflexiones-finales" class="nav-link" data-scroll-target="#reflexiones-finales"><span class="header-section-number">4.2</span> Reflexiones finales</a></li>
-  <li><a href="#mirando-hacia-adelante" id="toc-mirando-hacia-adelante" class="nav-link" data-scroll-target="#mirando-hacia-adelante"><span class="header-section-number">4.3</span> Mirando hacia adelante</a></li>
+  <li><a href="#resumen-de-los-aprendizajes" id="toc-resumen-de-los-aprendizajes" class="nav-link active" data-scroll-target="#resumen-de-los-aprendizajes"><span class="header-section-number">6.1</span> Resumen de los aprendizajes</a></li>
+  <li><a href="#reflexiones-finales" id="toc-reflexiones-finales" class="nav-link" data-scroll-target="#reflexiones-finales"><span class="header-section-number">6.2</span> Reflexiones finales</a></li>
+  <li><a href="#mirando-hacia-adelante" id="toc-mirando-hacia-adelante" class="nav-link" data-scroll-target="#mirando-hacia-adelante"><span class="header-section-number">6.3</span> Mirando hacia adelante</a></li>
   </ul>
 </nav>
     </div>
@@ -164,7 +176,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-conclusiones" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></h1>
+<h1 class="title"><span id="sec-conclusiones" class="quarto-section-identifier"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></h1>
 </div>
 
 
@@ -181,21 +193,36 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>A lo largo de cinco capítulos hemos presentado el material de la asignatura de Modelos de Regresión del grado en Ciencia e Ingeniería de Datos de la Universidad Rey Juan Carlos.</p>
-<p>En este capítulo final, te proponemos reflexionar sobre las principales lecciones aprendidas a lo largo del curso “Modelos de Regresión” y destacaremos la importancia de las técnicas abordadas en la formación de futuros profesionales en Ciencia e Ingeniería de Datos. Además, alentaremos a los estudiantes a continuar explorando y ampliando sus conocimientos en cursos posteriores.</p>
-<p>Al finalizar este recorrido por los conceptos y técnicas de la Regresión, es evidente la importancia de esta disciplina en el análisis y la interpretación de datos en el mundo moderno. A lo largo de este libro, hemos explorado desde los fundamentos teóricos hasta las aplicaciones prácticas, proporcionando a los estudiantes una base sólida sobre la cual construir sus habilidades en ciencia de datos.</p>
-<section id="resumen-de-los-aprendizajes" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="resumen-de-los-aprendizajes"><span class="header-section-number">4.1</span> Resumen de los aprendizajes</h2>
+<p>A lo largo de cinco capítulos hemos presentado el material de la asignatura de <strong>Modelos de Regresión</strong> del grado en <strong>Ciencia e Ingeniería de Datos</strong> de la <strong>Universidad Rey Juan Carlos</strong>.</p>
+<p>En este capítulo final, te invitamos a reflexionar sobre las principales lecciones aprendidas durante el curso <strong>“Modelos de Regresión”</strong> y a destacar la importancia de las técnicas abordadas en la formación de futuros profesionales en el campo de la Ciencia e Ingeniería de Datos. Además, animamos a los estudiantes a continuar explorando y ampliando sus conocimientos en cursos posteriores, consolidando así una base sólida para afrontar los desafíos de la ciencia de datos moderna.</p>
+<p>Al finalizar este recorrido por los conceptos y técnicas de la regresión, queda claro que esta disciplina es fundamental en el análisis y la interpretación de datos en el mundo actual. Hemos explorado desde los <strong>fundamentos teóricos</strong> hasta las <strong>aplicaciones prácticas</strong>, proporcionando a los estudiantes las herramientas necesarias para construir sus habilidades en el análisis de datos y en la toma de decisiones basadas en evidencia.</p>
+<section id="resumen-de-los-aprendizajes" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="resumen-de-los-aprendizajes"><span class="header-section-number">6.1</span> Resumen de los aprendizajes</h2>
+<p>A lo largo del libro, hemos abordado diversos temas que forman la columna vertebral del análisis de regresión:</p>
+<ol type="1">
+<li><p><strong>Modelos de Regresión Lineal Simple y Múltiple:</strong><br>
+Comprendimos cómo los modelos lineales permiten describir la relación entre una variable dependiente y una o más variables independientes. Exploramos técnicas para estimar parámetros, interpretar coeficientes y diagnosticar la validez del modelo.</p></li>
+<li><p><strong>Métodos de selección de variables y Regularización:</strong><br>
+Aprendimos a identificar las variables más relevantes mediante técnicas de selección como el <strong>stepwise</strong>, así como métodos de regularización como <strong>Ridge</strong>, <strong>Lasso</strong> y <strong>Elastic Net</strong>, que ayudan a mejorar la generalización del modelo.</p></li>
+<li><p><strong>Modelos no lineales y transformación de variables:</strong><br>
+Introdujimos métodos para capturar relaciones no lineales entre variables, incluyendo la <strong>regresión polinomial</strong>, los <strong>splines</strong> y la <strong>ingeniería de características</strong> para mejorar el rendimiento predictivo.</p></li>
+<li><p><strong>Modelos de Regresión generalizada:</strong><br>
+Ampliamos nuestro conocimiento hacia modelos que permiten trabajar con diferentes tipos de variables dependientes, como la <strong>regresión logística</strong> para variables binarias y la <strong>regresión de Poisson</strong> para datos de conteo.</p></li>
+<li><p><strong>Otros modelos avanzados:</strong><br>
+Finalmente, exploramos técnicas avanzadas como los <strong>Modelos Aditivos Generalizados (GAMs)</strong>, que proporcionan una manera flexible de capturar relaciones no lineales complejas sin perder interpretabilidad.</p></li>
+</ol>
 </section>
-<section id="reflexiones-finales" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="reflexiones-finales"><span class="header-section-number">4.2</span> Reflexiones finales</h2>
+<section id="reflexiones-finales" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="reflexiones-finales"><span class="header-section-number">6.2</span> Reflexiones finales</h2>
+<p>El aprendizaje de los <strong>Modelos de Regresión</strong> va más allá de la simple aplicación de fórmulas o técnicas estadísticas. A través de este curso, hemos desarrollado un enfoque crítico para <strong>analizar datos</strong>, <strong>identificar patrones</strong> y <strong>tomar decisiones basadas en evidencia</strong>. Hemos comprendido la importancia de realizar un diagnóstico adecuado del modelo, asegurando que los supuestos estadísticos se cumplan y que los resultados sean fiables y reproducibles.</p>
+<p>La <strong>interpretabilidad</strong> y la <strong>validación del modelo</strong> son pilares fundamentales en el análisis de regresión. Entender cómo y por qué un modelo llega a ciertas conclusiones es tan importante como la precisión de sus predicciones. En un mundo donde los datos juegan un papel cada vez más crucial, la habilidad para interpretar resultados y comunicar hallazgos de manera clara y concisa es esencial para cualquier profesional de la ciencia de datos.</p>
 </section>
-<section id="mirando-hacia-adelante" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="mirando-hacia-adelante"><span class="header-section-number">4.3</span> Mirando hacia adelante</h2>
-<p>Con el conocimiento y las habilidades adquiridas, los estudiantes están mejor equipados para explorar más a fondo el vasto campo de la ciencia de datos. La estadística y la inferencia estadística seguirán evolucionando con el avance de la tecnología y la disponibilidad de datos. Por lo tanto, es crucial que los futuros profesionales mantengan una mentalidad de aprendizaje continuo y estén abiertos a adoptar nuevas metodologías y herramientas.</p>
-<p>En conclusión, esperamos que este libro haya proporcionado una comprensión profunda y práctica de los Modelos de Regresión, y que inspire a los estudiantes a aplicar estos conocimientos con confianza y creatividad en sus proyectos futuros. La capacidad de analizar datos de manera crítica y tomar decisiones basadas en evidencias es una habilidad poderosa y transformadora, que sin duda abrirá numerosas oportunidades en el ámbito profesional.</p>
-<p>Os recordamos que en próximos cursos os encontraréis con las asignaturas de Aprendizaje Automático I y Aprendizaje Automático II, donde aplicaréis muchas de las técnicas y herramientas que hemos aprendido juntos.</p>
-<p><strong>¡Buena suerte!</strong></p>
+<section id="mirando-hacia-adelante" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="mirando-hacia-adelante"><span class="header-section-number">6.3</span> Mirando hacia adelante</h2>
+<p>Con el conocimiento y las habilidades adquiridas en este curso, los estudiantes están mejor preparados para profundizar en el vasto campo de la ciencia de datos. La <strong>estadística</strong> y la <strong>inferencia estadística</strong> seguirán evolucionando con el avance de la tecnología y la creciente disponibilidad de datos. Por lo tanto, es crucial que los futuros profesionales mantengan una <strong>mentalidad de aprendizaje continuo</strong> y estén abiertos a adoptar nuevas metodologías y herramientas.</p>
+<p>Los modelos de regresión son solo el comienzo de un camino más amplio en el análisis predictivo y el aprendizaje automático. En los próximos cursos, como <strong>Aprendizaje Automático I</strong> y <strong>Aprendizaje Automático II</strong>, aplicarás muchas de las técnicas y conceptos que hemos aprendido, avanzando hacia modelos más complejos como los <strong>árboles de decisión</strong>, las <strong>redes neuronales</strong> y los <strong>modelos de ensamblaje</strong>.</p>
+<p>En conclusión, esperamos que este libro haya proporcionado una comprensión profunda y práctica de los <strong>Modelos de Regresión</strong>, y que inspire a los estudiantes a aplicar estos conocimientos con confianza y creatividad en sus proyectos futuros. La capacidad de <strong>analizar datos de manera crítica</strong> y <strong>tomar decisiones basadas en evidencias</strong> es una habilidad poderosa y transformadora, que sin duda abrirá numerosas oportunidades en el ámbito profesional.</p>
+<p><strong>¡Buena suerte en tu camino en la ciencia de datos!</strong></p>
 
 
 </section>
@@ -623,8 +650,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./tema3.html" class="pagination-link" aria-label="Modelos no lineales. Transformación de variables. Ingeniería de características.">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modelos no lineales. Transformación de variables. Ingeniería de características.</span></span>
+      <a href="./tema5.html" class="pagination-link" aria-label="Otros modelos de regresión: Modelos Aditivos Generalizados (GAMs)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Otros modelos de regresión: Modelos Aditivos Generalizados (GAMs)</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
