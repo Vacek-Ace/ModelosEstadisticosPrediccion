@@ -89,7 +89,7 @@ La **reducción de variables explicativas** busca simplificar el modelo al selec
 
 Al limitar el número de predictores, no solo se simplifica el modelo, sino que también se optimizan diversos aspectos fundamentales en el análisis.
 
-1.  **Evitar el zobreajuste:**
+1.  **Evitar el sobreajuste:**
     -   Cuando hay demasiadas variables en relación al número de observaciones, el modelo puede ajustarse demasiado a los datos de entrenamiento y perder capacidad predictiva en nuevos conjuntos de datos.
 2.  **Mejorar la interpretabilidad:**
     -   Un modelo con menos variables es más fácil de interpretar, lo que resulta fundamental en aplicaciones como ciencias sociales, biomedicina o economía.
@@ -269,8 +269,7 @@ En la siguiente sección, exploraremos la **regresión Lasso**, que extiende est
 
 Cuando se tiene un conjunto de predictores con posibles redundancias o ruido, Lasso permite identificar cuáles son las variables más relevantes para el modelo, lo que facilita la interpretación y reduce la complejidad del análisis.
 
-Al igual que ocurría en Ridge Regression, el modelo de regresión Lasso se basa en la minimización de la siguiente función de error [@ranstam2018lasso]: 
-$$
+Al igual que ocurría en Ridge Regression, el modelo de regresión Lasso se basa en la minimización de la siguiente función de error [@ranstam2018lasso]: $$
 SSE_{lasso} = \| \mathbf{Y}- \mathbf{X} \beta \|^2 + \lambda \sum_{j=1}^{p} |\beta_j|
 $$
 
@@ -403,7 +402,7 @@ La regresión Elastic Net combina lo mejor de Ridge y Lasso, ofreciendo un méto
 ### Comparación de los métodos de Regularización
 
 | Método | Penalización | Efecto sobre los coeficientes |
-|------------------|------------------|------------------------------------|
+|------------------|------------------|-----------------------------------|
 | **OLS** | Ninguna | Sin restricción, puede haber multicolinealidad |
 | **Ridge** | $L_2$ | Reduce la magnitud de los coeficientes, pero no los anula |
 | **Lasso** | $L_1$ | Puede anular coeficientes, permitiendo selección de variables |
