@@ -275,9 +275,10 @@ window.Quarto = {
   </ul></li>
   <li><a href="#comparación-de-modelos-y-evaluación-del-ajuste" id="toc-comparación-de-modelos-y-evaluación-del-ajuste" class="nav-link" data-scroll-target="#comparación-de-modelos-y-evaluación-del-ajuste"><span class="header-section-number">4.5</span> Comparación de modelos y evaluación del ajuste</a>
   <ul class="collapse">
-  <li><a href="#criterios-de-selección-de-modelos-aic-bic" id="toc-criterios-de-selección-de-modelos-aic-bic" class="nav-link" data-scroll-target="#criterios-de-selección-de-modelos-aic-bic"><span class="header-section-number">4.5.1</span> Criterios de selección de modelos (AIC, BIC)</a></li>
-  <li><a href="#validación-cruzada-y-técnicas-de-evaluación-predictiva" id="toc-validación-cruzada-y-técnicas-de-evaluación-predictiva" class="nav-link" data-scroll-target="#validación-cruzada-y-técnicas-de-evaluación-predictiva"><span class="header-section-number">4.5.2</span> Validación cruzada y técnicas de evaluación predictiva</a></li>
-  <li><a href="#diagnóstico-de-residuos-y-buenas-prácticas" id="toc-diagnóstico-de-residuos-y-buenas-prácticas" class="nav-link" data-scroll-target="#diagnóstico-de-residuos-y-buenas-prácticas"><span class="header-section-number">4.5.3</span> Diagnóstico de residuos y buenas prácticas</a></li>
+  <li><a href="#la-deviance" id="toc-la-deviance" class="nav-link" data-scroll-target="#la-deviance"><span class="header-section-number">4.5.1</span> La Deviance</a></li>
+  <li><a href="#criterios-de-selección-de-modelos-aic-bic" id="toc-criterios-de-selección-de-modelos-aic-bic" class="nav-link" data-scroll-target="#criterios-de-selección-de-modelos-aic-bic"><span class="header-section-number">4.5.2</span> Criterios de selección de modelos (AIC, BIC)</a></li>
+  <li><a href="#validación-cruzada-y-técnicas-de-evaluación-predictiva" id="toc-validación-cruzada-y-técnicas-de-evaluación-predictiva" class="nav-link" data-scroll-target="#validación-cruzada-y-técnicas-de-evaluación-predictiva"><span class="header-section-number">4.5.3</span> Validación cruzada y técnicas de evaluación predictiva</a></li>
+  <li><a href="#diagnóstico-de-residuos-y-buenas-prácticas" id="toc-diagnóstico-de-residuos-y-buenas-prácticas" class="nav-link" data-scroll-target="#diagnóstico-de-residuos-y-buenas-prácticas"><span class="header-section-number">4.5.4</span> Diagnóstico de residuos y buenas prácticas</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -1287,8 +1288,66 @@ Number of Fisher Scoring iterations: 5</code></pre>
 <h2 data-number="4.5" class="anchored" data-anchor-id="comparación-de-modelos-y-evaluación-del-ajuste"><span class="header-section-number">4.5</span> Comparación de modelos y evaluación del ajuste</h2>
 <p>Una vez que se han ajustado varios modelos, es crucial evaluar su rendimiento y seleccionar el más adecuado para el problema en cuestión. La <strong>evaluación del ajuste</strong> y la <strong>comparación de modelos</strong> permiten identificar cuál modelo describe mejor los datos sin caer en el sobreajuste, es decir, ajustarse demasiado a los datos de entrenamiento a costa de un mal desempeño en datos nuevos.</p>
 <p>Esta sección abordará los métodos más comunes para evaluar y comparar modelos, incluyendo criterios estadísticos, técnicas de validación y análisis de residuos.</p>
-<section id="criterios-de-selección-de-modelos-aic-bic" class="level3" data-number="4.5.1">
-<h3 data-number="4.5.1" class="anchored" data-anchor-id="criterios-de-selección-de-modelos-aic-bic"><span class="header-section-number">4.5.1</span> Criterios de selección de modelos (AIC, BIC)</h3>
+<section id="la-deviance" class="level3" data-number="4.5.1">
+<h3 data-number="4.5.1" class="anchored" data-anchor-id="la-deviance"><span class="header-section-number">4.5.1</span> La Deviance</h3>
+<p>La <strong>deviance</strong> (o <strong>desviación</strong>) es una medida estadística que evalúa qué tan bien se ajusta un modelo estadístico a los datos observados. Se utiliza principalmente en modelos de regresión que no se basan en supuestos de normalidad estricta, como los <strong>modelos lineales generalizados</strong> (GLM), incluyendo:</p>
+<ul>
+<li>Regresión logística</li>
+<li>Regresión de Poisson</li>
+<li>Modelos exponenciales, etc.</li>
+</ul>
+<p>La deviance mide la <strong>diferencia</strong> entre el modelo propuesto y el <strong>modelo saturado</strong> (el modelo que predice perfectamente los datos observados).</p>
+<ul>
+<li>El <strong>modelo saturado</strong> tiene tantos parámetros como observaciones, por lo que ajusta cada punto de datos perfectamente.</li>
+<li>El <strong>modelo propuesto</strong> es el modelo que intentamos evaluar.</li>
+</ul>
+<p>La deviance se interpreta como una generalización de la <strong>suma de cuadrados de los residuos</strong> utilizada en regresión lineal.</p>
+<p>La deviance se define como:</p>
+<p><span class="math display">\[
+D = 2 \sum_{i=1}^{n} \left[ \ell(y_i; y_i) - \ell(y_i; \hat{y}_i) \right]
+\]</span></p>
+<p>donde:</p>
+<ul>
+<li><span class="math inline">\(D\)</span> = Deviance</li>
+<li><span class="math inline">\(\ell(y_i; y_i)\)</span> = Log-verosimilitud del modelo saturado (máxima verosimilitud posible)</li>
+<li><span class="math inline">\(\ell(y_i; \hat{y}_i)\)</span> = Log-verosimilitud del modelo propuesto</li>
+</ul>
+<p>En términos simples, mide cuánto peor es el modelo propuesto comparado con el modelo que se ajusta perfectamente.</p>
+<section id="interpretación" class="level4" data-number="4.5.1.1">
+<h4 data-number="4.5.1.1" class="anchored" data-anchor-id="interpretación"><span class="header-section-number">4.5.1.1</span> Interpretación</h4>
+<ul>
+<li><strong>Valores pequeños de deviance</strong> → Indican que el modelo se ajusta bien a los datos.</li>
+<li><strong>Valores grandes de deviance</strong> → Indican que el modelo no se ajusta bien.</li>
+</ul>
+<p>Si el modelo es perfecto, la deviance es <strong>cero</strong>.</p>
+</section>
+<section id="deviance-residuals" class="level4" data-number="4.5.1.2">
+<h4 data-number="4.5.1.2" class="anchored" data-anchor-id="deviance-residuals"><span class="header-section-number">4.5.1.2</span> Deviance Residuals</h4>
+<p>En lugar de evaluar la deviance global, los <strong>residuos de deviance</strong> permiten identificar qué observaciones individuales no se ajustan bien.</p>
+<p><span class="math display">\[
+d_i = \text{sign}(y_i - \hat{y}_i) \sqrt{2 \left[ \ell(y_i; y_i) - \ell(y_i; \hat{y}_i) \right]}
+\]</span></p>
+<p>Los residuos de deviance se comportan de forma similar a los residuos en regresión lineal, permitiendo identificar observaciones atípicas o mal ajustadas.</p>
+</section>
+<section id="relación-con-otros-conceptos" class="level4" data-number="4.5.1.3">
+<h4 data-number="4.5.1.3" class="anchored" data-anchor-id="relación-con-otros-conceptos"><span class="header-section-number">4.5.1.3</span> Relación con otros conceptos</h4>
+<ul>
+<li>En <strong>regresión lineal</strong>, la deviance es equivalente a la <strong>suma de los cuadrados de los residuos</strong> (RSS).</li>
+<li>En <strong>regresión logística</strong>, la deviance se utiliza como alternativa a la suma de errores cuadráticos debido a que los residuos no se distribuyen normalmente.</li>
+<li>En <strong>pruebas de bondad de ajuste</strong>, se usa la <strong>deviance nula</strong> para comparar el modelo sin predictores (solo la media) con el modelo completo.</li>
+</ul>
+</section>
+<section id="ejemplo-en-regresión-logística" class="level4" data-number="4.5.1.4">
+<h4 data-number="4.5.1.4" class="anchored" data-anchor-id="ejemplo-en-regresión-logística"><span class="header-section-number">4.5.1.4</span> Ejemplo en Regresión Logística</h4>
+<p>Supongamos que estamos modelando la probabilidad de que una persona compre un producto en función de su edad. La deviance nos ayuda a evaluar qué tan bien el modelo logra predecir esas probabilidades comparado con un modelo perfecto.</p>
+<ul>
+<li><strong>Deviance baja:</strong> El modelo ajusta bien las probabilidades.</li>
+<li><strong>Deviance alta:</strong> El modelo falla en capturar los patrones en los datos.</li>
+</ul>
+</section>
+</section>
+<section id="criterios-de-selección-de-modelos-aic-bic" class="level3" data-number="4.5.2">
+<h3 data-number="4.5.2" class="anchored" data-anchor-id="criterios-de-selección-de-modelos-aic-bic"><span class="header-section-number">4.5.2</span> Criterios de selección de modelos (AIC, BIC)</h3>
 <p>Los criterios de selección de modelos como el <strong>AIC</strong> y el <strong>BIC</strong> permiten comparar modelos que han sido ajustados a los mismos datos, penalizando la complejidad para evitar el sobreajuste.</p>
 <p><strong>Akaike Information Criterion (AIC)</strong></p>
 <p>El <strong>Criterio de Información de Akaike (AIC)</strong> es una medida que equilibra la calidad del ajuste y la complejidad del modelo. Se calcula como:</p>
@@ -1406,8 +1465,8 @@ modelo_binom_neg  4 1228.918</code></pre>
 </div>
 <p>El modelo con el menor <strong>AIC</strong> o <strong>BIC</strong> es preferido. Si ambos modelos tienen valores similares, se puede preferir el modelo más simple (con menos parámetros).</p>
 </section>
-<section id="validación-cruzada-y-técnicas-de-evaluación-predictiva" class="level3" data-number="4.5.2">
-<h3 data-number="4.5.2" class="anchored" data-anchor-id="validación-cruzada-y-técnicas-de-evaluación-predictiva"><span class="header-section-number">4.5.2</span> Validación cruzada y técnicas de evaluación predictiva</h3>
+<section id="validación-cruzada-y-técnicas-de-evaluación-predictiva" class="level3" data-number="4.5.3">
+<h3 data-number="4.5.3" class="anchored" data-anchor-id="validación-cruzada-y-técnicas-de-evaluación-predictiva"><span class="header-section-number">4.5.3</span> Validación cruzada y técnicas de evaluación predictiva</h3>
 <p>La <strong>validación cruzada</strong> y otras técnicas de evaluación predictiva permiten estimar cómo se desempeñará un modelo en datos no vistos, lo que es esencial para evitar el sobreajuste.</p>
 <p>La <strong>validación cruzada k-fold</strong> divide el conjunto de datos en <strong>k</strong> subconjuntos (o “folds”). El modelo se ajusta <strong>k</strong> veces, cada vez utilizando <span class="math inline">\(k-1\)</span> folds para el entrenamiento y el fold restante para la prueba. El rendimiento se promedia sobre todas las iteraciones. La validación cruzada utiliza eficientemente los datos disponibles, proporcionando una estimación robusta del rendimiento del modelo.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo: Validación cruzada">
@@ -1522,8 +1581,8 @@ Prediction No Yes
 </div>
 </div>
 </section>
-<section id="diagnóstico-de-residuos-y-buenas-prácticas" class="level3" data-number="4.5.3">
-<h3 data-number="4.5.3" class="anchored" data-anchor-id="diagnóstico-de-residuos-y-buenas-prácticas"><span class="header-section-number">4.5.3</span> Diagnóstico de residuos y buenas prácticas</h3>
+<section id="diagnóstico-de-residuos-y-buenas-prácticas" class="level3" data-number="4.5.4">
+<h3 data-number="4.5.4" class="anchored" data-anchor-id="diagnóstico-de-residuos-y-buenas-prácticas"><span class="header-section-number">4.5.4</span> Diagnóstico de residuos y buenas prácticas</h3>
 <p>El análisis de <strong>residuos</strong> es fundamental para evaluar el ajuste del modelo y detectar problemas como la falta de ajuste, valores atípicos o violaciones de los supuestos del modelo.</p>
 <p>Los <strong>residuos deviance</strong> son una medida común en los <strong>Modelos Lineales Generalizados (GLM)</strong>. Representan la diferencia entre el modelo ajustado y el modelo perfecto (donde la predicción es exactamente igual al valor observado).</p>
 <p><strong>Tipos de residuos:</strong></p>

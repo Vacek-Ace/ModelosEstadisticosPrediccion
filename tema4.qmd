@@ -615,6 +615,70 @@ Una vez que se han ajustado varios modelos, es crucial evaluar su rendimiento y 
 
 Esta sección abordará los métodos más comunes para evaluar y comparar modelos, incluyendo criterios estadísticos, técnicas de validación y análisis de residuos.
 
+
+### La Deviance
+
+La **deviance** (o **desviación**) es una medida estadística que evalúa qué tan bien se ajusta un modelo estadístico a los datos observados. Se utiliza principalmente en modelos de regresión que no se basan en supuestos de normalidad estricta, como los **modelos lineales generalizados** (GLM), incluyendo:
+
+- Regresión logística
+- Regresión de Poisson
+- Modelos exponenciales, etc.
+
+La deviance mide la **diferencia** entre el modelo propuesto y el **modelo saturado** (el modelo que predice perfectamente los datos observados).
+
+- El **modelo saturado** tiene tantos parámetros como observaciones, por lo que ajusta cada punto de datos perfectamente.
+- El **modelo propuesto** es el modelo que intentamos evaluar.
+
+La deviance se interpreta como una generalización de la **suma de cuadrados de los residuos** utilizada en regresión lineal.
+
+La deviance se define como:
+
+$$
+D = 2 \sum_{i=1}^{n} \left[ \ell(y_i; y_i) - \ell(y_i; \hat{y}_i) \right]
+$$
+
+donde:
+
+- $D$ = Deviance
+- $\ell(y_i; y_i)$ = Log-verosimilitud del modelo saturado (máxima verosimilitud posible)
+- $\ell(y_i; \hat{y}_i)$ = Log-verosimilitud del modelo propuesto
+
+En términos simples, mide cuánto peor es el modelo propuesto comparado con el modelo que se ajusta perfectamente.
+
+
+#### Interpretación
+
+- **Valores pequeños de deviance** → Indican que el modelo se ajusta bien a los datos.
+- **Valores grandes de deviance** → Indican que el modelo no se ajusta bien.
+
+Si el modelo es perfecto, la deviance es **cero**.
+
+
+#### Deviance Residuals 
+
+En lugar de evaluar la deviance global, los **residuos de deviance** permiten identificar qué observaciones individuales no se ajustan bien.
+
+$$
+d_i = \text{sign}(y_i - \hat{y}_i) \sqrt{2 \left[ \ell(y_i; y_i) - \ell(y_i; \hat{y}_i) \right]}
+$$
+
+Los residuos de deviance se comportan de forma similar a los residuos en regresión lineal, permitiendo identificar observaciones atípicas o mal ajustadas.
+
+
+#### Relación con otros conceptos
+
+- En **regresión lineal**, la deviance es equivalente a la **suma de los cuadrados de los residuos** (RSS).
+- En **regresión logística**, la deviance se utiliza como alternativa a la suma de errores cuadráticos debido a que los residuos no se distribuyen normalmente.
+- En **pruebas de bondad de ajuste**, se usa la **deviance nula** para comparar el modelo sin predictores (solo la media) con el modelo completo.
+
+
+
+#### Ejemplo en Regresión Logística
+Supongamos que estamos modelando la probabilidad de que una persona compre un producto en función de su edad. La deviance nos ayuda a evaluar qué tan bien el modelo logra predecir esas probabilidades comparado con un modelo perfecto.
+
+- **Deviance baja:** El modelo ajusta bien las probabilidades.
+- **Deviance alta:** El modelo falla en capturar los patrones en los datos.
+
 ### Criterios de selección de modelos (AIC, BIC)
 
 Los criterios de selección de modelos como el **AIC** y el **BIC** permiten comparar modelos que han sido ajustados a los mismos datos, penalizando la complejidad para evitar el sobreajuste.
