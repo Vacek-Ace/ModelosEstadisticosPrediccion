@@ -727,7 +727,7 @@ El modelo ajustará la relación entre la puntuación de satisfacción y el nive
 #### Diferencias entre Codificación Ordinal y One-Hot Encoding
 
 | Característica | **Codificación Ordinal** | **One-Hot Encoding** |
-|------------------------|------------------------|------------------------|
+|----|----|----|
 | **Preserva el orden** | Sí, refleja la jerarquía entre categorías. | No, trata cada categoría como independiente. |
 | **Aumenta la dimensionalidad** | No, mantiene la variable en una sola columna. | Sí, crea una columna para cada categoría única. |
 | **Adecuado para** | Variables con orden natural (ej. educación). | Variables sin orden (ej. color, género, ciudad). |
