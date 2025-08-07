@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.7.33">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -93,7 +93,7 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-1b90310288666db1f83ae9fc236520cd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -426,11 +426,10 @@ Linealidad en los parámetros, no en las variables
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">formula =</span> y <span class="sc">~</span> x <span class="sc">+</span> <span class="fu">I</span>(x<span class="sc">^</span><span class="dv">2</span>), <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"#0072B2"</span>, <span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span> <span class="co"># Línea del modelo ajustado</span></span>
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Modelo Lineal con Término Cuadrático"</span>,</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Relación no lineal en la variable (curva) ajustada con un modelo lineal en los parámetros"</span>,</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Variable Predictora (X)"</span>,</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Variable de Respuesta (Y)"</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Variable Predictora (X)"</span>,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Variable de Respuesta (Y)"</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="fig-linear-params" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -469,12 +468,12 @@ Figura&nbsp;1.1: Ejemplo de un modelo lineal en los parámetros que captura una 
 <p>Esta flexibilidad se logra mediante la combinación de dos ingeniosos mecanismos que son el corazón de la teoría:</p>
 <ol type="1">
 <li><p><strong>La familia exponencial de distribuciones</strong>: Los GLMs no funcionan con cualquier distribución, sino con aquellas que pertenecen a una “familia” matemática con propiedades muy convenientes: la <strong>familia exponencial</strong>. Este “club” de distribuciones es muy selecto, pero incluye a miembros tan importantes como la Normal, la Poisson (para datos de conteo), la Binomial (para datos de proporciones o binarios), la Gamma (para datos continuos positivos y asimétricos) o la Binomial Negativa. Su estructura matemática común permite desarrollar una teoría unificada para la estimación de parámetros, lo que es un logro teórico de primer orden.</p></li>
-<li><p><strong>La función de enlace (link function)</strong>: Este es el verdadero golpe de genialidad. El predictor lineal de nuestro modelo, <span class="math inline">\(\boldsymbol{X\beta}\)</span>, puede tomar cualquier valor en la recta real, desde <span class="math inline">\(-\infty\)</span> hasta <span class="math inline">\(+\infty\)</span>. Sin embargo, la media de nuestra variable de respuesta, <span class="math inline">\(E[Y] = \mu\)</span>, a menudo está restringida. Por ejemplo, una probabilidad (<span class="math inline">\(\mu\)</span> en un modelo binomial) debe estar entre 0 y 1; un conteo (<span class="math inline">\(\mu\)</span> en un modelo de Poisson) debe ser positivo. La función de enlace, <span class="math inline">\(g(\cdot)\)</span>, actúa como un <strong>“traductor”</strong> o un <strong>“puente”</strong> que conecta estos dos mundos. Transforma la media restringida de la respuesta para que pueda ser modelada por el predictor lineal no restringido. La relación fundamental es, por tanto, <span class="math inline">\(g(E[Y]) = g(\mu) = \boldsymbol{X\beta}\)</span>.</p>
+<li><p><strong>La función de enlace (link function)</strong>: Este es el verdadero golpe de genialidad. El predictor lineal de nuestro modelo, <span class="math inline">\(\boldsymbol{X\beta}\)</span>, puede tomar cualquier valor en la recta real, desde <span class="math inline">\(-\infty\)</span> hasta <span class="math inline">\(+\infty\)</span>. Sin embargo, la media de nuestra variable de respuesta, <span class="math inline">\(E[Y] = \mu\)</span>, a menudo está restringida. Por ejemplo, una probabilidad (<span class="math inline">\(\mu\)</span> en un modelo binomial) debe estar entre 0 y 1; un conteo (<span class="math inline">\(\mu\)</span> en un modelo de Poisson) debe ser positivo. La función de enlace, <span class="math inline">\(g(\cdot)\)</span>, actúa como un <strong>“traductor”</strong> o un <strong>“puente”</strong> que conecta estos dos mundos. Transforma la media restringida de la respuesta para que pueda ser modelada por el predictor lineal no restringido. La relación fundamental es, por tanto, <span class="math inline">\(g(E[Y]) = g(\mu) = \boldsymbol{X\beta}\)</span>.</p></li>
+</ol>
 <ul>
 <li>Para datos de <strong>conteo</strong> (Poisson), se usa un <strong>enlace logarítmico</strong> (<span class="math inline">\(g(\mu) = \log(\mu)\)</span>). Esto garantiza que, al invertir la función para obtener la media (<span class="math inline">\(\mu = \exp(\boldsymbol{X\beta})\)</span>), el resultado será siempre positivo, como debe ser un conteo.</li>
 <li>Para datos <strong>binarios</strong> (Binomial), se usa un <strong>enlace logit</strong> (<span class="math inline">\(g(\mu) = \log(\frac{\mu}{1-\mu})\)</span>). Esta función toma una probabilidad <span class="math inline">\(\mu\)</span> en el rango (0, 1) y la proyecta sobre toda la recta real, permitiendo que sea modelada por <span class="math inline">\(\boldsymbol{X\beta}\)</span>.</li>
-</ul></li>
-</ol>
+</ul>
 <p>Gracias a los GLMs, podemos usar el mismo marco conceptual de la regresión lineal para modelar una gama de fenómenos increíblemente diversa, desde predecir la cantidad de ciclistas en una ciudad (Poisson) hasta la probabilidad de que un paciente responda a un tratamiento (logística).</p>
 </section>
 <section id="modelos-de-efectos-mixtos-mixed-models" class="level3" data-number="1.3.3">
@@ -497,7 +496,13 @@ R como lenguaje del modelado estadístico
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Este compendio no es un texto puramente teórico. Fusiona intrínsecamente la exposición de los conceptos con su aplicación computacional directa a través del lenguaje y entorno estadístico <strong>R</strong>. R se ha consolidado como el estándar de facto en la investigación estadística y la ciencia de datos académica por su potencia, flexibilidad y el inmenso ecosistema de paquetes contribuidos por la comunidad científica. Se presupone en el lector una familiaridad operativa básica con R, y se fomenta activamente el desarrollo de una fluidez progresiva mediante la reproducción, modificación y experimentación con los numerosos ejemplos y fragmentos de código presentados.</p>
-<p>La capacidad de ejecutar análisis en R es fundamental para todo el ciclo de vida del modelado: - La <strong>exploración de datos</strong> y la visualización inicial. - La <strong>estimación de parámetros</strong> y el ajuste de los modelos. - El <strong>diagnóstico riguroso</strong> de la adecuación del modelo y la validación de sus supuestos. - La <strong>producción de gráficos</strong> y tablas de alta calidad para comunicar los resultados.</p>
+<p>La capacidad de ejecutar análisis en R es fundamental para todo el ciclo de vida del modelado:</p>
+<ul>
+<li>La <strong>exploración de datos</strong> y la visualización inicial.</li>
+<li>La <strong>estimación de parámetros</strong> y el ajuste de los modelos.</li>
+<li>El <strong>diagnóstico riguroso</strong> de la adecuación del modelo y la validación de sus supuestos.</li>
+<li>La <strong>producción de gráficos</strong> y tablas de alta calidad para comunicar los resultados.</li>
+</ul>
 <p>En R, las herramientas fundamentales para la regresión lineal (<code>lm()</code>) y los modelos lineales generalizados (<code>glm()</code>) están incluidas en el paquete <strong><code>stats</code></strong>, que es uno de los <strong>paquetes base</strong> y se carga automáticamente con cada sesión. Por lo tanto, no necesitamos instalarlo ni cargarlo.</p>
 <p>A lo largo del libro, extenderemos esta funcionalidad base con paquetes especializados que sí requieren instalación y carga. Entre los más importantes que usaremos se encuentran:</p>
 <ul>
@@ -609,14 +614,13 @@ El término y la idea detrás de “regresión a la media” surgieron de estos 
 <span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  <span class="co">#    Añadimos un subtítulo y una fuente.</span></span>
 <span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
 <span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Regresión de la Estatura de Hijos vs. Padres"</span>,</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Datos históricos del estudio de Sir Francis Galton sobre la 'regresión a la media'"</span>,</span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Promedio de Estatura de los Padres (pulgadas)"</span>,</span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Estatura del Hijo/a (pulgadas)"</span>,</span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Fuente: Paquete HistData de R"</span></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 5. Tema: Usamos un tema limpio y profesional como base.</span></span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Promedio de Estatura de los Padres (pulgadas)"</span>,</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Estatura del Hijo/a (pulgadas)"</span>,</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Fuente: Paquete HistData de R"</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 5. Tema: Usamos un tema limpio y profesional como base.</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
@@ -624,7 +628,7 @@ El término y la idea detrás de “regresión a la media” surgieron de estos 
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="tema0_files/figure-html/galtonn-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption>Datos de Galton sobre la estatura de padres e hijos</figcaption>
+<figcaption>Datos históricos del estudio sobre la ‘regresión a la media’</figcaption>
 </figure>
 </div>
 </div>
