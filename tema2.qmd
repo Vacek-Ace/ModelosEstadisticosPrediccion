@@ -402,7 +402,7 @@ La regresión Elastic Net combina lo mejor de Ridge y Lasso, ofreciendo un méto
 ### Comparación de los métodos de Regularización
 
 | Método | Penalización | Efecto sobre los coeficientes |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | **OLS** | Ninguna | Sin restricción, puede haber multicolinealidad |
 | **Ridge** | $L_2$ | Reduce la magnitud de los coeficientes, pero no los anula |
 | **Lasso** | $L_1$ | Puede anular coeficientes, permitiendo selección de variables |

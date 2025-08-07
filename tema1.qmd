@@ -4,642 +4,180 @@ editor:
     wrap: 72
 ---
 
-# Modelo de regresión lineal: simple y múltiple {#sec-tema1}
+# El modelo de regresión lineal simple {#sec-regresion-lineal-simple}
 
-La regresión lineal constituye uno de los pilares fundamentales de la
-modelización estadística y es ampliamente utilizada en múltiples
-disciplinas para analizar relaciones entre variables. Este modelo
-permite explorar cómo una o varias variables explicativas
-(independientes) influyen sobre una variable respuesta (dependiente),
-proporcionando no solo descripciones útiles sino también herramientas
-para la predicción y la inferencia [@draper1998applied].
+La regresión lineal constituye uno de los pilares fundamentales de la modelización estadística. Es, a menudo, el primer y más importante modelo predictivo que se aprende, no solo por su simplicidad e interpretabilidad, sino porque los conceptos que exploraremos aquí son la base sobre la que se construyen técnicas mucho más avanzadas, como el **modelo de regresión lineal múltiple**, los **modelos lineales generalizados (GLM)** o incluso conceptos utilizados en algoritmos de *machine learning* [@draper1998applied].
 
-El **modelo de regresión lineal simple** se centra en analizar la
-relación entre una única variable explicativa y una respuesta, mientras
-que el **modelo de regresión lineal múltiple** extiende este concepto al
-considerar múltiples variables explicativas, permitiendo capturar
-relaciones más complejas y realistas. Ambos modelos comparten principios
-fundamentales, como el ajuste de una recta mediante el criterio de
-mínimos cuadrados y la interpretación de sus parámetros, pero difieren
-en su alcance y en los retos que presentan[@weisberg2005applied].
+En este capítulo, daremos el primer y más crucial paso en nuestro viaje por el modelado predictivo: el estudio del **modelo de regresión lineal simple**. Para ello, seguiremos el ciclo de vida completo de un proyecto de modelado: comenzaremos con la exploración visual y cuantitativa de los datos, formalizaremos después nuestras observaciones mediante el lenguaje matemático del modelo y sus supuestos, aprenderemos a estimar sus parámetros, realizaremos inferencias sobre ellos y, finalmente, diagnosticaremos la validez de nuestro modelo.
 
-En este tema, abordaremos los fundamentos de la regresión lineal simple,
-incluyendo sus suposiciones clave, el procedimiento de estimación de
-parámetros y el uso de herramientas de diagnóstico. A través de ejemplos
-prácticos, como los estudios clásicos de Galton sobre la herencia de
-estaturas o el análisis de datos de inversión en publicidad, se
-ilustrará el poder descriptivo y predictivo de este modelo.
+La comprensión profunda que desarrollaremos aquí es esencial, ya que los principios de estimación, inferencia y diagnóstico que aprenderemos son directamente escalables al **modelo de regresión lineal múltiple**, que exploraremos en el siguiente capítulo.
 
-Este tema también prepara las bases para comprender el modelo de
-regresión lineal múltiple, presentado como una generalización del
-simple, y para abordar las complejidades adicionales que surgen, como la
-colinealidad entre variables explicativas y la selección de modelos
-óptimos.
+::: {.callout-important title="Objetivos de aprendizaje"}
+Al finalizar este capítulo, serás capaz de:
 
-La comprensión y aplicación correcta de estos modelos es esencial no
-solo para su utilidad en contextos prácticos, sino también porque
-representan el punto de partida para técnicas más avanzadas en la
-ciencia de datos y el aprendizaje automático.
-
-::: {.callout-important title="Objetivos"}
-Los siguiente objetivos buscan sentar las bases teóricas y prácticas
-necesarias para entender y aplicar modelos de regresión, preparando al
-estudiante para explorar modelos más complejos en los temas posteriores.
-
-1.  **Introducción a la modelización estadística**:
-    -   Comprender el proceso de modelización estadística, desde la
-        definición de objetivos y variables hasta el ajuste y evaluación
-        del modelo.
-2.  **Relación lineal y correlación**:
-    -   Introducir conceptos como la correlación y la relación lineal
-        entre variables.\
-    -   Analizar cómo identificar y medir la fuerza de la relación entre
-        dos variables.
-3.  **Comprensión del modelo de regresión lineal simple**:
-    -   Describir la estructura del modelo de regresión lineal simple y
-        entender su formulación matemática.\
-    -   Interpretar los parámetros del modelo (intercepto y pendiente) y
-        su significado en un contexto práctico.
-4.  **Procedimiento de inferencia estadística**:
-    -   Estimar los coeficientes del modelo mediante el método de
-        mínimos cuadrados.\
-    -   Realizar inferencias sobre los parámetros, incluyendo contrastes
-        de hipótesis y predicciones.
-5.  **Diagnóstico del modelo**:
-    -   Introducir herramientas para diagnosticar la adecuación del
-        modelo ajustado.\
-    -   Evaluar la validez de los supuestos del modelo, como la
-        linealidad, homocedasticidad e independencia de errores.
-6.  **Aplicación práctica**:
-    -   Implementar el modelo en contextos reales, como el análisis de
-        la influencia de inversiones en ganancias o la herencia de
-        características biológicas (ejemplo de Galton).\
-    -   Visualizar y analizar gráficamente las relaciones para facilitar
-        la interpretación de los resultados.
+1.  **Comprender y aplicar** el proceso de modelización estadística para un problema con una única variable predictora.
+2.  **Identificar y medir la correlación lineal** entre dos variables como paso previo al modelado.
+3.  **Describir la formulación matemática** del modelo de regresión lineal simple e interpretar el significado práctico de sus parámetros.
+4.  **Estimar los coeficientes** del modelo mediante el método de mínimos cuadrados ordinarios (MCO) y entender su derivación matemática y propiedades.
+5.  **Realizar inferencias sobre los parámetros** del modelo y evaluar su bondad de ajuste mediante el análisis de la varianza y el coeficiente de determinación R².
+6.  **Diagnosticar la adecuación del modelo**, evaluando visual y analíticamente si se cumplen los supuestos del modelo lineal.
 :::
 
-## Modelización estadística
 
-La modelización estadística es un proceso estructurado que permite
-analizar y describir relaciones entre variables mediante modelos
-matemáticos. Este enfoque es fundamental en la estadística aplicada y
-proporciona herramientas para interpretar datos, realizar predicciones y
-tomar decisiones fundamentadas. A continuación, se describen los pasos
-clave de este proceso. Este enfoque sistemático asegura que el modelo
-ajustado sea robusto, interpretable y útil para realizar predicciones
-confiables. La revisión continua y el ajuste basado en evidencia
-permiten capturar la complejidad de los datos de manera efectiva.
 
-### Contextualización del problema
+## Exploración inicial: visualización y cuantificación de la relación
 
-El primer paso en la modelización estadística es definir el problema que
-se busca analizar. Esto incluye identificar el contexto, establecer
-objetivos claros y determinar las variables involucradas.
+Antes de sumergirnos en la teoría de la regresión, debemos hacer lo que todo buen analista hace primero: **observar y cuantificar la relación en los datos**. Este paso exploratorio es fundamental para formular hipótesis y justificar la elección de un modelo lineal.
 
-::: {.callout-tip title="Ejemplo" collapse="true"}
--   **Problema:** Investigar si existe una relación positiva entre el
-    tiempo dedicado al estudio semanal y el promedio de calificaciones
-    de los estudiantes universitarios.\
--   **Variables:**
-    -   Variable explicativa (independiente): Tiempo de estudio semanal
-        (en horas).\
-    -   Variable respuesta (dependiente): Promedio de calificaciones al
-        final del semestre (en una escala de 0 a 10).\
--   **Objetivo:** Determinar si los estudiantes que dedican más horas al
-    estudio semanalmente obtienen mejores calificaciones en promedio.
+### Visualización: el gráfico de dispersión
 
-Emplearemos datos simulados para este ejemplo:
+La herramienta más potente para examinar la relación entre dos variables continuas es el **gráfico de dispersión** (*scatterplot*). Nos permite intuir visualmente la **forma**, la **dirección** y la **fuerza** de la relación. Una inspección visual es siempre el punto de partida.
 
-```{r datos, warning=FALSE}
-# Establecer la semilla para reproducibilidad
-set.seed(123)
+### Cuantificación de la asociación: covarianza y correlación
 
-# Número de estudiantes
-n <- 100
+Una vez que la visualización sugiere una tendencia, necesitamos métricas para cuantificarla.
 
-# Generar tiempo de estudio (en horas) como una variable independiente
-tiempo_estudio <- round(runif(n, min = 5, max = 40), 1)
+#### Covarianza
 
-# Relación lineal entre tiempo de estudio y calificaciones (con ruido)
-beta_0 <- 5  # Intercepto
-beta_1 <- 0.1  # Pendiente (efecto del tiempo de estudio)
-sigma <- 0.5  # Varianza del ruido
-
-# Esta será la relación que deseamos "descubrir".
-calificaciones <- round(beta_0 + beta_1 * tiempo_estudio + rnorm(n, mean = 0, sd = sigma), 2)
-
-# Crear un data frame con los datos generados
-datos <- data.frame(Tiempo_Estudio = tiempo_estudio, Calificaciones = calificaciones)
-
-# Visualizar los primeros registros
-head(datos)
-
-```
-:::
-
-### Inspección gráfica e identificación de tendencias
-
-Antes de ajustar un modelo, es esencial realizar una inspección visual
-de los datos. Los gráficos de dispersión son una herramienta útil para
-observar tendencias, relaciones o patrones entre las variables.
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-En el ejemplo, representamos el tiempo de estudio frente a las
-calificaciones. De este modo podemos analizar si los puntos siguen un
-patrón lineal o si muestran comportamientos más complejos.
-
-```{r grafico1, warning=FALSE}
-
-# Graficar los datos de estudio generados anteriormente
-plot(datos$Tiempo_Estudio, datos$Calificaciones,
-     main = "Relación entre Tiempo de Estudio y Calificaciones",
-     xlab = "Tiempo de Estudio (horas/semana)",
-     ylab = "Calificaciones (promedio)",
-     pch = 19, col = "blue")
-
-```
-:::
-
-### Propuesta y ajuste del modelo
-
-Con base en las observaciones previas, se propone un modelo estadístico
-que relacione las variables. En el caso de relaciones lineales, la
-ecuación típica es:
+La **covarianza** es una medida de la variabilidad conjunta de dos variables aleatorias, $X$ e $Y$. Nos indica la dirección de la relación lineal. La covarianza muestral, calculada a partir de nuestras observaciones $(x_i, y_i)$, es:
 
 $$
-\text{Respuesta} = \beta_0 + \beta_1 (\text{Variable explicativa}) + \varepsilon,
+\text{Cov}(x, y) = s_{xy} = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{n-1}
 $$
 
-donde $\beta_0$ es la constante (o intercepto), $\beta_1$ es la
-pendiente, y $\varepsilon$ es el término de error aleatorio.
+El principal inconveniente de la covarianza es que su magnitud depende de las unidades de las variables, lo que la hace difícil de interpretar.
 
-Fíjate que la expresión anterior concuerda con el siguiente principio
-fundamental del análisis de datos:
+#### Coeficiente de correlación de Pearson
 
-$$DATOS = MODELO + ERROR$$
+Para solucionar el problema de la escala, estandarizamos la covarianza, dividiéndola por el producto de las desviaciones típicas de cada variable. El resultado es el **coeficiente de correlación de Pearson ($r$)**:
 
--   Los **datos** representan la realidad (procesos de negocios,
-    clientes, productos, actividades, fenómenos físicos, etc.) que se
-    quiere comprender, predecir o mejorar.
+$$
+r = r_{xy} = \frac{s_{xy}}{s_x s_y}
+$$
 
--   El **modelo** es una representación **simplificada** de la realidad
-    que proponemos para describirla e interpretarla más fácilmente.
+Este coeficiente es **adimensional** y siempre varía entre **-1 y 1**, lo que permite una interpretación universal de la fuerza de la asociación *lineal*.
 
--   El **error** refleja la diferencia entre nuestra representación
-    simplificada de la realidad (el modelo) y los datos que relamente
-    describen esa realidad de forma precisa.
+::: {.callout-tip title="Ejemplo práctico: Horas de estudio vs. Calificaciones"}
+Vamos a plantear un problema que nos acompañará durante todo el capítulo: queremos saber si el tiempo de estudio semanal influye en las calificaciones finales.
 
-::: {.callout-tip title="Ejemplo" collapse="true"}
--   Propuesta del modelo:\
-    $$
-    \text{Calificaciones} = \beta_0 + \beta_1 (\text{Tiempo de Estudio}).
-    $$
--   **Ajuste:** Calcular los valores de \$ \beta\_0 \$ y \$ \beta\_1 \$
-    mediante el método de mínimos cuadrados. Este método busca minimizar
-    la suma de los errores cuadrados entre los valores observados y los
-    predichos por el modelo.
+```{r}
+#| label: fig-exploracion-inicial-full
+#| fig-cap: "Relación entre tiempo de estudio y calificaciones."
+#| echo: true
 
-```{r ajuste1, warning=FALSE}
-
-# Ajustar un modelo de regresión lineal
-modelo <- lm(Calificaciones ~ Tiempo_Estudio, data = datos)
-summary(modelo)
-
-# Graficar los datos de estudio y su recta de regresión lineal
-plot(datos$Tiempo_Estudio, datos$Calificaciones,
-     main = "Relación entre Tiempo de Estudio y Calificaciones",
-     xlab = "Tiempo de Estudio (horas/semana)",
-     ylab = "Calificaciones (promedio)",
-     pch = 19, col = "blue")
-abline(lm(Calificaciones ~ Tiempo_Estudio, data = datos), col = "red", lwd = 2)
-```
-
-A la vista de los estimadores de los parámetros del modelo, tenemos la
-siguiente interpretación:
-
--   Se produce un incremento de la calificiación de $0.1$
-    (aproximadamente) por cada incremento de $1$ hora en el tiempo de
-    estudio. O bien, por cada $10$ horas de estudio, se incrementa la
-    nota en $1$ punto.
-
--   En ocasiones es complicado interpretar el valor de $\beta_0$. En
-    este caso, corresponde a la calificación de los estudiantes que no
-    dedican ningún tiempo de estudio. En este caso sería $5$
-    (aproximadamente).
-:::
-
-### Revisión y diagnóstico del modelo
-
-Una vez ajustado el modelo, es crucial evaluar su calidad. Esto implica
-analizar si los supuestos del modelo se cumplen, como la linealidad, la
-homocedasticidad y la independencia de los errores.
-
-Deberemos realizar las siguientes tareas:
-
--   Comparar los valores predichos por el modelo con los datos
-    observados para verificar su ajuste.
-
--   Examinar los residuos (errores) para identificar posibles problemas,
-    como tendencias no capturadas o varianzas no constantes.
-
-### Reajuste del modelo
-
-Si el diagnóstico revela deficiencias en el modelo ajustado, se plantean
-modificaciones. Estas pueden incluir:
-
--   Transformaciones de variables para mejorar la linealidad.
-
--   Introducción de términos adicionales, como variables cuadráticas o
-    interacciones.
-
--   Cambios a modelos no lineales si el comportamiento de los datos lo
-    requiere.
-
-::: {.callout-tip title="Estudios de Galton sobre estatura"}
-Los estudios de Sir Francis Galton sobre la estatura son un ejemplo
-clásico en estadística y forman parte de la historia de la regresión
-lineal. Galton, un polímata británico del siglo XIX, investigó la
-herencia biológica y publicó en 1889 su libro *Natural Inheritance*,
-donde analizó datos sobre la relación entre las estaturas de padres e
-hijos. Estos estudios no solo sentaron las bases para la regresión
-lineal, sino que también ayudaron a formalizar conceptos clave en
-estadística, haciendo de Galton una figura central en su desarrollo.
-
-**Contexto y propósito**
-
-Galton estaba interesado en cómo las características físicas, como la
-estatura, se transmiten de padres a hijos. Su objetivo era cuantificar
-esta relación y establecer patrones de herencia. En particular, buscó
-responder si los hijos de padres altos tienden a ser más altos y si los
-de padres bajos tienden a ser más bajos.
-
-**Datos recopilados**
-
--   Galton recopiló datos sobre las estaturas de **928 hijos** y sus
-    respectivos **padres**.
--   Las medidas fueron expresadas en pulgadas (1 pulgada = 2.54 cm).\
--   En sus análisis, utilizó el promedio de las estaturas de ambos
-    padres, conocido como **estatura media parental**, para compararlo
-    con la estatura de los hijos.
-
-**Principales hallazgos**
-
-1.  **Relación lineal entre padres e hijos:**\
-    Galton observó que existe una relación positiva entre la estatura de
-    los padres y la de los hijos. Los padres altos tienden a tener hijos
-    altos, y los padres bajos tienden a tener hijos bajos. Esta relación
-    puede modelarse con una línea recta, lo que inspiró la formulación
-    de la regresión lineal.
-
-2.  **Regresión a la media:**
-
-    -   Aunque los hijos de padres altos son, en promedio, más altos que
-        el promedio general de la población, también tienden a ser
-        **menos altos que sus padres**.\
-    -   De manera similar, los hijos de padres bajos son más bajos que
-        el promedio general, pero suelen ser **menos bajos que sus
-        padres**.\
-    -   Este fenómeno, que Galton llamó "regresión a la media", ocurre
-        porque las características extremas tienden a suavizarse en la
-        siguiente generación debido a la influencia de múltiples
-        factores genéticos y ambientales.
-
-3.  **Ecuación de la recta de regresión:**\
-    Galton ajustó una recta para describir la relación entre la estatura
-    media parental ($X$) y la estatura de los hijos ($Y$): $$
-    Y = \beta_0 + \beta_1 X
-    $$ Donde:
-
-    -   $\beta_0$: Intercepto, representa la estatura promedio de los
-        hijos cuando la estatura parental es promedio.
-    -   $\beta_1$: Pendiente, indica cómo cambia la estatura de los
-        hijos por cada unidad de cambio en la estatura media parental.
-
-**Importancia en la Estadística**
-
-1.  **Regresión lineal:**\
-    Este estudio introdujo el concepto de **recta de regresión**, que
-    describe cómo varía la media de una variable dependiente en función
-    de una variable independiente.
-
-2.  **Correlación:**\
-    Galton también estudió el grado de relación entre variables,
-    precursor del concepto de **coeficiente de correlación**
-    desarrollado posteriormente por Karl Pearson, un discípulo suyo.
-
-3.  **Regresión a la media:**\
-    El término y la idea detrás de "regresión a la media" surgieron de
-    estos estudios y son hoy fundamentales en estadística y genética.
-
-**Ejemplo Gráfico**
-
-Galton representó sus datos en gráficos de dispersión, mostrando cómo
-los puntos (pares de estatura media parental y estatura de los hijos) se
-agrupan alrededor de la recta de regresión, ilustrando la tendencia
-general de la relación.
-
-```{r galtonn}
-# Instalar y cargar los paquetes necesarios
 library(ggplot2)
-library(HistData)
+set.seed(123) # Para reproducibilidad
 
-# Cargar los datos de Galton
-data("GaltonFamilies")
-galton_data <- GaltonFamilies
+# Simulación de datos
+datos <- data.frame(
+  Tiempo_Estudio = round(runif(100, min = 5, max = 40), 1)
+)
+datos$Calificaciones <- round(5 + 0.1 * datos$Tiempo_Estudio + rnorm(100, mean = 0, sd = 0.5), 2)
 
-# Crear el modelo de regresión lineal
-modelo <- lm(childHeight ~ midparentHeight, data = galton_data)
+# Visualización
+ggplot(datos, aes(x = Tiempo_Estudio, y = Calificaciones)) +
+  geom_point(color = "#0072B2", alpha = 0.7) +
+  labs(
+    title = "Relación entre Tiempo de Estudio y Calificaciones",
+    x = "Tiempo de Estudio (horas/semana)",
+    y = "Calificaciones (promedio)"
+  ) +
+  theme_classic(base_size = 14)
 
-# Crear el gráfico con ggplot2
-grafico <- ggplot(galton_data, aes(x = midparentHeight, y = childHeight)) +
-  geom_point() +  # Añadir puntos de datos
-  geom_smooth(method = "lm", col = "red") +  # Añadir la recta de regresión
-  labs(title = "Altura de Padres e Hijos (Datos de Galton)",
-       x = "Altura de los Padres",
-       y = "Altura de los Hijos") +
-  annotate("text", x = 67, y = 75, label = paste("y =", round(coef(modelo)[1], 2), "+", round(coef(modelo)[2], 2), "x"), color = "red")
-
-# Mostrar el gráfico
-print(grafico)
+# Cuantificación (los objetos se guardan para usarlos en el texto)
+covarianza <- cov(datos$Tiempo_Estudio, datos$Calificaciones)
+correlacion <- cor(datos$Tiempo_Estudio, datos$Calificaciones)
 ```
+
+El gráfico muestra una clara tendencia lineal positiva. La covarianza toma un valor de `r round(covarianza, 2)`, y el coeficiente de correlación de Pearson es de `r round(correlacion, 2)`. Ambos valores confirman que la asociación lineal es, además de positiva, muy fuerte. Esta evidencia visual y numérica nos da una base sólida para proponer un modelo de regresión lineal.
 :::
 
-## Correlación
+::: {.callout-warning title="¡Correlación no implica causalidad!"}
+El haber encontrado una fuerte correlación positiva entre el tiempo de estudio y las calificaciones (`r round(correlacion, 2)`) no nos autoriza a concluir que *una cosa causa la otra*. La regresión lineal puede demostrar que las variables se mueven juntas y nos permite predecir una a partir de la otra, pero no explica el porqué de la relación.
 
-La correlación es una medida estadística que describe la relación entre
-dos variables. Permite evaluar si existe una asociación entre ellas y en
-qué grado los cambios en una variable están relacionados con los cambios
-en la otra. En el contexto de modelos de regresión, la correlación es un
-paso fundamental para explorar la fuerza y la dirección de la relación
-entre las variables explicativas y la variable respuesta.
-
-::: {.callout-note collapse="true"}
-## Concepto de correlación
-
-La correlación responde a preguntas como:
-
--   ¿A valores altos de una variable le corresponden valores altos de la
-    otra? (correlación positiva).
--   ¿A valores altos de una variable le corresponden valores bajos de la
-    otra? (correlación negativa).
--   ¿No existe un patrón evidente de asociación? (ausencia de
-    correlación).
+Podría existir una tercera variable oculta (p. ej., el interés del alumno en la materia) que influya tanto en las horas de estudio como en las calificaciones. Establecer causalidad requiere un diseño experimental riguroso (asignando aleatoriamente a los estudiantes a diferentes tiempos de estudio), no solo un análisis observacional.
 :::
 
-### Covarianza
+## Formulación teórica del modelo
 
-La **covarianza** es una medida que cuantifica cómo varían conjuntamente
-dos variables. Su fórmula es:\
-$$
-\text{Cov}(X, Y) = \frac{\sum_{i=1}^{n}(X_i - \bar{X})(Y_i - \bar{Y})}{n}
-$$
+Una vez que la exploración sugiere una relación lineal, el siguiente paso es formalizarla matemáticamente. Aquí es donde definimos la estructura teórica del modelo y los supuestos bajo los cuales operará.
 
--   Si la covarianza es positiva, indica una tendencia a que ambas
-    variables aumenten juntas (relación positiva).
+### El modelo poblacional y sus componentes
 
--   Si es negativa, una variable tiende a aumentar mientras la otra
-    disminuye (relación negativa).\
-
--   Una covarianza cercana a cero sugiere que no hay una relación lineal
-    significativa.
-
-Sin embargo, la covarianza tiene una limitación: su valor depende de las
-unidades de medida de las variables, lo que dificulta su interpretación
-directa.
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r galton_covarianza}
-# Cargar los datos de Galton
-data("GaltonFamilies")
-galton_data <- GaltonFamilies
-
-# Seleccionar las variables de interés
-midparent_height <- galton_data$midparentHeight
-child_height <- galton_data$childHeight
-
-# Calcular la covarianza
-covarianza <- round(cov(midparent_height, child_height),3)
-
-# Mostrar el resultado
-print(paste("La covarianza entre la altura de los padres y la altura de los hijos es:", covarianza))
-```
-:::
-
-### Coeficiente de correlación lineal
-
-Para superar la limitación anterior, se utiliza el **coeficiente de
-correlación lineal de Pearson** ($r$), que estandariza la covarianza
-dividiéndola por las desviaciones típicas de las variables:
+El **modelo poblacional** postula que la relación verdadera entre la variable respuesta $Y$ y la predictora $X$ sigue una línea recta, aunque contaminada por cierta aleatoriedad. Para cualquier individuo $i$ de la población, esta relación se describe como:
 
 $$
-r(X, Y) = \frac{\text{Cov}(X, Y)}{\sigma_X \cdot \sigma_Y}
+Y_i = \beta_0 + \beta_1 X_i + \varepsilon_i
 $$
 
-El coeficiente de correlación es adimensional y toma valores entre $-1$
-y $1$, facilitando su interpretación sin importar las unidades de las
-variables.
+En esta ecuación, $\beta_0$ y $\beta_1$ son los **parámetros poblacionales** (el intercepto y la pendiente verdaderos pero desconocidos), y $\varepsilon_i$ es el **error aleatorio**, un componente fundamental que captura todas las fuentes de variabilidad que el modelo no puede explicar por sí solo. Específicamente, este término incluye:
 
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r galton_corr}
-# Cargar los datos de Galton
-data("GaltonFamilies")
-galton_data <- GaltonFamilies
+-   **Variables omitidas:** Factores que también afectan a las calificaciones (como la calidad del sueño, la motivación del estudiante o su conocimiento previo) y que no están en el modelo.
+-   **Error de medida:** Pequeñas imprecisiones al medir las variables (p. ej., un estudiante podría reportar 20 horas de estudio cuando en realidad fueron 19.5).
+-   **Aleatoriedad inherente:** La variabilidad puramente estocástica o impredecible en el comportamiento humano.
 
-# Seleccionar las variables de interés
-midparent_height <- galton_data$midparentHeight
-child_height <- galton_data$childHeight
-
-# Calcular la covarianza
-correlacion_pearson <- round(cor(midparent_height, child_height),2)
-
-# Mostrar el resultado
-print(paste("El coeficiente de correlación de Pearson entre la altura de los padres y la altura de los hijos es:", correlacion_pearson))
-```
-:::
-
-**Interpretación del Coeficiente de Correlación**
-
-1.  **Magnitud:**
-    -   Valores cercanos a $|1|$ indican una relación lineal fuerte.\
-    -   Valores cercanos a $0$ sugieren una relación lineal débil o
-        inexistente.
-2.  **Signo:**
-    -   **Positivo:** Ambas variables tienden a moverse en la misma
-        dirección.\
-    -   **Negativo:** Las variables tienden a moverse en direcciones
-        opuestas.
-
-**Relación lineal y otras relaciones**
-
-Es importante destacar que una correlación de $r = 0$ no implica
-necesariamente que no haya relación entre las variables. Puede haber una
-relación no lineal que el coeficiente de correlación lineal no detecta.
-
-::: {.callout-tip title="Ejemplo" collapse="false"}
-Por ejemplo, en un gráfico de dispersión en forma de parábola, el
-coeficiente de correlación lineal podría ser cercano a 0, a pesar de que
-existe una relación cuadrática clara entre las variables.
-
-```{r corr_0}
-# Generar datos de ejemplo
-set.seed(0)
-x <- seq(-10, 10, length.out = 100)
-y <- x^2 + rnorm(100, mean = 0, sd = 10)
-
-# Calcular el coeficiente de correlación de Pearson
-correlacion_pearson <- cor(x, y)
-
-# Crear el gráfico de dispersión
-plot(x, y, main = "Gráfico de Dispersión con Relación Cuadrática",
-     xlab = "X", ylab = "Y", pch = 19)
-abline(h = 0, v = 0, col = "gray", lty = 2)
-
-# Mostrar el coeficiente de correlación en el gráfico
-text(0, 80, paste("Correlación de Pearson:", round(correlacion_pearson, 2)), col = "red")
-```
-:::
-
-### Aplicación práctica
-
-La correlación es una herramienta inicial esencial en la exploración de
-datos:
-
--   Identifica variables explicativas potenciales para modelos de
-    regresión.\
--   Ayuda a entender la estructura de los datos y a verificar si una
-    relación lineal es razonable.
-
-::: {.callout-tip title="Ejemplo" collapse="false"}
-En un análisis del tiempo de estudio semanal y las calificaciones, se
-puede calcular el coeficiente de correlación $r$ para determinar si los
-estudiantes que estudian más tienden a obtener mejores resultados.
-
-```{r corr_practico_1}
-# Generar datos de ejemplo
-# Calcular el coeficiente de correlación de Pearson
-coef_correlacion <- round(cor(datos$Tiempo_Estudio, datos$Calificaciones),3)
-
-# Mostrar el coeficiente de correlación
-cat("El coeficiente de correlación entre el tiempo de estudio y las calificaciones es:", coef_correlacion, "\n")
-
-```
-:::
-
-## Regresión lineal simple
-
-La regresión lineal simple es una de las herramientas más fundamentales
-y ampliamente utilizadas en el análisis estadístico. Su objetivo
-principal es modelar la relación entre dos variables: una variable
-explicativa (independiente) y una variable respuesta (dependiente). Este
-modelo permite no solo describir cómo se relacionan estas dos variables,
-sino también realizar predicciones basadas en dicha relación.
-
-El concepto básico de la regresión lineal simple es ajustar una recta
-que minimice las discrepancias entre los valores observados y los
-predichos por el modelo. La ecuación general de este modelo es:\
-$$
-Y = \beta_0 + \beta_1 X + \varepsilon,
-$$ donde:
-
--   $Y$ es la variable dependiente o respuesta.\
--   $X$ es la variable independiente o explicativa.\
--   La ecuación recibe el nombre de **recta de regresión**.\
--   Los coeficiente $\beta_0$ y $\beta_1$ reciben el nombre de
-    **coeficientes del modelo de regresión**.
-    -   $\beta_0$ es el intercepto, que representa el valor de $Y$
-        cuando $X = 0$.\
-    -   $\beta_1$ es la pendiente, que indica el cambio esperado en $Y$
-        por cada unidad de cambio en $X$.\
--   $\varepsilon$ es un término de error que captura la variabilidad no
-    explicada por el modelo.
-
-Para cada valor fijo de $X$, $Y$ es una variable aleatoria, es decir,
-$Y$ sigue una distribución de probabilidad para cada valor fijo de $X$,
-con media o valor esperado: $$
-E[Y|X]=\beta_0+\beta_1X,
-$$ y con varianza: $$
-Var(Y|X)=Var(\beta_0+\beta_1X+\varepsilon)=Var(\varepsilon)=\sigma^2.
-$$
-
-::: {.callout-note title="Propiedades Clave" collapse="false"}
-Para que las inferencias del modelo sean válidas, se requieren ciertos
-supuestos sobre los datos y el término de error $\varepsilon$:
-
-1.  **Linealidad:** La relación entre $X$ y $Y$ es lineal. Es decir, la
-    esperanza de $Y$ es una función **lineal** de $X$.\
-2.  **Independencia:** Los términos de error $\varepsilon$ son
-    independientes entre sí. Los errores para observaciones distintas
-    son incorrelados, es decir $\varepsilon_i$ y $\varepsilon_j$ son no
-    correlados y, por tanto, también lo son $Y_i$ e $Y_j$.
-3.  **Homocedasticidad:** La varianza de los términos de error
-    $\varepsilon$ es constante para todos los valores de $X$. Es decir,
-    la varianza de $Y$ es constante, no depende $X$.\
-
-Cuando el objetivo no es sólo estimar la recta, sino inferir con ella,
-entonces se asume una hipótesis más: la normalidad de la variable
-respuesta, o lo que es lo mismo, del error aleatorio:
-
-4.  **Normalidad:** Los términos de error $\varepsilon$ siguen una
-    distribución normal con media cero y varianza constante:\
-    $$
-        \varepsilon_i \overset{\mathrm{iid}}{\sim} N(0, \sigma^2) , \hspace{0.5cm} i=1,\ldots,n
-        $$
-
-Estos supuestos son esenciales para garantizar la validez de las
-estimaciones y conclusiones derivadas del modelo.
-:::
-
-En resumen, el modelo de regresión lineal simple, implica que las
-respuestas $Y_i$ proceden de una distribución de probabilidad con
-esperanza: $$
-E[Y_i|X_i]=\beta_0+\beta_1X_i \hspace{.5cm} i=1,\dots,n,
-$$ y con varianza $\sigma^2$, para todas las $Y$. Además, cualesquiera
-dos respuestas $Y_i$ e $Y_j$ son incorreladas.
-
-La regresión lineal simple es fundamental en estadística y ciencia de
-datos porque proporciona un marco intuitivo y matemáticamente riguroso
-para analizar relaciones. Algunas aplicaciones comunes incluyen:
-
--   Predecir valores futuros, como ingresos o gastos, en función de un
-    predictor.\
--   Evaluar el impacto de una variable en otra, como el efecto de la
-    inversión publicitaria en las ventas.\
--   Explorar relaciones lineales entre variables en estudios científicos
-    o sociales.
-
-En esta sección, exploraremos los fundamentos de la regresión lineal
-simple, desde su formulación teórica hasta su implementación práctica.
-Veremos cómo ajustar este modelo, interpretar sus parámetros, y evaluar
-su adecuación utilizando herramientas estadísticas y gráficas. Además,
-se presentarán ejemplos prácticos para ilustrar su aplicación en
-situaciones reales.
-
-### Estimación de los parámetros del modelo
-
-Los parámetros del modelo ($\beta_0$ y $\beta_1$) se estiman utilizando
-el **método de mínimos cuadrados**. Llamaremos $\hat{\beta_0}$ y
-$\hat{\beta_1}$ a los estimadores de los parámetros.
-
-Llamaremos **valor predicho (**$\hat{Y}$):\
-$$
-  \hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_i,
-  $$ al valor estimado de $Y$ para un valor dado de $X$.
-
-Y nos referimos al **residuo (**$e_i$):\
-$$
-  e_i = Y_i - \hat{Y}_i,
-  $$ para medir la discrepancia entre el valor observado $Y_i$ y el
-valor predicho $\hat{Y}_i$.
-
-El método de los mínimos cuadrados busca minimizar la suma de los
-errores cuadráticos (residuos) entre los valores observados de $Y$ y los
-valores predichos ($\hat{Y}$):
+Como nunca observamos la población entera, nuestro trabajo consiste en usar una muestra para estimar el **modelo muestral**:
 
 $$
-\text{SSE} = \sum_{i=1}^n e_i^2 =\sum_{i=1}^{n} (Y_i - \hat{Y}_i)^2
-= \sum_{i=1}^{n} \left(Y_i - (\hat{\beta_0} + \hat{\beta_1}
-X_i)\right)^2. 
+\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i
 $$
+
+Aquí, los "gorros" ($\hat{\cdot}$) denotan **estimaciones** calculadas a partir de la muestra. La diferencia entre el valor real y el predicho, $e_i = y_i - \hat{y}_i$, se conoce como **residuo**.
+
+### Los supuestos del modelo lineal clásico (Gauss-Markov)
+
+Para que el puente entre nuestro modelo muestral y la realidad poblacional sea sólido, debemos asumir que los errores teóricos $\varepsilon_i$ se comportan de una manera predecible y ordenada.
+
+1.  **Linealidad**: La relación entre $X$ y el valor esperado de $Y$ es, en promedio, una línea recta: $E[Y_i | X_i] = \beta_0 + \beta_1 X_i$.
+2.  **Independencia de los errores**: El error de una observación no está correlacionado con el error de ninguna otra: $\text{Cov}(\varepsilon_i, \varepsilon_j) = 0$ para $i \neq j$.
+3.  **Homocedasticidad**: La varianza del error es constante ($\sigma^2$) para todos los valores de $X$: $Var(\varepsilon_i | X_i) = \sigma^2$. Esto significa que la dispersión de los datos alrededor de la línea de regresión es la misma a lo largo de todos los valores de la variable predictora. La violación de este supuesto se conoce como **heterocedasticidad**, donde la dispersión de los errores cambia (p. ej., aumenta a medida que $X$ crece).
+
+Cuando el objetivo no es sólo estimar la recta, sino inferir con ella, entonces se asume una hipótesis más: la normalidad de la variable respuesta, o lo que es lo mismo, del error aleatorio:
+
+4.  **Normalidad de los errores**: Para la inferencia, se asume que los errores siguen una distribución Normal con media cero y varianza $\sigma^2$: $\varepsilon_i \sim N(0, \sigma^2)$.
+
+Estos supuestos son esenciales para garantizar la validez de las estimaciones y conclusiones derivadas del modelo.
+
+## Estimación de los parámetros
+
+Necesitamos un método para encontrar la "mejor" recta de ajuste. El **Método de Mínimos Cuadrados Ordinarios (MCO/OLS)** nos proporciona este criterio.
+
+### El criterio de mínimos cuadrados
+
+MCO busca la recta que minimice la **Suma de los Cuadrados del Error (SSE)**, es decir, la suma de las distancias verticales al cuadrado entre los puntos observados y la recta de regresión:
+
+$$
+\text{SSE}(\beta_0, \beta_1) = \sum_{i=1}^{n} e_i^2 = \sum_{i=1}^{n} (y_i-\hat{y})^2 = \sum_{i=1}^{n} (y_i - (\beta_0 + \beta_1 x_i))^2
+$$
+
+### Derivación matemática de los estimadores
+
+Para encontrar los valores de $\beta_0$ y $\beta_1$ que minimizan esta función, recurrimos al cálculo. Tratamos la SSE como una función de dos variables y calculamos sus derivadas parciales, igualándolas a cero para encontrar el mínimo.
+
+
+$$
+\frac{\partial \text{SSE}}{\partial \beta_0} = -2 \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i) = 0
+$$
+
+$$
+\frac{\partial \text{SSE}}{\partial \beta_1} = -2 \sum_{i=1}^{n} x_i (y_i - \beta_0 - \beta_1 x_i) = 0
+$$
+
+La resolución de este sistema de dos ecuaciones (conocidas como las **ecuaciones normales**) nos proporciona las fórmulas para los estimadores de MCO:
+
+$$
+\hat{\beta}_1 = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^{n}(x_i - \bar{x})^2} = \frac{s_{xy}}{s_{xx}}
+$$
+$$ \hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}
+$$
+
+#### Interpretación práctica de los coeficientes
+
+Una vez estimados, los coeficientes tienen una interpretación muy concreta y útil:
+
+* **Pendiente ($\hat{\beta}_1$):** Representa el cambio promedio estimado en la variable respuesta $Y$ por cada **aumento de una unidad** en la variable predictora $X$. En nuestro ejemplo, sería el número de puntos que se espera que aumente la calificación final por cada hora adicional de estudio semanal.
+
+* **Intercepto ($\hat{\beta}_0$):** Es el valor promedio estimado de la variable respuesta $Y$ cuando la variable predictora $X$ es igual a cero. La interpretación del intercepto solo tiene sentido práctico si $X=0$ es un valor plausible y se encuentra dentro del rango de nuestros datos. De lo contrario (como en nuestro ejemplo, donde nadie estudia 0 horas), a menudo se considera simplemente un ancla matemática para la recta de regresión.
 
 ::: {.callout-note title="Minimización de SSE" collapse="true"}
 La obtención de los estimadores de mínimos cuadrados para la regresión
@@ -653,7 +191,7 @@ $\beta_1$ y resolvemos el sistema de ecuaciones.
 
 $$
     \frac{\partial SSE}{\partial \beta_0} = -2\sum_{i=1}^n
-    \left(Y_i - (\beta_0 + \beta_1 X_i)\right).
+    \left(y_i - (\beta_0 + \beta_1 x_i)\right).
   $$
 
 ```         
@@ -661,8 +199,8 @@ Igualando a cero:
 ```
 
 $$ 
-    \sum_{i=1}^n \left(Y_i - \beta_0 - \beta_1
-    X_i\right) = 0. 
+    \sum_{i=1}^n \left(y_i - \beta_0 - \beta_1
+    x_i\right) = 0. 
   $$
 
 ```         
@@ -670,14 +208,14 @@ Reordenando:
 ```
 
 $$
-    n\beta_0 + \beta_1 \sum_{i=1}^n X_i = \sum_{i=1}^n Y_i. \tag{1}
+    n\beta_0 + \beta_1 \sum_{i=1}^n x_i = \sum_{i=1}^n y_i. \tag{1}
   $$
 
 2.  **Primera derivada con respecto a** $\beta_1$:
 
 $$
-    \frac{\partial SSE}{\partial \beta_1} = -2\sum_{i=1}^n X_i
-    \left(Y_i - (\beta_0 + \beta_1 X_i)\right).
+    \frac{\partial SSE}{\partial \beta_1} = -2\sum_{i=1}^n x_i
+    \left(y_i - (\beta_0 + \beta_1 x_i)\right).
     $$
 
 ```         
@@ -685,8 +223,8 @@ Igualando a cero:
 ```
 
 $$ 
-    \sum_{i=1}^n X_i \left(Y_i - \beta_0 -
-    \beta_1 X_i\right) = 0. 
+    \sum_{i=1}^n x_i \left(y_i - \beta_0 -
+    \beta_1 x_i\right) = 0. 
    $$
 
 ```         
@@ -694,1334 +232,612 @@ Reordenando:
 ```
 
 $$
-    \beta_0 \sum_{i=1}^n X_i + \beta_1 \sum_{i=1}^n X_i^2 = \sum_{i=1}^n X_i Y_i. \tag{2}
+    \beta_0 \sum_{i=1}^n x_i + \beta_1 \sum_{i=1}^n x_i^2 = \sum_{i=1}^n x_i y_i. \tag{2}
    $$
 
 **Resolución del Sistema de Ecuaciones**
 
 El sistema está dado por las ecuaciones (1) y (2):
 
-1.  $n\beta_0 + \beta_1 \sum_{i=1}^n X_i = \sum_{i=1}^n Y_i.$\
-2.  $\beta_0 \sum_{i=1}^n X_i + \beta_1 \sum_{i=1}^n X_i^2 = \sum_{i=1}^n X_i Y_i.$
+1.  $n\beta_0 + \beta_1 \sum_{i=1}^n x_i = \sum_{i=1}^n y_i.$\
+2.  $\beta_0 \sum_{i=1}^n x_i + \beta_1 \sum_{i=1}^n x_i^2 = \sum_{i=1}^n x_i y_i.$
 
 Resolviendo para $\beta_0$ y $\beta_1$:
 
 1.  De la primera ecuación, despejamos $\beta_0$:\
     $$
-    \beta_0 = \frac{\sum_{i=1}^n Y_i - \beta_1 \sum_{i=1}^n X_i}{n}. \tag{3}
+    \beta_0 = \frac{\sum_{i=1}^n y_i - \beta_1 \sum_{i=1}^n x_i}{n}. \tag{3}
     $$
 
 2.  Sustituimos $\beta_0$ en la segunda ecuación:\
     $$
-    \frac{\sum_{i=1}^n Y_i - \beta_1 \sum_{i=1}^n X_i}{n} \sum_{i=1}^n X_i + \beta_1 \sum_{i=1}^n X_i^2 = \sum_{i=1}^n X_i Y_i.
+    \frac{\sum_{i=1}^n y_i - \beta_1 \sum_{i=1}^n x_i}{n} \sum_{i=1}^n x_i + \beta_1 \sum_{i=1}^n x_i^2 = \sum_{i=1}^n x_i y_i.
     $$
 
     Simplificando:\
     $$
-    \beta_1 \left(\sum_{i=1}^n X_i^2 - \frac{(\sum_{i=1}^n X_i)^2}{n}\right) = \sum_{i=1}^n X_i Y_i - \frac{\sum_{i=1}^n X_i \sum_{i=1}^n Y_i}{n}.
+    \beta_1 \left(\sum_{i=1}^n x_i^2 - \frac{(\sum_{i=1}^n x_i)^2}{n}\right) = \sum_{i=1}^n x_i y_i - \frac{\sum_{i=1}^n x_i \sum_{i=1}^n y_i}{n}.
     $$
 
 3.  Expresamos $\beta_1$:\
     $$
-    \beta_1 = \frac{\sum_{i=1}^n X_i Y_i - \frac{\sum_{i=1}^n X_i \sum_{i=1}^n Y_i}{n}}{\sum_{i=1}^n X_i^2 - \frac{(\sum_{i=1}^n X_i)^2}{n}}.
+    \beta_1 = \frac{\sum_{i=1}^n x_i y_i - \frac{\sum_{i=1}^n x_i \sum_{i=1}^n y_i}{n}}{\sum_{i=1}^n x_i^2 - \frac{(\sum_{i=1}^n x_i)^2}{n}}.
     $$ Esta es la fórmula para $\beta_1$, que puede reescribirse como:\
     $$
-    \beta_1 = \frac{\text{Cov}(X, Y)}{\text{Var}(X)},
-    $$ donde $\text{Cov}(X, Y)$ y $\text{Var}(X)$ son la covarianza y la
-    varianza muestral de $X$ y $Y$.
+    \beta_1 = \frac{\text{Cov}(x, y)}{\text{Var}(x)},
+    $$ donde $\text{Cov}(x, y)$ y $\text{Var}(x)$ son la covarianza y la
+    varianza muestral de $x$ y $y$.
 
 4.  Finalmente, sustituimos $\beta_1$ en la ecuación (3) para obtener
     $\beta_0$:\
     $$
-    \beta_0 = \bar{Y} - \beta_1 \bar{X},
-    $$ donde $\bar{X}$ y $\bar{Y}$ son las medias de $X$ y $Y$.
+    \beta_0 = \bar{y} - \beta_1 \bar{x},
+    $$ donde $\bar{x}$ y $\bar{y}$ son las medias de $x$ y $y$.
 :::
 
-Las fórmulas para los estimadores de mínimos cuadrados son:
+Bajo los supuestos del modelo, el **Teorema de Gauss-Markov** demuestra que estos estimadores son los **Mejores Estimadores Lineales Insesgados (MELI / BLUE)**.
 
-$$
-\hat{\beta}_1 = \frac{\text{Cov}(X, Y)}{\text{Var}(X)} = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{\sum_{i=1}^n (X_i - \bar{X})^2},
-$$ $$
-\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{X},
-$$ donde $\bar{X}$ y $\bar{Y}$ son las medias de $X$ y $Y$,
-respectivamente.
+## Inferencia y bondad de ajuste
 
-::: {.callout-caution title="Ejercicio" collapse="true"}
-Asumiendo la normalidad de la variable respuesta: $$
-    \varepsilon_i \overset{\mathrm{iid}}{\sim} N(0, \sigma^2) \Leftrightarrow Y_i \overset{\mathrm{iid}}{\sim} N(\beta_0+\beta_1X_i,\sigma^2), \hspace{0.5cm} i=1,\ldots,n.
+Una vez hemos estimado los parámetros del modelo, nuestro trabajo apenas ha comenzado. Ahora debemos pasar de la descripción a la inferencia. Necesitamos un conjunto de herramientas que nos permitan responder a preguntas cruciales: ¿Son nuestros coeficientes estimados, $\hat{\beta}_0$ y $\hat{\beta}_1$, meras casualidades de nuestra muestra o reflejan una relación real en la población? ¿Qué tan bueno es nuestro modelo para explicar la variabilidad de la variable respuesta? Esta sección se dedica a responder estas preguntas.
+
+
+### Propiedades de los estimadores de MCO
+
+Antes de realizar inferencias, es fundamental entender las propiedades teóricas de los estimadores que hemos calculado.
+
+* **Insesgadez**: Los estimadores de MCO son insesgados. Esto significa que si pudiéramos repetir nuestro muestreo muchísimas veces y calcular los estimadores en cada muestra, el promedio de todas nuestras estimaciones de $\hat{\beta}_0$ y $\hat{\beta}_1$ convergería a los verdaderos valores poblacionales $\beta_0$ y $\beta_1$. Matemáticamente:
+    $$
+    E[\hat{\beta}_0] = \beta_0 \quad \text{y} \quad E[\hat{\beta}_1] = \beta_1
     $$
 
-Se tiene entonces la verosimilud para $\beta=(\beta_0,\beta_1)$,
-
-$$
-L(\beta; Y)=exp \left ( -\frac{\sum_{i=1}^{n}(Y_i-\beta_0-\beta_1X_i)^2}{2\sigma^2} \right).
-$$
-
-En este ejercicio, pedimos buscar los valores de $\beta$ tales que
-maximizan la verosimilud. Esto es, los estimadores máximo verosimiles.
-Para ello derivamos e igualamos a cero. Se pide demostrar que los
-estimadores máximo verosimiles coinciden con los obtenidos por mínimos
-cuadrados.
-:::
-
-### Propiedades de los estimadores
-
-Estudiemos algunas de las propiedades de los estimadores de mı́nimos
-cuadrados y del modelo de regresión ajustado.
-
--   Sean: $$
-    S_{xx}=\sum_{i=1}^n (X_i-\bar{X})^2
-    $$ y $$
-    S_{xy}=\sum_{i=1}^n (X_i-\bar{X})(Y_i-\bar{Y})
-    $$ Entonces: $$
-    \hat{\beta_1}=\frac{S_{xy}}{S_{xx}}
+* **Varianza de los estimadores**: Las fórmulas para la varianza de nuestros estimadores cuantifican su precisión. Una varianza pequeña implica que el estimador es más estable a través de diferentes muestras.
     $$
-
--   Los estimadores de $\beta_0$ y $\beta_1$ son insesgados, es decir:
+    Var(\hat{\beta}_1) = \frac{\sigma^2}{\sum_{i=1}^{n}(x_i - \bar{x})^2} = \frac{\sigma^2}{S_{xx}}
     $$
-    E[\hat{\beta_0}]=\beta_0, \space E[\hat{\beta_1}]=\beta_1
     $$
+    Var(\hat{\beta}_0) = \sigma^2 \left[ \frac{1}{n} + \frac{\bar{x}^2}{S_{xx}} \right]
+    $$
+    Donde $\sigma^2$ es la varianza (desconocida) del término de error $\varepsilon$.
 
--   Las varianzas de los estimadores de $\beta_0$ y $\beta_1$ son: $$
-    Var(\hat{\beta_1})=\frac{\sigma^2}{S_{xx}}
-    $$ donde $\sigma^2$ es la varianza del error $\varepsilon$. En la
-    práctica, como $\sigma^2$ no se conoce, se estima con la varianza
-    residual ($\hat{\sigma}^2$): $$
-    \hat{\sigma}^2=\frac{SSE}{n-2},
-    $$ siendo $SSE=\sum_{i=1}^{n}(Y_i-\hat{Y_i})^2$, la suma de los
-    cuadrados de los residos y $n-2$ los grados de libertad (por estimar
-    dos parámetros). De modo que:
+* **Teorema de Gauss-Markov**: Este es uno de los resultados más importantes de la teoría de la regresión. Establece que, bajo los supuestos de linealidad, independencia y homocedasticidad (no se requiere normalidad), los estimadores de MCO son los **Mejores Estimadores Lineales Insesgados** (MELI, o BLUE en inglés). Esto significa que, de entre toda la clase de estimadores que son lineales e insesgados, los de MCO son los que tienen la menor varianza posible.
 
-$$
-Var(\hat{\beta_1}) \approx \frac{\hat{\sigma}^2}{S_{xx}}
-$$
-
-De igual modo tenemos: $$
-Var(\hat{\beta_0}) \approx \hat{\sigma}^2 \left ( \frac{1}{n}+\frac{\bar{X}^2}{S_{xx}}\right )
-$$
-
--   Teorema de Gaus-Markov: Para el modelo de regresión con
-    $E[\varepsilon] = 0$, $Var(\varepsilon) = \sigma^2$ y los errores
-    incorrelados, se tiene que los estimadores $\hat{\beta_0}$ y
-    $\hat{\beta_1}$ son insesgados y de mı́nima varianza. Demostración en
-    [@kutner2005applied].
 
 ::: {.callout-note title="Propiedades adicionales para las predicciones y para los residuos" collapse="false"}
 -   La suma de los residuos es cero: $$
-      \sum_{i=1}^n e_i=\sum_{i=1}^n(Y_i-\hat{Y_i})=0
+      \sum_{i=1}^n e_i=\sum_{i=1}^n(y_i-\hat{y_i})=0
       $$
 
 -   La suma de los valores observados es igual a la suma de los valores
     ajustados: $$
-      \sum_{i=1}^n Y_i=\sum_{i=1}^n \hat{Y_i}
+      \sum_{i=1}^n y_i=\sum_{i=1}^n \hat{y_i}
       $$
 
 -   La suma de los residuos ponderados por los regresores es cero: $$
-      \sum_{i=1}^n X_ie_i=0
+      \sum_{i=1}^n x_ie_i=0
       $$
 
 -   La suma de los residuos ponderados por las predicciones es cero: $$
-      \sum_{i=1}^n \hat{Y_i}e_i=0
+      \sum_{i=1}^n \hat{y_i}e_i=0
       $$
 
--   La recta de regresión contiene el punto $(\bar{X},\bar{Y})$:
+-   La recta de regresión contiene el punto $(\bar{x},\bar{y})$:
 :::
 
 ::: {.callout-tip title="Ejemplo" collapse="true"}
 Para los datos de calificaciones y tiempo de estudio, estos son los
 estimadores de los parámetros del modelo de regresión:
 
-```{r estimadores}
-# Ajustar el modelo de regresión lineal
-modelo <- lm(calificaciones ~ tiempo_estudio)
+```{r}
+#| label: lm-summary-full
+#| echo: true
 
-# Obtener estimadores de los parámetros y errores estándar
-estimadores <- coef(summary(modelo))  # Incluye estimadores y errores estándar
+# 1. Ajustamos el modelo lineal
+modelo_estudio <- lm(Calificaciones ~ Tiempo_Estudio, data = datos)
 
-# Imprimir los resultados
-cat("Estimadores para los parámetros del modelo:\n")
-print(estimadores)
+# 2. Obtenemos el resumen completo del modelo
+summary(modelo_estudio)
 ```
 :::
 
-Una vez obtenida la recta de regresión, surgen una serie de preguntas
-interesantes:
+### Estimación de la varianza del error
 
--   ¿Cómo de bien describe la ecuación de regresión los datos
-    observados?
--   ¿Podemos emplear este modelo para predecir nuevas observaciones?
--   ¿Se cumplen todas las suposiciones del modelo?
-
-Todas estas cuestiones serán analizadas antes de adoptar el modelo como
-válido. Una herramienta muy importante en la validación del modelo será
-el estudio de los residuos. Lo veremos más adelante.
-
-### Inferencia sobre los parámetros del modelo
-
-En regresión, con frecuencia interesa realizar contraste de hipótesis o
-construir intervalos de confianza para los parámetros del modelo.
-
-Para hacer inferencias consideramos la distribución en el muestreo de
-los estimadores de dichos parámetros. Este procedimiento requiere que
-tengamos en cuenta la suposición de normalidad sobre los errores
-$\varepsilon_i$ , es decir: $$
-    \varepsilon_i \overset{\mathrm{iid}}{\sim} N(0, \sigma^2) 
-$$ Entonces: $$
-Y_i\sim N(\beta_0+\beta_1X,\sigma^2),
-$$ y se puede demostrar que: $$
-\hat{\beta_1} \sim N\left (\beta_1,\frac{\sigma^2}{S_{xx}}\right),
-$$ $$
-\hat{\beta_0} \sim N\left ( \beta_0, \sigma^2 \left ( \frac{1}{n} + \frac{\bar{X}^2}{S_{xx}} \right) \right )
-$$
-
-Puesto que las varianzas de los parámetros1 dependen de $\sigma^2$ ,
-cuando el modelo de regresión es adecuado, podemos estimarlas
-sustituyendo dicho valor por su estimador insesgado $s^2$. En este caso,
-la distribución de los parámetros ya no será normal, al igual que
-ocurrı́a en la distribución del valor esperado $\mu$ en una población
-i.i.d., aparece la distribución t-Student: $$
-t=\frac{\hat{\beta_1}-\beta_1}{SE({\hat{\beta_1}})}\sim t_{n-2},
-$$ siendo $SE(\hat{\beta_1})=\frac{s}{\sqrt{S_{xx}}}$, es una t-Student
-con $n-2$ grados de ligertad.
-
-#### Intervalo de confianza
-
-Así, su intervalo de confianza al $1-\alpha\%$ calculado a partir de la
-distribución en el muestro es: $$
-IC(\beta_1;1-\alpha)=\hat{\beta_1} \pm t_{1-\alpha/2,n-2}\sqrt{\frac{s^2}{S_{xx}}},
-$$ donde $t_{1-\alpha/2,n-2}$ es el cuantil $1-\alpha/2$ de una
-distribución $t$ con $n-2$ grados de libertad (los correspondientes a
-$s^2$).
-
-#### Contraste de hipótesis
-
-En regresión, normalmente estamos interesado en realizar el siguiente
-contraste de hipótesis: $$
-H_0:\beta_1=0 \text{ frente a } H_1: \beta_1\neq 0.
-$$ De este modo, si no podemos rechazar la hipótesis nula, podemos
-concluir que no existe prueba (en los datos) de una relación lineal
-significativa entre las variables estudiadas. Este tipo de contraste nos
-será muy útil cuando trabajemos con modelos con más de una variable para
-eliminar aquellas que no son importantes dentro del mismo.
-
-En el caso del modelo de regresión lineal simple, no rechazar $H_0$
-implica que la mejor predicción para todas las observaciones es:
-$\hat{Y_i}=Y_i$, o bien que la relación entre las variables $X$ e $Y$ no
-es lineal y, entonces, demos corregir nuestro modelo.
-
-Por otro lado, rechazar la hipótesis nula en favor de la alternativa,
-significa que la variable $X$ influye al explicar la variabilidad de la
-variable $Y$. Quizás el modelo no sea el más adecuado, pero no podemos
-eliminar la variable del mismo.
-
-Para realizar el contraste, como $\varepsilon_i$ sin variables i.i.d.
-tales que $\varepsilon_i\sim N(0,\sigma^2)$, entonces:
+Las fórmulas de la varianza de los estimadores dependen de $\sigma^2$, la varianza del error poblacional, que es desconocida. Por lo tanto, necesitamos estimarla a partir de nuestros datos. Un estimador insesgado de $\sigma^2$ es la **Media Cuadrática del Error (MSE)**:
 
 $$
-Y_i\sim N(\beta_0+\beta_1X,\sigma^2), \text{ } \hat{\beta_1} \sim N\left (0,\frac{\sigma^2}{S_{xx}}\right)
+\hat{\sigma}^2 = \text{MSE} = \frac{\text{SSE}}{n-2} = \frac{\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}{n-2}
 $$
 
-De manera que si, como es lo habitual, $\sigma^2$ es desconocida, como
-$E[\hat{\sigma^2}]=\sigma^2$, se tiene que, bajo la hipótesis nula: $$
-t=\frac{\hat{\beta_1}}{SE({\hat{\beta_1}})}\sim t_{n-2},
-$$ donde $SE({\hat{\beta_1}})=\sqrt{\frac{\hat{\sigma^2}}{S_{xx}}}$, es
-el error estándar estimado del parámetro $\hat{\beta_1}$. De este modo,
-la hipótesis nula será rechazada si $|t|>t_{\alpha/2,n-2}$, siendo
-$\alpha$, el nivel de significación del contraste.
+Dividimos por $n-2$, los **grados de libertad del error**, porque hemos "gastado" dos grados de libertad de nuestros datos para estimar los dos parámetros, $\beta_0$ y $\beta_1$. La raíz cuadrada de la MSE, $\hat{\sigma}$, se conoce como el **error estándar de los residuos** y es una medida de la dispersión promedio de los puntos alrededor de la recta de regresión.
 
-::: {.callout-important title="Para recordar"}
-En los programas estadı́sticos se suele proporcionar el p-valor del
-contraste. Puedes repasar el significado de p-valor proporcionado en la
-asignatura de Inferencia.
-:::
+#### El error estándar de los residuos y el RMSE
 
-::: {.callout-tip title="Ejemplo" collapse="true"}
-A continuación se presenta un resumen del modelo. Podemos ver los
-p-valores asociados a cada uno de los parámetros del modelo.
+La raíz cuadrada de la MSE, $\hat{\sigma}$, se conoce formalmente como el **error estándar de los residuos** (*Residual Standard Error*). Este valor es nuestra estimación de la desviación estándar del error poblacional, $\sigma$, y es una medida de la dispersión promedio de los puntos alrededor de la recta de regresión.
 
-```{r estimadores2}
-# Ajustar el modelo de regresión lineal
-modelo <- lm(calificaciones ~ tiempo_estudio)
+$$
+\hat{\sigma} = \sqrt{\text{MSE}}
+$$
 
-# Obtener resumen del modelo
-summary(modelo)
-```
-:::
+En el campo del modelado predictivo y el *machine learning*, esta misma cantidad se conoce como la **Raíz del Error Cuadrático Medio** o **RMSE** (*Root Mean Squared Error*). Aunque la fórmula es idéntica, la interpretación del RMSE se centra en la **evaluación del rendimiento predictivo** del modelo. El RMSE nos dice, en promedio, cuál es la magnitud del error de predicción de nuestro modelo, y tiene la ventaja de estar en las **mismas unidades** que la variable respuesta $Y$. Por ejemplo, si estamos prediciendo precios de viviendas en euros, un RMSE de 5000 significa que nuestras predicciones se desvían, en promedio, unos 5000 € de los precios reales.
 
-### Descomposición de la varianza: ANOVA
+### Análisis de la Varianza (ANOVA) para la significancia de la regresión
 
-La descomposición de la varianza es un paso crucial para evaluar la
-calidad del ajuste del modelo de regresión lineal simple. A través de un
-análisis de varianza (ANOVA), se divide la variabilidad total de la
-variable respuesta ($Y$) en componentes atribuibles al modelo y al
-error, proporcionando un marco para evaluar si la relación entre $X$ e
-$Y$ es estadísticamente significativa. Un modelo es bueno si la
-variabilidad explicada es mucha, o lo que es lo mismo, si las
-diferencias entre los datos y las predicciones según el modelo son
-pequeñas.
+Una vez hemos estimado los coeficientes, necesitamos una prueba formal para determinar si el modelo en su conjunto es útil. Es decir, ¿la variable predictora $X$ explica una porción de la variabilidad de la variable respuesta $Y$ que sea estadísticamente significativa, o la relación que observamos podría deberse simplemente al azar? El **Análisis de la Varianza (ANOVA)** nos proporciona la herramienta para responder a esta pregunta a través del **contraste F de significancia global**.
+
+Las hipótesis de este contraste son:
+
+* $H_0: \beta_1 = 0$: La hipótesis nula postula que no existe una relación lineal entre $X$ e $Y$. El modelo no tiene poder explicativo y no es mejor que usar simplemente la media, $\bar{y}$, como predicción para cualquier valor de $x$.
+* $H_1: \beta_1 \neq 0$: La hipótesis alternativa sostiene que sí existe una relación lineal significativa.
 
 ::: {.callout-caution title="Repaso"}
-Es conveniente repasar el tema de *Análisis de la Varianza* estudiado en
-la asignatura de Inferencia.
+Es conveniente repasar el tema de *Análisis de la Varianza* estudiado en la asignatura de Inferencia, ya que los conceptos son directamente aplicables aquí.
 :::
 
-#### Variabilidad total
+La idea fundamental del ANOVA es comparar la variabilidad que nuestro modelo *explica* con la variabilidad que *no puede explicar* (el error residual). Para ello, se descompone la variabilidad total de nuestras observaciones ($y_i$) en dos partes ortogonales.
 
-La variabilidad total de$Y$ se mide mediante la **Suma Total de los
-Cuadrados (SST)**:
+1.  La **Suma Total de Cuadrados (SST)** mide la variabilidad total de los datos alrededor de su media. Es nuestra referencia base de la dispersión total que hay que explicar.
+    $$
+    \text{SST} = \sum_{i=1}^{n} (y_i - \bar{y})^2
+    $$
 
-$$ SST = \sum_{i=1}^n (Y_i - \bar{Y})^2,
+2.  Esta variabilidad se descompone en:
+    * **Suma de Cuadrados de la Regresión (SSR)**: Mide la parte de la variabilidad total que es explicada por nuestro modelo. Cuantifica cuánto se desvían las predicciones del modelo ($\hat{y}_i$) de la media general ($\bar{y}$).
+        $$
+        \text{SSR} = \sum_{i=1}^{n} (\hat{y}_i - \bar{y})^2
+        $$
+    * **Suma de Cuadrados del Error (SSE)**: Mide la variabilidad residual, es decir, la parte que el modelo no puede capturar. Cuantifica la dispersión de los puntos reales ($y_i$) alrededor de la recta de regresión ($\hat{y}_i$).
+        $$
+        \text{SSE} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
+        $$
+
+La descomposición fundamental de la varianza es, por tanto: $\text{SST} = \text{SSR} + \text{SSE}$.
+
+Para poder comparar estas sumas de cuadrados de forma justa, las estandarizamos dividiéndolas por sus respectivos **grados de libertad**, obteniendo así las **Medias Cuadráticas** (MS):
+
+$$
+\text{MSR} = \frac{\text{SSR}}{1} \quad \quad \quad \text{MSE} = \frac{\text{SSE}}{n-2}
 $$
 
-donde $\bar{Y}$ es la media de $Y$. $SST$ refleja la dispersión general
-de $Y$ respecto a su media.
+Finalmente, el **estadístico F** se construye como el cociente entre la variabilidad explicada por el modelo y la variabilidad no explicada:
 
-**Descomposición de la variabilidad**
-
-El modelo de regresión lineal permite descomponer$SST$ en dos
-componentes principales:
-
-$$ SST = SSR + SSE,
-$$\
-donde:
-
--   $SSR$ (Suma de los Cuadrados del Modelo): Representa la variabilidad
-    explicada por la regresión, es decir, la parte de $Y$ que se puede
-    predecir a partir de $X$:\
-    $$ SSR = \sum_{i=1}^n (\hat{Y}_i - \bar{Y})^2,
-     $$ donde $\hat{Y}_i$ es el valor predicho por el modelo para el
-    $i$-ésimo dato.
-
--   $SSE$ (Suma de los Cuadrados de los Errores): Como hemos visto al
-    inicio de esta sección, representa la variabilidad no explicada por
-    el modelo, es decir, la dispersión de los valores observados
-    respecto a los valores predichos:\
-    $$ SSE = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2.
-     $$
-
-#### Tabla ANOVA
-
-El análisis de varianza organiza la descomposición de la varianza en una
-tabla, donde cada componente se asocia con sus grados de libertad
-($df$), suma de cuadrados ($SS$), media cuadrática ($MS$) y el
-estadístico $F$:
-
-| Fuente    | $df$  | $SS$  | $MS = SS/df$      | Estadístico$F$ |
-|-----------|-------|-------|-------------------|----------------|
-| Regresión | 1     | $SSR$ | $MSR = SSR/1$     | $F = MSR/MSE$  |
-| Error     | $n-2$ | $SSE$ | $MSE = SSE/(n-2)$ |                |
-| Total     | $n-1$ | $SST$ |                   |                |
-
-#### Prueba de significancia global
-
-Para evaluar si $X$ tiene un efecto significativo sobre $Y$, se utiliza
-el estadístico $F$:\
 $$
-F = \frac{MSR}{MSE}.
+F = \frac{\text{MSR}}{\text{MSE}}
 $$
 
--   Bajo la hipótesis nula ($H_0: \beta_1 = 0$), $F$ sigue una
-    distribución $F$ con 1 y $n-2$ grados de libertad.
--   Si el valor $p$ asociado al estadístico $F$ es pequeño
-    ($p < \alpha$), se rechaza $H_0$, indicando que $X$ tiene un efecto
-    significativo sobre $Y$.
+Intuitivamente, el estadístico F actúa como una **ratio de señal a ruido**. La MSR (la "señal") representa la variabilidad que nuestro modelo captura sistemáticamente, mientras que la MSE (el "ruido") representa la variabilidad aleatoria o residual. Un valor de F grande nos dice que la señal es mucho más fuerte que el ruido, lo que apoya la hipótesis de que la relación que hemos modelado es real y no fruto del azar.
 
-El análisis ANOVA permite responder preguntas clave:
+Toda esta información se organiza de forma estándar en la **tabla ANOVA**:
 
--   ¿Qué proporción de la variabilidad de $Y$ es explicada por $X$?\
--   ¿Es significativa esta relación desde el punto de vista estadístico?
+| Fuente    | $df$  | $SS$  | $MS = SS/df$  | Estadístico $F$ |
+|-----------|-------|-------|---------------|-----------------|
+| Regresión | 1     | $SSR$ | $MSR$         | $F = MSR/MSE$   |
+| Error     | $n-2$ | $SSE$ | $MSE$         |                 |
+| Total     | $n-1$ | $SST$ |               |                 |
 
-En el contexto de la regresión lineal simple, esta herramienta no solo
-cuantifica el ajuste del modelo, sino que también valida su relevancia
-estadística.
+Bajo la hipótesis nula ($H_0: \beta_1 = 0$), el estadístico $F$ sigue una distribución $F$ con 1 y $n-2$ grados de libertad. Si el p-valor asociado a nuestro estadístico F es suficientemente pequeño ($p < \alpha$), rechazamos $H_0$ y concluimos que nuestro modelo tiene un poder explicativo estadísticamente significativo.
 
-::: {.callout-tip title="Ejemplo" collapse="true"}
-A continuación se presenta la tabla ANOVA correspondiente al modelo de
-horas de estudio y calificaciones, previamente entrenado.
-
-```{r anova}
-# Ajustar el modelo de regresión lineal
-modelo <- lm(calificaciones ~ tiempo_estudio)
-
-# Obtener y mostrar la tabla ANOVA
-tabla_anova <- anova(modelo)
-cat("Tabla ANOVA:\n")
-print(tabla_anova)
-
-```
-:::
 
 ### Bondad del ajuste: coeficiente de determinación
 
-El coeficiente de determinación ($R^2$) mide qué proporción de la
-variabilidad total en $Y$ es explicada por $X$ a través del modelo:
+El coeficiente de determinación ($R^2$) es una medida clave que cuantifica qué proporción de la variabilidad total observada en la muestra ($y_i$) es explicada por la relación lineal con $X$ a través del modelo. Su fórmula se deriva de la descomposición de la varianza:
 
 $$
-R^2 = 1 - \frac{\text{Suma de los Cuadrados de los Residuos (SSE)}}{\text{Suma Total de los Cuadrados (SST)}}
-$$ $$
-= \frac{\text{Suma de los Cuadrados del Modelo (SSR)}}{\text{Suma Total de los Cuadrados (SST)}}.
+R^2 = \frac{\text{SSR}}{\text{SST}} = 1 - \frac{\text{SSE}}{\text{SST}}
 $$
 
-Donde:
+Donde las sumas de cuadrados se calculan a partir de los datos muestrales:
 
--   $\text{SST} = \sum_{i=1}^n (Y_i - \bar{Y})^2$: Variabilidad total en
-    $Y$.\
--   $\text{SSR} = \sum_{i=1}^n (\hat{Y}_i - \bar{Y})^2$: Variabilidad
-    explicada por el modelo.\
--   $\text{SSE} = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2$: Variabilidad no
-    explicada.
+-   $\text{SST} = \sum_{i=1}^n (y_i - \bar{y})^2$: Suma Total de Cuadrados, mide la variabilidad total de las observaciones.
+-   $\text{SSR} = \sum_{i=1}^n (\hat{y}_i - \bar{y})^2$: Suma de Cuadrados de la Regresión, mide la variabilidad explicada por el modelo.
+-   $\text{SSE} = \sum_{i=1}^n (y_i - \hat{y}_i)^2$: Suma de Cuadrados del Error, mide la variabilidad no explicada (residual).
 
-Un $R^2$ cercano a 1 indica que el modelo ajusta bien los datos,
-mientras que un $R^2$ cercano a 0 indica un ajuste pobre.
+Un $R^2$ cercano a 1 indica que el modelo ajusta bien los datos, mientras que un $R^2$ cercano a 0 indica un ajuste pobre.
 
-::: {.callout-tip title="Ejemplo" collapse="true"}
-En el resumen del modelo anterior hemos obtenido el siguiente valor para
-el coeficiente de determinación $R^2=0.8069$. ¿Cómo evaluas el ajuste
-obtenido en este modelo?
+::: {.callout-note title="Relación entre R² y el coeficiente de correlación" collapse="true"}
+En el caso específico del modelo de regresión lineal simple, existe una relación directa y simple: el coeficiente de determinación $R^2$ es literalmente el cuadrado del coeficiente de correlación de Pearson ($r$) entre $X$ e $Y$.
+
+$$ R^2 = (r_{xy})^2 $$
+
+Esto refuerza la idea de que ambos miden la fuerza de la asociación *lineal*, aunque $R^2$ lo hace desde la perspectiva de la varianza explicada por el modelo.
 :::
 
-::: {.callout-note title="Observaciones" collapse="false"}
--   $R^2$ debe ser interpretado con cautela, ya que resultará con
-    frecuencia grande a pesar de que la relación entre $X$ e $Y$ no sea
-    lineal.
--   Ası́ por ejemplo, la magnitud de $R^2$ depende del rango de
-    variabilidad de la variable explicativa, $X$. Siendo el modelo de
-    regresión adecuado, la magnitud de $R^2$ aumenta (o disminuye)
-    cuando lo hace la dispersión de $X$.
--   Además $R^2$ podrı́a ser un valor muy pequeño debido a que el rango
-    de variación de $X$ es demasiado pequeño e impide que se detecte la
-    relación con $Y$.
+
+::: {.callout-caution title="Interpretación de R²"}
+El coeficiente de determinación, $R^2$, es una métrica muy popular, pero su interpretación requiere cautela. Un valor alto no garantiza un buen modelo, y un valor bajo no siempre implica un modelo inútil. Es fundamental tener en cuenta las siguientes observaciones:
+
+-   **$R^2$ no mide la linealidad de la relación.** Un modelo puede tener un $R^2$ muy alto incluso si la relación subyacente entre las variables $X$ e $Y$ no es lineal. Por ello, un $R^2$ elevado nunca debe sustituir a un análisis gráfico de los residuos para verificar el supuesto de linealidad.
+
+-   **$R^2$ es sensible al rango de la variable predictora $X$.** Si el modelo de regresión es adecuado, la magnitud de $R^2$ aumentará si aumenta la dispersión de las observaciones $x_i$ (es decir, si $S_{xx}$ crece). Esto se debe a que un mayor rango en $X$ tiende a aumentar la Suma Total de Cuadrados (SST), lo que puede inflar el valor de $R^2$ sin que la precisión del modelo (medida por la MSE) haya mejorado.
+
+-   **Un rango restringido en $X$ puede producir un $R^2$ artificialmente bajo.** Como consecuencia del punto anterior, si los datos se han recogido en un rango muy estrecho de la variable $X$, el $R^2$ puede ser muy pequeño, aunque exista una relación fuerte y significativa entre las variables. Esto podría llevar a la conclusión errónea de que el predictor no es útil.
 :::
 
-### Diagnóstico del modelo
+### Inferencia sobre los coeficientes
 
-El diagnóstico del modelo de regresión es un paso esencial para evaluar
-si los supuestos subyacentes se cumplen y garantizar la validez de las
-inferencias. El análisis de residuos proporciona información clave sobre
-la calidad del ajuste del modelo y la adecuación del modelo a los
-supuestos de la regresión lineal.
+Además de la prueba F global, podemos realizar inferencias sobre cada parámetro individualmente. Para ello, necesitamos el supuesto de normalidad de los errores.
 
-El análisis de residuos ayuda a verificar los siguientes supuestos del
-modelo:
+#### Distribución de los estimadores
 
--   Linealidad: La relación entre $X$ e $Y$es lineal.
--   Independencia: Los residuos son independientes entre sí.
--   Homocedasticidad: Los residuos tienen varianza constante.
--   Normalidad: Los residuos se distribuyen de manera aproximadamente
-    normal.
-
-Una vez ajustado el modelo, hemos de detectar desviaciones de las
-hipótesis, es decir, proceder al diagnóstico del modelo. El análisis de
-los residuos nos permitirá identificar deficiencias en la verificación
-de estas hipótesis, ası́ como la detección de observaciones anómalas o
-influyentes.
-
-Recordemos que los residuos del modelo son las diferencias entre los
-valores observados y los valores predichos por el modelo:
-
+Bajo el supuesto de normalidad, se puede demostrar que los estimadores también siguen una distribución Normal:
 $$
-e_i = Y_i - \hat{Y}_i.
-$$ Los residuos representan la parte de la variabilidad en $Y$ no
-explicada por el modelo.
-
-En ocasiones, es preferible trabajar con los **residuos
-estandarizados**, que tienen media cero y varianza, aproximadamente,
-uno: $$
-d_i = \frac{e_i}{\sqrt{MSE}},  \hspace{0.5cm} i=1,\ldots,n.
-$$ Otro tipo de residuos habitual son los llamados **residuos
-estudentizados**: $$
-r_i = \frac{e_i}{\sqrt{MSE \left ( 1-\frac{1}{n}-\frac{(X_i-\bar{X})^2}{S_{xx}} \right )}}, \hspace{0.5cm} i=1,\ldots,n.
+\hat{\beta}_1 \sim N\left(\beta_1, \frac{\sigma^2}{S_{xx}}\right) \quad \quad \quad \hat{\beta}_0 \sim N\left(\beta_0, \sigma^2 \left[ \frac{1}{n} + \frac{\bar{x}^2}{S_{xx}} \right]\right)
 $$
 
-Estos residuos son preferibles a los estandarizados cuando $n$ es
-pequeño.
+Al estandarizar y reemplazar la desconocida $\sigma^2$ por su estimador $\hat{\sigma}^2 = \text{MSE}$, obtenemos un estadístico que sigue una distribución t-Student con $n-2$ grados de libertad:
+$$
+t = \frac{\hat{\beta}_1 - \beta_1}{\text{SE}(\hat{\beta}_1)} \sim t_{n-2}
+$$
+donde $\text{SE}(\hat{\beta}_1) = \sqrt{\frac{\text{MSE}}{S_{xx}}}$ es el **error estándar** del estimador $\hat{\beta}_1$.
 
-#### Pasos en el diagnóstico
+#### Contraste de hipótesis para la pendiente
 
-En primer lugar emplearemos gráficos de los residuos para visualizar
-cómo se comportan las discrepancias entre los valores observados y los
-predichos en relación con diversas variables o aspectos del modelo.
+El contraste más común es el de la significancia de la pendiente:
+* $H_0: \beta_1 = 0$
+* $H_1: \beta_1 \neq 0$
 
-A continuación se ejecutarán pruebas estadísticas (contrastes de
-hipótesis) para confirmar los hallazgos visuales.
+Bajo $H_0$, el estadístico de contraste es:
+$$
+t_0 = \frac{\hat{\beta}_1}{\text{SE}(\hat{\beta}_1)}
+$$
+Rechazamos $H_0$ si $|t_0| > t_{\alpha/2, n-2}$ o, equivalentemente, si el p-valor asociado es menor que $\alpha$.
 
-Corregir los problemas detectados será el último paso. Para ello, y
-dependiendo del problema, será necesario transformar la variable
-respuesta, considerar modificaciones del modelo, o el uso de modelos
-alternativos.
-
-::: {.callout-caution title="Aviso"}
-Algunos científicos y analistas de datos buscan un **flujo de trabajo** reproducible y aplicable a **cualquier** conjunto de datos, con la esperanza de establecer un procedimiento estándar para el diagnóstico de modelos, a menudo representado mediante un diagrama de flujo. Sin embargo, esta aproximación puede ser arriesgada. Los datos son inherentemente complejos y variados, y aplicar una guía estricta sin considerar las particularidades de cada conjunto puede conducir a conclusiones erróneas. Aunque existen múltiples herramientas para el diagnóstico de modelos, la elección de una u otra dependerá en gran medida de las características específicas de los datos que estamos analizando. Además, en situaciones del mundo real, es fundamental contar con el **asesoramiento de expertos en el dominio** para evaluar si las decisiones *estadísticas* adoptadas tienen sentido en el contexto del problema. La flexibilidad y la interpretación contextual son esenciales para un análisis riguroso y significativo [@isabel2020ciencia].
+::: {.callout-note title="Relación entre el contraste F y el contraste t"}
+En el contexto de la **regresión lineal simple** (y solo en este caso), el contraste F para la significancia global del modelo es matemáticamente equivalente al contraste t para la significancia del coeficiente $\beta_1$. Se puede demostrar que $F = t^2$, y el p-valor de ambos contrastes será idéntico.
 :::
 
-#### Gráficos de residuos
 
-La utilidad de los gráficos radica en que ofrecen una manera intuitiva
-de evaluar si los supuestos clave del modelo de regresión se cumplen,
-ayudando a identificar problemas que podrían comprometer la validez de
-las conclusiones. Los gráficos de residuos no solo permiten diagnosticar
-problemas en el ajuste del modelo, sino también identificar áreas donde
-el modelo puede ser mejorado. Su uso sistemático en el análisis de
-regresión asegura un modelo más robusto, fiable y ajustado a los datos,
-mejorando la calidad de las conclusiones y predicciones.
+#### Intervalo de confianza para la pendiente
 
-Las principales utilidades de estos gráficos son:
-
-1.  **Evaluación de la linealidad:**
-
-Un gráfico de residuos frente a valores ajustados ayuda a identificar si
-la relación entre la variable explicativa y la variable respuesta es
-lineal. La ausencia de patrones sistemáticos indica que el supuesto de
-linealidad se cumple.
-
-2.  **Detección de heterocedasticidad:**
-
-Se detectan problemas de heterocedasticidad, si en el gráfico de
-residuos frente a los valores ajustados se observa un patrón de "embudo" o una variación creciente/disminuyente, es decir, cuando se observa que la
-varianza de los residuos no es constante para todos los valores de $X$.
-
-3.  **Verificación de normalidad:**
-
-Recordemos que la hipótesis de normalidad de los residuos es esencial
-para realizar inferencias estadísticas fiables (intervalos de confianza,
-pruebas de hipótesis). Los histogramas de residuos o los gráficos
-QQ-plot permiten detectar desviaciones respecto a la distribución
-normal. Los residuos estandarizados y estudentizados también son útiles
-para detectar desviaciones de la normalidad, Si los errores se
-distribuyen según una normal, entonces aproximadamente el $68\%$ de los
-residuos estandarizados (estudentizados) quedarán entre $−1$ y $+1$, y
-el $95\%$ entre $−2$ y $+2$.
-
-4.  **Detección de observaciones atípicas e influyentes:**
-
-Los gráficos de residuos ayudan a identificar puntos atípicos (outliers)
-o valores con alta influencia que podrían afectar de manera
-desproporcionada el modelo. Esto es especialmente útil para decidir si
-ajustar el modelo o realizar un análisis más detallado de estos puntos.
-
-5.  **Facilidad para diagnóstico rápido:**
-
-Los gráficos de residuos son intuitivos y ofrecen una evaluación visual
-inmediata de posibles problemas, complementando las pruebas estadísticas
-formales.
-
-Los gráficos más comunes para llevar a cabo todos los análisis
-anteriores son:
-
--   Residuos vs. Valores Ajustados: Este gráfico permite verificar la
-    linealidad y la homocedasticidad. Los residuos deben distribuirse
-    aleatoriamente alrededor del cero sin patrones discernibles. Cuando
-    aparece alguna tendencia como una forma de embudo o un abombamiento,
-    etc., podemos tener algún problema con la violación de la hipótesis
-    de varianza constante para los residuos (heterocedasticidad).
-    También pueden aparecer gráficos con cierta tendencia cuando la
-    relación entre $X$ e $Y$ es no lineal. Aunque esto se podrı́a ver en
-    un gráfico de dispersión de ($X$ , $Y$ ), suele ser más evidente en
-    un gráfico con los residuos.
--   Histograma de Residuos: Muestra si los residuos tienen una
-    distribución aproximadamente normal.
--   QQ-Plot (Gráfico Cuantil-Cuantil): Compara la distribución de los
-    residuos con una distribución normal. Si los puntos se alinean con
-    la diagonal, se cumple la normalidad. Se dibujan los residuos
-    ordenados $e_{[i]}$ frente a los cuantiles correspondientes de una
-    normal estándar, $\phi^{−1}_{[(i − 1)/n]}$. Si es cierta la
-    normalidad de los residuos, el gráfico resultante deberı́a
-    corresponderse con una recta.
--   Residuos vs. Variables Predictoras: Verifica si hay patrones entre
-    los residuos y $X$, lo que indicaría problemas de linealidad o
-    varianza no constante.
+A partir de la distribución t, podemos construir un intervalo de confianza al $100(1-\alpha)\%$ para el verdadero valor de la pendiente $\beta_1$:
+$$
+\hat{\beta}_1 \pm t_{\alpha/2, n-2} \cdot \text{SE}(\hat{\beta}_1)
+$$
+Este intervalo nos da un rango de valores plausibles para el efecto de $X$ sobre $Y$. Si el intervalo no contiene el cero, es equivalente a rechazar la hipótesis nula $H_0: \beta_1 = 0$.
 
 ::: {.callout-important title="Para recordar"}
-Es análogo hacer el gráfico de los $e_i$ frente a $\hat{Y_i}$ o $X_i$,
-ya que los valores ajustados $\hat{Y_i}$ son función lineal de $X_i$.
+En los programas estadísticos se suele proporcionar el p-valor del contraste. Puedes repasar el significado de p-valor proporcionado en la asignatura de Inferencia.
 :::
 
-::: {.callout-tip title="Ejemplo" collapse="true"}
-Estudiamos los residuos del ejemplo de calificaciones de estudiantes.
 
-```{r residuos1}
-# Ajustar el modelo de regresión lineal
-modelo <- lm(calificaciones ~ tiempo_estudio)
-
-# Obtener los residuos
-residuos <- resid(modelo)
-
-# Estudiar los residuos
-
-# 1. Gráfico de residuos vs. valores ajustados
-valores_ajustados <- fitted(modelo)
-plot(valores_ajustados, residuos,
-     main = "Residuos vs Valores Ajustados",
-     xlab = "Valores Ajustados",
-     ylab = "Residuos",
-     pch = 19, col = "blue")
-abline(h = 0, col = "red", lwd = 2)
-
-# 2. Histograma de los residuos
-hist(residuos,
-     main = "Histograma de Residuos",
-     xlab = "Residuos",
-     col = "lightblue", border = "black")
-
-# 3. QQ-Plot de residuos
-qqnorm(residuos, main = "QQ-Plot de los Residuos")
-qqline(residuos, col = "red", lwd = 2)
-
-# 4. Pruebas de normalidad de los residuos
-shapiro_test <- shapiro.test(residuos)
-cat("Prueba de Shapiro-Wilk para normalidad de los residuos:\n")
-print(shapiro_test)
-
-# 5. Gráfico de residuos vs. tiempo de estudio
-plot(tiempo_estudio, residuos,
-     main = "Residuos vs Tiempo de Estudio",
-     xlab = "Tiempo de Estudio (horas/semana)",
-     ylab = "Residuos",
-     pch = 19, col = "purple")
-abline(h = 0, col = "red", lwd = 2)
-
+::: {.callout-tip title="Ejemplo: Interpretación del `summary`" collapse="true"}
+La función `summary()` en R nos proporciona toda esta información.
+```{r}
+#| echo: true
+summary(modelo_estudio)
 ```
+**Interpretación:**
+
+- **Coefficients**: El p-valor para `Tiempo_Estudio` (`r format.pval(summary(modelo_estudio)$coefficients[2,4], digits=3, eps=0.001)`) es muy pequeño, por lo que rechazamos $H_0$ y concluimos que la variable es un predictor significativo.
+- **R-squared**: El valor de $R^2$ (`r round(summary(modelo_estudio)$r.squared, 2)`) nos indica que el `r round(summary(modelo_estudio)$r.squared*100, 0)`% de la variabilidad en las calificaciones es explicada por el tiempo de estudio.
+- **F-statistic**: El p-valor del estadístico F (`r format.pval(summary(modelo_estudio)$fstatistic[3], digits=3, eps=0.001)`) confirma que el modelo en su conjunto es estadísticamente significativo.
 :::
 
-#### Estadísticas para el diagnóstico
+## Predicción de nuevas observaciones
 
-Las pruebas estadísticas son útiles para confirmar los hallazgos
-visuales obtenidos al analizar los gráficos de los residuos. Las
-principales pruebas formales a considerar son:
+Una vez que hemos ajustado y validado un modelo de regresión, uno de sus propósitos más importantes es utilizarlo para hacer predicciones. Sin embargo, es fundamental distinguir entre dos tipos de predicción:
 
--   Prueba de normalidad (Shapiro-Wilk): Confirma si los residuos siguen
-    una distribución normal. Un p-valor por debajo del grado de
-    significatividad elegido (típicamente $0.05$), indica que no podemos
-    rechazar la hipótesis nula de normalidad de los residuos.
--   Prueba de autocorrelación (Durbin-Watson): Evalúa la independencia
-    de los residuos.
--   Prueba de homocedasticidad (Breusch-Pagan): Detecta si los residuos
-    presentan varianza constante. Un p-valor pequeño (típicamente menor
-    que $0.05$) sugiere heterocedasticidad.
+1.  **Estimar la respuesta media** para un valor dado de $X$. Por ejemplo: "¿Cuál es la calificación *promedio* que esperamos para todos los estudiantes que estudian 25 horas semanales?".
+2.  **Predecir una respuesta individual** para un valor dado de $X$. Por ejemplo: "Si un estudiante *concreto* estudia 25 horas semanales, ¿entre qué valores esperamos que se encuentre su calificación?".
 
-::: {.callout-tip title="Ejemplo" collapse="true"}
-Estudiamos los residuos del ejemplo de calificaciones de estudiantes.
+Estos dos objetivos, aunque parecidos, responden a preguntas distintas y manejan diferentes fuentes de incertidumbre, lo que da lugar a dos tipos de intervalos.
 
-```{r residuos2}
-# Ajustar el modelo de regresión lineal
-modelo <- lm(calificaciones ~ tiempo_estudio)
+### Intervalo de confianza para la respuesta media
 
-# Obtener los residuos
-residuos <- resid(modelo)
+Este intervalo estima el valor esperado de $Y$ para un valor concreto del regresor, $x_0$. Su objetivo es acotar dónde se encuentra la **línea de regresión poblacional verdadera** para ese punto $x_0$. La estimación puntual es $\hat{y}_0 = \hat{\beta}_0 + \hat{\beta}_1 x_0$.
 
-# Estadísticas para diagnóstico
+El intervalo de confianza al $100(1-\alpha)\%$ para la respuesta media $E[Y|X=x_0]$ viene dado por:
 
-# 1. Prueba de normalidad de los residuos (Shapiro-Wilk)
-shapiro_test <- shapiro.test(residuos)
-cat("Prueba de Shapiro-Wilk para normalidad de los residuos:\n")
-print(shapiro_test)
-
-# 2. Prueba de homocedasticidad (Breusch-Pagan)
-library(lmtest)
-breusch_pagan <- bptest(modelo)
-cat("\nPrueba de Breusch-Pagan para homocedasticidad:\n")
-print(breusch_pagan)
-
-# 3. Estadística Durbin-Watson para autocorrelación de los residuos
-durbin_watson <- dwtest(modelo)
-cat("\nPrueba de Durbin-Watson para autocorrelación de los residuos:\n")
-print(durbin_watson)
-
-```
-:::
-
-### Observaciones atípicas (outliers)
-
-En el contexto de la regresión lineal simple, una observación atípica es
-un punto de datos que se aleja notablemente del patrón general observado
-entre la variable independiente ($X$) y la variable dependiente ($Y$).
-Estas observaciones pueden surgir por errores en la recopilación de
-datos, valores extremos naturales o situaciones especiales que no están
-representadas en el modelo.
-
-Las observaciones atípicas pueden tener un impacto significativo en el
-ajuste del modelo, afectando las estimaciones de los coeficientes de
-regresión, el análisis de residuos y la validez de las conclusiones. Las
-observaciones atípicas pueden distorsionar los coeficientes
-$\hat{\beta}_0$ y $\hat{\beta}_1$, añadiendo sesgos a las estimaciones.
-Además, pueden conducir a diagnóticos incorrectos, al alterae la
-normalidad y homocedasticidad de los residuos, afectando las pruebas
-estadísticas. Por último, conducen a predicciones inexactas, puesto que
-los modelos ajustados en presencia de valores atípicos pueden no ser
-representativos del conjunto de datos general.
-
-#### Tipos de observaciones atípicas
-
-1.  Outliers en $Y$:
-
--   Son puntos que tienen valores de $Y$ mucho mayores o menores en
-    comparación con lo predicho por el modelo.\
--   Estos puntos suelen detectarse como residuos grandes.
-
-2.  Outliers en $X$:
-
--   Son puntos con valores extremos de $X$ que no están bien
-    representados en el rango principal de los datos.\
--   Si bien pueden no afectar directamente la regresión, pueden influir
-    en los coeficientes del modelo si tienen alta "leverage" (potencial
-    para influir en el ajuste).
-
-3.  Observaciones Influyentes:
-
--   Son puntos que, debido a su posición, tienen un impacto
-    desproporcionado en el ajuste del modelo. Pueden ser outliers en
-    $X$, $Y$, o ambos.
-
-#### Detección de observaciones atípicas
-
-Un gráfico de dispersión entre la variables respuesta y la variable
-explicativa permite identificar qué puntos se desvían claramente del
-patrón general. Además, en un gráfico de los residuos frente a los
-valores ajutados, los outliers en $Y$ aparecen como residuos grandes.
-
-Generalmente, residuos estudentizados con valores mayores a $|3|$
-indican outliers.
-
-El **leverage**, o apalancamiento mide el grado en el que una
-observación individual influye en el ajuste del modelo. En términos
-simples, el leverage cuantifica cómo de "lejos" está un punto de datos
-de la media de la variable explicativa $X$ y, por lo tanto, cuánto
-contribuye al ajuste del modelo.
-
-El leverage se calcula a partir de la matriz de proyección $H$ (también
-llamada matriz "hat"), que transforma los valores observados en valores
-ajustados. La diagonal de esta matriz ($h_{ii}$) mide el leverage para
-cada observación: $$
-h_{ii}=\frac{1}{n}+\frac{(X_i-\bar{X})^2}{\sum_{j=1}^n (X_j-\bar{X})^2}
+$$
+\hat{y}_0 \pm t_{\alpha/2, n-2} \cdot \sqrt{\text{MSE} \left( \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right)}
 $$
 
-El leverage ($h_{ii}$) toma valores entre $0$ y $1$. Un leverage cercano
-a $0$ indica que el punto está muy cerca del centro de los datos,
-mientras que un leverage alto sugiere que el punto está lejos. Valores
-de leverage altos ($h_{ii} > \frac{2p}{n}$, donde $p$ es el número de
-parámetros del modelo) son sospechosos.
+La anchura de este intervalo depende de dos fuentes de error: la incertidumbre en la estimación de la recta y la distancia del punto $x_0$ a la media $\bar{x}$. El intervalo es más estrecho cerca del centro de los datos y más ancho en los extremos.
 
-::: {.callout-tip title="Ejemplo" collapse="true"}
-Estudiamos los valores de leverage del ejemplo de calificaciones de
-estudiantes.
+### Intervalo de predicción para una respuesta individual
 
-```{r leverage}
-# Ajustar el modelo de regresión lineal
-modelo <- lm(calificaciones ~ tiempo_estudio)
+Este intervalo es el que debemos usar cuando queremos predecir el valor para **una única observación futura**, no para la media. Como indicas, este intervalo debe tener en cuenta dos fuentes de variabilidad:
 
-# Calcular leverage
-leverage <- hatvalues(modelo)
+1.  La incertidumbre sobre la localización de la verdadera recta de regresión (la misma que en el intervalo de confianza).
+2.  La variabilidad inherente de una observación individual alrededor de la recta de regresión (el error aleatorio $\varepsilon_i$, cuya varianza estimamos con la MSE).
 
-# Umbral para leverage alto
-p <- length(coef(modelo))  # Número de parámetros (incluyendo el intercepto)
-leverage_threshold <- 2 * p / n
+Por esta razón, el intervalo de predicción **siempre será más ancho** que el intervalo de confianza para la respuesta media. El intervalo de predicción al $100(1-\alpha)\%$ para una observación futura $y_0$ en el punto $x_0$ es:
 
-# Identificar observaciones con leverage alto
-leverage_high <- which(leverage > leverage_threshold)
+$$
+\hat{y}_0 \pm t_{\alpha/2, n-2} \cdot \sqrt{\text{MSE} \left( 1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right)}
+$$
 
-# Resultados
-cat("Valores de leverage:\n")
-print(leverage)
+La única diferencia matemática es el **"+1"** dentro de la raíz cuadrada, que representa la varianza $\sigma^2$ del error de una sola observación.
 
-cat("\nUmbral para leverage alto:", leverage_threshold, "\n")
-cat("\nObservaciones con leverage alto (si las hay):\n")
-print(leverage_high)
+#### Predicción para la media de *m* observaciones futuras
 
-# Gráfico de leverage
-plot(leverage, 
-     main = "Leverage de las Observaciones",
-     xlab = "Índice de Observación",
-     ylab = "Leverage",
-     pch = 19, col = "blue", ylim=c(min(leverage)*.9,max(leverage)*1.05))
-abline(h = leverage_threshold, col = "red", lwd = 2, lty = 2)  # Línea del umbral
-text(leverage_high, leverage[leverage_high], labels = leverage_high, pos = 3, col = "red")
-```
-:::
+Si se desea un intervalo de predicción para la media de *m* futuras observaciones en un valor $x_0$, la fórmula se modifica ligeramente. Este intervalo será más estrecho que el de una sola observación pero más ancho que el de la respuesta media:
 
-Las **medidas de influencia** son herramientas que evalúan el impacto
-que tiene cada observación individual en el ajuste del modelo. Mientras
-que conceptos como los residuos y el leverage analizan diferentes
-aspectos de las observaciones, las medidas de influencia integran esta
-información para determinar qué tan decisiva es una observación en la
-estimación de los coeficientes y en las predicciones del modelo:
+$$
+\hat{y}_0 \pm t_{\alpha/2, n-2} \cdot \sqrt{\text{MSE} \left( \frac{1}{m} + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right)}
+$$
 
--   **Distancia de Cook:** Combina leverage y residuos para medir el
-    impacto de una observación en el ajuste del modelo. Valores mayores
-    a $1$ son indicativos de observaciones influyentes.
--   **DFBETAS:** Evalúa cuánto cambia un coeficiente del modelo si se
-    elimina una observación. Valores absolutos mayores a $2/\sqrt{n}$
-    sugieren influencia significativa.
--   **DFFITS:** Mide el impacto de una observación en el valor ajustado.
-    Valores absolutos mayores a $2\sqrt{p/n}$ sugieren influencia
-    significativa.
+::: {.callout-tip title="Ejemplo práctico: Predicción de calificaciones"}
 
-::: {.callout-tip title="Ejemplo" collapse="true"}
-Estudiamos los valores de leverage del ejemplo de calificaciones de
-estudiantes.
+Vamos a calcular y visualizar los intervalos para nuestro modelo de estudio. Usaremos la función `predict()` de R, que calcula estos intervalos de forma automática.
 
-```{r influyentes1}
-# Ajustar el modelo de regresión lineal
-modelo <- lm(calificaciones ~ tiempo_estudio)
+```{r}
+#| label: fig-prediccion
+#| fig-cap: "Comparación visual del intervalo de confianza (azul, más estrecho) y el intervalo de predicción (rojo, más ancho)."
+#| echo: true
 
-# 1. Calcular Distancia de Cook
-cooks_distance <- cooks.distance(modelo)
-
-# 2. Calcular DFBETAS
-dfbetas_values <- dfbetas(modelo)
-
-# 3. Calcular DFFITS
-dffits_values <- dffits(modelo)
-
-# Umbrales sugeridos
-cooks_threshold <- 4 / n  # Umbral para Distancia de Cook
-dffits_threshold <- 2 * sqrt(length(coef(modelo)) / n)  # Umbral para DFFITS
-
-# Resultados
-cat("Distancia de Cook (primeras 10 observaciones):\n")
-print(head(cooks_distance, 10))
-
-cat("\nObservaciones con Distancia de Cook alta (> ", cooks_threshold, "):\n")
-print(which(cooks_distance > cooks_threshold))
-
-cat("\nDFBETAS (primeras 10 observaciones):\n")
-print(head(dfbetas_values, 10))
-
-cat("\nDFFITS (primeras 10 observaciones):\n")
-print(head(dffits_values, 10))
-cat("\nObservaciones con DFFITS alto (> ", dffits_threshold, "):\n")
-print(which(abs(dffits_values) > dffits_threshold))
-
-# Graficar Distancia de Cook
-plot(cooks_distance,
-     main = "Distancia de Cook",
-     xlab = "Índice de Observación",
-     ylab = "Distancia de Cook",
-     pch = 19, col = "blue", ylim=c(min(cooks_distance)*.9,max(cooks_distance)*1.05))
-abline(h = cooks_threshold, col = "red", lwd = 2, lty = 2)
-text(which(cooks_distance > cooks_threshold), cooks_distance[cooks_distance > cooks_threshold],
-     labels = which(cooks_distance > cooks_threshold), pos = 3, col = "red")
-
-# Graficar DFFITS
-plot(dffits_values,
-     main = "DFFITS",
-     xlab = "Índice de Observación",
-     ylab = "DFFITS",
-     pch = 19, col = "green", ylim=c(min(dffits_values)*.85,max(dffits_values)*1.07))
-abline(h = c(dffits_threshold, -dffits_threshold), col = "red", lwd = 2, lty = 2)
-text(which(abs(dffits_values) > dffits_threshold), dffits_values[abs(dffits_values) > dffits_threshold],
-     labels = which(abs(dffits_values) > dffits_threshold), pos = 3, col = "red")
-
-```
-:::
-
-#### Tratamiento de observaciones atípicas
-
-Hemos visto que las observaciones atípicas son inevitables en el
-análisis de datos y pueden surgir por diversas razones, como errores en
-la recopilación de datos, fenómenos extremos o situaciones únicas en el
-conjunto de datos. Aunque estas observaciones pueden proporcionar
-información valiosa, también tienen el potencial de distorsionar los
-resultados del análisis, afectando la validez de los modelos ajustados y
-las conclusiones derivadas.
-
-El manejo adecuado de las observaciones atípicas es esencial para
-garantizar que el modelo represente de manera precisa y robusta el
-comportamiento general de los datos. Este proceso no implica simplemente
-eliminar valores problemáticos, sino evaluar cuidadosamente su
-naturaleza y decidir una estrategia adecuada para tratarlos.
-
-Consideramos cuatro enfoques principales para el manejo de observaciones
-atípicas:
-
-1.  **Verificación de datos:**
-    -   Confirmar si las observaciones atípicas son errores de registro
-        o si representan casos válidos pero raros.
-2.  **Transformación de datos:**
-    -   Aplicar transformaciones como logaritmos o raíces cuadradas para
-        reducir la influencia de los valores atípicos.
-3.  **Modelos robustos:**
-    -   Considerar modelos de regresión robusta, que son menos sensibles
-        a los valores atípicos.
-4.  **Eliminación justificada:**
-    -   En casos donde los valores atípicos son errores claros o no
-        representativos, pueden eliminarse del análisis, siempre
-        documentando esta decisión.
-
-### Tratamiento de problemas
-
-Si el modelo de regresión lineal simple no es apropiado porque se
-incumplen algunas de las suposiciones, algunas opciones básicas son:
-
-1.  Abandonar el modelo de regresión y desarrollar otro más apropiado,
-    según las suposiciones incumplidas.
-2.  Emplear alguna transformación de los datos de forma que el modelo de
-    regresión sea válido para los datos transformados.
-
-Trataremos estas técnicas en próximos capítulos de este libro.
-
-## Regresión lineal múltiple
-
-El modelo de regresión lineal múltiple es una extensión natural del
-modelo de regresión lineal simple, diseñada para analizar la relación
-entre una variable respuesta ($Y$) y múltiples variables explicativas
-($X_1, X_2, \dots, X_p$). Este modelo permite capturar interacciones más
-complejas entre las variables y mejora la capacidad de explicar y
-predecir fenómenos en contextos donde una sola variable explicativa no
-es suficiente para describir la variabilidad en $Y$.
-
-La ecuación general del modelo de regresión lineal múltiple se expresa
-como: $$
-Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon,
-$$ donde:
-
--   $\beta_0$: Intercepto, representa el valor esperado de $Y$ cuando
-    todas las variables explicativas son cero.
--   $\beta_1, \beta_2, \dots, \beta_p$: Coeficientes de regresión, que
-    miden el efecto promedio de cada variable explicativa sobre $Y$,
-    manteniendo las demás constantes.
--   $\varepsilon$: Término de error aleatorio, que captura la
-    variabilidad en $Y$ no explicada por las variables
-    $X_1, X_2, \dots, X_p$.
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-Generamos nuevos datos para regresión lineal múltiple.
-
-```{r datos_mul}
-# Generar dos nuevas variables explicativas
-# Establecer la semilla para reproducibilidad
-set.seed(123)
-
-# Generar datos base
-n <- 100
-tiempo_estudio <- round(runif(n, min = 5, max = 40), 1)  # Tiempo de estudio (horas/semana)
-beta_0_true <- 5  # Intercepto verdadero
-beta_1_true <- 0.1  # Pendiente verdadera
-sigma <- 0.5  # Desviación estándar del ruido
-
-# Generar calificaciones dependientes del tiempo de estudio con ruido
-calificaciones <- round(beta_0_true + beta_1_true * tiempo_estudio + rnorm(n, mean = 0, sd = sigma), 2)
-
-
-distraccion <- sample(0:1, size = n, replace = TRUE)  # Nivel de distracción (0 bajo, 1 alto)
-interacciones_clase <- sample(0:20, size = n, replace = TRUE)  # Interacciones en clase
-
-# Crear un data frame
-datos <- data.frame(
-  Tiempo_Estudio = tiempo_estudio,
-  Distraccion = distraccion,
-  Interacciones_Clase = interacciones_clase,
-  Calificaciones = calificaciones
+# 1. Crear una secuencia de nuevos valores de X para predecir
+nuevos_datos <- data.frame(
+  Tiempo_Estudio = seq(min(datos$Tiempo_Estudio), max(datos$Tiempo_Estudio), length.out = 100)
 )
 
-# Mostrar los primeros registros
-head(datos)
+# 2. Calcular el intervalo de confianza para la RESPUESTA MEDIA
+conf_interval <- predict(
+  modelo_estudio, 
+  newdata = nuevos_datos, 
+  interval = "confidence", 
+  level = 0.95
+)
+
+# 3. Calcular el intervalo de predicción para una OBSERVACIÓN INDIVIDUAL
+pred_interval <- predict(
+  modelo_estudio, 
+  newdata = nuevos_datos, 
+  interval = "prediction", 
+  level = 0.95
+)
+
+# 4. Unir todo para graficar con ggplot2
+plot_data <- cbind(nuevos_datos, as.data.frame(conf_interval), pred_pred = as.data.frame(pred_interval))
+colnames(plot_data) <- c("Tiempo_Estudio", "fit_conf", "lwr_conf", "upr_conf", "fit_pred", "lwr_pred", "upr_pred")
+
+# 5. Visualización
+ggplot() +
+  # Capa 1: Puntos originales del dataframe 'datos'
+  geom_point(data = datos, aes(x = Tiempo_Estudio, y = Calificaciones), color = "#0072B2", alpha = 0.7) +
+  
+  # Capa 2: Línea de regresión del dataframe 'plot_data'
+  geom_line(data = plot_data, aes(x = Tiempo_Estudio, y = fit_conf), color = "black", linewidth = 1) +
+  
+  # Capa 3: Banda de predicción (roja) del dataframe 'plot_data'
+  geom_ribbon(data = plot_data, aes(x = Tiempo_Estudio, ymin = lwr_pred, ymax = upr_pred), fill = "red", alpha = 0.2) +
+  
+  # Capa 4: Banda de confianza (azul) del dataframe 'plot_data'
+  geom_ribbon(data = plot_data, aes(x = Tiempo_Estudio, ymin = lwr_conf, ymax = upr_conf), fill = "blue", alpha = 0.3) +
+  
+  # Etiquetas y tema
+  labs(
+    title = "Intervalos de Confianza y Predicción",
+    x = "Tiempo de Estudio (horas/semana)",
+    y = "Calificaciones (promedio)",
+    caption = "La banda azul (más estrecha) es el IC del 95% para la media.\nLa banda roja (más ancha) es el IP del 95% para una nueva observación."
+  ) +
+  theme_classic(base_size = 14)
 ```
-:::
+El gráfico muestra claramente que la incertidumbre al predecir una calificación individual es mucho mayor que la incertidumbre al estimar la calificación promedio. Ambas bandas se ensanchan al alejarse del centro de los datos.
 
-El modelo de regresión lineal múltiple es fundamental para analizar
-fenómenos que dependen de múltiples factores, ya que permite explicar
-variabilidad compleja al identificar la contribución individual de cada
-variable explicativa. Al incluir diversas variables relevantes, este
-modelo mejora significativamente la precisión de las predicciones en
-comparación con modelos más simples. Además, proporciona una herramienta
-poderosa para controlar variables confusoras, evaluando el efecto de
-cada variable explicativa mientras ajusta por la influencia de las
-demás, lo que garantiza un análisis más robusto y detallado.
+Si quisiéramos una predicción para un estudiante que estudia 25 horas:
+```	{r}
+#| echo: true
+#| results: 'hide' # Oculta la salida de esta celda
 
-El modelo de regresión lineal múltiple se basa en los mismos supuestos
-fundamentales que el modelo simple: linealidad, independencia,
-homocedasticidad y normalidad de los errores. Sin embargo, la presencia
-de múltiples variables explicativas introduce nuevos desafíos, como la
-*multicolinealidad*, que deben ser diagnosticados y manejados para
-garantizar la fiabilidad del modelo.
+dato_nuevo <- data.frame(Tiempo_Estudio = 25)
 
-En esta sección, exploraremos los fundamentos teóricos del modelo de
-regresión lineal múltiple, sus aplicaciones prácticas y las técnicas de
-diagnóstico necesarias para evaluar su calidad y validez. También
-abordaremos cómo interpretar los coeficientes y realizar predicciones
-útiles en contextos reales.
+# Guardamos la predicción para la media en un objeto
+pred_media <- predict(modelo_estudio, newdata = dato_nuevo, interval = "confidence")
 
-### Variables regresoras cualitativas
-
-El modelo de regresión lineal múltiple no se limita al uso de variables
-cuantitativas, sino que también permite incorporar variables predictoras
-cualitativas. Por ejemplo, se pueden incluir características como el
-género (masculino o femenino) o el grado de satisfacción (nada
-satisfecho, poco satisfecho, satisfecho, muy satisfecho). Para
-representar estas variables en el modelo de regresión lineal, se
-utilizan variables binarias que indican a qué categoría pertenece cada
-individuo.
-
-Por ejemplo, consideremos un modelo de regresión lineal para predecir
-las calificaciones de los estudiantes, $Y$ , en función del tiempo de
-estudio $X_1$, las interacciones en clase, $X_2$ y el grado de
-distracción $X_3$.
-
-En este caso definimos $X_3$ como sigue:
-
-$$
-X_3 =
-\begin{cases} 
-0 & \text{si el grado de distracción es bajo} \\ 
-1 & \text{si el grado de distracción es alto}
-\end{cases}
-$$ En general, una variable cualitativa con $c$ niveles, se puede
-codificar mediante $c − 1$ variables binarias o variables indicadoras
-(también llamadas dummy).
-
-Trataremos ampliamente el tema de creación de variables en temas
-posteriores.
-
-### Estimación de los coeficientes de regresión
-
-Es más conveniente trabajar con los modelos de regresión lineal múltiple
-si los expresamos en notación matricial. En ese caso, el modelo de
-regresión lineal múltiple se escribe como:
-
-$$
-\mathbf{Y} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\varepsilon},
-$$
-
-donde:
-
--   $\mathbf{Y}$ es el vector de observaciones de la variable
-    dependiente (respuesta), de dimensión $n \times 1$: $$
-      \mathbf{Y} = 
-      \begin{bmatrix}
-      Y_1 \\
-      Y_2 \\
-      \vdots \\
-      Y_n
-      \end{bmatrix}.
-      $$
-
--   $\mathbf{X}$ es la matriz de diseño de las variables explicativas
-    (predictoras), de dimensión $n \times (p+1)$, donde $p$ es el número
-    de variables explicativas. Incluye una columna de unos para el
-    término independiente ($\beta_0$): $$
-      \mathbf{X} = 
-      \begin{bmatrix}
-      1 & X_{11} & X_{12} & \cdots & X_{1p} \\
-      1 & X_{21} & X_{22} & \cdots & X_{2p} \\
-      \vdots & \vdots & \vdots & \ddots & \vdots \\
-      1 & X_{n1} & X_{n2} & \cdots & X_{np}
-      \end{bmatrix}.
-      $$
-
--   $\boldsymbol{\beta}$ es el vector de coeficientes de regresión, de
-    dimensión $(p+1) \times 1$: $$
-      \boldsymbol{\beta} = 
-      \begin{bmatrix}
-      \beta_0 \\
-      \beta_1 \\
-      \vdots \\
-      \beta_p
-      \end{bmatrix}.
-      $$
-
--   $\boldsymbol{\varepsilon}$ es el vector de errores aleatorios, de
-    dimensión $n \times 1$: $$
-      \boldsymbol{\varepsilon} = 
-      \begin{bmatrix}
-      \varepsilon_1 \\
-      \varepsilon_2 \\
-      \vdots \\
-      \varepsilon_n
-      \end{bmatrix}.
-      $$
-
-En esta formulación, el modelo expresa que cada observación de la
-variable dependiente es una combinación lineal de las variables
-predictoras, más un término de error aleatorio. La notación matricial es
-compacta y facilita la manipulación algebraica para obtener estimaciones
-y realizar inferencias.
-
-Como en el caso de la regresión lineal simple, asumimos que los errores
-$\varepsilon$ son i.i.d. según una normal:
-
-$$
-\boldsymbol{\varepsilon} \overset{i.i.d.}{\sim} \mathcal{N}(\mathbf{0}, \sigma^2 \mathbf{I}),
-$$
-
-donde $\mathbf{I}$ denota la matriz identidad,
-
-$$
-\mathbf{I} =
-\begin{pmatrix}
-1 & 0 & \cdots & 0 \\
-0 & 1 & \cdots & 0 \\
-\vdots & \vdots & \ddots & \vdots \\
-0 & 0 & \cdots & 1
-\end{pmatrix}.
-$$
-
-El criterio de **mínimos cuadrados** es el método más común para estimar
-los parámetros del modelo de regresión lineal múltiple. Este método
-busca minimizar la suma de los cuadrados de los residuos. Es decir, la
-suma de los cuadrados de las diferencias entre los valores observados de
-la variable dependiente y los valores predichos por el modelo.
-
-El objetivo es estimar $\boldsymbol{\beta}$, el conjunto de coeficientes
-de regresión.
-
-La **función de pérdida** que se minimiza es la suma de los cuadrados de
-los residuos ($S(\boldsymbol{\beta})$): $$
-S(\boldsymbol{\beta}) = \sum_{i=1}^n (Y_i - \mathbf{X}_i \boldsymbol{\beta})^2,
-$$ o en notación matricial: $$
-S(\boldsymbol{\beta}) = (\mathbf{Y} - \mathbf{X} \boldsymbol{\beta})^\top (\mathbf{Y} - \mathbf{X} \boldsymbol{\beta}),
-$$ donde $(\mathbf{Y} - \mathbf{X} \boldsymbol{\beta})$ es el vector de
-residuos.
-
-Para encontrar el valor de $\boldsymbol{\beta}$ que minimiza
-$S(\boldsymbol{\beta})$, derivamos $S(\boldsymbol{\beta})$ con respecto
-a $\boldsymbol{\beta}$ y la igualamos a cero:
-
--   Expandimos $S(\boldsymbol{\beta})$: $$
-    S(\boldsymbol{\beta}) = \mathbf{Y}^\top \mathbf{Y} - 2 \mathbf{Y}^\top \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\beta}^\top \mathbf{X}^\top \mathbf{X} \boldsymbol{\beta}.
-    $$
-
--   Derivamos con respecto a $\boldsymbol{\beta}$: $$
-    \frac{\partial S(\boldsymbol{\beta})}{\partial \boldsymbol{\beta}} = -2 \mathbf{X}^\top \mathbf{Y} + 2 \mathbf{X}^\top \mathbf{X} \boldsymbol{\beta}.
-    $$
-
--   Igualamos a cero: $$
-    -2 \mathbf{X}^\top \mathbf{Y} + 2 \mathbf{X}^\top \mathbf{X} \boldsymbol{\beta} = 0.
-    $$
-
--   Resolviendo para $\boldsymbol{\beta}$: $$
-    \mathbf{X}^\top \mathbf{X} \boldsymbol{\beta} = \mathbf{X}^\top \mathbf{Y}.
-    $$
-
--   Finalmente, el estimador de mínimos cuadrados es: $$
-    \hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{Y}.
-    $$
-
-El criterio de mínimos cuadrados ajusta un plano en el espacio
-multidimensional de las variables explicativas que mejor representa los
-datos en términos de minimizar los residuos al cuadrado. Este estimador
-es ampliamente usado por su simplicidad y eficacia bajo los supuestos de
-normalidad y homocedasticidad.
-
-::: {.callout-important title="Para recordar"}
-Cuando se trata de un modelo de regresión con múltiples regresores, el
-análisis visual mediante diagramas de dispersión puede resultar
-engañoso. Construir gráficos que muestren la relación entre la variable
-respuesta y cada regresor de forma aislada no siempre proporciona una
-representación precisa de la realidad. Esto ocurre porque los efectos
-conjuntos de los regresores no se reflejan en estos gráficos
-individuales. Incluso en un caso ideal, donde existe una relación
-perfecta entre la variable respuesta y los regresores, sin ningún tipo
-de ruido o error, los diagramas de dispersión individuales pueden
-sugerir una relación débil o inexistente si no se tiene en cuenta el
-contexto multivariado.
-
-En situaciones más comunes, donde los datos incluyen errores en los
-valores observados de la variable respuesta y los regresores interactúan
-de manera compleja, los gráficos univariantes tienden a complicar aún
-más la interpretación. Pueden surgir aparentes inconsistencias o
-patrones confusos, ya que no se está considerando la influencia
-simultánea de todos los regresores en la respuesta. Por esta razón, es
-fundamental adoptar enfoques que analicen las relaciones de manera
-conjunta, como los coeficientes estimados en un modelo de regresión
-múltiple, que capturan el impacto parcial de cada regresor ajustando por
-los efectos de los demás.
-:::
-
-#### Propiedades del estimador
-
-Estas son las propiedades del estimador de mínimos cuadrados:
-
--   **Linealidad:** El estimador es una combinación lineal de los
-    valores observados ($\mathbf{Y}$).
--   **Insesgado:** En ausencia de errores correlacionados y bajo
-    supuestos estándar,
-    $E[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta}$.
--   **Varianza mínima:** Entre los estimadores lineales insesgados,
-    $\hat{\boldsymbol{\beta}}$ tiene la menor varianza posible
-    (propiedad BLUE: Best Linear Unbiased Estimator).
-
-### Varianza del error
-
-La varianza de los errores ($\sigma^2$) mide cuánto varían las
-observaciones reales ($Y_i$) con respecto a los valores predichos por el
-modelo ($\hat{Y}_i$). En el modelo de regresión múltiple, esta varianza
-puede ser estimada utilizando la **suma de los cuadrados de los residuos
-(SSE)**.
-
-La estimación de $\sigma^2$, denotada como $\hat{\sigma}^2$, se calcula
-como: $$
-\hat{\sigma}^2 = \frac{\text{SSE}}{n - p - 1}, $$ donde:
-
--   $\text{SSE} = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2 = \mathbf{e}^\top \mathbf{e}$
-    es la suma de los cuadrados de los residuos.
--   $\mathbf{e} = \mathbf{Y} - \hat{\mathbf{Y}} = \mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}}$
-    es el vector de residuos.
-
-La cantidad $n - p - 1$ es conocida como los **grados de libertad
-residuales**, que reflejan el número de datos disponibles para estimar
-la varianza de los errores después de ajustar los parámetros del modelo.
-
-En términos matriciales, $\hat{\sigma}^2$ se expresa como: $$
-\hat{\sigma}^2 = \frac{1}{n - p - 1} (\mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}})^\top (\mathbf{Y} - \mathbf{X} \hat{\boldsymbol{\beta}}),
-$$ o de forma más compacta: $$
-\hat{\sigma}^2 = \frac{1}{n - p - 1} \mathbf{e}^\top \mathbf{e}.
-$$
-
-La varianza estimada $\hat{\sigma}^2$ se encuentra en las mismas
-unidades al cuadrado que la variable dependiente ($\mathbf{Y}$). Este
-valor es crucial para construir intervalos de confianza y realizar
-pruebas de hipótesis sobre los coeficientes del modelo
-($\boldsymbol{\beta}$). La raíz cuadrada de $\hat{\sigma}^2$ proporciona
-el error estándar de los residuos.
-
-Este valor permite cuantificar la variabilidad no explicada por el
-modelo ajustado y es un componente esencial en la evaluación de la
-calidad del ajuste.
-
-### Inferencia sobre los parámetros del modelo
-
-Tal como indicamos en el modelo de regresión simple, en el análisis de
-regresión lineal múltiple, la inferencia estadística permite evaluar la
-significancia de los parámetros estimados y del modelo completo. Estas
-evaluaciones son cruciales para determinar si el modelo ajustado es útil
-para explicar y predecir la variable respuesta.
-
-#### Intervalos de confianza para los coeficientes de regresión
-
-Los intervalos de confianza proporcionan un rango plausible para los
-valores verdaderos de los coeficientes de regresión ($\beta_j$),
-permitiendo evaluar su significancia.
-
-Para construir intervalos de confianza para los coeficientes de la
-regresión, $\beta_0, \beta_1, \ldots, \beta_k$, procedemos de forma
-análoga a como hacíamos en el caso de la regresión lineal simple. Usamos
-la distribución en el muestreo de los estimadores, $\hat{\beta}$: $$
-\hat{\beta} \sim N_p(\beta, \sigma^2 (\mathbf{X}^\top \mathbf{X})^{-1}).
-$$
-
-Esto implica que cada coeficiente $\hat{\beta}_j$ es normal con media
-$\beta_j$ y varianza $\sigma^2 C_{jj}$, con $C_{jj}$ el elemento
-$j$-ésimo de la diagonal de la matriz
-$(\mathbf{X}^\top \mathbf{X})^{-1}$.
-
-De este modo, los estadísticos: $$
-t_j=\frac{\hat{\beta_j}-\beta_j}{\sqrt{\hat{\sigma^2}C_{jj}}} \hspace{0.5cm} j=0,1,\ldots,p
-$$ se distribuye como una t-Student, con $n-p$ grados de libertad.
-
-Po tanto, el intervalo de confianza para cada coeficiente $\beta_j$ se
-calcula como:
-
-$$
-\hat{\beta}_j \pm t_{n-p-1,\alpha/2} \cdot \text{SE}(\hat{\beta}_j) \hspace{0.5cm} j=0,1,\ldots,p
-$$
-
-donde:
-
-$$
-  \text{SE}(\hat{\beta}_j) = \sqrt{\sigma^2 (\mathbf{X}^\top \mathbf{X})^{-1}_{jj}}.
-  $$
-
-es el error estándar del estimador $\hat{\beta}_j$.
-
-#### Contraste global sobre lo significativo que es el modelo de regresión lineal múltiple
-
-El contraste global evalúa si el modelo de regresión, como un todo,
-explica una proporción significativa de la variabilidad de la variable
-respuesta. Esto se realiza mediante un **test F** y una tabla ANOVA.
-
-La tabla ANOVA para la regresión múltiple descompone la variabilidad
-total de la variable respuesta ($\text{SCT}$) en dos componentes
-principales:
-
-1.  **Suma de Cuadrados del Modelo de Regresión (SSR):** Variabilidad
-    explicada por los regresores.
-2.  **Suma de Cuadrados de los Residuos (SSE):** Variabilidad no
-    explicada por el modelo.
-
-La descomposición se expresa como: $$
-\text{SST} = \text{SSE} + \text{SSR}.
-$$
-
-Los términos involucrados son:
-
--   $\text{SSR} = \sum_{i=1}^n (\hat{Y}_i - \bar{Y})^2$, donde
-    $\hat{Y}_i$ son los valores predichos por el modelo y $\bar{Y}$ es
-    la media de $Y$.
--   $\text{SSE} = \sum_{i=1}^n (Y_i - \hat{Y}_i)^2$, la suma de los
-    cuadrados de los residuos.
--   $\text{SST} = \sum_{i=1}^n (Y_i - \bar{Y})^2$, la suma total de los
-    cuadrados.
-
-La tabla ANOVA incluye los siguientes elementos:
-
-| Fuente de Variación | Suma de Cuadrados | Grados de Libertad | Cuadrados Medios | Estadístico F |
-|---------------|---------------|---------------|---------------|---------------|
-| Modelo | $\text{SSR}$ | $p$ | $MSR=\text{SSR}/p$ | $F = \frac{\text{SCM}/p}{\text{SCR}/(n-p-1)}$ |
-| Residuos | $\text{SSE}$ | $n-p-1$ | $MSE=\text{SSE}/(n-p-1)$ |  |
-| Total | $\text{SST}$ | $n-1$ |  |  |
-
-La hipótesis del test F global es:
-
--   $H_0: \beta_1 = \beta_2 = \dots = \beta_p = 0$ (el modelo no es
-    significativo),
--   $H_1:$ al menos uno de los $\beta_j \neq 0$.
-
-El estadístico F se calcula como: $$
-F = \frac{\text{SSR}/p}{\text{SSE}/(n-p-1)}=\frac{MSR}{MSE}.
-$$ Se compara con un valor crítico de la distribución $F_{p, n-p-1}$. Si
-$F$ es grande o el valor $p$ asociado es pequeño, se rechaza $H_0$.
-
-#### Test global sobre el ajuste del modelo
-
-El test global evalúa si la proporción de la variabilidad total
-explicada por el modelo ($R^2$) es significativa. Esto se relaciona con
-el test F global presentado en la sección anterior.
-
-El coeficiente de determinación $R^2$ se define como: $$
-R^2 = \frac{\text{SSR}}{\text{SST}}.
-$$ El test F analiza si este valor es significativamente distinto de
-cero, como se muestra en la tabla ANOVA.
-
-#### Test sobre coeficientes individuales
-
-El objetivo aquí es determinar si cada variable explicativa tiene un
-efecto significativo en la variable respuesta, después de ajustar por
-las demás.
-
-Para cada coeficiente $\beta_j$:
-
--   $H_0: \beta_j = 0$ (la variable $X_j$ no contribuye al modelo),
--   $H_1: \beta_j \neq 0$ (la variable $X_j$ tiene un efecto
-    significativo).
-
-El estadístico $t$ para cada $\beta_j$ se calcula como: $$
-t_j = \frac{\hat{\beta}_j}{\text{SE}(\hat{\beta}_j)},
-$$
-
-donde $\text{SE}(\hat{\beta}_j)$ es el error estándar del coeficiente.
-Este estadístico sigue una distribución $t_{n-p-1}$.
-
-Se compara $|t_j|$ con el valor crítico de $t$ para un nivel de
-significancia $\alpha$, o se evalúa el valor $p$. Si $|t_j|$ es
-suficientemente grande (o $p$ es pequeño), se rechaza $H_0$, indicando
-que $X_j$ contribuye significativamente al modelo.
-
-El test sobre los coeficientes individuales permite identificar qué
-variables son más importantes en la explicación de la variabilidad de la
-variable respuesta, ajustando por las demás. Esto ayuda a interpretar y
-refinar el modelo.
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-Para los datos de calificaciones y tiempo de estudio, estos son los
-estimadores de los parámetros del modelo de regresión:
-
-```{r estimadores_multiple}
-# Ajustar el modelo de regresión lineal
-modelo_regresion <- lm(Calificaciones ~ Tiempo_Estudio + Distraccion + Interacciones_Clase, data = datos)
-
-# Mostrar los resultados del modelo
-summary(modelo_regresion)
+# Guardamos la predicción para un individuo en un objeto
+pred_indiv <- predict(modelo_estudio, newdata = dato_nuevo, interval = "prediction")
 ```
+
+**Interpretación:**
+
+- Con un 95% de confianza, la calificación **promedio** de los estudiantes que estudian 25 horas está entre **`r round(pred_media[1, "lwr"], 2)`** y **`r round(pred_media[1, "upr"], 2)`**.
+- Con un 95% de confianza, la calificación de **un estudiante concreto** que estudia 25 horas estará entre **`r round(pred_indiv[1, "lwr"], 2)`** y **`r round(pred_indiv[1, "upr"], 2)`**.
 :::
 
-------------------------------------------------------------------------
+## Diagnóstico del Modelo
+
+Una vez que hemos ajustado un modelo y evaluado su significancia, el trabajo no ha terminado. Un paso crucial, a menudo subestimado, es el **diagnóstico del modelo**. Este proceso consiste en verificar si se cumplen los supuestos del modelo de regresión lineal clásico. La fiabilidad de nuestras inferencias (los p-valores de los contrastes t y F, y los intervalos de confianza) depende directamente de la validez de estos supuestos.
+
+El diagnóstico se realiza principalmente a través del **análisis de los residuos** del modelo ($e_i = y_i - \hat{y}_i$). Los residuos son nuestra mejor aproximación empírica de los errores teóricos no observables ($\varepsilon_i$). A continuación, se detalla cómo verificar cada uno de los supuestos clave.
+
+### Linealidad
+
+Este supuesto establece que la relación entre la variable predictora $X$ y el valor esperado de la variable respuesta $Y$ es, en promedio, una línea recta: $E[Y | X] = \beta_0 + \beta_1 X$.
+
+La herramienta fundamental para diagnosticar la linealidad es el gráfico de **residuos** ($e_i$) frente a los **valores ajustados** por el modelo ($\hat{y}_i$). La lógica de este gráfico es sencilla pero potente: si el modelo lineal es adecuado, los errores que comete (los residuos) deberían ser completamente aleatorios, sin guardar relación alguna con la magnitud de las predicciones. En esencia, buscamos confirmar que no queda ninguna información sistemática en los errores que el modelo no haya capturado.
+
+**En un escenario ideal**, este gráfico debería parecer una nube de puntos distribuida horizontalmente y sin estructura aparente, centrada en la línea del cero. Esto nos indica que los errores son, en promedio, nulos para todos los niveles de predicción, cumpliendo así el supuesto de linealidad. La línea roja que R superpone en este gráfico, que suaviza la tendencia de los puntos, debería ser prácticamente plana y pegada al cero, confirmando la ausencia de patrones.
+
+::: {.callout-tip title="Ejemplo de un Modelo Válido (Nuestro Caso)"}
+Para nuestro `modelo_estudio`, podemos generar específicamente el primer gráfico de diagnóstico, que es el de Residuos vs. Valores Ajustados.
+
+```{r}
+#| label: fig-linealidad-ok
+#| fig-cap: "Gráfico de Residuos vs. Valores Ajustados para el modelo de estudio. No se observan patrones."
+
+# Usamos which = 1 para seleccionar solo el primer gráfico de diagnóstico
+plot(modelo_estudio, which = 1)
+```
+Como se puede observar, los puntos se distribuyen de forma aleatoria alrededor de la línea horizontal en cero. La línea roja, que suaviza la tendencia de los residuos, es prácticamente plana. Esto es un claro indicativo de que el supuesto de linealidad se cumple en nuestro modelo.
+:::
+
+Por el contrario, la aparición de un **patrón sistemático** en los residuos es la señal de alarma de que algo anda mal. En lo que respecta al supuesto de **linealidad**, la evidencia más clara de una violación es una **tendencia curvilínea** (como una "U" o una parábola). Este patrón nos dice que el modelo es estructuralmente incapaz de capturar la forma de los datos y, por lo tanto, comete errores predecibles. Por ejemplo, puede subestimar la respuesta en los extremos (generando residuos positivos) y sobreestimarla en el centro (residuos negativos), lo que invalida el modelo lineal.
+
+
+::: {.callout-tip title="Contraejemplo: Violación del Supuesto de Linealidad"}
+Ahora, vamos a simular a propósito unos datos que siguen una relación cuadrática (curva) y ajustaremos incorrectamente un modelo lineal para ver cómo se manifiesta el problema en el gráfico de diagnóstico.
+```{r}	
+#| label: fig-linealidad-mal
+#| fig-cap: "Patrón curvo evidente en los residuos, violando el supuesto de linealidad."
+
+# 1. Simulación de datos no lineales
+set.seed(42) # Nueva semilla para este ejemplo
+x_no_lineal <- runif(100, 0, 10)
+# La relación verdadera es cuadrática (y = 10 - (x-5)^2) más un error
+y_no_lineal <- 10 - (x_no_lineal - 5)^2 + rnorm(100, 0, 4)
+datos_no_lineal <- data.frame(x = x_no_lineal, y = y_no_lineal)
+
+# 2. Ajuste de un modelo lineal (incorrecto)
+modelo_no_lineal <- lm(y ~ x, data = datos_no_lineal)
+
+# 3. Gráfico de Residuos vs. Valores Ajustados
+plot(modelo_no_lineal, which = 1)
+```
+
+El gráfico de diagnóstico es inequívoco. A diferencia del ejemplo anterior, donde los puntos formaban una nube aleatoria, aquí los residuos dibujan un **patrón parabólico** perfecto (una "U" invertida). La línea roja de tendencia, en lugar de ser plana, sigue fielmente esta curva.
+
+:::
+
+### Homocedasticidad
+
+El supuesto de homocedasticidad establece que la varianza de los errores del modelo debe ser constante para todos los niveles de la variable predictora. Es decir, la dispersión de los datos alrededor de la línea de regresión es la misma en todo su recorrido ($Var(\varepsilon_i | X_i) = \sigma^2$). La violación de este supuesto se conoce como **heteroscedasticidad**, y es un problema común en el modelado.
+
+¿Por qué es tan importante? Si un modelo es heteroscedástico, los errores estándar de los coeficientes ($\beta_0, \beta_1$) estarán calculados de forma incorrecta. Como consecuencia, los intervalos de confianza y los contrastes de hipótesis (p-valores) no serán fiables, pudiendo llevarnos a conclusiones erróneas sobre la significancia de nuestras variables.
+
+::: {.callout-note title="¿Qué son los Residuos Estandarizados y Estudentizados?"}
+Antes de analizar los gráficos, es útil definir los **residuos estandarizados**. Un residuo simple ($e_i = y_i - \hat{y}_i$) nos dice cuán lejos está una observación de la línea de regresión. Sin embargo, no todos los residuos son directamente comparables, ya que su varianza puede depender de los valores de $X$ (especialmente de su apalancamiento o *leverage*).
+
+Para solucionar esto, se estandarizan los residuos, dividiéndolos por una estimación de su desviación estándar. Esto los pone a todos en una escala común (similar a una puntuación Z), haciendo más fácil la identificación de patrones y valores atípicos. R, en sus gráficos de diagnóstico, utiliza una versión aún más refinada llamada **residuos estudentizados**, que es más precisa para detectar outliers. A efectos prácticos, la interpretación es la misma.
+:::
+
+La heteroscedasticidad se detecta principalmente buscando patrones en la dispersión de los residuos.
+
+* **Gráfico de Residuos vs. Valores Ajustados:** Como en la prueba de linealidad, este gráfico es nuestra primera herramienta. Aquí no buscamos patrones en la media de los residuos (que debe ser cero), sino en su **dispersión**. La señal de alarma inequívoca de heteroscedasticidad es una **forma de embudo o megáfono**, donde la dispersión de los residuos aumenta o disminuye a medida que cambian los valores ajustados.
+
+* **Gráfico Scale-Location:** Este gráfico está diseñado específicamente para detectar heteroscedasticidad. Muestra la raíz cuadrada de los residuos estandarizados en el eje Y (`sqrt(|Standardized residuals|)`) frente a los valores ajustados en el eje X. Al usar la raíz cuadrada, se suaviza la distribución de los residuos, haciendo los patrones de varianza más fáciles de ver. Si la varianza es constante (homocedasticidad), deberíamos ver una nube de puntos aleatoria con una línea de tendencia roja aproximadamente plana. Una pendiente en esta línea roja indica que la varianza cambia con el nivel de la respuesta.
+
+* **Prueba de Breusch-Pagan:** Es el contraste de hipótesis formal. Su lógica es ingeniosa: realiza una regresión auxiliar donde intenta predecir los residuos al cuadrado a partir de las variables predictoras originales. Si las variables predictoras ayudan a explicar la magnitud de los residuos al cuadrado, significa que la varianza del error depende de los predictores, y por tanto, hay heteroscedasticidad.
+    * **Hipótesis Nula ($H_0$):** El modelo es homocedástico.
+    * **Decisión:** Un p-valor pequeño (p. ej., < 0.05) es evidencia en contra de la homocedasticidad.
+
+::: {.callout-tip title="Ejemplo de un Modelo Válido (Nuestro Caso)"}
+Analicemos nuestro `modelo_estudio`. Nos centraremos en el gráfico `Scale-Location` (`which = 3`) y en la prueba de Breusch-Pagan.
+
+```{r}
+#| label: fig-homocedasticidad-ok
+#| fig-cap: "Gráfico Scale-Location para el modelo de estudio. La línea de tendencia es casi plana."
+
+# Usamos which = 3 para seleccionar el gráfico Scale-Location
+plot(modelo_estudio, which = 3)
+
+# Prueba de Breusch-Pagan
+library(lmtest)
+bptest(modelo_estudio)
+```
+El diagnóstico es positivo. En el gráfico `Scale-Location`, la línea roja es casi horizontal, lo que indica que la varianza de los residuos es estable a lo largo de los valores ajustados. Esto se confirma con la prueba de Breusch-Pagan, que arroja un **p-valor alto**, por lo que no tenemos evidencia para rechazar la hipótesis nula de homocedasticidad. **Nuestro modelo cumple el supuesto**.
+:::
+
+::: {.callout-tip title="Contraejemplo: Violación del Supuesto de Homocedasticidad"}
+Ahora, simularemos datos donde el error aumenta a medida que `x` crece, un caso clásico de heteroscedasticidad.
+
+```{r}
+#| label: fig-homocedasticidad-mal
+#| fig-cap: "Diagnóstico de heteroscedasticidad. Izquierda: Gráfico de Residuos vs. Ajustados (patrón de embudo). Derecha: Gráfico Scale-Location (tendencia ascendente)."
+
+# Esta línea le dice a R que prepare una rejilla de 1 fila y 2 columnas para los gráficos
+par(mfrow = c(1, 2)) 
+
+# 1. Simulación de datos (la misma que antes)
+set.seed(101)
+x_hetero <- 1:100
+y_hetero <- 10 + 2 * x_hetero + rnorm(100, mean = 0, sd = 0.4 * x_hetero)
+datos_hetero <- data.frame(x = x_hetero, y = y_hetero)
+modelo_hetero <- lm(y ~ x, data = datos_hetero)
+
+# 2. Gráficos de diagnóstico
+# El primer plot irá a la izquierda
+plot(modelo_hetero, which = 1) 
+
+# El segundo plot irá a la derecha
+plot(modelo_hetero, which = 3)
+
+# 3. Prueba de Breusch-Pagan
+# La prueba no genera un gráfico, por lo que no afecta al layout
+library(lmtest)
+test_values <- bptest(modelo_hetero)
+```
+Los resultados son un libro de texto sobre la heteroscedasticidad.
+
+* El gráfico de **Residuos vs. Valores Ajustados** (izquierda) tiene una **forma de embudo** inconfundible: la dispersión de los puntos aumenta drásticamente de izquierda a derecha.
+* El gráfico **Scale-Location** (derecha) confirma el problema, mostrando una línea roja con una **clara pendiente ascendente**.
+* La **prueba de Breusch-Pagan** arroja un **p-valor `r format(test_values[[4]],scientific = TRUE, digits = 3)`**, dándonos una fuerte evidencia estadística para rechazar la hipótesis nula de homocedasticidad.
+
+Este modelo viola claramente el supuesto, y las inferencias basadas en él (como el p-valor del coeficiente de `x`) no serían fiables.
+:::
+
+
+### 3. Normalidad de los Errores
+
+Este supuesto postula que los errores del modelo ($\varepsilon_i$) siguen una distribución normal: $\varepsilon_i \sim N(0, \sigma^2)$. Es especialmente importante para la validez de los intervalos de confianza y los contrastes de hipótesis cuando el tamaño de la muestra es pequeño.
+
+#### **Evaluación Visual**
+
+* **Gráfico Normal Q-Q (`Normal Q-Q Plot`):** Compara los cuantiles de los residuos estandarizados con los cuantiles de una distribución normal teórica.
+    * **Qué buscar:** Los puntos deben caer muy cerca de la línea diagonal de 45 grados.
+* **Histograma de los Residuos:** Un simple histograma de los residuos debe mostrar una forma aproximada de campana de Gauss.
+
+#### **Prueba Analítica**
+
+* **Prueba de Shapiro-Wilk:** Es uno de los contrastes más potentes para la normalidad.
+    * **Hipótesis Nula ($H_0$):** Los residuos provienen de una distribución normal.
+    * **Decisión:** Un p-valor pequeño (< 0.05) sugiere rechazar $H_0$.
+
+---
+
+### 4. Independencia de los Errores
+
+Este supuesto afirma que el error de una observación no está correlacionado con el de ninguna otra: $Cov(\varepsilon_i, \varepsilon_j) = 0$ para $i \neq j$. La violación, conocida como **autocorrelación**, es común en datos de series temporales.
+
+#### **Evaluación**
+
+* **Prueba de Durbin-Watson:** Es el contraste clásico para la autocorrelación de primer orden. Su estadístico se calcula como:
+    $$ DW = \frac{\sum_{i=2}^{n}(e_i - e_{i-1})^2}{\sum_{i=1}^{n}e_i^2} $$
+    El estadístico varía entre 0 y 4. Un valor cercano a 2 sugiere no autocorrelación. Valores cercanos a 0 indican autocorrelación positiva, y cercanos a 4, autocorrelación negativa.
+
+---
+
+### 5. Identificación de Observaciones Influyentes y Atípicas
+
+Algunos puntos pueden tener una influencia desproporcionada en el modelo. Es crucial identificarlos usando tres métricas clave:
+
+* **Apalancamiento (Leverage, $h_{ii}$):** Mide cuán atípico es el valor de la variable predictora $X_i$ de una observación. Un apalancamiento alto significa que el punto tiene el *potencial* de ser muy influyente. En regresión simple, se calcula como:
+    $$ h_{ii} = \frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum_{j=1}^{n}(x_j - \bar{x})^2} $$
+    Una regla común es considerar un apalancamiento alto si $h_{ii} > \frac{2(k+1)}{n}$, donde $k$ es el número de predictores (1 en regresión simple).
+
+* **Residuos Estudentizados:** Son una versión de los residuos estandarizados que son más efectivos para detectar outliers. Un residuo estudentizado ($r_i$) sigue una distribución t de Student con $n-k-2$ grados de libertad. Valores $|r_i| > 2$ o $3$ a menudo se consideran atípicos.
+
+* **Distancia de Cook ($D_i$):** Mide la influencia global de una observación, combinando su apalancamiento y su residuo. Representa cuánto cambian los coeficientes del modelo si la i-ésima observación es eliminada.
+    $$ D_i = \frac{r_i^2}{k+1} \cdot \frac{h_{ii}}{1-h_{ii}} $$
+    Se considera que un punto es influyente si su distancia de Cook es grande, por ejemplo, si $D_i > 1$ o $D_i > 4/(n-k-1)$.
+
+El gráfico **`Residuals vs. Leverage`** es la herramienta visual que combina estas tres métricas, facilitando la identificación de puntos problemáticos.
+
+### Aplicación Práctica en R
+
+A continuación, se realizan las pruebas de diagnóstico para nuestro `modelo_estudio`.
+
+```{r}
+#| label: fig-diagnostico-detallado
+#| fig-cap: "Gráficos de diagnóstico estándar generados por R."
+#| echo: true
+
+# Gráficos de diagnóstico visual estándar
+par(mfrow = c(2, 2))
+plot(modelo_estudio)
+par(mfrow = c(1, 1))
+
+# Para las pruebas analíticas, usamos el paquete 'lmtest'
+# Si no está instalado, ejecuta: install.packages("lmtest")
+library(lmtest)
+
+# 1. Prueba de Breusch-Pagan para homocedasticidad
+bptest(modelo_estudio)
+
+# 2. Prueba de Shapiro-Wilk para normalidad (sobre los residuos)
+shapiro.test(residuals(modelo_estudio))
+
+# 3. Prueba de Durbin-Watson para independencia
+dwtest(modelo_estudio)
+```
+

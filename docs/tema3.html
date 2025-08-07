@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3&nbsp; Modelos no lineales. Transformación de variables. Ingeniería de características. – Modelos de Regresión</title>
+<title>4&nbsp; Modelos no lineales. Transformación de variables. Ingeniería de características. – Modelos Estadísticos para la Predicción</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,8 +21,9 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -66,15 +67,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="./">
 <link href="./tema4.html" rel="next">
 <link href="./tema2.html" rel="prev">
-<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-1b90310288666db1f83ae9fc236520cd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -136,7 +138,7 @@ window.Quarto = {
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-sidebar floating">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -145,7 +147,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema3.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modelos no lineales. Transformación de variables. Ingeniería de características.</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema3.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelos no lineales. Transformación de variables. Ingeniería de características.</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -160,7 +162,7 @@ window.Quarto = {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Modelos de Regresión</a> 
+      <a href="./">Modelos Estadísticos para la Predicción</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -178,38 +180,44 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./tema0.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción a los Modelos de Regresión</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./tema1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Modelo de regresión lineal: simple y múltiple</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Modelo de regresión lineal: simple y múltiple</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tema2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Métodos de selección de variables y problemas de regularización</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Métodos de selección de variables y problemas de regularización</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tema3.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modelos no lineales. Transformación de variables. Ingeniería de características.</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelos no lineales. Transformación de variables. Ingeniería de características.</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tema4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tema5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Otros modelos de regresión: Modelos Aditivos Generalizados (GAMs)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Otros modelos de regresión: Modelos Aditivos Generalizados (GAMs)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./conclusiones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -228,24 +236,24 @@ window.Quarto = {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#modelos-no-lineales" id="toc-modelos-no-lineales" class="nav-link active" data-scroll-target="#modelos-no-lineales"><span class="header-section-number">3.1</span> Modelos no lineales</a>
+  <li><a href="#modelos-no-lineales" id="toc-modelos-no-lineales" class="nav-link active" data-scroll-target="#modelos-no-lineales"><span class="header-section-number">4.1</span> Modelos no lineales</a>
   <ul class="collapse">
-  <li><a href="#regresión-polinómica" id="toc-regresión-polinómica" class="nav-link" data-scroll-target="#regresión-polinómica"><span class="header-section-number">3.1.1</span> Regresión Polinómica</a></li>
-  <li><a href="#modelos-de-regresión-exponencial-y-logarítmica" id="toc-modelos-de-regresión-exponencial-y-logarítmica" class="nav-link" data-scroll-target="#modelos-de-regresión-exponencial-y-logarítmica"><span class="header-section-number">3.1.2</span> Modelos de Regresión Exponencial y Logarítmica</a></li>
-  <li><a href="#regresión-spline-y-modelos-basados-en-segmentos" id="toc-regresión-spline-y-modelos-basados-en-segmentos" class="nav-link" data-scroll-target="#regresión-spline-y-modelos-basados-en-segmentos"><span class="header-section-number">3.1.3</span> Regresión Spline y modelos basados en Segmentos</a></li>
+  <li><a href="#regresión-polinómica" id="toc-regresión-polinómica" class="nav-link" data-scroll-target="#regresión-polinómica"><span class="header-section-number">4.1.1</span> Regresión Polinómica</a></li>
+  <li><a href="#modelos-de-regresión-exponencial-y-logarítmica" id="toc-modelos-de-regresión-exponencial-y-logarítmica" class="nav-link" data-scroll-target="#modelos-de-regresión-exponencial-y-logarítmica"><span class="header-section-number">4.1.2</span> Modelos de Regresión Exponencial y Logarítmica</a></li>
+  <li><a href="#regresión-spline-y-modelos-basados-en-segmentos" id="toc-regresión-spline-y-modelos-basados-en-segmentos" class="nav-link" data-scroll-target="#regresión-spline-y-modelos-basados-en-segmentos"><span class="header-section-number">4.1.3</span> Regresión Spline y modelos basados en Segmentos</a></li>
   </ul></li>
-  <li><a href="#transformación-de-variables" id="toc-transformación-de-variables" class="nav-link" data-scroll-target="#transformación-de-variables"><span class="header-section-number">3.2</span> Transformación de variables</a>
+  <li><a href="#transformación-de-variables" id="toc-transformación-de-variables" class="nav-link" data-scroll-target="#transformación-de-variables"><span class="header-section-number">4.2</span> Transformación de variables</a>
   <ul class="collapse">
-  <li><a href="#tipos-de-transformaciones-comunes" id="toc-tipos-de-transformaciones-comunes" class="nav-link" data-scroll-target="#tipos-de-transformaciones-comunes"><span class="header-section-number">3.2.1</span> Tipos de transformaciones comunes</a></li>
-  <li><a href="#transformación-de-box-cox" id="toc-transformación-de-box-cox" class="nav-link" data-scroll-target="#transformación-de-box-cox"><span class="header-section-number">3.2.2</span> Transformación de Box-Cox</a></li>
-  <li><a href="#consideracione-sobre-las-transformaciones" id="toc-consideracione-sobre-las-transformaciones" class="nav-link" data-scroll-target="#consideracione-sobre-las-transformaciones"><span class="header-section-number">3.2.3</span> Consideracione sobre las transformaciones</a></li>
+  <li><a href="#tipos-de-transformaciones-comunes" id="toc-tipos-de-transformaciones-comunes" class="nav-link" data-scroll-target="#tipos-de-transformaciones-comunes"><span class="header-section-number">4.2.1</span> Tipos de transformaciones comunes</a></li>
+  <li><a href="#transformación-de-box-cox" id="toc-transformación-de-box-cox" class="nav-link" data-scroll-target="#transformación-de-box-cox"><span class="header-section-number">4.2.2</span> Transformación de Box-Cox</a></li>
+  <li><a href="#consideracione-sobre-las-transformaciones" id="toc-consideracione-sobre-las-transformaciones" class="nav-link" data-scroll-target="#consideracione-sobre-las-transformaciones"><span class="header-section-number">4.2.3</span> Consideracione sobre las transformaciones</a></li>
   </ul></li>
-  <li><a href="#ingeniería-de-características" id="toc-ingeniería-de-características" class="nav-link" data-scroll-target="#ingeniería-de-características"><span class="header-section-number">3.3</span> Ingeniería de características</a>
+  <li><a href="#ingeniería-de-características" id="toc-ingeniería-de-características" class="nav-link" data-scroll-target="#ingeniería-de-características"><span class="header-section-number">4.3</span> Ingeniería de características</a>
   <ul class="collapse">
-  <li><a href="#creación-de-nuevas-variables" id="toc-creación-de-nuevas-variables" class="nav-link" data-scroll-target="#creación-de-nuevas-variables"><span class="header-section-number">3.3.1</span> Creación de nuevas variables</a></li>
-  <li><a href="#selección-y-reducción-de-variables" id="toc-selección-y-reducción-de-variables" class="nav-link" data-scroll-target="#selección-y-reducción-de-variables"><span class="header-section-number">3.3.2</span> Selección y Reducción de variables</a></li>
-  <li><a href="#escalado-y-normalización-de-variables" id="toc-escalado-y-normalización-de-variables" class="nav-link" data-scroll-target="#escalado-y-normalización-de-variables"><span class="header-section-number">3.3.3</span> Escalado y Normalización de Variables</a></li>
-  <li><a href="#técnicas-avanzadas-de-ingeniería-de-características" id="toc-técnicas-avanzadas-de-ingeniería-de-características" class="nav-link" data-scroll-target="#técnicas-avanzadas-de-ingeniería-de-características"><span class="header-section-number">3.3.4</span> Técnicas avanzadas de Ingeniería de Características</a></li>
+  <li><a href="#creación-de-nuevas-variables" id="toc-creación-de-nuevas-variables" class="nav-link" data-scroll-target="#creación-de-nuevas-variables"><span class="header-section-number">4.3.1</span> Creación de nuevas variables</a></li>
+  <li><a href="#selección-y-reducción-de-variables" id="toc-selección-y-reducción-de-variables" class="nav-link" data-scroll-target="#selección-y-reducción-de-variables"><span class="header-section-number">4.3.2</span> Selección y Reducción de variables</a></li>
+  <li><a href="#escalado-y-normalización-de-variables" id="toc-escalado-y-normalización-de-variables" class="nav-link" data-scroll-target="#escalado-y-normalización-de-variables"><span class="header-section-number">4.3.3</span> Escalado y Normalización de Variables</a></li>
+  <li><a href="#técnicas-avanzadas-de-ingeniería-de-características" id="toc-técnicas-avanzadas-de-ingeniería-de-características" class="nav-link" data-scroll-target="#técnicas-avanzadas-de-ingeniería-de-características"><span class="header-section-number">4.3.4</span> Técnicas avanzadas de Ingeniería de Características</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -255,7 +263,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-tema3" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Modelos no lineales. Transformación de variables. Ingeniería de características.</span></span></h1>
+<h1 class="title"><span id="sec-tema3" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelos no lineales. Transformación de variables. Ingeniería de características.</span></span></h1>
 </div>
 
 
@@ -284,11 +292,11 @@ window.Quarto = {
 <p>Además de utilizar modelos no lineales, otra estrategia fundamental es la <strong>transformación de variables</strong>. Mediante transformaciones matemáticas (como logaritmos, potencias o funciones exponenciales), es posible linearizar relaciones no lineales o mejorar la adecuación del modelo. Estas transformaciones pueden también ayudar a cumplir con los supuestos de normalidad y homocedasticidad en los modelos.</p>
 <p>Finalmente, la <strong>ingeniería de características</strong> juega un papel crucial en la mejora del rendimiento de los modelos predictivos. Este proceso implica la creación, modificación o combinación de variables explicativas para extraer mayor información de los datos. La ingeniería de características es clave para mejorar la capacidad predictiva de los modelos, especialmente en entornos de alta dimensionalidad o con datos complejos.</p>
 <p>A lo largo de este tema, exploraremos estos tres pilares: cómo identificar y ajustar modelos no lineales, cómo aplicar transformaciones efectivas a las variables y cómo desarrollar nuevas características que potencien el análisis y la predicción.</p>
-<section id="modelos-no-lineales" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="modelos-no-lineales"><span class="header-section-number">3.1</span> Modelos no lineales</h2>
+<section id="modelos-no-lineales" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="modelos-no-lineales"><span class="header-section-number">4.1</span> Modelos no lineales</h2>
 <p>Los modelos de regresión no lineal son herramientas esenciales cuando las relaciones entre las variables no pueden capturarse adecuadamente con modelos lineales. La regresión polinómica, exponencial, logarítmica y los modelos por tramos ofrecen diferentes enfoques para representar patrones complejos en los datos. Comprender cuándo y cómo aplicar estos modelos es fundamental para mejorar la precisión y la interpretabilidad en el análisis de datos.</p>
-<section id="regresión-polinómica" class="level3" data-number="3.1.1">
-<h3 data-number="3.1.1" class="anchored" data-anchor-id="regresión-polinómica"><span class="header-section-number">3.1.1</span> Regresión Polinómica</h3>
+<section id="regresión-polinómica" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="regresión-polinómica"><span class="header-section-number">4.1.1</span> Regresión Polinómica</h3>
 <p>La <strong>regresión polinómica</strong> es una extensión de la regresión lineal que permite capturar relaciones no lineales mediante la inclusión de términos polinómicos (cuadráticos, cúbicos, etc.). Aunque sigue siendo un modelo lineal en los parámetros, la inclusión de potencias de las variables independientes permite ajustar curvas en lugar de líneas rectas.</p>
 <p><span class="math display">\[
 Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \beta_3 X^3 + \dots + \beta_k X^k + \varepsilon
@@ -353,8 +361,8 @@ F-statistic: 509.1 on 2 and 17 DF,  p-value: 6.778e-16</code></pre>
 </div>
 </div>
 </section>
-<section id="modelos-de-regresión-exponencial-y-logarítmica" class="level3" data-number="3.1.2">
-<h3 data-number="3.1.2" class="anchored" data-anchor-id="modelos-de-regresión-exponencial-y-logarítmica"><span class="header-section-number">3.1.2</span> Modelos de Regresión Exponencial y Logarítmica</h3>
+<section id="modelos-de-regresión-exponencial-y-logarítmica" class="level3" data-number="4.1.2">
+<h3 data-number="4.1.2" class="anchored" data-anchor-id="modelos-de-regresión-exponencial-y-logarítmica"><span class="header-section-number">4.1.2</span> Modelos de Regresión Exponencial y Logarítmica</h3>
 <p>Cuando la relación entre la variable dependiente y la independiente sigue un <strong>crecimiento o decaimiento exponencial</strong>, o una relación logarítmica, los modelos lineales tradicionales no son suficientes. En estos casos, se pueden utilizar transformaciones exponenciales o logarítmicas.</p>
 <p><strong>Regresión Exponencial</strong></p>
 <p>Este modelo es útil cuando la variable dependiente crece (o decrece) a una tasa proporcional a su valor actual.</p>
@@ -436,8 +444,8 @@ F-statistic: 34.54 on 1 and 18 DF,  p-value: 1.45e-05</code></pre>
 </div>
 </div>
 </section>
-<section id="regresión-spline-y-modelos-basados-en-segmentos" class="level3" data-number="3.1.3">
-<h3 data-number="3.1.3" class="anchored" data-anchor-id="regresión-spline-y-modelos-basados-en-segmentos"><span class="header-section-number">3.1.3</span> Regresión Spline y modelos basados en Segmentos</h3>
+<section id="regresión-spline-y-modelos-basados-en-segmentos" class="level3" data-number="4.1.3">
+<h3 data-number="4.1.3" class="anchored" data-anchor-id="regresión-spline-y-modelos-basados-en-segmentos"><span class="header-section-number">4.1.3</span> Regresión Spline y modelos basados en Segmentos</h3>
 <p>Los <strong>splines</strong> y los <strong>modelos segmentados</strong> son técnicas que permiten ajustar relaciones no lineales mediante la división de los datos en segmentos y el ajuste de funciones lineales o polinómicas en cada segmento. Estos métodos son especialmente útiles cuando la relación entre las variables cambia en diferentes rangos de los datos.</p>
 <p><strong>Modelos por tramos (Piecewise Regression)</strong></p>
 <p>En este enfoque, se ajustan diferentes regresiones lineales a distintos rangos de la variable independiente. A diferencia de los splines, las transiciones entre segmentos no necesariamente son suaves.</p>
@@ -591,8 +599,8 @@ Ejemplo
 </div>
 </section>
 </section>
-<section id="transformación-de-variables" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="transformación-de-variables"><span class="header-section-number">3.2</span> Transformación de variables</h2>
+<section id="transformación-de-variables" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="transformación-de-variables"><span class="header-section-number">4.2</span> Transformación de variables</h2>
 <p>En el análisis de datos y la construcción de modelos estadísticos, no siempre es posible capturar adecuadamente la relación entre las variables independientes y la variable dependiente utilizando modelos lineales en su forma original. Aquí es donde entran en juego las <strong>transformaciones de variables</strong>, que permiten modificar la estructura de los datos para mejorar el ajuste del modelo, cumplir con los supuestos de la regresión y, en muchos casos, facilitar la interpretación.</p>
 <p>Las transformaciones de variables son una herramienta fundamental para mejorar el rendimiento y la precisión de los modelos estadísticos. Estas transformaciones pueden aplicarse tanto a la variable dependiente como a las variables independientes.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Objetivos">
@@ -623,8 +631,8 @@ Objetivos
 </div>
 </div>
 </div>
-<section id="tipos-de-transformaciones-comunes" class="level3" data-number="3.2.1">
-<h3 data-number="3.2.1" class="anchored" data-anchor-id="tipos-de-transformaciones-comunes"><span class="header-section-number">3.2.1</span> Tipos de transformaciones comunes</h3>
+<section id="tipos-de-transformaciones-comunes" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="tipos-de-transformaciones-comunes"><span class="header-section-number">4.2.1</span> Tipos de transformaciones comunes</h3>
 <p>Existen diversas transformaciones que pueden aplicarse a los datos según el problema que se desea abordar. A continuación, se describen las transformaciones más utilizadas en el análisis de regresión.</p>
 <hr>
 <p><strong>Transformación Logarítmica (</strong><span class="math inline">\(\log\)</span>)</p>
@@ -652,7 +660,7 @@ Ejemplo
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Transformación logarítmica para linearizar la relación</span></span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>modelo_log <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(y) <span class="sc">~</span> x)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning in log(y): Se han producido NaNs</code></pre>
+<pre><code>Warning in log(y): NaNs produced</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_log)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -719,7 +727,7 @@ Ejemplo
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Aplicando raíz cuadrada a la variable dependiente</span></span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>modelo_sqrt <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">sqrt</span>(y) <span class="sc">~</span> x)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning in sqrt(y): Se han producido NaNs</code></pre>
+<pre><code>Warning in sqrt(y): NaNs produced</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_sqrt)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -826,8 +834,8 @@ F-statistic: 553.3 on 1 and 48 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </section>
-<section id="transformación-de-box-cox" class="level3" data-number="3.2.2">
-<h3 data-number="3.2.2" class="anchored" data-anchor-id="transformación-de-box-cox"><span class="header-section-number">3.2.2</span> Transformación de Box-Cox</h3>
+<section id="transformación-de-box-cox" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="transformación-de-box-cox"><span class="header-section-number">4.2.2</span> Transformación de Box-Cox</h3>
 <p>La <strong>transformación de Box-Cox</strong> es un método que busca automáticamente la mejor transformación para estabilizar la varianza y aproximar la normalidad de los errores. La transformación se define como:</p>
 <p><span class="math display">\[
 Y(\lambda) =
@@ -887,8 +895,8 @@ Ejemplo
 <p>La gráfica de <strong>Box-Cox</strong> mostrará el valor óptimo de <span class="math inline">\(\lambda\)</span>, que indica la mejor transformación para los datos.</p>
 <hr>
 </section>
-<section id="consideracione-sobre-las-transformaciones" class="level3" data-number="3.2.3">
-<h3 data-number="3.2.3" class="anchored" data-anchor-id="consideracione-sobre-las-transformaciones"><span class="header-section-number">3.2.3</span> Consideracione sobre las transformaciones</h3>
+<section id="consideracione-sobre-las-transformaciones" class="level3" data-number="4.2.3">
+<h3 data-number="4.2.3" class="anchored" data-anchor-id="consideracione-sobre-las-transformaciones"><span class="header-section-number">4.2.3</span> Consideracione sobre las transformaciones</h3>
 <p>Antes de aplicar transformaciones, es importante diagnosticar si realmente son necesarias. Existen varias herramientas para identificar problemas en los datos que pueden solucionarse con transformaciones:</p>
 <ul>
 <li><p><strong>Gráficos de Dispersión:</strong> Visualizar la relación entre la variable dependiente y las independientes puede revelar patrones no lineales o heterocedasticidad.</p></li>
@@ -911,8 +919,8 @@ Ejemplo
 </ul>
 </section>
 </section>
-<section id="ingeniería-de-características" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="ingeniería-de-características"><span class="header-section-number">3.3</span> Ingeniería de características</h2>
+<section id="ingeniería-de-características" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="ingeniería-de-características"><span class="header-section-number">4.3</span> Ingeniería de características</h2>
 <p>La <strong>ingeniería de características</strong> es el arte y la ciencia de transformar los datos brutos en representaciones que faciliten el aprendizaje y mejoren la capacidad predictiva de los modelos. Consiste en el proceso de <strong>crear, transformar y seleccionar</strong> las variables que se utilizan en un modelo para mejorar su rendimiento. Una característica bien diseñada puede hacer que un modelo simple supere a modelos más complejos, mientras que características irrelevantes o mal definidas pueden degradar significativamente la calidad del análisis. Este proceso incluye:</p>
 <ul>
 <li><strong>Creación de nuevas variables</strong> a partir de las existentes.</li>
@@ -920,8 +928,8 @@ Ejemplo
 <li><strong>Selección de las características más relevantes</strong>, eliminando aquellas que no aportan valor o introducen ruido.</li>
 <li><strong>Preparación de datos para modelos específicos</strong>, asegurando que las variables cumplan con los requisitos del algoritmo (por ejemplo, escalado, normalización o codificación).</li>
 </ul>
-<section id="creación-de-nuevas-variables" class="level3" data-number="3.3.1">
-<h3 data-number="3.3.1" class="anchored" data-anchor-id="creación-de-nuevas-variables"><span class="header-section-number">3.3.1</span> Creación de nuevas variables</h3>
+<section id="creación-de-nuevas-variables" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="creación-de-nuevas-variables"><span class="header-section-number">4.3.1</span> Creación de nuevas variables</h3>
 <p>Una de las tareas más importantes en la ingeniería de características es la <strong>creación de nuevas variables</strong> que puedan capturar relaciones complejas entre las variables independientes y la variable objetivo.</p>
 <p>Las <strong>interacciones entre variables</strong> permiten capturar relaciones no lineales entre las variables al considerar cómo el efecto de una variable puede depender del valor de otra. Si se dispone de dos variables <span class="math inline">\(X_i\)</span> y <span class="math inline">\(X_j\)</span>, es posible crear una nueva variable de interacción $X_{} = X_i X_j $.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
@@ -1029,8 +1037,8 @@ F-statistic:  1792 on 2 and 17 DF,  p-value: &lt; 2.2e-16</code></pre>
 </ul>
 <hr>
 </section>
-<section id="selección-y-reducción-de-variables" class="level3" data-number="3.3.2">
-<h3 data-number="3.3.2" class="anchored" data-anchor-id="selección-y-reducción-de-variables"><span class="header-section-number">3.3.2</span> Selección y Reducción de variables</h3>
+<section id="selección-y-reducción-de-variables" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="selección-y-reducción-de-variables"><span class="header-section-number">4.3.2</span> Selección y Reducción de variables</h3>
 <p>Una vez que se han creado nuevas características, es importante <strong>seleccionar</strong> las que son más relevantes para el modelo y <strong>eliminar</strong> aquellas que no aportan valor o introducen ruido.</p>
 <p>Se trató con detalle estos conceptos en el tema anterior. Planteamos un ejemplo de selección <em>Stepwise</em>.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
@@ -1106,8 +1114,8 @@ F-statistic: 802.3 on 2 and 97 DF,  p-value: &lt; 2.2e-16</code></pre>
 <hr>
 <p>Recordemos que los métodos de regularización, estudiados en el tema 2, no solo ajustan el modelo, sino que también penalizan la complejidad, lo que ayuda a eliminar variables irrelevantes.</p>
 </section>
-<section id="escalado-y-normalización-de-variables" class="level3" data-number="3.3.3">
-<h3 data-number="3.3.3" class="anchored" data-anchor-id="escalado-y-normalización-de-variables"><span class="header-section-number">3.3.3</span> Escalado y Normalización de Variables</h3>
+<section id="escalado-y-normalización-de-variables" class="level3" data-number="4.3.3">
+<h3 data-number="4.3.3" class="anchored" data-anchor-id="escalado-y-normalización-de-variables"><span class="header-section-number">4.3.3</span> Escalado y Normalización de Variables</h3>
 <p>Muchos algoritmos de aprendizaje automático, como la regresión, las redes neuronales y los métodos basados en distancia (k-NN, SVM), son sensibles a la <strong>escala de las variables</strong>. Por lo tanto, es fundamental <strong>escalar</strong> o <strong>normalizar</strong> los datos para garantizar que todas las variables contribuyan de manera equitativa al modelo.</p>
 <p><strong>Estandarización (Z-Score Normalization)</strong></p>
 <p>La estandarización consiste en restar la media y dividir por la desviación estándar, lo que produce variables con <strong>media cero</strong> y <strong>desviación estándar uno</strong>.</p>
@@ -1159,11 +1167,11 @@ Ejemplo
 </div>
 </div>
 </section>
-<section id="técnicas-avanzadas-de-ingeniería-de-características" class="level3" data-number="3.3.4">
-<h3 data-number="3.3.4" class="anchored" data-anchor-id="técnicas-avanzadas-de-ingeniería-de-características"><span class="header-section-number">3.3.4</span> Técnicas avanzadas de Ingeniería de Características</h3>
+<section id="técnicas-avanzadas-de-ingeniería-de-características" class="level3" data-number="4.3.4">
+<h3 data-number="4.3.4" class="anchored" data-anchor-id="técnicas-avanzadas-de-ingeniería-de-características"><span class="header-section-number">4.3.4</span> Técnicas avanzadas de Ingeniería de Características</h3>
 <p>Cuando se trabaja con grandes conjuntos de datos o con variables altamente correlacionadas, puede ser necesario aplicar técnicas más avanzadas para reducir la dimensionalidad y extraer características relevantes.</p>
-<section id="análisis-de-componentes-principales-pca" class="level4" data-number="3.3.4.1">
-<h4 data-number="3.3.4.1" class="anchored" data-anchor-id="análisis-de-componentes-principales-pca"><span class="header-section-number">3.3.4.1</span> Análisis de Componentes Principales (PCA)</h4>
+<section id="análisis-de-componentes-principales-pca" class="level4" data-number="4.3.4.1">
+<h4 data-number="4.3.4.1" class="anchored" data-anchor-id="análisis-de-componentes-principales-pca"><span class="header-section-number">4.3.4.1</span> Análisis de Componentes Principales (PCA)</h4>
 <p>El <strong>Análisis de Componentes Principales (PCA)</strong> es una técnica de reducción de dimensionalidad que transforma un conjunto de variables correlacionadas en un conjunto más pequeño de <strong>componentes principales</strong> no correlacionados que explican la mayor parte de la varianza en los datos.</p>
 <div class="callout callout-style-default callout-caution callout-titled" title="Aviso">
 <div class="callout-header d-flex align-content-center">
@@ -1220,8 +1228,8 @@ Cumulative Proportion  0.3835 0.7102 1.0000</code></pre>
 </div>
 </div>
 </section>
-<section id="codificación-de-variables-categóricas" class="level4" data-number="3.3.4.2">
-<h4 data-number="3.3.4.2" class="anchored" data-anchor-id="codificación-de-variables-categóricas"><span class="header-section-number">3.3.4.2</span> Codificación de variables categóricas</h4>
+<section id="codificación-de-variables-categóricas" class="level4" data-number="4.3.4.2">
+<h4 data-number="4.3.4.2" class="anchored" data-anchor-id="codificación-de-variables-categóricas"><span class="header-section-number">4.3.4.2</span> Codificación de variables categóricas</h4>
 <p>Las variables categóricas deben convertirse en variables numéricas antes de ser utilizadas en muchos modelos. Esto puede hacerse mediante:</p>
 <p><strong>Codificación One-Hot</strong></p>
 <p>El <strong>One-Hot Encoding</strong> es una técnica utilizada en el <strong>preprocesamiento de datos</strong> para convertir variables categóricas en variables numéricas. Muchos algoritmos de aprendizaje automático y estadística (como la regresión lineal, redes neuronales y máquinas de soporte vectorial) requieren que las variables de entrada sean numéricas, ya que no pueden manejar directamente datos categóricos.</p>
@@ -1432,8 +1440,8 @@ Aviso
 </div>
 </div>
 </section>
-<section id="codificación-ordinal" class="level4" data-number="3.3.4.3">
-<h4 data-number="3.3.4.3" class="anchored" data-anchor-id="codificación-ordinal"><span class="header-section-number">3.3.4.3</span> Codificación Ordinal</h4>
+<section id="codificación-ordinal" class="level4" data-number="4.3.4.3">
+<h4 data-number="4.3.4.3" class="anchored" data-anchor-id="codificación-ordinal"><span class="header-section-number">4.3.4.3</span> Codificación Ordinal</h4>
 <p>La <strong>codificación ordinal</strong> es una técnica de preprocesamiento de datos utilizada para convertir variables categóricas en valores numéricos <strong>manteniendo el orden natural</strong> entre las categorías. A diferencia del <strong>One-Hot Encoding</strong>, que trata a todas las categorías como independientes y sin relación entre sí, la codificación ordinal es útil cuando las categorías tienen una <strong>jerarquía</strong> o un <strong>orden lógico</strong>.</p>
 <p>En la <strong>codificación ordinal</strong>, a cada categoría se le asigna un número entero que refleja su <strong>posición</strong> o <strong>nivel</strong> en un orden determinado. Esto permite que los modelos estadísticos y de aprendizaje automático interpreten que <strong>algunas categorías son mayores o menores</strong> que otras, lo que es especialmente útil en variables que representan rangos, niveles o clasificaciones.</p>
 <p>Supongamos que tenemos una variable llamada <strong>“Nivel de Satisfacción”</strong> con las siguientes categorías:</p>
@@ -1638,8 +1646,8 @@ F-statistic: 221.9 on 1 and 3 DF,  p-value: 0.0006565</code></pre>
 </div>
 <p>El modelo ajustará la relación entre la puntuación de satisfacción y el nivel de satisfacción codificado ordinalmente. El coeficiente de la variable <strong><code>Satisfaccion_codificada</code></strong> indicará cómo cambia la puntuación a medida que aumenta el nivel de satisfacción.</p>
 </section>
-<section id="diferencias-entre-codificación-ordinal-y-one-hot-encoding" class="level4" data-number="3.3.4.4">
-<h4 data-number="3.3.4.4" class="anchored" data-anchor-id="diferencias-entre-codificación-ordinal-y-one-hot-encoding"><span class="header-section-number">3.3.4.4</span> Diferencias entre Codificación Ordinal y One-Hot Encoding</h4>
+<section id="diferencias-entre-codificación-ordinal-y-one-hot-encoding" class="level4" data-number="4.3.4.4">
+<h4 data-number="4.3.4.4" class="anchored" data-anchor-id="diferencias-entre-codificación-ordinal-y-one-hot-encoding"><span class="header-section-number">4.3.4.4</span> Diferencias entre Codificación Ordinal y One-Hot Encoding</h4>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -1685,239 +1693,242 @@ F-statistic: 221.9 on 1 and 3 DF,  p-value: 0.0006565</code></pre>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
-      }
-    }
-    return false;
-  }
-  const onCopySuccess = function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copiado");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copiado");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
-  });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
-    });
-    clipboardModal.on('success', onCopySuccess);
-  }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
-      }
-    }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-    const config = {
-      allowHTML: true,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start',
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
         }
       }
+      return false;
     }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
           }
         }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
         }
-        return container.innerHTML
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
       } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
         if (window.Quarto?.typesetMath) {
           window.Quarto.typesetMath(note);
         }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      // TODO in 1.5, we should make sure this works without a callout special case
-      if (note.classList.contains("callout")) {
-        return note.outerHTML;
-      } else {
-        return note.innerHTML;
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
       }
     }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
           }
         } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
           .then(res => res.text())
           .then(html => {
             const parser = new DOMParser();
             const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
+            const note = htmlDoc.querySelector('main.content');
             if (note !== null) {
-              const html = processXRef(id, note);
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
               instance.setContent(html);
             } 
           }).finally(() => {
@@ -1925,194 +1936,170 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             instance.show();
           });
         }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
-    });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            div.style.left = 0;
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
-          } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
-          }
-        });
-      }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
-    }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
-          }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+      }, function(instance) {
       });
     }
-  }
-});
-</script>
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./tema2.html" class="pagination-link" aria-label="Métodos de selección de variables y problemas de regularización">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Métodos de selección de variables y problemas de regularización</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Métodos de selección de variables y problemas de regularización</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./tema4.html" class="pagination-link" aria-label="Modelos de regresión generalizada">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -1,55 +1,44 @@
 # Prefacio {.unnumbered}
 
-La ciencia y la ingeniería de datos han emergido como campos fundamentales en la era de la información, donde la capacidad de analizar y predecir comportamientos a partir de datos se ha convertido en una habilidad esencial. En este contexto, los modelos de regresión juegan un papel crucial al permitirnos describir y cuantificar las relaciones entre variables, así como predecir resultados futuros basados en datos históricos. Este libro está diseñado para proporcionar una comprensión profunda y práctica de las diversas técnicas de regresión utilizadas en la ciencia de datos. Basado en el contenido de la asignatura impartida en el **Grado en Ciencia e Ingeniería de Datos**, este texto abarca desde los modelos de regresión lineal más simples hasta los modelos no lineales y generalizados más complejos.
+Los modelos estadísticos han emergido como herramientas fundamentales en la era de la información, donde la capacidad de analizar y predecir comportamientos a partir de datos se ha convertido en una habilidad esencial. En este contexto, los modelos para la predicción juegan un papel crucial al permitirnos describir y cuantificar las relaciones entre variables, así como anticipar resultados futuros. Este libro está diseñado para proporcionar una comprensión profunda y práctica de estas técnicas, basándose en el contenido de la asignatura impartida en el **Grado en Matemáticas**.
 
-A lo largo de los capítulos, los alumnos encontrarán una combinación de teoría rigurosa y aplicaciones prácticas. Se abordarán temas como el modelo de regresión lineal simple y múltiple, métodos de selección de variables, problemas de regularización, transformación de variables, ingeniería de características, y modelos de regresión generalizada, entre otros. Además, se incluirán ejemplos y ejercicios prácticos utilizando el software R, que permitirán a los lectores aplicar los conceptos aprendidos a conjuntos de datos reales.
+A lo largo de los capítulos, encontrarás una combinación de teoría rigurosa y aplicaciones prácticas. Se abordarán temas como la regresión lineal simple y múltiple, métodos de selección de variables y regularización, ingeniería de características y modelos generalizados, entre otros. Además, todos los conceptos se ilustrarán con ejemplos en **R**, permitiéndote aplicar lo aprendido a conjuntos de datos reales.
 
-El objetivo de este libro es equipar a los estudiantes con las herramientas necesarias para modelar la dependencia entre variables en conjuntos de datos complejos, evaluar la calidad de los modelos, interpretarlos y proponer mejoras. Al finalizar la lectura, los alumnos habrán desarrollado una comprensión sólida de los modelos de regresión y estarán preparados para enfrentar desafíos en el ámbito de la ciencia e ingeniería de datos con confianza y creatividad.
+El objetivo de este libro es doble: por un lado, proporcionar herramientas avanzadas para analizar relaciones sujetas a incertidumbre y, por otro, capacitarte para elegir el método más apropiado para resolver problemas de predicción o explicación, analizando la naturaleza de las variables y sus posibles interacciones. Al finalizar, habrás desarrollado una comprensión sólida de los modelos estadísticos y estarás preparado para enfrentar desafíos en el análisis predictivo con confianza y creatividad.
 
-Agradecemos a los profesores y colegas que han contribuido al desarrollo de esta asignatura y a la elaboración de este libro. Su dedicación y conocimiento han sido fundamentales para la creación de este recurso educativo.
+## Filosofía pedagógica del volumen 
 
-Esperamos que este libro sea una guía útil y enriquecedora en tu viaje por el fascinante mundo de los modelos de regresión.
+La filosofía que subyace a la obra es un enfoque **"teórico-práctico"** deliberado y sin concesiones. No nos conformamos con una mera aplicación de "recetas" o una guía de funciones de software. Buscamos fomentar una comprensión profunda del *modus operandi* de cada modelo y método. Perseguimos un equilibrio entre la técnica estadística y la estrategia de resolución de problemas, bajo la firme convicción de que la labor práctica se desarrolla con mayor fluidez, creatividad y éxito cuando se cimienta en una comprensión robusta de los principios matemáticos y estadísticos subyacentes, tal y como defiende @harrell2015 en su influyente obra.
+
+### ¿Qué aprenderás con este libro?
+
+Al completar este recorrido, habrás desarrollado habilidades clave para:
+
+-   **Modelar** la dependencia entre una variable respuesta y múltiples predictores en conjuntos de datos complejos.
+-   **Resolver** problemas con iniciativa y creatividad, eligiendo las técnicas estadísticas más adecuadas para cada caso.
+-   **Evaluar** de forma crítica las ventajas e inconvenientes de diferentes alternativas metodológicas.
+-   **Implementar** estos modelos utilizando software estadístico profesional como R.
+-   **Interpretar** correctamente los resultados, proponer mejoras y tomar decisiones basadas en datos.
+-   **Adquirir** las competencias y la autonomía necesarias para emprender con éxito estudios de posgrado o proyectos profesionales en ciencia de datos.
+
+Agradecemos a los profesores y colegas que han contribuido al desarrollo de esta asignatura y a la elaboración de este libro. Su dedicación y conocimiento han sido fundamentales para la creación de este recurso.
+
+Esperamos que esta guía te resulte útil y enriquecedora.
 
 ¡Comenzamos!
 
-::: {.callout-caution collapse="true"}
-## Resultados de aprendizaje.
-
-1.  Que los estudiantes hayan demostrado poseer y comprender conocimientos en un área de estudio que parte de la base de la educación secundaria general, y se suele encontrar a un nivel que, si bien se apoya en libros de texto avanzados, incluye también algunos aspectos que implican conocimientos procedentes de la vanguardia de su campo de estudio.
-
-2.  Que los estudiantes hayan desarrollado aquellas habilidades de aprendizaje necesarias para emprender estudios posteriores con un alto grado de autonomía.
-
-3.  Comprender y utilizar materias, modelos y herramientas en el ámbito de la ciencia e ingeniería de datos que permitan comprender los problemas científico-técnicos fundamentales en este campo, así como evaluar las ventajas e inconvenientes de diferentes alternativas metodológicas.
-
-4.  Resolver problemas con iniciativa y creatividad.
-
-5.  Tomar decisiones de forma autónoma, elaborando de forma adecuada y original, argumentos razonados, pudiendo obtener así hipótesis razonables y contrastables y derivando conclusiones apropiadas.
-
-6.  Modelar la dependencia entre una variable respuesta y varias variables explicativas, en conjuntos de datos complejos, mediante técnicas de estadística avanzada (incluyendo métodos de regresión, inferencia bayesiana, etc.) y métodos de aprendizaje automático, evaluando e interpretando los resultados obtenidos.
-
-7.  Emplear distintas técnicas de modelado de datos, análisis de datos y aprendizaje automático: elegir y emplear técnicas adecuadas, evaluando la calidad de los modelos, validándolos, interpretándolos y proponiendo mejoras.
-:::
-
-::: {.callout-important title="Grado en Ciencia e Ingeniería de Datos"}
-Este libro presenta el material de la asignatura de Modelos de Regresión del grado en Ciencia e Ingeniería de Datos de la Universidad Rey Juan Carlos. Su contenido está fuertemente relacionado con las asignaturas de Inferencia Estadística, Aprendizaje Automático I y Aprendizaje Automático II.
+::: {.callout-important title="Grado en Matemáticas"}
+Este libro presenta el material de la asignatura de Modelos Estadísticos para la Predicción del Grado en Matemáticas de la Universidad Rey Juan Carlos. Su contenido está fuertemente relacionado con las asignaturas de Inferencia Estadística, Análisis de Datos y Métodos Estadísticos.
 :::
 
 ::: {.callout-important title="Conocimientos previos"}
-Es conveniente haber superado con éxito las asignaturas de Cálculo, Herramientas Matemáticas para la Ciencia de Datos I y Probabilidad y Simulación e Inferencia Estadística, del grado en Ciencia e Ingeniería de Datos.
+Es altamente recomendable que los alumnos que cursen esta materia manejen con soltura los conocimientos adquiridos en las asignaturas de Probabilidad y Estadística Matemática, así como herramientas de cálculo univariante, multivariante y álgebra lineal.
 :::
 
 ::: {.callout-note title="Sobre los autores"}
 **Víctor Aceña Gil** es graduado en Matemáticas por la UNED, máster en Tratamiento Estadístico y Computacional de la Información por la UCM y la UPM, doctor en Tecnologías de la Información y las Comunicaciones por la URJC y profesor del departamento de Informática y Estadística de la URJC. Miembro del grupo de investigación de alto rendimiento en Fundamentos y Aplicaciones de la Ciencia de Datos, DSLAB, de la URJC. Pertenece al grupo de innovación docente, DSLAB-TI.
 
-**Carmen Lancho Martín** es graduada en Matemáticas y Estadística por la Universidad Complutense de Madrid (UCM), máster en Tratamiento Estadístico y Computacional de la Información por la UCM y la Universidad Politécnica de Madrid (UPM), doctora en Tecnologías de la Información y las Comunicaciones por la Universidad Rey Juan Carlos (URJC) y profesora del departamento de Informática y Estadística de la URJC. Miembro del grupo de investigación de alto rendimiento en Fundamentos y Aplicaciones de la Ciencia de Datos, DSLAB, de la URJC. Pertenece al grupo de innovación docente, DSLAB-TI.
-
 **Isaac Martín de Diego** es diplomado en Estadística por la Universidad de Valladolid (UVA), licenciado en Ciencias y Técnicas Estadísticas por la Universidad Carlos III de Madrid (UC3M), doctor en Ingeniería Matemática por la UC3M, catedrático de Ciencias de la Computación e Inteligencia Artificial del departamento de Informática y Estadística de la URJC. Es fundador y coordinador del DSLAB y del DSLAB-TI.
 :::
 
-```{r, echo=FALSE}
-if (knitr::is_latex_output()){
-knitr::include_graphics("by-sa.png")
-}
-```
-
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" alt="Licencia de Creative Commons" style="border-width:0"/></a><br />Esta obra está bajo una <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">licencia de Creative Commons Atribuciónn-CompartirIgual 4.0 Internacional</a>.
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" alt="Licencia de Creative Commons" style="border-width:0"/></a><br />Esta obra está bajo una <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">licencia de Creative Commons Atribución-CompartirIgual 4.0 Internacional</a>.

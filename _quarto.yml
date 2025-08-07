@@ -3,12 +3,13 @@ project:
   output-dir: docs
 
 book:
-  title: "Modelos de Regresión"
-  author: "Víctor Aceña - Carmen Lancho - Isaac Martín"
-  date: "2025-01-23"
+  title: "Modelos Estadísticos para la Predicción"
+  author: "Víctor Aceña - Isaac Martín"
+  date: "2025-08-07"
   search: true
   chapters:
     - index.qmd
+    - tema0.qmd
     - tema1.qmd
     - tema2.qmd
     - tema3.qmd
