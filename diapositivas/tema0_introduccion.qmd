@@ -212,24 +212,25 @@ La función $f$ es una combinación lineal de los coeficientes $\beta$. Esta fle
 #| out-width: "100%"
 #| fig-align: center
 
+# Cargar ggplot2 explícitamente
+library(ggplot2)
+
 # Datos de ejemplo
 set.seed(42)
 x <- seq(-2, 2, length.out = 30)
 y <- 1 + 0.5*x - 0.8*x^2 + rnorm(30, 0, 0.3)
+datos <- data.frame(x, y)
 
-# Gráfico con base R (compatible con el template)
-par(mar = c(3.5, 3.5, 0.5, 0.5), mgp = c(2, 0.7, 0))
-plot(x, y, 
-     pch = 16, cex = 0.9, col = "darkgray",
-     xlab = "X", ylab = "Y",
-     main = "", 
-     cex.axis = 0.8, cex.lab = 1.0)
+# Ajuste del modelo
+modelo_cuadratico <- lm(y ~ x + I(x^2), data = datos)
 
-# Ajustar y dibujar curva cuadrática
-model <- lm(y ~ x + I(x^2))
-x_new <- seq(-2, 2, length.out = 100)
-y_pred <- predict(model, data.frame(x = x_new))
-lines(x_new, y_pred, col = "#0072B2", lwd = 2.5)
+# Gráfico con ggplot2
+ggplot(datos, aes(x = x, y = y)) +
+  geom_point(alpha = 0.6, color = "gray40") +
+  geom_smooth(method = "lm", formula = y ~ x + I(x^2), se = FALSE, 
+              color = "#0072B2", size = 1.2) +
+  labs(x = "Variable Predictora (X)", y = "Variable de Respuesta (Y)") +
+  theme_classic(base_size = 10)
 ```
 ::::
 :::: {.column width="45%"}
@@ -240,7 +241,7 @@ $$Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \epsilon$$
 - **SÍ**: Lineal en los parámetros $\beta_0, \beta_1, \beta_2$
 - **NO**: No lineal en la variable $X$
 
-**La clave**: La "linealidad" se refiere a los coeficientes, no a la forma de la curva.
+La "linealidad" se refiere a los coeficientes, no a la forma de la curva.
 
 Una parábola que encaja perfectamente en el marco de regresión lineal clásica.
 ::::
@@ -379,21 +380,60 @@ Estudiando la herencia de la estatura, notó que los padres muy altos tendían a
 
 Acuñó el término **"regresión a la mediocridad"** (hoy "regresión a la media") para describir esta tendencia de las características a "regresar" hacia la media de la población.
 
-# Los Estudios de Galton sobre la Estatura
+# Los Estudios de Galton: Los Datos Históricos
+
+```{r galtonn}
+#| fig-width: 6
+#| fig-height: 4.5
+#| out-width: "90%"
+#| fig-align: center
+
+# Cargar los paquetes necesarios
+library(ggplot2)
+library(HistData)
+
+# Cargar los datos de Galton
+data("GaltonFamilies")
+
+# Crear el modelo de regresión lineal
+modelo <- lm(childHeight ~ midparentHeight, data = GaltonFamilies)
+
+# Etiqueta para la ecuación de la recta
+eq_label <- sprintf("y = %.2f + %.2fx", coef(modelo)[1], coef(modelo)[2])
+
+# Gráfico
+ggplot(GaltonFamilies, aes(x = midparentHeight, y = childHeight)) +
+  geom_jitter(alpha = 0.4, color = "gray50", width = 0.1, height = 0.1) +
+  geom_smooth(method = "lm", se = FALSE, color = "#0072B2", size = 1.5) +
+  annotate("text", x = 66, y = 74, label = eq_label, 
+           color = "#0072B2", size = 4, fontface = "bold") +
+  labs(title = "Regresión de la Estatura: Hijos vs. Promedio Parental",
+       x = "Estatura Media Parental (pulgadas)", 
+       y = "Estatura del Hijo/a (pulgadas)") +
+  theme_classic(base_size = 12) +
+  theme(plot.title = element_text(size = 14, hjust = 0.5))
+```
+
+**928 familias • Datos del siglo XIX • El origen de la regresión lineal**
+
+# Los Estudios de Galton: Hallazgos e Importancia
 
 ::::: columns
 :::: {.column width="50%"}
-**Datos y Hallazgos**
+**Datos y Hallazgos Principales**
 
--   Galton recopiló datos de estaturas de 928 hijos y sus padres.
+-   Galton recopiló datos de **928 hijos** y sus padres.
 -   Observó una **relación lineal**: padres altos tenían hijos altos (y viceversa).
--   **Regresión a la media**: Notó que las estaturas extremas de los padres no se perpetuaban, sino que tendían a "regresar" hacia la media en los hijos.
+-   **"Regresión a la mediocridad"**: Las estaturas extremas de los padres no se perpetuaban completamente.
+-   Los hijos tendían a "regresar" hacia la **media poblacional**.
 ::::
 :::: {.column width="50%"}
-**Importancia en la Estadística**
+**Importancia Histórica**
 
--   **Regresión Lineal**: Su estudio introdujo el concepto de la **recta de regresión** para modelar la media de una variable en función de otra.
--   **Correlación**: Fue el precursor del concepto de **coeficiente de correlación**, desarrollado después por su discípulo Karl Pearson.
+-   **Regresión Lineal**: Introdujo el concepto de la **recta de regresión** para modelar relaciones.
+-   **Correlación**: Precursor del **coeficiente de correlación** (desarrollado por Karl Pearson).
+-   **Terminología**: Acuñó el término **"regresión"** que usamos hoy.
+-   **Método Estadístico**: Fundó las bases del análisis de regresión moderno.
 ::::
 :::::
 
