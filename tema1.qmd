@@ -13,7 +13,7 @@ interpretabilidad, sino porque los conceptos que exploraremos aquí son
 la base sobre la que se construyen técnicas mucho más avanzadas, como el
 **modelo de regresión lineal múltiple**, los **modelos lineales
 generalizados (GLM)** o incluso conceptos utilizados en algoritmos de
-*machine learning* [@draper1998applied].
+*machine learning* [@draper1998applied; @kutner2005applied; @james2021].
 
 En este capítulo, daremos el primer y más crucial paso en nuestro viaje
 por el modelado predictivo: el estudio del **modelo de regresión lineal
@@ -22,7 +22,7 @@ de modelado: comenzaremos con la exploración visual y cuantitativa de
 los datos, formalizaremos después nuestras observaciones mediante el
 lenguaje matemático del modelo y sus supuestos, aprenderemos a estimar
 sus parámetros, realizaremos inferencias sobre ellos y, finalmente,
-diagnosticaremos la validez de nuestro modelo.
+diagnosticaremos la validez de nuestro modelo [@fox2018r; @harrell2015].
 
 La comprensión profunda que desarrollaremos aquí es esencial, ya que los
 principios de estimación, inferencia y diagnóstico que aprenderemos son
@@ -201,7 +201,7 @@ $e_i = y_i - \hat{y}_i$, se conoce como **residuo**.
 
 Para que el puente entre nuestro modelo muestral y la realidad
 poblacional sea sólido, debemos asumir que los errores teóricos
-$\varepsilon_i$ se comportan de una manera predecible y ordenada.
+$\varepsilon_i$ se comportan de una manera predecible y ordenada. Estos supuestos, conocidos como condiciones de Gauss-Markov [@kutner2005applied; @weisberg2005applied], son fundamentales para las propiedades óptimas de los estimadores de mínimos cuadrados.
 
 1.  **Linealidad**: La relación entre $X$ y el valor esperado de $Y$ es,
     en promedio, una línea recta:
@@ -291,7 +291,7 @@ concreta y útil:
 ::: {.callout-note title="Minimización de SSE" collapse="true"}
 La obtención de los estimadores de mínimos cuadrados para la regresión
 lineal simple se basa en minimizar la suma de los cuadrados de los
-residuos ($SSE$). Aquí está el proceso paso a paso:
+residuos ($SSE$). Este método, desarrollado por Legendre y Gauss a principios del siglo XIX [@galton1886; @weisberg2005applied], es fundamental en la estadística moderna. Aquí está el proceso paso a paso:
 
 Para minimizar $SSE$, derivamos parcialmente con respecto a $\beta_0$ y
 $\beta_1$ y resolvemos el sistema de ecuaciones.
@@ -915,7 +915,7 @@ pred_indiv <- predict(modelo_estudio, newdata = dato_nuevo, interval = "predicti
 
 Una vez que hemos ajustado un modelo y evaluado su significancia, el
 trabajo no ha terminado. Un paso crucial, a menudo subestimado, es el
-**diagnóstico del modelo**. Este proceso consiste en verificar si se
+**diagnóstico del modelo** [@fox2018r; @harrell2015]. Este proceso consiste en verificar si se
 cumplen los supuestos del modelo de regresión lineal clásico. La
 fiabilidad de nuestras inferencias (los p-valores de los contrastes t y
 F, y los intervalos de confianza) depende directamente de la validez de
@@ -1480,7 +1480,7 @@ como una comprobación de que nuestros cálculos son correctos.
 
 Algunos puntos pueden tener una influencia desproporcionada en el
 modelo. Es crucial identificarlos usando diferentes métricas que evalúan
-aspectos complementarios de la influencia.
+aspectos complementarios de la influencia [@kutner2005applied; @fox2018r]. Las métricas desarrolladas por Cook, Belsley, Kuh y Welsch proporcionan herramientas robustas para este diagnóstico.
 
 ::: {.callout-note title="Fundamento teórico: de los residuos simples a los estudentizados"}
 Antes de analizar las métricas de influencia, debemos entender por qué
@@ -1895,5 +1895,5 @@ Cook, DFFITS o COVRATIO - ✅ **Sin outliers**: No hay residuos
 estandarizados extremos
 
 Esto confirma que nuestras inferencias estadísticas (p-valores,
-intervalos de confianza) son válidas y confiables.
+intervalos de confianza) son válidas y confiables [@james2021; @harrell2015].
 :::
