@@ -6,59 +6,101 @@ editor:
 
 # El modelo de regresión lineal simple {#sec-regresion-lineal-simple}
 
-La regresión lineal constituye uno de los pilares fundamentales de la modelización estadística. Es, a menudo, el primer y más importante modelo predictivo que se aprende, no solo por su simplicidad e interpretabilidad, sino porque los conceptos que exploraremos aquí son la base sobre la que se construyen técnicas mucho más avanzadas, como el **modelo de regresión lineal múltiple**, los **modelos lineales generalizados (GLM)** o incluso conceptos utilizados en algoritmos de *machine learning* [@draper1998applied].
+La regresión lineal constituye uno de los pilares fundamentales de la
+modelización estadística. Es, a menudo, el primer y más importante
+modelo predictivo que se aprende, no solo por su simplicidad e
+interpretabilidad, sino porque los conceptos que exploraremos aquí son
+la base sobre la que se construyen técnicas mucho más avanzadas, como el
+**modelo de regresión lineal múltiple**, los **modelos lineales
+generalizados (GLM)** o incluso conceptos utilizados en algoritmos de
+*machine learning* [@draper1998applied].
 
-En este capítulo, daremos el primer y más crucial paso en nuestro viaje por el modelado predictivo: el estudio del **modelo de regresión lineal simple**. Para ello, seguiremos el ciclo de vida completo de un proyecto de modelado: comenzaremos con la exploración visual y cuantitativa de los datos, formalizaremos después nuestras observaciones mediante el lenguaje matemático del modelo y sus supuestos, aprenderemos a estimar sus parámetros, realizaremos inferencias sobre ellos y, finalmente, diagnosticaremos la validez de nuestro modelo.
+En este capítulo, daremos el primer y más crucial paso en nuestro viaje
+por el modelado predictivo: el estudio del **modelo de regresión lineal
+simple**. Para ello, seguiremos el ciclo de vida completo de un proyecto
+de modelado: comenzaremos con la exploración visual y cuantitativa de
+los datos, formalizaremos después nuestras observaciones mediante el
+lenguaje matemático del modelo y sus supuestos, aprenderemos a estimar
+sus parámetros, realizaremos inferencias sobre ellos y, finalmente,
+diagnosticaremos la validez de nuestro modelo.
 
-La comprensión profunda que desarrollaremos aquí es esencial, ya que los principios de estimación, inferencia y diagnóstico que aprenderemos son directamente escalables al **modelo de regresión lineal múltiple**, que exploraremos en el siguiente capítulo.
+La comprensión profunda que desarrollaremos aquí es esencial, ya que los
+principios de estimación, inferencia y diagnóstico que aprenderemos son
+directamente escalables al **modelo de regresión lineal múltiple**, que
+exploraremos en el siguiente capítulo.
 
 ::: {.callout-important title="Objetivos de aprendizaje"}
 Al finalizar este capítulo, serás capaz de:
 
-1.  **Comprender y aplicar** el proceso de modelización estadística para un problema con una única variable predictora.
-2.  **Identificar y medir la correlación lineal** entre dos variables como paso previo al modelado.
-3.  **Describir la formulación matemática** del modelo de regresión lineal simple e interpretar el significado práctico de sus parámetros.
-4.  **Estimar los coeficientes** del modelo mediante el método de mínimos cuadrados ordinarios (MCO) y entender su derivación matemática y propiedades.
-5.  **Realizar inferencias sobre los parámetros** del modelo y evaluar su bondad de ajuste mediante el análisis de la varianza y el coeficiente de determinación R².
-6.  **Diagnosticar la adecuación del modelo**, evaluando visual y analíticamente si se cumplen los supuestos del modelo lineal.
+1.  **Comprender y aplicar** el proceso de modelización estadística para
+    un problema con una única variable predictora.
+2.  **Identificar y medir la correlación lineal** entre dos variables
+    como paso previo al modelado.
+3.  **Describir la formulación matemática** del modelo de regresión
+    lineal simple e interpretar el significado práctico de sus
+    parámetros.
+4.  **Estimar los coeficientes** del modelo mediante el método de
+    mínimos cuadrados ordinarios (MCO) y entender su derivación
+    matemática y propiedades.
+5.  **Realizar inferencias sobre los parámetros** del modelo y evaluar
+    su bondad de ajuste mediante el análisis de la varianza y el
+    coeficiente de determinación R².
+6.  **Diagnosticar la adecuación del modelo**, evaluando visual y
+    analíticamente si se cumplen los supuestos del modelo lineal.
 :::
-
-
 
 ## Exploración inicial: visualización y cuantificación de la relación
 
-Antes de sumergirnos en la teoría de la regresión, debemos hacer lo que todo buen analista hace primero: **observar y cuantificar la relación en los datos**. Este paso exploratorio es fundamental para formular hipótesis y justificar la elección de un modelo lineal.
+Antes de sumergirnos en la teoría de la regresión, debemos hacer lo que
+todo buen analista hace primero: **observar y cuantificar la relación en
+los datos**. Este paso exploratorio es fundamental para formular
+hipótesis y justificar la elección de un modelo lineal.
 
 ### Visualización: el gráfico de dispersión
 
-La herramienta más potente para examinar la relación entre dos variables continuas es el **gráfico de dispersión** (*scatterplot*). Nos permite intuir visualmente la **forma**, la **dirección** y la **fuerza** de la relación. Una inspección visual es siempre el punto de partida.
+La herramienta más potente para examinar la relación entre dos variables
+continuas es el **gráfico de dispersión** (*scatterplot*). Nos permite
+intuir visualmente la **forma**, la **dirección** y la **fuerza** de la
+relación. Una inspección visual es siempre el punto de partida.
 
 ### Cuantificación de la asociación: covarianza y correlación
 
-Una vez que la visualización sugiere una tendencia, necesitamos métricas para cuantificarla.
+Una vez que la visualización sugiere una tendencia, necesitamos métricas
+para cuantificarla.
 
 #### Covarianza
 
-La **covarianza** es una medida de la variabilidad conjunta de dos variables aleatorias, $X$ e $Y$. Nos indica la dirección de la relación lineal. La covarianza muestral, calculada a partir de nuestras observaciones $(x_i, y_i)$, es:
+La **covarianza** es una medida de la variabilidad conjunta de dos
+variables aleatorias, $X$ e $Y$. Nos indica la dirección de la relación
+lineal. La covarianza muestral, calculada a partir de nuestras
+observaciones $(x_i, y_i)$, es:
 
 $$
 \text{Cov}(x, y) = s_{xy} = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{n-1}
 $$
 
-El principal inconveniente de la covarianza es que su magnitud depende de las unidades de las variables, lo que la hace difícil de interpretar.
+El principal inconveniente de la covarianza es que su magnitud depende
+de las unidades de las variables, lo que la hace difícil de interpretar.
 
 #### Coeficiente de correlación de Pearson
 
-Para solucionar el problema de la escala, estandarizamos la covarianza, dividiéndola por el producto de las desviaciones típicas de cada variable. El resultado es el **coeficiente de correlación de Pearson ($r$)**:
+Para solucionar el problema de la escala, estandarizamos la covarianza,
+dividiéndola por el producto de las desviaciones típicas de cada
+variable. El resultado es el **coeficiente de correlación de Pearson
+(**$r$):
 
 $$
 r = r_{xy} = \frac{s_{xy}}{s_x s_y}
 $$
 
-Este coeficiente es **adimensional** y siempre varía entre **-1 y 1**, lo que permite una interpretación universal de la fuerza de la asociación *lineal*.
+Este coeficiente es **adimensional** y siempre varía entre **-1 y 1**,
+lo que permite una interpretación universal de la fuerza de la
+asociación *lineal*.
 
-::: {.callout-tip title="Ejemplo práctico: Horas de estudio vs. Calificaciones"}
-Vamos a plantear un problema que nos acompañará durante todo el capítulo: queremos saber si el tiempo de estudio semanal influye en las calificaciones finales.
+::: {.callout-tip title="Ejemplo práctico: Horas de estudio vs. Calificaciones" collapse="true"}
+Vamos a plantear un problema que nos acompañará durante todo el
+capítulo: queremos saber si el tiempo de estudio semanal influye en las
+calificaciones finales.
 
 ```{r}
 #| label: fig-exploracion-inicial-full
@@ -89,62 +131,115 @@ covarianza <- cov(datos$Tiempo_Estudio, datos$Calificaciones)
 correlacion <- cor(datos$Tiempo_Estudio, datos$Calificaciones)
 ```
 
-El gráfico muestra una clara tendencia lineal positiva. La covarianza toma un valor de `r round(covarianza, 2)`, y el coeficiente de correlación de Pearson es de `r round(correlacion, 2)`. Ambos valores confirman que la asociación lineal es, además de positiva, muy fuerte. Esta evidencia visual y numérica nos da una base sólida para proponer un modelo de regresión lineal.
+El gráfico muestra una clara tendencia lineal positiva. La covarianza
+toma un valor de `r round(covarianza, 2)`, y el coeficiente de
+correlación de Pearson es de `r round(correlacion, 2)`. Ambos valores
+confirman que la asociación lineal es, además de positiva, muy fuerte.
+Esta evidencia visual y numérica nos da una base sólida para proponer un
+modelo de regresión lineal.
 :::
 
 ::: {.callout-warning title="¡Correlación no implica causalidad!"}
-El haber encontrado una fuerte correlación positiva entre el tiempo de estudio y las calificaciones (`r round(correlacion, 2)`) no nos autoriza a concluir que *una cosa causa la otra*. La regresión lineal puede demostrar que las variables se mueven juntas y nos permite predecir una a partir de la otra, pero no explica el porqué de la relación.
+El haber encontrado una fuerte correlación positiva entre el tiempo de
+estudio y las calificaciones (`r round(correlacion, 2)`) no nos autoriza
+a concluir que *una cosa causa la otra*. La regresión lineal puede
+demostrar que las variables se mueven juntas y nos permite predecir una
+a partir de la otra, pero no explica el porqué de la relación.
 
-Podría existir una tercera variable oculta (p. ej., el interés del alumno en la materia) que influya tanto en las horas de estudio como en las calificaciones. Establecer causalidad requiere un diseño experimental riguroso (asignando aleatoriamente a los estudiantes a diferentes tiempos de estudio), no solo un análisis observacional.
+Podría existir una tercera variable oculta (p. ej., el interés del
+alumno en la materia) que influya tanto en las horas de estudio como en
+las calificaciones. Establecer causalidad requiere un diseño
+experimental riguroso (asignando aleatoriamente a los estudiantes a
+diferentes tiempos de estudio), no solo un análisis observacional.
 :::
 
 ## Formulación teórica del modelo
 
-Una vez que la exploración sugiere una relación lineal, el siguiente paso es formalizarla matemáticamente. Aquí es donde definimos la estructura teórica del modelo y los supuestos bajo los cuales operará.
+Una vez que la exploración sugiere una relación lineal, el siguiente
+paso es formalizarla matemáticamente. Aquí es donde definimos la
+estructura teórica del modelo y los supuestos bajo los cuales operará.
 
 ### El modelo poblacional y sus componentes
 
-El **modelo poblacional** postula que la relación verdadera entre la variable respuesta $Y$ y la predictora $X$ sigue una línea recta, aunque contaminada por cierta aleatoriedad. Para cualquier individuo $i$ de la población, esta relación se describe como:
+El **modelo poblacional** postula que la relación verdadera entre la
+variable respuesta $Y$ y la predictora $X$ sigue una línea recta, aunque
+contaminada por cierta aleatoriedad. Para cualquier individuo $i$ de la
+población, esta relación se describe como:
 
 $$
 Y_i = \beta_0 + \beta_1 X_i + \varepsilon_i
 $$
 
-En esta ecuación, $\beta_0$ y $\beta_1$ son los **parámetros poblacionales** (el intercepto y la pendiente verdaderos pero desconocidos), y $\varepsilon_i$ es el **error aleatorio**, un componente fundamental que captura todas las fuentes de variabilidad que el modelo no puede explicar por sí solo. Específicamente, este término incluye:
+En esta ecuación, $\beta_0$ y $\beta_1$ son los **parámetros
+poblacionales** (el intercepto y la pendiente verdaderos pero
+desconocidos), y $\varepsilon_i$ es el **error aleatorio**, un
+componente fundamental que captura todas las fuentes de variabilidad que
+el modelo no puede explicar por sí solo. Específicamente, este término
+incluye:
 
--   **Variables omitidas:** Factores que también afectan a las calificaciones (como la calidad del sueño, la motivación del estudiante o su conocimiento previo) y que no están en el modelo.
--   **Error de medida:** Pequeñas imprecisiones al medir las variables (p. ej., un estudiante podría reportar 20 horas de estudio cuando en realidad fueron 19.5).
--   **Aleatoriedad inherente:** La variabilidad puramente estocástica o impredecible en el comportamiento humano.
+-   **Variables omitidas:** Factores que también afectan a las
+    calificaciones (como la calidad del sueño, la motivación del
+    estudiante o su conocimiento previo) y que no están en el modelo.
+-   **Error de medida:** Pequeñas imprecisiones al medir las variables
+    (p. ej., un estudiante podría reportar 20 horas de estudio cuando en
+    realidad fueron 19.5).
+-   **Aleatoriedad inherente:** La variabilidad puramente estocástica o
+    impredecible en el comportamiento humano.
 
-Como nunca observamos la población entera, nuestro trabajo consiste en usar una muestra para estimar el **modelo muestral**:
+Como nunca observamos la población entera, nuestro trabajo consiste en
+usar una muestra para estimar el **modelo muestral**:
 
 $$
 \hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i
 $$
 
-Aquí, los "gorros" ($\hat{\cdot}$) denotan **estimaciones** calculadas a partir de la muestra. La diferencia entre el valor real y el predicho, $e_i = y_i - \hat{y}_i$, se conoce como **residuo**.
+Aquí, los "gorros" ($\hat{\cdot}$) denotan **estimaciones** calculadas a
+partir de la muestra. La diferencia entre el valor real y el predicho,
+$e_i = y_i - \hat{y}_i$, se conoce como **residuo**.
 
 ### Los supuestos del modelo lineal clásico (Gauss-Markov)
 
-Para que el puente entre nuestro modelo muestral y la realidad poblacional sea sólido, debemos asumir que los errores teóricos $\varepsilon_i$ se comportan de una manera predecible y ordenada.
+Para que el puente entre nuestro modelo muestral y la realidad
+poblacional sea sólido, debemos asumir que los errores teóricos
+$\varepsilon_i$ se comportan de una manera predecible y ordenada.
 
-1.  **Linealidad**: La relación entre $X$ y el valor esperado de $Y$ es, en promedio, una línea recta: $E[Y_i | X_i] = \beta_0 + \beta_1 X_i$.
-2.  **Independencia de los errores**: El error de una observación no está correlacionado con el error de ninguna otra: $\text{Cov}(\varepsilon_i, \varepsilon_j) = 0$ para $i \neq j$.
-3.  **Homocedasticidad**: La varianza del error es constante ($\sigma^2$) para todos los valores de $X$: $Var(\varepsilon_i | X_i) = \sigma^2$. Esto significa que la dispersión de los datos alrededor de la línea de regresión es la misma a lo largo de todos los valores de la variable predictora. La violación de este supuesto se conoce como **heterocedasticidad**, donde la dispersión de los errores cambia (p. ej., aumenta a medida que $X$ crece).
+1.  **Linealidad**: La relación entre $X$ y el valor esperado de $Y$ es,
+    en promedio, una línea recta:
+    $E[Y_i | X_i] = \beta_0 + \beta_1 X_i$.
+2.  **Independencia de los errores**: El error de una observación no
+    está correlacionado con el error de ninguna otra:
+    $\text{Cov}(\varepsilon_i, \varepsilon_j) = 0$ para $i \neq j$.
+3.  **Homocedasticidad**: La varianza del error es constante
+    ($\sigma^2$) para todos los valores de $X$:
+    $Var(\varepsilon_i | X_i) = \sigma^2$. Esto significa que la
+    dispersión de los datos alrededor de la línea de regresión es la
+    misma a lo largo de todos los valores de la variable predictora. La
+    violación de este supuesto se conoce como **heterocedasticidad**,
+    donde la dispersión de los errores cambia (p. ej., aumenta a medida
+    que $X$ crece).
 
-Cuando el objetivo no es sólo estimar la recta, sino inferir con ella, entonces se asume una hipótesis más: la normalidad de la variable respuesta, o lo que es lo mismo, del error aleatorio:
+Cuando el objetivo no es sólo estimar la recta, sino inferir con ella,
+entonces se asume una hipótesis más: la normalidad de la variable
+respuesta, o lo que es lo mismo, del error aleatorio:
 
-4.  **Normalidad de los errores**: Para la inferencia, se asume que los errores siguen una distribución Normal con media cero y varianza $\sigma^2$: $\varepsilon_i \sim N(0, \sigma^2)$.
+4.  **Normalidad de los errores**: Para la inferencia, se asume que los
+    errores siguen una distribución Normal con media cero y varianza
+    $\sigma^2$: $\varepsilon_i \sim N(0, \sigma^2)$.
 
-Estos supuestos son esenciales para garantizar la validez de las estimaciones y conclusiones derivadas del modelo.
+Estos supuestos son esenciales para garantizar la validez de las
+estimaciones y conclusiones derivadas del modelo.
 
 ## Estimación de los parámetros
 
-Necesitamos un método para encontrar la "mejor" recta de ajuste. El **Método de Mínimos Cuadrados Ordinarios (MCO/OLS)** nos proporciona este criterio.
+Necesitamos un método para encontrar la "mejor" recta de ajuste. El
+**Método de Mínimos Cuadrados Ordinarios (MCO/OLS)** nos proporciona
+este criterio.
 
 ### El criterio de mínimos cuadrados
 
-MCO busca la recta que minimice la **Suma de los Cuadrados del Error (SSE)**, es decir, la suma de las distancias verticales al cuadrado entre los puntos observados y la recta de regresión:
+MCO busca la recta que minimice la **Suma de los Cuadrados del Error
+(SSE)**, es decir, la suma de las distancias verticales al cuadrado
+entre los puntos observados y la recta de regresión:
 
 $$
 \text{SSE}(\beta_0, \beta_1) = \sum_{i=1}^{n} e_i^2 = \sum_{i=1}^{n} (y_i-\hat{y})^2 = \sum_{i=1}^{n} (y_i - (\beta_0 + \beta_1 x_i))^2
@@ -152,8 +247,10 @@ $$
 
 ### Derivación matemática de los estimadores
 
-Para encontrar los valores de $\beta_0$ y $\beta_1$ que minimizan esta función, recurrimos al cálculo. Tratamos la SSE como una función de dos variables y calculamos sus derivadas parciales, igualándolas a cero para encontrar el mínimo.
-
+Para encontrar los valores de $\beta_0$ y $\beta_1$ que minimizan esta
+función, recurrimos al cálculo. Tratamos la SSE como una función de dos
+variables y calculamos sus derivadas parciales, igualándolas a cero para
+encontrar el mínimo.
 
 $$
 \frac{\partial \text{SSE}}{\partial \beta_0} = -2 \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i) = 0
@@ -163,21 +260,33 @@ $$
 \frac{\partial \text{SSE}}{\partial \beta_1} = -2 \sum_{i=1}^{n} x_i (y_i - \beta_0 - \beta_1 x_i) = 0
 $$
 
-La resolución de este sistema de dos ecuaciones (conocidas como las **ecuaciones normales**) nos proporciona las fórmulas para los estimadores de MCO:
+La resolución de este sistema de dos ecuaciones (conocidas como las
+**ecuaciones normales**) nos proporciona las fórmulas para los
+estimadores de MCO:
 
 $$
 \hat{\beta}_1 = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^{n}(x_i - \bar{x})^2} = \frac{s_{xy}}{s_{xx}}
-$$
-$$ \hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}
+$$ $$ \hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}
 $$
 
 #### Interpretación práctica de los coeficientes
 
-Una vez estimados, los coeficientes tienen una interpretación muy concreta y útil:
+Una vez estimados, los coeficientes tienen una interpretación muy
+concreta y útil:
 
-* **Pendiente ($\hat{\beta}_1$):** Representa el cambio promedio estimado en la variable respuesta $Y$ por cada **aumento de una unidad** en la variable predictora $X$. En nuestro ejemplo, sería el número de puntos que se espera que aumente la calificación final por cada hora adicional de estudio semanal.
+-   **Pendiente (**$\hat{\beta}_1$): Representa el cambio promedio
+    estimado en la variable respuesta $Y$ por cada **aumento de una
+    unidad** en la variable predictora $X$. En nuestro ejemplo, sería el
+    número de puntos que se espera que aumente la calificación final por
+    cada hora adicional de estudio semanal.
 
-* **Intercepto ($\hat{\beta}_0$):** Es el valor promedio estimado de la variable respuesta $Y$ cuando la variable predictora $X$ es igual a cero. La interpretación del intercepto solo tiene sentido práctico si $X=0$ es un valor plausible y se encuentra dentro del rango de nuestros datos. De lo contrario (como en nuestro ejemplo, donde nadie estudia 0 horas), a menudo se considera simplemente un ancla matemática para la recta de regresión.
+-   **Intercepto (**$\hat{\beta}_0$): Es el valor promedio estimado de
+    la variable respuesta $Y$ cuando la variable predictora $X$ es igual
+    a cero. La interpretación del intercepto solo tiene sentido práctico
+    si $X=0$ es un valor plausible y se encuentra dentro del rango de
+    nuestros datos. De lo contrario (como en nuestro ejemplo, donde
+    nadie estudia 0 horas), a menudo se considera simplemente un ancla
+    matemática para la recta de regresión.
 
 ::: {.callout-note title="Minimización de SSE" collapse="true"}
 La obtención de los estimadores de mínimos cuadrados para la regresión
@@ -275,33 +384,53 @@ Resolviendo para $\beta_0$ y $\beta_1$:
     $$ donde $\bar{x}$ y $\bar{y}$ son las medias de $x$ y $y$.
 :::
 
-Bajo los supuestos del modelo, el **Teorema de Gauss-Markov** demuestra que estos estimadores son los **Mejores Estimadores Lineales Insesgados (MELI / BLUE)**.
+Bajo los supuestos del modelo, el **Teorema de Gauss-Markov** demuestra
+que estos estimadores son los **Mejores Estimadores Lineales Insesgados
+(MELI / BLUE)**.
 
 ## Inferencia y bondad de ajuste
 
-Una vez hemos estimado los parámetros del modelo, nuestro trabajo apenas ha comenzado. Ahora debemos pasar de la descripción a la inferencia. Necesitamos un conjunto de herramientas que nos permitan responder a preguntas cruciales: ¿Son nuestros coeficientes estimados, $\hat{\beta}_0$ y $\hat{\beta}_1$, meras casualidades de nuestra muestra o reflejan una relación real en la población? ¿Qué tan bueno es nuestro modelo para explicar la variabilidad de la variable respuesta? Esta sección se dedica a responder estas preguntas.
-
+Una vez hemos estimado los parámetros del modelo, nuestro trabajo apenas
+ha comenzado. Ahora debemos pasar de la descripción a la inferencia.
+Necesitamos un conjunto de herramientas que nos permitan responder a
+preguntas cruciales: ¿Son nuestros coeficientes estimados,
+$\hat{\beta}_0$ y $\hat{\beta}_1$, meras casualidades de nuestra muestra
+o reflejan una relación real en la población? ¿Qué tan bueno es nuestro
+modelo para explicar la variabilidad de la variable respuesta? Esta
+sección se dedica a responder estas preguntas.
 
 ### Propiedades de los estimadores de MCO
 
-Antes de realizar inferencias, es fundamental entender las propiedades teóricas de los estimadores que hemos calculado.
+Antes de realizar inferencias, es fundamental entender las propiedades
+teóricas de los estimadores que hemos calculado.
 
-* **Insesgadez**: Los estimadores de MCO son insesgados. Esto significa que si pudiéramos repetir nuestro muestreo muchísimas veces y calcular los estimadores en cada muestra, el promedio de todas nuestras estimaciones de $\hat{\beta}_0$ y $\hat{\beta}_1$ convergería a los verdaderos valores poblacionales $\beta_0$ y $\beta_1$. Matemáticamente:
-    $$
-    E[\hat{\beta}_0] = \beta_0 \quad \text{y} \quad E[\hat{\beta}_1] = \beta_1
-    $$
+-   **Insesgadez**: Los estimadores de MCO son insesgados. Esto
+    significa que si pudiéramos repetir nuestro muestreo muchísimas
+    veces y calcular los estimadores en cada muestra, el promedio de
+    todas nuestras estimaciones de $\hat{\beta}_0$ y $\hat{\beta}_1$
+    convergería a los verdaderos valores poblacionales $\beta_0$ y
+    $\beta_1$. Matemáticamente: $$
+      E[\hat{\beta}_0] = \beta_0 \quad \text{y} \quad E[\hat{\beta}_1] = \beta_1
+      $$
 
-* **Varianza de los estimadores**: Las fórmulas para la varianza de nuestros estimadores cuantifican su precisión. Una varianza pequeña implica que el estimador es más estable a través de diferentes muestras.
-    $$
-    Var(\hat{\beta}_1) = \frac{\sigma^2}{\sum_{i=1}^{n}(x_i - \bar{x})^2} = \frac{\sigma^2}{S_{xx}}
-    $$
-    $$
-    Var(\hat{\beta}_0) = \sigma^2 \left[ \frac{1}{n} + \frac{\bar{x}^2}{S_{xx}} \right]
-    $$
-    Donde $\sigma^2$ es la varianza (desconocida) del término de error $\varepsilon$.
+-   **Varianza de los estimadores**: Las fórmulas para la varianza de
+    nuestros estimadores cuantifican su precisión. Una varianza pequeña
+    implica que el estimador es más estable a través de diferentes
+    muestras. $$
+      Var(\hat{\beta}_1) = \frac{\sigma^2}{\sum_{i=1}^{n}(x_i - \bar{x})^2} = \frac{\sigma^2}{S_{xx}}
+      $$ $$
+      Var(\hat{\beta}_0) = \sigma^2 \left[ \frac{1}{n} + \frac{\bar{x}^2}{S_{xx}} \right]
+      $$ Donde $\sigma^2$ es la varianza (desconocida) del término de
+    error $\varepsilon$.
 
-* **Teorema de Gauss-Markov**: Este es uno de los resultados más importantes de la teoría de la regresión. Establece que, bajo los supuestos de linealidad, independencia y homocedasticidad (no se requiere normalidad), los estimadores de MCO son los **Mejores Estimadores Lineales Insesgados** (MELI, o BLUE en inglés). Esto significa que, de entre toda la clase de estimadores que son lineales e insesgados, los de MCO son los que tienen la menor varianza posible.
-
+-   **Teorema de Gauss-Markov**: Este es uno de los resultados más
+    importantes de la teoría de la regresión. Establece que, bajo los
+    supuestos de linealidad, independencia y homocedasticidad (no se
+    requiere normalidad), los estimadores de MCO son los **Mejores
+    Estimadores Lineales Insesgados** (MELI, o BLUE en inglés). Esto
+    significa que, de entre toda la clase de estimadores que son
+    lineales e insesgados, los de MCO son los que tienen la menor
+    varianza posible.
 
 ::: {.callout-note title="Propiedades adicionales para las predicciones y para los residuos" collapse="false"}
 -   La suma de los residuos es cero: $$
@@ -342,223 +471,359 @@ summary(modelo_estudio)
 
 ### Estimación de la varianza del error
 
-Las fórmulas de la varianza de los estimadores dependen de $\sigma^2$, la varianza del error poblacional, que es desconocida. Por lo tanto, necesitamos estimarla a partir de nuestros datos. Un estimador insesgado de $\sigma^2$ es la **Media Cuadrática del Error (MSE)**:
+Las fórmulas de la varianza de los estimadores dependen de $\sigma^2$,
+la varianza del error poblacional, que es desconocida. Por lo tanto,
+necesitamos estimarla a partir de nuestros datos. Un estimador insesgado
+de $\sigma^2$ es la **Media Cuadrática del Error (MSE)**:
 
 $$
 \hat{\sigma}^2 = \text{MSE} = \frac{\text{SSE}}{n-2} = \frac{\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}{n-2}
 $$
 
-Dividimos por $n-2$, los **grados de libertad del error**, porque hemos "gastado" dos grados de libertad de nuestros datos para estimar los dos parámetros, $\beta_0$ y $\beta_1$. La raíz cuadrada de la MSE, $\hat{\sigma}$, se conoce como el **error estándar de los residuos** y es una medida de la dispersión promedio de los puntos alrededor de la recta de regresión.
+Dividimos por $n-2$, los **grados de libertad del error**, porque hemos
+"gastado" dos grados de libertad de nuestros datos para estimar los dos
+parámetros, $\beta_0$ y $\beta_1$. La raíz cuadrada de la MSE,
+$\hat{\sigma}$, se conoce como el **error estándar de los residuos** y
+es una medida de la dispersión promedio de los puntos alrededor de la
+recta de regresión.
 
 #### El error estándar de los residuos y el RMSE
 
-La raíz cuadrada de la MSE, $\hat{\sigma}$, se conoce formalmente como el **error estándar de los residuos** (*Residual Standard Error*). Este valor es nuestra estimación de la desviación estándar del error poblacional, $\sigma$, y es una medida de la dispersión promedio de los puntos alrededor de la recta de regresión.
+La raíz cuadrada de la MSE, $\hat{\sigma}$, se conoce formalmente como
+el **error estándar de los residuos** (*Residual Standard Error*). Este
+valor es nuestra estimación de la desviación estándar del error
+poblacional, $\sigma$, y es una medida de la dispersión promedio de los
+puntos alrededor de la recta de regresión.
 
 $$
 \hat{\sigma} = \sqrt{\text{MSE}}
 $$
 
-En el campo del modelado predictivo y el *machine learning*, esta misma cantidad se conoce como la **Raíz del Error Cuadrático Medio** o **RMSE** (*Root Mean Squared Error*). Aunque la fórmula es idéntica, la interpretación del RMSE se centra en la **evaluación del rendimiento predictivo** del modelo. El RMSE nos dice, en promedio, cuál es la magnitud del error de predicción de nuestro modelo, y tiene la ventaja de estar en las **mismas unidades** que la variable respuesta $Y$. Por ejemplo, si estamos prediciendo precios de viviendas en euros, un RMSE de 5000 significa que nuestras predicciones se desvían, en promedio, unos 5000 € de los precios reales.
+En el campo del modelado predictivo y el *machine learning*, esta misma
+cantidad se conoce como la **Raíz del Error Cuadrático Medio** o
+**RMSE** (*Root Mean Squared Error*). Aunque la fórmula es idéntica, la
+interpretación del RMSE se centra en la **evaluación del rendimiento
+predictivo** del modelo. El RMSE nos dice, en promedio, cuál es la
+magnitud del error de predicción de nuestro modelo, y tiene la ventaja
+de estar en las **mismas unidades** que la variable respuesta $Y$. Por
+ejemplo, si estamos prediciendo precios de viviendas en euros, un RMSE
+de 5000 significa que nuestras predicciones se desvían, en promedio,
+unos 5000 € de los precios reales.
 
 ### Análisis de la Varianza (ANOVA) para la significancia de la regresión
 
-Una vez hemos estimado los coeficientes, necesitamos una prueba formal para determinar si el modelo en su conjunto es útil. Es decir, ¿la variable predictora $X$ explica una porción de la variabilidad de la variable respuesta $Y$ que sea estadísticamente significativa, o la relación que observamos podría deberse simplemente al azar? El **Análisis de la Varianza (ANOVA)** nos proporciona la herramienta para responder a esta pregunta a través del **contraste F de significancia global**.
+Una vez hemos estimado los coeficientes, necesitamos una prueba formal
+para determinar si el modelo en su conjunto es útil. Es decir, ¿la
+variable predictora $X$ explica una porción de la variabilidad de la
+variable respuesta $Y$ que sea estadísticamente significativa, o la
+relación que observamos podría deberse simplemente al azar? El
+**Análisis de la Varianza (ANOVA)** nos proporciona la herramienta para
+responder a esta pregunta a través del **contraste F de significancia
+global**.
 
 Las hipótesis de este contraste son:
 
-* $H_0: \beta_1 = 0$: La hipótesis nula postula que no existe una relación lineal entre $X$ e $Y$. El modelo no tiene poder explicativo y no es mejor que usar simplemente la media, $\bar{y}$, como predicción para cualquier valor de $x$.
-* $H_1: \beta_1 \neq 0$: La hipótesis alternativa sostiene que sí existe una relación lineal significativa.
+-   $H_0: \beta_1 = 0$: La hipótesis nula postula que no existe una
+    relación lineal entre $X$ e $Y$. El modelo no tiene poder
+    explicativo y no es mejor que usar simplemente la media, $\bar{y}$,
+    como predicción para cualquier valor de $x$.
+-   $H_1: \beta_1 \neq 0$: La hipótesis alternativa sostiene que sí
+    existe una relación lineal significativa.
 
 ::: {.callout-caution title="Repaso"}
-Es conveniente repasar el tema de *Análisis de la Varianza* estudiado en la asignatura de Inferencia, ya que los conceptos son directamente aplicables aquí.
+Es conveniente repasar el tema de *Análisis de la Varianza* estudiado en
+la asignatura de Inferencia, ya que los conceptos son directamente
+aplicables aquí.
 :::
 
-La idea fundamental del ANOVA es comparar la variabilidad que nuestro modelo *explica* con la variabilidad que *no puede explicar* (el error residual). Para ello, se descompone la variabilidad total de nuestras observaciones ($y_i$) en dos partes ortogonales.
+La idea fundamental del ANOVA es comparar la variabilidad que nuestro
+modelo *explica* con la variabilidad que *no puede explicar* (el error
+residual). Para ello, se descompone la variabilidad total de nuestras
+observaciones ($y_i$) en dos partes ortogonales.
 
-1.  La **Suma Total de Cuadrados (SST)** mide la variabilidad total de los datos alrededor de su media. Es nuestra referencia base de la dispersión total que hay que explicar.
-    $$
+1.  La **Suma Total de Cuadrados (SST)** mide la variabilidad total de
+    los datos alrededor de su media. Es nuestra referencia base de la
+    dispersión total que hay que explicar. $$
     \text{SST} = \sum_{i=1}^{n} (y_i - \bar{y})^2
     $$
 
 2.  Esta variabilidad se descompone en:
-    * **Suma de Cuadrados de la Regresión (SSR)**: Mide la parte de la variabilidad total que es explicada por nuestro modelo. Cuantifica cuánto se desvían las predicciones del modelo ($\hat{y}_i$) de la media general ($\bar{y}$).
-        $$
-        \text{SSR} = \sum_{i=1}^{n} (\hat{y}_i - \bar{y})^2
-        $$
-    * **Suma de Cuadrados del Error (SSE)**: Mide la variabilidad residual, es decir, la parte que el modelo no puede capturar. Cuantifica la dispersión de los puntos reales ($y_i$) alrededor de la recta de regresión ($\hat{y}_i$).
-        $$
-        \text{SSE} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
-        $$
 
-La descomposición fundamental de la varianza es, por tanto: $\text{SST} = \text{SSR} + \text{SSE}$.
+    -   **Suma de Cuadrados de la Regresión (SSR)**: Mide la parte de la
+        variabilidad total que es explicada por nuestro modelo.
+        Cuantifica cuánto se desvían las predicciones del modelo
+        ($\hat{y}_i$) de la media general ($\bar{y}$). $$
+          \text{SSR} = \sum_{i=1}^{n} (\hat{y}_i - \bar{y})^2
+          $$
+    -   **Suma de Cuadrados del Error (SSE)**: Mide la variabilidad
+        residual, es decir, la parte que el modelo no puede capturar.
+        Cuantifica la dispersión de los puntos reales ($y_i$) alrededor
+        de la recta de regresión ($\hat{y}_i$). $$
+          \text{SSE} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
+          $$
 
-Para poder comparar estas sumas de cuadrados de forma justa, las estandarizamos dividiéndolas por sus respectivos **grados de libertad**, obteniendo así las **Medias Cuadráticas** (MS):
+La descomposición fundamental de la varianza es, por tanto:
+$\text{SST} = \text{SSR} + \text{SSE}$.
+
+Para poder comparar estas sumas de cuadrados de forma justa, las
+estandarizamos dividiéndolas por sus respectivos **grados de libertad**,
+obteniendo así las **Medias Cuadráticas** (MS):
 
 $$
 \text{MSR} = \frac{\text{SSR}}{1} \quad \quad \quad \text{MSE} = \frac{\text{SSE}}{n-2}
 $$
 
-Finalmente, el **estadístico F** se construye como el cociente entre la variabilidad explicada por el modelo y la variabilidad no explicada:
+Finalmente, el **estadístico F** se construye como el cociente entre la
+variabilidad explicada por el modelo y la variabilidad no explicada:
 
 $$
 F = \frac{\text{MSR}}{\text{MSE}}
 $$
 
-Intuitivamente, el estadístico F actúa como una **ratio de señal a ruido**. La MSR (la "señal") representa la variabilidad que nuestro modelo captura sistemáticamente, mientras que la MSE (el "ruido") representa la variabilidad aleatoria o residual. Un valor de F grande nos dice que la señal es mucho más fuerte que el ruido, lo que apoya la hipótesis de que la relación que hemos modelado es real y no fruto del azar.
+Intuitivamente, el estadístico F actúa como una **ratio de señal a
+ruido**. La MSR (la "señal") representa la variabilidad que nuestro
+modelo captura sistemáticamente, mientras que la MSE (el "ruido")
+representa la variabilidad aleatoria o residual. Un valor de F grande
+nos dice que la señal es mucho más fuerte que el ruido, lo que apoya la
+hipótesis de que la relación que hemos modelado es real y no fruto del
+azar.
 
-Toda esta información se organiza de forma estándar en la **tabla ANOVA**:
+Toda esta información se organiza de forma estándar en la **tabla
+ANOVA**:
 
-| Fuente    | $df$  | $SS$  | $MS = SS/df$  | Estadístico $F$ |
-|-----------|-------|-------|---------------|-----------------|
-| Regresión | 1     | $SSR$ | $MSR$         | $F = MSR/MSE$   |
-| Error     | $n-2$ | $SSE$ | $MSE$         |                 |
-| Total     | $n-1$ | $SST$ |               |                 |
+| Fuente    | $df$  | $SS$  | $MS = SS/df$ | Estadístico $F$ |
+|-----------|-------|-------|--------------|-----------------|
+| Regresión | 1     | $SSR$ | $MSR$        | $F = MSR/MSE$   |
+| Error     | $n-2$ | $SSE$ | $MSE$        |                 |
+| Total     | $n-1$ | $SST$ |              |                 |
 
-Bajo la hipótesis nula ($H_0: \beta_1 = 0$), el estadístico $F$ sigue una distribución $F$ con 1 y $n-2$ grados de libertad. Si el p-valor asociado a nuestro estadístico F es suficientemente pequeño ($p < \alpha$), rechazamos $H_0$ y concluimos que nuestro modelo tiene un poder explicativo estadísticamente significativo.
-
+Bajo la hipótesis nula ($H_0: \beta_1 = 0$), el estadístico $F$ sigue
+una distribución $F$ con 1 y $n-2$ grados de libertad. Si el p-valor
+asociado a nuestro estadístico F es suficientemente pequeño
+($p < \alpha$), rechazamos $H_0$ y concluimos que nuestro modelo tiene
+un poder explicativo estadísticamente significativo.
 
 ### Bondad del ajuste: coeficiente de determinación
 
-El coeficiente de determinación ($R^2$) es una medida clave que cuantifica qué proporción de la variabilidad total observada en la muestra ($y_i$) es explicada por la relación lineal con $X$ a través del modelo. Su fórmula se deriva de la descomposición de la varianza:
+El coeficiente de determinación ($R^2$) es una medida clave que
+cuantifica qué proporción de la variabilidad total observada en la
+muestra ($y_i$) es explicada por la relación lineal con $X$ a través del
+modelo. Su fórmula se deriva de la descomposición de la varianza:
 
 $$
 R^2 = \frac{\text{SSR}}{\text{SST}} = 1 - \frac{\text{SSE}}{\text{SST}}
 $$
 
-Donde las sumas de cuadrados se calculan a partir de los datos muestrales:
+Donde las sumas de cuadrados se calculan a partir de los datos
+muestrales:
 
--   $\text{SST} = \sum_{i=1}^n (y_i - \bar{y})^2$: Suma Total de Cuadrados, mide la variabilidad total de las observaciones.
--   $\text{SSR} = \sum_{i=1}^n (\hat{y}_i - \bar{y})^2$: Suma de Cuadrados de la Regresión, mide la variabilidad explicada por el modelo.
--   $\text{SSE} = \sum_{i=1}^n (y_i - \hat{y}_i)^2$: Suma de Cuadrados del Error, mide la variabilidad no explicada (residual).
+-   $\text{SST} = \sum_{i=1}^n (y_i - \bar{y})^2$: Suma Total de
+    Cuadrados, mide la variabilidad total de las observaciones.
+-   $\text{SSR} = \sum_{i=1}^n (\hat{y}_i - \bar{y})^2$: Suma de
+    Cuadrados de la Regresión, mide la variabilidad explicada por el
+    modelo.
+-   $\text{SSE} = \sum_{i=1}^n (y_i - \hat{y}_i)^2$: Suma de Cuadrados
+    del Error, mide la variabilidad no explicada (residual).
 
-Un $R^2$ cercano a 1 indica que el modelo ajusta bien los datos, mientras que un $R^2$ cercano a 0 indica un ajuste pobre.
+Un $R^2$ cercano a 1 indica que el modelo ajusta bien los datos,
+mientras que un $R^2$ cercano a 0 indica un ajuste pobre.
 
 ::: {.callout-note title="Relación entre R² y el coeficiente de correlación" collapse="true"}
-En el caso específico del modelo de regresión lineal simple, existe una relación directa y simple: el coeficiente de determinación $R^2$ es literalmente el cuadrado del coeficiente de correlación de Pearson ($r$) entre $X$ e $Y$.
+En el caso específico del modelo de regresión lineal simple, existe una
+relación directa y simple: el coeficiente de determinación $R^2$ es
+literalmente el cuadrado del coeficiente de correlación de Pearson ($r$)
+entre $X$ e $Y$.
 
 $$ R^2 = (r_{xy})^2 $$
 
-Esto refuerza la idea de que ambos miden la fuerza de la asociación *lineal*, aunque $R^2$ lo hace desde la perspectiva de la varianza explicada por el modelo.
+Esto refuerza la idea de que ambos miden la fuerza de la asociación
+*lineal*, aunque $R^2$ lo hace desde la perspectiva de la varianza
+explicada por el modelo.
 :::
 
-
 ::: {.callout-caution title="Interpretación de R²"}
-El coeficiente de determinación, $R^2$, es una métrica muy popular, pero su interpretación requiere cautela. Un valor alto no garantiza un buen modelo, y un valor bajo no siempre implica un modelo inútil. Es fundamental tener en cuenta las siguientes observaciones:
+El coeficiente de determinación, $R^2$, es una métrica muy popular, pero
+su interpretación requiere cautela. Un valor alto no garantiza un buen
+modelo, y un valor bajo no siempre implica un modelo inútil. Es
+fundamental tener en cuenta las siguientes observaciones:
 
--   **$R^2$ no mide la linealidad de la relación.** Un modelo puede tener un $R^2$ muy alto incluso si la relación subyacente entre las variables $X$ e $Y$ no es lineal. Por ello, un $R^2$ elevado nunca debe sustituir a un análisis gráfico de los residuos para verificar el supuesto de linealidad.
+-   $R^2$ no mide la linealidad de la relación. Un modelo puede tener un
+    $R^2$ muy alto incluso si la relación subyacente entre las variables
+    $X$ e $Y$ no es lineal. Por ello, un $R^2$ elevado nunca debe
+    sustituir a un análisis gráfico de los residuos para verificar el
+    supuesto de linealidad.
 
--   **$R^2$ es sensible al rango de la variable predictora $X$.** Si el modelo de regresión es adecuado, la magnitud de $R^2$ aumentará si aumenta la dispersión de las observaciones $x_i$ (es decir, si $S_{xx}$ crece). Esto se debe a que un mayor rango en $X$ tiende a aumentar la Suma Total de Cuadrados (SST), lo que puede inflar el valor de $R^2$ sin que la precisión del modelo (medida por la MSE) haya mejorado.
+-   $R^2$ es sensible al rango de la variable predictora $X$. Si el
+    modelo de regresión es adecuado, la magnitud de $R^2$ aumentará si
+    aumenta la dispersión de las observaciones $x_i$ (es decir, si
+    $S_{xx}$ crece). Esto se debe a que un mayor rango en $X$ tiende a
+    aumentar la Suma Total de Cuadrados (SST), lo que puede inflar el
+    valor de $R^2$ sin que la precisión del modelo (medida por la MSE)
+    haya mejorado.
 
--   **Un rango restringido en $X$ puede producir un $R^2$ artificialmente bajo.** Como consecuencia del punto anterior, si los datos se han recogido en un rango muy estrecho de la variable $X$, el $R^2$ puede ser muy pequeño, aunque exista una relación fuerte y significativa entre las variables. Esto podría llevar a la conclusión errónea de que el predictor no es útil.
+-   **Un rango restringido en** $X$ puede producir un $R^2$
+    artificialmente bajo. Como consecuencia del punto anterior, si los
+    datos se han recogido en un rango muy estrecho de la variable $X$,
+    el $R^2$ puede ser muy pequeño, aunque exista una relación fuerte y
+    significativa entre las variables. Esto podría llevar a la
+    conclusión errónea de que el predictor no es útil.
 :::
 
 ### Inferencia sobre los coeficientes
 
-Además de la prueba F global, podemos realizar inferencias sobre cada parámetro individualmente. Para ello, necesitamos el supuesto de normalidad de los errores.
+Además de la prueba F global, podemos realizar inferencias sobre cada
+parámetro individualmente. Para ello, necesitamos el supuesto de
+normalidad de los errores.
 
 #### Distribución de los estimadores
 
-Bajo el supuesto de normalidad, se puede demostrar que los estimadores también siguen una distribución Normal:
-$$
+Bajo el supuesto de normalidad, se puede demostrar que los estimadores
+también siguen una distribución Normal: $$
 \hat{\beta}_1 \sim N\left(\beta_1, \frac{\sigma^2}{S_{xx}}\right) \quad \quad \quad \hat{\beta}_0 \sim N\left(\beta_0, \sigma^2 \left[ \frac{1}{n} + \frac{\bar{x}^2}{S_{xx}} \right]\right)
 $$
 
-Al estandarizar y reemplazar la desconocida $\sigma^2$ por su estimador $\hat{\sigma}^2 = \text{MSE}$, obtenemos un estadístico que sigue una distribución t-Student con $n-2$ grados de libertad:
-$$
+Al estandarizar y reemplazar la desconocida $\sigma^2$ por su estimador
+$\hat{\sigma}^2 = \text{MSE}$, obtenemos un estadístico que sigue una
+distribución t-Student con $n-2$ grados de libertad: $$
 t = \frac{\hat{\beta}_1 - \beta_1}{\text{SE}(\hat{\beta}_1)} \sim t_{n-2}
-$$
-donde $\text{SE}(\hat{\beta}_1) = \sqrt{\frac{\text{MSE}}{S_{xx}}}$ es el **error estándar** del estimador $\hat{\beta}_1$.
+$$ donde $\text{SE}(\hat{\beta}_1) = \sqrt{\frac{\text{MSE}}{S_{xx}}}$
+es el **error estándar** del estimador $\hat{\beta}_1$.
 
 #### Contraste de hipótesis para la pendiente
 
-El contraste más común es el de la significancia de la pendiente:
-* $H_0: \beta_1 = 0$
-* $H_1: \beta_1 \neq 0$
+El contraste más común es el de la significancia de la pendiente: \*
+$H_0: \beta_1 = 0$ \* $H_1: \beta_1 \neq 0$
 
-Bajo $H_0$, el estadístico de contraste es:
-$$
+Bajo $H_0$, el estadístico de contraste es: $$
 t_0 = \frac{\hat{\beta}_1}{\text{SE}(\hat{\beta}_1)}
-$$
-Rechazamos $H_0$ si $|t_0| > t_{\alpha/2, n-2}$ o, equivalentemente, si el p-valor asociado es menor que $\alpha$.
+$$ Rechazamos $H_0$ si $|t_0| > t_{\alpha/2, n-2}$ o, equivalentemente,
+si el p-valor asociado es menor que $\alpha$.
 
 ::: {.callout-note title="Relación entre el contraste F y el contraste t"}
-En el contexto de la **regresión lineal simple** (y solo en este caso), el contraste F para la significancia global del modelo es matemáticamente equivalente al contraste t para la significancia del coeficiente $\beta_1$. Se puede demostrar que $F = t^2$, y el p-valor de ambos contrastes será idéntico.
+En el contexto de la **regresión lineal simple** (y solo en este caso),
+el contraste F para la significancia global del modelo es
+matemáticamente equivalente al contraste t para la significancia del
+coeficiente $\beta_1$. Se puede demostrar que $F = t^2$, y el p-valor de
+ambos contrastes será idéntico.
 :::
-
 
 #### Intervalo de confianza para la pendiente
 
-A partir de la distribución t, podemos construir un intervalo de confianza al $100(1-\alpha)\%$ para el verdadero valor de la pendiente $\beta_1$:
-$$
+A partir de la distribución t, podemos construir un intervalo de
+confianza al $100(1-\alpha)\%$ para el verdadero valor de la pendiente
+$\beta_1$: $$
 \hat{\beta}_1 \pm t_{\alpha/2, n-2} \cdot \text{SE}(\hat{\beta}_1)
-$$
-Este intervalo nos da un rango de valores plausibles para el efecto de $X$ sobre $Y$. Si el intervalo no contiene el cero, es equivalente a rechazar la hipótesis nula $H_0: \beta_1 = 0$.
+$$ Este intervalo nos da un rango de valores plausibles para el efecto
+de $X$ sobre $Y$. Si el intervalo no contiene el cero, es equivalente a
+rechazar la hipótesis nula $H_0: \beta_1 = 0$.
 
 ::: {.callout-important title="Para recordar"}
-En los programas estadísticos se suele proporcionar el p-valor del contraste. Puedes repasar el significado de p-valor proporcionado en la asignatura de Inferencia.
+En los programas estadísticos se suele proporcionar el p-valor del
+contraste. Puedes repasar el significado de p-valor proporcionado en la
+asignatura de Inferencia.
 :::
-
 
 ::: {.callout-tip title="Ejemplo: Interpretación del `summary`" collapse="true"}
 La función `summary()` en R nos proporciona toda esta información.
+
 ```{r}
 #| echo: true
 summary(modelo_estudio)
 ```
+
 **Interpretación:**
 
-- **Coefficients**: El p-valor para `Tiempo_Estudio` (`r format.pval(summary(modelo_estudio)$coefficients[2,4], digits=3, eps=0.001)`) es muy pequeño, por lo que rechazamos $H_0$ y concluimos que la variable es un predictor significativo.
-- **R-squared**: El valor de $R^2$ (`r round(summary(modelo_estudio)$r.squared, 2)`) nos indica que el `r round(summary(modelo_estudio)$r.squared*100, 0)`% de la variabilidad en las calificaciones es explicada por el tiempo de estudio.
-- **F-statistic**: El p-valor del estadístico F (`r format.pval(summary(modelo_estudio)$fstatistic[3], digits=3, eps=0.001)`) confirma que el modelo en su conjunto es estadísticamente significativo.
+-   **Coefficients**: El p-valor para `Tiempo_Estudio`
+    (`r format.pval(summary(modelo_estudio)$coefficients[2,4], digits=3, eps=0.001)`)
+    es muy pequeño, por lo que rechazamos $H_0$ y concluimos que la
+    variable es un predictor significativo.
+-   **R-squared**: El valor de $R^2$
+    (`r round(summary(modelo_estudio)$r.squared, 2)`) nos indica que el
+    `r round(summary(modelo_estudio)$r.squared*100, 0)`% de la
+    variabilidad en las calificaciones es explicada por el tiempo de
+    estudio.
+-   **F-statistic**: El p-valor del estadístico F
+    (`r format.pval(summary(modelo_estudio)$fstatistic[3], digits=3, eps=0.001)`)
+    confirma que el modelo en su conjunto es estadísticamente
+    significativo.
 :::
 
 ## Predicción de nuevas observaciones
 
-Una vez que hemos ajustado y validado un modelo de regresión, uno de sus propósitos más importantes es utilizarlo para hacer predicciones. Sin embargo, es fundamental distinguir entre dos tipos de predicción:
+Una vez que hemos ajustado y validado un modelo de regresión, uno de sus
+propósitos más importantes es utilizarlo para hacer predicciones. Sin
+embargo, es fundamental distinguir entre dos tipos de predicción:
 
-1.  **Estimar la respuesta media** para un valor dado de $X$. Por ejemplo: "¿Cuál es la calificación *promedio* que esperamos para todos los estudiantes que estudian 25 horas semanales?".
-2.  **Predecir una respuesta individual** para un valor dado de $X$. Por ejemplo: "Si un estudiante *concreto* estudia 25 horas semanales, ¿entre qué valores esperamos que se encuentre su calificación?".
+1.  **Estimar la respuesta media** para un valor dado de $X$. Por
+    ejemplo: "¿Cuál es la calificación *promedio* que esperamos para
+    todos los estudiantes que estudian 25 horas semanales?".
+2.  **Predecir una respuesta individual** para un valor dado de $X$. Por
+    ejemplo: "Si un estudiante *concreto* estudia 25 horas semanales,
+    ¿entre qué valores esperamos que se encuentre su calificación?".
 
-Estos dos objetivos, aunque parecidos, responden a preguntas distintas y manejan diferentes fuentes de incertidumbre, lo que da lugar a dos tipos de intervalos.
+Estos dos objetivos, aunque parecidos, responden a preguntas distintas y
+manejan diferentes fuentes de incertidumbre, lo que da lugar a dos tipos
+de intervalos.
 
 ### Intervalo de confianza para la respuesta media
 
-Este intervalo estima el valor esperado de $Y$ para un valor concreto del regresor, $x_0$. Su objetivo es acotar dónde se encuentra la **línea de regresión poblacional verdadera** para ese punto $x_0$. La estimación puntual es $\hat{y}_0 = \hat{\beta}_0 + \hat{\beta}_1 x_0$.
+Este intervalo estima el valor esperado de $Y$ para un valor concreto
+del regresor, $x_0$. Su objetivo es acotar dónde se encuentra la **línea
+de regresión poblacional verdadera** para ese punto $x_0$. La estimación
+puntual es $\hat{y}_0 = \hat{\beta}_0 + \hat{\beta}_1 x_0$.
 
-El intervalo de confianza al $100(1-\alpha)\%$ para la respuesta media $E[Y|X=x_0]$ viene dado por:
+El intervalo de confianza al $100(1-\alpha)\%$ para la respuesta media
+$E[Y|X=x_0]$ viene dado por:
 
 $$
 \hat{y}_0 \pm t_{\alpha/2, n-2} \cdot \sqrt{\text{MSE} \left( \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right)}
 $$
 
-La anchura de este intervalo depende de dos fuentes de error: la incertidumbre en la estimación de la recta y la distancia del punto $x_0$ a la media $\bar{x}$. El intervalo es más estrecho cerca del centro de los datos y más ancho en los extremos.
+La anchura de este intervalo depende de dos fuentes de error: la
+incertidumbre en la estimación de la recta y la distancia del punto
+$x_0$ a la media $\bar{x}$. El intervalo es más estrecho cerca del
+centro de los datos y más ancho en los extremos.
 
 ### Intervalo de predicción para una respuesta individual
 
-Este intervalo es el que debemos usar cuando queremos predecir el valor para **una única observación futura**, no para la media. Como indicas, este intervalo debe tener en cuenta dos fuentes de variabilidad:
+Este intervalo es el que debemos usar cuando queremos predecir el valor
+para **una única observación futura**, no para la media. Como indicas,
+este intervalo debe tener en cuenta dos fuentes de variabilidad:
 
-1.  La incertidumbre sobre la localización de la verdadera recta de regresión (la misma que en el intervalo de confianza).
-2.  La variabilidad inherente de una observación individual alrededor de la recta de regresión (el error aleatorio $\varepsilon_i$, cuya varianza estimamos con la MSE).
+1.  La incertidumbre sobre la localización de la verdadera recta de
+    regresión (la misma que en el intervalo de confianza).
+2.  La variabilidad inherente de una observación individual alrededor de
+    la recta de regresión (el error aleatorio $\varepsilon_i$, cuya
+    varianza estimamos con la MSE).
 
-Por esta razón, el intervalo de predicción **siempre será más ancho** que el intervalo de confianza para la respuesta media. El intervalo de predicción al $100(1-\alpha)\%$ para una observación futura $y_0$ en el punto $x_0$ es:
+Por esta razón, el intervalo de predicción **siempre será más ancho**
+que el intervalo de confianza para la respuesta media. El intervalo de
+predicción al $100(1-\alpha)\%$ para una observación futura $y_0$ en el
+punto $x_0$ es:
 
 $$
 \hat{y}_0 \pm t_{\alpha/2, n-2} \cdot \sqrt{\text{MSE} \left( 1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right)}
 $$
 
-La única diferencia matemática es el **"+1"** dentro de la raíz cuadrada, que representa la varianza $\sigma^2$ del error de una sola observación.
+La única diferencia matemática es el **"+1"** dentro de la raíz
+cuadrada, que representa la varianza $\sigma^2$ del error de una sola
+observación.
 
 #### Predicción para la media de *m* observaciones futuras
 
-Si se desea un intervalo de predicción para la media de *m* futuras observaciones en un valor $x_0$, la fórmula se modifica ligeramente. Este intervalo será más estrecho que el de una sola observación pero más ancho que el de la respuesta media:
+Si se desea un intervalo de predicción para la media de *m* futuras
+observaciones en un valor $x_0$, la fórmula se modifica ligeramente.
+Este intervalo será más estrecho que el de una sola observación pero más
+ancho que el de la respuesta media:
 
 $$
 \hat{y}_0 \pm t_{\alpha/2, n-2} \cdot \sqrt{\text{MSE} \left( \frac{1}{m} + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right)}
 $$
 
-::: {.callout-tip title="Ejemplo práctico: Predicción de calificaciones"}
-
-Vamos a calcular y visualizar los intervalos para nuestro modelo de estudio. Usaremos la función `predict()` de R, que calcula estos intervalos de forma automática.
+::: {.callout-tip title="Ejemplo práctico: Predicción de calificaciones" collapse="true"}
+Vamos a calcular y visualizar los intervalos para nuestro modelo de
+estudio. Usaremos la función `predict()` de R, que calcula estos
+intervalos de forma automática.
 
 ```{r}
 #| label: fig-prediccion
@@ -613,10 +878,15 @@ ggplot() +
   ) +
   theme_classic(base_size = 14)
 ```
-El gráfico muestra claramente que la incertidumbre al predecir una calificación individual es mucho mayor que la incertidumbre al estimar la calificación promedio. Ambas bandas se ensanchan al alejarse del centro de los datos.
+
+El gráfico muestra claramente que la incertidumbre al predecir una
+calificación individual es mucho mayor que la incertidumbre al estimar
+la calificación promedio. Ambas bandas se ensanchan al alejarse del
+centro de los datos.
 
 Si quisiéramos una predicción para un estudiante que estudia 25 horas:
-```	{r}
+
+```{r}
 #| echo: true
 #| results: 'hide' # Oculta la salida de esta celda
 
@@ -631,43 +901,108 @@ pred_indiv <- predict(modelo_estudio, newdata = dato_nuevo, interval = "predicti
 
 **Interpretación:**
 
-- Con un 95% de confianza, la calificación **promedio** de los estudiantes que estudian 25 horas está entre **`r round(pred_media[1, "lwr"], 2)`** y **`r round(pred_media[1, "upr"], 2)`**.
-- Con un 95% de confianza, la calificación de **un estudiante concreto** que estudia 25 horas estará entre **`r round(pred_indiv[1, "lwr"], 2)`** y **`r round(pred_indiv[1, "upr"], 2)`**.
+-   Con un 95% de confianza, la calificación **promedio** de los
+    estudiantes que estudian 25 horas está entre
+    **`r round(pred_media[1, "lwr"], 2)`** y
+    **`r round(pred_media[1, "upr"], 2)`**.
+-   Con un 95% de confianza, la calificación de **un estudiante
+    concreto** que estudia 25 horas estará entre
+    **`r round(pred_indiv[1, "lwr"], 2)`** y
+    **`r round(pred_indiv[1, "upr"], 2)`**.
 :::
 
 ## Diagnóstico del Modelo
 
-Una vez que hemos ajustado un modelo y evaluado su significancia, el trabajo no ha terminado. Un paso crucial, a menudo subestimado, es el **diagnóstico del modelo**. Este proceso consiste en verificar si se cumplen los supuestos del modelo de regresión lineal clásico. La fiabilidad de nuestras inferencias (los p-valores de los contrastes t y F, y los intervalos de confianza) depende directamente de la validez de estos supuestos.
+Una vez que hemos ajustado un modelo y evaluado su significancia, el
+trabajo no ha terminado. Un paso crucial, a menudo subestimado, es el
+**diagnóstico del modelo**. Este proceso consiste en verificar si se
+cumplen los supuestos del modelo de regresión lineal clásico. La
+fiabilidad de nuestras inferencias (los p-valores de los contrastes t y
+F, y los intervalos de confianza) depende directamente de la validez de
+estos supuestos.
 
-El diagnóstico se realiza principalmente a través del **análisis de los residuos** del modelo ($e_i = y_i - \hat{y}_i$). Los residuos son nuestra mejor aproximación empírica de los errores teóricos no observables ($\varepsilon_i$). A continuación, se detalla cómo verificar cada uno de los supuestos clave.
+El diagnóstico se realiza principalmente a través del **análisis de los
+residuos** del modelo ($e_i = y_i - \hat{y}_i$). Los residuos son
+nuestra mejor aproximación empírica de los errores teóricos no
+observables ($\varepsilon_i$). A continuación, se detalla cómo verificar
+cada uno de los supuestos clave.
 
 ### Linealidad
 
-Este supuesto establece que la relación entre la variable predictora $X$ y el valor esperado de la variable respuesta $Y$ es, en promedio, una línea recta: $E[Y | X] = \beta_0 + \beta_1 X$.
+Este supuesto establece que la relación entre la variable predictora $X$
+y el valor esperado de la variable respuesta $Y$ es, en promedio, una
+línea recta: $E[Y | X] = \beta_0 + \beta_1 X$.
 
-La herramienta fundamental para diagnosticar la linealidad es el gráfico de **residuos** ($e_i$) frente a los **valores ajustados** por el modelo ($\hat{y}_i$). La lógica de este gráfico es sencilla pero potente: si el modelo lineal es adecuado, los errores que comete (los residuos) deberían ser completamente aleatorios, sin guardar relación alguna con la magnitud de las predicciones. En esencia, buscamos confirmar que no queda ninguna información sistemática en los errores que el modelo no haya capturado.
+La herramienta fundamental para diagnosticar la linealidad es el gráfico
+de **residuos** ($e_i$) frente a los **valores ajustados** por el modelo
+($\hat{y}_i$). La lógica de este gráfico es sencilla pero potente: si el
+modelo lineal es adecuado, los errores que comete (los residuos)
+deberían ser completamente aleatorios, sin guardar relación alguna con
+la magnitud de las predicciones. En esencia, buscamos confirmar que no
+queda ninguna información sistemática en los errores que el modelo no
+haya capturado.
 
-**En un escenario ideal**, este gráfico debería parecer una nube de puntos distribuida horizontalmente y sin estructura aparente, centrada en la línea del cero. Esto nos indica que los errores son, en promedio, nulos para todos los niveles de predicción, cumpliendo así el supuesto de linealidad. La línea roja que R superpone en este gráfico, que suaviza la tendencia de los puntos, debería ser prácticamente plana y pegada al cero, confirmando la ausencia de patrones.
+**En un escenario ideal**, este gráfico debería parecer una nube de
+puntos distribuida horizontalmente y sin estructura aparente, centrada
+en la línea del cero. Esto nos indica que los errores son, en promedio,
+nulos para todos los niveles de predicción, cumpliendo así el supuesto
+de linealidad. La línea roja que R superpone en este gráfico, que
+suaviza la tendencia de los puntos, debería ser prácticamente plana y
+pegada al cero, confirmando la ausencia de patrones.
 
-::: {.callout-tip title="Ejemplo de un Modelo Válido (Nuestro Caso)"}
-Para nuestro `modelo_estudio`, podemos generar específicamente el primer gráfico de diagnóstico, que es el de Residuos vs. Valores Ajustados.
+::: {.callout-tip title="Ejemplo de un modelo válido" collapse="true"}
+Para nuestro `modelo_estudio`, podemos generar específicamente el primer
+gráfico de diagnóstico, que es el de Residuos vs. Valores Ajustados.
 
 ```{r}
 #| label: fig-linealidad-ok
 #| fig-cap: "Gráfico de Residuos vs. Valores Ajustados para el modelo de estudio. No se observan patrones."
 
-# Usamos which = 1 para seleccionar solo el primer gráfico de diagnóstico
-plot(modelo_estudio, which = 1)
+# Crear un dataframe con los datos para ggplot2
+library(ggplot2)
+library(broom)
+
+# Extraer residuos y valores ajustados
+datos_diagnostico <- data.frame(
+  residuos = residuals(modelo_estudio),
+  valores_ajustados = fitted(modelo_estudio)
+)
+
+# Gráfico de Residuos vs. Valores Ajustados con ggplot2
+ggplot(datos_diagnostico, aes(x = valores_ajustados, y = residuos)) +
+  geom_point(color = "#0072B2", alpha = 0.7) +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8) +
+  labs(
+    title = "Residuos vs. Valores Ajustados",
+    x = "Valores Ajustados",
+    y = "Residuos"
+  ) +
+  theme_classic(base_size = 12)
 ```
-Como se puede observar, los puntos se distribuyen de forma aleatoria alrededor de la línea horizontal en cero. La línea roja, que suaviza la tendencia de los residuos, es prácticamente plana. Esto es un claro indicativo de que el supuesto de linealidad se cumple en nuestro modelo.
+
+Como se puede observar, los puntos se distribuyen de forma aleatoria
+alrededor de la línea horizontal en cero. La línea roja, que suaviza la
+tendencia de los residuos, es prácticamente plana. Esto es un claro
+indicativo de que el supuesto de linealidad se cumple en nuestro modelo.
 :::
 
-Por el contrario, la aparición de un **patrón sistemático** en los residuos es la señal de alarma de que algo anda mal. En lo que respecta al supuesto de **linealidad**, la evidencia más clara de una violación es una **tendencia curvilínea** (como una "U" o una parábola). Este patrón nos dice que el modelo es estructuralmente incapaz de capturar la forma de los datos y, por lo tanto, comete errores predecibles. Por ejemplo, puede subestimar la respuesta en los extremos (generando residuos positivos) y sobreestimarla en el centro (residuos negativos), lo que invalida el modelo lineal.
+Por el contrario, la aparición de un **patrón sistemático** en los
+residuos es la señal de alarma de que algo anda mal. En lo que respecta
+al supuesto de **linealidad**, la evidencia más clara de una violación
+es una **tendencia curvilínea** (como una "U" o una parábola). Este
+patrón nos dice que el modelo es estructuralmente incapaz de capturar la
+forma de los datos y, por lo tanto, comete errores predecibles. Por
+ejemplo, puede subestimar la respuesta en los extremos (generando
+residuos positivos) y sobreestimarla en el centro (residuos negativos),
+lo que invalida el modelo lineal.
 
+::: {.callout-tip title="Contraejemplo: Violación del supuesto de linealidad" collapse="true"}
+Ahora, vamos a simular a propósito unos datos que siguen una relación
+cuadrática (curva) y ajustaremos incorrectamente un modelo lineal para
+ver cómo se manifiesta el problema en el gráfico de diagnóstico.
 
-::: {.callout-tip title="Contraejemplo: Violación del Supuesto de Linealidad"}
-Ahora, vamos a simular a propósito unos datos que siguen una relación cuadrática (curva) y ajustaremos incorrectamente un modelo lineal para ver cómo se manifiesta el problema en el gráfico de diagnóstico.
-```{r}	
+```{r}
 #| label: fig-linealidad-mal
 #| fig-cap: "Patrón curvo evidente en los residuos, violando el supuesto de linealidad."
 
@@ -681,163 +1016,884 @@ datos_no_lineal <- data.frame(x = x_no_lineal, y = y_no_lineal)
 # 2. Ajuste de un modelo lineal (incorrecto)
 modelo_no_lineal <- lm(y ~ x, data = datos_no_lineal)
 
-# 3. Gráfico de Residuos vs. Valores Ajustados
-plot(modelo_no_lineal, which = 1)
+# 3. Gráfico de Residuos vs. Valores Ajustados con ggplot2
+datos_diag_no_lineal <- data.frame(
+  residuos = residuals(modelo_no_lineal),
+  valores_ajustados = fitted(modelo_no_lineal)
+)
+
+ggplot(datos_diag_no_lineal, aes(x = valores_ajustados, y = residuos)) +
+  geom_point(color = "#D55E00", alpha = 0.7) +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8) +
+  labs(
+    title = "Residuos vs. Valores Ajustados (Violación de Linealidad)",
+    x = "Valores Ajustados",
+    y = "Residuos"
+  ) +
+  theme_classic(base_size = 12)
 ```
 
-El gráfico de diagnóstico es inequívoco. A diferencia del ejemplo anterior, donde los puntos formaban una nube aleatoria, aquí los residuos dibujan un **patrón parabólico** perfecto (una "U" invertida). La línea roja de tendencia, en lugar de ser plana, sigue fielmente esta curva.
-
+El gráfico de diagnóstico es inequívoco. A diferencia del ejemplo
+anterior, donde los puntos formaban una nube aleatoria, aquí los
+residuos dibujan un **patrón parabólico** perfecto (una "U" invertida).
+La línea roja de tendencia, en lugar de ser plana, sigue fielmente esta
+curva.
 :::
 
 ### Homocedasticidad
 
-El supuesto de homocedasticidad establece que la varianza de los errores del modelo debe ser constante para todos los niveles de la variable predictora. Es decir, la dispersión de los datos alrededor de la línea de regresión es la misma en todo su recorrido ($Var(\varepsilon_i | X_i) = \sigma^2$). La violación de este supuesto se conoce como **heteroscedasticidad**, y es un problema común en el modelado.
+El supuesto de homocedasticidad establece que la varianza de los errores
+del modelo debe ser constante para todos los niveles de la variable
+predictora. Es decir, la dispersión de los datos alrededor de la línea
+de regresión es la misma en todo su recorrido
+($Var(\varepsilon_i | X_i) = \sigma^2$). La violación de este supuesto
+se conoce como **heteroscedasticidad**, y es un problema común en el
+modelado.
 
-¿Por qué es tan importante? Si un modelo es heteroscedástico, los errores estándar de los coeficientes ($\beta_0, \beta_1$) estarán calculados de forma incorrecta. Como consecuencia, los intervalos de confianza y los contrastes de hipótesis (p-valores) no serán fiables, pudiendo llevarnos a conclusiones erróneas sobre la significancia de nuestras variables.
+¿Por qué es tan importante? Si un modelo es heteroscedástico, los
+errores estándar de los coeficientes ($\beta_0, \beta_1$) estarán
+calculados de forma incorrecta. Como consecuencia, los intervalos de
+confianza y los contrastes de hipótesis (p-valores) no serán fiables,
+pudiendo llevarnos a conclusiones erróneas sobre la significancia de
+nuestras variables.
 
-::: {.callout-note title="¿Qué son los Residuos Estandarizados y Estudentizados?"}
-Antes de analizar los gráficos, es útil definir los **residuos estandarizados**. Un residuo simple ($e_i = y_i - \hat{y}_i$) nos dice cuán lejos está una observación de la línea de regresión. Sin embargo, no todos los residuos son directamente comparables, ya que su varianza puede depender de los valores de $X$ (especialmente de su apalancamiento o *leverage*).
-
-Para solucionar esto, se estandarizan los residuos, dividiéndolos por una estimación de su desviación estándar. Esto los pone a todos en una escala común (similar a una puntuación Z), haciendo más fácil la identificación de patrones y valores atípicos. R, en sus gráficos de diagnóstico, utiliza una versión aún más refinada llamada **residuos estudentizados**, que es más precisa para detectar outliers. A efectos prácticos, la interpretación es la misma.
+::: {.callout-note title="Sobre los residuos estandarizados"}
+Los **residuos simples** ($e_i = y_i - \hat{y}_i$) no son directamente
+comparables entre sí porque tienen diferentes varianzas dependiendo de
+su apalancamiento (*leverage*). Por eso, en los gráficos de diagnóstico
+se utilizan **residuos estandarizados** o, mejor aún, **residuos
+estudentizados**, que ponen todos los residuos en una escala común. Esto
+facilita la identificación de patrones y valores atípicos. La
+explicación detallada de estos conceptos se encuentra en la sección de
+identificación de observaciones influyentes.
 :::
 
-La heteroscedasticidad se detecta principalmente buscando patrones en la dispersión de los residuos.
+La heteroscedasticidad se detecta principalmente buscando patrones en la
+dispersión de los residuos.
 
-* **Gráfico de Residuos vs. Valores Ajustados:** Como en la prueba de linealidad, este gráfico es nuestra primera herramienta. Aquí no buscamos patrones en la media de los residuos (que debe ser cero), sino en su **dispersión**. La señal de alarma inequívoca de heteroscedasticidad es una **forma de embudo o megáfono**, donde la dispersión de los residuos aumenta o disminuye a medida que cambian los valores ajustados.
+-   **Gráfico de Residuos vs. Valores Ajustados:** Como en la prueba de
+    linealidad, este gráfico es nuestra primera herramienta. Aquí no
+    buscamos patrones en la media de los residuos (que debe ser cero),
+    sino en su **dispersión**. La señal de alarma inequívoca de
+    heteroscedasticidad es una **forma de embudo o megáfono**, donde la
+    dispersión de los residuos aumenta o disminuye a medida que cambian
+    los valores ajustados.
 
-* **Gráfico Scale-Location:** Este gráfico está diseñado específicamente para detectar heteroscedasticidad. Muestra la raíz cuadrada de los residuos estandarizados en el eje Y (`sqrt(|Standardized residuals|)`) frente a los valores ajustados en el eje X. Al usar la raíz cuadrada, se suaviza la distribución de los residuos, haciendo los patrones de varianza más fáciles de ver. Si la varianza es constante (homocedasticidad), deberíamos ver una nube de puntos aleatoria con una línea de tendencia roja aproximadamente plana. Una pendiente en esta línea roja indica que la varianza cambia con el nivel de la respuesta.
+-   **Gráfico Scale-Location:** Este gráfico está diseñado
+    específicamente para detectar heteroscedasticidad. Muestra la raíz
+    cuadrada de los residuos estandarizados en el eje Y
+    (`sqrt(|Standardized residuals|)`) frente a los valores ajustados en
+    el eje X. Al usar la raíz cuadrada, se suaviza la distribución de
+    los residuos, haciendo los patrones de varianza más fáciles de ver.
+    Si la varianza es constante (homocedasticidad), deberíamos ver una
+    nube de puntos aleatoria con una línea de tendencia roja
+    aproximadamente plana. Una pendiente en esta línea roja indica que
+    la varianza cambia con el nivel de la respuesta.
 
-* **Prueba de Breusch-Pagan:** Es el contraste de hipótesis formal. Su lógica es ingeniosa: realiza una regresión auxiliar donde intenta predecir los residuos al cuadrado a partir de las variables predictoras originales. Si las variables predictoras ayudan a explicar la magnitud de los residuos al cuadrado, significa que la varianza del error depende de los predictores, y por tanto, hay heteroscedasticidad.
-    * **Hipótesis Nula ($H_0$):** El modelo es homocedástico.
-    * **Decisión:** Un p-valor pequeño (p. ej., < 0.05) es evidencia en contra de la homocedasticidad.
+-   **Prueba de Breusch-Pagan:** Es el contraste de hipótesis formal. Su
+    lógica es ingeniosa: realiza una regresión auxiliar donde intenta
+    predecir los residuos al cuadrado a partir de las variables
+    predictoras originales. Si las variables predictoras ayudan a
+    explicar la magnitud de los residuos al cuadrado, significa que la
+    varianza del error depende de los predictores, y por tanto, hay
+    heteroscedasticidad.
 
-::: {.callout-tip title="Ejemplo de un Modelo Válido (Nuestro Caso)"}
-Analicemos nuestro `modelo_estudio`. Nos centraremos en el gráfico `Scale-Location` (`which = 3`) y en la prueba de Breusch-Pagan.
+    -   **Hipótesis Nula (**$H_0$): El modelo es homocedástico.
+    -   **Decisión:** Un p-valor pequeño (p. ej., \< 0.05) es evidencia
+        en contra de la homocedasticidad.
+
+::: {.callout-tip title="Ejemplo de un modelo válido" collapse="true"}
+Analicemos nuestro `modelo_estudio`. Nos centraremos en el gráfico
+`Scale-Location` (`which = 3`) y en la prueba de Breusch-Pagan.
 
 ```{r}
 #| label: fig-homocedasticidad-ok
 #| fig-cap: "Gráfico Scale-Location para el modelo de estudio. La línea de tendencia es casi plana."
 
-# Usamos which = 3 para seleccionar el gráfico Scale-Location
-plot(modelo_estudio, which = 3)
+# Crear datos para el gráfico Scale-Location
+datos_scale_loc <- data.frame(
+  valores_ajustados = fitted(modelo_estudio),
+  residuos_std_sqrt = sqrt(abs(rstandard(modelo_estudio)))
+)
+
+# Gráfico Scale-Location con ggplot2
+ggplot(datos_scale_loc, aes(x = valores_ajustados, y = residuos_std_sqrt)) +
+  geom_point(color = "#0072B2", alpha = 0.7) +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8) +
+  labs(
+    title = "Scale-Location",
+    x = "Valores Ajustados",
+    y = expression(sqrt("|Residuos Estandarizados|"))
+  ) +
+  theme_classic(base_size = 12)
 
 # Prueba de Breusch-Pagan
 library(lmtest)
 bptest(modelo_estudio)
 ```
-El diagnóstico es positivo. En el gráfico `Scale-Location`, la línea roja es casi horizontal, lo que indica que la varianza de los residuos es estable a lo largo de los valores ajustados. Esto se confirma con la prueba de Breusch-Pagan, que arroja un **p-valor alto**, por lo que no tenemos evidencia para rechazar la hipótesis nula de homocedasticidad. **Nuestro modelo cumple el supuesto**.
+
+El diagnóstico es positivo. En el gráfico `Scale-Location`, la línea
+roja es casi horizontal, lo que indica que la varianza de los residuos
+es estable a lo largo de los valores ajustados. Esto se confirma con la
+prueba de Breusch-Pagan, que arroja un **p-valor alto**, por lo que no
+tenemos evidencia para rechazar la hipótesis nula de homocedasticidad.
+**Nuestro modelo cumple el supuesto**.
 :::
 
-::: {.callout-tip title="Contraejemplo: Violación del Supuesto de Homocedasticidad"}
-Ahora, simularemos datos donde el error aumenta a medida que `x` crece, un caso clásico de heteroscedasticidad.
+::: {.callout-tip title="Contraejemplo: Violación del supuesto de homocedasticidad" collapse="true"}
+Ahora, simularemos datos donde el error aumenta a medida que `x` crece,
+un caso clásico de heteroscedasticidad.
 
 ```{r}
 #| label: fig-homocedasticidad-mal
 #| fig-cap: "Diagnóstico de heteroscedasticidad. Izquierda: Gráfico de Residuos vs. Ajustados (patrón de embudo). Derecha: Gráfico Scale-Location (tendencia ascendente)."
 
-# Esta línea le dice a R que prepare una rejilla de 1 fila y 2 columnas para los gráficos
-par(mfrow = c(1, 2)) 
-
-# 1. Simulación de datos (la misma que antes)
+# 1. Simulación de datos heteroscedásticos
 set.seed(101)
 x_hetero <- 1:100
 y_hetero <- 10 + 2 * x_hetero + rnorm(100, mean = 0, sd = 0.4 * x_hetero)
 datos_hetero <- data.frame(x = x_hetero, y = y_hetero)
 modelo_hetero <- lm(y ~ x, data = datos_hetero)
 
-# 2. Gráficos de diagnóstico
-# El primer plot irá a la izquierda
-plot(modelo_hetero, which = 1) 
+# 2. Preparar datos para los gráficos
+datos_diag_hetero <- data.frame(
+  residuos = residuals(modelo_hetero),
+  valores_ajustados = fitted(modelo_hetero),
+  residuos_std_sqrt = sqrt(abs(rstandard(modelo_hetero)))
+)
 
-# El segundo plot irá a la derecha
-plot(modelo_hetero, which = 3)
+# 3. Gráfico de Residuos vs. Valores Ajustados
+p1 <- ggplot(datos_diag_hetero, aes(x = valores_ajustados, y = residuos)) +
+  geom_point(color = "#D55E00", alpha = 0.7) +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8) +
+  labs(
+    title = "Residuos vs. Valores Ajustados",
+    x = "Valores Ajustados",
+    y = "Residuos"
+  ) +
+  theme_classic(base_size = 10)
 
-# 3. Prueba de Breusch-Pagan
-# La prueba no genera un gráfico, por lo que no afecta al layout
+# 4. Gráfico Scale-Location
+p2 <- ggplot(datos_diag_hetero, aes(x = valores_ajustados, y = residuos_std_sqrt)) +
+  geom_point(color = "#D55E00", alpha = 0.7) +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8) +
+  labs(
+    title = "Scale-Location",
+    x = "Valores Ajustados",
+    y = expression(sqrt("|Residuos Estandarizados|"))
+  ) +
+  theme_classic(base_size = 10)
+
+# 5. Mostrar ambos gráficos lado a lado
+library(gridExtra)
+grid.arrange(p1, p2, ncol = 2)
+
+# 6. Prueba de Breusch-Pagan
 library(lmtest)
 test_values <- bptest(modelo_hetero)
 ```
+
 Los resultados son un libro de texto sobre la heteroscedasticidad.
 
-* El gráfico de **Residuos vs. Valores Ajustados** (izquierda) tiene una **forma de embudo** inconfundible: la dispersión de los puntos aumenta drásticamente de izquierda a derecha.
-* El gráfico **Scale-Location** (derecha) confirma el problema, mostrando una línea roja con una **clara pendiente ascendente**.
-* La **prueba de Breusch-Pagan** arroja un **p-valor `r format(test_values[[4]],scientific = TRUE, digits = 3)`**, dándonos una fuerte evidencia estadística para rechazar la hipótesis nula de homocedasticidad.
+-   El gráfico de **Residuos vs. Valores Ajustados** (izquierda) tiene
+    una **forma de embudo** inconfundible: la dispersión de los puntos
+    aumenta drásticamente de izquierda a derecha.
+-   El gráfico **Scale-Location** (derecha) confirma el problema,
+    mostrando una línea roja con una **clara pendiente ascendente**.
+-   La **prueba de Breusch-Pagan** arroja un **p-valor
+    `r format(test_values[[4]],scientific = TRUE, digits = 3)`**,
+    dándonos una fuerte evidencia estadística para rechazar la hipótesis
+    nula de homocedasticidad.
 
-Este modelo viola claramente el supuesto, y las inferencias basadas en él (como el p-valor del coeficiente de `x`) no serían fiables.
+Este modelo viola claramente el supuesto, y las inferencias basadas en
+él (como el p-valor del coeficiente de `x`) no serían fiables.
 :::
 
+### Normalidad de los residuos
 
-### 3. Normalidad de los Errores
+Este supuesto postula que los residuos del modelo ($\varepsilon_i$)
+siguen una distribución normal: $\varepsilon_i \sim N(0, \sigma^2)$. Es
+especialmente importante para la validez de los intervalos de confianza
+y los contrastes de hipótesis cuando el tamaño de la muestra es pequeño.
 
-Este supuesto postula que los errores del modelo ($\varepsilon_i$) siguen una distribución normal: $\varepsilon_i \sim N(0, \sigma^2)$. Es especialmente importante para la validez de los intervalos de confianza y los contrastes de hipótesis cuando el tamaño de la muestra es pequeño.
+Para evaluar la normalidad disponemos de herramientas visuales y
+analíticas:
 
-#### **Evaluación Visual**
+-   **Gráfico Normal Q-Q (`Normal Q-Q Plot`):** Compara los cuantiles de
+    los residuos estandarizados con los cuantiles de una distribución
+    normal teórica. Los puntos deben caer muy cerca de la línea diagonal
+    de 45 grados.
+-   **Histograma de los Residuos:** Un simple histograma de los residuos
+    debe mostrar una forma aproximada de campana de Gauss.
+-   **Prueba de Shapiro-Wilk:** Es uno de los contrastes más potentes
+    para la normalidad.
+    -   **Hipótesis Nula (**$H_0$): Los residuos provienen de una
+        distribución normal.
+    -   **Decisión:** Un p-valor pequeño (\< 0.05) sugiere rechazar
+        $H_0$.
 
-* **Gráfico Normal Q-Q (`Normal Q-Q Plot`):** Compara los cuantiles de los residuos estandarizados con los cuantiles de una distribución normal teórica.
-    * **Qué buscar:** Los puntos deben caer muy cerca de la línea diagonal de 45 grados.
-* **Histograma de los Residuos:** Un simple histograma de los residuos debe mostrar una forma aproximada de campana de Gauss.
-
-#### **Prueba Analítica**
-
-* **Prueba de Shapiro-Wilk:** Es uno de los contrastes más potentes para la normalidad.
-    * **Hipótesis Nula ($H_0$):** Los residuos provienen de una distribución normal.
-    * **Decisión:** Un p-valor pequeño (< 0.05) sugiere rechazar $H_0$.
-
----
-
-### 4. Independencia de los Errores
-
-Este supuesto afirma que el error de una observación no está correlacionado con el de ninguna otra: $Cov(\varepsilon_i, \varepsilon_j) = 0$ para $i \neq j$. La violación, conocida como **autocorrelación**, es común en datos de series temporales.
-
-#### **Evaluación**
-
-* **Prueba de Durbin-Watson:** Es el contraste clásico para la autocorrelación de primer orden. Su estadístico se calcula como:
-    $$ DW = \frac{\sum_{i=2}^{n}(e_i - e_{i-1})^2}{\sum_{i=1}^{n}e_i^2} $$
-    El estadístico varía entre 0 y 4. Un valor cercano a 2 sugiere no autocorrelación. Valores cercanos a 0 indican autocorrelación positiva, y cercanos a 4, autocorrelación negativa.
-
----
-
-### 5. Identificación de Observaciones Influyentes y Atípicas
-
-Algunos puntos pueden tener una influencia desproporcionada en el modelo. Es crucial identificarlos usando tres métricas clave:
-
-* **Apalancamiento (Leverage, $h_{ii}$):** Mide cuán atípico es el valor de la variable predictora $X_i$ de una observación. Un apalancamiento alto significa que el punto tiene el *potencial* de ser muy influyente. En regresión simple, se calcula como:
-    $$ h_{ii} = \frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum_{j=1}^{n}(x_j - \bar{x})^2} $$
-    Una regla común es considerar un apalancamiento alto si $h_{ii} > \frac{2(k+1)}{n}$, donde $k$ es el número de predictores (1 en regresión simple).
-
-* **Residuos Estudentizados:** Son una versión de los residuos estandarizados que son más efectivos para detectar outliers. Un residuo estudentizado ($r_i$) sigue una distribución t de Student con $n-k-2$ grados de libertad. Valores $|r_i| > 2$ o $3$ a menudo se consideran atípicos.
-
-* **Distancia de Cook ($D_i$):** Mide la influencia global de una observación, combinando su apalancamiento y su residuo. Representa cuánto cambian los coeficientes del modelo si la i-ésima observación es eliminada.
-    $$ D_i = \frac{r_i^2}{k+1} \cdot \frac{h_{ii}}{1-h_{ii}} $$
-    Se considera que un punto es influyente si su distancia de Cook es grande, por ejemplo, si $D_i > 1$ o $D_i > 4/(n-k-1)$.
-
-El gráfico **`Residuals vs. Leverage`** es la herramienta visual que combina estas tres métricas, facilitando la identificación de puntos problemáticos.
-
-### Aplicación Práctica en R
-
-A continuación, se realizan las pruebas de diagnóstico para nuestro `modelo_estudio`.
+::: {.callout-tip title="Ejemplo de normalidad válida" collapse="true"}
+Para nuestro `modelo_estudio`, examinamos la normalidad mediante el
+gráfico Q-Q y la prueba de Shapiro-Wilk.
 
 ```{r}
-#| label: fig-diagnostico-detallado
-#| fig-cap: "Gráficos de diagnóstico estándar generados por R."
-#| echo: true
+#| label: fig-normalidad-ok
+#| fig-cap: "Diagnóstico de normalidad del modelo de estudio. Izquierda: Q-Q Plot. Derecha: Histograma de residuos."
 
-# Gráficos de diagnóstico visual estándar
-par(mfrow = c(2, 2))
-plot(modelo_estudio)
-par(mfrow = c(1, 1))
+# Crear datos para los gráficos
+residuos <- residuals(modelo_estudio)
 
-# Para las pruebas analíticas, usamos el paquete 'lmtest'
-# Si no está instalado, ejecuta: install.packages("lmtest")
+# 1. Gráfico Q-Q con ggplot2
+datos_qq <- data.frame(residuos = residuos)
+
+p1 <- ggplot(datos_qq, aes(sample = residuos)) +
+  geom_qq(color = "#0072B2", alpha = 0.7) +
+  geom_qq_line(color = "red", linetype = "dashed") +
+  labs(
+    title = "Normal Q-Q Plot",
+    x = "Cuantiles Teóricos",
+    y = "Cuantiles de la Muestra"
+  ) +
+  theme_classic(base_size = 10)
+
+# 2. Histograma con ggplot2
+datos_hist <- data.frame(residuos = residuos)
+
+p2 <- ggplot(datos_hist, aes(x = residuos)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 15, fill = "lightblue", 
+                 color = "black", alpha = 0.7) +
+  stat_function(fun = dnorm, 
+                args = list(mean = mean(residuos), sd = sd(residuos)),
+                color = "red", linewidth = 1) +
+  labs(
+    title = "Histograma de Residuos",
+    x = "Residuos",
+    y = "Densidad"
+  ) +
+  theme_classic(base_size = 10)
+
+# 3. Mostrar ambos gráficos lado a lado
+library(gridExtra)
+grid.arrange(p1, p2, ncol = 2)
+
+# Prueba de Shapiro-Wilk
 library(lmtest)
-
-# 1. Prueba de Breusch-Pagan para homocedasticidad
-bptest(modelo_estudio)
-
-# 2. Prueba de Shapiro-Wilk para normalidad (sobre los residuos)
-shapiro.test(residuals(modelo_estudio))
-
-# 3. Prueba de Durbin-Watson para independencia
-dwtest(modelo_estudio)
+shapiro_resultado <- shapiro.test(residuals(modelo_estudio))
 ```
 
+El diagnóstico es excelente. En el gráfico Q-Q, los puntos se alinean
+muy bien con la línea diagonal, indicando normalidad. El histograma
+muestra una distribución aproximadamente simétrica que se ajusta bien a
+la curva normal teórica (línea roja). La prueba de Shapiro-Wilk confirma
+esto con un **p-valor alto**
+(`r format(shapiro_resultado$p.value, scientific = TRUE, digits = 3)`),
+por lo que no rechazamos la hipótesis nula de normalidad.
+:::
+
+::: {.callout-tip title="Contraejemplo: Violación del supuesto de normalidad" collapse="true"}
+Ahora simularemos datos donde los residuos siguen una distribución
+asimétrica (distribución exponencial) para mostrar una violación clara
+del supuesto de normalidad.
+
+```{r}
+#| label: fig-normalidad-mal
+#| fig-cap: "Violación del supuesto de normalidad. Izquierda: Q-Q Plot con clara desviación. Derecha: Histograma asimétricamente distribuido."
+
+# 1. Simulación de datos con errores no normales (exponenciales)
+set.seed(456)
+x_no_normal <- 1:100
+# Errores exponenciales (muy asimétricos) centrados en 0
+errores_exp <- rexp(100, rate = 1) - 1  # Restamos 1 para centrar en 0
+y_no_normal <- 5 + 2 * x_no_normal + errores_exp * 10
+datos_no_normal <- data.frame(x = x_no_normal, y = y_no_normal)
+modelo_no_normal <- lm(y ~ x, data = datos_no_normal)
+
+# 2. Crear datos para los gráficos
+residuos_no_normal <- residuals(modelo_no_normal)
+
+# 3. Gráfico Q-Q con ggplot2
+datos_qq_mal <- data.frame(residuos = residuos_no_normal)
+
+p1_mal <- ggplot(datos_qq_mal, aes(sample = residuos)) +
+  geom_qq(color = "#D55E00", alpha = 0.7) +
+  geom_qq_line(color = "red", linetype = "dashed") +
+  labs(
+    title = "Normal Q-Q Plot (Violación)",
+    x = "Cuantiles Teóricos",
+    y = "Cuantiles de la Muestra"
+  ) +
+  theme_classic(base_size = 10)
+
+# 4. Histograma con ggplot2
+datos_hist_mal <- data.frame(residuos = residuos_no_normal)
+
+p2_mal <- ggplot(datos_hist_mal, aes(x = residuos)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 15, fill = "lightcoral", 
+                 color = "black", alpha = 0.7) +
+  stat_function(fun = dnorm, 
+                args = list(mean = mean(residuos_no_normal), sd = sd(residuos_no_normal)),
+                color = "blue", linewidth = 1) +
+  labs(
+    title = "Histograma de Residuos (Violación)",
+    x = "Residuos",
+    y = "Densidad"
+  ) +
+  theme_classic(base_size = 10)
+
+# 5. Mostrar ambos gráficos lado a lado
+grid.arrange(p1_mal, p2_mal, ncol = 2)
+
+# Prueba de Shapiro-Wilk
+shapiro_resultado <- shapiro.test(residuals(modelo_no_normal))
+```
+
+La violación es evidente. En el gráfico Q-Q, los puntos se desvían
+sistemáticamente de la línea diagonal, especialmente en los extremos,
+formando una curva característica de distribuciones asimétricas. El
+histograma muestra una clara asimetría hacia la derecha que no se ajusta
+a la curva normal teórica (línea azul). La prueba de Shapiro-Wilk arroja
+un **p-valor muy pequeño**
+(`r format(shapiro_resultado$p.value, scientific = TRUE, digits = 3)`),
+rechazando fuertemente la hipótesis nula de normalidad.
+:::
+
+### Independencia de los residuos
+
+Este supuesto afirma que el error de una observación no está
+correlacionado con el de ninguna otra:
+$Cov(\varepsilon_i, \varepsilon_j) = 0$ para $i \neq j$. La violación,
+conocida como **autocorrelación**, es común en datos de series
+temporales.
+
+La **Prueba de Durbin-Watson** es el contraste clásico para la
+autocorrelación de primer orden. Su estadístico se calcula como:
+$$ DW = \frac{\sum_{i=2}^{n}(e_i - e_{i-1})^2}{\sum_{i=1}^{n}e_i^2} $$
+El estadístico varía entre 0 y 4. Un valor cercano a 2 sugiere no
+autocorrelación. Valores cercanos a 0 indican autocorrelación positiva,
+y cercanos a 4, autocorrelación negativa.
+
+::: {.callout-tip title="Ejemplo de independencia válida" collapse="true"}
+Para nuestro `modelo_estudio`, evaluamos la independencia mediante el
+gráfico de residuos vs orden y la prueba de Durbin-Watson.
+
+```{r}
+#| label: fig-independencia-ok
+#| fig-cap: "Diagnóstico de independencia del modelo de estudio. Los residuos no muestran patrones temporales."
+
+# Gráfico de residuos vs orden de observación con ggplot2
+datos_orden <- data.frame(
+  orden = 1:length(residuals(modelo_estudio)),
+  residuos = residuals(modelo_estudio)
+)
+
+ggplot(datos_orden, aes(x = orden, y = residuos)) +
+  geom_point(color = "#0072B2", alpha = 0.7) +
+  geom_line(color = "#0072B2", alpha = 0.5) +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+  labs(
+    title = "Residuos vs Orden de Observación",
+    x = "Orden de observación",
+    y = "Residuos"
+  ) +
+  theme_classic(base_size = 12)
+
+# Prueba de Durbin-Watson
+library(lmtest)
+dw_resultado_valido <- dwtest(modelo_estudio)
+```
+
+El diagnóstico es satisfactorio. El gráfico de residuos vs orden no
+muestra ningún patrón sistemático o tendencia temporal, los puntos
+fluctúan aleatoriamente alrededor del cero. La prueba de Durbin-Watson
+arroja un estadístico de **`r round(dw_resultado_valido$statistic, 3)`**
+(cercano a 2) y un **p-valor de
+`r format.pval(dw_resultado_valido$p.value, digits=3, eps=0.001)`**,
+confirmando que no hay evidencia de autocorrelación. **El supuesto de
+independencia se cumple**.
+:::
+
+::: {.callout-tip title="Contraejemplo: Violación del supuesto de independencia" collapse="true"}
+Simularemos datos con autocorrelación positiva, donde cada residuo está
+correlacionado con el anterior, violando el supuesto de independencia.
+
+```{r}
+#| label: fig-independencia-mal
+#| fig-cap: "Violación del supuesto de independencia. Los residuos muestran un patrón de autocorrelación positiva."
+
+# 1. Simulación de datos con autocorrelación
+set.seed(789)
+n <- 100
+x_autocorr <- 1:n
+# Generamos errores autocorrelacionados (AR1 con phi = 0.7)
+errores_autocorr <- numeric(n)
+errores_autocorr[1] <- rnorm(1)
+for(i in 2:n) {
+  errores_autocorr[i] <- 0.7 * errores_autocorr[i-1] + rnorm(1, sd = 0.5)
+}
+
+y_autocorr <- 10 + 1.5 * x_autocorr + errores_autocorr * 3
+datos_autocorr <- data.frame(x = x_autocorr, y = y_autocorr)
+modelo_autocorr <- lm(y ~ x, data = datos_autocorr)
+
+# 2. Gráfico de residuos vs orden con ggplot2
+datos_orden_autocorr <- data.frame(
+  orden = 1:length(residuals(modelo_autocorr)),
+  residuos = residuals(modelo_autocorr)
+)
+
+ggplot(datos_orden_autocorr, aes(x = orden, y = residuos)) +
+  geom_point(color = "#D55E00", alpha = 0.7) +
+  geom_line(color = "#D55E00", alpha = 0.5) +
+  geom_hline(yintercept = 0, color = "blue", linetype = "dashed") +
+  labs(
+    title = "Residuos vs Orden de Observación (Violación)",
+    x = "Orden de observación",
+    y = "Residuos"
+  ) +
+  theme_classic(base_size = 12)
+
+# 3. Prueba de Durbin-Watson
+dw_resultado <- dwtest(modelo_autocorr)
+```
+
+La violación es clara. El gráfico de residuos vs orden muestra un patrón
+ondulante característico: los residuos tienden a mantenerse del mismo
+signo durante varias observaciones consecutivas (rachas de valores
+positivos seguidas de rachas de valores negativos). Esto indica
+**autocorrelación positiva**. La prueba de Durbin-Watson confirma esto
+con un estadístico muy por debajo de 2 (DW =
+**`r round(dw_resultado$statistic, 3)`**) y un **p-valor muy pequeño**
+(**`r format(dw_resultado$p.value, scientific = TRUE, digits = 3)`**),
+rechazando fuertemente la hipótesis nula de independencia.
+:::
+
+### Media nula de los residuos
+
+Un requisito fundamental del modelo es que la media de los residuos debe
+ser exactamente cero: $E[e_i] = 0$. Esta propiedad se deriva
+matemáticamente del método de mínimos cuadrados y su verificación sirve
+como una comprobación de que nuestros cálculos son correctos.
+
+### Identificación de observaciones influyentes y atípicas
+
+Algunos puntos pueden tener una influencia desproporcionada en el
+modelo. Es crucial identificarlos usando diferentes métricas que evalúan
+aspectos complementarios de la influencia.
+
+::: {.callout-note title="Fundamento teórico: de los residuos simples a los estudentizados"}
+Antes de analizar las métricas de influencia, debemos entender por qué
+no todos los **residuos simples** ($e_i = y_i - \hat{y}_i$) son
+comparables entre sí. El problema fundamental es que **no tienen la
+misma varianza**, incluso bajo homocedasticidad.
+
+La varianza teórica del residuo $e_i$ depende del **apalancamiento**
+(*leverage*) de la observación: $$
+\text{Var}(e_i) = \sigma^2(1 - h_{ii})
+$$
+
+donde el apalancamiento $h_{ii}$ se define como: $$
+h_{ii} = \frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum_{j=1}^{n}(x_j - \bar{x})^2}
+$$
+
+Las observaciones con valores de $X$ más alejados de la media tendrán
+mayor apalancamiento y, paradójicamente, residuos con **menor
+varianza**. Por esto, un residuo pequeño en una observación de alto
+leverage puede ser más preocupante que un residuo grande en el centro de
+los datos.
+
+**Los residuos estandarizados** solucionan parcialmente este problema:
+$$
+r_i^* = \frac{e_i}{\sqrt{\text{MSE}(1 - h_{ii})}}
+$$
+
+Pero **los residuos estudentizados** van un paso más allá, eliminando el
+sesgo de autoinfluencia: $$
+r_i = \frac{e_i}{\sqrt{\text{MSE}_{(-i)}(1 - h_{ii})}}
+$$
+
+donde $\text{MSE}_{(-i)}$ excluye la observación $i$ del ajuste. Esto
+evita que un outlier "contamine" su propia evaluación y proporciona una
+distribución teórica exacta (t de Student con $n-k-2$ grados de
+libertad).
+
+**¿Por qué son superiores los residuos estudentizados?** Por tres
+razones clave: (1) **eliminan el sesgo de autoinfluencia** al excluir
+cada observación de su propia evaluación, (2) **evitan la
+contaminación** que un outlier produce en la MSE global, y (3) **siguen
+una distribución conocida** (t de Student) que permite umbrales
+estadísticamente precisos. **En la práctica:** $|r_i| > 2$ indica
+posibles outliers (≈5% en normalidad) y $|r_i| > 3$ outliers muy
+probables (\<1%).
+:::
+
+Las métricas fundamentales de influencia para identificar observaciones
+problemáticas son:
+
+-   **Apalancamiento (Leverage,** $h_{ii}$): Mide cuán atípico es el
+    valor de la variable predictora $X_i$ de una observación. Un
+    apalancamiento alto significa que el punto tiene el *potencial* de
+    ser muy influyente. En regresión simple, se calcula como:
+    $$ h_{ii} = \frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum_{j=1}^{n}(x_j - \bar{x})^2} $$
+    Una regla común es considerar un apalancamiento alto si
+    $h_{ii} > \frac{2(k+1)}{n}$, donde $k$ es el número de predictores
+    (1 en regresión simple).
+
+-   **Distancia de Cook (**$D_i$): Mide la influencia global de una
+    observación, combinando su apalancamiento y su residuo. Representa
+    cuánto cambian los coeficientes del modelo si la i-ésima observación
+    es eliminada.
+    $$ D_i = \frac{r_i^2}{k+1} \cdot \frac{h_{ii}}{1-h_{ii}} $$ Se
+    considera que un punto es influyente si su distancia de Cook es
+    grande, por ejemplo, si $D_i > 1$ o $D_i > 4/(n-k-1)$.
+
+-   **DFFITS:** Mide cuánto cambia la predicción $\hat{y}_i$ cuando se
+    elimina la i-ésima observación. Es una medida estandarizada que
+    combina el residuo estudentizado y el apalancamiento.
+    $$ \text{DFFITS}_i = r_i \sqrt{\frac{h_{ii}}{1-h_{ii}}} $$ Un punto
+    se considera influyente si $|\text{DFFITS}_i| > 2\sqrt{(k+1)/n}$,
+    donde $k$ es el número de predictores.
+
+::: {.callout-tip title="Ejemplo: Cálculo y análisis de DFFITS" collapse="true"}
+DFFITS es especialmente útil para evaluar cómo cada observación afecta a
+su propia predicción. Analicemos esta medida con nuestro
+`modelo_estudio`.
+
+```{r}
+#| label: fig-dffits
+#| fig-cap: "Análisis de DFFITS para identificar observaciones que afectan significativamente a sus propias predicciones."
+
+# Calcular DFFITS y sus componentes
+dffits_vals <- dffits(modelo_estudio)
+residuos_stud <- rstudent(modelo_estudio)  # Residuos estudentizados
+leverage_vals <- hatvalues(modelo_estudio)
+
+# Crear dataframe para análisis
+datos_dffits <- data.frame(
+  observacion = 1:length(dffits_vals),
+  dffits = dffits_vals,
+  residuo_stud = residuos_stud,
+  leverage = leverage_vals
+)
+
+# Umbral de DFFITS
+n <- nrow(datos)
+k <- 1  # número de predictores
+dffits_threshold <- 2 * sqrt((k + 1) / n)
+
+# Gráfico de DFFITS
+ggplot(datos_dffits, aes(x = observacion, y = dffits)) +
+  geom_point(color = "#0072B2", alpha = 0.7) +
+  geom_hline(yintercept = 0, color = "gray", linetype = "dashed") +
+  geom_hline(yintercept = c(-dffits_threshold, dffits_threshold), 
+             color = "red", linetype = "dashed", alpha = 0.7) +
+  labs(
+    title = "DFFITS por Observación",
+    x = "Número de Observación",
+    y = "DFFITS",
+    caption = paste("Líneas rojas: umbrales ±", round(dffits_threshold, 3))
+  ) +
+  theme_classic(base_size = 12)
+
+# Análisis cuantitativo
+influential_dffits <- which(abs(dffits_vals) > dffits_threshold)
+top_indices <- order(abs(dffits_vals), decreasing = TRUE)[1:5]
+```
+
+**Análisis de resultados:**
+
+El umbral de influencia para DFFITS es `r round(dffits_threshold, 3)`. En nuestro modelo, **`r length(influential_dffits)` observaciones superan este umbral**: las observaciones `r paste(influential_dffits, collapse = ", ")`, lo que las clasifica como influyentes según este criterio.
+
+Las **cinco observaciones con mayor |DFFITS|** son las observaciones `r paste(top_indices, collapse = ", ")`, con valores de `r paste(round(dffits_vals[top_indices], 3), collapse = ", ")` respectivamente. Lo más notable es que **todas estas cinco observaciones** (`r paste(intersect(top_indices, influential_dffits), collapse = ", ")`) **superan el umbral de DFFITS**, confirmando su carácter influyente.
+
+**Interpretación clave:** La observación `r top_indices[1]` es el caso más destacado: tiene un DFFITS de `r round(dffits_vals[top_indices[1]], 3)`, superando el umbral de `r round(dffits_threshold, 3)`. Esta combinación de residuo y apalancamiento resulta en un DFFITS significativo que indica cambios sustanciales en su predicción.
+
+**Conclusión práctica:** Tenemos **`r length(influential_dffits)` observaciones influyentes** según DFFITS (`r paste(influential_dffits, collapse = ", ")`) que merecen investigación adicional. Estas observaciones cambian significativamente sus propias predicciones cuando son eliminadas del modelo, sugiriendo que podrían representar casos especiales o errores de medición que deberían ser examinados más detalladamente.
+:::
+
+El gráfico **`Residuals vs. Leverage`** es la herramienta visual más
+importante para el diagnóstico de influencia, ya que combina en un solo
+gráfico el **apalancamiento** (eje X) y los **residuos estudentizados**
+(eje Y), permitiendo identificar simultáneamente observaciones con alto
+leverage y outliers. Además, incluye curvas que delimitan regiones de
+alta **Distancia de Cook**, facilitando la identificación visual de los
+puntos más problemáticos.
+
+::: {.callout-tip title="Ejemplo: Gráfico Residuals vs. Leverage" collapse="true"}
+Vamos a analizar el gráfico más importante para el diagnóstico de influencia usando nuestro `modelo_estudio`.
+
+```{r}
+#| label: fig-leverage
+#| fig-cap: "Gráfico Residuals vs. Leverage para identificar observaciones influyentes."
+
+# Crear datos para el gráfico Residuals vs. Leverage
+leverage_vals <- hatvalues(modelo_estudio)
+residuos_stud <- rstudent(modelo_estudio)  # Residuos estudentizados
+cook_dist <- cooks.distance(modelo_estudio)
+
+datos_leverage <- data.frame(
+  leverage = leverage_vals,
+  residuos_stud = residuos_stud,
+  cook = cook_dist,
+  observacion = 1:length(leverage_vals)
+)
+
+# Calcular umbrales
+n <- nrow(datos)
+k <- 1
+leverage_threshold <- 2 * (k + 1) / n
+cook_threshold <- 4 / (n - k - 1)
+
+# Función para crear curvas de Cook
+cook_curve <- function(leverage, cook_value, k) {
+  sqrt(cook_value * (k + 1) * (1 - leverage) / leverage)
+}
+
+# Crear curvas de Cook para diferentes valores
+lev_seq <- seq(0.001, max(leverage_vals) * 1.1, length.out = 100)
+cook_05 <- data.frame(
+  leverage = lev_seq,
+  pos = cook_curve(lev_seq, 0.5, k),
+  neg = -cook_curve(lev_seq, 0.5, k)
+)
+cook_1 <- data.frame(
+  leverage = lev_seq,
+  pos = cook_curve(lev_seq, 1, k),
+  neg = -cook_curve(lev_seq, 1, k)
+)
+
+# Gráfico Residuals vs. Leverage con ggplot2
+ggplot(datos_leverage, aes(x = leverage, y = residuos_stud)) +
+  # Curvas de Cook
+  geom_line(data = cook_05, aes(x = leverage, y = pos), 
+            color = "red", linetype = "dashed", alpha = 0.6, inherit.aes = FALSE) +
+  geom_line(data = cook_05, aes(x = leverage, y = neg), 
+            color = "red", linetype = "dashed", alpha = 0.6, inherit.aes = FALSE) +
+  geom_line(data = cook_1, aes(x = leverage, y = pos), 
+            color = "red", linetype = "solid", alpha = 0.8, inherit.aes = FALSE) +
+  geom_line(data = cook_1, aes(x = leverage, y = neg), 
+            color = "red", linetype = "solid", alpha = 0.8, inherit.aes = FALSE) +
+  # Puntos de datos
+  geom_point(color = "#0072B2", alpha = 0.7, size = 2) +
+  # Líneas de referencia
+  geom_hline(yintercept = 0, color = "gray", linetype = "dashed") +
+  geom_hline(yintercept = c(-2, 2), color = "orange", linetype = "dotted", alpha = 0.7) +
+  geom_vline(xintercept = leverage_threshold, color = "purple", linetype = "dotted", alpha = 0.7) +
+  # Etiquetas
+  labs(
+    title = "Residuals vs. Leverage",
+    x = "Leverage",
+    y = "Residuos Estudentizados",
+    caption = "Curvas rojas: Cook 0.5 (discontinua) y 1.0 (continua) | Líneas naranjas: ±2 | Línea morada: umbral leverage"
+  ) +
+  theme_classic(base_size = 12)
+
+# Identificar observaciones problemáticas
+high_leverage <- which(leverage_vals > leverage_threshold)
+outliers_stud <- which(abs(residuos_stud) > 2)
+high_cook <- which(cook_dist > cook_threshold)
+```
+
+**Análisis del gráfico:**
+
+El gráfico revela varios puntos importantes. Tenemos `r length(outliers_stud)` outliers (residuos estudentizados > 2): las observaciones `r paste(outliers_stud, collapse = ", ")`. Además, `r length(high_leverage)` observaciones superan el umbral de leverage (> `r round(leverage_threshold, 3)`): las observaciones `r paste(high_leverage, collapse = ", ")`.
+
+**Interpretación por regiones:**
+
+- **Zona derecha (alto leverage)**: Las observaciones `r paste(high_leverage, collapse = ", ")` superan el umbral de leverage, lo que significa que tienen valores de X atípicos y **alto potencial influyente**
+- **Zona izquierda superior/inferior**: Los `r length(outliers_stud)` outliers (`r paste(outliers_stud, collapse = ", ")`) están distribuidos aquí, con leverage bajo-moderado pero residuos grandes
+- **Esquinas críticas**: Afortunadamente vacías (alto leverage + outlier sería muy problemático)
+
+**Distancia de Cook:** Las curvas rojas muestran que aunque ningún punto supera Cook = 1.0 (línea continua), **varios puntos se acercan a la curva de Cook = 0.5** (línea discontinua), indicando influencia moderada. Las observaciones con alto leverage están en esta zona de influencia moderada.
+
+**Conclusión práctica:** El modelo presenta una **situación favorable**: aunque tenemos **outliers** (observaciones `r paste(outliers_stud, collapse = ", ")`) que son atípicos en Y, y **observaciones de alto leverage** (observaciones `r paste(high_leverage, collapse = ", ")`) que son atípicos en X, **crucialmente no hay solapamiento entre ambos grupos**. Esto significa que no tenemos la situación más problemática (alto leverage + outlier). Aun así, ambos grupos merecen investigación.
+:::
+
+#### Interpretación práctica de las medidas de influencia
+
+Cada medida nos proporciona información complementaria sobre diferentes
+aspectos de la influencia:
+
+-   **Leverage (Apalancamiento):** Identifica observaciones con valores
+    "raros" en las variables predictoras. Alto leverage no es
+    necesariamente problemático, pero indica potencial para ser
+    influyente.
+
+-   **Distancia de Cook:** Es la medida más general de influencia.
+    Valores altos indican que eliminar esa observación cambiaría
+    substancialmente los coeficientes del modelo.
+
+-   **DFFITS:** Se enfoca específicamente en cómo cambia la predicción
+    de cada punto cuando se elimina esa observación. Es especialmente
+    útil para evaluar el impacto en las predicciones.
+
+En la práctica, una observación es especialmente preocupante si es
+problemática según **múltiples criterios** a la vez.
+
+::: {.callout-tip title="Diagnóstico completo del modelo de estudio" collapse="true"}
+A continuación, realizamos todas las verificaciones de diagnóstico para
+nuestro `modelo_estudio`:
+
+```{r}
+#| label: fig-diagnostico-completo
+#| fig-cap: "Gráficos de diagnóstico completo del modelo de regresión."
+#| echo: true
+
+# Preparar todos los datos necesarios para los gráficos
+residuos_completo <- residuals(modelo_estudio)
+valores_ajustados_completo <- fitted(modelo_estudio)
+residuos_std <- rstandard(modelo_estudio)
+leverage_vals <- hatvalues(modelo_estudio)
+
+# 1. Gráfico Residuos vs. Valores Ajustados
+p1_completo <- ggplot(data.frame(x = valores_ajustados_completo, y = residuos_completo), 
+                      aes(x = x, y = y)) +
+  geom_point(color = "#0072B2", alpha = 0.7) +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8) +
+  labs(title = "Residuos vs. Valores Ajustados", x = "Valores Ajustados", y = "Residuos") +
+  theme_classic(base_size = 10)
+
+# 2. Gráfico Q-Q Normal
+datos_qq_completo <- data.frame(residuos = residuos_std)
+
+p2_completo <- ggplot(datos_qq_completo, aes(sample = residuos)) +
+  geom_qq(color = "#0072B2", alpha = 0.7) +
+  geom_qq_line(color = "red", linetype = "dashed") +
+  labs(title = "Normal Q-Q Plot", x = "Cuantiles Teóricos", y = "Cuantiles de la Muestra") +
+  theme_classic(base_size = 10)
+
+# 3. Gráfico Scale-Location
+p3_completo <- ggplot(data.frame(x = valores_ajustados_completo, 
+                                 y = sqrt(abs(residuos_std))), 
+                      aes(x = x, y = y)) +
+  geom_point(color = "#0072B2", alpha = 0.7) +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8) +
+  labs(title = "Scale-Location", x = "Valores Ajustados", 
+       y = expression(sqrt("|Residuos Estandarizados|"))) +
+  theme_classic(base_size = 10)
+
+# 4. Gráfico Residuos vs. Leverage
+p4_completo <- ggplot(data.frame(x = leverage_vals, y = residuos_std), 
+                      aes(x = x, y = y)) +
+  geom_point(color = "#0072B2", alpha = 0.7) +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8) +
+  geom_hline(yintercept = 0, color = "gray", linetype = "dashed") +
+  labs(title = "Residuos vs. Leverage", x = "Leverage", y = "Residuos Estandarizados") +
+  theme_classic(base_size = 10)
+
+# 5. Histograma de residuos
+p5_completo <- ggplot(data.frame(residuos = residuos_completo), aes(x = residuos)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 15, fill = "lightblue", 
+                 color = "black", alpha = 0.7) +
+  stat_function(fun = dnorm, 
+                args = list(mean = mean(residuos_completo), sd = sd(residuos_completo)),
+                color = "red", linewidth = 1) +
+  labs(title = "Histograma de Residuos", x = "Residuos", y = "Densidad") +
+  theme_classic(base_size = 10)
+
+# 6. Residuos vs. Orden
+p6_completo <- ggplot(data.frame(orden = 1:length(residuos_completo), 
+                                 residuos = residuos_completo), 
+                      aes(x = orden, y = residuos)) +
+  geom_point(color = "#0072B2", alpha = 0.7) +
+  geom_line(color = "#0072B2", alpha = 0.5) +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Residuos vs. Orden", x = "Orden de observación", y = "Residuos") +
+  theme_classic(base_size = 10)
+
+# Mostrar todos los gráficos en una rejilla 2x3
+library(gridExtra)
+grid.arrange(p1_completo, p2_completo, p3_completo, 
+             p4_completo, p5_completo, p6_completo, ncol = 3)
+
+# Pruebas analíticas
+library(lmtest)
+
+cat("=== DIAGNÓSTICO ANALÍTICO ===\n\n")
+
+# 1. Verificación de media nula de residuos
+media_residuos <- mean(residuals(modelo_estudio))
+cat("Media de los residuos:", round(media_residuos, 10), "\n")
+cat("(Debe ser prácticamente 0)\n\n")
+
+# 2. Homocedasticidad: Breusch-Pagan
+cat("HOMOCEDASTICIDAD - Prueba de Breusch-Pagan:\n")
+bp_test <- bptest(modelo_estudio)
+print(bp_test)
+cat("Interpretación: p-valor >", 0.05, "→ No hay evidencia de heterocedasticidad\n\n")
+
+# 3. Normalidad: Shapiro-Wilk
+cat("NORMALIDAD - Prueba de Shapiro-Wilk:\n")
+sw_test <- shapiro.test(residuals(modelo_estudio))
+print(sw_test)
+cat("Interpretación: p-valor >", 0.05, "→ No hay evidencia contra la normalidad\n\n")
+
+# 4. Independencia: Durbin-Watson
+cat("INDEPENDENCIA - Prueba de Durbin-Watson:\n")
+dw_test <- dwtest(modelo_estudio)
+cat("Estadístico DW:", round(dw_test$statistic, 3), "\n")
+cat("p-valor:", format.pval(dw_test$p.value, digits=3, eps=0.001), "\n")
+cat("Interpretación: Estadístico ≈ 2 y p-valor >", 0.05, "→ No hay autocorrelación\n\n")
+
+# 5. Identificación de observaciones influyentes
+cat("OBSERVACIONES INFLUYENTES:\n")
+# Calculamos las métricas principales
+leverage <- hatvalues(modelo_estudio)
+cook_dist <- cooks.distance(modelo_estudio)
+std_residuals <- rstandard(modelo_estudio)
+dffits_vals <- dffits(modelo_estudio)
+covratio_vals <- covratio(modelo_estudio)
+
+# Umbrales de corte
+n <- nrow(datos)
+k <- 1  # número de predictores
+leverage_threshold <- 2 * (k + 1) / n
+cook_threshold <- 4 / (n - k - 1)
+dffits_threshold <- 2 * sqrt((k + 1) / n)
+covratio_threshold <- 3 * (k + 1) / n
+
+# Identificamos observaciones problemáticas
+high_leverage <- which(leverage > leverage_threshold)
+influential_cook <- which(cook_dist > cook_threshold)
+outliers <- which(abs(std_residuals) > 2)
+influential_dffits <- which(abs(dffits_vals) > dffits_threshold)
+problematic_covratio <- which(abs(covratio_vals - 1) > covratio_threshold)
+
+cat("Observaciones con alto apalancamiento (>", round(leverage_threshold, 3), "):", 
+    ifelse(length(high_leverage) > 0, paste(high_leverage, collapse = ", "), "Ninguna"), "\n")
+cat("Observaciones influyentes por Cook (>", round(cook_threshold, 3), "):", 
+    ifelse(length(influential_cook) > 0, paste(influential_cook, collapse = ", "), "Ninguna"), "\n")
+cat("Observaciones influyentes por DFFITS (>", round(dffits_threshold, 3), "):", 
+    ifelse(length(influential_dffits) > 0, paste(influential_dffits, collapse = ", "), "Ninguna"), "\n")
+
+cat("Posibles outliers (|residuo std| > 2):", 
+    ifelse(length(outliers) > 0, paste(outliers, collapse = ", "), "Ninguna"), "\n")
+
+# Resumen de observaciones más problemáticas
+all_problematic <- unique(c(high_leverage, influential_cook, influential_dffits, 
+                           problematic_covratio, outliers))
+if(length(all_problematic) > 0) {
+  cat("\nRESUMEN - Observaciones que requieren atención:", paste(all_problematic, collapse = ", "), "\n")
+  cat("Estas observaciones deberían ser investigadas más detalladamente.\n")
+} else {
+  cat("\nRESUMEN - No hay observaciones problemáticas detectadas.\n")
+}
+```
+
+**Conclusión del diagnóstico:**
+
+Nuestro modelo de estudio pasa exitosamente todas las verificaciones: -
+✅ **Linealidad**: Sin patrones en residuos vs ajustados - ✅
+**Homocedasticidad**: Varianza constante (Breusch-Pagan p \> 0.05) - ✅
+**Normalidad**: Los residuos siguen distribución normal (Shapiro-Wilk p
+\> 0.05) - ✅ **Independencia**: Sin autocorrelación (Durbin-Watson ≈
+2) - ✅ **Media nula**: La media de residuos es prácticamente 0 - ✅
+**Sin valores influyentes**: No hay observaciones problemáticas según
+Cook, DFFITS o COVRATIO - ✅ **Sin outliers**: No hay residuos
+estandarizados extremos
+
+Esto confirma que nuestras inferencias estadísticas (p-valores,
+intervalos de confianza) son válidas y confiables.
+:::

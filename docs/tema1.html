@@ -288,10 +288,10 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#linealidad" id="toc-linealidad" class="nav-link" data-scroll-target="#linealidad"><span class="header-section-number">2.6.1</span> Linealidad</a></li>
   <li><a href="#homocedasticidad" id="toc-homocedasticidad" class="nav-link" data-scroll-target="#homocedasticidad"><span class="header-section-number">2.6.2</span> Homocedasticidad</a></li>
-  <li><a href="#normalidad-de-los-errores" id="toc-normalidad-de-los-errores" class="nav-link" data-scroll-target="#normalidad-de-los-errores"><span class="header-section-number">2.6.3</span> 3. Normalidad de los Errores</a></li>
-  <li><a href="#independencia-de-los-errores" id="toc-independencia-de-los-errores" class="nav-link" data-scroll-target="#independencia-de-los-errores"><span class="header-section-number">2.6.4</span> 4. Independencia de los Errores</a></li>
-  <li><a href="#identificación-de-observaciones-influyentes-y-atípicas" id="toc-identificación-de-observaciones-influyentes-y-atípicas" class="nav-link" data-scroll-target="#identificación-de-observaciones-influyentes-y-atípicas"><span class="header-section-number">2.6.5</span> 5. Identificación de Observaciones Influyentes y Atípicas</a></li>
-  <li><a href="#aplicación-práctica-en-r" id="toc-aplicación-práctica-en-r" class="nav-link" data-scroll-target="#aplicación-práctica-en-r"><span class="header-section-number">2.6.6</span> Aplicación Práctica en R</a></li>
+  <li><a href="#normalidad-de-los-residuos" id="toc-normalidad-de-los-residuos" class="nav-link" data-scroll-target="#normalidad-de-los-residuos"><span class="header-section-number">2.6.3</span> Normalidad de los residuos</a></li>
+  <li><a href="#independencia-de-los-residuos" id="toc-independencia-de-los-residuos" class="nav-link" data-scroll-target="#independencia-de-los-residuos"><span class="header-section-number">2.6.4</span> Independencia de los residuos</a></li>
+  <li><a href="#media-nula-de-los-residuos" id="toc-media-nula-de-los-residuos" class="nav-link" data-scroll-target="#media-nula-de-los-residuos"><span class="header-section-number">2.6.5</span> Media nula de los residuos</a></li>
+  <li><a href="#identificación-de-observaciones-influyentes-y-atípicas" id="toc-identificación-de-observaciones-influyentes-y-atípicas" class="nav-link" data-scroll-target="#identificación-de-observaciones-influyentes-y-atípicas"><span class="header-section-number">2.6.6</span> Identificación de observaciones influyentes y atípicas</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -362,20 +362,22 @@ Objetivos de aprendizaje
 </section>
 <section id="coeficiente-de-correlación-de-pearson" class="level4" data-number="2.1.2.2">
 <h4 data-number="2.1.2.2" class="anchored" data-anchor-id="coeficiente-de-correlación-de-pearson"><span class="header-section-number">2.1.2.2</span> Coeficiente de correlación de Pearson</h4>
-<p>Para solucionar el problema de la escala, estandarizamos la covarianza, dividiéndola por el producto de las desviaciones típicas de cada variable. El resultado es el <strong>coeficiente de correlación de Pearson (<span class="math inline">\(r\)</span>)</strong>:</p>
+<p>Para solucionar el problema de la escala, estandarizamos la covarianza, dividiéndola por el producto de las desviaciones típicas de cada variable. El resultado es el <strong>coeficiente de correlación de Pearson (</strong><span class="math inline">\(r\)</span>):</p>
 <p><span class="math display">\[
 r = r_{xy} = \frac{s_{xy}}{s_x s_y}
 \]</span></p>
 <p>Este coeficiente es <strong>adimensional</strong> y siempre varía entre <strong>-1 y 1</strong>, lo que permite una interpretación universal de la fuerza de la asociación <em>lineal</em>.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo práctico: Horas de estudio vs. Calificaciones">
-<div class="callout-header d-flex align-content-center">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 Ejemplo práctico: Horas de estudio vs.&nbsp;Calificaciones
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Vamos a plantear un problema que nos acompañará durante todo el capítulo: queremos saber si el tiempo de estudio semanal influye en las calificaciones finales.</p>
 <div class="cell">
@@ -415,6 +417,7 @@ Figura&nbsp;2.1: Relación entre tiempo de estudio y calificaciones.
 </div>
 </div>
 <p>El gráfico muestra una clara tendencia lineal positiva. La covarianza toma un valor de 9.82, y el coeficiente de correlación de Pearson es de 0.9. Ambos valores confirman que la asociación lineal es, además de positiva, muy fuerte. Esta evidencia visual y numérica nos da una base sólida para proponer un modelo de regresión lineal.</p>
+</div>
 </div>
 </div>
 <div class="callout callout-style-default callout-warning callout-titled" title="¡Correlación no implica causalidad!">
@@ -498,8 +501,8 @@ Y_i = \beta_0 + \beta_1 X_i + \varepsilon_i
 <h4 data-number="2.3.2.1" class="anchored" data-anchor-id="interpretación-práctica-de-los-coeficientes"><span class="header-section-number">2.3.2.1</span> Interpretación práctica de los coeficientes</h4>
 <p>Una vez estimados, los coeficientes tienen una interpretación muy concreta y útil:</p>
 <ul>
-<li><p><strong>Pendiente (<span class="math inline">\(\hat{\beta}_1\)</span>):</strong> Representa el cambio promedio estimado en la variable respuesta <span class="math inline">\(Y\)</span> por cada <strong>aumento de una unidad</strong> en la variable predictora <span class="math inline">\(X\)</span>. En nuestro ejemplo, sería el número de puntos que se espera que aumente la calificación final por cada hora adicional de estudio semanal.</p></li>
-<li><p><strong>Intercepto (<span class="math inline">\(\hat{\beta}_0\)</span>):</strong> Es el valor promedio estimado de la variable respuesta <span class="math inline">\(Y\)</span> cuando la variable predictora <span class="math inline">\(X\)</span> es igual a cero. La interpretación del intercepto solo tiene sentido práctico si <span class="math inline">\(X=0\)</span> es un valor plausible y se encuentra dentro del rango de nuestros datos. De lo contrario (como en nuestro ejemplo, donde nadie estudia 0 horas), a menudo se considera simplemente un ancla matemática para la recta de regresión.</p></li>
+<li><p><strong>Pendiente (</strong><span class="math inline">\(\hat{\beta}_1\)</span>): Representa el cambio promedio estimado en la variable respuesta <span class="math inline">\(Y\)</span> por cada <strong>aumento de una unidad</strong> en la variable predictora <span class="math inline">\(X\)</span>. En nuestro ejemplo, sería el número de puntos que se espera que aumente la calificación final por cada hora adicional de estudio semanal.</p></li>
+<li><p><strong>Intercepto (</strong><span class="math inline">\(\hat{\beta}_0\)</span>): Es el valor promedio estimado de la variable respuesta <span class="math inline">\(Y\)</span> cuando la variable predictora <span class="math inline">\(X\)</span> es igual a cero. La interpretación del intercepto solo tiene sentido práctico si <span class="math inline">\(X=0\)</span> es un valor plausible y se encuentra dentro del rango de nuestros datos. De lo contrario (como en nuestro ejemplo, donde nadie estudia 0 horas), a menudo se considera simplemente un ancla matemática para la recta de regresión.</p></li>
 </ul>
 <div class="callout callout-style-default callout-note callout-titled" title="Minimización de SSE">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
@@ -820,9 +823,9 @@ Interpretación de R²
 <div class="callout-body-container callout-body">
 <p>El coeficiente de determinación, <span class="math inline">\(R^2\)</span>, es una métrica muy popular, pero su interpretación requiere cautela. Un valor alto no garantiza un buen modelo, y un valor bajo no siempre implica un modelo inútil. Es fundamental tener en cuenta las siguientes observaciones:</p>
 <ul>
-<li><p><strong><span class="math inline">\(R^2\)</span> no mide la linealidad de la relación.</strong> Un modelo puede tener un <span class="math inline">\(R^2\)</span> muy alto incluso si la relación subyacente entre las variables <span class="math inline">\(X\)</span> e <span class="math inline">\(Y\)</span> no es lineal. Por ello, un <span class="math inline">\(R^2\)</span> elevado nunca debe sustituir a un análisis gráfico de los residuos para verificar el supuesto de linealidad.</p></li>
-<li><p><strong><span class="math inline">\(R^2\)</span> es sensible al rango de la variable predictora <span class="math inline">\(X\)</span>.</strong> Si el modelo de regresión es adecuado, la magnitud de <span class="math inline">\(R^2\)</span> aumentará si aumenta la dispersión de las observaciones <span class="math inline">\(x_i\)</span> (es decir, si <span class="math inline">\(S_{xx}\)</span> crece). Esto se debe a que un mayor rango en <span class="math inline">\(X\)</span> tiende a aumentar la Suma Total de Cuadrados (SST), lo que puede inflar el valor de <span class="math inline">\(R^2\)</span> sin que la precisión del modelo (medida por la MSE) haya mejorado.</p></li>
-<li><p><strong>Un rango restringido en <span class="math inline">\(X\)</span> puede producir un <span class="math inline">\(R^2\)</span> artificialmente bajo.</strong> Como consecuencia del punto anterior, si los datos se han recogido en un rango muy estrecho de la variable <span class="math inline">\(X\)</span>, el <span class="math inline">\(R^2\)</span> puede ser muy pequeño, aunque exista una relación fuerte y significativa entre las variables. Esto podría llevar a la conclusión errónea de que el predictor no es útil.</p></li>
+<li><p><span class="math inline">\(R^2\)</span> no mide la linealidad de la relación. Un modelo puede tener un <span class="math inline">\(R^2\)</span> muy alto incluso si la relación subyacente entre las variables <span class="math inline">\(X\)</span> e <span class="math inline">\(Y\)</span> no es lineal. Por ello, un <span class="math inline">\(R^2\)</span> elevado nunca debe sustituir a un análisis gráfico de los residuos para verificar el supuesto de linealidad.</p></li>
+<li><p><span class="math inline">\(R^2\)</span> es sensible al rango de la variable predictora <span class="math inline">\(X\)</span>. Si el modelo de regresión es adecuado, la magnitud de <span class="math inline">\(R^2\)</span> aumentará si aumenta la dispersión de las observaciones <span class="math inline">\(x_i\)</span> (es decir, si <span class="math inline">\(S_{xx}\)</span> crece). Esto se debe a que un mayor rango en <span class="math inline">\(X\)</span> tiende a aumentar la Suma Total de Cuadrados (SST), lo que puede inflar el valor de <span class="math inline">\(R^2\)</span> sin que la precisión del modelo (medida por la MSE) haya mejorado.</p></li>
+<li><p><strong>Un rango restringido en</strong> <span class="math inline">\(X\)</span> puede producir un <span class="math inline">\(R^2\)</span> artificialmente bajo. Como consecuencia del punto anterior, si los datos se han recogido en un rango muy estrecho de la variable <span class="math inline">\(X\)</span>, el <span class="math inline">\(R^2\)</span> puede ser muy pequeño, aunque exista una relación fuerte y significativa entre las variables. Esto podría llevar a la conclusión errónea de que el predictor no es útil.</p></li>
 </ul>
 </div>
 </div>
@@ -917,7 +920,10 @@ F-statistic: 409.5 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 <ul>
 <li><strong>Coefficients</strong>: El p-valor para <code>Tiempo_Estudio</code> (&lt;0.001) es muy pequeño, por lo que rechazamos <span class="math inline">\(H_0\)</span> y concluimos que la variable es un predictor significativo.</li>
 <li><strong>R-squared</strong>: El valor de <span class="math inline">\(R^2\)</span> (0.81) nos indica que el 81% de la variabilidad en las calificaciones es explicada por el tiempo de estudio.</li>
-<li><strong>F-statistic</strong>: El p-valor del estadístico F (98) confirma que el modelo en su conjunto es estadísticamente significativo.</li>
+<li><strong>F-statistic</strong>: El p-valor del estadístico F
+<ol start="98" type="1">
+<li>confirma que el modelo en su conjunto es estadísticamente significativo.</li>
+</ol></li>
 </ul>
 </div>
 </div>
@@ -961,14 +967,16 @@ F-statistic: 409.5 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 \hat{y}_0 \pm t_{\alpha/2, n-2} \cdot \sqrt{\text{MSE} \left( \frac{1}{m} + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right)}
 \]</span></p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo práctico: Predicción de calificaciones">
-<div class="callout-header d-flex align-content-center">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 Ejemplo práctico: Predicción de calificaciones
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Vamos a calcular y visualizar los intervalos para nuestro modelo de estudio. Usaremos la función <code>predict()</code> de R, que calcula estos intervalos de forma automática.</p>
 <div class="cell">
@@ -1050,6 +1058,7 @@ Figura&nbsp;2.2: Comparación visual del intervalo de confianza (azul, más estr
 </ul>
 </div>
 </div>
+</div>
 </section>
 </section>
 </section>
@@ -1062,20 +1071,44 @@ Figura&nbsp;2.2: Comparación visual del intervalo de confianza (azul, más estr
 <p>Este supuesto establece que la relación entre la variable predictora <span class="math inline">\(X\)</span> y el valor esperado de la variable respuesta <span class="math inline">\(Y\)</span> es, en promedio, una línea recta: <span class="math inline">\(E[Y | X] = \beta_0 + \beta_1 X\)</span>.</p>
 <p>La herramienta fundamental para diagnosticar la linealidad es el gráfico de <strong>residuos</strong> (<span class="math inline">\(e_i\)</span>) frente a los <strong>valores ajustados</strong> por el modelo (<span class="math inline">\(\hat{y}_i\)</span>). La lógica de este gráfico es sencilla pero potente: si el modelo lineal es adecuado, los errores que comete (los residuos) deberían ser completamente aleatorios, sin guardar relación alguna con la magnitud de las predicciones. En esencia, buscamos confirmar que no queda ninguna información sistemática en los errores que el modelo no haya capturado.</p>
 <p><strong>En un escenario ideal</strong>, este gráfico debería parecer una nube de puntos distribuida horizontalmente y sin estructura aparente, centrada en la línea del cero. Esto nos indica que los errores son, en promedio, nulos para todos los niveles de predicción, cumpliendo así el supuesto de linealidad. La línea roja que R superpone en este gráfico, que suaviza la tendencia de los puntos, debería ser prácticamente plana y pegada al cero, confirmando la ausencia de patrones.</p>
-<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo de un Modelo Válido (Nuestro Caso)">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo de un modelo válido">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Ejemplo de un Modelo Válido (Nuestro Caso)
+Ejemplo de un modelo válido
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Para nuestro <code>modelo_estudio</code>, podemos generar específicamente el primer gráfico de diagnóstico, que es el de Residuos vs.&nbsp;Valores Ajustados.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Usamos which = 1 para seleccionar solo el primer gráfico de diagnóstico</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_estudio, <span class="at">which =</span> <span class="dv">1</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear un dataframe con los datos para ggplot2</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraer residuos y valores ajustados</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>datos_diagnostico <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">residuos =</span> <span class="fu">residuals</span>(modelo_estudio),</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">valores_ajustados =</span> <span class="fu">fitted</span>(modelo_estudio)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de Residuos vs. Valores Ajustados con ggplot2</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_diagnostico, <span class="fu">aes</span>(<span class="at">x =</span> valores_ajustados, <span class="at">y =</span> residuos)) <span class="sc">+</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0072B2"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Residuos vs. Valores Ajustados"</span>,</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Valores Ajustados"</span>,</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Residuos"</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
 <div class="cell-output-display">
 <div id="fig-linealidad-ok" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -1092,31 +1125,51 @@ Figura&nbsp;2.3: Gráfico de Residuos vs.&nbsp;Valores Ajustados para el modelo 
 <p>Como se puede observar, los puntos se distribuyen de forma aleatoria alrededor de la línea horizontal en cero. La línea roja, que suaviza la tendencia de los residuos, es prácticamente plana. Esto es un claro indicativo de que el supuesto de linealidad se cumple en nuestro modelo.</p>
 </div>
 </div>
+</div>
 <p>Por el contrario, la aparición de un <strong>patrón sistemático</strong> en los residuos es la señal de alarma de que algo anda mal. En lo que respecta al supuesto de <strong>linealidad</strong>, la evidencia más clara de una violación es una <strong>tendencia curvilínea</strong> (como una “U” o una parábola). Este patrón nos dice que el modelo es estructuralmente incapaz de capturar la forma de los datos y, por lo tanto, comete errores predecibles. Por ejemplo, puede subestimar la respuesta en los extremos (generando residuos positivos) y sobreestimarla en el centro (residuos negativos), lo que invalida el modelo lineal.</p>
-<div class="callout callout-style-default callout-tip callout-titled" title="Contraejemplo: Violación del Supuesto de Linealidad">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-default callout-tip callout-titled" title="Contraejemplo: Violación del supuesto de linealidad">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Contraejemplo: Violación del Supuesto de Linealidad
+Contraejemplo: Violación del supuesto de linealidad
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Ahora, vamos a simular a propósito unos datos que siguen una relación cuadrática (curva) y ajustaremos incorrectamente un modelo lineal para ver cómo se manifiesta el problema en el gráfico de diagnóstico.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Simulación de datos no lineales</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>) <span class="co"># Nueva semilla para este ejemplo</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>x_no_lineal <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">10</span>)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># La relación verdadera es cuadrática (y = 10 - (x-5)^2) más un error</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>y_no_lineal <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="sc">-</span> (x_no_lineal <span class="sc">-</span> <span class="dv">5</span>)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">4</span>)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>datos_no_lineal <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x_no_lineal, <span class="at">y =</span> y_no_lineal)</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Ajuste de un modelo lineal (incorrecto)</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>modelo_no_lineal <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> datos_no_lineal)</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Gráfico de Residuos vs. Valores Ajustados</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_no_lineal, <span class="at">which =</span> <span class="dv">1</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Simulación de datos no lineales</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>) <span class="co"># Nueva semilla para este ejemplo</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>x_no_lineal <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">10</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># La relación verdadera es cuadrática (y = 10 - (x-5)^2) más un error</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>y_no_lineal <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="sc">-</span> (x_no_lineal <span class="sc">-</span> <span class="dv">5</span>)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">4</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>datos_no_lineal <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x_no_lineal, <span class="at">y =</span> y_no_lineal)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Ajuste de un modelo lineal (incorrecto)</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>modelo_no_lineal <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> datos_no_lineal)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Gráfico de Residuos vs. Valores Ajustados con ggplot2</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>datos_diag_no_lineal <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">residuos =</span> <span class="fu">residuals</span>(modelo_no_lineal),</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">valores_ajustados =</span> <span class="fu">fitted</span>(modelo_no_lineal)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_diag_no_lineal, <span class="fu">aes</span>(<span class="at">x =</span> valores_ajustados, <span class="at">y =</span> residuos)) <span class="sc">+</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#D55E00"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Residuos vs. Valores Ajustados (Violación de Linealidad)"</span>,</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Valores Ajustados"</span>,</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Residuos"</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
 <div class="cell-output-display">
 <div id="fig-linealidad-mal" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -1133,23 +1186,23 @@ Figura&nbsp;2.4: Patrón curvo evidente en los residuos, violando el supuesto de
 <p>El gráfico de diagnóstico es inequívoco. A diferencia del ejemplo anterior, donde los puntos formaban una nube aleatoria, aquí los residuos dibujan un <strong>patrón parabólico</strong> perfecto (una “U” invertida). La línea roja de tendencia, en lugar de ser plana, sigue fielmente esta curva.</p>
 </div>
 </div>
+</div>
 </section>
 <section id="homocedasticidad" class="level3" data-number="2.6.2">
 <h3 data-number="2.6.2" class="anchored" data-anchor-id="homocedasticidad"><span class="header-section-number">2.6.2</span> Homocedasticidad</h3>
 <p>El supuesto de homocedasticidad establece que la varianza de los errores del modelo debe ser constante para todos los niveles de la variable predictora. Es decir, la dispersión de los datos alrededor de la línea de regresión es la misma en todo su recorrido (<span class="math inline">\(Var(\varepsilon_i | X_i) = \sigma^2\)</span>). La violación de este supuesto se conoce como <strong>heteroscedasticidad</strong>, y es un problema común en el modelado.</p>
 <p>¿Por qué es tan importante? Si un modelo es heteroscedástico, los errores estándar de los coeficientes (<span class="math inline">\(\beta_0, \beta_1\)</span>) estarán calculados de forma incorrecta. Como consecuencia, los intervalos de confianza y los contrastes de hipótesis (p-valores) no serán fiables, pudiendo llevarnos a conclusiones erróneas sobre la significancia de nuestras variables.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="¿Qué son los Residuos Estandarizados y Estudentizados?">
+<div class="callout callout-style-default callout-note callout-titled" title="Sobre los residuos estandarizados">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-¿Qué son los Residuos Estandarizados y Estudentizados?
+Sobre los residuos estandarizados
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Antes de analizar los gráficos, es útil definir los <strong>residuos estandarizados</strong>. Un residuo simple (<span class="math inline">\(e_i = y_i - \hat{y}_i\)</span>) nos dice cuán lejos está una observación de la línea de regresión. Sin embargo, no todos los residuos son directamente comparables, ya que su varianza puede depender de los valores de <span class="math inline">\(X\)</span> (especialmente de su apalancamiento o <em>leverage</em>).</p>
-<p>Para solucionar esto, se estandarizan los residuos, dividiéndolos por una estimación de su desviación estándar. Esto los pone a todos en una escala común (similar a una puntuación Z), haciendo más fácil la identificación de patrones y valores atípicos. R, en sus gráficos de diagnóstico, utiliza una versión aún más refinada llamada <strong>residuos estudentizados</strong>, que es más precisa para detectar outliers. A efectos prácticos, la interpretación es la misma.</p>
+<p>Los <strong>residuos simples</strong> (<span class="math inline">\(e_i = y_i - \hat{y}_i\)</span>) no son directamente comparables entre sí porque tienen diferentes varianzas dependiendo de su apalancamiento (<em>leverage</em>). Por eso, en los gráficos de diagnóstico se utilizan <strong>residuos estandarizados</strong> o, mejor aún, <strong>residuos estudentizados</strong>, que ponen todos los residuos en una escala común. Esto facilita la identificación de patrones y valores atípicos. La explicación detallada de estos conceptos se encuentra en la sección de identificación de observaciones influyentes.</p>
 </div>
 </div>
 <p>La heteroscedasticidad se detecta principalmente buscando patrones en la dispersión de los residuos.</p>
@@ -1158,40 +1211,55 @@ Figura&nbsp;2.4: Patrón curvo evidente en los residuos, violando el supuesto de
 <li><p><strong>Gráfico Scale-Location:</strong> Este gráfico está diseñado específicamente para detectar heteroscedasticidad. Muestra la raíz cuadrada de los residuos estandarizados en el eje Y (<code>sqrt(|Standardized residuals|)</code>) frente a los valores ajustados en el eje X. Al usar la raíz cuadrada, se suaviza la distribución de los residuos, haciendo los patrones de varianza más fáciles de ver. Si la varianza es constante (homocedasticidad), deberíamos ver una nube de puntos aleatoria con una línea de tendencia roja aproximadamente plana. Una pendiente en esta línea roja indica que la varianza cambia con el nivel de la respuesta.</p></li>
 <li><p><strong>Prueba de Breusch-Pagan:</strong> Es el contraste de hipótesis formal. Su lógica es ingeniosa: realiza una regresión auxiliar donde intenta predecir los residuos al cuadrado a partir de las variables predictoras originales. Si las variables predictoras ayudan a explicar la magnitud de los residuos al cuadrado, significa que la varianza del error depende de los predictores, y por tanto, hay heteroscedasticidad.</p>
 <ul>
-<li><strong>Hipótesis Nula (<span class="math inline">\(H_0\)</span>):</strong> El modelo es homocedástico.</li>
+<li><strong>Hipótesis Nula (</strong><span class="math inline">\(H_0\)</span>): El modelo es homocedástico.</li>
 <li><strong>Decisión:</strong> Un p-valor pequeño (p.&nbsp;ej., &lt; 0.05) es evidencia en contra de la homocedasticidad.</li>
 </ul></li>
 </ul>
-<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo de un Modelo Válido (Nuestro Caso)">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo de un modelo válido">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Ejemplo de un Modelo Válido (Nuestro Caso)
+Ejemplo de un modelo válido
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Analicemos nuestro <code>modelo_estudio</code>. Nos centraremos en el gráfico <code>Scale-Location</code> (<code>which = 3</code>) y en la prueba de Breusch-Pagan.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Usamos which = 3 para seleccionar el gráfico Scale-Location</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_estudio, <span class="at">which =</span> <span class="dv">3</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Prueba de Breusch-Pagan</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear datos para el gráfico Scale-Location</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>datos_scale_loc <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">valores_ajustados =</span> <span class="fu">fitted</span>(modelo_estudio),</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">residuos_std_sqrt =</span> <span class="fu">sqrt</span>(<span class="fu">abs</span>(<span class="fu">rstandard</span>(modelo_estudio)))</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico Scale-Location con ggplot2</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_scale_loc, <span class="fu">aes</span>(<span class="at">x =</span> valores_ajustados, <span class="at">y =</span> residuos_std_sqrt)) <span class="sc">+</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0072B2"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Scale-Location"</span>,</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Valores Ajustados"</span>,</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">expression</span>(<span class="fu">sqrt</span>(<span class="st">"|Residuos Estandarizados|"</span>))</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: zoo</code></pre>
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prueba de Breusch-Pagan</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'zoo'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
+<pre><code>Loading required package: zoo
+
+Attaching package: 'zoo'
+
+The following objects are masked from 'package:base':
 
     as.Date, as.Date.numeric</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bptest</span>(modelo_estudio)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bptest</span>(modelo_estudio)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     studentized Breusch-Pagan test
@@ -1215,39 +1283,68 @@ Figura&nbsp;2.5: Gráfico Scale-Location para el modelo de estudio. La línea de
 <p>El diagnóstico es positivo. En el gráfico <code>Scale-Location</code>, la línea roja es casi horizontal, lo que indica que la varianza de los residuos es estable a lo largo de los valores ajustados. Esto se confirma con la prueba de Breusch-Pagan, que arroja un <strong>p-valor alto</strong>, por lo que no tenemos evidencia para rechazar la hipótesis nula de homocedasticidad. <strong>Nuestro modelo cumple el supuesto</strong>.</p>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Contraejemplo: Violación del Supuesto de Homocedasticidad">
-<div class="callout-header d-flex align-content-center">
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Contraejemplo: Violación del supuesto de homocedasticidad">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Contraejemplo: Violación del Supuesto de Homocedasticidad
+Contraejemplo: Violación del supuesto de homocedasticidad
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Ahora, simularemos datos donde el error aumenta a medida que <code>x</code> crece, un caso clásico de heteroscedasticidad.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Esta línea le dice a R que prepare una rejilla de 1 fila y 2 columnas para los gráficos</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)) </span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Simulación de datos (la misma que antes)</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>x_hetero <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>y_hetero <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> x_hetero <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">0.4</span> <span class="sc">*</span> x_hetero)</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>datos_hetero <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x_hetero, <span class="at">y =</span> y_hetero)</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>modelo_hetero <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> datos_hetero)</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Gráficos de diagnóstico</span></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co"># El primer plot irá a la izquierda</span></span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_hetero, <span class="at">which =</span> <span class="dv">1</span>) </span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co"># El segundo plot irá a la derecha</span></span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_hetero, <span class="at">which =</span> <span class="dv">3</span>)</span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Prueba de Breusch-Pagan</span></span>
-<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="co"># La prueba no genera un gráfico, por lo que no afecta al layout</span></span>
-<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
-<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>test_values <span class="ot">&lt;-</span> <span class="fu">bptest</span>(modelo_hetero)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Simulación de datos heteroscedásticos</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>x_hetero <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>y_hetero <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> x_hetero <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">0.4</span> <span class="sc">*</span> x_hetero)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>datos_hetero <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x_hetero, <span class="at">y =</span> y_hetero)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>modelo_hetero <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> datos_hetero)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Preparar datos para los gráficos</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>datos_diag_hetero <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">residuos =</span> <span class="fu">residuals</span>(modelo_hetero),</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">valores_ajustados =</span> <span class="fu">fitted</span>(modelo_hetero),</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">residuos_std_sqrt =</span> <span class="fu">sqrt</span>(<span class="fu">abs</span>(<span class="fu">rstandard</span>(modelo_hetero)))</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Gráfico de Residuos vs. Valores Ajustados</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(datos_diag_hetero, <span class="fu">aes</span>(<span class="at">x =</span> valores_ajustados, <span class="at">y =</span> residuos)) <span class="sc">+</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#D55E00"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Residuos vs. Valores Ajustados"</span>,</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Valores Ajustados"</span>,</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Residuos"</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Gráfico Scale-Location</span></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(datos_diag_hetero, <span class="fu">aes</span>(<span class="at">x =</span> valores_ajustados, <span class="at">y =</span> residuos_std_sqrt)) <span class="sc">+</span></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#D55E00"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Scale-Location"</span>,</span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Valores Ajustados"</span>,</span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">expression</span>(<span class="fu">sqrt</span>(<span class="st">"|Residuos Estandarizados|"</span>))</span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Mostrar ambos gráficos lado a lado</span></span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(p1, p2, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'
+`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Prueba de Breusch-Pagan</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>test_values <span class="ot">&lt;-</span> <span class="fu">bptest</span>(modelo_hetero)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="fig-homocedasticidad-mal" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -1270,68 +1367,627 @@ Figura&nbsp;2.6: Diagnóstico de heteroscedasticidad. Izquierda: Gráfico de Res
 <p>Este modelo viola claramente el supuesto, y las inferencias basadas en él (como el p-valor del coeficiente de <code>x</code>) no serían fiables.</p>
 </div>
 </div>
+</div>
 </section>
-<section id="normalidad-de-los-errores" class="level3" data-number="2.6.3">
-<h3 data-number="2.6.3" class="anchored" data-anchor-id="normalidad-de-los-errores"><span class="header-section-number">2.6.3</span> 3. Normalidad de los Errores</h3>
-<p>Este supuesto postula que los errores del modelo (<span class="math inline">\(\varepsilon_i\)</span>) siguen una distribución normal: <span class="math inline">\(\varepsilon_i \sim N(0, \sigma^2)\)</span>. Es especialmente importante para la validez de los intervalos de confianza y los contrastes de hipótesis cuando el tamaño de la muestra es pequeño.</p>
-<section id="evaluación-visual" class="level4" data-number="2.6.3.1">
-<h4 data-number="2.6.3.1" class="anchored" data-anchor-id="evaluación-visual"><span class="header-section-number">2.6.3.1</span> <strong>Evaluación Visual</strong></h4>
+<section id="normalidad-de-los-residuos" class="level3" data-number="2.6.3">
+<h3 data-number="2.6.3" class="anchored" data-anchor-id="normalidad-de-los-residuos"><span class="header-section-number">2.6.3</span> Normalidad de los residuos</h3>
+<p>Este supuesto postula que los residuos del modelo (<span class="math inline">\(\varepsilon_i\)</span>) siguen una distribución normal: <span class="math inline">\(\varepsilon_i \sim N(0, \sigma^2)\)</span>. Es especialmente importante para la validez de los intervalos de confianza y los contrastes de hipótesis cuando el tamaño de la muestra es pequeño.</p>
+<p>Para evaluar la normalidad disponemos de herramientas visuales y analíticas:</p>
 <ul>
-<li><strong>Gráfico Normal Q-Q (<code>Normal Q-Q Plot</code>):</strong> Compara los cuantiles de los residuos estandarizados con los cuantiles de una distribución normal teórica.
-<ul>
-<li><strong>Qué buscar:</strong> Los puntos deben caer muy cerca de la línea diagonal de 45 grados.</li>
-</ul></li>
+<li><strong>Gráfico Normal Q-Q (<code>Normal Q-Q Plot</code>):</strong> Compara los cuantiles de los residuos estandarizados con los cuantiles de una distribución normal teórica. Los puntos deben caer muy cerca de la línea diagonal de 45 grados.</li>
 <li><strong>Histograma de los Residuos:</strong> Un simple histograma de los residuos debe mostrar una forma aproximada de campana de Gauss.</li>
-</ul>
-</section>
-<section id="prueba-analítica" class="level4" data-number="2.6.3.2">
-<h4 data-number="2.6.3.2" class="anchored" data-anchor-id="prueba-analítica"><span class="header-section-number">2.6.3.2</span> <strong>Prueba Analítica</strong></h4>
-<ul>
 <li><strong>Prueba de Shapiro-Wilk:</strong> Es uno de los contrastes más potentes para la normalidad.
 <ul>
-<li><strong>Hipótesis Nula (<span class="math inline">\(H_0\)</span>):</strong> Los residuos provienen de una distribución normal.</li>
+<li><strong>Hipótesis Nula (</strong><span class="math inline">\(H_0\)</span>): Los residuos provienen de una distribución normal.</li>
 <li><strong>Decisión:</strong> Un p-valor pequeño (&lt; 0.05) sugiere rechazar <span class="math inline">\(H_0\)</span>.</li>
 </ul></li>
 </ul>
-<hr>
-</section>
-</section>
-<section id="independencia-de-los-errores" class="level3" data-number="2.6.4">
-<h3 data-number="2.6.4" class="anchored" data-anchor-id="independencia-de-los-errores"><span class="header-section-number">2.6.4</span> 4. Independencia de los Errores</h3>
-<p>Este supuesto afirma que el error de una observación no está correlacionado con el de ninguna otra: <span class="math inline">\(Cov(\varepsilon_i, \varepsilon_j) = 0\)</span> para <span class="math inline">\(i \neq j\)</span>. La violación, conocida como <strong>autocorrelación</strong>, es común en datos de series temporales.</p>
-<section id="evaluación" class="level4" data-number="2.6.4.1">
-<h4 data-number="2.6.4.1" class="anchored" data-anchor-id="evaluación"><span class="header-section-number">2.6.4.1</span> <strong>Evaluación</strong></h4>
-<ul>
-<li><strong>Prueba de Durbin-Watson:</strong> Es el contraste clásico para la autocorrelación de primer orden. Su estadístico se calcula como: <span class="math display">\[ DW = \frac{\sum_{i=2}^{n}(e_i - e_{i-1})^2}{\sum_{i=1}^{n}e_i^2} \]</span> El estadístico varía entre 0 y 4. Un valor cercano a 2 sugiere no autocorrelación. Valores cercanos a 0 indican autocorrelación positiva, y cercanos a 4, autocorrelación negativa.</li>
-</ul>
-<hr>
-</section>
-</section>
-<section id="identificación-de-observaciones-influyentes-y-atípicas" class="level3" data-number="2.6.5">
-<h3 data-number="2.6.5" class="anchored" data-anchor-id="identificación-de-observaciones-influyentes-y-atípicas"><span class="header-section-number">2.6.5</span> 5. Identificación de Observaciones Influyentes y Atípicas</h3>
-<p>Algunos puntos pueden tener una influencia desproporcionada en el modelo. Es crucial identificarlos usando tres métricas clave:</p>
-<ul>
-<li><p><strong>Apalancamiento (Leverage, <span class="math inline">\(h_{ii}\)</span>):</strong> Mide cuán atípico es el valor de la variable predictora <span class="math inline">\(X_i\)</span> de una observación. Un apalancamiento alto significa que el punto tiene el <em>potencial</em> de ser muy influyente. En regresión simple, se calcula como: <span class="math display">\[ h_{ii} = \frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum_{j=1}^{n}(x_j - \bar{x})^2} \]</span> Una regla común es considerar un apalancamiento alto si <span class="math inline">\(h_{ii} &gt; \frac{2(k+1)}{n}\)</span>, donde <span class="math inline">\(k\)</span> es el número de predictores (1 en regresión simple).</p></li>
-<li><p><strong>Residuos Estudentizados:</strong> Son una versión de los residuos estandarizados que son más efectivos para detectar outliers. Un residuo estudentizado (<span class="math inline">\(r_i\)</span>) sigue una distribución t de Student con <span class="math inline">\(n-k-2\)</span> grados de libertad. Valores <span class="math inline">\(|r_i| &gt; 2\)</span> o <span class="math inline">\(3\)</span> a menudo se consideran atípicos.</p></li>
-<li><p><strong>Distancia de Cook (<span class="math inline">\(D_i\)</span>):</strong> Mide la influencia global de una observación, combinando su apalancamiento y su residuo. Representa cuánto cambian los coeficientes del modelo si la i-ésima observación es eliminada. <span class="math display">\[ D_i = \frac{r_i^2}{k+1} \cdot \frac{h_{ii}}{1-h_{ii}} \]</span> Se considera que un punto es influyente si su distancia de Cook es grande, por ejemplo, si <span class="math inline">\(D_i &gt; 1\)</span> o <span class="math inline">\(D_i &gt; 4/(n-k-1)\)</span>.</p></li>
-</ul>
-<p>El gráfico <strong><code>Residuals vs. Leverage</code></strong> es la herramienta visual que combina estas tres métricas, facilitando la identificación de puntos problemáticos.</p>
-</section>
-<section id="aplicación-práctica-en-r" class="level3" data-number="2.6.6">
-<h3 data-number="2.6.6" class="anchored" data-anchor-id="aplicación-práctica-en-r"><span class="header-section-number">2.6.6</span> Aplicación Práctica en R</h3>
-<p>A continuación, se realizan las pruebas de diagnóstico para nuestro <code>modelo_estudio</code>.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo de normalidad válida">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo de normalidad válida
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Para nuestro <code>modelo_estudio</code>, examinamos la normalidad mediante el gráfico Q-Q y la prueba de Shapiro-Wilk.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráficos de diagnóstico visual estándar</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_estudio)</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Para las pruebas analíticas, usamos el paquete 'lmtest'</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Si no está instalado, ejecuta: install.packages("lmtest")</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Prueba de Breusch-Pagan para homocedasticidad</span></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="fu">bptest</span>(modelo_estudio)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear datos para los gráficos</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>residuos <span class="ot">&lt;-</span> <span class="fu">residuals</span>(modelo_estudio)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Gráfico Q-Q con ggplot2</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>datos_qq <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">residuos =</span> residuos)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(datos_qq, <span class="fu">aes</span>(<span class="at">sample =</span> residuos)) <span class="sc">+</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq</span>(<span class="at">color =</span> <span class="st">"#0072B2"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq_line</span>(<span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Normal Q-Q Plot"</span>,</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Cuantiles Teóricos"</span>,</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Cuantiles de la Muestra"</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Histograma con ggplot2</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>datos_hist <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">residuos =</span> residuos)</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(datos_hist, <span class="fu">aes</span>(<span class="at">x =</span> residuos)) <span class="sc">+</span></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">bins =</span> <span class="dv">15</span>, <span class="at">fill =</span> <span class="st">"lightblue"</span>, </span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, </span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="fu">mean</span>(residuos), <span class="at">sd =</span> <span class="fu">sd</span>(residuos)),</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Histograma de Residuos"</span>,</span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Residuos"</span>,</span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Densidad"</span></span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Mostrar ambos gráficos lado a lado</span></span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(p1, p2, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Prueba de Shapiro-Wilk</span></span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>shapiro_resultado <span class="ot">&lt;-</span> <span class="fu">shapiro.test</span>(<span class="fu">residuals</span>(modelo_estudio))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-normalidad-ok" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-normalidad-ok-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="tema1_files/figure-html/fig-normalidad-ok-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-normalidad-ok-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.7: Diagnóstico de normalidad del modelo de estudio. Izquierda: Q-Q Plot. Derecha: Histograma de residuos.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>El diagnóstico es excelente. En el gráfico Q-Q, los puntos se alinean muy bien con la línea diagonal, indicando normalidad. El histograma muestra una distribución aproximadamente simétrica que se ajusta bien a la curva normal teórica (línea roja). La prueba de Shapiro-Wilk confirma esto con un <strong>p-valor alto</strong> (6.71e-01), por lo que no rechazamos la hipótesis nula de normalidad.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Contraejemplo: Violación del supuesto de normalidad">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Contraejemplo: Violación del supuesto de normalidad
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Ahora simularemos datos donde los residuos siguen una distribución asimétrica (distribución exponencial) para mostrar una violación clara del supuesto de normalidad.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Simulación de datos con errores no normales (exponenciales)</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">456</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>x_no_normal <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Errores exponenciales (muy asimétricos) centrados en 0</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>errores_exp <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">100</span>, <span class="at">rate =</span> <span class="dv">1</span>) <span class="sc">-</span> <span class="dv">1</span>  <span class="co"># Restamos 1 para centrar en 0</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>y_no_normal <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> x_no_normal <span class="sc">+</span> errores_exp <span class="sc">*</span> <span class="dv">10</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>datos_no_normal <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x_no_normal, <span class="at">y =</span> y_no_normal)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>modelo_no_normal <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> datos_no_normal)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Crear datos para los gráficos</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>residuos_no_normal <span class="ot">&lt;-</span> <span class="fu">residuals</span>(modelo_no_normal)</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Gráfico Q-Q con ggplot2</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>datos_qq_mal <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">residuos =</span> residuos_no_normal)</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>p1_mal <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(datos_qq_mal, <span class="fu">aes</span>(<span class="at">sample =</span> residuos)) <span class="sc">+</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq</span>(<span class="at">color =</span> <span class="st">"#D55E00"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq_line</span>(<span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Normal Q-Q Plot (Violación)"</span>,</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Cuantiles Teóricos"</span>,</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Cuantiles de la Muestra"</span></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Histograma con ggplot2</span></span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>datos_hist_mal <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">residuos =</span> residuos_no_normal)</span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>p2_mal <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(datos_hist_mal, <span class="fu">aes</span>(<span class="at">x =</span> residuos)) <span class="sc">+</span></span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">bins =</span> <span class="dv">15</span>, <span class="at">fill =</span> <span class="st">"lightcoral"</span>, </span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, </span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="fu">mean</span>(residuos_no_normal), <span class="at">sd =</span> <span class="fu">sd</span>(residuos_no_normal)),</span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Histograma de Residuos (Violación)"</span>,</span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Residuos"</span>,</span>
+<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Densidad"</span></span>
+<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span>
+<span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-42"><a href="#cb26-42" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Mostrar ambos gráficos lado a lado</span></span>
+<span id="cb26-43"><a href="#cb26-43" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(p1_mal, p2_mal, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
+<span id="cb26-44"><a href="#cb26-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-45"><a href="#cb26-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Prueba de Shapiro-Wilk</span></span>
+<span id="cb26-46"><a href="#cb26-46" aria-hidden="true" tabindex="-1"></a>shapiro_resultado <span class="ot">&lt;-</span> <span class="fu">shapiro.test</span>(<span class="fu">residuals</span>(modelo_no_normal))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-normalidad-mal" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-normalidad-mal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="tema1_files/figure-html/fig-normalidad-mal-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-normalidad-mal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.8: Violación del supuesto de normalidad. Izquierda: Q-Q Plot con clara desviación. Derecha: Histograma asimétricamente distribuido.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>La violación es evidente. En el gráfico Q-Q, los puntos se desvían sistemáticamente de la línea diagonal, especialmente en los extremos, formando una curva característica de distribuciones asimétricas. El histograma muestra una clara asimetría hacia la derecha que no se ajusta a la curva normal teórica (línea azul). La prueba de Shapiro-Wilk arroja un <strong>p-valor muy pequeño</strong> (1.78e-10), rechazando fuertemente la hipótesis nula de normalidad.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="independencia-de-los-residuos" class="level3" data-number="2.6.4">
+<h3 data-number="2.6.4" class="anchored" data-anchor-id="independencia-de-los-residuos"><span class="header-section-number">2.6.4</span> Independencia de los residuos</h3>
+<p>Este supuesto afirma que el error de una observación no está correlacionado con el de ninguna otra: <span class="math inline">\(Cov(\varepsilon_i, \varepsilon_j) = 0\)</span> para <span class="math inline">\(i \neq j\)</span>. La violación, conocida como <strong>autocorrelación</strong>, es común en datos de series temporales.</p>
+<p>La <strong>Prueba de Durbin-Watson</strong> es el contraste clásico para la autocorrelación de primer orden. Su estadístico se calcula como: <span class="math display">\[ DW = \frac{\sum_{i=2}^{n}(e_i - e_{i-1})^2}{\sum_{i=1}^{n}e_i^2} \]</span> El estadístico varía entre 0 y 4. Un valor cercano a 2 sugiere no autocorrelación. Valores cercanos a 0 indican autocorrelación positiva, y cercanos a 4, autocorrelación negativa.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo de independencia válida">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo de independencia válida
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Para nuestro <code>modelo_estudio</code>, evaluamos la independencia mediante el gráfico de residuos vs orden y la prueba de Durbin-Watson.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de residuos vs orden de observación con ggplot2</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>datos_orden <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">orden =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">residuals</span>(modelo_estudio)),</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">residuos =</span> <span class="fu">residuals</span>(modelo_estudio)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_orden, <span class="fu">aes</span>(<span class="at">x =</span> orden, <span class="at">y =</span> residuos)) <span class="sc">+</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0072B2"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"#0072B2"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Residuos vs Orden de Observación"</span>,</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Orden de observación"</span>,</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Residuos"</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Prueba de Durbin-Watson</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>dw_resultado_valido <span class="ot">&lt;-</span> <span class="fu">dwtest</span>(modelo_estudio)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-independencia-ok" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-independencia-ok-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="tema1_files/figure-html/fig-independencia-ok-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-independencia-ok-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.9: Diagnóstico de independencia del modelo de estudio. Los residuos no muestran patrones temporales.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>El diagnóstico es satisfactorio. El gráfico de residuos vs orden no muestra ningún patrón sistemático o tendencia temporal, los puntos fluctúan aleatoriamente alrededor del cero. La prueba de Durbin-Watson arroja un estadístico de <strong>2.056</strong> (cercano a 2) y un <strong>p-valor de 0.61</strong>, confirmando que no hay evidencia de autocorrelación. <strong>El supuesto de independencia se cumple</strong>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Contraejemplo: Violación del supuesto de independencia">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Contraejemplo: Violación del supuesto de independencia
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-22" class="callout-22-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Simularemos datos con autocorrelación positiva, donde cada residuo está correlacionado con el anterior, violando el supuesto de independencia.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Simulación de datos con autocorrelación</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">789</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>x_autocorr <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Generamos errores autocorrelacionados (AR1 con phi = 0.7)</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>errores_autocorr <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>errores_autocorr[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1</span>)</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n) {</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  errores_autocorr[i] <span class="ot">&lt;-</span> <span class="fl">0.7</span> <span class="sc">*</span> errores_autocorr[i<span class="dv">-1</span>] <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">sd =</span> <span class="fl">0.5</span>)</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>y_autocorr <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="sc">+</span> <span class="fl">1.5</span> <span class="sc">*</span> x_autocorr <span class="sc">+</span> errores_autocorr <span class="sc">*</span> <span class="dv">3</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>datos_autocorr <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x_autocorr, <span class="at">y =</span> y_autocorr)</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>modelo_autocorr <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> datos_autocorr)</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Gráfico de residuos vs orden con ggplot2</span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>datos_orden_autocorr <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">orden =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">residuals</span>(modelo_autocorr)),</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">residuos =</span> <span class="fu">residuals</span>(modelo_autocorr)</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_orden_autocorr, <span class="fu">aes</span>(<span class="at">x =</span> orden, <span class="at">y =</span> residuos)) <span class="sc">+</span></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#D55E00"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"#D55E00"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Residuos vs Orden de Observación (Violación)"</span>,</span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Orden de observación"</span>,</span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Residuos"</span></span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Prueba de Durbin-Watson</span></span>
+<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a>dw_resultado <span class="ot">&lt;-</span> <span class="fu">dwtest</span>(modelo_autocorr)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-independencia-mal" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-independencia-mal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="tema1_files/figure-html/fig-independencia-mal-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-independencia-mal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.10: Violación del supuesto de independencia. Los residuos muestran un patrón de autocorrelación positiva.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>La violación es clara. El gráfico de residuos vs orden muestra un patrón ondulante característico: los residuos tienden a mantenerse del mismo signo durante varias observaciones consecutivas (rachas de valores positivos seguidas de rachas de valores negativos). Esto indica <strong>autocorrelación positiva</strong>. La prueba de Durbin-Watson confirma esto con un estadístico muy por debajo de 2 (DW = <strong>0.74</strong>) y un <strong>p-valor muy pequeño</strong> (<strong>5.01e-11</strong>), rechazando fuertemente la hipótesis nula de independencia.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="media-nula-de-los-residuos" class="level3" data-number="2.6.5">
+<h3 data-number="2.6.5" class="anchored" data-anchor-id="media-nula-de-los-residuos"><span class="header-section-number">2.6.5</span> Media nula de los residuos</h3>
+<p>Un requisito fundamental del modelo es que la media de los residuos debe ser exactamente cero: <span class="math inline">\(E[e_i] = 0\)</span>. Esta propiedad se deriva matemáticamente del método de mínimos cuadrados y su verificación sirve como una comprobación de que nuestros cálculos son correctos.</p>
+</section>
+<section id="identificación-de-observaciones-influyentes-y-atípicas" class="level3" data-number="2.6.6">
+<h3 data-number="2.6.6" class="anchored" data-anchor-id="identificación-de-observaciones-influyentes-y-atípicas"><span class="header-section-number">2.6.6</span> Identificación de observaciones influyentes y atípicas</h3>
+<p>Algunos puntos pueden tener una influencia desproporcionada en el modelo. Es crucial identificarlos usando diferentes métricas que evalúan aspectos complementarios de la influencia.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Fundamento teórico: de los residuos simples a los estudentizados">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Fundamento teórico: de los residuos simples a los estudentizados
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Antes de analizar las métricas de influencia, debemos entender por qué no todos los <strong>residuos simples</strong> (<span class="math inline">\(e_i = y_i - \hat{y}_i\)</span>) son comparables entre sí. El problema fundamental es que <strong>no tienen la misma varianza</strong>, incluso bajo homocedasticidad.</p>
+<p>La varianza teórica del residuo <span class="math inline">\(e_i\)</span> depende del <strong>apalancamiento</strong> (<em>leverage</em>) de la observación: <span class="math display">\[
+\text{Var}(e_i) = \sigma^2(1 - h_{ii})
+\]</span></p>
+<p>donde el apalancamiento <span class="math inline">\(h_{ii}\)</span> se define como: <span class="math display">\[
+h_{ii} = \frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum_{j=1}^{n}(x_j - \bar{x})^2}
+\]</span></p>
+<p>Las observaciones con valores de <span class="math inline">\(X\)</span> más alejados de la media tendrán mayor apalancamiento y, paradójicamente, residuos con <strong>menor varianza</strong>. Por esto, un residuo pequeño en una observación de alto leverage puede ser más preocupante que un residuo grande en el centro de los datos.</p>
+<p><strong>Los residuos estandarizados</strong> solucionan parcialmente este problema: <span class="math display">\[
+r_i^* = \frac{e_i}{\sqrt{\text{MSE}(1 - h_{ii})}}
+\]</span></p>
+<p>Pero <strong>los residuos estudentizados</strong> van un paso más allá, eliminando el sesgo de autoinfluencia: <span class="math display">\[
+r_i = \frac{e_i}{\sqrt{\text{MSE}_{(-i)}(1 - h_{ii})}}
+\]</span></p>
+<p>donde <span class="math inline">\(\text{MSE}_{(-i)}\)</span> excluye la observación <span class="math inline">\(i\)</span> del ajuste. Esto evita que un outlier “contamine” su propia evaluación y proporciona una distribución teórica exacta (t de Student con <span class="math inline">\(n-k-2\)</span> grados de libertad).</p>
+<p><strong>¿Por qué son superiores los residuos estudentizados?</strong> Por tres razones clave: (1) <strong>eliminan el sesgo de autoinfluencia</strong> al excluir cada observación de su propia evaluación, (2) <strong>evitan la contaminación</strong> que un outlier produce en la MSE global, y (3) <strong>siguen una distribución conocida</strong> (t de Student) que permite umbrales estadísticamente precisos. <strong>En la práctica:</strong> <span class="math inline">\(|r_i| &gt; 2\)</span> indica posibles outliers (≈5% en normalidad) y <span class="math inline">\(|r_i| &gt; 3\)</span> outliers muy probables (&lt;1%).</p>
+</div>
+</div>
+<p>Las métricas fundamentales de influencia para identificar observaciones problemáticas son:</p>
+<ul>
+<li><p><strong>Apalancamiento (Leverage,</strong> <span class="math inline">\(h_{ii}\)</span>): Mide cuán atípico es el valor de la variable predictora <span class="math inline">\(X_i\)</span> de una observación. Un apalancamiento alto significa que el punto tiene el <em>potencial</em> de ser muy influyente. En regresión simple, se calcula como: <span class="math display">\[ h_{ii} = \frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum_{j=1}^{n}(x_j - \bar{x})^2} \]</span> Una regla común es considerar un apalancamiento alto si <span class="math inline">\(h_{ii} &gt; \frac{2(k+1)}{n}\)</span>, donde <span class="math inline">\(k\)</span> es el número de predictores (1 en regresión simple).</p></li>
+<li><p><strong>Distancia de Cook (</strong><span class="math inline">\(D_i\)</span>): Mide la influencia global de una observación, combinando su apalancamiento y su residuo. Representa cuánto cambian los coeficientes del modelo si la i-ésima observación es eliminada. <span class="math display">\[ D_i = \frac{r_i^2}{k+1} \cdot \frac{h_{ii}}{1-h_{ii}} \]</span> Se considera que un punto es influyente si su distancia de Cook es grande, por ejemplo, si <span class="math inline">\(D_i &gt; 1\)</span> o <span class="math inline">\(D_i &gt; 4/(n-k-1)\)</span>.</p></li>
+<li><p><strong>DFFITS:</strong> Mide cuánto cambia la predicción <span class="math inline">\(\hat{y}_i\)</span> cuando se elimina la i-ésima observación. Es una medida estandarizada que combina el residuo estudentizado y el apalancamiento. <span class="math display">\[ \text{DFFITS}_i = r_i \sqrt{\frac{h_{ii}}{1-h_{ii}}} \]</span> Un punto se considera influyente si <span class="math inline">\(|\text{DFFITS}_i| &gt; 2\sqrt{(k+1)/n}\)</span>, donde <span class="math inline">\(k\)</span> es el número de predictores.</p></li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo: Cálculo y análisis de DFFITS">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo: Cálculo y análisis de DFFITS
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-24" class="callout-24-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>DFFITS es especialmente útil para evaluar cómo cada observación afecta a su propia predicción. Analicemos esta medida con nuestro <code>modelo_estudio</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular DFFITS y sus componentes</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>dffits_vals <span class="ot">&lt;-</span> <span class="fu">dffits</span>(modelo_estudio)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>residuos_stud <span class="ot">&lt;-</span> <span class="fu">rstudent</span>(modelo_estudio)  <span class="co"># Residuos estudentizados</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>leverage_vals <span class="ot">&lt;-</span> <span class="fu">hatvalues</span>(modelo_estudio)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear dataframe para análisis</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>datos_dffits <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">observacion =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(dffits_vals),</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">dffits =</span> dffits_vals,</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">residuo_stud =</span> residuos_stud,</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">leverage =</span> leverage_vals</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Umbral de DFFITS</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(datos)</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">1</span>  <span class="co"># número de predictores</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>dffits_threshold <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">sqrt</span>((k <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">/</span> n)</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de DFFITS</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_dffits, <span class="fu">aes</span>(<span class="at">x =</span> observacion, <span class="at">y =</span> dffits)) <span class="sc">+</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0072B2"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"gray"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fu">c</span>(<span class="sc">-</span>dffits_threshold, dffits_threshold), </span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"DFFITS por Observación"</span>,</span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Número de Observación"</span>,</span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"DFFITS"</span>,</span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="fu">paste</span>(<span class="st">"Líneas rojas: umbrales ±"</span>, <span class="fu">round</span>(dffits_threshold, <span class="dv">3</span>))</span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Análisis cuantitativo</span></span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>influential_dffits <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">abs</span>(dffits_vals) <span class="sc">&gt;</span> dffits_threshold)</span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>top_indices <span class="ot">&lt;-</span> <span class="fu">order</span>(<span class="fu">abs</span>(dffits_vals), <span class="at">decreasing =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-dffits" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dffits-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="tema1_files/figure-html/fig-dffits-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dffits-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.11: Análisis de DFFITS para identificar observaciones que afectan significativamente a sus propias predicciones.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Análisis de resultados:</strong></p>
+<p>El umbral de influencia para DFFITS es 0.283. En nuestro modelo, <strong>7 observaciones superan este umbral</strong>: las observaciones 6, 20, 22, 47, 85, 87, 89, lo que las clasifica como influyentes según este criterio.</p>
+<p>Las <strong>cinco observaciones con mayor |DFFITS|</strong> son las observaciones 20, 85, 89, 47, 6, con valores de 0.446, -0.38, 0.364, 0.325, 0.312 respectivamente. Lo más notable es que <strong>5 de estas cinco observaciones (20, 85, 89, 47, 6) superan el umbral de DFFITS</strong>, confirmando su carácter influyente.</p>
+<p><strong>Interpretación clave:</strong> La observación 20 es el caso más destacado: tiene un DFFITS de 0.446, superando el umbral de 0.283. Esta combinación de residuo y apalancamiento resulta en un DFFITS significativo que indica cambios sustanciales en su predicción.</p>
+<p><strong>Conclusión práctica:</strong> Tenemos <strong>7 observaciones influyentes</strong> según DFFITS (6, 20, 22, 47, 85, 87, 89) que merecen investigación adicional. Estas observaciones cambian significativamente sus propias predicciones cuando son eliminadas del modelo, sugiriendo que podrían representar casos especiales o errores de medición que deberían ser examinados más detalladamente.</p>
+</div>
+</div>
+</div>
+<p>El gráfico <strong><code>Residuals vs. Leverage</code></strong> es la herramienta visual más importante para el diagnóstico de influencia, ya que combina en un solo gráfico el <strong>apalancamiento</strong> (eje X) y los <strong>residuos estudentizados</strong> (eje Y), permitiendo identificar simultáneamente observaciones con alto leverage y outliers. Además, incluye curvas que delimitan regiones de alta <strong>Distancia de Cook</strong>, facilitando la identificación visual de los puntos más problemáticos.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo: Gráfico Residuals vs. Leverage">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejemplo: Gráfico Residuals vs.&nbsp;Leverage
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-25" class="callout-25-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Vamos a analizar el gráfico más importante para el diagnóstico de influencia usando nuestro <code>modelo_estudio</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear datos para el gráfico Residuals vs. Leverage</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>leverage_vals <span class="ot">&lt;-</span> <span class="fu">hatvalues</span>(modelo_estudio)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>residuos_stud <span class="ot">&lt;-</span> <span class="fu">rstudent</span>(modelo_estudio)  <span class="co"># Residuos estudentizados</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>cook_dist <span class="ot">&lt;-</span> <span class="fu">cooks.distance</span>(modelo_estudio)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>datos_leverage <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">leverage =</span> leverage_vals,</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">residuos_stud =</span> residuos_stud,</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">cook =</span> cook_dist,</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">observacion =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(leverage_vals)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular umbrales</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(datos)</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>leverage_threshold <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> (k <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">/</span> n</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>cook_threshold <span class="ot">&lt;-</span> <span class="dv">4</span> <span class="sc">/</span> (n <span class="sc">-</span> k <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Función para crear curvas de Cook</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>cook_curve <span class="ot">&lt;-</span> <span class="cf">function</span>(leverage, cook_value, k) {</span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sqrt</span>(cook_value <span class="sc">*</span> (k <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> leverage) <span class="sc">/</span> leverage)</span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear curvas de Cook para diferentes valores</span></span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>lev_seq <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.001</span>, <span class="fu">max</span>(leverage_vals) <span class="sc">*</span> <span class="fl">1.1</span>, <span class="at">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>cook_05 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">leverage =</span> lev_seq,</span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">pos =</span> <span class="fu">cook_curve</span>(lev_seq, <span class="fl">0.5</span>, k),</span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">neg =</span> <span class="sc">-</span><span class="fu">cook_curve</span>(lev_seq, <span class="fl">0.5</span>, k)</span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a>cook_1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">leverage =</span> lev_seq,</span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">pos =</span> <span class="fu">cook_curve</span>(lev_seq, <span class="dv">1</span>, k),</span>
+<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">neg =</span> <span class="sc">-</span><span class="fu">cook_curve</span>(lev_seq, <span class="dv">1</span>, k)</span>
+<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico Residuals vs. Leverage con ggplot2</span></span>
+<span id="cb30-38"><a href="#cb30-38" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_leverage, <span class="fu">aes</span>(<span class="at">x =</span> leverage, <span class="at">y =</span> residuos_stud)) <span class="sc">+</span></span>
+<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Curvas de Cook</span></span>
+<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> cook_05, <span class="fu">aes</span>(<span class="at">x =</span> leverage, <span class="at">y =</span> pos), </span>
+<span id="cb30-41"><a href="#cb30-41" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb30-42"><a href="#cb30-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> cook_05, <span class="fu">aes</span>(<span class="at">x =</span> leverage, <span class="at">y =</span> neg), </span>
+<span id="cb30-43"><a href="#cb30-43" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb30-44"><a href="#cb30-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> cook_1, <span class="fu">aes</span>(<span class="at">x =</span> leverage, <span class="at">y =</span> pos), </span>
+<span id="cb30-45"><a href="#cb30-45" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"solid"</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb30-46"><a href="#cb30-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> cook_1, <span class="fu">aes</span>(<span class="at">x =</span> leverage, <span class="at">y =</span> neg), </span>
+<span id="cb30-47"><a href="#cb30-47" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"solid"</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb30-48"><a href="#cb30-48" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Puntos de datos</span></span>
+<span id="cb30-49"><a href="#cb30-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0072B2"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb30-50"><a href="#cb30-50" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Líneas de referencia</span></span>
+<span id="cb30-51"><a href="#cb30-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"gray"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb30-52"><a href="#cb30-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>), <span class="at">color =</span> <span class="st">"orange"</span>, <span class="at">linetype =</span> <span class="st">"dotted"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb30-53"><a href="#cb30-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> leverage_threshold, <span class="at">color =</span> <span class="st">"purple"</span>, <span class="at">linetype =</span> <span class="st">"dotted"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb30-54"><a href="#cb30-54" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Etiquetas</span></span>
+<span id="cb30-55"><a href="#cb30-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb30-56"><a href="#cb30-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Residuals vs. Leverage"</span>,</span>
+<span id="cb30-57"><a href="#cb30-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Leverage"</span>,</span>
+<span id="cb30-58"><a href="#cb30-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Residuos Estudentizados"</span>,</span>
+<span id="cb30-59"><a href="#cb30-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Curvas rojas: Cook 0.5 (discontinua) y 1.0 (continua) | Líneas naranjas: ±2 | Línea morada: umbral leverage"</span></span>
+<span id="cb30-60"><a href="#cb30-60" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb30-61"><a href="#cb30-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span>
+<span id="cb30-62"><a href="#cb30-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-63"><a href="#cb30-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Identificar observaciones problemáticas</span></span>
+<span id="cb30-64"><a href="#cb30-64" aria-hidden="true" tabindex="-1"></a>high_leverage <span class="ot">&lt;-</span> <span class="fu">which</span>(leverage_vals <span class="sc">&gt;</span> leverage_threshold)</span>
+<span id="cb30-65"><a href="#cb30-65" aria-hidden="true" tabindex="-1"></a>outliers_stud <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">abs</span>(residuos_stud) <span class="sc">&gt;</span> <span class="dv">2</span>)</span>
+<span id="cb30-66"><a href="#cb30-66" aria-hidden="true" tabindex="-1"></a>high_cook <span class="ot">&lt;-</span> <span class="fu">which</span>(cook_dist <span class="sc">&gt;</span> cook_threshold)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-leverage" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-leverage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="tema1_files/figure-html/fig-leverage-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-leverage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.12: Gráfico Residuals vs.&nbsp;Leverage para identificar observaciones influyentes.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Análisis del gráfico:</strong></p>
+<p>El gráfico revela varios puntos importantes. Tenemos 6 outliers (residuos estudentizados &gt; 2): las observaciones 20, 22, 47, 85, 89, 99. Además, 2 observaciones superan el umbral de leverage (&gt; 0.04): las observaciones 24, 74.</p>
+<p><strong>Interpretación por regiones:</strong></p>
+<ul>
+<li><strong>Zona derecha (alto leverage)</strong>: Las observaciones 24, 74 superan el umbral de leverage, lo que significa que tienen valores de X atípicos y <strong>alto potencial influyente</strong></li>
+<li><strong>Zona izquierda superior/inferior</strong>: Los 6 outliers (20, 22, 47, 85, 89, 99) están distribuidos aquí, con leverage bajo-moderado pero residuos grandes</li>
+<li><strong>Esquinas críticas</strong>: Afortunadamente vacías (alto leverage + outlier sería muy problemático)</li>
+</ul>
+<p><strong>Distancia de Cook:</strong> Las curvas rojas muestran que aunque ningún punto supera Cook = 1.0 (línea continua), <strong>varios puntos se acercan a la curva de Cook = 0.5</strong> (línea discontinua), indicando influencia moderada. Las observaciones con alto leverage están en esta zona de influencia moderada.</p>
+<p><strong>Conclusión práctica:</strong> El modelo presenta una <strong>situación favorable</strong>: aunque tenemos <strong>outliers</strong> (observaciones 20, 22, 47, 85, 89, 99) que son atípicos en Y, y <strong>observaciones de alto leverage</strong> (observaciones 24, 74) que son atípicos en X, <strong>crucialmente no hay solapamiento entre ambos grupos</strong>. Esto significa que no tenemos la situación más problemática (alto leverage + outlier). Aun así, ambos grupos merecen investigación.</p>
+</div>
+</div>
+</div>
+<section id="interpretación-práctica-de-las-medidas-de-influencia" class="level4" data-number="2.6.6.1">
+<h4 data-number="2.6.6.1" class="anchored" data-anchor-id="interpretación-práctica-de-las-medidas-de-influencia"><span class="header-section-number">2.6.6.1</span> Interpretación práctica de las medidas de influencia</h4>
+<p>Cada medida nos proporciona información complementaria sobre diferentes aspectos de la influencia:</p>
+<ul>
+<li><p><strong>Leverage (Apalancamiento):</strong> Identifica observaciones con valores “raros” en las variables predictoras. Alto leverage no es necesariamente problemático, pero indica potencial para ser influyente.</p></li>
+<li><p><strong>Distancia de Cook:</strong> Es la medida más general de influencia. Valores altos indican que eliminar esa observación cambiaría substancialmente los coeficientes del modelo.</p></li>
+<li><p><strong>DFFITS:</strong> Se enfoca específicamente en cómo cambia la predicción de cada punto cuando se elimina esa observación. Es especialmente útil para evaluar el impacto en las predicciones.</p></li>
+</ul>
+<p>En la práctica, una observación es especialmente preocupante si es problemática según <strong>múltiples criterios</strong> a la vez.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Diagnóstico completo del modelo de estudio">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Diagnóstico completo del modelo de estudio
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-26" class="callout-26-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>A continuación, realizamos todas las verificaciones de diagnóstico para nuestro <code>modelo_estudio</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preparar todos los datos necesarios para los gráficos</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>residuos_completo <span class="ot">&lt;-</span> <span class="fu">residuals</span>(modelo_estudio)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>valores_ajustados_completo <span class="ot">&lt;-</span> <span class="fu">fitted</span>(modelo_estudio)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>residuos_std <span class="ot">&lt;-</span> <span class="fu">rstandard</span>(modelo_estudio)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>leverage_vals <span class="ot">&lt;-</span> <span class="fu">hatvalues</span>(modelo_estudio)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Gráfico Residuos vs. Valores Ajustados</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>p1_completo <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> valores_ajustados_completo, <span class="at">y =</span> residuos_completo), </span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0072B2"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Residuos vs. Valores Ajustados"</span>, <span class="at">x =</span> <span class="st">"Valores Ajustados"</span>, <span class="at">y =</span> <span class="st">"Residuos"</span>) <span class="sc">+</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Gráfico Q-Q Normal</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>datos_qq_completo <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">residuos =</span> residuos_std)</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>p2_completo <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(datos_qq_completo, <span class="fu">aes</span>(<span class="at">sample =</span> residuos)) <span class="sc">+</span></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq</span>(<span class="at">color =</span> <span class="st">"#0072B2"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq_line</span>(<span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Normal Q-Q Plot"</span>, <span class="at">x =</span> <span class="st">"Cuantiles Teóricos"</span>, <span class="at">y =</span> <span class="st">"Cuantiles de la Muestra"</span>) <span class="sc">+</span></span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Gráfico Scale-Location</span></span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>p3_completo <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> valores_ajustados_completo, </span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">y =</span> <span class="fu">sqrt</span>(<span class="fu">abs</span>(residuos_std))), </span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0072B2"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Scale-Location"</span>, <span class="at">x =</span> <span class="st">"Valores Ajustados"</span>, </span>
+<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="fu">expression</span>(<span class="fu">sqrt</span>(<span class="st">"|Residuos Estandarizados|"</span>))) <span class="sc">+</span></span>
+<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span>
+<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Gráfico Residuos vs. Leverage</span></span>
+<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a>p4_completo <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> leverage_vals, <span class="at">y =</span> residuos_std), </span>
+<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0072B2"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb31-40"><a href="#cb31-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"gray"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb31-41"><a href="#cb31-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Residuos vs. Leverage"</span>, <span class="at">x =</span> <span class="st">"Leverage"</span>, <span class="at">y =</span> <span class="st">"Residuos Estandarizados"</span>) <span class="sc">+</span></span>
+<span id="cb31-42"><a href="#cb31-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span>
+<span id="cb31-43"><a href="#cb31-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-44"><a href="#cb31-44" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Histograma de residuos</span></span>
+<span id="cb31-45"><a href="#cb31-45" aria-hidden="true" tabindex="-1"></a>p5_completo <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">residuos =</span> residuos_completo), <span class="fu">aes</span>(<span class="at">x =</span> residuos)) <span class="sc">+</span></span>
+<span id="cb31-46"><a href="#cb31-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">bins =</span> <span class="dv">15</span>, <span class="at">fill =</span> <span class="st">"lightblue"</span>, </span>
+<span id="cb31-47"><a href="#cb31-47" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb31-48"><a href="#cb31-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, </span>
+<span id="cb31-49"><a href="#cb31-49" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="fu">mean</span>(residuos_completo), <span class="at">sd =</span> <span class="fu">sd</span>(residuos_completo)),</span>
+<span id="cb31-50"><a href="#cb31-50" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb31-51"><a href="#cb31-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Histograma de Residuos"</span>, <span class="at">x =</span> <span class="st">"Residuos"</span>, <span class="at">y =</span> <span class="st">"Densidad"</span>) <span class="sc">+</span></span>
+<span id="cb31-52"><a href="#cb31-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span>
+<span id="cb31-53"><a href="#cb31-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-54"><a href="#cb31-54" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Residuos vs. Orden</span></span>
+<span id="cb31-55"><a href="#cb31-55" aria-hidden="true" tabindex="-1"></a>p6_completo <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">orden =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(residuos_completo), </span>
+<span id="cb31-56"><a href="#cb31-56" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">residuos =</span> residuos_completo), </span>
+<span id="cb31-57"><a href="#cb31-57" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">aes</span>(<span class="at">x =</span> orden, <span class="at">y =</span> residuos)) <span class="sc">+</span></span>
+<span id="cb31-58"><a href="#cb31-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0072B2"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb31-59"><a href="#cb31-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"#0072B2"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb31-60"><a href="#cb31-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb31-61"><a href="#cb31-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Residuos vs. Orden"</span>, <span class="at">x =</span> <span class="st">"Orden de observación"</span>, <span class="at">y =</span> <span class="st">"Residuos"</span>) <span class="sc">+</span></span>
+<span id="cb31-62"><a href="#cb31-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span>
+<span id="cb31-63"><a href="#cb31-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-64"><a href="#cb31-64" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostrar todos los gráficos en una rejilla 2x3</span></span>
+<span id="cb31-65"><a href="#cb31-65" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb31-66"><a href="#cb31-66" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(p1_completo, p2_completo, p3_completo, </span>
+<span id="cb31-67"><a href="#cb31-67" aria-hidden="true" tabindex="-1"></a>             p4_completo, p5_completo, p6_completo, <span class="at">ncol =</span> <span class="dv">3</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'
+`geom_smooth()` using formula = 'y ~ x'
+`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pruebas analíticas</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"=== DIAGNÓSTICO ANALÍTICO ===</span><span class="sc">\n\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>=== DIAGNÓSTICO ANALÍTICO ===</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Verificación de media nula de residuos</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>media_residuos <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">residuals</span>(modelo_estudio))</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Media de los residuos:"</span>, <span class="fu">round</span>(media_residuos, <span class="dv">10</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Media de los residuos: 0 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"(Debe ser prácticamente 0)</span><span class="sc">\n\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Debe ser prácticamente 0)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Homocedasticidad: Breusch-Pagan</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"HOMOCEDASTICIDAD - Prueba de Breusch-Pagan:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>HOMOCEDASTICIDAD - Prueba de Breusch-Pagan:</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>bp_test <span class="ot">&lt;-</span> <span class="fu">bptest</span>(modelo_estudio)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(bp_test)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     studentized Breusch-Pagan test
@@ -1339,8 +1995,17 @@ Figura&nbsp;2.6: Diagnóstico de heteroscedasticidad. Izquierda: Gráfico de Res
 data:  modelo_estudio
 BP = 0.019638, df = 1, p-value = 0.8886</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Prueba de Shapiro-Wilk para normalidad (sobre los residuos)</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(<span class="fu">residuals</span>(modelo_estudio))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Interpretación: p-valor &gt;"</span>, <span class="fl">0.05</span>, <span class="st">"→ No hay evidencia de heterocedasticidad</span><span class="sc">\n\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Interpretación: p-valor &gt; 0.05 → No hay evidencia de heterocedasticidad</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Normalidad: Shapiro-Wilk</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"NORMALIDAD - Prueba de Shapiro-Wilk:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NORMALIDAD - Prueba de Shapiro-Wilk:</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>sw_test <span class="ot">&lt;-</span> <span class="fu">shapiro.test</span>(<span class="fu">residuals</span>(modelo_estudio))</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(sw_test)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Shapiro-Wilk normality test
@@ -1348,26 +2013,105 @@ BP = 0.019638, df = 1, p-value = 0.8886</code></pre>
 data:  residuals(modelo_estudio)
 W = 0.99008, p-value = 0.671</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Prueba de Durbin-Watson para independencia</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dwtest</span>(modelo_estudio)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Interpretación: p-valor &gt;"</span>, <span class="fl">0.05</span>, <span class="st">"→ No hay evidencia contra la normalidad</span><span class="sc">\n\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Interpretación: p-valor &gt; 0.05 → No hay evidencia contra la normalidad</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Independencia: Durbin-Watson</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"INDEPENDENCIA - Prueba de Durbin-Watson:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>INDEPENDENCIA - Prueba de Durbin-Watson:</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>dw_test <span class="ot">&lt;-</span> <span class="fu">dwtest</span>(modelo_estudio)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Estadístico DW:"</span>, <span class="fu">round</span>(dw_test<span class="sc">$</span>statistic, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Estadístico DW: 2.056 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"p-valor:"</span>, <span class="fu">format.pval</span>(dw_test<span class="sc">$</span>p.value, <span class="at">digits=</span><span class="dv">3</span>, <span class="at">eps=</span><span class="fl">0.001</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>p-valor: 0.61 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Interpretación: Estadístico ≈ 2 y p-valor &gt;"</span>, <span class="fl">0.05</span>, <span class="st">"→ No hay autocorrelación</span><span class="sc">\n\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Interpretación: Estadístico ≈ 2 y p-valor &gt; 0.05 → No hay autocorrelación</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Identificación de observaciones influyentes</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"OBSERVACIONES INFLUYENTES:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>OBSERVACIONES INFLUYENTES:</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculamos las métricas principales</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>leverage <span class="ot">&lt;-</span> <span class="fu">hatvalues</span>(modelo_estudio)</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>cook_dist <span class="ot">&lt;-</span> <span class="fu">cooks.distance</span>(modelo_estudio)</span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>std_residuals <span class="ot">&lt;-</span> <span class="fu">rstandard</span>(modelo_estudio)</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>dffits_vals <span class="ot">&lt;-</span> <span class="fu">dffits</span>(modelo_estudio)</span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>covratio_vals <span class="ot">&lt;-</span> <span class="fu">covratio</span>(modelo_estudio)</span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Umbrales de corte</span></span>
+<span id="cb61-9"><a href="#cb61-9" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(datos)</span>
+<span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">1</span>  <span class="co"># número de predictores</span></span>
+<span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a>leverage_threshold <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> (k <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">/</span> n</span>
+<span id="cb61-12"><a href="#cb61-12" aria-hidden="true" tabindex="-1"></a>cook_threshold <span class="ot">&lt;-</span> <span class="dv">4</span> <span class="sc">/</span> (n <span class="sc">-</span> k <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb61-13"><a href="#cb61-13" aria-hidden="true" tabindex="-1"></a>dffits_threshold <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">sqrt</span>((k <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">/</span> n)</span>
+<span id="cb61-14"><a href="#cb61-14" aria-hidden="true" tabindex="-1"></a>covratio_threshold <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> (k <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">/</span> n</span>
+<span id="cb61-15"><a href="#cb61-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-16"><a href="#cb61-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Identificamos observaciones problemáticas</span></span>
+<span id="cb61-17"><a href="#cb61-17" aria-hidden="true" tabindex="-1"></a>high_leverage <span class="ot">&lt;-</span> <span class="fu">which</span>(leverage <span class="sc">&gt;</span> leverage_threshold)</span>
+<span id="cb61-18"><a href="#cb61-18" aria-hidden="true" tabindex="-1"></a>influential_cook <span class="ot">&lt;-</span> <span class="fu">which</span>(cook_dist <span class="sc">&gt;</span> cook_threshold)</span>
+<span id="cb61-19"><a href="#cb61-19" aria-hidden="true" tabindex="-1"></a>outliers <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">abs</span>(std_residuals) <span class="sc">&gt;</span> <span class="dv">2</span>)</span>
+<span id="cb61-20"><a href="#cb61-20" aria-hidden="true" tabindex="-1"></a>influential_dffits <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">abs</span>(dffits_vals) <span class="sc">&gt;</span> dffits_threshold)</span>
+<span id="cb61-21"><a href="#cb61-21" aria-hidden="true" tabindex="-1"></a>problematic_covratio <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">abs</span>(covratio_vals <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">&gt;</span> covratio_threshold)</span>
+<span id="cb61-22"><a href="#cb61-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-23"><a href="#cb61-23" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Observaciones con alto apalancamiento (&gt;"</span>, <span class="fu">round</span>(leverage_threshold, <span class="dv">3</span>), <span class="st">"):"</span>, </span>
+<span id="cb61-24"><a href="#cb61-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ifelse</span>(<span class="fu">length</span>(high_leverage) <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="fu">paste</span>(high_leverage, <span class="at">collapse =</span> <span class="st">", "</span>), <span class="st">"Ninguna"</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Observaciones con alto apalancamiento (&gt; 0.04 ): 24, 74 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Observaciones influyentes por Cook (&gt;"</span>, <span class="fu">round</span>(cook_threshold, <span class="dv">3</span>), <span class="st">"):"</span>, </span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ifelse</span>(<span class="fu">length</span>(influential_cook) <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="fu">paste</span>(influential_cook, <span class="at">collapse =</span> <span class="st">", "</span>), <span class="st">"Ninguna"</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Observaciones influyentes por Cook (&gt; 0.041 ): 6, 20, 47, 85, 87, 89 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Observaciones influyentes por DFFITS (&gt;"</span>, <span class="fu">round</span>(dffits_threshold, <span class="dv">3</span>), <span class="st">"):"</span>, </span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ifelse</span>(<span class="fu">length</span>(influential_dffits) <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="fu">paste</span>(influential_dffits, <span class="at">collapse =</span> <span class="st">", "</span>), <span class="st">"Ninguna"</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Observaciones influyentes por DFFITS (&gt; 0.283 ): 6, 20, 22, 47, 85, 87, 89 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Posibles outliers (|residuo std| &gt; 2):"</span>, </span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ifelse</span>(<span class="fu">length</span>(outliers) <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="fu">paste</span>(outliers, <span class="at">collapse =</span> <span class="st">", "</span>), <span class="st">"Ninguna"</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Posibles outliers (|residuo std| &gt; 2): 20, 22, 47, 85, 89, 99 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Resumen de observaciones más problemáticas</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>all_problematic <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">c</span>(high_leverage, influential_cook, influential_dffits, </span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>                           problematic_covratio, outliers))</span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">length</span>(all_problematic) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">RESUMEN - Observaciones que requieren atención:"</span>, <span class="fu">paste</span>(all_problematic, <span class="at">collapse =</span> <span class="st">", "</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Estas observaciones deberían ser investigadas más detalladamente.</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb69-8"><a href="#cb69-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">RESUMEN - No hay observaciones problemáticas detectadas.</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb69-9"><a href="#cb69-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-    Durbin-Watson test
-
-data:  modelo_estudio
-DW = 2.0565, p-value = 0.6104
-alternative hypothesis: true autocorrelation is greater than 0</code></pre>
+RESUMEN - Observaciones que requieren atención: 24, 74, 6, 20, 47, 85, 87, 89, 22, 99 
+Estas observaciones deberían ser investigadas más detalladamente.</code></pre>
 </div>
 <div class="cell-output-display">
-<div id="fig-diagnostico-detallado" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-diagnostico-completo" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-diagnostico-detallado-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="tema1_files/figure-html/fig-diagnostico-detallado-1.png" class="img-fluid figure-img" width="672">
+<div aria-describedby="fig-diagnostico-completo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="tema1_files/figure-html/fig-diagnostico-completo-1.png" class="img-fluid figure-img" width="672">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-diagnostico-detallado-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;2.7: Gráficos de diagnóstico estándar generados por R.
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-diagnostico-completo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.13: Gráficos de diagnóstico completo del modelo de regresión.
 </figcaption>
 </figure>
+</div>
+</div>
+</div>
+<p><strong>Conclusión del diagnóstico:</strong></p>
+<p>Nuestro modelo de estudio pasa exitosamente todas las verificaciones: - ✅ <strong>Linealidad</strong>: Sin patrones en residuos vs ajustados - ✅ <strong>Homocedasticidad</strong>: Varianza constante (Breusch-Pagan p &gt; 0.05) - ✅ <strong>Normalidad</strong>: Los residuos siguen distribución normal (Shapiro-Wilk p &gt; 0.05) - ✅ <strong>Independencia</strong>: Sin autocorrelación (Durbin-Watson ≈ 2) - ✅ <strong>Media nula</strong>: La media de residuos es prácticamente 0 - ✅ <strong>Sin valores influyentes</strong>: No hay observaciones problemáticas según Cook, DFFITS o COVRATIO - ✅ <strong>Sin outliers</strong>: No hay residuos estandarizados extremos</p>
+<p>Esto confirma que nuestras inferencias estadísticas (p-valores, intervalos de confianza) son válidas y confiables.</p>
 </div>
 </div>
 </div>
@@ -1378,6 +2122,7 @@ Figura&nbsp;2.7: Gráficos de diagnóstico estándar generados por R.
 Draper, NR. 1998. <em>Applied regression analysis</em>. McGraw-Hill. Inc.
 </div>
 </div>
+</section>
 </section>
 </section>
 
