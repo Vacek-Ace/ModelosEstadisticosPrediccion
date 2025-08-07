@@ -1,0 +1,9 @@
+project:
+  type: default
+
+format:
+  beamer:
+    pdf-engine: pdflatex
+    include-in-header:
+      - text: |
+          \usepackage{hyperref}

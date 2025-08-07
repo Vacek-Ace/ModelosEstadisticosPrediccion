@@ -1,0 +1,109 @@
+---
+title: "Introduccion a los Modelos de Regresion"
+subtitle: "Tema 0 - Andamiaje Conceptual y Filosofico"
+author: "Grado en Matematicas - Universidad Rey Juan Carlos"
+date: "Curso academico 2025-2026"
+format: 
+  beamer: 
+    template: dslab.beamer.tex
+    slide-level: 1
+    section-titles: false
+editor: visual
+---
+
+# Objetivos del Tema Inaugural
+
+Este tema construye el **andamiaje conceptual y filosófico** del modelado estadístico moderno:
+
+::::: columns
+::: {.column width="50%"}
+**Contextualizaremos:** 
+- La regresión como marco de pensamiento 
+- Su propósito dual fundamental 
+- Sus componentes axiomáticos
+:::
+
+::: {.column width="50%"}
+**Exploraremos:** 
+- La vasta familia de modelos 
+- Una perspectiva histórica 
+- Preparación para inmersiones técnicas
+:::
+:::::
+
+*"El objetivo es preparar al lector, con solidez y sin prisas, para las inmersiones técnicas que seguirán"*
+
+# La Gran Dicotomía - Predecir vs. Explicar
+
+Referencia: Shmueli (2010)
+
+El modelado estadístico se orienta hacia uno de dos polos:
+
+> *"Comprender esta distinción es el primer paso para convertirse en un modelador eficaz"*
+
+# Paradigma 1 - Predicción
+
+**Objetivo principal:** PRECISIÓN
+
+::::: columns
+::: {.column width="50%"}
+**Características:** 
+- Modelo como "caja negra" 
+- Funcionamiento interno secundario 
+- Prioridad: minimizar error 
+- Validación en datos no observados
+:::
+
+::: {.column width="50%"}
+**Criterios de Éxito:** - Exactitud predictiva - Robustez en nuevos datos - Generalización - Eficiencia computacional
+:::
+:::::
+
+**Ejemplo:** Entidad financiera predice impago de créditos usando edad, ingresos, nivel estudios, historial crediticio
+
+*→ No necesita entender la "causa", solo clasificar correctamente*
+
+# Paradigma 2 - Inferencia (Explicación)
+
+**Objetivo principal:** COMPRENSIÓN
+
+::::: columns
+::: {.column width="50%"}
+**Características:** 
+- Interpretabilidad primordial 
+- Dilucidar interdependencias 
+- Cuantificar relaciones 
+- Incertidumbre estadística clave
+:::
+
+::: {.column width="50%"}
+**Herramientas:** 
+- Errores estándar 
+- Intervalos de confianza 
+- P-valores 
+- Magnitud y signo de efectos
+:::
+:::::
+
+**Ejemplo:** Epidemióloga investiga factores de riesgo cardíaco
+
+*→ "¿En cuántos mmHg aumenta la presión arterial por cada gramo adicional de sal?"*
+
+# La Relación Simbiótica
+
+::: block
+Los dos paradigmas se benefician mutuamente
+:::
+
+**Inferencia → Predicción:** 
+- Modelo con base inferencial sólida 
+- Captura relaciones causales/asociativas verdaderas\
+- Suele tener buen rendimiento predictivo
+
+**Predicción → Inferencia:** 
+- Alta precisión en datos nuevos 
+- Da confianza en las relaciones aprendidas 
+- No son casualidades del entrenamiento 
+- Probablemente reflejan patrones reales
+
+**Tensión moderna:** Interpretabilidad vs. Precisión

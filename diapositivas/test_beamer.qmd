@@ -1,0 +1,12 @@
+---
+title: "Prueba de Beamer"
+format: beamer
+---
+
+## Diapositiva 1
+
+Hola Mundo
+
+## Diapositiva 2
+
+Esto es una prueba.
