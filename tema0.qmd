@@ -102,7 +102,6 @@ ggplot(datos, aes(x = x, y = y)) +
   geom_smooth(method = "lm", formula = y ~ x + I(x^2), se = FALSE, color = "#0072B2", size = 1.2) + # Línea del modelo ajustado
   labs(
     title = "Modelo Lineal con Término Cuadrático",
-    subtitle = "Relación no lineal en la variable (curva) ajustada con un modelo lineal en los parámetros",
     x = "Variable Predictora (X)",
     y = "Variable de Respuesta (Y)"
   ) +
@@ -136,8 +135,8 @@ Esta flexibilidad se logra mediante la combinación de dos ingeniosos mecanismos
 
 2.  **La función de enlace (link function)**: Este es el verdadero golpe de genialidad. El predictor lineal de nuestro modelo, $\boldsymbol{X\beta}$, puede tomar cualquier valor en la recta real, desde $-\infty$ hasta $+\infty$. Sin embargo, la media de nuestra variable de respuesta, $E[Y] = \mu$, a menudo está restringida. Por ejemplo, una probabilidad ($\mu$ en un modelo binomial) debe estar entre 0 y 1; un conteo ($\mu$ en un modelo de Poisson) debe ser positivo. La función de enlace, $g(\cdot)$, actúa como un **"traductor"** o un **"puente"** que conecta estos dos mundos. Transforma la media restringida de la respuesta para que pueda ser modelada por el predictor lineal no restringido. La relación fundamental es, por tanto, $g(E[Y]) = g(\mu) = \boldsymbol{X\beta}$.
 
-    - Para datos de **conteo** (Poisson), se usa un **enlace logarítmico** ($g(\mu) = \log(\mu)$). Esto garantiza que, al invertir la función para obtener la media ($\mu = \exp(\boldsymbol{X\beta})$), el resultado será siempre positivo, como debe ser un conteo.
-    - Para datos **binarios** (Binomial), se usa un **enlace logit** ($g(\mu) = \log(\frac{\mu}{1-\mu})$). Esta función toma una probabilidad $\mu$ en el rango (0, 1) y la proyecta sobre toda la recta real, permitiendo que sea modelada por $\boldsymbol{X\beta}$.
+- Para datos de **conteo** (Poisson), se usa un **enlace logarítmico** ($g(\mu) = \log(\mu)$). Esto garantiza que, al invertir la función para obtener la media ($\mu = \exp(\boldsymbol{X\beta})$), el resultado será siempre positivo, como debe ser un conteo.
+- Para datos **binarios** (Binomial), se usa un **enlace logit** ($g(\mu) = \log(\frac{\mu}{1-\mu})$). Esta función toma una probabilidad $\mu$ en el rango (0, 1) y la proyecta sobre toda la recta real, permitiendo que sea modelada por $\boldsymbol{X\beta}$.
 
 Gracias a los GLMs, podemos usar el mismo marco conceptual de la regresión lineal para modelar una gama de fenómenos increíblemente diversa, desde predecir la cantidad de ciclistas en una ciudad (Poisson) hasta la probabilidad de que un paciente responda a un tratamiento (logística).
 
@@ -155,6 +154,7 @@ Representan una extensión natural y altamente flexible de los GLMs que relaja e
 Este compendio no es un texto puramente teórico. Fusiona intrínsecamente la exposición de los conceptos con su aplicación computacional directa a través del lenguaje y entorno estadístico **R**. R se ha consolidado como el estándar de facto en la investigación estadística y la ciencia de datos académica por su potencia, flexibilidad y el inmenso ecosistema de paquetes contribuidos por la comunidad científica. Se presupone en el lector una familiaridad operativa básica con R, y se fomenta activamente el desarrollo de una fluidez progresiva mediante la reproducción, modificación y experimentación con los numerosos ejemplos y fragmentos de código presentados.
 
 La capacidad de ejecutar análisis en R es fundamental para todo el ciclo de vida del modelado: 
+
 - La **exploración de datos** y la visualización inicial. 
 - La **estimación de parámetros** y el ajuste de los modelos. 
 - El **diagnóstico riguroso** de la adecuación del modelo y la validación de sus supuestos. 
@@ -248,7 +248,7 @@ agrupan alrededor de la recta de regresión, ilustrando la tendencia
 general de la relación.
 
 ```{r galtonn}
-#| fig-cap: "Datos de Galton sobre la estatura de padres e hijos"
+#| fig-cap: "Datos históricos del estudio sobre la 'regresión a la media'."
 # Cargar los paquetes necesarios
 library(ggplot2)
 library(HistData)
@@ -290,7 +290,6 @@ ggplot(GaltonFamilies, aes(x = midparentHeight, y = childHeight)) +
   #    Añadimos un subtítulo y una fuente.
   labs(
     title = "Regresión de la Estatura de Hijos vs. Padres",
-    subtitle = "Datos históricos del estudio de Sir Francis Galton sobre la 'regresión a la media'",
     x = "Promedio de Estatura de los Padres (pulgadas)",
     y = "Estatura del Hijo/a (pulgadas)",
     caption = "Fuente: Paquete HistData de R"
