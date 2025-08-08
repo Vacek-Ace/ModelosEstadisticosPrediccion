@@ -1,423 +1,997 @@
-# Métodos de selección de variables y problemas de regularización {#sec-tema2}
+---
+editor: 
+  markdown: 
+    wrap: 72
+---
 
-En los modelos de regresión, especialmente cuando se trabaja con conjuntos de datos que incluyen un gran número de variables predictoras, es común enfrentarse al desafío de identificar qué variables son realmente relevantes para explicar la variable respuesta. La inclusión de demasiadas variables en un modelo puede llevar a problemas como el sobreajuste, pérdida de interpretabilidad y complejidad innecesaria, mientras que la exclusión de variables importantes puede resultar en modelos subóptimos.
+# El modelo de regresión lineal múltiple {#sec-regresion-lineal-multiple}
 
-## Proceso de construcción del modelo de regresión
+El modelo de regresión lineal múltiple constituye la extensión natural y
+más potente del modelo simple que estudiamos en el capítulo anterior.
+Mientras que la regresión simple nos permitía examinar la relación entre
+una variable respuesta y un único predictor, la regresión múltiple nos
+capacita para **modelar simultáneamente el efecto de múltiples variables
+predictoras**, una situación mucho más realista en la mayoría de
+aplicaciones prácticas [@kutner2005applied; @james2021; @fox2018r].
 
-La construcción de un modelo de regresión múltiple es un proceso sistemático que busca explicar la relación entre una variable respuesta ($Y$) y múltiples variables predictoras ($X_1, X_2, \dots, X_k$). Este proceso consta de varias etapas clave [@kutner2005applied]:
+En este capítulo profundizaremos en los aspectos únicos de la regresión
+múltiple que no están presentes en el caso simple: la **interpretación
+de coeficientes en presencia de otros predictores**, las
+**transformaciones de variables** para capturar relaciones no lineales,
+las **interacciones** entre variables, el **diagnóstico específico** del
+modelo múltiple, y el problema crucial de la **multicolinealidad**.
+Estos conceptos son fundamentales para desarrollar modelos predictivos
+robustos y interpretables [@harrell2015; @draper1998applied].
 
-1.  **Definición del problema y variables de interés:**
-    -   Identificar claramente el objetivo del análisis, ya sea realizar predicciones, evaluar relaciones o controlar por efectos de variables confusoras.
-    -   Seleccionar las variables predictoras potenciales en función de su relevancia teórica, conocimiento previo o exploración inicial de los datos.
-2.  **Recogida de datos:**
+La comprensión sólida de estos principios es esencial, ya que
+constituyen la base conceptual sobre la que se construyen técnicas más
+avanzadas como la selección de variables (Tema 3), los modelos lineales
+generalizados (Tema 4), y las tendencias modernas en modelado
+estadístico (Tema 5).
 
--   La calidad de los datos recogidos influye directamente en la validez de los resultados y conclusiones obtenidas. El proceso de recogida de datos consiste en recopilar información de manera organizada y sistemática para responder a las preguntas de investigación planteadas. Dependiendo del diseño del estudio y los objetivos del análisis, se pueden emplear diferentes tipos de experimentos o métodos de recogida de datos.
--   Debemos asegurar las siguientes características sobre los datos.
-    -   **Fiabilidad:** Asegurar que los datos sean consistentes y puedan reproducirse bajo condiciones similares.
-    -   **Validez:** Garantizar que los datos recojan realmente la información necesaria para responder a las preguntas de investigación.
-    -   **Ética:** Asegurar la privacidad y el consentimiento informado de los participantes.
-    -   **Control de Sesgos:** Diseñar el estudio de manera que se minimicen los sesgos que puedan distorsionar los resultados.
+::: {.callout-important title="Objetivos de aprendizaje"}
+Al finalizar este capítulo, serás capaz de:
 
-::: {.callout-note collapse="true" title="Tipos de experimentos"}
-La elección del tipo de experimento o método de recogida de datos dependerá de la naturaleza del problema a investigar, los recursos disponibles y las limitaciones del estudio. Una correcta planificación y ejecución de esta etapa sienta las bases para un análisis robusto y confiable.
-
-1.  **Experimentos controlados:**
-    -   Los experimentos controlados son diseñados de manera que los investigadores manipulan deliberadamente una o más variables independientes (llamadas factores o variables controladas) para observar su efecto en la variable dependiente.
-    -   Incluyen la aleatorización de sujetos entre grupos (por ejemplo, grupos de control y tratamiento) para minimizar sesgos y asegurar comparabilidad.
-    -   En muchas ocasiones la información suplementaria no se puede incorporar en el diseño del experimento. A esas variables, no controladas, se les suel llamar covariables.
-    -   **Ejemplo:** Un estudio clínico donde se prueba un nuevo medicamento y se compara su efecto con un placebo.
-2.  **Estudios observacionales exploratorios:**
-    -   En este enfoque, los datos se recogen sin intervenir ni manipular las condiciones. Los investigadores observan y registran los fenómenos tal como ocurren en la naturaleza.
-    -   Pueden clasificarse en:
-        -   **Estudios transversales:** Los datos se recogen en un único punto temporal.
-        -   **Estudios longitudinales:** Los datos se recogen durante un periodo para analizar cambios a lo largo del tiempo.
-    -   **Ejemplo:** Investigar los hábitos alimenticios y su asociación con enfermedades cardiovasculares en una población.
-3.  **Estudios observacionales confirmatorios:**
-    -   En este enfoque, los datos se recogen para testear (confirmar o no) hipótesis derivadas de estudios previos o de ideas que pueden tener los investigadores.
-    -   En este contexto, las variables que aparecen involucradas en la hipótesis que se quiere confirmar se denominan variables primarias, y las variables explicativas que se sabe inluyen en la respuesta se llaman variables de control (en Epidemiología nos referimos a ellas como factores de riesgo)
-    -   **Ejemplo:** Un equipo de investigadores, basándose en estudios previos, plantea la hipótesis de que existe una relación positiva entre el hábito de fumar (variable explicativa principal) y la incidencia de cáncer de pulmón (variable respuesta). Para confirmar esta hipótesis, realizan un estudio observacional en el que recopilan datos de una población durante un periodo determinado. Dado que no es ético inducir a las personas a fumar para realizar un experimento controlado, este estudio se realiza de forma observacional. Los datos se analizan para evaluar la asociación entre las variables, permitiendo confirmar (o refutar) la hipótesis planteada con un diseño adecuado y controlando los posibles factores de confusión.
-4.  **Encuestas y cuestionarios:**
-    -   Las encuestas son una técnica común para recoger datos de manera estructurada sobre actitudes, opiniones, comportamientos o características demográficas.
-    -   Pueden aplicarse en formato presencial, en línea, por teléfono o mediante correo.
-    -   **Ejemplo:** Una encuesta para medir el grado de satisfacción de los clientes con un servicio.
-5.  **Experimentos naturales:**
-    -   Se producen cuando un fenómeno natural o social actúa como una intervención en un entorno sin que los investigadores tengan control sobre el experimento.
-    -   Este tipo de estudio aprovecha eventos únicos para analizar sus impactos.
-    -   **Ejemplo:** Estudiar los efectos económicos de una nueva política fiscal aplicada en una región específica.
-6.  **Estudios de simulación:**
-    -   Los datos se generan a través de modelos matemáticos o computacionales que representan un sistema real o hipotético.
-    -   Este método se usa cuando es difícil o costoso realizar experimentos reales.
-    -   **Ejemplo:** Simular el comportamiento de un mercado financiero bajo diferentes escenarios económicos.
-7.  **Recogida de datos secundarios:**
-    -   En lugar de recoger datos nuevos, se utilizan datos ya existentes recopilados por terceros, como censos, registros administrativos o bases de datos públicas.
-    -   Aunque es eficiente en tiempo y costos, el investigador tiene menor control sobre la calidad y las características de los datos.
-    -   **Ejemplo:** Analizar datos de encuestas nacionales para estudiar tendencias sociales.
+1.  **Formular y estimar** modelos de regresión lineal múltiple,
+    comprendiendo las diferencias clave respecto al caso simple.
+2.  **Interpretar coeficientes** en el contexto multivariante,
+    entendiendo el concepto de "manteniendo las demás variables
+    constantes".
+3.  **Aplicar transformaciones de variables** para capturar relaciones
+    no lineales y mejorar el ajuste del modelo.
+4.  **Modelar e interpretar interacciones** entre variables predictoras
+    y entender cuándo son necesarias.
+5.  **Diagnosticar el modelo múltiple**, aplicando técnicas específicas
+    para detectar problemas únicos del caso multivariante.
+6.  **Identificar y tratar la multicolinealidad**, comprendiendo sus
+    causas, consecuencias y soluciones.
+7.  **Evaluar y comparar modelos múltiples** usando criterios apropiados
+    para la selección del mejor modelo.
 :::
 
-3.  **Análisis Exploratorio de Datos (EDA):**
-    -   Inspeccionar los datos mediante análisis descriptivo y visual para identificar posibles problemas como valores atípicos, datos faltantes y multicolinealidad.
-    -   Escalar o transformar las variables si es necesario, especialmente si están en diferentes escalas o presentan distribuciones no lineales.
-4.  **Ajuste del modelo:**
-    -   Especificar el modelo de regresión múltiple en su forma general:\
-        $$
-        Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p + \varepsilon,
-         $$ donde $\varepsilon$ representa los errores aleatorios.
-    -   Estimar los coeficientes del modelo ($\beta_0, \beta_1, \dots, \beta_p$) utilizando el método de mínimos cuadrados, que minimiza la suma de los errores al cuadrado.
-5.  **Evaluación del modelo:**
-    -   Analizar el ajuste general del modelo utilizando métricas como $R^2$ y $R^2$ ajustado, que miden la proporción de la variabilidad explicada.
-    -   Examinar la tabla ANOVA para evaluar la significancia global del modelo.
-    -   Realizar pruebas de hipótesis para los coeficientes individuales, verificando si las variables predictoras tienen un efecto significativo en la variable respuesta.
-6.  **Diagnóstico del modelo:**
-    -   Examinar los residuos para evaluar supuestos como la linealidad, homocedasticidad, normalidad de los errores y ausencia de autocorrelación.
-    -   Identificar observaciones atípicas, leverage y puntos de influencia utilizando herramientas como la distancia de Cook, DFBETAS y DFFITS.
-7.  **Reducción de variables:**
-    -   En análisis de regresión, especialmente cuando se trabaja con conjuntos de datos de alta dimensionalidad, es común enfrentar situaciones en las que el número de variables explicativas es muy grande. Esto puede llevar a problemas como el sobreajuste, dificultades en la interpretación del modelo y una mayor complejidad computacional. Por ello, reducir el número de variables explicativas, sin perder información relevante, se convierte en un paso crucial para construir modelos más eficientes y robustos.
-8.  **Validación del modelo:**
-    -   Evaluar el desempeño del modelo con datos de validación o mediante técnicas como validación cruzada para garantizar su capacidad predictiva en nuevos conjuntos de datos.
+## Conceptos fundamentales {#sec-conceptos-fundamentales}
 
-El objetivo principal de este tema es presentar las técnicas más relevantes para la selección de variables y regularización, entender sus fundamentos teóricos, y aplicarlas a casos prácticos. Esto no solo permitirá construir modelos más robustos y eficientes, sino que también ayudará a obtener insights más claros y útiles a partir de los datos.
+### Del modelo simple al múltiple: Una perspectiva teórica
 
-## Reducción de variables
+El modelo de regresión lineal múltiple representa una extensión natural pero conceptualmente rica del modelo simple. Para $n$ observaciones y $p$ variables predictoras, el modelo se expresa como:
 
-En análisis de regresión, especialmente cuando se trabaja con conjuntos de datos de alta dimensionalidad, es común enfrentar situaciones en las que el número de variables explicativas es muy grande. Esto puede llevar a problemas como el sobreajuste, dificultades en la interpretación del modelo y una mayor complejidad computacional. Por ello, reducir el número de variables explicativas, sin perder información relevante, se convierte en un paso crucial para construir modelos más eficientes y robustos.
+$$Y_i = \beta_0 + \beta_1 X_{i1} + \beta_2 X_{i2} + ... + \beta_p X_{ip} + \varepsilon_i, \quad i = 1, 2, ..., n$$
 
-Es especialmente importante reducir el número de variables explicativas en los estudios observacionales exploratorios, ya que en otros tipos de estudios, como los diseñados previamente, las variables incluidas suelen estar seleccionadas de antemano porque se conoce su relación con la variable respuesta o porque han sido identificadas como relevantes en investigaciones previas.
+donde:
+- $Y_i$ es la $i$-ésima observación de la variable respuesta
+- $X_{ij}$ es la $i$-ésima observación de la $j$-ésima variable predictora
+- $\beta_0, \beta_1, ..., \beta_p$ son los parámetros del modelo
+- $\varepsilon_i$ es el término de error para la $i$-ésima observación
 
-La **reducción de variables explicativas** busca simplificar el modelo al seleccionar un subconjunto de predictores que capturen la mayor parte de la información relevante de los datos. Este proceso puede realizarse a través de diferentes enfoques, dependiendo del contexto y de las características del conjunto de datos.
+### Formulación matricial del modelo
 
-### Motivaciones para reducir variables
+La representación matricial es fundamental para el desarrollo teórico:
 
-Al limitar el número de predictores, no solo se simplifica el modelo, sino que también se optimizan diversos aspectos fundamentales en el análisis.
-
-1.  **Evitar el sobreajuste:**
-    -   Cuando hay demasiadas variables en relación al número de observaciones, el modelo puede ajustarse demasiado a los datos de entrenamiento y perder capacidad predictiva en nuevos conjuntos de datos.
-2.  **Mejorar la interpretabilidad:**
-    -   Un modelo con menos variables es más fácil de interpretar, lo que resulta fundamental en aplicaciones como ciencias sociales, biomedicina o economía.
-3.  **Reducción de complejidad computacional:**
-    -   Al disminuir el número de variables, se reducen los costos de tiempo y memoria en el ajuste y evaluación del modelo.
-4.  **Manejo de multicolinealidad:**
-    -   La reducción puede eliminar variables redundantes que presentan una alta correlación entre sí, estabilizando las estimaciones del modelo.
-
-### Métodos de reducción de variables
-
-Algunas de las ideas más comunes para tratar de reducir el número de variables de un modelo son:
-
-1.  **Selección de variables:**
-    -   Utiliza estrategias como selección directa, métodos automáticos (forward, backward o stepwise), o técnicas basadas en regularización (Lasso, Elastic Net) para seleccionar las variables más relevantes.
-2.  **Técnicas de transformación de datos:**
-    -   Se proyectan las variables explicativas en un nuevo espacio de menor dimensionalidad, manteniendo la mayor cantidad posible de información. Algunas de estas técnicas se estudian en la asignatura de Aprendizaje Automático:
-        -   **Análisis de Componentes Principales (PCA):** Reduce las variables explicativas a un conjunto de componentes ortogonales que explican la mayor parte de la varianza.
-        -   **Análisis de Factores:** Agrupa variables relacionadas en factores latentes que capturan la esencia de la información.
-3.  **Filtrado basado en información:**
-    -   Identifica y descarta variables con baja variabilidad o poca relación con la variable respuesta, utilizando métricas como la correlación o importancia estadística.
-4.  **Métodos de selección basados en modelos:**
-    -   Ajusta modelos iterativamente para evaluar la contribución de cada variable explicativa y descartar aquellas con menor relevancia según criterios como el $p$-valor, AIC o BIC.
-
-::: {.callout-important title="Consideraciones importantes"}
--   La reducción de variables debe realizarse cuidadosamente para evitar la pérdida de información clave que pueda comprometer la calidad del modelo.
--   Es fundamental validar el modelo resultante, asegurándose de que mantenga su capacidad predictiva mediante técnicas como validación cruzada.
--   En algunos casos, la selección o transformación de variables puede implicar compromisos entre simplicidad e interpretabilidad.
-:::
-
-## Selección de variables
-
-Simplificar un modelo eliminando variables irrelevantes es fundamental para mejorar su parsimonia y evitar el sobreajuste. Este objetivo puede lograrse mediante métodos de selección de variables, ya sean directos, automáticos o basados en regularización. Estas técnicas permiten identificar subconjuntos óptimos de predictores, optimizando tanto la simplicidad como la precisión del modelo. En particular, los métodos de regularización, como Ridge, Lasso y Elastic Net, introducen penalizaciones al modelo para controlar la complejidad y prevenir el sobreajuste, convirtiéndose en herramientas clave en el análisis de datos modernos.
-
-Cuando se dispone de $p$ variables explicativas, es posible construir hasta $2^p$ modelos diferentes considerando todas las combinaciones posibles de estas variables. Sin embargo, explorar de manera exhaustiva todos estos modelos puede ser inviable, especialmente si $p$ es grande. Por ejemplo, con solo 10 variables regresoras, se generarían $2^{10} = 1024$ modelos posibles. Aunque la tecnología actual permite ajustar todos estos modelos, evaluar cada uno en términos de bondad de ajuste, gráficos de residuos, detección de observaciones influyentes y otros diagnósticos sería extremadamente complejo y costoso.
-
-Para superar este desafío, se han desarrollado criterios específicos de selección de variables que ayudan a los analistas a identificar un pequeño subconjunto de modelos que cumplan con los estándares de calidad deseados. Este enfoque permite centrar el análisis en un grupo reducido de modelos “buenos”, generalmente entre 4 y 6, y realizar un estudio más profundo y detallado de ellos. Esta estrategia facilita tanto la interpretación como la eficiencia del proceso analítico, optimizando el uso de recursos computacionales y asegurando que los resultados sean robustos y fiables.
-
-## Métodos de selección directa
-
-Los métodos de selección directa son un enfoque fundamental en la búsqueda de un subconjunto óptimo de variables predictoras en modelos de regresión. Este enfoque evalúa de manera sistemática diferentes combinaciones de variables para identificar cuál de ellas proporciona el mejor ajuste al modelo en función de un criterio predefinido, como el coeficiente de determinación ajustado ($R^2$ ajustado), el error cuadrático medio (ECM) o criterios de información como AIC o BIC.
-
-A diferencia de los métodos automáticos, los métodos de selección directa no dependen de un proceso iterativo de adición o eliminación de variables. En cambio, buscan exhaustivamente (o mediante aproximaciones computacionalmente más eficientes) entre todas las posibles combinaciones de variables, lo que garantiza un análisis completo de las interacciones y relevancias potenciales.
-
-Estos métodos son especialmente útiles cuando el número de predictores no es demasiado grande, ya que el esfuerzo computacional crece exponencialmente con el número de variables. Aunque el costo computacional puede ser elevado en datasets amplios, los métodos de selección directa proporcionan una referencia sólida y transparente para evaluar qué variables son fundamentales en el modelo.
-
-En esta sección, analizaremos los métodos de selección directa más comunes, su implementación práctica y las métricas utilizadas para comparar modelos, destacando sus ventajas y limitaciones.
-
-## Métodos automáticos
-
-Los métodos automáticos de selección de variables son herramientas prácticas y eficientes diseñadas para identificar subconjuntos relevantes de predictores en un modelo de regresión. A diferencia de los métodos de selección directa, que exploran exhaustivamente todas las combinaciones posibles de variables, los métodos automáticos siguen un enfoque iterativo que simplifica el proceso de selección. Estos métodos son especialmente útiles en situaciones donde el número de predictores es elevado, ya que reducen significativamente el esfuerzo computacional.
-
-El principio clave detrás de los métodos automáticos es el ajuste dinámico del conjunto de variables en función de criterios estadísticos, como $p$-valores, coeficientes de determinación ajustados ($R^2$) ajustado), o criterios de información como AIC y BIC. Entre las estrategias más comunes se encuentran:
-
--   **Método Forward (selección progresiva):** Parte de un modelo vacío e incorpora variables de manera secuencial, añadiendo en cada paso la variable que mejora más el modelo.
-
--   **Método Backward (eliminación regresiva):** Comienza con todas las variables en el modelo y elimina iterativamente aquellas que tienen menor impacto.
-
--   **Método Stepwise:** Combina las estrategias forward y backward, permitiendo tanto la inclusión como la exclusión de variables en cada iteración.
-
-Estos métodos ofrecen una manera estructurada y ágil de seleccionar variables, aunque no garantizan encontrar el mejor modelo global debido a su naturaleza secuencial. A lo largo de esta sección, examinaremos cada uno de estos métodos, sus ventajas, limitaciones y aplicaciones en diferentes contextos de análisis.
-
-## Métodos basados en regularización
-
-En los modelos de regresión, especialmente cuando se trabaja con un gran número de variables predictoras o con datos multicolineales, los métodos tradicionales de selección de variables pueden resultar ineficaces o inestables. En estos casos, los métodos basados en regularización surgen como una alternativa poderosa que no solo selecciona variables, sino que también mejora la estabilidad y la precisión del modelo.
-
-La regularización consiste en introducir una penalización en la función de ajuste del modelo, lo que tiene dos efectos principales: controlar el sobreajuste al reducir la complejidad del modelo y forzar la selección de un subconjunto más parsimonioso de predictores. Estas penalizaciones ajustan los coeficientes de las variables predictoras, favoreciendo soluciones más simples y robustas [@james2013introduction].
-
-Entre los métodos de regularización más destacados se encuentran:
-
--   **Ridge Regression:** Aplica una penalización proporcional al cuadrado de los coeficientes, lo que permite manejar problemas de multicolinealidad pero no conduce a la eliminación completa de variables.
--   **Lasso (Least Absolute Shrinkage and Selection Operator):** Introduce una penalización basada en el valor absoluto de los coeficientes, lo que no solo reduce su magnitud, sino que también puede anularlos completamente, realizando una selección automática de variables.
--   **Elastic Net:** Combina las penalizaciones de Ridge y Lasso, ofreciendo mayor flexibilidad en situaciones donde hay una gran correlación entre los predictores.
-
-Estos métodos son especialmente útiles en problemas donde el número de variables predictoras excede el número de observaciones, o cuando se desea un modelo más interpretable. En esta sección, exploraremos en detalle los fundamentos teóricos, la implementación práctica y las aplicaciones de cada uno de estos métodos, destacando sus ventajas en escenarios complejos y desafiantes.
-
-### Ridge regression
-
-La regresión Ridge introduce una penalización en la estimación de los coeficientes de regresión, lo que ayuda a reducir la varianza del modelo y mejora su capacidad predictiva en presencia de datos altamente correlacionados o con muchas variables [@marquardt1975ridge]. El modelo de regresión Ridge es una extensión de la regresión lineal estándar. Dado un conjunto de datos con $n$ observaciones y $p$ predictores, expresamos el modelo de regresión lineal múltiple como:
-
-$$
-\mathbf{Y}= \mathbf{X} \beta + \boldsymbol{\varepsilon}
-$$
+$$\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$$
 
 donde:
 
--   $\mathbf{Y}$ es el vector de respuesta de dimensión $n \times 1$.
--   $\mathbf{X}$ es la matriz de diseño de dimensión $n \times p$.
--   $\beta$ es el vector de coeficientes de regresión de dimensión $p \times 1$.
--   $\boldsymbol{\varepsilon}$ es el vector de errores aleatorios.
+$$\mathbf{y} = \begin{bmatrix} Y_1 \\ Y_2 \\ \vdots \\ Y_n \end{bmatrix}, \quad
+\mathbf{X} = \begin{bmatrix} 
+1 & X_{11} & X_{12} & \cdots & X_{1p} \\
+1 & X_{21} & X_{22} & \cdots & X_{2p} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+1 & X_{n1} & X_{n2} & \cdots & X_{np}
+\end{bmatrix}$$
 
-En mínimos cuadrados ordinarios (OLS), los coeficientes se estiman minimizando la suma de los errores al cuadrado:
+$$\boldsymbol{\beta} = \begin{bmatrix} \beta_0 \\ \beta_1 \\ \vdots \\ \beta_p \end{bmatrix}, \quad
+\boldsymbol{\varepsilon} = \begin{bmatrix} \varepsilon_1 \\ \varepsilon_2 \\ \vdots \\ \varepsilon_n \end{bmatrix}$$
 
-$$
-SSE = \sum_{i=1}^{n} (Y_i - \hat{Y}_i)^2 = \| \mathbf{Y} - \mathbf{X} \beta \|^2.
-$$
+La matriz $\mathbf{X}$ es de dimensión $n \times (p+1)$ y se denomina **matriz de diseño**.
 
-Sin embargo, cuando hay multicolinealidad, la matriz $X^T X$ puede ser casi singular, generando coeficientes inestables. Para evitar esto, la regresión Ridge añade un **término de penalización** $\lambda$, de la siguiente manera:
+### Supuestos fundamentales del modelo
 
-$$
-SSE_{ridge} = \| \mathbf{Y} - \mathbf{X} \beta \|^2 + \lambda \sum_{j=1}^{p} \beta_j^2.
-$$
+Los supuestos del modelo de regresión lineal múltiple, conocidos como **condiciones de Gauss-Markov**, son:
 
-Este término adicional, es un **término de penalización** ($L_2=\sum \beta_j^2$) impone una restricción sobre los coeficientes, evitando que tomen valores excesivamente grandes. La estimación de $\beta$ en Ridge se obtiene resolviendo:
+#### **Supuesto 1: Linealidad**
+$$E[\mathbf{y}|\mathbf{X}] = \mathbf{X}\boldsymbol{\beta}$$
 
-$$
-\hat{\beta}_{ridge} = (\mathbf{X}^T \mathbf{X} + \lambda I)^{-1} \mathbf{X}^T \mathbf{Y}.
-$$
+La esperanza condicional de $\mathbf{y}$ es una función lineal de los parámetros $\boldsymbol{\beta}$.
 
-donde $I$ es la matriz identidad y $\lambda \geq 0$ es un hiperparámetro que controla la cantidad de penalización aplicada.
+#### **Supuesto 2: Independencia**
+$$E[\varepsilon_i \varepsilon_j] = 0, \quad \forall i \neq j$$
 
-**Interpretación del parámetro** $\lambda$
+Los errores son no correlacionados entre observaciones.
 
--   Si $\lambda = 0$, el modelo Ridge es equivalente a la regresión lineal tradicional (OLS).
--   A medida que $\lambda$ aumenta, los coeficientes $\beta_j$ se reducen en magnitud, lo que ayuda a controlar la varianza del modelo y a prevenir el sobreajuste.
--   Si $\lambda$ es demasiado grande, los coeficientes se acercan a cero y el modelo puede perder interpretabilidad.
+#### **Supuesto 3: Homocedasticidad**
+$$\text{Var}(\varepsilon_i) = \sigma^2, \quad \forall i = 1, 2, ..., n$$
 
-La elección óptima de $\lambda$ se determina generalmente mediante **validación cruzada**.
+La varianza del error es constante para todas las observaciones.
 
-::: {.callout-caution title="Aviso"}
-Los detalles de la validación cruzada son tratados en la asignatura de Aprendizaje Automático.
-:::
+#### **Supuesto 4: Media nula**
+$$E[\varepsilon_i] = 0, \quad \forall i = 1, 2, ..., n$$
 
-::: {.callout-note title="Propiedades Clave" collapse="false"}
--   **Manejo de la multicolinealidad:** La regularización reduce la sensibilidad del modelo cuando los predictores están altamente correlacionados.
+Los errores tienen esperanza cero.
 
--   **Menor varianza en las predicciones:** El modelo Ridge tiende a ser más estable en comparación con OLS, lo que mejora la capacidad de generalización en conjuntos de datos nuevos.
+#### **Supuesto 5: Rango completo**
+$$\text{rango}(\mathbf{X}) = p + 1 < n$$
 
--   **No realiza selección de variables:** A diferencia de Lasso, Ridge **no anula coeficientes**, sino que reduce su magnitud. Esto es útil cuando se sospecha que todas las variables tienen algún grado de importancia en el modelo.
-:::
+La matriz $\mathbf{X}$ tiene rango completo (no hay multicolinealidad perfecta).
 
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r ridge}
-# Cargar librerías
-library(glmnet)
+**Formulación matricial conjunta:**
+$$E[\boldsymbol{\varepsilon}] = \mathbf{0}, \quad \text{Var}(\boldsymbol{\varepsilon}) = \sigma^2 \mathbf{I}_n$$
 
-# Datos simulados
+#### **Supuesto adicional para inferencia:**
+
+**Normalidad**: 
+$$\boldsymbol{\varepsilon} \sim N(\mathbf{0}, \sigma^2 \mathbf{I}_n)$$
+
+Este supuesto no es necesario para las propiedades BLUE de los estimadores, pero sí para la inferencia estadística exacta.
+
+### Geometría de la regresión múltiple
+
+#### **Espacios vectoriales**
+
+En regresión múltiple, trabajamos en el espacio $\mathbb{R}^n$:
+
+- El vector de observaciones $\mathbf{y} \in \mathbb{R}^n$
+- Cada columna de $\mathbf{X}$ (incluyendo el vector de unos) genera un subespacio
+- El **espacio columna** de $\mathbf{X}$, denotado $C(\mathbf{X})$, es el subespacio generado por las columnas de $\mathbf{X}$
+
+#### **Proyección ortogonal**
+
+El vector de valores ajustados $\hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol{\beta}}$ es la **proyección ortogonal** de $\mathbf{y}$ sobre $C(\mathbf{X})$:
+
+$$\hat{\mathbf{y}} = \text{Proj}_{C(\mathbf{X})} \mathbf{y}$$
+
+La matriz de proyección es:
+$$\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$$
+
+con las propiedades:
+- $\mathbf{H}\mathbf{H} = \mathbf{H}$ (idempotente)
+- $\mathbf{H}^T = \mathbf{H}$ (simétrica)
+- $\text{traza}(\mathbf{H}) = p + 1$ (número de parámetros)
+
+#### **Descomposición ortogonal**
+
+$$\mathbf{y} = \hat{\mathbf{y}} + \mathbf{e} = \mathbf{H}\mathbf{y} + (\mathbf{I}_n - \mathbf{H})\mathbf{y}$$
+
+donde $\mathbf{e} = \mathbf{y} - \hat{\mathbf{y}}$ es el vector de residuos, y se cumple:
+
+$$\hat{\mathbf{y}}^T \mathbf{e} = 0$$
+
+Esta ortogonalidad es fundamental para el Teorema de Pitágoras en regresión.
+
+## Estimación de parámetros {#sec-estimacion-parametros}
+
+### Derivación de los estimadores de mínimos cuadrados
+
+#### **Función objetivo**
+
+Buscamos minimizar la suma de cuadrados de errores:
+
+$$SSE(\boldsymbol{\beta}) = \sum_{i=1}^n (Y_i - \beta_0 - \beta_1 X_{i1} - ... - \beta_p X_{ip})^2$$
+
+En notación matricial:
+$$SSE(\boldsymbol{\beta}) = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^T(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})$$
+
+#### **Desarrollo de la función objetivo**
+
+Expandiendo:
+\begin{align}
+SSE(\boldsymbol{\beta}) &= \mathbf{y}^T\mathbf{y} - \boldsymbol{\beta}^T\mathbf{X}^T\mathbf{y} - \mathbf{y}^T\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\beta}^T\mathbf{X}^T\mathbf{X}\boldsymbol{\beta}\\
+&= \mathbf{y}^T\mathbf{y} - 2\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{y} + \boldsymbol{\beta}^T\mathbf{X}^T\mathbf{X}\boldsymbol{\beta}
+\end{align}
+
+#### **Condiciones de primer orden**
+
+Derivando respecto a $\boldsymbol{\beta}$ e igualando a cero:
+
+$$\frac{\partial SSE}{\partial \boldsymbol{\beta}} = -2\mathbf{X}^T\mathbf{y} + 2\mathbf{X}^T\mathbf{X}\boldsymbol{\beta} = \mathbf{0}$$
+
+#### **Ecuaciones normales**
+
+$$\mathbf{X}^T\mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{X}^T\mathbf{y}$$
+
+Si $\mathbf{X}^T\mathbf{X}$ es no singular (rango completo), la solución única es:
+
+$$\boxed{\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}}$$
+
+#### **Condiciones de segundo orden**
+
+La matriz Hessiana es:
+$$\frac{\partial^2 SSE}{\partial \boldsymbol{\beta} \partial \boldsymbol{\beta}^T} = 2\mathbf{X}^T\mathbf{X}$$
+
+Como $\mathbf{X}^T\mathbf{X}$ es positiva definida (bajo el supuesto de rango completo), $\hat{\boldsymbol{\beta}}$ es efectivamente un mínimo global.
+
+### Propiedades de los estimadores
+
+#### **Teorema de Gauss-Markov**
+
+**Enunciado**: Bajo los supuestos 1-5, los estimadores de mínimos cuadrados $\hat{\boldsymbol{\beta}}$ son BLUE (Best Linear Unbiased Estimators).
+
+**Demostración de insesgadez:**
+
+\begin{align}
+E[\hat{\boldsymbol{\beta}}] &= E[(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}]\\
+&= E[(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T(\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon})]\\
+&= (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\boldsymbol{\beta} + (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T E[\boldsymbol{\varepsilon}]\\
+&= \boldsymbol{\beta}
+\end{align}
+
+**Matriz de varianzas-covarianzas:**
+
+\begin{align}
+\text{Var}(\hat{\boldsymbol{\beta}}) &= \text{Var}[(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}]\\
+&= (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T \text{Var}(\mathbf{y}) \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\\
+&= (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T (\sigma^2 \mathbf{I}_n) \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\\
+&= \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}
+\end{align}
+
+Por tanto: $$\boxed{\text{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}}$$
+
+#### **Distribución de los estimadores**
+
+Bajo el supuesto de normalidad:
+
+$$\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^T\mathbf{X})^{-1})$$
+
+**Corolario**: Para cada coeficiente individual:
+$$\hat{\beta}_j \sim N\left(\beta_j, \sigma^2 [(\mathbf{X}^T\mathbf{X})^{-1}]_{jj}\right)$$
+
+### Estimación de la varianza del error
+
+#### **Suma de cuadrados de errores**
+
+$$SSE = \mathbf{e}^T\mathbf{e} = (\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}})^T(\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}})$$
+
+Usando $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$ y $\mathbf{e} = (\mathbf{I}_n - \mathbf{H})\mathbf{y}$:
+
+$$SSE = \mathbf{y}^T(\mathbf{I}_n - \mathbf{H})\mathbf{y}$$
+
+#### **Esperanza de SSE**
+
+**Lema**: $E[\mathbf{y}^T\mathbf{A}\mathbf{y}] = \text{traza}(\mathbf{A}\boldsymbol{\Sigma}) + \boldsymbol{\mu}^T\mathbf{A}\boldsymbol{\mu}$
+
+Para nuestro caso, con $\mathbf{A} = \mathbf{I}_n - \mathbf{H}$, $\boldsymbol{\Sigma} = \sigma^2\mathbf{I}_n$, y $\boldsymbol{\mu} = \mathbf{X}\boldsymbol{\beta}$:
+
+\begin{align}
+E[SSE] &= \text{traza}[(\mathbf{I}_n - \mathbf{H})\sigma^2\mathbf{I}_n] + \boldsymbol{\beta}^T\mathbf{X}^T(\mathbf{I}_n - \mathbf{H})\mathbf{X}\boldsymbol{\beta}\\
+&= \sigma^2 \text{traza}(\mathbf{I}_n - \mathbf{H}) + 0\\
+&= \sigma^2 (n - p - 1)
+\end{align}
+
+#### **Estimador insesgado de σ²**
+
+$$\boxed{\hat{\sigma}^2 = \frac{SSE}{n - p - 1} = \frac{\mathbf{e}^T\mathbf{e}}{n - p - 1}}$$
+
+**Distribución**: Bajo normalidad,
+$$\frac{SSE}{\sigma^2} \sim \chi^2_{n-p-1}$$
+
+#### **Error estándar de los coeficientes**
+
+$$\text{se}(\hat{\beta}_j) = \sqrt{\hat{\sigma}^2 [(\mathbf{X}^T\mathbf{X})^{-1}]_{jj}}$$
+
+### Interpretación de coeficientes en regresión múltiple
+
+#### **Concepto fundamental**
+
+En regresión múltiple, cada coeficiente $\beta_j$ representa:
+
+> **El cambio esperado en $Y$ por unidad de cambio en $X_j$, manteniendo todas las demás variables predictoras constantes.**
+
+Matemáticamente:
+$$\beta_j = \frac{\partial E[Y|\mathbf{X}]}{\partial X_j}$$
+
+#### **Diferencia con correlaciones simples**
+
+El coeficiente de regresión múltiple $\hat{\beta}_j$ es **diferente** del coeficiente de regresión simple de $Y$ sobre $X_j$:
+
+- **Regresión simple**: $\hat{\beta}_j^{(simple)} = \frac{\text{Cov}(Y, X_j)}{\text{Var}(X_j)}$
+- **Regresión múltiple**: $\hat{\beta}_j$ está "ajustado" por las demás variables
+
+#### **Relación con correlaciones parciales**
+
+El coeficiente de regresión múltiple está relacionado con la **correlación parcial**:
+
+$$r_{Y,X_j|X_{-j}} = \text{corr}(Y, X_j | X_1, ..., X_{j-1}, X_{j+1}, ..., X_p)$$
+
+Esta es la correlación entre $Y$ y $X_j$ después de eliminar el efecto de las demás variables.
+
+### Propiedades de los residuos y valores ajustados
+
+#### **Propiedades de los residuos**
+
+Los residuos $\mathbf{e} = \mathbf{y} - \hat{\mathbf{y}}$ satisfacen:
+
+1. **Suma cero**: $\sum_{i=1}^n e_i = \mathbf{1}^T\mathbf{e} = 0$
+2. **Ortogonalidad con predictores**: $\mathbf{X}^T\mathbf{e} = \mathbf{0}$
+3. **Ortogonalidad con valores ajustados**: $\hat{\mathbf{y}}^T\mathbf{e} = 0$
+
+#### **Propiedades de los valores ajustados**
+
+Los valores ajustados $\hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol{\beta}}$ satisfacen:
+
+1. **Media**: $E[\hat{Y}_i] = E[Y_i] = \mathbf{x}_i^T\boldsymbol{\beta}$
+2. **Varianza**: $\text{Var}(\hat{Y}_i) = \sigma^2 \mathbf{h}_{ii}$ donde $\mathbf{h}_{ii} = \mathbf{x}_i^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_i$
+3. **Covarianza con residuos**: $\text{Cov}(\hat{Y}_i, e_i) = 0$
+
+#### **Descomposición de varianza**
+
+**Teorema de Pitágoras en regresión**:
+$$\|\mathbf{y}\|^2 = \|\hat{\mathbf{y}}\|^2 + \|\mathbf{e}\|^2$$
+
+En términos de sumas de cuadrados:
+$$\sum_{i=1}^n (Y_i - \bar{Y})^2 = \sum_{i=1}^n (\hat{Y}_i - \bar{Y})^2 + \sum_{i=1}^n e_i^2$$
+
+$$\boxed{SST = SSR + SSE}$$
+
+donde:
+- $SST = \sum_{i=1}^n (Y_i - \bar{Y})^2$ (suma total de cuadrados)
+- $SSR = \sum_{i=1}^n (\hat{Y}_i - \bar{Y})^2$ (suma de cuadrados de la regresión)
+- $SSE = \sum_{i=1}^n e_i^2$ (suma de cuadrados del error)
+
+### Inferencia estadística
+
+#### **Distribuciones para inferencia**
+
+Bajo normalidad:
+
+1. **Coeficientes individuales**:
+   $$\frac{\hat{\beta}_j - \beta_j}{\text{se}(\hat{\beta}_j)} \sim t_{n-p-1}$$
+
+2. **Combinaciones lineales**:
+   $$\frac{\mathbf{c}^T\hat{\boldsymbol{\beta}} - \mathbf{c}^T\boldsymbol{\beta}}}{\sqrt{\hat{\sigma}^2 \mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}}} \sim t_{n-p-1}$$
+
+3. **Pruebas F**:
+   $$\frac{(\mathbf{L}\hat{\boldsymbol{\beta}} - \mathbf{c})^T[\mathbf{L}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{L}^T]^{-1}(\mathbf{L}\hat{\boldsymbol{\beta}} - \mathbf{c})/q}{\hat{\sigma}^2} \sim F_{q, n-p-1}$$
+
+#### **Coeficiente de determinación múltiple**
+
+$$R^2 = \frac{SSR}{SST} = 1 - \frac{SSE}{SST}$$
+
+**Propiedades**:
+- $0 \leq R^2 \leq 1$
+- $R^2$ nunca decrece al agregar variables
+- $R^2 = \text{corr}^2(\mathbf{y}, \hat{\mathbf{y}})$
+
+**R² ajustado**:
+$$R^2_{adj} = 1 - \frac{SSE/(n-p-1)}{SST/(n-1)} = 1 - \frac{\hat{\sigma}^2}{s_Y^2}$$
+
+donde $s_Y^2 = SST/(n-1)$ es la varianza muestral de $Y$.
+
+-   **Insesgadez**: $E[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta}$
+-   **Varianza mínima**: Entre todos los estimadores lineales insesgados
+-   **Matriz de varianzas-covarianzas**:
+    $\text{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$
+
+## Ejemplo práctico: Datos de viviendas {#sec-ejemplo-practico}
+
+Vamos a desarrollar un ejemplo completo usando datos de precios de
+viviendas, que nos permitirá ilustrar todos los conceptos del capítulo.
+
+```{r}
+#| warning: false
+#| message: false
+# Configuración inicial
+suppressPackageStartupMessages({
+  library(ggplot2)
+  library(dplyr)
+  library(broom)
+  library(car)
+  library(corrplot)
+  library(gridExtra)
+})
+
+# Crear datos simulados realistas de precios de viviendas
 set.seed(123)
-X <- matrix(rnorm(100 * 10), 100, 10)  # 100 observaciones, 10 predictores
-Y <- X %*% rnorm(10) + rnorm(100)  # Variable de respuesta con ruido
+n <- 200
 
-# Ajustar modelo Ridge
-modelo_ridge <- glmnet(X, Y, alpha = 0)  # alpha = 0 indica regresión Ridge
+# Variables predictoras
+superficie <- rnorm(n, 120, 30)  # m2
+habitaciones <- round(2 + 0.02*superficie + rnorm(n, 0, 0.8))  # número
+antiguedad <- sample(0:50, n, replace = TRUE)  # años
+distancia_centro <- runif(n, 1, 25)  # km
+garaje <- rbinom(n, 1, 0.6)  # 0/1
 
-# Seleccionar lambda óptimo con validación cruzada
-cv_ridge <- cv.glmnet(X, Y, alpha = 0)
-lambda_optimo <- cv_ridge$lambda.min  # Mejor valor de lambda
+# Variable respuesta con relaciones realistas
+precio <- 50000 + 
+  1200*superficie + 
+  15000*habitaciones - 
+  800*antiguedad - 
+  2000*distancia_centro + 
+  25000*garaje + 
+  rnorm(n, 0, 15000)
 
-print(lambda_optimo)
+# Crear data frame
+viviendas <- data.frame(
+  precio = round(precio),
+  superficie = round(superficie),
+  habitaciones = pmax(1, habitaciones),  # mínimo 1 habitación
+  antiguedad = antiguedad,
+  distancia_centro = round(distancia_centro, 1),
+  garaje = factor(garaje, labels = c("No", "Sí"))
+)
 
-# Ajustar modelo final con lambda óptimo
-modelo_ridge_final <- glmnet(X, Y, alpha = 0, lambda = lambda_optimo)
-
-modelo_ridge_final
-
-# Comparación modelo clásico
-
-modelo_lm <- lm(Y~X)
-
-# Mostrar coeficientes
-output=cbind(round(coef(modelo_ridge_final),3),
-            round(coef(modelo_lm),3))
-
-colnames(output)=c("RIDGE","OLS")
-
-output
-
+# Mostrar las primeras observaciones
+head(viviendas)
 ```
-:::
 
-------------------------------------------------------------------------
+```{r}
+#| fig-cap: "Matriz de correlaciones entre variables numéricas del dataset de viviendas"
+# Exploración inicial: matriz de correlaciones
+viviendas_num <- viviendas %>% 
+  select(-garaje) %>%
+  mutate(garaje_num = as.numeric(viviendas$garaje) - 1)
 
-La regresión Ridge es una técnica poderosa para mejorar la estabilidad de los modelos de regresión en presencia de multicolinealidad. A diferencia de OLS, que puede generar coeficientes inestables, Ridge introduce una penalización que reduce la magnitud de los coeficientes, evitando valores extremos. Aunque Ridge no realiza selección de variables, su capacidad para reducir la varianza y mejorar la capacidad predictiva lo convierte en una herramienta esencial en el análisis de datos modernos.
-
-En la siguiente sección, exploraremos la **regresión Lasso**, que extiende este concepto permitiendo la eliminación de variables irrelevantes del modelo.
-
-### Regresión Lasso
-
-Cuando se tiene un conjunto de predictores con posibles redundancias o ruido, Lasso permite identificar cuáles son las variables más relevantes para el modelo, lo que facilita la interpretación y reduce la complejidad del análisis.
-
-Al igual que ocurría en Ridge Regression, el modelo de regresión Lasso se basa en la minimización de la siguiente función de error [@ranstam2018lasso]: $$
-SSE_{lasso} = \| \mathbf{Y}- \mathbf{X} \beta \|^2 + \lambda \sum_{j=1}^{p} |\beta_j|
-$$
-
-donde el **término de penalización**, ($L_1=\sum |\beta_j|$) hace que algunos coeficientes se reduzcan exactamente a **cero**, lo que significa que esas variables son eliminadas del modelo.
-
-La diferencia clave con **Ridge Regressión**, visto anteriormente, es que Ridge reduce la magnitud de los coeficientes pero no los anula, mientras que **Lasso puede eliminar variables por completo**.
-
-**Interpretación del parámetro** $\lambda$
-
--   Si $\lambda = 0$, el modelo es equivalente a la regresión lineal tradicional (OLS).
--   A medida que $\lambda$ aumenta, más coeficientes se reducen a cero, lo que equivale a realizar **selección de variables**.
--   Si $\lambda$ es demasiado grande, se eliminan demasiadas variables, lo que puede resultar en un modelo subóptimo.
-
-Al igual que en el método *Risge*, la selección óptima de $\lambda$ se realiza generalmente mediante **validación cruzada**.
-
-------------------------------------------------------------------------
-
-::: {.callout-note title="Propiedades Clave" collapse="false"}
--   **Selección de variables automática:** Lasso no solo regulariza, sino que también selecciona las variables más importantes eliminando aquellas menos relevantes.
--   **Manejo de la multicolinealidad:** Puede mejorar la interpretación del modelo cuando hay muchas variables correlacionadas.
--   **Simplicidad y interpretabilidad:** Un modelo con menos variables es más fácil de interpretar y aplicar en la práctica.
--   **Reduce el sobreajuste:** La penalización $L_1$ evita que el modelo se ajuste demasiado a los datos de entrenamiento, mejorando su capacidad predictiva en datos nuevos.
-:::
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r lasso}
-
-# Ajustar modelo Lasso
-modelo_lasso <- glmnet(X, Y, alpha = 1)  # alpha = 1 indica regresión Lasso
-
-# Seleccionar lambda óptimo con validación cruzada
-cv_lasso <- cv.glmnet(X, Y, alpha = 1)
-lambda_optimo <- cv_lasso$lambda.min  # Mejor valor de lambda
-
-print(lambda_optimo)
-
-# Ajustar modelo final con lambda óptimo
-modelo_lasso_final <- glmnet(X, Y, alpha = 1, lambda = lambda_optimo)
-
-
-# Mostrar coeficientes
-output=cbind(round(coef(modelo_lasso_final),3),output)
-
-colnames(output)=c("LASSO","RIDGE","OLS")
-
-output
-
-
+cor_matrix <- cor(viviendas_num)
+corrplot(cor_matrix, method = "color", type = "upper", 
+         addCoef.col = "black", tl.cex = 0.8, number.cex = 0.8)
 ```
-:::
 
-**Consideraciones Importantes**
+### Modelo múltiple inicial
 
-La regresión Lasso es una poderosa técnica de regularización que no solo mejora la estabilidad del modelo en presencia de muchas variables predictoras, sino que también realiza una selección automática de las más relevantes. Su capacidad para reducir coeficientes a cero la convierte en una herramienta esencial en el análisis de datos de alta dimensión.
+Comenzamos ajustando un modelo que incluye todas las variables
+disponibles:
 
--   **Lasso puede eliminar demasiadas variables si** $\lambda$ es demasiado grande, lo que puede llevar a la pérdida de información importante.
--   **No maneja bien grupos de predictores altamente correlacionados**, ya que selecciona solo uno de ellos y elimina los demás.
--   **Elastic Net**, que combina Ridge y Lasso, puede ser una mejor opción cuando hay **multicolinealidad fuerte** en los datos.
+```{r}
+# Modelo múltiple completo
+modelo_completo <- lm(precio ~ superficie + habitaciones + antiguedad + 
+                      distancia_centro + garaje, data = viviendas)
 
-En la siguiente sección, exploraremos **Elastic Net**, una técnica híbrida que combina las ventajas de Ridge y Lasso para mejorar la selección de variables en presencia de predictores altamente correlacionados.
-
-### Elastic Net
-
-La regresión **Elastic Net** es una técnica de regularización que combina las propiedades de **Ridge** y **Lasso**, abordando algunas de sus limitaciones individuales [@zou2005regularization]. Mientras que Ridge es útil para manejar la multicolinealidad sin eliminar variables y Lasso selecciona un subconjunto de predictores, Elastic Net equilibra ambos enfoques permitiendo la selección de variables en presencia de alta correlación entre los predictores.
-
-Este método es particularmente efectivo cuando el número de predictores es grande y existe **multicolinealidad**, ya que permite controlar simultáneamente la **reducción de la magnitud de los coeficientes** y la **eliminación de variables irrelevantes**.
-
-Elastic Net introduce una penalización que combina los términos de Ridge ($L_2$) y Lasso ($L_1$):
-
-$$
-SSE_{\text{Elastic Net}} = \| Y - X \beta \|^2 + \lambda_1 \sum_{j=1}^{p} |\beta_j| + \lambda_2 \sum_{j=1}^{p} \beta_j^2
-$$
-
-donde:
-
--   $\lambda_1$ (asociado a Lasso) controla la cantidad de coeficientes que se reducen a **cero**.
--   $\lambda_2$ (asociado a Ridge) controla la **reducción de magnitud** de los coeficientes sin anularlos.
--   $\alpha$ es un parámetro adicional que pondera la combinación entre Lasso y Ridge, con:
-    -   $\alpha = 1$ → Elastic Net se comporta como Lasso.
-    -   $\alpha = 0$ → Elastic Net se comporta como Ridge.
-    -   $0 < \alpha < 1$ → Elastic Net combina ambos métodos.
-
-La estimación de los coeficientes en Elastic Net se obtiene resolviendo:
-
-$$
-\hat{\beta}_{\text{Elastic Net}} = \arg \min_{\beta} \left( \| Y - X \beta \|^2 + \lambda \left( \alpha \sum |\beta_j| + (1 - \alpha) \sum \beta_j^2 \right) \right)
-$$
-
-------------------------------------------------------------------------
-
-::: {.callout-note title="Propiedades Clave" collapse="false"}
--   **Manejo de la Multicolinealidad:** A diferencia de Lasso, que selecciona solo una de las variables correlacionadas y elimina las demás, Elastic Net distribuye la penalización entre todas las variables correlacionadas, evitando una selección arbitraria.
-
--   **Selección de variables más estable:** La combinación de Lasso y Ridge permite una selección más robusta, manteniendo información relevante del modelo sin eliminar predictores clave.
-
--   **Mejora del rendimiento predictivo:** Al utilizar validación cruzada para seleccionar los hiperparámetros $\lambda_1$, $\lambda_2$ y $\alpha$, se optimiza la capacidad del modelo para generalizar a nuevos datos.
-:::
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r elastic}
-
-# Ajustar modelo Elastic Net
-modelo_elastic_net <- glmnet(X, Y, alpha = 0.5)  # Alpha = 0.5 (50% Ridge, 50% Lasso)
-
-# Seleccionar lambda óptimo con validación cruzada
-cv_elastic_net <- cv.glmnet(X, Y, alpha = 0.5)
-lambda_optimo <- cv_elastic_net$lambda.min  # Mejor valor de lambda
-
-print(lambda_optimo)
-# Ajustar modelo final con lambda óptimo
-modelo_elastic_final <- glmnet(X, Y, alpha = 0.5, lambda = lambda_optimo)
-
-# Mostrar coeficientes
-output=cbind(round(coef(modelo_elastic_final),3),output)
-
-colnames(output)=c("ELASTIC","LASSO","RIDGE","OLS")
-
-output
+summary(modelo_completo)
 ```
+
+### Interpretación de coeficientes
+
+Analicemos la interpretación de cada coeficiente:
+
+```{r}
+# Extraer coeficientes con intervalos de confianza
+coef_tabla <- tidy(modelo_completo, conf.int = TRUE) %>%
+  mutate(
+    estimate = round(estimate, 0),
+    std.error = round(std.error, 0),
+    conf.low = round(conf.low, 0),
+    conf.high = round(conf.high, 0)
+  )
+
+print(coef_tabla)
+```
+
+**Interpretación:**
+
+-   **Superficie**: Por cada m² adicional, el precio aumenta en promedio
+    `r round(coef(modelo_completo)[2], 0)` euros, manteniendo constantes
+    las demás variables.
+-   **Habitaciones**: Cada habitación adicional incrementa el precio en
+    `r round(coef(modelo_completo)[3], 0)` euros en promedio, ceteris
+    paribus.
+-   **Antigüedad**: Por cada año de antigüedad, el precio disminuye en
+    `r abs(round(coef(modelo_completo)[4], 0))` euros en promedio.
+-   **Distancia al centro**: Cada km adicional de distancia reduce el
+    precio en `r abs(round(coef(modelo_completo)[5], 0))` euros en
+    promedio.
+-   **Garaje**: Las viviendas con garaje cuestan
+    `r round(coef(modelo_completo)[6], 0)` euros más que las que no
+    tienen, en promedio.
+
+## Transformaciones de variables {#sec-transformaciones-variables}
+
+Las transformaciones nos permiten capturar relaciones no lineales entre
+las variables manteniendo la estructura del modelo lineal. Las
+transformaciones más comunes incluyen logarítmicas, polinomiales, y de
+raíz cuadrada.
+
+### Transformación logarítmica
+
+La transformación logarítmica es útil cuando esperamos efectos
+multiplicativos o cuando la variabilidad de la respuesta aumenta con su
+nivel:
+
+```{r}
+#| fig-cap: "Comparación entre modelo lineal y logarítmico para la relación precio-superficie"
+# Modelo con transformación logarítmica del precio
+modelo_log <- lm(log(precio) ~ superficie + habitaciones + antiguedad + 
+                 distancia_centro + garaje, data = viviendas)
+
+# Comparación gráfica
+p1 <- ggplot(viviendas, aes(x = superficie, y = precio)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  labs(title = "Modelo Lineal", y = "Precio (euros)") +
+  theme_minimal()
+
+p2 <- ggplot(viviendas, aes(x = superficie, y = log(precio))) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  labs(title = "Modelo Logarítmico", y = "log(Precio)") +
+  theme_minimal()
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+### Transformación polinomial
+
+Los términos polinomiales capturan relaciones curvilíneas:
+
+```{r}
+# Modelo con término cuadrático para superficie
+modelo_poly <- lm(precio ~ superficie + I(superficie^2) + habitaciones + 
+                  antiguedad + distancia_centro + garaje, data = viviendas)
+
+summary(modelo_poly)$coefficients
+```
+
+```{r}
+#| fig-cap: "Efecto cuadrático de la superficie sobre el precio"
+# Visualización del efecto polinomial
+superficie_seq <- seq(min(viviendas$superficie), max(viviendas$superficie), length.out = 100)
+pred_data <- data.frame(
+  superficie = superficie_seq,
+  habitaciones = mean(viviendas$habitaciones),
+  antiguedad = mean(viviendas$antiguedad),
+  distancia_centro = mean(viviendas$distancia_centro),
+  garaje = "No"
+)
+
+pred_data$precio_pred <- predict(modelo_poly, pred_data)
+
+ggplot() +
+  geom_point(data = viviendas, aes(x = superficie, y = precio), alpha = 0.6) +
+  geom_line(data = pred_data, aes(x = superficie, y = precio_pred), 
+            color = "red", size = 1.2) +
+  labs(title = "Modelo con término cuadrático",
+       x = "Superficie (m²)", y = "Precio (euros)") +
+  theme_minimal()
+```
+
+### Transformación de variables predictoras
+
+También podemos transformar las variables predictoras:
+
+```{r}
+# Modelo con transformación logarítmica de distancia
+modelo_log_dist <- lm(precio ~ superficie + habitaciones + antiguedad + 
+                      log(distancia_centro + 1) + garaje, data = viviendas)
+
+# Comparar modelos
+AIC(modelo_completo, modelo_log, modelo_poly, modelo_log_dist)
+```
+
+## Interacciones entre variables {#sec-interacciones}
+
+Las interacciones permiten que el efecto de una variable predictora
+dependa del nivel de otra variable. Son especialmente importantes cuando
+las variables actúan de manera sinérgica.
+
+### Concepto de interacción
+
+Una interacción entre $X_1$ y $X_2$ se modela como:
+
+$$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1 X_2 + \varepsilon$$
+
+El coeficiente $\beta_3$ representa el **cambio adicional** en el efecto
+de $X_1$ por unidad de cambio en $X_2$.
+
+### Interacción entre variables continuas
+
+```{r}
+# Modelo con interacción superficie × habitaciones
+modelo_interaccion <- lm(precio ~ superficie * habitaciones + antiguedad + 
+                         distancia_centro + garaje, data = viviendas)
+
+summary(modelo_interaccion)$coefficients
+```
+
+### Interacción entre variable continua y categórica
+
+```{r}
+# Modelo con interacción superficie × garaje
+modelo_int_garaje <- lm(precio ~ superficie * garaje + habitaciones + 
+                        antiguedad + distancia_centro, data = viviendas)
+
+summary(modelo_int_garaje)
+```
+
+```{r}
+#| fig-cap: "Interacción entre superficie y presencia de garaje"
+# Visualización de la interacción
+ggplot(viviendas, aes(x = superficie, y = precio, color = garaje)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE, formula = y ~ x) +
+  labs(title = "Interacción Superficie × Garaje",
+       x = "Superficie (m²)", y = "Precio (euros)",
+       color = "Garaje") +
+  theme_minimal() +
+  scale_color_manual(values = c("red", "blue"))
+```
+
+### Interpretación de interacciones
+
+```{r}
+# Coeficientes del modelo con interacción
+coef_int <- coef(modelo_int_garaje)
+print(coef_int)
+
+cat("\nInterpretación de la interacción superficie × garaje:\n")
+cat("- Para viviendas SIN garaje: efecto de superficie =", round(coef_int[2], 0), "euros/m²\n")
+cat("- Para viviendas CON garaje: efecto de superficie =", round(coef_int[2] + coef_int[6], 0), "euros/m²\n")
+cat("- Diferencia en el efecto de superficie =", round(coef_int[6], 0), "euros/m²\n")
+```
+
+## Diagnóstico del modelo múltiple {#sec-diagnostico-multiple}
+
+El diagnóstico en regresión múltiple requiere técnicas específicas que
+van más allá de las utilizadas en regresión simple. Nos enfocaremos en
+los aspectos únicos del caso multivariante.
+
+### Gráficos de residuos parciales
+
+Los gráficos de residuos parciales (added-variable plots) son
+específicos de regresión múltiple y ayudan a identificar la contribución
+individual de cada variable:
+
+```{r}
+#| fig-cap: "Gráficos de residuos parciales (Added-Variable Plots)"
+# Gráficos de residuos parciales
+avPlots(modelo_completo, layout = c(2, 3))
+```
+
+### Gráficos de residuos vs predictores
+
+```{r}
+#| fig-cap: "Residuos vs variables predictoras individuales"
+# Crear gráficos de residuos vs cada predictor
+residuos <- residuals(modelo_completo)
+
+p1 <- ggplot(viviendas, aes(x = superficie, y = residuos)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "loess", se = FALSE, color = "red") +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(title = "Residuos vs Superficie") +
+  theme_minimal()
+
+p2 <- ggplot(viviendas, aes(x = habitaciones, y = residuos)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "loess", se = FALSE, color = "red") +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(title = "Residuos vs Habitaciones") +
+  theme_minimal()
+
+p3 <- ggplot(viviendas, aes(x = antiguedad, y = residuos)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "loess", se = FALSE, color = "red") +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(title = "Residuos vs Antigüedad") +
+  theme_minimal()
+
+p4 <- ggplot(viviendas, aes(x = distancia_centro, y = residuos)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "loess", se = FALSE, color = "red") +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(title = "Residuos vs Distancia Centro") +
+  theme_minimal()
+
+grid.arrange(p1, p2, p3, p4, ncol = 2)
+```
+
+### Pruebas estadísticas específicas
+
+Aplicamos las mismas pruebas que en regresión simple, pero interpretadas
+en el contexto multivariante:
+
+```{r}
+#| echo: false
+#| results: 'hide'
+suppressPackageStartupMessages(library(lmtest))
+
+# Pruebas de diagnóstico
+bp_test <- bptest(modelo_completo)
+sw_test <- shapiro.test(residuals(modelo_completo))
+dw_test <- dwtest(modelo_completo)
+reset_test <- resettest(modelo_completo, power = 2:3, type = "regressor")
+```
+
+```{r}
+# Resultados de las pruebas
+cat("=== DIAGNÓSTICO DEL MODELO MÚLTIPLE ===\n\n")
+
+cat("1. ESPECIFICACIÓN - Prueba RESET:\n")
+print(reset_test)
+cat("Interpretación: p-valor", ifelse(reset_test$p.value > 0.05, ">", "<"), 
+    "0.05 →", ifelse(reset_test$p.value > 0.05, "Modelo bien especificado", "Posible mala especificación"), "\n\n")
+
+cat("2. HOMOCEDASTICIDAD - Prueba Breusch-Pagan:\n")
+print(bp_test)
+cat("Interpretación: p-valor", ifelse(bp_test$p.value > 0.05, ">", "<"), 
+    "0.05 →", ifelse(bp_test$p.value > 0.05, "No hay heterocedasticidad", "Hay heterocedasticidad"), "\n\n")
+
+cat("3. NORMALIDAD - Prueba Shapiro-Wilk:\n")
+print(sw_test)
+cat("Interpretación: p-valor", ifelse(sw_test$p.value > 0.05, ">", "<"), 
+    "0.05 →", ifelse(sw_test$p.value > 0.05, "Residuos normales", "Residuos no normales"), "\n\n")
+
+cat("4. INDEPENDENCIA - Prueba Durbin-Watson:\n")
+print(dw_test)
+cat("Interpretación: Estadístico ≈ 2 →", ifelse(abs(dw_test$statistic - 2) < 0.5, "Sin autocorrelación", "Posible autocorrelación"), "\n\n")
+```
+
+## Multicolinealidad {#sec-multicolinealidad}
+
+La multicolinealidad es uno de los problemas más importantes y
+específicos de la regresión múltiple. Ocurre cuando existe una relación
+lineal fuerte entre dos o más variables predictoras.
+
+### ¿Qué es la multicolinealidad?
+
+La multicolinealidad **perfecta** existe cuando una variable predictora
+es una combinación lineal exacta de otras variables predictoras. Más
+comúnmente, encontramos multicolinealidad **imperfecta**, donde existe
+una correlación alta pero no perfecta entre predictores.
+
+### Consecuencias de la multicolinealidad
+
+1.  **Estimación inestable**: Pequeños cambios en los datos pueden
+    producir grandes cambios en los coeficientes
+2.  **Errores estándar inflados**: Intervalos de confianza muy amplios
+3.  **Problemas de interpretación**: Dificulta la interpretación de
+    coeficientes individuales
+4.  **No afecta la predicción**: El $R^2$ y las predicciones no se ven
+    afectados
+
+### Detección: Factor de Inflación de Varianza (VIF)
+
+El VIF mide cuánto se infla la varianza de un coeficiente debido a la
+colinealidad:
+
+$$VIF_j = \frac{1}{1 - R_j^2}$$
+
+donde $R_j^2$ es el $R^2$ de la regresión de $X_j$ sobre las demás
+variables predictoras.
+
+```{r}
+# Cálculo de VIF
+vif_valores <- vif(modelo_completo)
+print(vif_valores)
+
+cat("\nInterpretación de VIF:\n")
+cat("- VIF = 1: Sin multicolinealidad\n")
+cat("- 1 < VIF < 5: Multicolinealidad moderada\n")
+cat("- VIF > 5: Multicolinealidad problemática\n")
+cat("- VIF > 10: Multicolinealidad severa\n\n")
+
+for(i in 1:length(vif_valores)) {
+  nivel <- ifelse(vif_valores[i] < 1.5, "Baja", 
+                  ifelse(vif_valores[i] < 5, "Moderada", 
+                         ifelse(vif_valores[i] < 10, "Problemática", "Severa")))
+  cat(names(vif_valores)[i], ": VIF =", round(vif_valores[i], 2), "(", nivel, ")\n")
+}
+```
+
+### Ejemplo de multicolinealidad alta
+
+Vamos a crear un ejemplo con multicolinealidad alta para ilustrar sus
+efectos:
+
+```{r}
+# Crear variable altamente correlacionada con superficie
+viviendas$superficie_alt <- viviendas$superficie * 1.2 + rnorm(n, 0, 5)
+
+# Modelo con multicolinealidad
+modelo_multicol <- lm(precio ~ superficie + superficie_alt + habitaciones + 
+                      antiguedad + distancia_centro + garaje, data = viviendas)
+
+# VIF del modelo con multicolinealidad
+vif_multicol <- vif(modelo_multicol)
+print(vif_multicol)
+
+# Comparar errores estándar
+se_original <- summary(modelo_completo)$coefficients[2, 2]
+se_multicol <- summary(modelo_multicol)$coefficients[2, 2]
+
+cat("\nEfecto en errores estándar:\n")
+cat("- Error estándar superficie (modelo original):", round(se_original, 0), "\n")
+cat("- Error estándar superficie (con multicolinealidad):", round(se_multicol, 0), "\n")
+cat("- Incremento:", round((se_multicol/se_original - 1) * 100, 1), "%\n")
+```
+
+### Soluciones para la multicolinealidad
+
+1.  **Eliminación de variables**: Remover variables redundantes
+2.  **Combinación de variables**: Crear índices o variables compuestas
+3.  **Regresión ridge o lasso**: Técnicas de regularización (Tema 5)
+4.  **Análisis de componentes principales**: Reducción de
+    dimensionalidad
+
+```{r}
+# Ejemplo: eliminar variable redundante
+modelo_sin_multicol <- lm(precio ~ superficie + habitaciones + antiguedad + 
+                          distancia_centro + garaje, data = viviendas)
+
+# Comparar VIF
+cat("VIF después de eliminar variable redundante:\n")
+print(vif(modelo_sin_multicol))
+```
+
+## Evaluación y comparación de modelos {#sec-evaluacion-modelos}
+
+### Criterios de información
+
+Los criterios de información nos ayudan a comparar modelos con
+diferentes números de parámetros:
+
+```{r}
+# Comparar diferentes modelos
+modelos <- list(
+  "Completo" = modelo_completo,
+  "Logarítmico" = modelo_log,
+  "Polinomial" = modelo_poly,
+  "Con interacción" = modelo_int_garaje
+)
+
+# Calcular criterios
+criterios <- data.frame(
+  Modelo = names(modelos),
+  R2 = sapply(modelos, function(m) summary(m)$r.squared),
+  R2_adj = sapply(modelos, function(m) summary(m)$adj.r.squared),
+  AIC = sapply(modelos, AIC),
+  BIC = sapply(modelos, BIC)
+)
+
+# Redondear solo las columnas numéricas
+criterios[, 2:5] <- round(criterios[, 2:5], 4)
+print(criterios)
+```
+
+### Validación cruzada
+
+```{r}
+# Validación cruzada simple (división 80-20)
+set.seed(456)
+train_indices <- sample(1:nrow(viviendas), 0.8 * nrow(viviendas))
+
+# Datos de entrenamiento y prueba
+train_data <- viviendas[train_indices, ]
+test_data <- viviendas[-train_indices, ]
+
+# Ajustar modelo en datos de entrenamiento
+modelo_train <- lm(precio ~ superficie + habitaciones + antiguedad + 
+                   distancia_centro + garaje, data = train_data)
+
+# Predicciones en datos de prueba
+pred_test <- predict(modelo_train, test_data)
+
+# Error cuadrático medio de predicción
+rmse_test <- sqrt(mean((test_data$precio - pred_test)^2))
+
+cat("Error de predicción (RMSE):", round(rmse_test, 0), "euros\n")
+cat("RMSE como % del precio promedio:", round(rmse_test / mean(test_data$precio) * 100, 1), "%\n")
+```
+
+## Análisis de casos especiales {#sec-casos-especiales}
+
+### Variables categóricas con múltiples niveles
+
+```{r}
+# Crear variable categórica con múltiples niveles
+viviendas$zona <- factor(sample(c("Centro", "Norte", "Sur", "Este", "Oeste"), 
+                                nrow(viviendas), replace = TRUE))
+
+# Modelo con variable categórica
+modelo_zona <- lm(precio ~ superficie + habitaciones + antiguedad + 
+                  distancia_centro + garaje + zona, data = viviendas)
+
+# Resumen del modelo
+summary(modelo_zona)$coefficients
+```
+
+### Análisis de outliers en regresión múltiple
+
+```{r}
+#| fig-cap: "Diagnóstico de observaciones influyentes en regresión múltiple"
+# Identificar observaciones influyentes
+influence_measures <- influence.measures(modelo_completo)
+
+# Gráficos de diagnóstico específicos para regresión múltiple
+par(mfrow = c(2, 2))
+plot(modelo_completo, which = 1:4)
+par(mfrow = c(1, 1))
+```
+
+## Ejemplo completo: Análisis paso a paso {#sec-ejemplo-completo}
+
+Vamos a realizar un análisis completo desde el inicio, aplicando todo lo
+aprendido:
+
+```{r}
+# === PASO 1: EXPLORACIÓN INICIAL ===
+cat("=== ANÁLISIS EXPLORATORIO ===\n")
+cat("Dimensiones del dataset:", dim(viviendas)[1], "observaciones,", dim(viviendas)[2], "variables\n\n")
+
+# Estadísticas descriptivas
+print(summary(viviendas))
+```
+
+```{r}
+# === PASO 2: MODELO INICIAL ===
+modelo_inicial <- lm(precio ~ superficie + habitaciones + antiguedad + 
+                     distancia_centro + garaje, data = viviendas)
+
+cat("\n=== MODELO INICIAL ===\n")
+print(summary(modelo_inicial))
+```
+
+```{r}
+# === PASO 3: DIAGNÓSTICO ===
+cat("\n=== DIAGNÓSTICO DEL MODELO ===\n")
+
+# VIF
+cat("Factor de Inflación de Varianza (VIF):\n")
+print(round(vif(modelo_inicial), 2))
+
+# Pruebas estadísticas silenciosas
+bp_final <- bptest(modelo_inicial)
+sw_final <- shapiro.test(residuals(modelo_inicial))
+reset_final <- resettest(modelo_inicial, power = 2:3, type = "regressor")
+
+cat("\nPruebas de diagnóstico:\n")
+cat("- Breusch-Pagan (homocedasticidad): p =", round(bp_final$p.value, 4), 
+    ifelse(bp_final$p.value > 0.05, " ✓", " ✗"), "\n")
+cat("- Shapiro-Wilk (normalidad): p =", round(sw_final$p.value, 4), 
+    ifelse(sw_final$p.value > 0.05, " ✓", " ✗"), "\n")
+cat("- RESET (especificación): p =", round(reset_final$p.value, 4), 
+    ifelse(reset_final$p.value > 0.05, " ✓", " ✗"), "\n")
+```
+
+```{r}
+# === PASO 4: MODELO FINAL CON MEJORAS ===
+# Basándonos en el diagnóstico, podríamos mejorar el modelo
+modelo_final <- modelo_inicial  # En este caso, el modelo inicial es bueno
+
+cat("\n=== RESUMEN FINAL ===\n")
+cat("R² =", round(summary(modelo_final)$r.squared, 4), "\n")
+cat("R² ajustado =", round(summary(modelo_final)$adj.r.squared, 4), "\n")
+cat("Error estándar residual =", round(summary(modelo_final)$sigma, 0), "euros\n")
+```
+
+## Conclusiones y recomendaciones prácticas {#sec-conclusiones}
+
+### Puntos clave de la regresión múltiple
+
+1.  **Interpretación condicional**: Los coeficientes deben interpretarse
+    manteniendo las demás variables constantes.
+
+2.  **Multicolinealidad**: Es el problema más específico de regresión
+    múltiple. Use VIF \> 5 como señal de alarma.
+
+3.  **Transformaciones**: Son herramientas poderosas para capturar
+    relaciones no lineales manteniendo la interpretabilidad.
+
+4.  **Interacciones**: Considere interacciones cuando tenga razones
+    teóricas o empíricas para esperarlas.
+
+5.  **Diagnóstico específico**: Use gráficos de residuos parciales y
+    pruebas específicas para el caso multivariante.
+
+### Flujo de trabajo recomendado
+
+1.  **Exploración**: Analice correlaciones y distribuciones
+2.  **Modelo base**: Comience con efectos principales
+3.  **Diagnóstico**: Verifique supuestos y multicolinealidad
+4.  **Refinamiento**: Considere transformaciones e interacciones
+5.  **Validación**: Use validación cruzada para evaluar poder predictivo
+6.  **Interpretación**: Comunique resultados de manera clara y
+    contextualizada
+
+### Preparación para temas avanzados
+
+Los conceptos de este capítulo son fundamentales para: - **Selección de
+variables** (Tema 3): Decidir qué variables incluir - **GLM** (Tema 4):
+Extensión a variables respuesta no normales - **Técnicas modernas**
+(Tema 5): Regularización y métodos no paramétricos
+
+::: {.callout-tip title="Buenas prácticas"}
+-   Siempre verifique VIF antes de interpretar coeficientes
+-   Use gráficos de residuos parciales para evaluar la contribución
+    individual de cada variable
+-   Considere la interpretabilidad vs. capacidad predictiva según sus
+    objetivos
+-   Documente todas las decisiones de modelado para reproducibilidad
+-   Valide siempre en datos independientes cuando sea posible
 :::
-
-Para determinar el mejor valor de $\alpha$, se usa **validación cruzada** probando distintos valores entre $0$ y 1. Algunas estrategias comunes incluyen:
-
--   **Si hay muchas variables irrelevantes**, se recomienda $\alpha$ cercano a 1 (Lasso).
--   **Si hay fuerte multicolinealidad**, se recomienda $\alpha$ cercano a 0 (Ridge).
--   **Si se desea un balance entre selección y estabilidad**, se suele usar $\alpha = 0.5$.
-
-La regresión Elastic Net combina lo mejor de Ridge y Lasso, ofreciendo un método de regularización robusto para modelos con muchas variables predictoras y posible multicolinealidad. Su capacidad para seleccionar variables sin eliminar información clave lo convierte en una opción ideal para modelos complejos y de alta dimensionalidad.
-
-### Comparación de los métodos de Regularización
-
-| Método | Penalización | Efecto sobre los coeficientes |
-|------------------------|------------------------|------------------------|
-| **OLS** | Ninguna | Sin restricción, puede haber multicolinealidad |
-| **Ridge** | $L_2$ | Reduce la magnitud de los coeficientes, pero no los anula |
-| **Lasso** | $L_1$ | Puede anular coeficientes, permitiendo selección de variables |
-| **Elastic Net** | $L_1 + L_2$ | Combinación de Ridge y Lasso |
-
-------------------------------------------------------------------------
-
-Lasso es especialmente útil cuando se sospecha que muchas variables son irrelevantes, mientras que Ridge es preferido cuando se espera que todas las variables aporten información al modelo.
-
-Elastic Net es ideal cuando hay **muchas variables correlacionadas** y se desea un modelo **estable y parsimonioso**.
-
--   Elastic Net mejora la estabilidad del modelo en comparación con Lasso, especialmente cuando hay variables predictoras altamente correlacionadas.
-
--   Es más flexible que Ridge y Lasso individualmente, permitiendo un ajuste más fino a distintos tipos de problemas.
-
--   Requiere la selección de hiperparámetros ($\lambda$ y $\alpha$), por lo que debe usarse validación cruzada para encontrar la combinación óptima.
-
-------------------------------------------------------------------------
