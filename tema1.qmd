@@ -201,7 +201,10 @@ $e_i = y_i - \hat{y}_i$, se conoce como **residuo**.
 
 Para que el puente entre nuestro modelo muestral y la realidad
 poblacional sea sólido, debemos asumir que los errores teóricos
-$\varepsilon_i$ se comportan de una manera predecible y ordenada. Estos supuestos, conocidos como condiciones de Gauss-Markov [@kutner2005applied; @weisberg2005applied], son fundamentales para las propiedades óptimas de los estimadores de mínimos cuadrados.
+$\varepsilon_i$ se comportan de una manera predecible y ordenada. Estos
+supuestos, conocidos como condiciones de Gauss-Markov
+[@kutner2005applied; @weisberg2005applied], son fundamentales para las
+propiedades óptimas de los estimadores de mínimos cuadrados.
 
 1.  **Linealidad**: La relación entre $X$ y el valor esperado de $Y$ es,
     en promedio, una línea recta:
@@ -291,7 +294,9 @@ concreta y útil:
 ::: {.callout-note title="Minimización de SSE" collapse="true"}
 La obtención de los estimadores de mínimos cuadrados para la regresión
 lineal simple se basa en minimizar la suma de los cuadrados de los
-residuos ($SSE$). Este método, desarrollado por Legendre y Gauss a principios del siglo XIX [@galton1886; @weisberg2005applied], es fundamental en la estadística moderna. Aquí está el proceso paso a paso:
+residuos ($SSE$). Este método, desarrollado por Legendre y Gauss a
+principios del siglo XIX [@galton1886; @weisberg2005applied], es
+fundamental en la estadística moderna. Aquí está el proceso paso a paso:
 
 Para minimizar $SSE$, derivamos parcialmente con respecto a $\beta_0$ y
 $\beta_1$ y resolvemos el sistema de ecuaciones.
@@ -450,7 +455,7 @@ teóricas de los estimadores que hemos calculado.
       \sum_{i=1}^n \hat{y_i}e_i=0
       $$
 
--   La recta de regresión contiene el punto $(\bar{x},\bar{y})$:
+-   La recta de regresión contiene el punto $(\bar{x},\bar{y})$:$$\hat{\beta_0} + \hat{\beta_1}\bar{x} = \bar{y}$$
 :::
 
 ::: {.callout-tip title="Ejemplo" collapse="true"}
@@ -915,11 +920,11 @@ pred_indiv <- predict(modelo_estudio, newdata = dato_nuevo, interval = "predicti
 
 Una vez que hemos ajustado un modelo y evaluado su significancia, el
 trabajo no ha terminado. Un paso crucial, a menudo subestimado, es el
-**diagnóstico del modelo** [@fox2018r; @harrell2015]. Este proceso consiste en verificar si se
-cumplen los supuestos del modelo de regresión lineal clásico. La
-fiabilidad de nuestras inferencias (los p-valores de los contrastes t y
-F, y los intervalos de confianza) depende directamente de la validez de
-estos supuestos.
+**diagnóstico del modelo** [@fox2018r; @harrell2015]. Este proceso
+consiste en verificar si se cumplen los supuestos del modelo de
+regresión lineal clásico. La fiabilidad de nuestras inferencias (los
+p-valores de los contrastes t y F, y los intervalos de confianza)
+depende directamente de la validez de estos supuestos.
 
 El diagnóstico se realiza principalmente a través del **análisis de los
 residuos** del modelo ($e_i = y_i - \hat{y}_i$). Los residuos son
@@ -1480,7 +1485,9 @@ como una comprobación de que nuestros cálculos son correctos.
 
 Algunos puntos pueden tener una influencia desproporcionada en el
 modelo. Es crucial identificarlos usando diferentes métricas que evalúan
-aspectos complementarios de la influencia [@kutner2005applied; @fox2018r]. Las métricas desarrolladas por Cook, Belsley, Kuh y Welsch proporcionan herramientas robustas para este diagnóstico.
+aspectos complementarios de la influencia [@kutner2005applied;
+@fox2018r]. Las métricas desarrolladas por Cook, Belsley, Kuh y Welsch
+proporcionan herramientas robustas para este diagnóstico.
 
 ::: {.callout-note title="Fundamento teórico: de los residuos simples a los estudentizados"}
 Antes de analizar las métricas de influencia, debemos entender por qué
@@ -1603,13 +1610,34 @@ top_indices <- order(abs(dffits_vals), decreasing = TRUE)[1:5]
 
 **Análisis de resultados:**
 
-El umbral de influencia para DFFITS es `r round(dffits_threshold, 3)`. En nuestro modelo, **`r length(influential_dffits)` observaciones superan este umbral**: las observaciones `r paste(influential_dffits, collapse = ", ")`, lo que las clasifica como influyentes según este criterio.
+El umbral de influencia para DFFITS es `r round(dffits_threshold, 3)`.
+En nuestro modelo, **`r length(influential_dffits)` observaciones
+superan este umbral**: las observaciones
+`r paste(influential_dffits, collapse = ", ")`, lo que las clasifica
+como influyentes según este criterio.
 
-Las **cinco observaciones con mayor |DFFITS|** son las observaciones `r paste(top_indices, collapse = ", ")`, con valores de `r paste(round(dffits_vals[top_indices], 3), collapse = ", ")` respectivamente. Lo más notable es que **todas estas cinco observaciones** (`r paste(intersect(top_indices, influential_dffits), collapse = ", ")`) **superan el umbral de DFFITS**, confirmando su carácter influyente.
+Las **cinco observaciones con mayor \|DFFITS\|** son las observaciones
+`r paste(top_indices, collapse = ", ")`, con valores de
+`r paste(round(dffits_vals[top_indices], 3), collapse = ", ")`
+respectivamente. Lo más notable es que **todas estas cinco
+observaciones**
+(`r paste(intersect(top_indices, influential_dffits), collapse = ", ")`)
+**superan el umbral de DFFITS**, confirmando su carácter influyente.
 
-**Interpretación clave:** La observación `r top_indices[1]` es el caso más destacado: tiene un DFFITS de `r round(dffits_vals[top_indices[1]], 3)`, superando el umbral de `r round(dffits_threshold, 3)`. Esta combinación de residuo y apalancamiento resulta en un DFFITS significativo que indica cambios sustanciales en su predicción.
+**Interpretación clave:** La observación `r top_indices[1]` es el caso
+más destacado: tiene un DFFITS de
+`r round(dffits_vals[top_indices[1]], 3)`, superando el umbral de
+`r round(dffits_threshold, 3)`. Esta combinación de residuo y
+apalancamiento resulta en un DFFITS significativo que indica cambios
+sustanciales en su predicción.
 
-**Conclusión práctica:** Tenemos **`r length(influential_dffits)` observaciones influyentes** según DFFITS (`r paste(influential_dffits, collapse = ", ")`) que merecen investigación adicional. Estas observaciones cambian significativamente sus propias predicciones cuando son eliminadas del modelo, sugiriendo que podrían representar casos especiales o errores de medición que deberían ser examinados más detalladamente.
+**Conclusión práctica:** Tenemos **`r length(influential_dffits)`
+observaciones influyentes** según DFFITS
+(`r paste(influential_dffits, collapse = ", ")`) que merecen
+investigación adicional. Estas observaciones cambian significativamente
+sus propias predicciones cuando son eliminadas del modelo, sugiriendo
+que podrían representar casos especiales o errores de medición que
+deberían ser examinados más detalladamente.
 :::
 
 El gráfico **`Residuals vs. Leverage`** es la herramienta visual más
@@ -1621,7 +1649,8 @@ alta **Distancia de Cook**, facilitando la identificación visual de los
 puntos más problemáticos.
 
 ::: {.callout-tip title="Ejemplo: Gráfico Residuals vs. Leverage" collapse="true"}
-Vamos a analizar el gráfico más importante para el diagnóstico de influencia usando nuestro `modelo_estudio`.
+Vamos a analizar el gráfico más importante para el diagnóstico de
+influencia usando nuestro `modelo_estudio`.
 
 ```{r}
 #| label: fig-leverage
@@ -1697,17 +1726,39 @@ high_cook <- which(cook_dist > cook_threshold)
 
 **Análisis del gráfico:**
 
-El gráfico revela varios puntos importantes. Tenemos `r length(outliers_stud)` outliers (residuos estudentizados > 2): las observaciones `r paste(outliers_stud, collapse = ", ")`. Además, `r length(high_leverage)` observaciones superan el umbral de leverage (> `r round(leverage_threshold, 3)`): las observaciones `r paste(high_leverage, collapse = ", ")`.
+El gráfico revela varios puntos importantes. Tenemos
+`r length(outliers_stud)` outliers (residuos estudentizados \> 2): las
+observaciones `r paste(outliers_stud, collapse = ", ")`. Además,
+`r length(high_leverage)` observaciones superan el umbral de leverage
+(\> `r round(leverage_threshold, 3)`): las observaciones
+`r paste(high_leverage, collapse = ", ")`.
 
 **Interpretación por regiones:**
 
-- **Zona derecha (alto leverage)**: Las observaciones `r paste(high_leverage, collapse = ", ")` superan el umbral de leverage, lo que significa que tienen valores de X atípicos y **alto potencial influyente**
-- **Zona izquierda superior/inferior**: Los `r length(outliers_stud)` outliers (`r paste(outliers_stud, collapse = ", ")`) están distribuidos aquí, con leverage bajo-moderado pero residuos grandes
-- **Esquinas críticas**: Afortunadamente vacías (alto leverage + outlier sería muy problemático)
+-   **Zona derecha (alto leverage)**: Las observaciones
+    `r paste(high_leverage, collapse = ", ")` superan el umbral de
+    leverage, lo que significa que tienen valores de X atípicos y **alto
+    potencial influyente**
+-   **Zona izquierda superior/inferior**: Los `r length(outliers_stud)`
+    outliers (`r paste(outliers_stud, collapse = ", ")`) están
+    distribuidos aquí, con leverage bajo-moderado pero residuos grandes
+-   **Esquinas críticas**: Afortunadamente vacías (alto leverage +
+    outlier sería muy problemático)
 
-**Distancia de Cook:** Las curvas rojas muestran que aunque ningún punto supera Cook = 1.0 (línea continua), **varios puntos se acercan a la curva de Cook = 0.5** (línea discontinua), indicando influencia moderada. Las observaciones con alto leverage están en esta zona de influencia moderada.
+**Distancia de Cook:** Las curvas rojas muestran que aunque ningún punto
+supera Cook = 1.0 (línea continua), **varios puntos se acercan a la
+curva de Cook = 0.5** (línea discontinua), indicando influencia
+moderada. Las observaciones con alto leverage están en esta zona de
+influencia moderada.
 
-**Conclusión práctica:** El modelo presenta una **situación favorable**: aunque tenemos **outliers** (observaciones `r paste(outliers_stud, collapse = ", ")`) que son atípicos en Y, y **observaciones de alto leverage** (observaciones `r paste(high_leverage, collapse = ", ")`) que son atípicos en X, **crucialmente no hay solapamiento entre ambos grupos**. Esto significa que no tenemos la situación más problemática (alto leverage + outlier). Aun así, ambos grupos merecen investigación.
+**Conclusión práctica:** El modelo presenta una **situación favorable**:
+aunque tenemos **outliers** (observaciones
+`r paste(outliers_stud, collapse = ", ")`) que son atípicos en Y, y
+**observaciones de alto leverage** (observaciones
+`r paste(high_leverage, collapse = ", ")`) que son atípicos en X,
+**crucialmente no hay solapamiento entre ambos grupos**. Esto significa
+que no tenemos la situación más problemática (alto leverage + outlier).
+Aun así, ambos grupos merecen investigación.
 :::
 
 #### Interpretación práctica de las medidas de influencia
@@ -1895,5 +1946,6 @@ Cook, DFFITS o COVRATIO - ✅ **Sin outliers**: No hay residuos
 estandarizados extremos
 
 Esto confirma que nuestras inferencias estadísticas (p-valores,
-intervalos de confianza) son válidas y confiables [@james2021; @harrell2015].
+intervalos de confianza) son válidas y confiables [@james2021;
+@harrell2015].
 :::
