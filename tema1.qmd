@@ -455,7 +455,8 @@ teóricas de los estimadores que hemos calculado.
       \sum_{i=1}^n \hat{y_i}e_i=0
       $$
 
--   La recta de regresión contiene el punto $(\bar{x},\bar{y})$:$$\hat{\beta_0} + \hat{\beta_1}\bar{x} = \bar{y}$$
+-   La recta de regresión contiene el punto
+    $(\bar{x},\bar{y})$:$$\hat{\beta_0} + \hat{\beta_1}\bar{x} = \bar{y}$$
 :::
 
 ::: {.callout-tip title="Ejemplo" collapse="true"}
@@ -683,15 +684,18 @@ normalidad de los errores.
 #### Distribución de los estimadores
 
 Bajo el supuesto de normalidad, se puede demostrar que los estimadores
-también siguen una distribución Normal: $$
+también siguen una distribución Normal: 
+$$
 \hat{\beta}_1 \sim N\left(\beta_1, \frac{\sigma^2}{S_{xx}}\right) \quad \quad \quad \hat{\beta}_0 \sim N\left(\beta_0, \sigma^2 \left[ \frac{1}{n} + \frac{\bar{x}^2}{S_{xx}} \right]\right)
 $$
 
 Al estandarizar y reemplazar la desconocida $\sigma^2$ por su estimador
 $\hat{\sigma}^2 = \text{MSE}$, obtenemos un estadístico que sigue una
-distribución t-Student con $n-2$ grados de libertad: $$
+distribución t-Student con $n-2$ grados de libertad: 
+$$
 t = \frac{\hat{\beta}_1 - \beta_1}{\text{SE}(\hat{\beta}_1)} \sim t_{n-2}
-$$ donde $\text{SE}(\hat{\beta}_1) = \sqrt{\frac{\text{MSE}}{S_{xx}}}$
+$$ 
+donde $\text{SE}(\hat{\beta}_1) = \sqrt{\frac{\text{MSE}}{S_{xx}}}$
 es el **error estándar** del estimador $\hat{\beta}_1$.
 
 #### Contraste de hipótesis para la pendiente
@@ -699,9 +703,11 @@ es el **error estándar** del estimador $\hat{\beta}_1$.
 El contraste más común es el de la significancia de la pendiente: \*
 $H_0: \beta_1 = 0$ \* $H_1: \beta_1 \neq 0$
 
-Bajo $H_0$, el estadístico de contraste es: $$
+Bajo $H_0$, el estadístico de contraste es: 
+$$
 t_0 = \frac{\hat{\beta}_1}{\text{SE}(\hat{\beta}_1)}
-$$ Rechazamos $H_0$ si $|t_0| > t_{\alpha/2, n-2}$ o, equivalentemente,
+$$ 
+Rechazamos $H_0$ si $|t_0| > t_{\alpha/2, n-2}$ o, equivalentemente,
 si el p-valor asociado es menor que $\alpha$.
 
 ::: {.callout-note title="Relación entre el contraste F y el contraste t"}
@@ -716,7 +722,8 @@ ambos contrastes será idéntico.
 
 A partir de la distribución t, podemos construir un intervalo de
 confianza al $100(1-\alpha)\%$ para el verdadero valor de la pendiente
-$\beta_1$: $$
+$\beta_1$: 
+$$
 \hat{\beta}_1 \pm t_{\alpha/2, n-2} \cdot \text{SE}(\hat{\beta}_1)
 $$ Este intervalo nos da un rango de valores plausibles para el efecto
 de $X$ sobre $Y$. Si el intervalo no contiene el cero, es equivalente a
@@ -938,16 +945,18 @@ Este supuesto establece que la relación entre la variable predictora $X$
 y el valor esperado de la variable respuesta $Y$ es, en promedio, una
 línea recta: $E[Y | X] = \beta_0 + \beta_1 X$.
 
-La herramienta fundamental para diagnosticar la linealidad es el gráfico
-de **residuos** ($e_i$) frente a los **valores ajustados** por el modelo
-($\hat{y}_i$). La lógica de este gráfico es sencilla pero potente: si el
-modelo lineal es adecuado, los errores que comete (los residuos)
-deberían ser completamente aleatorios, sin guardar relación alguna con
-la magnitud de las predicciones. En esencia, buscamos confirmar que no
-queda ninguna información sistemática en los errores que el modelo no
-haya capturado.
+**Métodos de diagnóstico:**
 
-**En un escenario ideal**, este gráfico debería parecer una nube de
+1. **Diagnóstico visual:** El gráfico de **residuos** ($e_i$) frente a los **valores ajustados** por el modelo ($\hat{y}_i$) es la herramienta fundamental. La lógica es sencilla pero potente: si el modelo lineal es adecuado, los errores que comete (los residuos) deberían ser completamente aleatorios, sin guardar relación alguna con la magnitud de las predicciones.
+
+2. **Test de Ramsey RESET:** Este test estadístico detecta violaciones de la forma funcional mediante la inclusión de términos no lineales ($\hat{y}^2, \hat{y}^3, ...$) en el modelo. 
+
+   - **H₀:** La forma funcional es correcta (lineal)  
+   - **H₁:** La forma funcional es incorrecta (no lineal)  
+   - **Estadístico:** Sigue una distribución F bajo H₀  
+   - **Interpretación:** p-valor bajo indica violación de linealidad
+
+**En un escenario ideal**, el gráfico debería parecer una nube de
 puntos distribuida horizontalmente y sin estructura aparente, centrada
 en la línea del cero. Esto nos indica que los errores son, en promedio,
 nulos para todos los niveles de predicción, cumpliendo así el supuesto
@@ -977,7 +986,7 @@ datos_diagnostico <- data.frame(
 ggplot(datos_diagnostico, aes(x = valores_ajustados, y = residuos)) +
   geom_point(color = "#0072B2", alpha = 0.7) +
   geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
-  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8) +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8, formula = y ~ x) +
   labs(
     title = "Residuos vs. Valores Ajustados",
     x = "Valores Ajustados",
@@ -1030,7 +1039,7 @@ datos_diag_no_lineal <- data.frame(
 ggplot(datos_diag_no_lineal, aes(x = valores_ajustados, y = residuos)) +
   geom_point(color = "#D55E00", alpha = 0.7) +
   geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
-  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8) +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8, formula = y ~ x) +
   labs(
     title = "Residuos vs. Valores Ajustados (Violación de Linealidad)",
     x = "Valores Ajustados",
@@ -1044,6 +1053,31 @@ anterior, donde los puntos formaban una nube aleatoria, aquí los
 residuos dibujan un **patrón parabólico** perfecto (una "U" invertida).
 La línea roja de tendencia, en lugar de ser plana, sigue fielmente esta
 curva.
+
+**Test de Ramsey RESET para Linealidad**
+
+Además del diagnóstico visual, podemos usar el test de Ramsey RESET
+(Regression Equation Specification Error Test) para detectar violaciones
+de linealidad:
+
+```{r}
+suppressPackageStartupMessages(library(lmtest))
+# Test RESET para el modelo correcto (horas de estudio)
+reset_resultado <- resettest(modelo_estudio, power = 2:3, type = "fitted")
+print(reset_resultado)
+
+# Test RESET para el modelo incorrecto (no lineal)
+reset_no_lineal <- resettest(modelo_no_lineal, power = 2:3, type = "fitted")
+print(reset_no_lineal)
+```
+
+El test de Ramsey RESET confirma nuestro diagnóstico visual: 
+
+- Para el modelo correcto: p-valor = `r round(reset_resultado$p.value, 4)` → No
+rechazamos H₀ (forma funcional correcta) 
+- Para el modelo no lineal:
+p-valor = `r round(reset_no_lineal$p.value, 4)` → Rechazamos H₀ (forma
+funcional incorrecta)
 :::
 
 ### Homocedasticidad
@@ -1053,8 +1087,24 @@ del modelo debe ser constante para todos los niveles de la variable
 predictora. Es decir, la dispersión de los datos alrededor de la línea
 de regresión es la misma en todo su recorrido
 ($Var(\varepsilon_i | X_i) = \sigma^2$). La violación de este supuesto
-se conoce como **heteroscedasticidad**, y es un problema común en el
+se conoce como **heterocedasticidad**, y es un problema común en el
 modelado.
+
+**Métodos de diagnóstico:**
+
+1. **Diagnóstico visual:** El gráfico **Scale-Location** muestra la raíz cuadrada de los residuos estandarizados absolutos frente a los valores ajustados. Una línea horizontal indica homocedasticidad.
+
+2. **Test de Breusch-Pagan:** Test clásico para detectar heterocedasticidad.
+
+   - **H₀:** Homocedasticidad (varianza constante)
+   - **H₁:** Heterocedasticidad 
+   - **Estadístico:** LM ~ χ² bajo H₀
+
+3. **Test de White:** Versión más robusta que no asume una forma específica de heterocedasticidad.
+
+   - **H₀:** Homocedasticidad
+   - **H₁:** Heterocedasticidad (forma general)
+   - **Ventaja:** No requiere especificar la forma funcional de la heterocedasticidad
 
 ¿Por qué es tan importante? Si un modelo es heteroscedástico, los
 errores estándar de los coeficientes ($\beta_0, \beta_1$) estarán
@@ -1125,7 +1175,7 @@ datos_scale_loc <- data.frame(
 # Gráfico Scale-Location con ggplot2
 ggplot(datos_scale_loc, aes(x = valores_ajustados, y = residuos_std_sqrt)) +
   geom_point(color = "#0072B2", alpha = 0.7) +
-  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8) +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8, formula = y ~ x) +
   labs(
     title = "Scale-Location",
     x = "Valores Ajustados",
@@ -1134,16 +1184,25 @@ ggplot(datos_scale_loc, aes(x = valores_ajustados, y = residuos_std_sqrt)) +
   theme_classic(base_size = 12)
 
 # Prueba de Breusch-Pagan
-library(lmtest)
-bptest(modelo_estudio)
+suppressPackageStartupMessages(library(lmtest))
+bp_resultado <- bptest(modelo_estudio)
+print(bp_resultado)
+
+# Prueba de White (versión robusta)
+white_resultado <- bptest(modelo_estudio, ~ fitted(modelo_estudio) + I(fitted(modelo_estudio)^2))
+print(white_resultado)
 ```
 
 El diagnóstico es positivo. En el gráfico `Scale-Location`, la línea
 roja es casi horizontal, lo que indica que la varianza de los residuos
-es estable a lo largo de los valores ajustados. Esto se confirma con la
-prueba de Breusch-Pagan, que arroja un **p-valor alto**, por lo que no
-tenemos evidencia para rechazar la hipótesis nula de homocedasticidad.
-**Nuestro modelo cumple el supuesto**.
+es estable a lo largo de los valores ajustados. Esto se confirma con
+ambas pruebas:
+
+- **Breusch-Pagan**: p-valor = `r round(bp_resultado$p.value, 4)` → No
+    rechazamos H₀ (homocedasticidad)
+- **White**: p-valor = `r round(white_resultado$p.value, 4)` → No
+    rechazamos H₀ (varianza constante) **Nuestro modelo cumple el
+    supuesto**.
 :::
 
 ::: {.callout-tip title="Contraejemplo: Violación del supuesto de homocedasticidad" collapse="true"}
@@ -1172,7 +1231,7 @@ datos_diag_hetero <- data.frame(
 p1 <- ggplot(datos_diag_hetero, aes(x = valores_ajustados, y = residuos)) +
   geom_point(color = "#D55E00", alpha = 0.7) +
   geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
-  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8) +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8, formula = y ~ x) +
   labs(
     title = "Residuos vs. Valores Ajustados",
     x = "Valores Ajustados",
@@ -1183,7 +1242,7 @@ p1 <- ggplot(datos_diag_hetero, aes(x = valores_ajustados, y = residuos)) +
 # 4. Gráfico Scale-Location
 p2 <- ggplot(datos_diag_hetero, aes(x = valores_ajustados, y = residuos_std_sqrt)) +
   geom_point(color = "#D55E00", alpha = 0.7) +
-  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8) +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8, formula = y ~ x) +
   labs(
     title = "Scale-Location",
     x = "Valores Ajustados",
@@ -1196,7 +1255,7 @@ library(gridExtra)
 grid.arrange(p1, p2, ncol = 2)
 
 # 6. Prueba de Breusch-Pagan
-library(lmtest)
+suppressPackageStartupMessages(library(lmtest))
 test_values <- bptest(modelo_hetero)
 ```
 
@@ -1223,7 +1282,26 @@ siguen una distribución normal: $\varepsilon_i \sim N(0, \sigma^2)$. Es
 especialmente importante para la validez de los intervalos de confianza
 y los contrastes de hipótesis cuando el tamaño de la muestra es pequeño.
 
-Para evaluar la normalidad disponemos de herramientas visuales y
+**Métodos de diagnóstico:**
+
+1. **Diagnóstico visual:** 
+
+   - **Gráfico Q-Q:** Los puntos deben seguir la línea diagonal si hay normalidad
+   - **Histograma:** Debe mostrar forma campaniforme y simétrica
+
+2. **Test de Shapiro-Wilk:** Test más potente para muestras pequeñas y medianas (n < 50).
+
+   - **H₀:** Los residuos siguen distribución normal
+   - **H₁:** Los residuos no siguen distribución normal
+   - **Limitación:** Muy sensible en muestras grandes
+
+3. **Test de Jarque-Bera:** Basado en medidas de asimetría y curtosis.
+
+   - **H₀:** Los residuos son normales (asimetría = 0, curtosis = 3)
+   - **H₁:** Los residuos no son normales
+   - **Ventaja:** Menos sensible al tamaño muestral que Shapiro-Wilk
+
+Para evaluar la normalidad disponemos de estas herramientas visuales y
 analíticas:
 
 -   **Gráfico Normal Q-Q (`Normal Q-Q Plot`):** Compara los cuantiles de
@@ -1284,17 +1362,26 @@ library(gridExtra)
 grid.arrange(p1, p2, ncol = 2)
 
 # Prueba de Shapiro-Wilk
-library(lmtest)
+suppressPackageStartupMessages(library(lmtest))
 shapiro_resultado <- shapiro.test(residuals(modelo_estudio))
+print(shapiro_resultado)
+
+# Prueba de Jarque-Bera
+suppressPackageStartupMessages(library(tseries))
+jb_resultado <- jarque.bera.test(residuals(modelo_estudio))
+print(jb_resultado)
 ```
 
 El diagnóstico es excelente. En el gráfico Q-Q, los puntos se alinean
 muy bien con la línea diagonal, indicando normalidad. El histograma
 muestra una distribución aproximadamente simétrica que se ajusta bien a
-la curva normal teórica (línea roja). La prueba de Shapiro-Wilk confirma
-esto con un **p-valor alto**
-(`r format(shapiro_resultado$p.value, scientific = TRUE, digits = 3)`),
-por lo que no rechazamos la hipótesis nula de normalidad.
+la curva normal teórica (línea roja). Ambas pruebas estadísticas
+confirman la normalidad:
+
+-   **Shapiro-Wilk**: p-valor = `r round(shapiro_resultado$p.value, 4)`
+    → No rechazamos H₀ (normalidad)
+-   **Jarque-Bera**: p-valor = `r round(jb_resultado$p.value, 4)` → No
+    rechazamos H₀ (normalidad)
 :::
 
 ::: {.callout-tip title="Contraejemplo: Violación del supuesto de normalidad" collapse="true"}
@@ -1372,10 +1459,22 @@ $Cov(\varepsilon_i, \varepsilon_j) = 0$ para $i \neq j$. La violación,
 conocida como **autocorrelación**, es común en datos de series
 temporales.
 
-La **Prueba de Durbin-Watson** es el contraste clásico para la
-autocorrelación de primer orden. Su estadístico se calcula como:
-$$ DW = \frac{\sum_{i=2}^{n}(e_i - e_{i-1})^2}{\sum_{i=1}^{n}e_i^2} $$
-El estadístico varía entre 0 y 4. Un valor cercano a 2 sugiere no
+**Métodos de diagnóstico:**
+
+1. **Diagnóstico visual:** Gráfico de residuos vs orden de observación. No debe mostrar patrones temporales o secuenciales.
+
+2. **Test de Durbin-Watson:** Test clásico para autocorrelación de primer orden.
+   - **H₀:** No hay autocorrelación ($\rho = 0$)
+   - **H₁:** Hay autocorrelación de orden 1
+   - **Estadístico:** $DW = \frac{\sum_{i=2}^{n}(e_i - e_{i-1})^2}{\sum_{i=1}^{n}e_i^2}$
+   - **Interpretación:** Valores cerca de 2 → no autocorrelación; cerca de 0 → autocorrelación positiva; cerca de 4 → autocorrelación negativa
+
+3. **Test de Breusch-Godfrey (LM):** Generalización del Durbin-Watson para órdenes superiores y regresores retardados.
+   - **H₀:** No hay autocorrelación serial hasta el orden especificado
+   - **H₁:** Hay autocorrelación serial
+   - **Ventaja:** Más general y potente que Durbin-Watson
+
+El estadístico de Durbin-Watson varía entre 0 y 4. Un valor cercano a 2 sugiere no
 autocorrelación. Valores cercanos a 0 indican autocorrelación positiva,
 y cercanos a 4, autocorrelación negativa.
 
@@ -1405,16 +1504,24 @@ ggplot(datos_orden, aes(x = orden, y = residuos)) +
   theme_classic(base_size = 12)
 
 # Prueba de Durbin-Watson
-library(lmtest)
+suppressPackageStartupMessages(library(lmtest))
 dw_resultado_valido <- dwtest(modelo_estudio)
+print(dw_resultado_valido)
+
+# Prueba de Breusch-Godfrey (más general)
+bg_resultado <- bgtest(modelo_estudio, order = 2)
+print(bg_resultado)
 ```
 
 El diagnóstico es satisfactorio. El gráfico de residuos vs orden no
-muestra ningún patrón sistemático o tendencia temporal, los puntos
-fluctúan aleatoriamente alrededor del cero. La prueba de Durbin-Watson
-arroja un estadístico de **`r round(dw_resultado_valido$statistic, 3)`**
-(cercano a 2) y un **p-valor de
-`r format.pval(dw_resultado_valido$p.value, digits=3, eps=0.001)`**,
+muestra ningún patrón sistemático o tendencia temporal. Ambas pruebas
+estadísticas confirman la independencia: 
+
+- **Durbin-Watson**: DW =`r round(dw_resultado_valido$statistic, 3)`, p-valor = `r round(dw_resultado_valido$p.value, 4)` → No hay autocorrelación de orden 1 
+- **Breusch-Godfrey**: LM =`r round(bg_resultado$statistic, 3)`, p-valor = `r round(bg_resultado$p.value, 4)` → No hay autocorrelación de orden 2 fluctúan aleatoriamente alrededor del cero. 
+
+La prueba de Durbin-Watson arroja un estadístico de **`r round(dw_resultado_valido$statistic, 3)`**
+(cercano a 2) y un **p-valor de `r format.pval(dw_resultado_valido$p.value, digits=3, eps=0.001)`**,
 confirmando que no hay evidencia de autocorrelación. **El supuesto de
 independencia se cumple**.
 :::
@@ -1802,7 +1909,7 @@ p1_completo <- ggplot(data.frame(x = valores_ajustados_completo, y = residuos_co
                       aes(x = x, y = y)) +
   geom_point(color = "#0072B2", alpha = 0.7) +
   geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
-  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8) +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8, formula = y ~ x) +
   labs(title = "Residuos vs. Valores Ajustados", x = "Valores Ajustados", y = "Residuos") +
   theme_classic(base_size = 10)
 
@@ -1820,18 +1927,29 @@ p3_completo <- ggplot(data.frame(x = valores_ajustados_completo,
                                  y = sqrt(abs(residuos_std))), 
                       aes(x = x, y = y)) +
   geom_point(color = "#0072B2", alpha = 0.7) +
-  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8) +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8, formula = y ~ x) +
   labs(title = "Scale-Location", x = "Valores Ajustados", 
        y = expression(sqrt("|Residuos Estandarizados|"))) +
   theme_classic(base_size = 10)
 
-# 4. Gráfico Residuos vs. Leverage
-p4_completo <- ggplot(data.frame(x = leverage_vals, y = residuos_std), 
-                      aes(x = x, y = y)) +
-  geom_point(color = "#0072B2", alpha = 0.7) +
-  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8) +
+# 4. Gráfico Residuos vs. Leverage (con curvas de Cook)
+p4_completo <- ggplot(datos_leverage, aes(x = leverage, y = residuos_stud)) +
+  # Curvas de Cook
+  geom_line(data = cook_05, aes(x = leverage, y = pos), 
+            color = "red", linetype = "dashed", alpha = 0.6, inherit.aes = FALSE) +
+  geom_line(data = cook_05, aes(x = leverage, y = neg), 
+            color = "red", linetype = "dashed", alpha = 0.6, inherit.aes = FALSE) +
+  geom_line(data = cook_1, aes(x = leverage, y = pos), 
+            color = "red", linetype = "solid", alpha = 0.8, inherit.aes = FALSE) +
+  geom_line(data = cook_1, aes(x = leverage, y = neg), 
+            color = "red", linetype = "solid", alpha = 0.8, inherit.aes = FALSE) +
+  # Puntos de datos
+  geom_point(color = "#0072B2", alpha = 0.7, size = 1.5) +
+  # Líneas de referencia
   geom_hline(yintercept = 0, color = "gray", linetype = "dashed") +
-  labs(title = "Residuos vs. Leverage", x = "Leverage", y = "Residuos Estandarizados") +
+  geom_hline(yintercept = c(-2, 2), color = "orange", linetype = "dotted", alpha = 0.7) +
+  geom_vline(xintercept = leverage_threshold, color = "purple", linetype = "dotted", alpha = 0.7) +
+  labs(title = "Residuals vs. Leverage", x = "Leverage", y = "Residuos Estudentizados") +
   theme_classic(base_size = 10)
 
 # 5. Histograma de residuos
@@ -1858,39 +1976,27 @@ p6_completo <- ggplot(data.frame(orden = 1:length(residuos_completo),
 library(gridExtra)
 grid.arrange(p1_completo, p2_completo, p3_completo, 
              p4_completo, p5_completo, p6_completo, ncol = 3)
+```
 
-# Pruebas analíticas
-library(lmtest)
-
-cat("=== DIAGNÓSTICO ANALÍTICO ===\n\n")
+```{r}
+#| echo: false
+#| results: 'hide'
+# Realizamos todas las pruebas estadísticas silenciosamente
+suppressPackageStartupMessages(library(lmtest))
 
 # 1. Verificación de media nula de residuos
 media_residuos <- mean(residuals(modelo_estudio))
-cat("Media de los residuos:", round(media_residuos, 10), "\n")
-cat("(Debe ser prácticamente 0)\n\n")
 
 # 2. Homocedasticidad: Breusch-Pagan
-cat("HOMOCEDASTICIDAD - Prueba de Breusch-Pagan:\n")
 bp_test <- bptest(modelo_estudio)
-print(bp_test)
-cat("Interpretación: p-valor >", 0.05, "→ No hay evidencia de heterocedasticidad\n\n")
 
 # 3. Normalidad: Shapiro-Wilk
-cat("NORMALIDAD - Prueba de Shapiro-Wilk:\n")
 sw_test <- shapiro.test(residuals(modelo_estudio))
-print(sw_test)
-cat("Interpretación: p-valor >", 0.05, "→ No hay evidencia contra la normalidad\n\n")
 
 # 4. Independencia: Durbin-Watson
-cat("INDEPENDENCIA - Prueba de Durbin-Watson:\n")
 dw_test <- dwtest(modelo_estudio)
-cat("Estadístico DW:", round(dw_test$statistic, 3), "\n")
-cat("p-valor:", format.pval(dw_test$p.value, digits=3, eps=0.001), "\n")
-cat("Interpretación: Estadístico ≈ 2 y p-valor >", 0.05, "→ No hay autocorrelación\n\n")
 
 # 5. Identificación de observaciones influyentes
-cat("OBSERVACIONES INFLUYENTES:\n")
-# Calculamos las métricas principales
 leverage <- hatvalues(modelo_estudio)
 cook_dist <- cooks.distance(modelo_estudio)
 std_residuals <- rstandard(modelo_estudio)
@@ -1912,38 +2018,45 @@ outliers <- which(abs(std_residuals) > 2)
 influential_dffits <- which(abs(dffits_vals) > dffits_threshold)
 problematic_covratio <- which(abs(covratio_vals - 1) > covratio_threshold)
 
-cat("Observaciones con alto apalancamiento (>", round(leverage_threshold, 3), "):", 
-    ifelse(length(high_leverage) > 0, paste(high_leverage, collapse = ", "), "Ninguna"), "\n")
-cat("Observaciones influyentes por Cook (>", round(cook_threshold, 3), "):", 
-    ifelse(length(influential_cook) > 0, paste(influential_cook, collapse = ", "), "Ninguna"), "\n")
-cat("Observaciones influyentes por DFFITS (>", round(dffits_threshold, 3), "):", 
-    ifelse(length(influential_dffits) > 0, paste(influential_dffits, collapse = ", "), "Ninguna"), "\n")
-
-cat("Posibles outliers (|residuo std| > 2):", 
-    ifelse(length(outliers) > 0, paste(outliers, collapse = ", "), "Ninguna"), "\n")
-
-# Resumen de observaciones más problemáticas
 all_problematic <- unique(c(high_leverage, influential_cook, influential_dffits, 
                            problematic_covratio, outliers))
-if(length(all_problematic) > 0) {
-  cat("\nRESUMEN - Observaciones que requieren atención:", paste(all_problematic, collapse = ", "), "\n")
-  cat("Estas observaciones deberían ser investigadas más detalladamente.\n")
-} else {
-  cat("\nRESUMEN - No hay observaciones problemáticas detectadas.\n")
-}
 ```
 
 **Conclusión del diagnóstico:**
 
-Nuestro modelo de estudio pasa exitosamente todas las verificaciones: -
-✅ **Linealidad**: Sin patrones en residuos vs ajustados - ✅
-**Homocedasticidad**: Varianza constante (Breusch-Pagan p \> 0.05) - ✅
-**Normalidad**: Los residuos siguen distribución normal (Shapiro-Wilk p
-\> 0.05) - ✅ **Independencia**: Sin autocorrelación (Durbin-Watson ≈
-2) - ✅ **Media nula**: La media de residuos es prácticamente 0 - ✅
-**Sin valores influyentes**: No hay observaciones problemáticas según
-Cook, DFFITS o COVRATIO - ✅ **Sin outliers**: No hay residuos
-estandarizados extremos
+Nuestro modelo de estudio pasa exitosamente todas las verificaciones:
+
+**✅ Linealidad**: Los gráficos de residuos vs valores ajustados no muestran patrones sistemáticos, confirmando que la relación lineal es apropiada.
+
+**✅ Homocedasticidad**: La prueba de Breusch-Pagan arroja un p-valor de `r round(bp_test$p.value, 4)`, que es mayor a 0.05, por lo que no hay evidencia de heterocedasticidad. La varianza de los errores es constante.
+
+**✅ Normalidad**: La prueba de Shapiro-Wilk presenta un p-valor de `r round(sw_test$p.value, 4)`, superior a 0.05, confirmando que los residuos siguen una distribución normal. Esto se corrobora visualmente en el Q-Q plot.
+
+**✅ Independencia**: El estadístico de Durbin-Watson es `r round(dw_test$statistic, 3)` con un p-valor de `r format.pval(dw_test$p.value, digits=3, eps=0.001)`, indicando ausencia de autocorrelación en los residuos.
+
+**✅ Media nula**: La media de los residuos es `r round(media_residuos, 10)`, prácticamente cero como se esperaría en un modelo bien especificado.
+
+```{r}
+#| echo: false
+if(length(all_problematic) > 0) {
+  cat("Se identificaron las siguientes observaciones que requieren atención:")
+  if(length(high_leverage) > 0) {
+    cat("\n• Alto apalancamiento (>", round(leverage_threshold, 3), "):", paste(high_leverage, collapse = ", "))
+  }
+  if(length(influential_cook) > 0) {
+    cat("\n• Influyentes según Cook (>", round(cook_threshold, 3), "):", paste(influential_cook, collapse = ", "))
+  }
+  if(length(influential_dffits) > 0) {
+    cat("\n• Influyentes según DFFITS (>", round(dffits_threshold, 3), "):", paste(influential_dffits, collapse = ", "))
+  }
+  if(length(outliers) > 0) {
+    cat("\n• Posibles outliers (|residuo std| > 2):", paste(outliers, collapse = ", "))
+  }
+  cat("\n\nEstas observaciones deberían ser investigadas más detalladamente antes de proceder con las inferencias finales.")
+} else {
+  cat("✅ **Sin observaciones problemáticas**: No se detectaron observaciones influyentes, con alto apalancamiento o outliers significativos.")
+}
+```
 
 Esto confirma que nuestras inferencias estadísticas (p-valores,
 intervalos de confianza) son válidas y confiables [@james2021;
