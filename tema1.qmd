@@ -688,14 +688,11 @@ también siguen una distribución Normal:
 $$
 \hat{\beta}_1 \sim N\left(\beta_1, \frac{\sigma^2}{S_{xx}}\right) \quad \quad \quad \hat{\beta}_0 \sim N\left(\beta_0, \sigma^2 \left[ \frac{1}{n} + \frac{\bar{x}^2}{S_{xx}} \right]\right)
 $$
-
 Al estandarizar y reemplazar la desconocida $\sigma^2$ por su estimador
 $\hat{\sigma}^2 = \text{MSE}$, obtenemos un estadístico que sigue una
 distribución t-Student con $n-2$ grados de libertad: 
 $$
-t = \frac{\hat{\beta}_1 - \beta_1}{\text{SE}(\hat{\beta}_1)} \sim t_{n-2}
-$$ 
-donde $\text{SE}(\hat{\beta}_1) = \sqrt{\frac{\text{MSE}}{S_{xx}}}$
+t = \frac{\hat{\beta}_1 - \beta_1}{\text{SE}(\hat{\beta}_1)} \sim t_{n-2}$$ donde $\text{SE}(\hat{\beta}_1) = \sqrt{\frac{\text{MSE}}{S_{xx}}}$
 es el **error estándar** del estimador $\hat{\beta}_1$.
 
 #### Contraste de hipótesis para la pendiente
@@ -705,8 +702,8 @@ $H_0: \beta_1 = 0$ \* $H_1: \beta_1 \neq 0$
 
 Bajo $H_0$, el estadístico de contraste es: 
 $$
-t_0 = \frac{\hat{\beta}_1}{\text{SE}(\hat{\beta}_1)}
-$$ 
+t_0 = \frac{\hat{\beta}_1}{\text{SE}(\hat{\beta}_1)}$$ 
+
 Rechazamos $H_0$ si $|t_0| > t_{\alpha/2, n-2}$ o, equivalentemente,
 si el p-valor asociado es menor que $\alpha$.
 
@@ -722,8 +719,7 @@ ambos contrastes será idéntico.
 
 A partir de la distribución t, podemos construir un intervalo de
 confianza al $100(1-\alpha)\%$ para el verdadero valor de la pendiente
-$\beta_1$: 
-$$
+$\beta_1$: $$
 \hat{\beta}_1 \pm t_{\alpha/2, n-2} \cdot \text{SE}(\hat{\beta}_1)
 $$ Este intervalo nos da un rango de valores plausibles para el efecto
 de $X$ sobre $Y$. Si el intervalo no contiene el cero, es equivalente a
@@ -947,22 +943,29 @@ línea recta: $E[Y | X] = \beta_0 + \beta_1 X$.
 
 **Métodos de diagnóstico:**
 
-1. **Diagnóstico visual:** El gráfico de **residuos** ($e_i$) frente a los **valores ajustados** por el modelo ($\hat{y}_i$) es la herramienta fundamental. La lógica es sencilla pero potente: si el modelo lineal es adecuado, los errores que comete (los residuos) deberían ser completamente aleatorios, sin guardar relación alguna con la magnitud de las predicciones.
+1.  **Diagnóstico visual:** El gráfico de **residuos** ($e_i$) frente a
+    los **valores ajustados** por el modelo ($\hat{y}_i$) es la
+    herramienta fundamental. La lógica es sencilla pero potente: si el
+    modelo lineal es adecuado, los errores que comete (los residuos)
+    deberían ser completamente aleatorios, sin guardar relación alguna
+    con la magnitud de las predicciones.
 
-2. **Test de Ramsey RESET:** Este test estadístico detecta violaciones de la forma funcional mediante la inclusión de términos no lineales ($\hat{y}^2, \hat{y}^3, ...$) en el modelo. 
+2.  **Test de Ramsey RESET:** Este test estadístico detecta violaciones
+    de la forma funcional mediante la inclusión de términos no lineales
+    ($\hat{y}^2, \hat{y}^3, ...$) en el modelo.
 
-   - **H₀:** La forma funcional es correcta (lineal)  
-   - **H₁:** La forma funcional es incorrecta (no lineal)  
-   - **Estadístico:** Sigue una distribución F bajo H₀  
-   - **Interpretación:** p-valor bajo indica violación de linealidad
+    -   **H₀:** La forma funcional es correcta (lineal)\
+    -   **H₁:** La forma funcional es incorrecta (no lineal)\
+    -   **Estadístico:** Sigue una distribución F bajo H₀\
+    -   **Interpretación:** p-valor bajo indica violación de linealidad
 
-**En un escenario ideal**, el gráfico debería parecer una nube de
-puntos distribuida horizontalmente y sin estructura aparente, centrada
-en la línea del cero. Esto nos indica que los errores son, en promedio,
-nulos para todos los niveles de predicción, cumpliendo así el supuesto
-de linealidad. La línea roja que R superpone en este gráfico, que
-suaviza la tendencia de los puntos, debería ser prácticamente plana y
-pegada al cero, confirmando la ausencia de patrones.
+**En un escenario ideal**, el gráfico debería parecer una nube de puntos
+distribuida horizontalmente y sin estructura aparente, centrada en la
+línea del cero. Esto nos indica que los errores son, en promedio, nulos
+para todos los niveles de predicción, cumpliendo así el supuesto de
+linealidad. La línea roja que R superpone en este gráfico, que suaviza
+la tendencia de los puntos, debería ser prácticamente plana y pegada al
+cero, confirmando la ausencia de patrones.
 
 ::: {.callout-tip title="Ejemplo de un modelo válido" collapse="true"}
 Para nuestro `modelo_estudio`, podemos generar específicamente el primer
@@ -1071,13 +1074,14 @@ reset_no_lineal <- resettest(modelo_no_lineal, power = 2:3, type = "fitted")
 print(reset_no_lineal)
 ```
 
-El test de Ramsey RESET confirma nuestro diagnóstico visual: 
+El test de Ramsey RESET confirma nuestro diagnóstico visual:
 
-- Para el modelo correcto: p-valor = `r round(reset_resultado$p.value, 4)` → No
-rechazamos H₀ (forma funcional correcta) 
-- Para el modelo no lineal:
-p-valor = `r round(reset_no_lineal$p.value, 4)` → Rechazamos H₀ (forma
-funcional incorrecta)
+-   Para el modelo correcto: p-valor =
+    `r round(reset_resultado$p.value, 4)` → No rechazamos H₀ (forma
+    funcional correcta)
+-   Para el modelo no lineal: p-valor =
+    `r round(reset_no_lineal$p.value, 4)` → Rechazamos H₀ (forma
+    funcional incorrecta)
 :::
 
 ### Homocedasticidad
@@ -1092,19 +1096,24 @@ modelado.
 
 **Métodos de diagnóstico:**
 
-1. **Diagnóstico visual:** El gráfico **Scale-Location** muestra la raíz cuadrada de los residuos estandarizados absolutos frente a los valores ajustados. Una línea horizontal indica homocedasticidad.
+1.  **Diagnóstico visual:** El gráfico **Scale-Location** muestra la
+    raíz cuadrada de los residuos estandarizados absolutos frente a los
+    valores ajustados. Una línea horizontal indica homocedasticidad.
 
-2. **Test de Breusch-Pagan:** Test clásico para detectar heterocedasticidad.
+2.  **Test de Breusch-Pagan:** Test clásico para detectar
+    heterocedasticidad.
 
-   - **H₀:** Homocedasticidad (varianza constante)
-   - **H₁:** Heterocedasticidad 
-   - **Estadístico:** LM ~ χ² bajo H₀
+    -   **H₀:** Homocedasticidad (varianza constante)
+    -   **H₁:** Heterocedasticidad
+    -   **Estadístico:** LM \~ χ² bajo H₀
 
-3. **Test de White:** Versión más robusta que no asume una forma específica de heterocedasticidad.
+3.  **Test de White:** Versión más robusta que no asume una forma
+    específica de heterocedasticidad.
 
-   - **H₀:** Homocedasticidad
-   - **H₁:** Heterocedasticidad (forma general)
-   - **Ventaja:** No requiere especificar la forma funcional de la heterocedasticidad
+    -   **H₀:** Homocedasticidad
+    -   **H₁:** Heterocedasticidad (forma general)
+    -   **Ventaja:** No requiere especificar la forma funcional de la
+        heterocedasticidad
 
 ¿Por qué es tan importante? Si un modelo es heteroscedástico, los
 errores estándar de los coeficientes ($\beta_0, \beta_1$) estarán
@@ -1198,9 +1207,9 @@ roja es casi horizontal, lo que indica que la varianza de los residuos
 es estable a lo largo de los valores ajustados. Esto se confirma con
 ambas pruebas:
 
-- **Breusch-Pagan**: p-valor = `r round(bp_resultado$p.value, 4)` → No
+-   **Breusch-Pagan**: p-valor = `r round(bp_resultado$p.value, 4)` → No
     rechazamos H₀ (homocedasticidad)
-- **White**: p-valor = `r round(white_resultado$p.value, 4)` → No
+-   **White**: p-valor = `r round(white_resultado$p.value, 4)` → No
     rechazamos H₀ (varianza constante) **Nuestro modelo cumple el
     supuesto**.
 :::
@@ -1284,22 +1293,24 @@ y los contrastes de hipótesis cuando el tamaño de la muestra es pequeño.
 
 **Métodos de diagnóstico:**
 
-1. **Diagnóstico visual:** 
+1.  **Diagnóstico visual:**
 
-   - **Gráfico Q-Q:** Los puntos deben seguir la línea diagonal si hay normalidad
-   - **Histograma:** Debe mostrar forma campaniforme y simétrica
+    -   **Gráfico Q-Q:** Los puntos deben seguir la línea diagonal si
+        hay normalidad
+    -   **Histograma:** Debe mostrar forma campaniforme y simétrica
 
-2. **Test de Shapiro-Wilk:** Test más potente para muestras pequeñas y medianas (n < 50).
+2.  **Test de Shapiro-Wilk:** Test más potente para muestras pequeñas y
+    medianas (n \< 50).
 
-   - **H₀:** Los residuos siguen distribución normal
-   - **H₁:** Los residuos no siguen distribución normal
-   - **Limitación:** Muy sensible en muestras grandes
+    -   **H₀:** Los residuos siguen distribución normal
+    -   **H₁:** Los residuos no siguen distribución normal
+    -   **Limitación:** Muy sensible en muestras grandes
 
-3. **Test de Jarque-Bera:** Basado en medidas de asimetría y curtosis.
+3.  **Test de Jarque-Bera:** Basado en medidas de asimetría y curtosis.
 
-   - **H₀:** Los residuos son normales (asimetría = 0, curtosis = 3)
-   - **H₁:** Los residuos no son normales
-   - **Ventaja:** Menos sensible al tamaño muestral que Shapiro-Wilk
+    -   **H₀:** Los residuos son normales (asimetría = 0, curtosis = 3)
+    -   **H₁:** Los residuos no son normales
+    -   **Ventaja:** Menos sensible al tamaño muestral que Shapiro-Wilk
 
 Para evaluar la normalidad disponemos de estas herramientas visuales y
 analíticas:
@@ -1461,22 +1472,31 @@ temporales.
 
 **Métodos de diagnóstico:**
 
-1. **Diagnóstico visual:** Gráfico de residuos vs orden de observación. No debe mostrar patrones temporales o secuenciales.
+1.  **Diagnóstico visual:** Gráfico de residuos vs orden de observación.
+    No debe mostrar patrones temporales o secuenciales.
 
-2. **Test de Durbin-Watson:** Test clásico para autocorrelación de primer orden.
-   - **H₀:** No hay autocorrelación ($\rho = 0$)
-   - **H₁:** Hay autocorrelación de orden 1
-   - **Estadístico:** $DW = \frac{\sum_{i=2}^{n}(e_i - e_{i-1})^2}{\sum_{i=1}^{n}e_i^2}$
-   - **Interpretación:** Valores cerca de 2 → no autocorrelación; cerca de 0 → autocorrelación positiva; cerca de 4 → autocorrelación negativa
+2.  **Test de Durbin-Watson:** Test clásico para autocorrelación de
+    primer orden.
 
-3. **Test de Breusch-Godfrey (LM):** Generalización del Durbin-Watson para órdenes superiores y regresores retardados.
-   - **H₀:** No hay autocorrelación serial hasta el orden especificado
-   - **H₁:** Hay autocorrelación serial
-   - **Ventaja:** Más general y potente que Durbin-Watson
+    -   **H₀:** No hay autocorrelación ($\rho = 0$)
+    -   **H₁:** Hay autocorrelación de orden 1
+    -   **Estadístico:**
+        $DW = \frac{\sum_{i=2}^{n}(e_i - e_{i-1})^2}{\sum_{i=1}^{n}e_i^2}$
+    -   **Interpretación:** Valores cerca de 2 → no autocorrelación;
+        cerca de 0 → autocorrelación positiva; cerca de 4 →
+        autocorrelación negativa
 
-El estadístico de Durbin-Watson varía entre 0 y 4. Un valor cercano a 2 sugiere no
-autocorrelación. Valores cercanos a 0 indican autocorrelación positiva,
-y cercanos a 4, autocorrelación negativa.
+3.  **Test de Breusch-Godfrey (LM):** Generalización del Durbin-Watson
+    para órdenes superiores y regresores retardados.
+
+    -   **H₀:** No hay autocorrelación serial hasta el orden
+        especificado
+    -   **H₁:** Hay autocorrelación serial
+    -   **Ventaja:** Más general y potente que Durbin-Watson
+
+El estadístico de Durbin-Watson varía entre 0 y 4. Un valor cercano a 2
+sugiere no autocorrelación. Valores cercanos a 0 indican autocorrelación
+positiva, y cercanos a 4, autocorrelación negativa.
 
 ::: {.callout-tip title="Ejemplo de independencia válida" collapse="true"}
 Para nuestro `modelo_estudio`, evaluamos la independencia mediante el
@@ -1515,13 +1535,20 @@ print(bg_resultado)
 
 El diagnóstico es satisfactorio. El gráfico de residuos vs orden no
 muestra ningún patrón sistemático o tendencia temporal. Ambas pruebas
-estadísticas confirman la independencia: 
+estadísticas confirman la independencia:
 
-- **Durbin-Watson**: DW =`r round(dw_resultado_valido$statistic, 3)`, p-valor = `r round(dw_resultado_valido$p.value, 4)` → No hay autocorrelación de orden 1 
-- **Breusch-Godfrey**: LM =`r round(bg_resultado$statistic, 3)`, p-valor = `r round(bg_resultado$p.value, 4)` → No hay autocorrelación de orden 2 fluctúan aleatoriamente alrededor del cero. 
+-   **Durbin-Watson**: DW =`r round(dw_resultado_valido$statistic, 3)`,
+    p-valor = `r round(dw_resultado_valido$p.value, 4)` → No hay
+    autocorrelación de orden 1
+-   **Breusch-Godfrey**: LM =`r round(bg_resultado$statistic, 3)`,
+    p-valor = `r round(bg_resultado$p.value, 4)` → No hay
+    autocorrelación de orden 2 fluctúan aleatoriamente alrededor del
+    cero.
 
-La prueba de Durbin-Watson arroja un estadístico de **`r round(dw_resultado_valido$statistic, 3)`**
-(cercano a 2) y un **p-valor de `r format.pval(dw_resultado_valido$p.value, digits=3, eps=0.001)`**,
+La prueba de Durbin-Watson arroja un estadístico de
+**`r round(dw_resultado_valido$statistic, 3)`** (cercano a 2) y un
+**p-valor de
+`r format.pval(dw_resultado_valido$p.value, digits=3, eps=0.001)`**,
 confirmando que no hay evidencia de autocorrelación. **El supuesto de
 independencia se cumple**.
 :::
@@ -2026,15 +2053,28 @@ all_problematic <- unique(c(high_leverage, influential_cook, influential_dffits,
 
 Nuestro modelo de estudio pasa exitosamente todas las verificaciones:
 
-**✅ Linealidad**: Los gráficos de residuos vs valores ajustados no muestran patrones sistemáticos, confirmando que la relación lineal es apropiada.
+**✅ Linealidad**: Los gráficos de residuos vs valores ajustados no
+muestran patrones sistemáticos, confirmando que la relación lineal es
+apropiada.
 
-**✅ Homocedasticidad**: La prueba de Breusch-Pagan arroja un p-valor de `r round(bp_test$p.value, 4)`, que es mayor a 0.05, por lo que no hay evidencia de heterocedasticidad. La varianza de los errores es constante.
+**✅ Homocedasticidad**: La prueba de Breusch-Pagan arroja un p-valor de
+`r round(bp_test$p.value, 4)`, que es mayor a 0.05, por lo que no hay
+evidencia de heterocedasticidad. La varianza de los errores es
+constante.
 
-**✅ Normalidad**: La prueba de Shapiro-Wilk presenta un p-valor de `r round(sw_test$p.value, 4)`, superior a 0.05, confirmando que los residuos siguen una distribución normal. Esto se corrobora visualmente en el Q-Q plot.
+**✅ Normalidad**: La prueba de Shapiro-Wilk presenta un p-valor de
+`r round(sw_test$p.value, 4)`, superior a 0.05, confirmando que los
+residuos siguen una distribución normal. Esto se corrobora visualmente
+en el Q-Q plot.
 
-**✅ Independencia**: El estadístico de Durbin-Watson es `r round(dw_test$statistic, 3)` con un p-valor de `r format.pval(dw_test$p.value, digits=3, eps=0.001)`, indicando ausencia de autocorrelación en los residuos.
+**✅ Independencia**: El estadístico de Durbin-Watson es
+`r round(dw_test$statistic, 3)` con un p-valor de
+`r format.pval(dw_test$p.value, digits=3, eps=0.001)`, indicando
+ausencia de autocorrelación en los residuos.
 
-**✅ Media nula**: La media de los residuos es `r round(media_residuos, 10)`, prácticamente cero como se esperaría en un modelo bien especificado.
+**✅ Media nula**: La media de los residuos es
+`r round(media_residuos, 10)`, prácticamente cero como se esperaría en
+un modelo bien especificado.
 
 ```{r}
 #| echo: false
