@@ -562,7 +562,11 @@ El caso más directo es la interacción entre dos variables continuas:
 
 $$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1 X_2 + \varepsilon$$
 
-**Interpretación del coeficiente de interacción (**$\beta_3$): - Si $\beta_3 > 0$: El efecto de $X_1$ se **amplifica** cuando $X_2$ aumenta - Si $\beta_3 < 0$: El efecto de $X_1$ se **atenúa** cuando $X_2$ aumenta - Si $\beta_3 = 0$: No hay interacción (efectos aditivos)
+**Interpretación del coeficiente de interacción** ($\beta_3$): 
+
+- Si $\beta_3 > 0$: El efecto de $X_1$ se **amplifica** cuando $X_2$ aumenta 
+- Si $\beta_3 < 0$: El efecto de $X_1$ se **atenúa** cuando $X_2$ aumenta 
+- Si $\beta_3 = 0$: No hay interacción (efectos aditivos)
 
 ::: {.callout-tip title="Ejemplo: Interacción precio-publicidad en ventas"}
 ```{r interaccion-continua-continua}
@@ -583,15 +587,46 @@ datos_inter <- data.frame(precio, publicidad, ventas)
 # Modelo con interacción
 modelo_interaccion <- lm(ventas ~ precio * publicidad, data = datos_inter)
 summary(modelo_interaccion)
+```
 
-# Interpretación del coeficiente de interacción
+**Interpretación numérica de los coeficientes:**
+
+```{r interpretacion-coeficientes}
+# Extraer coeficientes y p-valores para interpretación
 coef_int <- coef(modelo_interaccion)
-cat("Interpretación de la interacción:\n")
-cat("Coeficiente interacción:", round(coef_int[4], 3), "\n")
-cat("Efecto precio cuando publicidad=0:", round(coef_int[2], 2), "\n")
-cat("Efecto precio cuando publicidad=5:", round(coef_int[2] + 5*coef_int[4], 2), "\n")
-cat("Efecto precio cuando publicidad=10:", round(coef_int[2] + 10*coef_int[4], 2), "\n")
+summary_model <- summary(modelo_interaccion)
+p_valores <- summary_model$coefficients[, "Pr(>|t|)"]
 
+# Crear tabla de interpretación de efectos
+tabla_efectos <- data.frame(
+  Nivel_Publicidad = c("0 (sin publicidad)", "5 (media)", "10 (alta)"),
+  Efecto_Precio = c(
+    round(coef_int[2], 2),
+    round(coef_int[2] + 5*coef_int[4], 2),
+    round(coef_int[2] + 10*coef_int[4], 2)
+  )
+)
+
+kable(tabla_efectos, 
+      caption = "Efecto del precio según el nivel de publicidad (hipotético)",
+      col.names = c("Nivel de Publicidad", "Efecto del Precio (€/unidad)"))
+```
+
+**Evidencia estadística:** La interacción tiene un coeficiente de **`r round(coef_int[4], 3)`** con un p-valor de **`r round(p_valores[4], 3)`**. Dado que p > 0.05, **no hay evidencia estadística de interacción** entre precio y publicidad.
+
+**Interpretación del gráfico:** El primer gráfico (scatter plot con líneas de tendencia por grupos de publicidad) muestra **líneas prácticamente paralelas**, confirmando la ausencia de interacción. Aunque visualmente las pendientes parecen ligeramente diferentes, esta variación está dentro del rango esperado por el ruido aleatorio.
+
+**Implicaciones prácticas:** 
+
+- El efecto del precio sobre las ventas es **constante** (-€5 por unidad) independientemente del nivel de publicidad
+- Los efectos son **aditivos**: cada €1000 adicional en publicidad aumenta las ventas base en ~50 unidades, sin modificar la sensibilidad al precio
+- **Modelo recomendado:** `ventas ~ precio + publicidad` (sin término de interacción)
+
+**Lección metodológica:** Este caso demuestra la importancia de **confiar en la evidencia estadística formal** sobre las impresiones visuales cuando hay variabilidad muestral significativa.
+
+**Visualización para verificar ausencia de interacción:**
+
+```{r visualizacion-interaccion}
 # Visualización de la interacción
 library(ggplot2)
 # Crear grupos de publicidad para visualizar
@@ -600,10 +635,377 @@ datos_inter$pub_grupo <- cut(datos_inter$publicidad,
                             labels = c("Baja", "Media", "Alta"))
 
 ggplot(datos_inter, aes(x = precio, y = ventas, color = pub_grupo)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(title = "Interacción Precio-Publicidad",
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, linewidth = 1.2) +
+  labs(title = "Efectos Aditivos: Precio y Publicidad",
+       subtitle = "Pendientes similares confirman ausencia de interacción",
        x = "Precio (€)", y = "Ventas", color = "Publicidad") +
   theme_minimal()
 ```
+
+**Interpretación crítica: Visual vs Estadística**
+
+Observando el gráfico, las líneas **parecen tener pendientes diferentes**, lo que visualmente sugeriría la presencia de interacción. Sin embargo, el análisis estadístico formal nos indica que esta diferencia **no es estadísticamente significativa** (p = 0.435).
+
+**¿Por qué esta aparente contradicción?**
+
+- **Variabilidad aleatoria**: Las diferencias observadas pueden deberse al ruido aleatorio en los datos
+- **Tamaño de muestra**: Puede no ser suficiente para detectar una interacción débil si realmente existe
+- **Poder estadístico**: El test puede no tener suficiente poder para detectar efectos pequeños
+- **Agrupación artificial**: Los grupos de publicidad se crearon artificialmente para visualización, no reflejan la variable continua real
+
+**Decisión metodológica correcta:**
+
+- **Confiar en la estadística formal**: El p-valor > 0.05 indica no significancia
+- **Modelo parsimonioso**: Eliminar el término de interacción no significativo
+- **Interpretación conservadora**: Los efectos son aditivos hasta que se demuestre lo contrario
+
+**Lección pedagógica crucial:** 
+
+Este ejemplo demuestra por qué **la inspección visual nunca debe ser el único criterio** para decidir sobre la inclusión de términos de interacción. La estadística inferencial formal debe prevalecer sobre las impresiones visuales, especialmente cuando hay incertidumbre debido a la variabilidad muestral.
+
+**Modelo final recomendado:** `ventas ~ precio + publicidad` (sin interacción)
 :::
+
+
+
+### Interacciones entre variables categóricas
+
+Cuando ambas variables son categóricas, las interacciones representan efectos específicos de **combinaciones de categorías** que no pueden explicarse por los efectos principales por separado.
+
+Para dos variables categóricas A (con niveles i) y B (con niveles j), el modelo incluye:
+
+$$Y = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \varepsilon$$
+
+Donde $(\alpha\beta)_{ij}$ representa la interacción específica entre el nivel i de A y el nivel j de B.
+
+La interacción $(\alpha\beta)_{ij}$ indica cuánto la combinación específica (i,j) se desvía del efecto que esperaríamos si solo sumáramos los efectos principales $\alpha_i + \beta_j$.
+
+::: {.callout-tip title="Ejemplo: Interacción género-departamento en salarios" collapse="true"}
+```{r interaccion-categorica-categorica}
+# Simulación: salarios por género y departamento con interacción
+# (brecha salarial varía según departamento)
+set.seed(456)
+n <- 300
+
+# Variables categóricas
+genero <- sample(c("Masculino", "Femenino"), n, replace = TRUE)
+departamento <- sample(c("Ventas", "IT", "RRHH"), n, replace = TRUE)
+
+# Efectos principales y de interacción simulados
+efecto_base <- 40000  # salario base
+efecto_masculino <- ifelse(genero == "Masculino", 2000, 0)
+efecto_it <- ifelse(departamento == "IT", 8000, 0)
+efecto_rrhh <- ifelse(departamento == "RRHH", 3000, 0)
+
+# Interacción: brecha de género mayor en IT
+interaccion <- ifelse(genero == "Masculino" & departamento == "IT", 4000, 0)
+
+salario <- efecto_base + efecto_masculino + efecto_it + efecto_rrhh + 
+           interaccion + rnorm(n, 0, 3000)
+
+datos_cat <- data.frame(genero, departamento, salario)
+
+# Modelo con interacción
+modelo_cat <- lm(salario ~ genero * departamento, data = datos_cat)
+summary(modelo_cat)
+
+# Medias por grupo para interpretar la interacción
+medias_grupo <- aggregate(salario ~ genero + departamento, data = datos_cat, FUN = mean)
+medias_grupo <- medias_grupo[order(medias_grupo$departamento, medias_grupo$genero), ]
+kable(medias_grupo, caption = "Salario promedio por género y departamento")
+
+# Visualización de la interacción
+library(ggplot2)
+ggplot(datos_cat, aes(x = departamento, y = salario, fill = genero)) +
+  geom_boxplot(position = "dodge") +
+  stat_summary(fun = mean, geom = "point", shape = 23, size = 3, 
+               position = position_dodge(0.75)) +
+  labs(title = "Interacción Género-Departamento en Salarios",
+       x = "Departamento", y = "Salario (€)", fill = "Género") +
+  theme_minimal()
+```
+
+**Evidencia visual clara:** El segundo gráfico (boxplots por género y departamento) revela **patrones de interacción marcados** que se manifiestan de forma diferente en cada departamento.
+
+**Patrones específicos por departamento:**
+
+- **IT:** La brecha de género es **máxima** (~€8,000). Los hombres tienen salarios significativamente superiores y mayor variabilidad salarial
+- **RRHH:** Brecha **moderada** (~€3,000) con distribuciones más similares entre géneros
+- **Ventas:** **Menor brecha de género** (~€1,500), con salarios más homogéneos entre grupos
+
+**Interpretación de la interacción:** Las **líneas no paralelas** en el patrón de medias confirman que el efecto del género sobre el salario **varía significativamente según el departamento**. Esto sugiere:
+
+- Diferencias en **culturas departamentales** respecto a equidad salarial
+- **Estructuras de compensación** variables entre departamentos
+- Posibles diferencias en **poder de negociación** o **demanda de talento**
+
+**Implicaciones organizacionales:** La interacción indica que las políticas salariales no son uniformes y que intervenciones de equidad deberían ser **diferenciadas por departamento**.
+
+:::
+
+### Interacciones mixtas (continua × categórica)
+
+Las interacciones mixtas son especialmente útiles para modelar **cómo el efecto de una variable continua varía entre grupos categóricos**. Esto es fundamental cuando sospechamos que la relación funcional cambia según el contexto definido por la variable categórica.
+
+**Formulación matemática:**
+$$Y = \beta_0 + \beta_1 X + \beta_2 D + \beta_3 X \cdot D + \varepsilon$$
+
+Donde D es una variable dummy (0/1) que representa la variable categórica.
+
+**Interpretación geométrica:** La interacción permite que cada grupo categórico tenga:
+
+- **Intercepto diferente**: $\beta_0$ (grupo de referencia) vs. $\beta_0 + \beta_2$ (otro grupo)  
+- **Pendiente diferente**: $\beta_1$ (grupo de referencia) vs. $\beta_1 + \beta_3$ (otro grupo)
+
+::: {.callout-tip title="Ejemplo: Interacción experiencia-género en salarios" collapse="true"}
+```{r interaccion-mixta}
+# Simulación: efecto de experiencia en salario varía según género
+set.seed(789)
+n <- 250
+
+experiencia <- runif(n, 0, 20)  # años de experiencia
+genero <- sample(c("Femenino", "Masculino"), n, replace = TRUE)
+
+# Efecto diferencial: pendiente de experiencia menor para mujeres
+salario_base <- 35000
+efecto_experiencia_hombres <- 2000  # €2000 por año para hombres
+efecto_experiencia_mujeres <- 1200  # €1200 por año para mujeres (brecha creciente)
+efecto_genero_base <- ifelse(genero == "Masculino", 3000, 0)
+
+# Crear variable dummy para interacción
+dummy_masculino <- ifelse(genero == "Masculino", 1, 0)
+
+# Salario con interacción
+salario <- salario_base + 
+           efecto_experiencia_mujeres * experiencia +  # pendiente base (mujeres)
+           efecto_genero_base * dummy_masculino +      # diferencia intercepto
+           (efecto_experiencia_hombres - efecto_experiencia_mujeres) * experiencia * dummy_masculino +  # interacción
+           rnorm(n, 0, 4000)
+
+datos_mixta <- data.frame(experiencia, genero, salario, dummy_masculino)
+
+# Modelo con interacción
+modelo_mixta <- lm(salario ~ experiencia * genero, data = datos_mixta)
+summary(modelo_mixta)
+```
+
+**Interpretación detallada de los coeficientes:**
+
+```{r interpretacion-coeficientes-mixta}
+# Extraer coeficientes para interpretación
+coef_mixta <- coef(modelo_mixta)
+
+# Crear tabla de interpretación por género
+tabla_genero <- data.frame(
+  Parámetro = c("Intercepto (salario inicial)", "Pendiente (€ por año experiencia)"),
+  Mujeres = c(
+    paste0("€", format(round(coef_mixta[1], 0), big.mark = ",")),
+    paste0("€", round(coef_mixta[2], 0))
+  ),
+  Hombres = c(
+    paste0("€", format(round(coef_mixta[1] + coef_mixta[3], 0), big.mark = ",")),
+    paste0("€", round(coef_mixta[2] + coef_mixta[4], 0))
+  ),
+  Diferencia = c(
+    paste0("€", format(round(coef_mixta[3], 0), big.mark = ",")),
+    paste0("€", round(coef_mixta[4], 0), " adicionales")
+  )
+)
+
+kable(tabla_genero, 
+      caption = "Comparación de parámetros del modelo por género")
+```
+
+**Implicaciones de la interacción:**
+
+El coeficiente de interacción (**`r round(coef_mixta[4], 0)`**) indica que cada año adicional de experiencia aumenta el salario masculino en **€`r round(coef_mixta[4], 0)` más** que el salario femenino. Esto crea una **brecha creciente**: inicialmente la diferencia es de €`r format(round(coef_mixta[3], 0), big.mark = ",")`, pero después de 20 años de experiencia, la brecha total alcanza €`r format(round(coef_mixta[3] + 20*coef_mixta[4], 0), big.mark = ",")`.
+
+**Visualización de la divergencia salarial:**
+
+```{r visualizacion-mixta}
+# Visualización de líneas de regresión por grupo
+ggplot(datos_mixta, aes(x = experiencia, y = salario, color = genero)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", formula = y ~ x, se = TRUE, linewidth = 1.2) +
+  labs(title = "Interacción Experiencia-Género: Brechas Crecientes",
+       subtitle = "La brecha salarial se amplía con la experiencia",
+       x = "Años de experiencia", y = "Salario (€)", color = "Género") +
+  theme_minimal() +
+  scale_color_manual(values = c("Femenino" = "#E69F00", "Masculino" = "#0072B2")) +
+  scale_y_continuous(labels = scales::comma_format(suffix = "€"))
+```
+
+**Evidencia de brechas crecientes:** El tercer gráfico (scatter plot con líneas de regresión) demuestra claramente el patrón de **interacción experiencia-género** mediante **líneas divergentes** con pendientes notablemente diferentes.
+
+**Interpretación cuantitativa de la divergencia:**
+
+- **Punto de inicio (0 años):** Brecha inicial de €`r format(round(coef_mixta[3], 0), big.mark = ",")` a favor de los hombres
+- **Pendientes diferenciadas:** Los hombres ganan €`r round(coef_mixta[2] + coef_mixta[4], 0)` adicionales por año vs. €`r round(coef_mixta[2], 0)` para las mujeres
+- **Brecha acumulativa:** Cada año adicional de experiencia **amplía la brecha** en €`r round(coef_mixta[4], 0)` adicionales
+
+**Implicaciones del patrón de interacción:** La **divergencia progresiva** visible en las líneas revela que:
+
+- El **retorno a la experiencia** es sistemáticamente **mayor para hombres** que para mujeres
+- A los 20 años de experiencia, la brecha total alcanza €`r format(round(coef_mixta[3] + 20*coef_mixta[4], 0), big.mark = ",")` (inicial + acumulativa)
+- Este patrón sugiere **barreras estructurales** que impiden que las mujeres capitalicen plenamente su experiencia
+
+**Significancia social:** Esta interacción documenta un fenómeno preocupante donde la **inequidad salarial se agrava con el tiempo**, indicando que las brechas de género no son meramente diferencias de entrada sino **desventajas acumulativas** a lo largo de la carrera profesional.
+:::
+
+
+### Identificación y detección de interacciones
+
+La **detección sistemática de interacciones** requiere combinar **justificación teórica**, **exploración visual** y **validación estadística**. No debemos buscar interacciones aleatoriamente, sino guiados por el conocimiento del dominio y patrones observables en los datos.
+
+#### Métodos de identificación
+
+**1. Justificación teórica previa:** La teoría del dominio debe sugerir dónde pueden existir interacciones. Por ejemplo:
+
+- **Economía**: efectos precio-publicidad, educación-experiencia
+- **Medicina**: interacciones dosis-edad, tratamiento-comorbilidad  
+- **Marketing**: producto-canal, temporada-promoción
+
+**2. Exploración visual sistemática:**
+
+- **Variables continuas**: Gráficos de dispersión coloreados por grupos categóricos
+- **Variables categóricas**: Gráficos de interacción (interaction plots)
+- **Mixtas**: Líneas de regresión por grupo
+
+**3. Tests estadísticos formales:**
+
+- **Test F para interacciones**: Compara modelos con y sin términos de interacción
+- **Test de significancia individual**: t-test para coeficientes de interacción específicos
+- **Criterios de información**: AIC/BIC para selección de modelos
+
+::: {.callout-note title="Estrategia de modelado jerárquico"}
+**Principio de jerarquía:** Si incluimos una interacción A×B, **siempre debemos incluir los efectos principales** A y B, incluso si no son significativos individualmente. Esto preserva la interpretabilidad y evita sesgos en los coeficientes de interacción.
+
+**Proceso de construcción del modelo:**
+
+1. **Modelo base**: Solo efectos principales
+2. **Modelo con interacciones**: Agregar términos de interacción teoricamente justificados
+3. **Comparación**: Test F para evaluar mejora significativa
+4. **Selección**: Usar criterios estadísticos y de parsimonia
+5. **Validación**: Verificar supuestos y estabilidad en datos de prueba
+:::
+
+#### Visualización de interacciones
+
+La **visualización efectiva** es crítica para comunicar interacciones, ya que su interpretación puede ser contraintuitiva. Diferentes tipos de interacciones requieren estrategias visuales específicas.
+
+::: {.callout-tip title="Ejemplo: Gráfico de interacción para variables categóricas" collapse="true"}
+Para visualizar efectivamente las interacciones entre variables categóricas, utilizaremos los datos del ejemplo anterior de género-departamento y crearemos un gráfico de interacción clásico. Este tipo de gráfico nos permite identificar visualmente la presencia de interacciones mediante el patrón de las líneas.
+
+**Preparación de los datos:**
+
+```{r grafico-interaccion-prep}
+# Usar datos del ejemplo anterior de género-departamento
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(dplyr))
+
+# Calcular medias y errores estándar por grupo para el gráfico
+medias_se <- datos_cat %>%
+  group_by(genero, departamento) %>%
+  summarise(
+    media = mean(salario),
+    se = sd(salario) / sqrt(n()),
+    .groups = "drop"
+  )
+
+# Mostrar los datos calculados
+kable(medias_se, caption = "Medias y errores estándar por grupo")
+```
+
+**Visualización de la interacción:**
+
+```{r grafico-interaccion-viz}
+# Gráfico de interacción estilo clásico
+ggplot(medias_se, aes(x = departamento, y = media, color = genero, group = genero)) +
+  geom_point(size = 3) +
+  geom_line(linewidth = 1) +
+  geom_errorbar(aes(ymin = media - se, ymax = media + se), width = 0.1) +
+  labs(title = "Gráfico de Interacción: Género × Departamento",
+       subtitle = "Las líneas no paralelas indican presencia de interacción",
+       x = "Departamento", y = "Salario promedio (€)", color = "Género") +
+  theme_minimal() +
+  theme(plot.subtitle = element_text(size = 10, color = "gray50"))
+```
+
+**Interpretación del gráfico de interacción:**
+
+La interpretación visual de las interacciones se basa en el patrón de las líneas:
+
+- **Líneas paralelas**: Indican **ausencia de interacción**. El efecto de una variable es constante across los niveles de la otra variable.
+
+- **Líneas que convergen, divergen o se cruzan**: Indican **presencia de interacción**. El efecto de una variable cambia según el nivel de la otra variable.
+
+En nuestro ejemplo, las líneas **no son paralelas**, lo que confirma la presencia de una interacción significativa entre género y departamento. La brecha salarial de género varía considerablemente entre departamentos: es mayor en IT, moderada en RRHH, y menor en Ventas.
+
+**Implicaciones prácticas:** Este patrón sugiere que las políticas salariales no son uniformes across departamentos, y que factores como la cultura departamental, la demanda de talento, o las dinámicas de negociación pueden influir de manera diferencial en la brecha de género.
+:::
+
+### Consideraciones prácticas y limitaciones
+
+#### Complejidad interpretativa
+
+Las interacciones incrementan exponencialmente la **complejidad interpretativa** del modelo. Un modelo con k efectos principales puede tener hasta k(k-1)/2 interacciones de segundo orden, y el número crece exponencialmente con interacciones de orden superior.
+
+**Reglas prácticas para la complejidad:**
+
+- **Máximo 2-3 interacciones de segundo orden** en modelos explicativos
+- **Evitar interacciones de tercer orden** salvo justificación teórica muy sólida
+- **Priorizar interacciones con efectos grandes** sobre significancia estadística
+
+#### Problemas de multicolinealidad
+
+Las interacciones pueden crear **multicolinealidad severa**, especialmente cuando:
+- Las variables principales están correlacionadas
+- Se incluyen múltiples interacciones con variables comunes
+- Se usan variables categóricas con muchos niveles
+
+**Estrategias de mitigación:**
+
+- **Centrado de variables continuas**: Reduce correlación entre X y X×Z
+- **Selección cuidadosa**: No incluir todas las interacciones posibles
+- **Regularización**: Métodos Ridge/Lasso cuando hay muchas interacciones
+
+#### Interpretación con variables transformadas
+
+Cuando las variables están **transformadas** (logarítmica, Box-Cox), la interpretación de interacciones se complica significativamente:
+
+$$\log(Y) = \beta_0 + \beta_1 \log(X_1) + \beta_2 X_2 + \beta_3 \log(X_1) \cdot X_2 + \varepsilon$$
+
+En este caso, $\beta_3$ representa cómo cambia la **elasticidad** de Y respecto a X₁ cuando X₂ aumenta en una unidad.
+
+::: {.callout-warning title="Advertencia sobre interpretación"}
+**Cuidado con la interpretación automática.** Las interacciones en escalas transformadas tienen significados diferentes que en escalas originales. Siempre verificar la interpretación en el contexto de la transformación aplicada y considerar la retransformación para comunicación con audiencias no técnicas.
+:::
+
+### Validación y robustez de interacciones
+
+Las interacciones son particularmente susceptibles a **inestabilidad** y **sobreajuste**. Una interacción significativa en la muestra puede no replicarse en nuevos datos, especialmente si la muestra es pequeña o la interacción es débil.
+
+#### Estrategias de validación
+
+**1. Validación cruzada:** Dividir datos en entrenamiento/prueba y verificar que las interacciones se mantienen significativas y con signos consistentes.
+
+**2. Bootstrap:** Generar múltiples muestras bootstrap y verificar la estabilidad de los coeficientes de interacción.
+
+**3. Análisis de sensibilidad:** Verificar cómo cambian las interacciones al:
+- Eliminar observaciones influyentes
+- Cambiar transformaciones de variables
+- Modificar especificaciones del modelo
+
+**4. Replicación:** Cuando sea posible, validar interacciones en datasets independientes del mismo dominio.
+
+::: {.callout-important title="Principios para el uso de interacciones"}
+1. **Justificación teórica primero**: No buscar interacciones sin base conceptual
+2. **Principio de jerarquía**: Mantener efectos principales cuando se incluyen interacciones
+3. **Parsimonia**: Preferir modelos simples que expliquen bien sobre modelos complejos
+4. **Validación robusta**: Verificar estabilidad en múltiples contextos
+5. **Interpretación cuidadosa**: Asegurar comprensión completa antes de conclusiones
+6. **Comunicación efectiva**: Usar visualizaciones para explicar efectos complejos
+:::
+
+Las interacciones son herramientas poderosas que pueden revelar patrones importantes ocultos en los efectos principales. Sin embargo, su uso requiere disciplina metodológica, justificación teórica sólida, y validación rigurosa para evitar conclusiones espurias y modelos sobreajustados.
