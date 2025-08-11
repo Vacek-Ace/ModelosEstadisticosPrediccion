@@ -1,736 +1,609 @@
-# Modelos no lineales. Transformación de variables. Ingeniería de características. {#sec-tema3}
+# Ingeniería de características: transformaciones de variables e interacciones {#sec-tema3}
 
-En el análisis de datos, muchas relaciones entre variables no pueden ser capturadas adecuadamente mediante modelos de regresión lineal. Aunque la regresión lineal es una herramienta poderosa por su simplicidad e interpretabilidad, existen numerosos escenarios donde las relaciones entre las variables son inherentemente **no lineales**.
+En la práctica del análisis de datos, los datos en su estado bruto raramente están en la forma óptima para el modelado estadístico. La **ingeniería de características** es el proceso fundamental que transforma, combina y crea variables para maximizar la capacidad predictiva y la interpretabilidad de nuestros modelos [@kuhn2019feature; @zheng2018feature].
 
-Limitaciones de la regresión lineal:
+Este proceso abarca tres áreas principales que exploraremos en profundidad:
 
--   Relaciones no lineales: En muchos casos, la relación entre las variables no es proporcional ni constante. Por ejemplo, el crecimiento poblacional o la desintegración radiactiva siguen patrones exponenciales.
--   Interacciones no consideradas: La regresión lineal simple no capta interacciones entre variables a menos que se incluyan explícitamente.
--   Sensibilidad a valores atípicos: Los modelos lineales pueden verse influenciados por outliers, afectando la precisión del modelo.
--   Supuestos estrictos: La regresión lineal asume homocedasticidad, normalidad de los errores e independencia, lo cual no siempre se cumple en la práctica.
+**Transformaciones de variables**: Las transformaciones matemáticas nos permiten abordar múltiples problemas simultaneamente: linearizar relaciones no lineales, estabilizar la varianza (heterocedasticidad), aproximar la distribución de los errores a la normalidad, y reducir la influencia de valores atípicos. Dominar cuándo y cómo aplicar transformaciones logarítmicas, potenciales, Box-Cox o Yeo-Johnson es fundamental para optimizar nuestros modelos [@box1964analysis; @yeo2000new].
 
-Estas limitaciones abren la puerta a la necesidad de modelos más flexibles (**modelos no lineales**) que puedan capturar relaciones complejas entre las variables.
+**Tratamiento de variables categóricas**: Las variables categóricas requieren estrategias específicas de codificación que preserven la información relevante sin introducir supuestos erróneos. La elección entre codificación ordinal, one-hot encoding, o técnicas más avanzadas puede impactar significativamente el rendimiento del modelo [@potdar2017comparative].
 
-Además de utilizar modelos no lineales, otra estrategia fundamental es la **transformación de variables**. Mediante transformaciones matemáticas (como logaritmos, potencias o funciones exponenciales), es posible linearizar relaciones no lineales o mejorar la adecuación del modelo. Estas transformaciones pueden también ayudar a cumplir con los supuestos de normalidad y homocedasticidad en los modelos.
+**Interacciones entre variables**: Las interacciones capturan cómo el efecto de una variable puede cambiar según el nivel de otra variable, revelando patrones que los efectos principales por sí solos no pueden detectar. Comprender los diferentes tipos de interacciones y sus aplicaciones es clave para modelar relaciones complejas en el mundo real [@jaccard2003interaction].
 
-Finalmente, la **ingeniería de características** juega un papel crucial en la mejora del rendimiento de los modelos predictivos. Este proceso implica la creación, modificación o combinación de variables explicativas para extraer mayor información de los datos. La ingeniería de características es clave para mejorar la capacidad predictiva de los modelos, especialmente en entornos de alta dimensionalidad o con datos complejos.
+::: {.callout-important title="Objetivos de aprendizaje"}
+Al finalizar este capítulo, serás capaz de:
 
-A lo largo de este tema, exploraremos estos tres pilares: cómo identificar y ajustar modelos no lineales, cómo aplicar transformaciones efectivas a las variables y cómo desarrollar nuevas características que potencien el análisis y la predicción.
+1.  **Identificar cuándo aplicar transformaciones** específicas según el problema: linearización, heterocedasticidad, normalidad, o atípicos.
+2.  **Aplicar transformaciones clásicas** (logarítmica, potencial, inversa) y **avanzadas** (Box-Cox, Yeo-Johnson) de manera apropiada.
+3.  **Interpretar modelos transformados**, comprendiendo cómo cambia el significado de los coeficientes después de la transformación.
+4.  **Codificar variables categóricas** using ordinal encoding y one-hot encoding según la naturaleza de las categorías.
+5.  **Crear e interpretar términos de interacción** entre variables continuas, categóricas, y mixtas.
+6.  **Aplicar ingeniería de características** para crear nuevas variables predictivas mediante combinaciones, ratios y transformaciones.
+7.  **Evaluar la efectividad** de las transformaciones e interacciones usando métricas apropiadas.
+:::
 
-## Modelos no lineales
+## Transformaciones de variables: propósitos y aplicaciones
 
-Los modelos de regresión no lineal son herramientas esenciales cuando las relaciones entre las variables no pueden capturarse adecuadamente con modelos lineales. La regresión polinómica, exponencial, logarítmica y los modelos por tramos ofrecen diferentes enfoques para representar patrones complejos en los datos. Comprender cuándo y cómo aplicar estos modelos es fundamental para mejorar la precisión y la interpretabilidad en el análisis de datos.
+En el análisis de datos y la construcción de modelos estadísticos, los datos en su forma original no siempre están preparados para obtener el máximo rendimiento de nuestros modelos. Las **transformaciones de variables** son herramientas fundamentales que nos permiten modificar la estructura matemática de nuestros datos para abordar problemas específicos y mejorar significativamente el ajuste del modelo [@box1964analysis; @carroll1988transformation].
 
-### Regresión Polinómica
+La clave del éxito en las transformaciones está en **diagnosticar correctamente el problema** que enfrentamos y **seleccionar la transformación apropiada**. Cada transformación tiene propósitos específicos y consecuencias interpretativas que debemos comprender profundamente.
 
-La **regresión polinómica** es una extensión de la regresión lineal que permite capturar relaciones no lineales mediante la inclusión de términos polinómicos (cuadráticos, cúbicos, etc.). Aunque sigue siendo un modelo lineal en los parámetros, la inclusión de potencias de las variables independientes permite ajustar curvas en lugar de líneas rectas.
+### Diagnóstico: ¿Cuándo transformar?
 
-$$
-Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \beta_3 X^3 + \dots + \beta_k X^k + \varepsilon
-$$
+El arte de las transformaciones no está en aplicarlas indiscriminadamente, sino en **diagnosticar correctamente** cuál es el problema que enfrentamos y **seleccionar la transformación más apropiada** para resolverlo. Un diagnóstico erróneo puede llevarnos a aplicar una transformación innecesaria o, peor aún, contraproducente que distorsione las relaciones reales en los datos.
 
-Donde $k$ es el grado del polinomio. A medida que aumenta el grado, el modelo se vuelve más flexible y puede ajustarse a relaciones más complejas.
+La práctica común de "probar transformaciones hasta que mejore el ajuste" es metodológicamente peligrosa. Este enfoque de **transformación por ensayo y error** puede llevarnos a:
 
-Este tipo de modelos son capaces de capturar curvaturas suaves en los datos. Se trata de modelos fáciles de implementar y comprender, aunque la interpretación de los coeficientes asociados a altos grados del polinomio puede ser compleja. De hecho, exite un claro riesgo de sobreajuste cuando se utilizan polinomios de alto grado.
+-   **Sobreajuste**: Optimizar el modelo para los datos específicos que tenemos, perdiendo capacidad de generalización.
+-   **Pérdida de interpretabilidad**: Aplicar transformaciones complejas sin comprender su significado teórico.
+-   **Violación de supuestos**: Resolver un problema creando otros nuevos (ej. transformar para normalidad pero introducir heterocedasticidad).
+-   **Sesgo de selección**: Elegir la transformación que da los "mejores" resultados sin justificación teórica.
 
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r regresión_polinomica}
-# Datos simulados
+El proceso de diagnóstico debe ser **sistemático y basado en evidencia visual y estadística**. No basta con aplicar transformaciones porque "mejoran el R²"; debemos entender qué problema específico estamos resolviendo y cómo la transformación aborda ese problema desde una perspectiva teórica sólida.
+
+Un **enfoque metodológicamente sólido** sigue estos principios:
+
+1.  **Diagnóstico previo**: Identificar problemas específicos mediante análisis visual y tests estadísticos antes de decidir transformar.
+
+2.  **Justificación teórica**: Cada transformación debe tener una base conceptual sólida. Por ejemplo, usar logaritmos para relaciones multiplicativas o raíz cuadrada para estabilizar varianza Poisson.
+
+3.  **Evaluación integral**: No solo considerar el ajuste estadístico, sino también la interpretabilidad, robustez y generalización del modelo transformado.
+
+4.  **Validación posterior**: Verificar que la transformación realmente resuelve el problema identificado sin crear nuevos problemas.
+
+5.  **Parsimonia**: Preferir la transformación más simple que resuelva efectivamente el problema (principio de Occam aplicado a transformaciones).
+
+::: {.callout-note title="Recordatorio: Diagnóstico de problemas en regresión lineal" collapse="true"}
+**Identificación de no linealidad:** La no linealidad es uno de los problemas más comunes que enfrentamos en el modelado. *Diagnóstico visual:* gráficos de dispersión (Y vs. X), gráficos de componente + residuo (CPR plots), análisis de residuos vs. valores ajustados. *Diagnóstico estadístico:* Test de Ramsey RESET que evalúa si potencias de los valores ajustados mejoran significativamente el modelo.
+
+**Detección de heterocedasticidad:** La heterocedasticidad (varianza no constante) viola supuestos fundamentales de la regresión lineal y sesga las inferencias estadísticas. *Diagnóstico visual:* gráfico de residuos vs. valores ajustados (patrón "embudo"), gráfico Scale-Location, residuos vs. variables predictoras individuales. *Diagnóstico estadístico:* Test de Breusch-Pagan (el más utilizado) y Test de White (más general).
+
+**Evaluación de normalidad de residuos:** Aunque la normalidad no es crítica para estimación de coeficientes, sí es importante para inferencia estadística. *Diagnóstico visual:* histograma de residuos, QQ-plot de residuos. *Diagnóstico estadístico:* Test de Shapiro-Wilk (muestras pequeñas n\<50) y Test de Jarque-Bera.
+
+**Detección de outliers y observaciones influyentes:** Es fundamental distinguir entre outliers (valores extremos en Y) y observaciones influyentes (impacto en coeficientes). *Outliers:* boxplot de variable respuesta, residuos estudentizados, criterios \|t_i\| \> 2. *Observaciones influyentes:* análisis de leverage, distancia de Cook, DFBETAS, DFFITS, con criterios específicos como h_i \> 2p/n y D_i \> 4/n. Las observaciones se clasifican en: normales, outliers no influyentes, influyentes sin ser outliers, y outliers influyentes.
+:::
+
+## Escalado y normalización: preparando variables para el análisis
+
+Antes de aplicar transformaciones complejas, es fundamental asegurar que nuestras variables estén en **escalas comparables**. Aunque la regresión lineal ordinaria no requiere estrictamente el escalado de variables para obtener estimadores insesgados, el escalado se vuelve **crítico para la interpretación** y **esencial en métodos avanzados** de modelado.
+
+En regresión múltiple, los coeficientes representan el cambio en Y por unidad de cambio en cada variable predictora. Cuando las variables tienen escalas muy diferentes, los coeficientes pierden comparabilidad directa. Una variable medida en miles de euros tendrá coeficientes numéricamente pequeños, mientras que una variable medida en porcentajes tendrá coeficientes grandes, **independientemente de su importancia real** en el modelo.
+
+Esta disparidad de escalas genera **problemas interpretativos fundamentales**: comparar la "importancia" relativa de las variables se vuelve imposible basándose únicamente en la magnitud de los coeficientes. El escalado resuelve este problema permitiendo que los coeficientes estandarizados (beta coefficients) representen cambios en desviaciones estándar, facilitando comparaciones directas entre predictores y proporcionando una base sólida para evaluar la importancia relativa de cada variable.
+
+::: {.callout-note title="Escalado en métodos de regularización" collapse="true"}
+**En regresión con regularización (Ridge, Lasso)**, el problema se agrava dramáticamente. Las penalizaciones L1 y L2 afectan **desproporcionadamente** a variables con escalas grandes, llevando a regularización injusta donde variables con unidades grandes son penalizadas más severamente que variables con unidades pequeñas, independientemente de su relevancia predictiva. Esto puede resultar en selección de variables sesgada y estimadores subóptimos. Este tema se desarrollará en profundidad en el siguiente capítulo sobre métodos de regularización.
+:::
+
+El escalado no es solo una cuestión técnica, sino una **decisión metodológica** que afecta directamente la interpretación y validez de nuestros resultados. La elección entre estandarización, normalización min-max, o escalado robusto debe basarse en las características de los datos y los objetivos del análisis, considerando siempre el impacto en la interpretabilidad de los resultados finales.
+
+### Estandarización (Z-Score)
+
+La **estandarización** es la técnica de escalado más utilizada en estadística. Transforma cada variable para que tenga **media cero** y **desviación estándar uno**, preservando la forma de la distribución original.
+
+$$X_{\text{estandarizado}} = \frac{X - \bar{X}}{\sigma_X}$$
+
+**Propiedades de la estandarización:**
+
+-   **Preserva la forma de la distribución**: Si X era normal, X estandarizado también lo será.
+-   **Facilita la comparación**: Los coeficientes en regresión múltiple se vuelven comparables.
+-   **Robusta ante outliers moderados**: La media y desviación estándar son menos sensibles que min-max a valores extremos.
+
+**Cuándo usar estandarización:**
+
+-   Variables con distribuciones aproximadamente normales.
+-   Cuando necesitamos preservar la información sobre la variabilidad relativa.
+-   En regresión múltiple para comparar la importancia relativa de las variables.
+-   Como paso previo a técnicas multivariantes (PCA, análisis discriminante).
+
+### Normalización Min-Max
+
+La **normalización Min-Max** escala las variables a un rango específico, típicamente \[0,1\], preservando las relaciones relativas entre los valores.
+
+$$X_{\text{normalizado}} = \frac{X - X_{\text{min}}}{X_{\text{max}} - X_{\text{min}}}$$
+
+**Propiedades de la normalización Min-Max:**
+
+-   **Rango acotado**: Todas las variables transformadas tienen el mismo rango \[0,1\].
+-   **Preserva relaciones**: Las distancias relativas entre observaciones se mantienen.
+-   **Interpretación intuitiva**: 0 representa el mínimo observado, 1 el máximo observado.
+
+**Cuándo usar normalización Min-Max:**
+
+-   Cuando necesitamos un rango específico (ej. entradas de redes neuronales).
+-   Variables con distribuciones uniformes o sin outliers extremos.
+-   Cuando la interpretación en términos de mínimo-máximo es relevante.
+-   En algoritmos que requieren entradas en \[0,1\] (algunos métodos de ensemble).
+
+**Limitaciones:**
+
+-   **Muy sensible a outliers**: Un solo valor extremo puede comprimir toda la distribución.
+-   **No preserva la normalidad**: Una distribución normal se vuelve uniforme tras Min-Max.
+
+### Escalado robusto
+
+Para datos con **outliers significativos**, el escalado robusto utiliza la mediana y el rango intercuartílico (IQR) en lugar de la media y desviación estándar:
+
+$$X_{\text{robusto}} = \frac{X - \text{mediana}(X)}{\text{IQR}(X)}$$
+
+Este método es menos sensible a valores extremos y preserva mejor la estructura de los datos en presencia de outliers.
+
+::: {.callout-tip title="Ejemplo comparativo: Escalado de variables" collapse=True}
+```{r std1}
+# Generar datos de ejemplo con diferentes escalas
 set.seed(123)
-x <- 1:20
-y <- 3 + 2 * x + 0.5 * x^2 + rnorm(20, mean = 0, sd = 10)
+n <- 100
 
-# Ajuste del modelo polinómico de grado 2
-modelo_polinomico <- lm(y ~ poly(x, 2))
+# Variable de ejemplo: Ingresos en miles de euros
+ingresos <- rnorm(n, mean = 50, sd = 15)
 
-summary(modelo_polinomico)
+# Aplicar diferentes transformaciones
+ingresos_std <- scale(ingresos)[,1]  # Estandarización
+ingresos_norm <- (ingresos - min(ingresos)) / (max(ingresos) - min(ingresos))  # Min-Max
+ingresos_robust <- (ingresos - median(ingresos)) / IQR(ingresos)  # Robusto
 
-# Visualización
-plot(x, y, main = "Regresión Polinómica de Segundo Grado", pch = 19, col = "blue")
-lines(x, predict(modelo_polinomico), col = "red", lwd = 2)
+# Crear tabla comparativa
+library(knitr)
+tabla_escalado <- data.frame(
+  Método = c("Original", "Estandarización", "Min-Max", "Escalado Robusto"),
+  Media = round(c(mean(ingresos), mean(ingresos_std), mean(ingresos_norm), median(ingresos_robust)), 3),
+  Desviación = round(c(sd(ingresos), sd(ingresos_std), sd(ingresos_norm), mad(ingresos_robust)), 3),
+  Mínimo = round(c(min(ingresos), min(ingresos_std), min(ingresos_norm), min(ingresos_robust)), 3),
+  Máximo = round(c(max(ingresos), max(ingresos_std), max(ingresos_norm), max(ingresos_robust)), 3),
+  Rango = round(c(
+    max(ingresos) - min(ingresos),
+    max(ingresos_std) - min(ingresos_std),
+    max(ingresos_norm) - min(ingresos_norm),
+    max(ingresos_robust) - min(ingresos_robust)
+  ), 3)
+)
+
+kable(tabla_escalado, caption = "Comparación de métodos de escalado en variable Ingresos")
 ```
+
+**Interpretación de los resultados:**
+
+-   **Original**: Ingresos en miles de euros con gran variabilidad (SD ≈ 15)
+-   **Estandarización**: Media = 0, SD = 1, preservando la forma de la distribución
+-   **Min-Max**: Valores acotados entre \[0,1\], comprimiendo toda la variabilidad en este rango
+-   **Escalado Robusto**: Centrado en la mediana, menos sensible a valores extremos
+
+Cada método transforma los datos de manera diferente según el objetivo: comparabilidad (estandarización), rango específico (min-max), o robustez ante outliers (robusto).
 :::
 
-### Modelos de Regresión Exponencial y Logarítmica
+::: {.callout-tip title="Ejemplo con outliers: Escalado robusto" collapse=True}
+```{r norm1}
+# Datos con outliers
+set.seed(456)
+datos_normales <- rnorm(95, 10, 2)
+outliers <- c(25, 30, 35, 40, 45)
+datos_outliers <- c(datos_normales, outliers)
 
-Cuando la relación entre la variable dependiente y la independiente sigue un **crecimiento o decaimiento exponencial**, o una relación logarítmica, los modelos lineales tradicionales no son suficientes. En estos casos, se pueden utilizar transformaciones exponenciales o logarítmicas.
+# Aplicar diferentes métodos de escalado
+std_clasica <- scale(datos_outliers)[,1]
+norm_minmax <- (datos_outliers - min(datos_outliers)) / (max(datos_outliers) - min(datos_outliers))
+escalado_robusto <- (datos_outliers - median(datos_outliers)) / IQR(datos_outliers)
 
-**Regresión Exponencial**
+# Crear tabla comparativa
+library(knitr)
+tabla_outliers <- data.frame(
+  Método = c("Original", "Estandarización", "Min-Max", "Escalado Robusto"),
+  Media_Mediana = round(c(mean(datos_outliers), mean(std_clasica), mean(norm_minmax), median(escalado_robusto)), 3),
+  Desviación = round(c(sd(datos_outliers), sd(std_clasica), sd(norm_minmax), mad(escalado_robusto)), 3),
+  Mínimo = round(c(min(datos_outliers), min(std_clasica), min(norm_minmax), min(escalado_robusto)), 3),
+  Máximo = round(c(max(datos_outliers), max(std_clasica), max(norm_minmax), max(escalado_robusto)), 3),
+  Q25_Q75 = c(
+    paste(round(quantile(datos_outliers, c(0.25, 0.75)), 2), collapse = " - "),
+    paste(round(quantile(std_clasica, c(0.25, 0.75)), 2), collapse = " - "),
+    paste(round(quantile(norm_minmax, c(0.25, 0.75)), 2), collapse = " - "),
+    paste(round(quantile(escalado_robusto, c(0.25, 0.75)), 2), collapse = " - ")
+  )
+)
 
-Este modelo es útil cuando la variable dependiente crece (o decrece) a una tasa proporcional a su valor actual.
-
-$$
-Y = \beta_0 e^{\beta_1 X} + \varepsilon
-$$
-
-Este modelo puede **linearizarse** tomando el logaritmo de la variable dependiente:
-
-$$
-\log(Y) = \log(\beta_0) + \beta_1 X + \varepsilon
-$$
-
-**Regresión Logarítmica**
-
-Útil cuando la tasa de cambio de la variable dependiente disminuye a medida que aumenta la variable independiente.
-
-$$
-Y = \beta_0 + \beta_1 \log(X) + \varepsilon
-$$
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r regresión_exp}
-# Datos simulados para un modelo exponencial
-set.seed(123)
-x <- 1:20
-y <- exp(0.3 * x) + rnorm(20, mean = 0, sd = 20)
-
-# Asegurarse de que todos los valores de 'y' sean positivos para aplicar logaritmo
-y[y <= 0] <- min(y[y > 0]) * 0.5  # Reemplaza valores no positivos por un valor pequeño positivo
-
-# Ajuste del modelo exponencial (transformación logarítmica)
-modelo_exponencial <- lm(log(y) ~ x)
-
-# Resumen del modelo
-summary(modelo_exponencial)
-
-# Visualización
-plot(x, y, main = "Regresión Exponencial", pch = 19, col = "blue", ylab = "y", xlab = "x")
-
-# Predicciones para los mismos valores de x
-predicciones <- predict(modelo_exponencial, newdata = data.frame(x = x))
-
-# Convertir predicciones a la escala original (exponencial inverso del log)
-lines(x, exp(predicciones), col = "red", lwd = 2)
-
+kable(tabla_outliers, caption = "Comparación de métodos de escalado con outliers presentes")
 ```
+
+**Análisis del impacto de outliers:**
+
+-   **Datos originales**: Los outliers extienden el rango de \~6-14 a 6-45, distorsionando las medidas centrales
+-   **Estandarización**: Afectada por outliers en media y desviación estándar, resultando en distribución asimétrica
+-   **Min-Max**: Extremadamente sensible. Los datos normales quedan comprimidos en un rango muy pequeño (\~0.0-0.2)
+-   **Escalado robusto**: Mantiene mejor las proporciones de la distribución central, minimizando la influencia de valores extremos
+
+**Conclusión**: El escalado robusto es superior cuando hay outliers, preservando la estructura de la mayoría de observaciones.
 :::
 
-### Regresión Spline y modelos basados en Segmentos
+## Catálogo de transformaciones según el propósito
 
-Los **splines** y los **modelos segmentados** son técnicas que permiten ajustar relaciones no lineales mediante la división de los datos en segmentos y el ajuste de funciones lineales o polinómicas en cada segmento. Estos métodos son especialmente útiles cuando la relación entre las variables cambia en diferentes rangos de los datos.
+Una vez realizado el diagnóstico, debemos seleccionar la transformación más apropiada. Cada transformación tiene propósitos específicos y efectos secundarios que debemos considerar. La clave está en entender no solo qué transformación aplicar, sino por qué esa transformación específica resuelve nuestro problema.
 
-**Modelos por tramos (Piecewise Regression)**
+### Transformaciones para linearizar relaciones
 
-En este enfoque, se ajustan diferentes regresiones lineales a distintos rangos de la variable independiente. A diferencia de los splines, las transiciones entre segmentos no necesariamente son suaves.
+Muchas relaciones en el mundo real no son lineales, pero pueden linearizarse mediante transformaciones apropiadas. La linearización no solo mejora el ajuste del modelo, sino que también facilita la interpretación y cumple con los supuestos de la regresión lineal.
 
-Estos modelos permiten capturar relaciones complejas con menor riesgo de sobreajuste en comparación con polinomios de alto grado.
+#### Transformación logarítmica
 
-**Splines**
+La transformación logarítmica es probablemente la más utilizada en estadística aplicada debido a su versatilidad y propiedades interpretativas únicas.
 
-Los **splines** son una poderosa herramienta en el análisis de regresión para modelar relaciones no lineales entre variables. A diferencia de los modelos polinómicos tradicionales, que ajustan un solo polinomio a todos los datos, los splines permiten dividir el rango de la variable independiente en diferentes **tramos** y ajustar polinomios separados en cada uno de ellos. Esto proporciona mayor flexibilidad para capturar patrones complejos en los datos, sin los problemas de inestabilidad y sobreajuste que pueden surgir al utilizar polinomios de alto grado.
+**Cuándo utilizarla:**
 
-Un **spline** es una función que está compuesta por múltiples **polinomios por tramos** que se ajustan en diferentes intervalos del dominio de la variable independiente. Estos polinomios están conectados en puntos específicos llamados **nudos** (*knots*), que marcan el final de un tramo y el inicio de otro. La principal característica de los splines es que estos polinomios están diseñados para unirse de manera **suave** en los nudos, asegurando que la función resultante sea continua y, en muchos casos, que sus derivadas también sean continuas.
+-   Relaciones exponenciales: Cuando Y crece exponencialmente respecto a X, $Y = ae^{bX}$ se lineariza como $\log(Y) = \log(a) + bX$
+-   Relaciones multiplicativas: En modelos donde los efectos se combinan multiplicativamente
+-   Procesos de crecimiento proporcional: Donde la tasa de cambio es proporcional al nivel actual
+-   Variables con crecimiento acelerado: Ingresos, precios, donde cada unidad adicional tiene impacto decreciente
 
-::: {.callout-note title="Elementos clave" collapse="false"}
--   **Tramos:** Intervalos del dominio de la variable independiente en los que se ajusta un polinomio distinto.
--   **Nudos:** Puntos donde los tramos se conectan. Los nudos definen la estructura del spline y determinan dónde la función puede cambiar de forma.
--   **Continuidad:** Los splines están construidos para que no haya saltos abruptos en la función o en sus derivadas en los nudos. Por ejemplo, un spline cúbico asegura continuidad en la función, la primera derivada (pendiente) y la segunda derivada (curvatura).
-:::
+**Patrones de identificación:**
 
-::: {.callout-note title="Tipos de Splines" collapse="false"}
-**Splines Lineales:**
+-   Curva cóncava que se aplana hacia la derecha (rendimientos decrecientes)
+-   Relación donde duplicar X no duplica Y, sino que el efecto se atenúa
+-   Heterocedasticidad donde la varianza aumenta con el nivel de Y
 
--   Se ajustan líneas rectas entre los nudos.
--   Garantizan la continuidad en los puntos de unión, pero no necesariamente en la pendiente.
--   Son simples, pero pueden generar ángulos abruptos en los nudos.
+**Aplicaciones matemáticas:**
 
-**Splines Cuadráticos:**
+-   $Y' = \log(Y)$: Lineariza relaciones exponenciales en Y
+-   $X' = \log(X)$: Lineariza relaciones de potencia en X\
+-   $\log(Y) = a + b\log(X)$: Modelo log-log que produce elasticidades constantes
 
--   Se utilizan polinomios de segundo grado en cada tramo.
--   Aseguran continuidad en la función y en la pendiente, pero no en la curvatura.
+**Interpretación especial:** En modelos log-lineales y log-log, los coeficientes tienen interpretaciones económicas directas. En el modelo log-lineal $\log(Y) = a + bX$, el coeficiente b representa el cambio porcentual en Y por unidad de cambio en X. En el modelo log-log $\log(Y) = a + b\log(X)$, b es la elasticidad.
 
-**Splines Cúbicos:**
+**Casos típicos:** Economía (relaciones ingreso-consumo, funciones de producción), biología (crecimiento poblacional, relaciones alométricas), finanzas (rendimientos de inversión).
 
--   Los **splines cúbicos** son los más utilizados en análisis de regresión.
--   Utilizan polinomios de tercer grado en cada tramo.
--   Garantizan suavidad en la función y en sus primeras dos derivadas, lo que significa que la función es continua, su pendiente es continua y la curvatura es suave.
--   Evitan el sobreajuste que puede ocurrir con polinomios de alto grado, proporcionando un ajuste flexible sin perder estabilidad.
--   A diferencia de los polinomios globales de alto grado, los splines cúbicos pueden capturar patrones complejos sin oscilar de manera excesiva entre los puntos de datos.
--   Los splines permiten que el modelo se adapte localmente a diferentes patrones en distintos tramos del dominio de la variable independiente.
+#### Transformación de potencia
 
-**Splines Naturales:**
+Las transformaciones de potencia son fundamentales cuando trabajamos con leyes físicas o relaciones alométricas donde esperamos relaciones del tipo $Y = aX^b$.
 
--   Son una variante de los splines cúbicos que imponen condiciones adicionales en los extremos del rango de los datos, forzando la segunda derivada a ser cero en los extremos. Esto ayuda a evitar oscilaciones no deseadas fuera del rango de los datos.
-:::
+**Identificación y aplicación:**
 
-El uso de splines en regresión permite modelar relaciones no lineales de manera flexible. La elección del número y la ubicación de los **nudos** es un aspecto fundamental del ajuste con splines:
+-   Relaciones curvilíneas que en escala log-log se vuelven lineales
+-   Método de linearización: tomar logaritmo de ambas variables $\log(Y) = \log(a) + b\log(X)$
+-   El exponente b representa la elasticidad o exponente de escalamiento
 
--   Número de nudos: Demasiados nudos pueden llevar a un sobreajuste, mientras que muy pocos pueden no capturar adecuadamente la relación entre las variables. El uso de técnicas de validación cruzada puede ayudar a encontrar el equilibrio adecuado.
+**Ejemplos clásicos:** Ley de Stevens en psicofísica, relaciones masa-metabolismo (Ley de Kleiber), economía urbana donde PIB de ciudades escala con población elevada a una potencia.
 
--   Ubicación de los nudos: Los nudos pueden colocarse en puntos equidistantes, en cuantiles de la variable independiente, o en puntos donde se sospecha que la relación entre las variables cambia. La colocación de nudos es clave para obtener un buen ajuste. Los nudos pueden seleccionarse de manera automática (por ejemplo, en los cuantiles de la variable independiente) o manualmente según el conocimiento del problema.
+### Transformaciones para estabilizar la varianza
 
-::: {.callout-caution title="Aviso"}
-A diferencia de la regresión lineal simple, los coeficientes de los splines no tienen una interpretación directa. El enfoque se centra en la forma general del ajuste en lugar de en el valor de los coeficientes individuales.
-:::
+La heterocedasticidad no solo viola supuestos del modelo, sino que también indica que diferentes observaciones tienen diferentes niveles de información. Las transformaciones de varianza estabilizan esta heterogeneidad.
 
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r regresión_splines}
-# Cargar librería para splines
-library(splines)
+#### Transformación de raíz cuadrada
 
-# Datos simulados
-set.seed(123)
-x <- seq(1, 100, by = 1)
-y <- ifelse(x <= 50, 2 * x + rnorm(100, 0, 10), 0.5 * x + rnorm(100, 0, 10))
+La transformación $Y' = \sqrt{Y}$ es especialmente útil para datos de conteo donde la varianza es proporcional a la media, característica típica de la distribución de Poisson.
 
-# Ajuste del modelo spline
-modelo_spline <- lm(y ~ bs(x, knots = c(30, 60, 80)))
+**Fundamento teórico:** En una distribución de Poisson con parámetro $\lambda$, tanto la media como la varianza son iguales a $\lambda$. La transformación de raíz cuadrada estabiliza la varianza porque $\text{Var}(\sqrt{Y}) \approx \frac{1}{4}$ (constante).
 
-# Visualización
-plot(x, y, main = "Regresión Spline", pch = 19, col = "blue")
-lines(x, predict(modelo_spline), col = "red", lwd = 2)
+**Cuándo aplicarla:**
 
-# Cambio en la posición de los nodos
-# Ajuste del modelo spline
-modelo_spline <- lm(y ~ bs(x, knots = c(40, 50)))
+-   Conteos de eventos: número de defectos, llamadas telefónicas, accidentes, ventas por período
+-   Datos de frecuencia: número de visitas, clicks, transacciones
+-   Variables discretas con varianza creciente proporcional al nivel
 
-# Visualización
-plot(x, y, main = "Regresión Spline", pch = 19, col = "blue")
-lines(x, predict(modelo_spline), col = "red", lwd = 2)
+**Patrón de diagnóstico:** Gráfico de residuos con forma de embudo donde la dispersión aumenta linealmente con la media, y gráfico de varianza vs. media de grupos muestra relación lineal.
 
+**Limitaciones:** Solo apropiada para valores no negativos, interpretación complicada (unidades en raíz cuadrada), y para conteos con muchos ceros puede requerir $\sqrt{Y + c}$.
 
-# Ajustamos un spline cuadrático 
+#### Transformación logarítmica para heterocedasticidad multiplicativa
 
-# Ajuste del modelo spline
-modelo_spline <- lm(y ~ bs(x, degree=2, knots = c(30, 60, 80)))
+Cuando la varianza es proporcional al cuadrado de la media (heterocedasticidad multiplicativa), la transformación logarítmica es la solución natural.
 
-# Visualización
-plot(x, y, main = "Regresión Spline", pch = 19, col = "blue")
-lines(x, predict(modelo_spline), col = "red", lwd = 2)
-```
-:::
+**Características típicas:**
 
-## Transformación de variables
+-   Variables monetarias: ingresos, precios, costos donde el error relativo es constante
+-   Porcentajes de crecimiento: donde el error de medición es proporcional al nivel
+-   Procesos multiplicativos: donde los errores se acumulan multiplicativamente
 
-En el análisis de datos y la construcción de modelos estadísticos, no siempre es posible capturar adecuadamente la relación entre las variables independientes y la variable dependiente utilizando modelos lineales en su forma original. Aquí es donde entran en juego las **transformaciones de variables**, que permiten modificar la estructura de los datos para mejorar el ajuste del modelo, cumplir con los supuestos de la regresión y, en muchos casos, facilitar la interpretación.
+**Efectos múltiples:** La transformación logarítmica frecuentemente resuelve múltiples problemas simultáneamente: lineariza relaciones exponenciales, estabiliza varianza multiplicativa, reduce el impacto de outliers extremos, y aproxima distribuciones asimétricas a la normalidad.
 
-Las transformaciones de variables son una herramienta fundamental para mejorar el rendimiento y la precisión de los modelos estadísticos. Estas transformaciones pueden aplicarse tanto a la variable dependiente como a las variables independientes.
+### Transformaciones para normalizar residuos y controlar outliers
 
-::: {.callout-note title="Objetivos" collapse="false"}
-**Linearizar relaciones no lineales:**
+Algunas transformaciones son especialmente efectivas para aproximar distribuciones a la normalidad y reducir la influencia de valores extremos.
 
-Muchas relaciones entre variables no son lineales en su forma original. Aplicar una transformación adecuada puede **convertir una relación no lineal en lineal**, permitiendo el uso de técnicas de regresión lineal. Por ejemplo, una relación exponencial $$Y = \beta_0 e^{\beta_1 X}$$ puede linearizarse tomando el logaritmo de $Y$:\
-$$
-   \log(Y) = \log(\beta_0) + \beta_1 X
-   $$
+#### Transformación inversa
 
-**Corregir problemas de heterocedasticidad:**
+La transformación inversa $Y' = \frac{1}{Y}$ o $X' = \frac{1}{X}$ es útil para relaciones hiperbólicas y distribuciones con colas pesadas hacia la derecha.
 
-La regresión lineal asume que los errores tienen **varianza constante** (homocedasticidad). Sin embargo, en la práctica, es común encontrar datos con **heterocedasticidad** (la varianza de los errores cambia con el nivel de la variable independiente). Las transformaciones pueden ayudar a estabilizar la varianza. Por ejemplo, transformar la variable dependiente $Y$ usando un logaritmo o una raíz cuadrada puede reducir la heterocedasticidad.
+**Identificación matemática:**
 
-**Normalizar la distribución de los errores:**
+-   Relación hiperbólica: $Y = \frac{a}{X} + b$ se lineariza como $Y = a \cdot \frac{1}{X} + b$
+-   Asíntota horizontal: la relación se aproxima a un valor límite cuando X aumenta
 
-La regresión lineal también asume que los errores están **normalmente distribuidos**. Las transformaciones pueden ayudar a que los residuos del modelo se ajusten mejor a una distribución normal, lo que mejora la validez de los intervalos de confianza y las pruebas de hipótesis.
+**Aplicaciones específicas:** Tiempo hasta el evento (con asíntota natural), tasas de decaimiento, relaciones dosis-respuesta en farmacología, curvas de demanda con elasticidad precio variable.
 
-**Reducir la influencia de valores atípicos:**
+**Efecto en outliers:** La transformación inversa invierte la escala, comprimiendo fuertemente los valores grandes y expandiendo los pequeños. Útil para reducir influencia de outliers extremos, pero debe usarse con precaución ya que amplifica errores en valores pequeños.
 
-Algunas transformaciones pueden disminuir la influencia de los **valores atípicos** en el modelo, haciendo que el ajuste sea más robusto.
+**Consideraciones prácticas:** Solo aplicable a valores estrictamente positivos (o negativos), los coeficientes representan el impacto en la escala inversa, y requiere tratamiento especial para valores cercanos a cero.
 
-**Mejorar la interpretabilidad del modelo:**
+## Transformación de Box-Cox
 
-Aunque algunas transformaciones pueden complicar la interpretación directa de los coeficientes, otras pueden facilitar el entendimiento de la relación entre variables (por ejemplo, tasas de crecimiento constantes).
-:::
+La transformación de Box-Cox es un método que **optimiza automáticamente** el parámetro de transformación para maximizar la normalidad y homocedasticidad de los residuos [@box1964analysis]. En lugar de elegir manualmente entre transformación logarítmica, raíz cuadrada o inversa, Box-Cox encuentra el valor $\lambda$ (lambda) que mejor normaliza los datos.
 
-### Tipos de transformaciones comunes
+### Definición matemática
 
-Existen diversas transformaciones que pueden aplicarse a los datos según el problema que se desea abordar. A continuación, se describen las transformaciones más utilizadas en el análisis de regresión.
-
-------------------------------------------------------------------------
-
-**Transformación Logarítmica (**$\log$)
-
-Se emplea para linearizar relaciones exponenciales, reducir la heterocedasticidad, y estabilizar la varianza: - $$ Y = \log(Y) $$ o $$ X = \log(X) $$
-
-Es una transformación adecuada cuando la variable tiene una distribución sesgada a la derecha o cuando el efecto marginal disminuye con el valor de la variable (Ingresos, crecimiento poblacional, y tasas de interés, etc).
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r log}
-# Datos simulados con crecimiento exponencial
-set.seed(123)
-x <- 1:20
-y <- exp(0.3 * x) + rnorm(20, mean = 0, sd = 20)
-
-
-# Transformación logarítmica para linearizar la relación
-modelo_log <- lm(log(y) ~ x)
-summary(modelo_log)
-
-# Visualización
-plot(x, y, main = "Transformación Log", pch = 19, col = "blue", ylab = "y", xlab = "x")
-
-# Predicciones para los mismos valores de x
-predicciones <- predict(modelo_log, newdata = data.frame(x = x))
-
-# Convertir predicciones a la escala original (exponencial inverso del log)
-lines(x, exp(predicciones), col = "red", lwd = 2)
-
-```
-:::
-
-**Transformación de Raíz Cuadrada (**$\sqrt{}$)
-
-Se emplea para reducir la heterocedasticidad, especialmente cuando la varianza aumenta linealmente con la media: $$Y = \sqrt{Y}$$ o $$X = \sqrt{X}$$
-
-Se emplea comúnmente en conteos de eventos o variables positivas (número de llamadas, defectos, etc.).
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r sqrt}
-# Datos simulados con variabilidad creciente
-set.seed(123)
-x <- 1:50
-y <- x + rnorm(50, mean = 0, sd = x)
-
-# Aplicando raíz cuadrada a la variable dependiente
-modelo_sqrt <- lm(sqrt(y) ~ x)
-summary(modelo_sqrt)
-
-# Visualización
-plot(x, y, main = "Transformación SQRT", pch = 19, col = "blue", ylab = "y", xlab = "x")
-
-# Predicciones para los mismos valores de x
-predicciones <- predict(modelo_sqrt, newdata = data.frame(x = x))
-
-# Convertir predicciones a la escala original
-lines(x, predicciones^2, col = "red", lwd = 2)
-```
-:::
-
-**Transformación Inversa (**$\frac{1}{X}$)
-
-Se emplea la tranformación inversa para modelar relaciones donde el efecto de la variable independiente disminuye rápidamente. $$ Y = \frac{1}{X} $$
-
-Es especialmente útil cuando se espera que un aumento en $X$ tenga un efecto decreciente en $Y$ (Relaciones físicas como la ley de la gravitación, velocidad vs. tiempo en fricción, etc).
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r inv}
-# Datos simulados con relación inversa
-set.seed(123)
-x <- 1:50
-y <- 1 / x + rnorm(50, mean = 0, sd = 0.05)
-
-# Ajuste del modelo con transformación inversa
-modelo_inverso <- lm(y ~ I(1/x))
-summary(modelo_inverso)
-
-# Visualización
-plot(x, y, main = "Transformación Inversa", pch = 19, col = "blue", ylab = "y", xlab = "x")
-
-# Predicciones para los mismos valores de x
-predicciones <- predict(modelo_inverso, newdata = data.frame(x = x))
-
-# Convertir predicciones a la escala original
-lines(x, predicciones, col = "red", lwd = 2)
-```
-:::
-
-### Transformación de Box-Cox
-
-La **transformación de Box-Cox** es un método que busca automáticamente la mejor transformación para estabilizar la varianza y aproximar la normalidad de los errores. La transformación se define como:
-
-$$
-Y(\lambda) = 
-\begin{cases}
+$$Y(\lambda) = \begin{cases}
 \frac{Y^\lambda - 1}{\lambda}, & \lambda \neq 0 \\
 \log(Y), & \lambda = 0
-\end{cases}
-$$
+\end{cases}$$
 
-Se emplea para encontrar la transformación óptima para los datos. Se utiliza cuando no está claro qué transformación aplicar. Por ejemplo, en caso de variables continuas con varianza no constante o distribución no normal.
+Los valores especiales de $\lambda$ corresponden a transformaciones clásicas:
 
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r boxcox}
-# Cargar librería para Box-Cox
-library(MASS)
+- **$\lambda$ = 1**: Sin transformación (identidad)
+- **$\lambda$ = 0.5**: Transformación de raíz cuadrada  
+- **$\lambda$ = 0**: Transformación logarítmica
+- **$\lambda$ = -1**: Transformación inversa
 
-# Datos simulados
-set.seed(123)
-x <- 1:20
-y <- x^2 + rnorm(20, mean = 0, sd = 5)
+### Propósito y ventajas
 
-# Verificar si hay valores negativos
-min(y)
+**Para qué sirve Box-Cox:**
 
-# Si hay valores negativos, sumar una constante para que todos los valores sean positivos
-if (min(y) <= 0) {
-  y <- y + abs(min(y)) + 1  # Desplaza todos los valores para que sean positivos
-}
+- Encuentra automáticamente la transformación óptima sin prueba y error
+- Maximiza la verosimilitud del modelo, mejorando simultáneamente normalidad y homocedasticidad
+- Proporciona un método objetivo para seleccionar la transformación apropiada
+- Incluye intervalos de confianza para $\lambda$, permitiendo evaluar la incertidumbre de la estimación
 
-# Ajuste de un modelo lineal simple
-modelo_bc <- lm(y ~ x)
+**Procedimiento de aplicación:**
 
-# Aplicación de la transformación de Box-Cox
-boxcox(modelo_bc)
+1. Se ajusta el modelo original y se calculan los residuos
+2. Se evalúa la función de verosimilitud para diferentes valores de $\lambda$
+3. Se selecciona el $\lambda$ que maximiza la verosimilitud
+4. Se aplica la transformación con el $\lambda$ óptimo encontrado
 
+### Limitaciones importantes
+
+**Restricción de dominio:** Box-Cox requiere que **todos los valores de Y sean estrictamente positivos**. Esta es su limitación más importante, ya que muchos conjuntos de datos reales incluyen ceros o valores negativos.
+
+**Aplicación tradicional:** Se aplica principalmente a la **variable dependiente Y**, no a las variables predictoras. Aunque técnicamente es posible aplicarla a X, la interpretación se complica considerablemente.
+
+**Interpretación compleja:** Cuando $\lambda$ no corresponde a valores "simples" (como 0, 0.5, o 1), la interpretación de los coeficientes se vuelve difícil. Por ejemplo, si $\lambda$ = 0.37, ¿cómo interpretar un coeficiente en la escala transformada?
+
+**Dependencia del modelo:** El $\lambda$ óptimo depende del modelo específico (predictores incluidos), por lo que cambiar el modelo puede requerir recalcular la transformación.
+
+::: {.callout-note title="Extensión: Transformación de Yeo-Johnson"}
+La transformación de Yeo-Johnson [@yeo2000new] fue desarrollada específicamente para superar la limitación principal de Box-Cox: la restricción a valores positivos.
+
+**Ventajas de Yeo-Johnson sobre Box-Cox:**
+
+- **Sin restricción de dominio**: Acepta cualquier valor real, incluyendo negativos y cero
+- **Preserva el signo**: Los valores negativos permanecen negativos tras la transformación
+- **Continuidad**: La transformación es continua en Y = 0, evitando discontinuidades
+- **Casos especiales familiares**: Incluye como casos especiales todas las transformaciones comunes
+
+**Cuándo usar cada una:**
+
+- **Box-Cox**: Para datos estrictamente positivos, especialmente cuando se busca comparabilidad con literatura existente
+- **Yeo-Johnson**: Cuando los datos incluyen valores negativos o cero, o cuando se necesita mayor flexibilidad
+
+La elección entre ambas depende fundamentalmente de las características de sus datos y los objetivos del análisis.
+:::
+
+## Tratamiento de variables categóricas
+
+Las **variables categóricas** son fundamentales en el modelado estadístico, pero requieren una preparación especial antes de ser utilizadas en algoritmos que esperan entradas numéricas [@potdar2017comparative]. La elección del método de codificación puede impactar significativamente tanto la interpretabilidad como el rendimiento del modelo.
+
+### Principios de codificación categórica
+
+**¿Por qué codificar?** La mayoría de algoritmos de machine learning y modelos estadísticos requieren entradas numéricas. Las variables categóricas deben transformarse preservando su información semántica sin introducir supuestos erróneos sobre relaciones entre categorías.
+
+**Criterios de selección del método:**
+
+- **Naturaleza de la variable**: ¿Existe orden inherente entre categorías?
+- **Número de categorías**: Variables con muchas categorías requieren consideraciones especiales
+- **Interpretabilidad**: ¿Qué método facilita la interpretación de resultados?
+- **Eficiencia computacional**: Balance entre precisión y complejidad
+
+### Codificación One-Hot (variables nominales)
+
+El **One-Hot Encoding** transforma variables categóricas nominales en un conjunto de variables binarias (0/1), donde cada nueva variable representa la presencia o ausencia de una categoría específica. Esta técnica es fundamental cuando trabajamos con variables categóricas que no tienen orden inherente, como color, género, región geográfica, o tipo de producto.
+
+La transformación convierte una variable categórica con *k* categorías en *k* nuevas columnas binarias (o *k-1* para evitar colinealidad). Cada fila tendrá exactamente un "1" en la columna correspondiente a su categoría y "0" en todas las demás.
+
+::: {.callout-warning title="Dummy Variable Trap"}
+Cuando se crean todas las columnas (k para k categorías), una puede expresarse como combinación lineal de las demás, causando colinealidad perfecta en modelos lineales. 
+
+**Solución:** Eliminar una categoría de referencia (usar k-1 columnas).
+:::
+
+**¿Por qué es necesario?** La mayoría de algoritmos de machine learning requieren entradas numéricas y no pueden procesar directamente texto categórico. Más importante aún, el One-Hot Encoding **no impone orden artificial** entre categorías, tratando cada una como completamente independiente.
+
+**Ejemplo práctico:** Consideremos una variable "Color" con valores [Rojo, Verde, Azul]. La codificación One-Hot creará tres columnas:
+
+| **ID** | **Color** | **Color_Rojo** | **Color_Verde** | **Color_Azul** |
+|--------|-----------|----------------|-----------------|----------------|
+| 1      | Rojo      | 1              | 0               | 0              |
+| 2      | Verde     | 0              | 1               | 0              |
+| 3      | Azul      | 0              | 0               | 1              |
+| 4      | Rojo      | 1              | 0               | 0              |
+
+Cada observación queda representada por un vector binario que identifica unívocamente su categoría sin asumir relaciones ordinales entre colores.
+
+**Interpretación en regresión:** En un modelo de regresión lineal, cada variable binaria creada tendrá su propio coeficiente que representa la **diferencia en la variable respuesta** entre esa categoría específica y la categoría de referencia (la omitida). Por ejemplo, si omitimos "Azul", el coeficiente de "Color_Rojo" indicará cuánto mayor (o menor) es el valor esperado de Y cuando el color es Rojo comparado con cuando es Azul.
+
+::: {.callout-tip title="Implementación práctica" collapse="true"}
+```{r one-hot-example}
+# Crear datos de ejemplo
+suppressPackageStartupMessages(library(caret))
+datos <- data.frame(
+  ID = 1:5,
+  Color = c("Rojo", "Verde", "Azul", "Rojo", "Verde")
+)
+```
+
+Método 1: usando model.matrix (incluye todas las categorías)
+
+```{r}
+one_hot_completo <- model.matrix(~ Color - 1, data = datos)
+one_hot_completo
+```
+
+Método 2: eliminando categoría de referencia (evita colinealidad)
+
+```{r}
+
+one_hot_referencia <- model.matrix(~ Color, data = datos)[, -1]
+one_hot_referencia
+```
+
+Método 3: usando `caret::dummyVars` con `fullRank` para evitar colinealidad
+
+```{r}
+dummy_vars <- dummyVars(~ Color, data = datos, fullRank = TRUE)
+one_hot_caret <- predict(dummy_vars, newdata = datos)
+one_hot_caret
 ```
 :::
 
-La gráfica de **Box-Cox** mostrará el valor óptimo de $\lambda$, que indica la mejor transformación para los datos.
+::: {.callout-note title="Ventajas y desventajas"}
+**Ventajas del One-Hot Encoding:**
 
-------------------------------------------------------------------------
+- **No asume orden**: Trata cada categoría como independiente
+- **Interpretabilidad**: Cada coeficiente representa el efecto específico de esa categoría
+- **Compatibilidad**: Funciona con todos los algoritmos numéricos
 
-### Consideracione sobre las transformaciones
+**Desventajas:**
 
-Antes de aplicar transformaciones, es importante diagnosticar si realmente son necesarias. Existen varias herramientas para identificar problemas en los datos que pueden solucionarse con transformaciones:
-
--   **Gráficos de Dispersión:** Visualizar la relación entre la variable dependiente y las independientes puede revelar patrones no lineales o heterocedasticidad.
-
--   **Análisis de Residuos:** Un gráfico de los residuos frente a los valores ajustados debe mostrar una distribución aleatoria. Patrones sistemáticos o "abanicos" indican la necesidad de transformación. El gráfico de **QQ-Plot** de los residuos ayuda a evaluar la normalidad.
-
--   **Pruebas Estadísticas:** Pruebas de normalidad como **Shapiro-Wilk** para los residuos. Pruebas de heterocedasticidad como **Breusch-Pagan**.
-
-Si bien las transformaciones pueden mejorar el ajuste del modelo, también pueden afectar la **interpretación de los coeficientes**. Es importante tener en cuenta cómo cambia el significado de los resultados:
-
--   **Transformaciones en la variable dependiente:**
-
-    -   Si aplicas $\log(Y)$, los coeficientes representan **cambios proporcionales** en $Y$.
-    -   Si aplicas $\sqrt{Y}$, los coeficientes representan la tasa de cambio en la raíz cuadrada de $Y$.
-
--   **Transformaciones en la variable independiente:**
-
-    -   Si transformas $X$ con $\log(X)$, los coeficientes indican cómo cambia $Y$ por cada **incremento porcentual** en $X$.
-    -   Si transformas $X$ con $\frac{1}{X}$, los coeficientes representan el cambio en $Y$ por cada unidad de **disminución** en $X$.
-
--   **Revertir Transformaciones para Interpretación:** Después de ajustar un modelo, es posible transformar las predicciones de nuevo a la escala original para facilitar la interpretación.
-
-## Ingeniería de características
-
-La **ingeniería de características** es el arte y la ciencia de transformar los datos brutos en representaciones que faciliten el aprendizaje y mejoren la capacidad predictiva de los modelos. Consiste en el proceso de **crear, transformar y seleccionar** las variables que se utilizan en un modelo para mejorar su rendimiento. Una característica bien diseñada puede hacer que un modelo simple supere a modelos más complejos, mientras que características irrelevantes o mal definidas pueden degradar significativamente la calidad del análisis. Este proceso incluye:
-
--   **Creación de nuevas variables** a partir de las existentes.
--   **Transformación de variables** para mejorar su distribución o relación con la variable objetivo.
--   **Selección de las características más relevantes**, eliminando aquellas que no aportan valor o introducen ruido.
--   **Preparación de datos para modelos específicos**, asegurando que las variables cumplan con los requisitos del algoritmo (por ejemplo, escalado, normalización o codificación).
-
-### Creación de nuevas variables
-
-Una de las tareas más importantes en la ingeniería de características es la **creación de nuevas variables** que puedan capturar relaciones complejas entre las variables independientes y la variable objetivo.
-
-Las **interacciones entre variables** permiten capturar relaciones no lineales entre las variables al considerar cómo el efecto de una variable puede depender del valor de otra. Si se dispone de dos variables $X_i$ y $X_j$, es posible crear una nueva variable de interacción \$X\_{\text{interacción}} = X_i \times X_j \$.
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r iter1}
-# Ejemplo en R de interacción de variables
-set.seed(123)
-X1 <- rnorm(100)
-X2 <- rnorm(100)
-Y <- 3 + 2 * X1 + 4 * X2 + 1.5 * X1 * X2 + rnorm(100)
-
-# Crear variable de interacción
-X_interaccion <- X1 * X2
-
-# Ajustar modelo con interacción
-modelo_interaccion <- lm(Y ~ X1 + X2 + X_interaccion)
-summary(modelo_interaccion)
-```
+- **Dimensionalidad**: Crea k columnas para k categorías (o k-1 con categoría de referencia)
+- **Dispersión**: Matrices resultantes son muy dispersas (muchos ceros)
+- **Colinealidad**: Riesgo de "dummy variable trap" sin categoría de referencia
 :::
 
-Tal y como estudiamos cuando tratamos el tema de regresión polinómica, agregar **términos polinómicos** permite capturar relaciones no lineales al incluir potencias de las variables independientes. Por ejemplo, para una variable $X$, se puede crear $X^2$, $X^3$, etc.
+### Codificación Ordinal (variables ordinales)
 
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r pol1}
-# Datos simulados
-x <- 1:20
-y <- 5 + 2 * x + 0.5 * x^2 + rnorm(20, mean = 0, sd = 5)
+La **codificación ordinal** transforma variables categóricas ordinales en números enteros que preservan el orden jerárquico natural de las categorías. Esta técnica es fundamental cuando trabajamos with variables categóricas que tienen un orden inherente y significativo, como nivel educativo, satisfacción del cliente, grado de severidad, o calificaciones de crédito.
 
-# Incluir término cuadrático en el modelo
-modelo_polinomico <- lm(y ~ x + I(x^2))
-summary(modelo_polinomico)
-```
+La transformación asigna números enteros consecutivos que reflejan la jerarquía natural de las categorías, preservando tanto la información categórica como el orden relativo entre ellas.
+
+::: {.callout-warning title="Cuándo usar codificación ordinal"}
+La codificación ordinal es apropiada cuando las categorías tienen un orden natural claro y este orden es relevante para el fenómeno que estamos modelando. El modelo puede aprovechar esta información ordinal para capturar tendencias o patrones relacionados con la jerarquía de las categorías.
 :::
 
-Crear combinaciones simples de variables puede capturar relaciones ocultas en los datos. Por ejemplo:
+**¿Por qué preservar el orden?** Los algoritmos de machine learning pueden aprovechar la información ordinal para identificar tendencias y patrones que se perderían con one-hot encoding. Cuando el orden es significativo, la codificación ordinal es más eficiente y puede mejorar el rendimiento del modelo.
 
--   Sumas o diferencias: $X_{\text{nuevo}} = X_1 + X_2$
--   Ratios: $X_{\text{ratio}} = \frac{X_1}{X_2}$
--   Variables categóricas combinadas: Fusionar categorías relacionadas en una nueva variable. Deben ser categorías que, desde un punto de vista del dominio de aplicación, tenga sentido combinar.
+**Ejemplo práctico:** Consideremos una variable "Satisfacción" con valores ordenados [Muy Insatisfecho, Insatisfecho, Neutral, Satisfecho, Muy Satisfecho]. La codificación ordinal asignará:
 
-------------------------------------------------------------------------
+| **ID** | **Satisfacción** | **Satisfacción_Codificada** |
+|--------|------------------|---------------------------|
+| 1      | Muy Insatisfecho | 1                         |
+| 2      | Insatisfecho     | 2                         |
+| 3      | Neutral          | 3                         |
+| 4      | Satisfecho       | 4                         |
+| 5      | Muy Satisfecho   | 5                         |
 
-### Selección y Reducción de variables
+Cada observación queda representada por un número entero que preserva el orden jerárquico de las categorías originales.
 
-Una vez que se han creado nuevas características, es importante **seleccionar** las que son más relevantes para el modelo y **eliminar** aquellas que no aportan valor o introducen ruido.
+**Interpretación en regresión:** En un modelo de regresión lineal, el coeficiente de la variable ordinal codificada representa el **cambio promedio en la variable respuesta** por cada incremento de una unidad en el nivel ordinal. Por ejemplo, si el coeficiente es 2.5, esto significa que pasar del nivel 1 al 2, o del 3 al 4, se asocia en promedio con un aumento de 2.5 unidades en la variable respuesta, asumiendo intervalos uniformes entre niveles.
 
-Se trató con detalle estos conceptos en el tema anterior. Planteamos un ejemplo de selección *Stepwise*.
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r sel1}
-# Datos simulados
-set.seed(123)
-X1 <- rnorm(100)
-X2 <- rnorm(100)
-X3 <- rnorm(100)
-Y <- 3 + 2 * X1 + 4 * X2 + rnorm(100)
-
-# Modelo completo con todas las variables
-modelo_completo <- lm(Y ~ X1 + X2 + X3)
-
-# Selección de variables usando stepwise
-modelo_seleccionado <- step(modelo_completo, direction = "both")
-summary(modelo_seleccionado)
-```
-:::
-
-------------------------------------------------------------------------
-
-Recordemos que los métodos de regularización, estudiados en el tema 2, no solo ajustan el modelo, sino que también penalizan la complejidad, lo que ayuda a eliminar variables irrelevantes.
-
-### Escalado y Normalización de Variables
-
-Muchos algoritmos de aprendizaje automático, como la regresión, las redes neuronales y los métodos basados en distancia (k-NN, SVM), son sensibles a la **escala de las variables**. Por lo tanto, es fundamental **escalar** o **normalizar** los datos para garantizar que todas las variables contribuyan de manera equitativa al modelo.
-
-**Estandarización (Z-Score Normalization)**
-
-La estandarización consiste en restar la media y dividir por la desviación estándar, lo que produce variables con **media cero** y **desviación estándar uno**.
-
-$$
-X_{\text{estandarizado}} = \frac{X - \bar{X}}{\sigma_X}
-$$
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r std1}
-# Estandarización de una variable
-X1_estandarizado <- scale(X1)
-```
-:::
-
-------------------------------------------------------------------------
-
-**Normalización Min-Max**
-
-La **normalización Min-Max** escala las variables a un rango específico, típicamente entre 0 y 1.
-
-$$
-X_{\text{normalizado}} = \frac{X - X_{\text{min}}}{X_{\text{max}} - X_{\text{min}}}
-$$
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r norm1}
-# Normalización Min-Max
-X1_min_max <- (X1 - min(X1)) / (max(X1) - min(X1))
-```
-:::
-
-### Técnicas avanzadas de Ingeniería de Características
-
-Cuando se trabaja con grandes conjuntos de datos o con variables altamente correlacionadas, puede ser necesario aplicar técnicas más avanzadas para reducir la dimensionalidad y extraer características relevantes.
-
-#### Análisis de Componentes Principales (PCA)
-
-El **Análisis de Componentes Principales (PCA)** es una técnica de reducción de dimensionalidad que transforma un conjunto de variables correlacionadas en un conjunto más pequeño de **componentes principales** no correlacionados que explican la mayor parte de la varianza en los datos.
-
-::: {.callout-caution title="Aviso"}
-Los detalles del Análisis de Componentes Principales son tratados en la asignatura de Aprendizaje Automático.
-:::
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r pca1}
-# Datos simulados
-set.seed(123)
-datos <- data.frame(X1, X2, X3)
-
-# Aplicar PCA
-pca_resultado <- prcomp(datos, scale. = TRUE)
-
-# Visualización de los resultados
-summary(pca_resultado)
-biplot(pca_resultado)
-```
-:::
-
-#### Codificación de variables categóricas
-
-Las variables categóricas deben convertirse en variables numéricas antes de ser utilizadas en muchos modelos. Esto puede hacerse mediante:
-
-**Codificación One-Hot**
-
-El **One-Hot Encoding** es una técnica utilizada en el **preprocesamiento de datos** para convertir variables categóricas en variables numéricas. Muchos algoritmos de aprendizaje automático y estadística (como la regresión lineal, redes neuronales y máquinas de soporte vectorial) requieren que las variables de entrada sean numéricas, ya que no pueden manejar directamente datos categóricos.
-
-El **One-Hot Encoding** transforma cada categoría en una nueva columna binaria (0 o 1), donde el **1** indica la presencia de una categoría específica y el **0** su ausencia.
-
-Supongamos que tienes una variable categórica llamada **Color** con tres categorías: **Rojo**, **Verde**, y **Azul**.
-
-| **ID** | **Color** |
-|--------|-----------|
-| 1      | Rojo      |
-| 2      | Verde     |
-| 3      | Azul      |
-| 4      | Rojo      |
-| 5      | Verde     |
-
-Con **One-Hot Encoding**, creamos una nueva columna para cada categoría única:
-
-| **ID** | **Color_Rojo** | **Color_Verde** | **Color_Azul** |
-|--------|----------------|-----------------|----------------|
-| 1      | 1              | 0               | 0              |
-| 2      | 0              | 1               | 0              |
-| 3      | 0              | 0               | 1              |
-| 4      | 1              | 0               | 0              |
-| 5      | 0              | 1               | 0              |
-
-Cada fila tiene un **único 1** que indica la categoría correspondiente y **ceros** en las otras columnas. Esto convierte la información categórica en un formato que los algoritmos numéricos pueden procesar.
-
-::: {.callout-note title="Propiedades Clave" collapse="false"}
-**Ventajas del One-Hot Encoding**
-
--   Compatibilidad con algoritmos numéricos: La mayoría de los modelos de aprendizaje automático requieren variables numéricas. El One-Hot Encoding convierte las categorías en un formato adecuado.
-
--   Evita suposiciones erróneas A diferencia de la **codificación ordinal**, que asigna valores numéricos secuenciales a categorías (por ejemplo, Rojo = 1, Verde = 2, Azul = 3), el One-Hot Encoding **no introduce un orden artificial** entre las categorías. Esto es importante cuando no hay una jerarquía natural.
-
--   Mejora la Interpretabilidad en Modelos Lineales: En modelos como la regresión lineal, cada columna creada mediante One-Hot Encoding representa el efecto específico de esa categoría.
-
-**Desventajas del One-Hot Encoding**
-
--   Incremento de la Dimensionalidad: Si la variable categórica tiene muchas categorías únicas (por ejemplo, países o códigos postales), el número de columnas creadas puede ser muy grande. Esto puede conducir a problemas de **"curse of dimensionality"** (la maldición de la dimensionalidad), afectando el rendimiento del modelo y aumentando el tiempo de computación.
-
--   Colinealidad Perfecta (Dummy Variable Trap): Al crear una columna para cada categoría, una de las columnas se puede representar como una combinación lineal de las demás. Esto puede causar problemas en modelos lineales. Para evitarlo, se elimina una categoría de referencia (típicamente la primera), lo que se conoce como **evitar la trampa de las variables ficticias** (*dummy variable trap*).
-:::
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r codif1}
-# Variable categórica simulada
-categoria <- factor(c("bajo", "medio", "alto", "medio", "alto"))
-
-# Codificación one-hot
-library(caret)
-dummies <- dummyVars(~ categoria, data = data.frame(categoria))
-print(dummies)
-datos_codificados <- predict(dummies, newdata = data.frame(categoria))
-```
-:::
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r onehot2}
-# Instalar y cargar la librería caret
-library(caret)
-
-# Crear un data frame
-datos <- data.frame(ID = 1:5, Color = c("Rojo", "Verde", "Azul", "Rojo", "Verde"))
-
-# Aplicar One-Hot Encoding usando dummyVars
-dummy <- dummyVars(~ Color, data = datos)
-one_hot <- predict(dummy, newdata = datos)
-
-# Ver los resultados
-print(one_hot)
-```
-:::
-
-::: {.callout-caution title="Aviso"}
-Cuando aplicamos One-Hot Encoding, el conjunto de variables resultantes puede generar colinealidad perfecta, lo que puede ser problemático en modelos lineales. Para evitarlo, es común eliminar una de las columnas creadas (que actuará como categoría de referencia).
-
-```{r ejemplo}
-# One-Hot Encoding con eliminación de una categoría (categoría de referencia)
-one_hot_ref <- model.matrix(~ Color, data = datos)[, -1]  # Eliminar la primera columna
-
-print(one_hot_ref)
-```
-
-Esto elimina una columna (por ejemplo, **ColorAzul**) y permite que las otras columnas se interpreten en relación a la categoría de referencia.
-:::
-
-#### Codificación Ordinal
-
-La **codificación ordinal** es una técnica de preprocesamiento de datos utilizada para convertir variables categóricas en valores numéricos **manteniendo el orden natural** entre las categorías. A diferencia del **One-Hot Encoding**, que trata a todas las categorías como independientes y sin relación entre sí, la codificación ordinal es útil cuando las categorías tienen una **jerarquía** o un **orden lógico**.
-
-En la **codificación ordinal**, a cada categoría se le asigna un número entero que refleja su **posición** o **nivel** en un orden determinado. Esto permite que los modelos estadísticos y de aprendizaje automático interpreten que **algunas categorías son mayores o menores** que otras, lo que es especialmente útil en variables que representan rangos, niveles o clasificaciones.
-
-Supongamos que tenemos una variable llamada **"Nivel de Satisfacción"** con las siguientes categorías:
-
-| **Nivel de Satisfacción** |
-|---------------------------|
-| Muy Insatisfecho          |
-| Insatisfecho              |
-| Neutral                   |
-| Satisfecho                |
-| Muy Satisfecho            |
-
-Aquí, hay un orden lógico desde **"Muy Insatisfecho"** hasta **"Muy Satisfecho"**. Aplicando codificación ordinal, asignamos números que reflejen esta jerarquía:
-
-| **Nivel de Satisfacción** | **Codificación Ordinal** |
-|---------------------------|--------------------------|
-| Muy Insatisfecho          | 1                        |
-| Insatisfecho              | 2                        |
-| Neutral                   | 3                        |
-| Satisfecho                | 4                        |
-| Muy Satisfecho            | 5                        |
-
-------------------------------------------------------------------------
-
-::: {.callout-note title="Propiedades clave" collapse="false"}
-La codificación ordinal es adecuada cuando:
-
--   Las categorías tienen un orden natural: Ejemplos incluyen niveles educativos (**Primaria**, **Secundaria**, **Universidad**), calificaciones (**Bajo**, **Medio**, **Alto**), o satisfacción del cliente (**Insatisfecho**, **Neutral**, **Satisfecho**).
-
--   El modelo puede interpretar la relación de orden: Algunos algoritmos, como la **regresión lineal** o las **máquinas de vectores soporte (SVM)**, pueden beneficiarse de la codificación ordinal si el orden es relevante para la variable objetivo.
-
--   Reducción de dimensionalidad: A diferencia del One-Hot Encoding, que puede crear muchas columnas para variables con múltiples categorías, la codificación ordinal **mantiene la variable en una sola columna**, lo que es más eficiente para conjuntos de datos grandes.
-:::
-
-::: {.callout-note title="Ventajas y desventajas" collapse="false"}
-**Ventajas**
-
--   Preserva la jerarquía de las categorías: Permite que el modelo entienda que ciertas categorías son **mayores** o **menores** que otras.
-
--   Reducción de la dimensionalidad: A diferencia del One-Hot Encoding, no aumenta el número de columnas, lo que reduce el riesgo de la **maldición de la dimensionalidad**.
-
--   Simplicidad Computacional: Es más eficiente en términos de almacenamiento y tiempo de computación, especialmente para variables con muchas categorías.
-
-**Desventajas**
-
--   Riesgo de interpretación incorrecta del orden: Si la variable categórica **no tiene un orden lógico**, la codificación ordinal puede inducir al modelo a asumir relaciones que no existen. Por ejemplo, supongamos que tienes una variable **Color** con categorías **Rojo**, **Verde**, y **Azul**. Asignarles valores como Rojo = 1, Verde = 2, Azul = 3 podría inducir al modelo a pensar que Verde es "mayor" que Rojo y Azul es "mayor" que Verde, lo cual no tiene sentido en este contexto.
-
--   No Captura la Magnitud de la Diferencia: Aunque las categorías están ordenadas, la codificación ordinal **no refleja la magnitud real de las diferencias** entre categorías. Por ejemplo, la diferencia entre "Insatisfecho" y "Neutral" puede no ser la misma que entre "Satisfecho" y "Muy Satisfecho".
-:::
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
+::: {.callout-tip title="Implementación práctica" collapse="true"}
 ```{r cod_ord1}
-# Crear un data frame con una variable categórica ordinal
+# Crear datos de ejemplo
 datos <- data.frame(
   ID = 1:5,
   Satisfaccion = c("Muy Insatisfecho", "Insatisfecho", "Neutral", "Satisfecho", "Muy Satisfecho")
 )
 
-# Convertir la variable en un factor ordenado
-datos$Satisfaccion_ordinal <- factor(datos$Satisfaccion, 
+# Convertir en factor ordenado
+datos$Satisfaccion_factor <- factor(datos$Satisfaccion, 
                                      levels = c("Muy Insatisfecho", "Insatisfecho", "Neutral", "Satisfecho", "Muy Satisfecho"), 
                                      ordered = TRUE)
 
-# Ver la estructura del factor
-str(datos)
+# Codificación ordinal manual
+datos$Satisfaccion_codificada <- as.numeric(datos$Satisfaccion_factor)
 
-# Asignar valores numéricos a las categorías ordenadas
-datos$Satisfaccion_codificada <- as.numeric(datos$Satisfaccion_ordinal)
-
-# Ver el resultado
-print(datos)
+# Verificar la codificación
+datos
 ```
-:::
 
-Podemos usar la variable codificada ordinalmente en un modelo de regresión para evaluar su impacto en una variable dependiente, como una **puntuación de satisfacción general**.
+Ejemplo de uso en regresión:
 
-::: {.callout-tip title="Ejemplo" collapse="true"}
 ```{r reg1}
-# Simular una variable de respuesta (puntuación general)
+# Simular variable respuesta correlacionada con el orden
 set.seed(123)
 datos$Puntuacion <- c(2, 4, 6, 8, 10) + rnorm(5, mean = 0, sd = 0.5)
 
-# Ajustar un modelo de regresión lineal usando la variable codificada
-modelo_ordinal <- lm(Puntuacion ~ Satisfaccion_codificada, data = datos)
-
-# Resumen del modelo
-summary(modelo_ordinal)
+# Modelo de regresión
+modelo <- lm(Puntuacion ~ Satisfaccion_codificada, data = datos)
+summary(modelo)
 ```
 :::
 
-El modelo ajustará la relación entre la puntuación de satisfacción y el nivel de satisfacción codificado ordinalmente. El coeficiente de la variable **`Satisfaccion_codificada`** indicará cómo cambia la puntuación a medida que aumenta el nivel de satisfacción.
+::: {.callout-note title="Ventajas y desventajas"}
+**Ventajas de la codificación ordinal:**
 
-#### Diferencias entre Codificación Ordinal y One-Hot Encoding
+- **Preserva la jerarquía**: Mantiene el orden natural entre categorías
+- **Eficiencia dimensional**: Una sola columna independiente del número de categorías
+- **Interpretabilidad**: Coeficientes representan cambios por unidad de nivel ordinal
+- **Eficiencia computacional**: Menor uso de memoria y procesamiento
 
-| Característica | **Codificación Ordinal** | **One-Hot Encoding** |
-|----|----|----|
-| **Preserva el orden** | Sí, refleja la jerarquía entre categorías. | No, trata cada categoría como independiente. |
-| **Aumenta la dimensionalidad** | No, mantiene la variable en una sola columna. | Sí, crea una columna para cada categoría única. |
-| **Adecuado para** | Variables con orden natural (ej. educación). | Variables sin orden (ej. color, género, ciudad). |
-| **Riesgo** | Puede inducir al modelo a asumir relaciones falsas si no hay orden real. | Incremento de la complejidad del modelo. |
+**Desventajas:**
 
-------------------------------------------------------------------------
+- **Supuesto de intervalos uniformes**: Asume que las diferencias entre niveles consecutivos son iguales
+- **Riesgo con variables no-ordinales**: Puede imponer orden artificial en variables nominales
+- **Pérdida de flexibilidad**: No puede capturar relaciones no-lineales entre niveles ordinales
+:::
+
+### Comparación directa: Ordinal vs One-Hot Encoding
+
+La elección entre codificación ordinal y one-hot encoding depende fundamentalmente de la **naturaleza de la variable categórica** y los **objetivos del análisis**. Una decisión incorrecta puede llevar a interpretaciones erróneas y modelos subóptimos.
+
+| **Característica** | **Codificación Ordinal** | **One-Hot Encoding** |
+|-------------------|-------------------------|---------------------|
+| **Preserva el orden** | Sí, refleja la jerarquía entre categorías | No, trata cada categoría como independiente |
+| **Dimensionalidad** | Una sola columna | k columnas (o k-1) |
+| **Adecuado para** | Variables con orden natural (educación, satisfacción) | Variables nominales (color, género, región) |
+| **Interpretación** | Cambio por unidad de nivel | Diferencia vs. categoría de referencia |
+| **Eficiencia computacional** | Alta (menos parámetros) | Menor (más parámetros) |
+| **Riesgo principal** | Orden artificial en variables nominales | Dimensionalidad excesiva |
+
+## Interacciones entre variables
+
+Las **interacciones entre variables** representan uno de los conceptos más poderosos y subestimados en el modelado estadístico. Mientras que los efectos principales capturan el impacto promedio de cada variable por separado, las interacciones revelan **cómo el efecto de una variable cambia según el nivel de otra variable**. Este fenómeno es omnipresente en el mundo real: el efecto del precio en las ventas depende del nivel de publicidad, el impacto de la experiencia en el salario varía según la educación, o la efectividad de un tratamiento médico puede diferir entre grupos demográficos.
+
+Ignorar las interacciones relevantes puede llevar a **conclusiones erróneas** y **pérdida significativa de poder predictivo**. Por otro lado, incluir interacciones irrelevantes incrementa la complejidad del modelo sin beneficios, violando el principio de parsimonia. La clave está en **identificar, interpretar y validar** interacciones de manera sistemática y teoricamente fundamentada.
+
+### Interacciones entre variables continuas
+
+El caso más directo es la interacción entre dos variables continuas:
+
+$$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1 X_2 + \varepsilon$$
+
+**Interpretación del coeficiente de interacción (**$\beta_3$): - Si $\beta_3 > 0$: El efecto de $X_1$ se **amplifica** cuando $X_2$ aumenta - Si $\beta_3 < 0$: El efecto de $X_1$ se **atenúa** cuando $X_2$ aumenta - Si $\beta_3 = 0$: No hay interacción (efectos aditivos)
+
+::: {.callout-tip title="Ejemplo: Interacción precio-publicidad en ventas"}
+```{r interaccion-continua-continua}
+# Simulación: efecto de precio y publicidad en ventas
+# con interacción (mayor publicidad reduce sensibilidad al precio)
+set.seed(789)
+n <- 200
+precio <- runif(n, 50, 150)  # precio en euros
+publicidad <- runif(n, 0, 10)  # gasto en publicidad (miles €)
+
+# Efecto principal negativo del precio, positivo de publicidad
+# Interacción: mayor publicidad reduce sensibilidad negativa al precio
+ventas <- 1000 - 5*precio + 50*publicidad + 0.8*precio*publicidad/10 + 
+          rnorm(n, 0, 50)
+
+datos_inter <- data.frame(precio, publicidad, ventas)
+
+# Modelo con interacción
+modelo_interaccion <- lm(ventas ~ precio * publicidad, data = datos_inter)
+summary(modelo_interaccion)
+
+# Interpretación del coeficiente de interacción
+coef_int <- coef(modelo_interaccion)
+cat("Interpretación de la interacción:\n")
+cat("Coeficiente interacción:", round(coef_int[4], 3), "\n")
+cat("Efecto precio cuando publicidad=0:", round(coef_int[2], 2), "\n")
+cat("Efecto precio cuando publicidad=5:", round(coef_int[2] + 5*coef_int[4], 2), "\n")
+cat("Efecto precio cuando publicidad=10:", round(coef_int[2] + 10*coef_int[4], 2), "\n")
+
+# Visualización de la interacción
+library(ggplot2)
+# Crear grupos de publicidad para visualizar
+datos_inter$pub_grupo <- cut(datos_inter$publicidad, 
+                            breaks = 3, 
+                            labels = c("Baja", "Media", "Alta"))
+
+ggplot(datos_inter, aes(x = precio, y = ventas, color = pub_grupo)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(title = "Interacción Precio-Publicidad",
+       x = "Precio (€)", y = "Ventas", color = "Publicidad") +
+  theme_minimal()
+```
+:::
