@@ -1,403 +1,791 @@
-# Otros modelos de regresión: Modelos Aditivos Generalizados (GAMs) {#sec-tema5}
+# Modelos de regresión generalizada {#sec-tema4}
 
-En el análisis de datos y la modelización estadística, a menudo asumimos que las relaciones entre las variables independientes y la variable dependiente son lineales o que pueden transformarse fácilmente para cumplir con esta suposición. Sin embargo, en muchos contextos del mundo real, las relaciones entre las variables son **no lineales** y **complejas**, lo que limita la efectividad de los modelos de regresión tradicionales como la regresión lineal o polinomial.
+Hasta ahora hemos estuadiado la regresión lineal como una herramienta poderosa para modelar la relación entre una variable dependiente continua y un conjunto de variables independientes. Sin embargo, en muchos contextos del mundo real, las suposiciones de la regresión lineal tradicional no son adecuadas. ¿Qué sucede si la variable dependiente es binaria, como en un diagnóstico médico (enfermo/sano)? ¿O si estás modelando el número de accidentes en una intersección o la cantidad de compras realizadas por un cliente?
 
-Los **Modelos de Regresión Aditiva Generalizada (GAMs)** ofrecen una solución poderosa y flexible para este problema. Los GAMs permiten modelar relaciones no lineales sin necesidad de especificar de antemano la forma exacta de la no linealidad [@hastie2017generalized]. En lugar de ajustar una única función global para todos los predictores, los GAMs aplican funciones de suavizado a cada variable independiente por separado, lo que permite capturar patrones complejos y sutiles en los datos.
+Para abordar estos desafíos, se utilizan los llamados **Modelos Lineales Generalizados (GLM)**. Esta clase de modelos amplía la regresión lineal al permitir que la variable dependiente tenga distribuciones diferentes a la normal, como la binomial o la de Poisson. Además, los GLM utilizan funciones de enlace que transforman la relación entre la variable dependiente y los predictores, permitiendo una mayor flexibilidad en el modelado.
 
-Un **Modelo Aditivo Generalizado (GAM)** es una extensión de los **Modelos Lineales Generalizados (GLM)** vistos en el tema anterior y que permite que la relación entre la variable dependiente y las variables independientes sea **no lineal** y **flexible**. En un GAM, la variable dependiente se modela como una suma de funciones suavizadas de las variables independientes:
+Algunos de los modelos más comunes dentro de los GLM son:
 
-$$
-g(\mu) = \beta_0 + f_1(X_1) + f_2(X_2) + \dots + f_p(X_p)
-$$
+-   Regresión Logística: Ideal para variables dependientes binarias (sí/no, éxito/fracaso).
+-   Regresión de Poisson: Utilizada para modelar datos de conteo (número de eventos).
+-   Regresión Binomial Negativa: Una extensión de la regresión de Poisson para datos de conteo con sobredispersión.
+-   Modelos de Gamma y Inverso Gaussiano: Utilizados para modelar variables continuas positivas y sesgadas, como tiempos de espera o costos.
 
-Donde:
+En este tema, exploraremos cómo utilizar estos modelos para resolver problemas del mundo real, interpretar sus resultados y evaluar su ajuste.
 
-  - $g(\mu)$ es la **función de enlace** que conecta la media de la variable dependiente ($\mu$) con los predictores.
-  - $\beta_0$ es el **intercepto** del modelo.
-  - $f_i(X_i)$ son funciones suavizadas que capturan la relación entre cada predictor $X_i$ y la variable dependiente.
+## Introducción a los GLM
 
-A diferencia de la regresión lineal, donde los predictores tienen una relación lineal con la variable dependiente, en los GAMs cada predictor puede tener una forma funcional diferente, permitiendo capturar **curvas**, **patrones no lineales** y **efectos complejos** en los datos.
+### ¿Qué son los Modelos Lineales Generalizados?
 
-::: {.callout-note title="Ventajas de los GAMs" collapse="false"}
-**Flexibilidad para modelar No Linealidades:**  
-   Los GAMs permiten capturar relaciones no lineales complejas sin necesidad de especificar una forma funcional exacta.
+Los **Modelos Lineales Generalizados (GLM)** son una extensión de los modelos de regresión lineal que permiten manejar una mayor variedad de tipos de datos y relaciones entre variables [@nelder1972generalized]. Mientras que la regresión lineal tradicional asume que la variable dependiente es continua y sigue una distribución normal, los GLM permiten trabajar con variables dependientes que:
 
-**Interpretabilidad:**  
-   A pesar de su flexibilidad, los GAMs siguen siendo interpretables, ya que el efecto de cada predictor puede visualizarse por separado.
+-   Son **binarias** (como éxito/fracaso o sí/no).
+-   Representan **conteos** de eventos (número de llamadas, accidentes, etc.).
+-   Son **continuas positivas** y no siguen una distribución normal (como tiempos o costos).
 
-**Evita el sobreajuste:**  
-   A través de técnicas de suavizado controlado, los GAMs pueden evitar el sobreajuste al equilibrar la complejidad del modelo con la precisión de las predicciones.
+Los GLM proporcionan una estructura flexible para modelar la relación entre una o más variables independientes y una variable dependiente que sigue alguna distribución de la **familia exponencial** (binomial, Poisson, gamma, entre otras).
 
-**Adaptabilidad a diferentes tipos de datos:**  
-   Los GAMs pueden aplicarse a variables continuas, categóricas y de conteo, lo que los hace útiles en una amplia variedad de contextos.
+### Componentes de un Modelo Lineal Generalizado
+
+Un GLM se define por tres componentes clave:
+
+1.  **Componente Aleatorio:**
+
+    Este componente describe la distribución de la variable dependiente. En la regresión lineal, la variable dependiente sigue una distribución normal. En los GLM, puede seguir otras distribuciones de la **familia exponencial**, como:
+
+    -   **Distribución Binomial:** Para variables categóricas binarias (0/1, éxito/fracaso).
+    -   **Distribución de Poisson:** Para datos de conteo (número de eventos).
+    -   **Distribución Gamma:** Para variables continuas y positivas (como costos o tiempos).
+
+2.  **Componente Sistemático:**\
+    Este componente describe cómo las variables independientes se combinan linealmente en el modelo. Se define como:
+
+    $$
+    \eta = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p
+    $$
+
+    Donde $\eta$ es el **predictor lineal** y $\beta$ representa los coeficientes del modelo.
+
+3.  **Función de Enlace:**\
+    La función de enlace conecta el componente sistemático con la media de la variable dependiente. Mientras que en la regresión lineal la relación es directa (\$Y = \eta \$), en los GLM se utiliza una función de enlace $g(\mu)$ para transformar la media $\mu$ y ajustar diferentes tipos de datos.
+
+    $$
+    g(\mu) = \eta
+    $$
+
+**Ejemplos de funciones de enlace:**
+
+-   **Logística (Logit):** Para la regresión logística, que modela la probabilidad de un evento. $$
+    g(\mu) = \log\left(\frac{\mu}{1 - \mu}\right)
+    $$
+-   **Logarítmica:** Para la regresión de Poisson, que modela tasas de eventos. $$
+    g(\mu) = \log(\mu)
+    $$
+-   **Identidad:** Para la regresión lineal estándar. $$
+    g(\mu) = \mu
+    $$
+
+::: {.callout-note collapse="true" title="Aplicaciones"}
+Los GLM se utilizan en una amplia variedad de disciplinas para resolver problemas del mundo real:
+
+**Regresión Logística (para variables binarias):**
+
+-   **Medicina:** Predicción de la presencia o ausencia de una enfermedad basada en factores de riesgo.
+-   **Marketing:** Determinación de la probabilidad de que un cliente compre un producto.
+-   **Finanzas:** Evaluación de la probabilidad de incumplimiento de pago de un préstamo.
+
+**Regresión de Poisson (para datos de conteo):**
+
+-   **Transporte:** Modelado del número de accidentes en una carretera en un período de tiempo.
+-   **Ecología:** Conteo de especies en un área determinada.
+-   **Telecomunicaciones:** Número de llamadas recibidas por un centro de atención.
+
+**Regresión Binomial Negativa (para conteos con sobredispersión):**
+
+-   **Salud Pública:** Modelado del número de visitas al médico o incidentes de una enfermedad en una población.
+
+**Modelos Gamma (para variables continuas positivas):**
+
+-   **Seguros:** Estimación de los costos de reclamos de seguros.
+-   **Ingeniería:** Modelado de tiempos de falla en procesos industriales.
 :::
 
-Los principales casos de uso de los GAMS son:
+### Diferencias clave entre la Regresión Lineal y los GLM
 
-  - **Relaciones no lineales complejas:** Cuando se sospecha que la relación entre las variables no es lineal y los modelos polinomiales no capturan adecuadamente la estructura de los datos.
-  
-  - **Interacciones complejas entre variables:** Cuando los efectos de las variables pueden variar dependiendo del contexto o de otros predictores.
+| **Característica** | **Regresión Lineal** | **Modelos Lineales Generalizados (GLM)** |
+|------------------|---------------------------|----------------------------|
+| **Distribución de la variable dependiente** | Normal | Familia exponencial (binomial, Poisson, gamma, etc.) |
+| **Tipo de variable dependiente** | Continua | Binaria, de conteo, continua positiva |
+| **Relación entre las variables** | Lineal directa | Relación transformada mediante una función de enlace |
+| **Función de Enlace** | Identidad ($g(\mu) = \mu$) | Logit, logarítmica, inversa, etc. |
 
-  - **Datos con distribuciones no estándar:** En combinación con funciones de enlace, los GAMs pueden manejar diferentes tipos de distribuciones en la variable dependiente, como datos de conteo, binarios o continuos sesgados.
+------------------------------------------------------------------------
 
-Los **Modelos Aditivos Generalizados (GAMs)** tienen aplicaciones en una amplia variedad de disciplinas debido a su capacidad para capturar relaciones no lineales complejas. En **medicina y epidemiología**, se utilizan para modelar el riesgo de enfermedades en función de múltiples factores de riesgo que interactúan de manera no lineal, permitiendo identificar patrones sutiles en la salud de las poblaciones. En **economía y finanzas**, los GAMs son útiles para analizar la relación entre variables económicas, como la inflación y el crecimiento del PIB, donde las interacciones y los efectos pueden variar a lo largo del tiempo. En el campo de las **ciencias ambientales**, permiten modelar la relación entre la temperatura y la concentración de contaminantes atmosféricos, lo cual es crucial para entender el impacto del cambio climático. Finalmente, en **marketing y negocios**, los GAMs ayudan a analizar el comportamiento del cliente, como la probabilidad de compra, en función de variables como el ingreso y la edad, proporcionando insights valiosos para la toma de decisiones estratégicas.
+Las ventajas principales de los GLM son:
 
-## Fundamentos de los GAMs
+-   **Flexibilidad:** Los GLM permiten modelar diferentes tipos de variables dependientes, lo que amplía significativamente el rango de problemas que se pueden abordar.
 
-Los **Modelos Aditivos Generalizados (GAMs)** son una extensión de los **Modelos Lineales Generalizados (GLM)** que permiten capturar relaciones **no lineales** entre la variable dependiente y las variables independientes. Mientras que los GLM asumen una relación lineal (o lineal después de una transformación mediante una función de enlace), los GAMs relajan esta suposición al permitir que cada predictor tenga su propia forma funcional no paramétrica.
+-   **Interpretación Coherente:** Aunque se utilizan funciones de enlace, los coeficientes de los GLM pueden interpretarse de manera similar a los modelos lineales, proporcionando información sobre el impacto de cada variable independiente.
 
-Un **GLM** se expresa como:
+-   **Evaluación Estadística Robusta:** Los GLM permiten la realización de pruebas de hipótesis, la construcción de intervalos de confianza y la evaluación de la bondad del ajuste mediante medidas como el **AIC** y el **BIC**.
 
-$$
-g(\mu) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p
-$$
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r glm1}
+# Cargar librería y datos
+library(MASS)
+data(Pima.tr)  # Datos sobre diabetes en mujeres de origen pima
 
-Donde:
-- $g(\mu)$ es la función de enlace que relaciona la media de la variable dependiente ($\mu$) con el predictor lineal.
-- $\beta_0, \beta_1, \dots, \beta_p$ son los coeficientes del modelo que representan el efecto lineal de cada predictor.
+# Ajustar un modelo de regresión logística
+modelo_logistico <- glm(type ~ npreg + glu + bmi, data = Pima.tr, family = binomial)
 
-En contraste, un **GAM** se define como:
+# Resumen del modelo
+summary(modelo_logistico)
 
-$$
-g(\mu) = \beta_0 + f_1(X_1) + f_2(X_2) + \dots + f_p(X_p)
-$$
+# Predicciones de la probabilidad de tener diabetes
+predicciones <- predict(modelo_logistico, type = "response")
 
-Donde $f_i(X_i)$ son **funciones suavizadas** que capturan la relación (posiblemente no lineal) entre el predictor $X_i$ y la variable dependiente.
+# Ver primeras predicciones
+head(predicciones)
+```
+:::
 
-En los GLM, los efectos de los predictores son estrictamente lineales o transformados de forma lineal. En los GAMs, la relación puede ser cualquier forma no paramétrica, determinada por los datos. Los GAMs ofrecen mayor flexibilidad al permitir que la forma de la relación entre cada predictor y la respuesta sea modelada directamente a partir de los datos. Aunque los GAMs son más flexibles, siguen siendo interpretables, ya que el efecto de cada variable puede visualizarse y analizarse individualmente.
+------------------------------------------------------------------------
 
----
+Los **Modelos Lineales Generalizados** amplían el alcance de la regresión lineal clásica, proporcionando herramientas para modelar una amplia variedad de tipos de datos, desde variables binarias hasta datos de conteo y variables continuas no normales. A través del uso de funciones de enlace y distribuciones flexibles, los GLM permiten resolver problemas complejos del mundo real en campos tan diversos como la medicina, el marketing, la ingeniería y las ciencias sociales.
 
-### Suavizado en los GAMs
+En las próximas secciones, exploraremos en detalle cómo aplicar estos modelos específicos, como la **regresión logística** y la **regresión de Poisson**, y cómo interpretar sus resultados en diferentes contextos.
 
-El componente fundamental de los GAMs es el uso de **funciones de suavizado**, que permiten modelar relaciones no lineales de manera flexible y controlada. El suavizado evita el sobreajuste (overfitting) al no intentar seguir cada fluctuación en los datos, sino al capturar las **tendencias generales** subyacentes.
+## Regresión Logística
 
-El **suavizado** consiste en ajustar una curva a los datos de tal manera que se capturen las tendencias generales sin que el modelo sea demasiado sensible al ruido o a las fluctuaciones aleatorias. En el contexto de los GAMs, cada predictor tiene su propia función de suavizado que determina cómo se ajusta la relación entre esa variable y la variable dependiente.
+La **regresión logística** es una herramienta fundamental para modelar la probabilidad de eventos binarios en una variedad de contextos, desde la medicina hasta la economía y el marketing [@hosmer2013applied]. La correcta interpretación de los coeficientes mediante **odds ratios**, así como la evaluación del ajuste del modelo mediante curvas **ROC** y matrices de confusión, son esenciales para extraer conclusiones válidas de los datos.
 
-$$
-g(\mu) = \beta_0 + s_1(X_1) + s_2(X_2) + \dots + s_p(X_p)
-$$
+### Fundamentos de la Regresión Logística
 
-Donde $s_i(X_i)$ representa una función suavizada para el predictor $X_i$.
+La **regresión logística** es una técnica estadística utilizada para modelar la probabilidad de ocurrencia de un evento binario, es decir, cuando la variable dependiente toma solo dos posibles valores (por ejemplo, **éxito/fracaso**, **sí/no**, **enfermo/sano**). A diferencia de la regresión lineal, que modela una relación lineal entre variables, la regresión logística utiliza una **función logística** para asegurar que las predicciones estén en el rango \[0,1\], lo cual es necesario para interpretar los resultados como probabilidades.
 
-El grado de suavizado controla cuánto sigue el modelo las fluctuaciones de los datos:
+**La función Logística (Sigmoide)**
 
-  - **Suavizado bajo:** El modelo se ajusta demasiado a los datos, capturando incluso el ruido aleatorio. Esto puede llevar al **sobreajuste**.
-  - **Suavizado alto:** El modelo puede no capturar adecuadamente la estructura subyacente de los datos, llevando al **subajuste** (underfitting).
-
-El **criterio de suavizado óptimo** se selecciona automáticamente mediante técnicas como la **minimización del criterio de información de Akaike (AIC)** o el uso de **validación cruzada**.
-
-El **suavizado** en los **Modelos Aditivos Generalizados (GAMs)** ofrece múltiples ventajas que los convierten en una herramienta poderosa para el análisis de datos complejos. En primer lugar, permite **capturar no linealidades complejas**, detectando patrones que no pueden ser representados adecuadamente por términos lineales o polinomiales simples. Esta flexibilidad es crucial para modelar relaciones reales que rara vez son estrictamente lineales. Además, el suavizado ayuda a **evitar el sobreajuste**; a diferencia de los polinomios de alto grado, que pueden generar oscilaciones indeseadas y seguir de manera excesiva las fluctuaciones del ruido en los datos, el suavizado controlado proporciona una representación más estable y generalizable de la relación entre las variables. Finalmente, una de las características más valiosas del suavizado en GAMs es su **interpretación intuitiva**. Las funciones suavizadas pueden visualizarse de manera clara y directa, lo que facilita la comprensión del impacto de cada predictor sobre la variable de respuesta, haciendo que los GAMs sean no solo potentes, sino también accesibles desde el punto de vista interpretativo.
-
-### Splines 
-
-En los GAMs, las funciones de suavizado se implementan comúnmente mediante **splines**, que son funciones polinómicas definidas por tramos. Estas permiten una flexibilidad controlada al ajustar diferentes tramos de los datos mientras se mantiene la continuidad y la suavidad en los puntos de unión (nudos).
-
-  - **Splines Lineales:**  
-  Son polinomios de primer grado ajustados por tramos. Aunque permiten cierta flexibilidad, pueden generar ángulos agudos en los puntos de unión.
-
-  - **Splines Cúbicos:**  
-  Utilizan polinomios de tercer grado en cada tramo, asegurando continuidad en la primera y segunda derivada en los **nudos**. Los **splines cúbicos** son los más utilizados en la práctica debido a su capacidad para capturar curvaturas suaves sin introducir oscilaciones no deseadas.
-
-Los **splines penalizados** añaden una penalización al modelo para controlar la suavidad de la curva. Esto se logra añadiendo un término de penalización al proceso de ajuste que limita la complejidad de la función suavizada.
+La función logística transforma cualquier valor real en un valor comprendido entre 0 y 1. La forma matemática de la función logística es:
 
 $$
-\min \left( \sum_{i=1}^{n} (y_i - f(x_i))^2 + \lambda \int [f''(x)]^2 dx \right)
+P(Y = 1 | X) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p)}}
 $$
 
 Donde:
-  
-  - $\lambda$ es el **parámetro de suavizado** que controla el equilibrio entre el ajuste a los datos y la suavidad de la curva.
-  - Si $\lambda$ es grande, el modelo será más suave; si es pequeño, el modelo se ajustará más a los datos.
 
-El número y la ubicación de los **nudos** (puntos donde cambian los tramos polinómicos) es un aspecto crucial en el ajuste de splines:
+-   $P(Y = 1 | X)$ es la probabilidad de que el evento ocurra.
+-   $\beta_0$ es el intercepto y $\beta_1, \beta_2, \dots, \beta_p$ son los coeficientes asociados a las variables independientes $X_1, X_2, \dots, X_p$.
 
-  - **Muchos nudos:** Mayor flexibilidad, pero riesgo de sobreajuste.
-  - **Pocos nudos:** Modelo más simple, pero riesgo de no capturar la estructura subyacente de los datos.
+La **curva sigmoide** que representa esta función tiene forma de "S", lo que refleja que para valores muy pequeños o muy grandes del predictor, la probabilidad se aplana hacia 0 o 1, respectivamente.
 
-La elección óptima del número de nudos puede realizarse mediante criterios automáticos como el **AIC** o mediante validación cruzada.
+**Función de Enlace Logit**
 
+En la regresión logística, la relación entre el predictor lineal y la probabilidad se establece mediante la **función de enlace logit**. El logit de una probabilidad $p$ se define como:
 
-::: {.callout-tip title="Ejemplo:  Ajuste de un GAM con Splines" collapse="true"}
-Vamos a ajustar un **GAM** utilizando la librería `mgcv` en R, que es una de las herramientas más utilizadas para trabajar con GAMs.
+$$
+\text{logit}(p) = \log\left(\frac{p}{1 - p}\right)
+$$
 
-```{r gam1}
-# Instalar y cargar la librería mgcv
-library(mgcv)
+Esta transformación convierte una probabilidad en una escala que va de $-\infty$ a $+\infty$, lo que permite ajustar un modelo lineal a los datos. El modelo logístico puede expresarse como:
+
+$$
+\log\left(\frac{p}{1 - p}\right) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p
+$$
+
+### Interpretación de coeficientes y Odds Ratios
+
+Uno de los aspectos más importantes de la regresión logística es la interpretación de los coeficientes. Dado que los coeficientes están en la escala del logit, su interpretación directa no es tan intuitiva como en la regresión lineal. Sin embargo, podemos interpretarlos utilizando **odds** y **odds ratios**.
+
+El **odds** o razón de probabilidades de que ocurra un evento es el cociente entre la probabilidad de que ocurra el evento y la probabilidad de que no ocurra:
+
+$$
+\text{odds} = \frac{p}{1 - p}
+$$
+
+Por ejemplo, si la probabilidad de éxito es 0.8, el odds sería:
+
+$$
+\text{odds} = \frac{0.8}{1 - 0.8} = 4
+$$
+
+Esto significa que el evento es **4 veces más probable** que no ocurra.
+
+El **odds ratio (OR)** mide el cambio en los odds cuando una variable independiente aumenta en una unidad. Se calcula como el exponencial del coeficiente de la regresión logística:
+
+$$
+\text{OR} = e^{\beta}
+$$
+
+**Interpretación de OR:**
+
+-   Si **OR \> 1**, el evento es más probable a medida que aumenta la variable independiente.
+-   Si **OR \< 1**, el evento es menos probable a medida que aumenta la variable independiente.
+-   Si **OR = 1**, no hay efecto.
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+Supongamos que ajustamos un modelo de regresión logística para predecir la probabilidad de tener diabetes en función del índice de masa corporal (BMI). El coeficiente asociado a **BMI** es 0.08.
+
+$$
+\text{OR} = e^{0.08} \approx 1.083
+$$
+
+Esto significa que por cada incremento de 1 unidad en el BMI, la **odds** de tener diabetes aumentan en un **8.3%**.
+:::
+
+### Evaluación del modelo Logístico
+
+A diferencia de la regresión lineal, donde se usa el coeficiente de determinación ($R^2$) para evaluar el ajuste, en la regresión logística se utilizan otros métodos para medir la calidad del modelo.
+
+**Matriz de Confusión**
+
+La **matriz de confusión** compara las predicciones del modelo con los valores reales, clasificando las observaciones en:
+
+-   **Verdaderos Positivos (VP):** Predijo positivo y es positivo.
+-   **Falsos Positivos (FP):** Predijo positivo pero es negativo.
+-   **Verdaderos Negativos (VN):** Predijo negativo y es negativo.
+-   **Falsos Negativos (FN):** Predijo negativo pero es positivo.
+
+A partir de esta matriz, se pueden calcular métricas importantes como:
+
+-   **Precisión (Accuracy):** $\frac{VP + VN}{\text{Total}}$
+-   **Sensibilidad (Recall o Tasa de Verdaderos Positivos):** $\frac{VP}{VP + FN}$
+-   **Especificidad (Tasa de Verdaderos Negativos):** $\frac{VN}{VN + FP}$
+
+::: {.callout-caution title="Aviso"}
+Los detalles de la evaluación de un modelo empleando la Matríz de Confusión son ampliamente tratados en la asignatura de Aprendizaje Automático.
+:::
+
+**Curva ROC y AUC**
+
+La **Curva ROC (Receiver Operating Characteristic)** muestra la relación entre la **tasa de verdaderos positivos** y la **tasa de falsos positivos** a diferentes umbrales de clasificación.
+
+El **AUC (Área Bajo la Curva ROC)** mide la capacidad del modelo para discriminar entre las clases. Un AUC de $0.5$ indica que el modelo no tiene capacidad predictiva, mientras que un AUC de $1.0$ indica un modelo perfecto.
+
+**Pseudo R² (Nagelkerke, McFadden)**
+
+Aunque el $R^2$ tradicional no se aplica directamente a la regresión logística, existen medidas como el **pseudo** $R^2$ que proporcionan una idea de la bondad del ajuste del modelo.
+
+-   **McFadden’s** $R^2$:\
+    $$
+    R^2_{\text{McFadden}} = 1 - \frac{\log L_{\text{modelo}}}{\log L_{\text{modelo nulo}}}
+    $$
+
+    Donde $\log L_{\text{modelo}}$ es el log-likelihood del modelo ajustado y $\log L_{\text{modelo nulo}}$ es el log-likelihood de un modelo sin predictores.
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+Vamos a aplicar la regresión logística en R utilizando el conjunto de datos `Pima.tr` del paquete `MASS`, que contiene información sobre mujeres pima y si tienen o no diabetes.
+
+```{r log1}
+# Cargar la librería y el conjunto de datos
+library(MASS)
+data(Pima.tr)
+
+# Ajustar el modelo de regresión logística
+modelo_logistico <- glm(type ~ npreg + glu + bmi, data = Pima.tr, family = binomial)
+
+# Resumen del modelo
+summary(modelo_logistico)
+
+# Predicciones de probabilidad
+predicciones_prob <- predict(modelo_logistico, type = "response")
+
+# Clasificación con un umbral de 0.5
+predicciones_clase <- ifelse(predicciones_prob > 0.5, "Yes", "No")
+
+# Crear matriz de confusión
+tabla_confusion <- table(Predicted = predicciones_clase, Actual = Pima.tr$type)
+print(tabla_confusion)
+
+# Calcular precisión
+accuracy <- sum(diag(tabla_confusion)) / sum(tabla_confusion)
+print(paste("Precisión:", round(accuracy, 3)))
+
+# Cargar librería para curvas ROC
+library(pROC)
+
+# Curva ROC
+roc_obj <- roc(Pima.tr$type, predicciones_prob)
+plot(roc_obj, main = "Curva ROC para Regresión Logística")
+
+# Calcular AUC
+auc_valor <- auc(roc_obj)
+print(paste("AUC:", round(auc_valor, 3)))
+```
+:::
+
+## Regresión de Poisson
+
+La **regresión de Poisson** es una técnica estadística utilizada para modelar **datos de conteo**, es decir, situaciones en las que la variable dependiente representa el número de veces que ocurre un evento en un período de tiempo o espacio específico [@coxe2009analysis]. Este tipo de modelo es adecuado cuando la variable dependiente toma valores enteros no negativos ($0, 1, 2, \dots$) y sigue una distribución de **Poisson**.
+
+La distribución de Poisson describe la probabilidad de que ocurra un número determinado de eventos en un intervalo fijo, dado que estos eventos ocurren de forma independiente y a una tasa constante.
+
+La **función de probabilidad** de la distribución de Poisson es:
+
+$$
+P(Y = y) = \frac{e^{-\lambda} \lambda^y}{y!}
+$$
+
+Donde:
+
+-   $Y$ es la variable aleatoria que representa el número de eventos.
+-   $\lambda$ es la **tasa media de ocurrencia** de los eventos (esperanza de $Y$).
+-   $y$ es el número de eventos observados ($y = 0, 1, 2, \dots$).
+
+### Modelo de regresión de Poisson
+
+En la **regresión de Poisson**, el objetivo es modelar la relación entre la **tasa de ocurrencia de los eventos** ($\lambda$) y un conjunto de variables predictoras $X_1, X_2, \dots, X_p$.
+
+La **forma funcional** del modelo de Poisson es:
+
+$$
+\log(\lambda) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p
+$$
+
+Donde:
+
+-   $\log(\lambda)$ es la **función de enlace logarítmica** que asegura que la tasa $\lambda$ sea siempre positiva.
+-   $\beta_0, \beta_1, \dots, \beta_p$ son los coeficientes del modelo que describen la influencia de cada predictor sobre la tasa de eventos.
+
+El modelo puede expresarse en términos de la **tasa esperada de eventos** como:
+
+$$
+\lambda = e^{\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p}
+$$
+
+### Supuestos y limitaciones de la regresión de Poisson
+
+Tal y como ocurre en el modelo de regresión lineal, para que la regresión de Poisson sea adecuada, se deben cumplir ciertos **supuestos**:
+
+-   **Independencia de los eventos:** Los eventos deben ocurrir de manera independiente unos de otros.
+
+-   **Distribución de Poisson de la variable dependiente:** La variable de respuesta debe seguir una distribución de Poisson, donde la **media** y la **varianza** son iguales:
+
+$$
+   E(Y) = Var(Y) = \lambda
+   $$
+
+-   **No sobredispersión:** Uno de los problemas comunes en los datos de conteo es la **sobredispersión**, que ocurre cuando la varianza de los datos es mayor que la media ($Var(Y) > E(Y)$). La presencia de sobredispersión indica que el modelo de Poisson puede no ser adecuado, y puede ser necesario considerar modelos alternativos como la **regresión binomial negativa**.
+
+-   **No exceso de ceros:** Si hay demasiados ceros en los datos (por ejemplo, en el número de accidentes en diferentes localidades donde muchas tienen cero accidentes), puede ser necesario utilizar modelos de **Poisson inflados en ceros (ZIP)** [@lambert1992zero].
+
+### Interpretación de los resultados
+
+La interpretación de los coeficientes en la regresión de Poisson difiere de la regresión lineal debido al uso de la función de enlace logarítmica.
+
+Los coeficientes $\beta$ representan el **logaritmo de la tasa** de eventos asociados con un cambio en la variable independiente. Para interpretar en términos de la tasa de ocurrencia, se utiliza el **exponencial de los coeficientes**:
+
+$$
+  e^{\beta_i}
+$$
+
+Esto representa el **factor de cambio multiplicativo** en la tasa de eventos por cada unidad adicional en la variable $X_i$.
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+Si $\beta_1 = 0.5$, entonces $e^{0.5} \approx 1.65$. Esto significa que por cada unidad adicional en $X_1$, la tasa de ocurrencia de eventos **aumenta en un 65%**.
+
+Si $\beta_1 = -0.3$, entonces $e^{-0.3} \approx 0.74$. Esto indica que por cada unidad adicional en $X_1$, la tasa de eventos **disminuye en un 26%**.
+:::
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+Vamos a utilizar R para ajustar un modelo de regresión de Poisson. Supongamos que tenemos datos sobre el **número de accidentes de tráfico** en diferentes intersecciones de una ciudad, junto con variables como el volumen de tráfico y la visibilidad.
+
+```{r poiss1}
+# Simulación de datos para el número de accidentes
+set.seed(123)
+n <- 100  # Número de observaciones
+
+# Variables predictoras
+trafico <- rnorm(n, mean = 1000, sd = 300)  # Volumen de tráfico en vehículos por día
+visibilidad <- rnorm(n, mean = 5, sd = 2)   # Visibilidad en kilómetros
+
+# Generar la tasa de accidentes (lambda) usando un modelo logarítmico
+lambda <- exp(0.01 * trafico - 0.2 * visibilidad)
+
+# Generar el número de accidentes como una variable de Poisson
+accidentes <- rpois(n, lambda = lambda)
+
+# Crear el data frame
+datos_accidentes <- data.frame(accidentes, trafico, visibilidad)
+head(datos_accidentes)
+
+# Ajustar el modelo de regresión de Poisson
+modelo_poisson <- glm(accidentes ~ trafico + visibilidad, data = datos_accidentes, family = poisson)
+
+# Resumen del modelo
+summary(modelo_poisson)
+```
+
+El coeficiente asociado a `trafico` indica cómo el volumen de tráfico afecta la tasa de accidentes.
+
+El coeficiente asociado a `visibilidad` muestra cómo la visibilidad afecta la frecuencia de accidentes.
+
+```{r poiss}
+# Exponenciar los coeficientes para interpretar en términos de tasas
+exp(coef(modelo_poisson))
+```
+
+Un coeficiente positivo implica que un aumento en la variable está asociado con un **aumento en la tasa de accidentes**.
+
+Un coeficiente negativo implica que un aumento en la variable está asociado con una **disminución en la tasa de accidentes**.
+:::
+
+### Evaluación del modelo de Poisson
+
+La **sobredispersión** ocurre cuando la varianza de los datos es mayor que la media, lo que puede invalidar los supuestos de la regresión de Poisson.
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r poiss3}
+# Calcular la relación entre el deviance y los grados de libertad
+deviance <- modelo_poisson$deviance
+grados_libertad <- modelo_poisson$df.residual
+sobredispersion <- deviance / grados_libertad
+
+print(paste("Índice de Sobredispersión:", round(sobredispersion, 2)))
+```
+:::
+
+Un valor del índice de sobredispersión cercano a $1$ sugiere que no hay sobredispersión. Por contra, un valor significativamente mayor que $1$ sugiere la presencia de sobredispersión, y puede ser necesario considerar una **regresión binomial negativa**.
+
+**Diagnóstico de Residuos:**
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r diag1}
+# Gráfico de residuos deviance para evaluar el ajuste
+plot(residuals(modelo_poisson, type = "deviance"), main = "Residuos Deviance", ylab = "Residuos", xlab = "Índice")
+abline(h = 0, col = "red")
+```
+:::
+
+::: {.callout-tip title="Ejemplo sobre datos reales" collapse="true"}
+Un conjunto de datos clásico en R es **`warpbreaks`**, que contiene el número de roturas de hilo en diferentes condiciones de tensión y longitud del hilo.
+
+```{r pois_real1}
+# Datos de ejemplo: número de roturas de hilo
+data(warpbreaks)
+
+# Ajustar un modelo de Poisson para el número de roturas en función de la tensión
+modelo_poisson_real <- glm(breaks ~ wool + tension, data = warpbreaks, family = poisson)
+
+# Resumen del modelo
+summary(modelo_poisson_real)
+
+# Interpretación de coeficientes
+exp(coef(modelo_poisson_real))
+```
+:::
+
+### Limitaciones y alternativas
+
+Si la varianza de los datos es mayor que la media, el modelo de Poisson no será adecuado. En este caso, se recomienda utilizar la **regresión binomial negativa**, que introduce un parámetro adicional para manejar la sobredispersión.
+
+Si hay más ceros de los esperados (por ejemplo, muchas intersecciones con cero accidentes), puede ser necesario utilizar modelos de **Poisson inflados en ceros (ZIP)** o **binomial negativa inflada en ceros (ZINB)**.
+
+## Otros GLMs
+
+La **regresión binomial negativa** y los **modelos basados en distribuciones como Gamma e Inversa Gaussiana** amplían la capacidad de los **Modelos Lineales Generalizados (GLM)** para adaptarse a una amplia variedad de situaciones del mundo real. Estos modelos son especialmente útiles cuando los datos presentan características como sobredispersión, sesgo o restricciones en el dominio (por ejemplo, solo valores positivos). La elección adecuada del modelo y la función de enlace garantiza predicciones precisas y válidas, contribuyendo a la toma de decisiones informadas en campos como la salud, la ingeniería y la economía.
+
+### Regresión Binomial Negativa
+
+Tal y como hemos visto en apartados anteriores, la **sobredispersión** ocurre cuando la varianza de los datos de conteo es **mayor que la media**, lo cual viola uno de los supuestos clave de la regresión de Poisson, que asume que la media y la varianza son iguales ($E(Y) = Var(Y)$). La sobredispersión puede surgir por varias razones:
+
+-   **Heterogeneidad no modelada:** Existen factores que afectan la variable dependiente pero no han sido incluidos en el modelo.
+-   **Dependencia entre eventos:** Los eventos no ocurren de forma independiente.
+-   **Exceso de ceros:** Hay más ceros en los datos de los que predice la distribución de Poisson.
+
+Cuando la sobredispersión está presente, la regresión de Poisson subestima los errores estándar, lo que puede llevar a conclusiones incorrectas sobre la significancia de los predictores.
+
+La **regresión binomial negativa** es una extensión de la regresión de Poisson que introduce un parámetro adicional para manejar la sobredispersión. Este modelo permite que la varianza sea mayor que la media:
+
+$$
+Var(Y) = \lambda + \alpha \lambda^2
+$$
+
+Donde $\alpha$ es el parámetro de dispersión. Si $\alpha = 0$, el modelo se reduce a la regresión de Poisson.
+
+La forma funcional del modelo binomial negativa es similar al de Poisson:
+
+$$
+\log(\lambda) = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p
+$$
+
+Pero la varianza ahora incluye el término adicional $\alpha$ para capturar la sobredispersión.
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r bin_neg1}
+# Instalar y cargar la librería MASS que contiene la función glm.nb
+library(MASS)
+
+# Ajuste de un modelo binomial negativo con los datos simulados de accidentes
+modelo_binom_neg <- glm.nb(accidentes ~ trafico + visibilidad, data = datos_accidentes)
+
+# Resumen del modelo
+summary(modelo_binom_neg)
+
+# Comparar la dispersión con el modelo de Poisson
+cat("Dispersión en Poisson:", modelo_poisson$deviance / modelo_poisson$df.residual, "\n")
+cat("Dispersión en Binomial Negativa:", modelo_binom_neg$theta, "\n")
+```
+:::
+
+-   El parámetro $\theta$ (dispersión) ajustado en el modelo binomial negativa ayuda a corregir la varianza subestimada en el modelo de Poisson.
+-   Si $\theta$ es significativamente mayor que 1, se confirma la presencia de sobredispersión.
+
+------------------------------------------------------------------------
+
+### Modelos para variables continuas No Normales
+
+Existen situaciones en las que la variable dependiente es **continua**, pero **no sigue una distribución normal**. En estos casos, los **Modelos Lineales Generalizados (GLM)** permiten utilizar distribuciones alternativas como **Gamma** o **Inversa Gaussiana**, junto con funciones de enlace específicas.
+
+#### Regresión Gamma para datos positivos y sesgados
+
+La **regresión Gamma** es adecuada para modelar variables continuas que son **positivas** y tienen una distribución **sesgada a la derecha**. Ejemplos típicos incluyen tiempos de espera, costos médicos o duración de procesos.
+
+-   La distribución Gamma asume que la variable dependiente es continua y positiva.
+-   La varianza de la variable dependiente aumenta proporcionalmente al cuadrado de la media.
+
+**Función de Enlace Común:** $$
+\log(\mu) = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p
+$$
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r gamma_1}
+# Simulación de costos médicos
+set.seed(123)
+n <- 100
+ingresos <- rnorm(n, mean = 50000, sd = 10000)
+edad <- rnorm(n, mean = 45, sd = 10)
+costos <- rgamma(n, shape = 2, rate = 0.00005 * ingresos + 0.01 * edad)
+
+# Ajuste del modelo Gamma
+modelo_gamma <- glm(costos ~ ingresos + edad, family = Gamma(link = "log"))
+
+# Resumen del modelo
+summary(modelo_gamma)
+```
+
+-   Los coeficientes muestran cómo los ingresos y la edad afectan los costos médicos esperados.
+-   El enlace logarítmico asegura que las predicciones sean siempre positivas.
+:::
+
+#### Regresión Inversa Gaussiana
+
+La **regresión Inversa Gaussiana** es útil para modelar tiempos de respuesta o variables donde la varianza disminuye rápidamente a medida que la media aumenta. Este modelo se aplica en campos como la ingeniería, donde se analizan tiempos hasta fallas de sistemas.
+
+**Función de Enlace Común:** $$
+\frac{1}{\mu^2} = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p
+$$
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r inv_1}
+# Instalar y cargar la librería correcta
+library(statmod)
 
 # Simulación de datos
 set.seed(123)
 n <- 100
-x <- seq(0, 10, length.out = n)
-y <- sin(x) + rnorm(n, sd = 0.3)
+carga_trabajo <- rnorm(n, mean = 50, sd = 10)
 
-# Ajuste de un GAM con splines cúbicos
-modelo_gam <- gam(y ~ s(x), method = "REML")
+# Generar tiempos hasta el fallo usando la distribución inversa gaussiana
+# Aseguramos que los valores de carga_trabajo sean positivos para evitar problemas numéricos
+carga_trabajo[carga_trabajo <= 0] <- 1
+tiempo_fallo <- rinvgauss(n, mean = 100 / carga_trabajo, dispersion = 1)
+
+# Ajuste del modelo Inversa Gaussiana con enlace logarítmico
+modelo_inversa_gauss <- glm(tiempo_fallo ~ carga_trabajo, family = inverse.gaussian(link = "1/mu^2"),start = c(0.01, 0.01))
 
 # Resumen del modelo
-summary(modelo_gam)
+summary(modelo_inversa_gauss)
 
-# Visualización de la función suavizada
-plot(modelo_gam, main = "Ajuste GAM con Splines Cúbicos", shade = TRUE)
+
 ```
 :::
 
+## Comparación de modelos y evaluación del ajuste
 
-## Interpretación de los resultados
+Una vez que se han ajustado varios modelos, es crucial evaluar su rendimiento y seleccionar el más adecuado para el problema en cuestión. La **evaluación del ajuste** y la **comparación de modelos** permiten identificar cuál modelo describe mejor los datos sin caer en el sobreajuste, es decir, ajustarse demasiado a los datos de entrenamiento a costa de un mal desempeño en datos nuevos.
 
-Después de ajustar el modelo, el siguiente paso es interpretar los resultados proporcionados por la función `summary()` de R.
+Esta sección abordará los métodos más comunes para evaluar y comparar modelos, incluyendo criterios estadísticos, técnicas de validación y análisis de residuos.
 
+### La Deviance
 
-El comando `summary(modelo_gam)` proporciona la siguiente información clave:
+La **deviance** (o **desviación**) es una medida estadística que evalúa qué tan bien se ajusta un modelo estadístico a los datos observados. Se utiliza principalmente en modelos de regresión que no se basan en supuestos de normalidad estricta, como los **modelos lineales generalizados** (GLM), incluyendo:
 
-1. **Resumen de la suavización:**
-   - **`edf (effective degrees of freedom)`:** Indica el grado de flexibilidad del suavizado.  
-     - Un **edf cercano a 1** sugiere una relación lineal.  
-     - Un **edf mayor que 1** indica una relación no lineal.
-   
-2. **Significancia de los predictores:**
-   - **`p-values`:** Indican si la función suavizada para cada predictor es significativa. Un valor $p < 0.05$ sugiere que la relación entre el predictor y la variable dependiente es estadísticamente significativa.
+-   Regresión logística
+-   Regresión de Poisson
+-   Modelos exponenciales, etc.
 
-3. **Medidas de ajuste:**
-   - **`Deviance explained`:** Similar al $R^2$ en regresión lineal, indica el porcentaje de la variabilidad de los datos explicada por el modelo.
-   - **`GCV score` y `AIC`:** Utilizados para evaluar la calidad del ajuste y comparar diferentes modelos.
+La deviance mide la **diferencia** entre el modelo propuesto y el **modelo saturado** (el modelo que predice perfectamente los datos observados).
 
+-   El **modelo saturado** tiene tantos parámetros como observaciones, por lo que ajusta cada punto de datos perfectamente.
+-   El **modelo propuesto** es el modelo que intentamos evaluar.
 
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r gams2}
-summary(modelo_gam)
-```
+La deviance se interpreta como una generalización de la **suma de cuadrados de los residuos** utilizada en regresión lineal.
 
-- El **intercepto** (0.01852) no es significativo, lo que sugiere que el valor medio de $y$ cuando $x = 0$ no difiere significativamente de cero.
-- La función suavizada $s(x)$ tiene un **edf de 7.54**, indicando que la relación entre $x$ e $y$ es altamente no lineal.
-- El **valor p (<2e-16)** para $s(x)$ sugiere que la relación no lineal es estadísticamente significativa.
-- El **82.1% de la devianza explicada** indica que el modelo captura bien la variabilidad de los datos.
-- Un **GCV (Generalized Cross-Validation)** bajo indica un buen ajuste.
-:::
-
-Una de las principales ventajas de los GAMs es la posibilidad de visualizar fácilmente la relación entre cada predictor y la variable dependiente. La función `plot()` de `mgcv` permite crear gráficos claros e intuitivos de los efectos suavizados.
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r gams3}
-# Visualización del efecto suavizado de x en y
-plot(modelo_gam, shade = TRUE, main = "Relación No Lineal entre x e y")
-```
-
-El **área sombreada** alrededor de la curva representa el **intervalo de confianza** al 95%. La **forma de la curva** muestra la relación entre $x$ e $ y$; en este caso, debería reflejar una forma sinusoidal. Si la curva es recta, la relación es aproximadamente lineal.
-:::
-
-Es posible personalizar el gráfico para mejorar la presentación:
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r gams4}
-# Personalización avanzada del gráfico
-plot(modelo_gam, 
-     residuals = TRUE,  # Muestra los residuos
-     pch = 19,          # Estilo de los puntos de datos
-     col = "blue",      # Color de la curva suavizada
-     seWithMean = TRUE, # Muestra intervalos de confianza ajustados al promedio
-     rug = TRUE,        # Añade marcas en el eje x para indicar la densidad de los datos
-     main = "Efecto Suavizado de x sobre y")
-```
-:::
-
-Si el modelo incluye múltiples predictores suavizados, `plot()` creará un gráfico para cada uno.
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r gams5}
-# Simulación de un segundo predictor
-set.seed(123)
-x2 <- seq(0, 5, length.out = n)
-y2 <- sin(x) + log(x2 + 1) + rnorm(n, sd = 0.3)
-
-# Ajuste del GAM con dos predictores suavizados
-modelo_gam_multi <- gam(y2 ~ s(x) + s(x2), method = "REML")
-
-# Visualización de los efectos suavizados
-plot(modelo_gam_multi, pages = 1, shade = TRUE, main = "Efectos Suavizados de x y x2")
-```
-
-
-El parámetro `pages = 1` muestra todos los efectos en una sola página. Cada gráfico muestra cómo cada predictor afecta la variable dependiente, permitiendo una interpretación clara de efectos individuales.
-:::
-
-
-Un valor de **`edf` cercano a 1** indica un efecto lineal, mientras que valores mayores sugieren una relación no lineal más compleja. La **significancia estadística** de los efectos suavizados indica qué predictores tienen una relación significativa con la variable dependiente. La **devianza explicada** y el **AIC** proporcionan medidas para evaluar la calidad del ajuste y comparar diferentes modelos. Los gráficos permiten identificar patrones no lineales complejos y facilitan la comunicación de los resultados a audiencias no técnicas.
-
-
-## Evaluación del modelo y selección de parámetros en GAMs
-
-Una vez ajustado un **Modelo Aditivo Generalizado (GAM)**, es fundamental evaluar su calidad y ajustar adecuadamente el **grado de suavizado** para garantizar que el modelo capture las relaciones relevantes sin caer en el **sobreajuste** o **subajuste**. Esta sección explora las técnicas para evaluar el rendimiento de los GAMs, identificar problemas en el ajuste y seleccionar los parámetros óptimos de suavizado.
-
-
-### Técnicas para evaluar la calidad del ajuste en GAMs
-
-La evaluación de la calidad del ajuste en GAMs implica una combinación de **métricas estadísticas** y **diagnósticos gráficos**. Estas herramientas permiten determinar qué tan bien el modelo se ajusta a los datos y si los supuestos subyacentes son válidos.
-
-
-La **deviance explicada** es una medida análoga al $R^2$ en la regresión lineal. Indica la proporción de la variabilidad de la variable dependiente que es explicada por el modelo:
+La deviance se define como:
 
 $$
-\text{Deviance Explicada} = 1 - \frac{\text{Deviance del Modelo}}{\text{Deviance del Modelo Nulo}}
+D = 2 \sum_{i=1}^{n} \left[ \ell(y_i; y_i) - \ell(y_i; \hat{y}_i) \right]
 $$
 
-  - **Valores cercanos a 1** indican que el modelo explica bien la variabilidad de los datos.
-  - **Valores cercanos a 0** sugieren que el modelo no captura adecuadamente la estructura de los datos.
+donde:
 
-El **$R^2$ ajustado** también puede interpretarse en modelos GAM cuando la familia es `gaussian`. Este valor se reporta en la salida de `summary(modelo_gam)`.
+-   $D$ = Deviance
+-   $\ell(y_i; y_i)$ = Log-verosimilitud del modelo saturado (máxima verosimilitud posible)
+-   $\ell(y_i; \hat{y}_i)$ = Log-verosimilitud del modelo propuesto
 
+En términos simples, mide cuánto peor es el modelo propuesto comparado con el modelo que se ajusta perfectamente.
 
-### Criterios de Información (AIC, GCV)
+#### Interpretación
 
-Los **criterios de información** permiten comparar modelos y evaluar su capacidad para generalizar a nuevos datos. Dos de las métricas más comunes en GAMs son:
+-   **Valores pequeños de deviance** → Indican que el modelo se ajusta bien a los datos.
+-   **Valores grandes de deviance** → Indican que el modelo no se ajusta bien.
 
-**AIC (Akaike Information Criterion):**
+Si el modelo es perfecto, la deviance es **cero**.
+
+#### Deviance Residuals
+
+En lugar de evaluar la deviance global, los **residuos de deviance** permiten identificar qué observaciones individuales no se ajustan bien.
+
+$$
+d_i = \text{sign}(y_i - \hat{y}_i) \sqrt{2 \left[ \ell(y_i; y_i) - \ell(y_i; \hat{y}_i) \right]}
+$$
+
+Los residuos de deviance se comportan de forma similar a los residuos en regresión lineal, permitiendo identificar observaciones atípicas o mal ajustadas.
+
+#### Relación con otros conceptos
+
+-   En **regresión lineal**, la deviance es equivalente a la **suma de los cuadrados de los residuos** (RSS).
+-   En **regresión logística**, la deviance se utiliza como alternativa a la suma de errores cuadráticos debido a que los residuos no se distribuyen normalmente.
+-   En **pruebas de bondad de ajuste**, se usa la **deviance nula** para comparar el modelo sin predictores (solo la media) con el modelo completo.
+
+#### Ejemplo en Regresión Logística
+
+Supongamos que estamos modelando la probabilidad de que una persona compre un producto en función de su edad. La deviance nos ayuda a evaluar qué tan bien el modelo logra predecir esas probabilidades comparado con un modelo perfecto.
+
+-   **Deviance baja:** El modelo ajusta bien las probabilidades.
+-   **Deviance alta:** El modelo falla en capturar los patrones en los datos.
+
+### Criterios de selección de modelos (AIC, BIC)
+
+Los criterios de selección de modelos como el **AIC** y el **BIC** permiten comparar modelos que han sido ajustados a los mismos datos, penalizando la complejidad para evitar el sobreajuste.
+
+**Akaike Information Criterion (AIC)**
+
+El **Criterio de Información de Akaike (AIC)** es una medida que equilibra la calidad del ajuste y la complejidad del modelo. Se calcula como:
 
 $$
 AIC = -2 \log(L) + 2k
 $$
 
-Visto en temas anteriores, donde $L$ es el log-likelihood del modelo y $k$ es el número de parámetros. **Un AIC más bajo** sugiere un modelo mejor ajustado.
+Donde:
 
-**GCV (Generalized Cross-Validation):**
+-   $L$ es el **log-likelihood** del modelo (medida de la probabilidad de los datos dados los parámetros del modelo).
+-   $k$ es el número de parámetros del modelo.
 
-El **GCV** es una medida específica para modelos de suavizado y penalización. Estima el error de predicción esperado usando una forma eficiente de validación cruzada. Un **GCV bajo** indica un buen ajuste sin sobreajuste.
+Respecto a su interpretación, el AIC **no tiene una interpretación absoluta**, solo es útil para comparar modelos ajustados a los mismos datos. Un **AIC menor** indica un mejor equilibrio entre ajuste y simplicidad.
 
+**Bayesian Information Criterion (BIC)**
 
-### Análisis de residuos
+El **Criterio de Información Bayesiano (BIC)** es similar al AIC, pero penaliza más severamente la complejidad del modelo, especialmente cuando el número de observaciones es grande. Se calcula como:
 
-Como en otros modelos de regresión, el análisis de residuos es una herramienta esencial para diagnosticar el ajuste del modelo y detectar patrones no explicados.
+$$
+BIC = -2 \log(L) + k \log(n)
+$$
 
-  - **Residuos Pearson y Deviance:**  
-  Deben distribuirse aleatoriamente alrededor de cero si el modelo está bien especificado.
+Donde: - $n$ es el número de observaciones.
 
-  - **Gráficos de residuos:**  
-  Permiten identificar valores atípicos, heterocedasticidad y patrones no capturados por el modelo.
+El BIC favorece modelos más simples en comparación con el AIC. Un **BIC menor** indica un mejor modelo.
 
----
+::: {.callout-tip title="Ejemplo: comparación de AIC y BIC" collapse="true"}
+```{r eval1}
+# Comparación de modelos: Poisson vs Binomial Negativa
 
-::: {.callout-tip title="Ejemplo: Evaluación del ajuste de un GAM" collapse="true"}
-```{r eval_gam1}
-# Ajuste del modelo GAM
-library(mgcv)
-set.seed(123)
-n <- 200
-x <- seq(0, 10, length.out = n)
-y <- sin(x) + rnorm(n, sd = 0.3)
+# Modelo de Poisson
+modelo_poisson <- glm(accidentes ~ trafico + visibilidad, family = poisson, data = datos_accidentes)
 
-modelo_gam <- gam(y ~ s(x), method = "REML")
+# Modelo Binomial Negativa
+library(MASS)
+modelo_binom_neg <- glm.nb(accidentes ~ trafico + visibilidad, data = datos_accidentes)
 
-# Resumen del modelo
-summary(modelo_gam)
-
-# Verificar la deviance explicada y el AIC
-cat("Deviance Explicada:", summary(modelo_gam)$dev.expl, "\n")
-cat("AIC del Modelo:", AIC(modelo_gam), "\n")
-
-# Diagnóstico de residuos
-par(mfrow = c(2, 2))
-gam.check(modelo_gam)
+# Calcular AIC y BIC
+AIC(modelo_poisson, modelo_binom_neg)
+BIC(modelo_poisson, modelo_binom_neg)
 ```
 :::
 
-El comando `gam.check()` proporciona múltiples gráficos de diagnóstico para evaluar la adecuación del modelo, incluyendo la distribución de los residuos y la comprobación del grado de suavizado.
+El modelo con el menor **AIC** o **BIC** es preferido. Si ambos modelos tienen valores similares, se puede preferir el modelo más simple (con menos parámetros).
 
+### Validación cruzada y técnicas de evaluación predictiva
 
-### Selección del grado de suavizado y control del sobreajuste
+La **validación cruzada** y otras técnicas de evaluación predictiva permiten estimar cómo se desempeñará un modelo en datos no vistos, lo que es esencial para evitar el sobreajuste.
 
-El **grado de suavizado** en los GAMs controla la flexibilidad del modelo. Un suavizado adecuado permite capturar la estructura subyacente de los datos sin ajustarse al ruido aleatorio.
+La **validación cruzada k-fold** divide el conjunto de datos en **k** subconjuntos (o "folds"). El modelo se ajusta **k** veces, cada vez utilizando $k-1$ folds para el entrenamiento y el fold restante para la prueba. El rendimiento se promedia sobre todas las iteraciones. La validación cruzada utiliza eficientemente los datos disponibles, proporcionando una estimación robusta del rendimiento del modelo.
 
-El **grado de suavizado** determina la complejidad de la función que se ajusta a los datos. Esto se representa mediante los **grados de libertad efectivos (edf)**:
-
-  - **edf cercano a 1:** Indica una relación casi lineal.
-  - **edf mayor que 1:** Sugiere una relación no lineal más compleja.
-
-Un **grado de suavizado demasiado bajo** puede llevar al **subajuste** (el modelo no captura adecuadamente los patrones de los datos), mientras que un **suavizado excesivo** puede llevar al **sobreajuste** (el modelo sigue el ruido en lugar de la tendencia general).
-
-La librería `mgcv` ajusta automáticamente el grado de suavizado utilizando métodos de optimización como **REML** (Restricted Maximum Likelihood) o **GCV** (Generalized Cross-Validation).
-
-  - **`method = "REML"`:** Proporciona un ajuste más robusto y es menos propenso al sobreajuste que GCV.
-  - **`method = "GCV.Cp"`:** Utiliza la validación cruzada para seleccionar el suavizado, pero puede ser más sensible al ruido.
-
-::: {.callout-tip title="Ejemplo: Comparación de métodos de suavizado" collapse="true"}
-```{r suaviza1}
-# Ajuste usando REML
-modelo_reml <- gam(y ~ s(x), method = "REML")
-
-# Ajuste usando GCV
-modelo_gcv <- gam(y ~ s(x), method = "GCV.Cp")
-
-# Comparación de AIC y GCV
-cat("AIC (REML):", AIC(modelo_reml), "\n")
-cat("GCV (GCV.Cp):", modelo_gcv$gcv.ubre, "\n")
-```
-:::
-
-Aunque `mgcv` selecciona automáticamente el grado de suavizado, es posible **controlar manualmente** la complejidad del modelo especificando el número de **bases de suavizado** mediante el argumento `k` en la función `s()`:
-
-  - **`k` pequeño:** Menor flexibilidad, puede llevar al subajuste.
-  - **`k` grande:** Mayor flexibilidad, riesgo de sobreajuste.
-
-::: {.callout-tip title="Ejemplo: Control manual del suavizado" collapse="true"}
-```{r suavizado2}
-# Menor suavizado (k = 3)
-modelo_suave <- gam(y ~ s(x, k = 3), method = "REML")
-
-# Mayor suavizado (k = 20)
-modelo_mas_flexible <- gam(y ~ s(x, k = 20), method = "REML")
-
-# Visualización de los diferentes ajustes
-par(mfrow = c(1, 2))
-plot(modelo_suave, main = "Suavizado Bajo (k=3)", shade = TRUE)
-plot(modelo_mas_flexible, main = "Suavizado Alto (k=20)", shade = TRUE)
-```
-:::
-
-La **validación cruzada** es una técnica robusta para seleccionar el grado de suavizado. Tal y como hemos visto en temas anteriores, en este enfoque, el conjunto de datos se divide en varios subconjuntos (folds), y el modelo se entrena y evalúa en diferentes combinaciones de estos subconjuntos.
-
-::: {.callout-tip title="Ejemplo: Valización cruzada para GAMs" collapse="true"}
+::: {.callout-tip title="Ejemplo: Validación cruzada" collapse="true"}
 ```{r val1}
-# Cargar librerías necesarias
-library(cvTools)
-library(mgcv)
+# Instalar y cargar la librería caret
+library(caret)
 
-# Configuración de la validación cruzada 5-fold
-set.seed(123)
-folds <- cvFolds(n = n, K = 5)
+# Definir la validación cruzada de 5-fold
+control <- trainControl(method = "cv", number = 5)
 
-# Inicializar un vector para almacenar el error
-errores <- numeric(5)
+# Ajustar un modelo de regresión logística con validación cruzada
+modelo_cv <- train(type ~ npreg + glu + bmi, data = Pima.tr, method = "glm", family = "binomial", trControl = control)
 
-# Validación cruzada manual
-for (i in 1:5) {
-  # Dividir en conjunto de entrenamiento y prueba
-  test_idx <- which(folds$which == i)
-  train_idx <- setdiff(1:n, test_idx)
-  
-  # Ajustar el modelo en el conjunto de entrenamiento
-  modelo_gam_cv <- gam(y ~ s(x), data = data.frame(x = x[train_idx], y = y[train_idx]), method = "REML")
-  
-  # Predecir en el conjunto de prueba
-  predicciones <- predict(modelo_gam_cv, newdata = data.frame(x = x[test_idx]))
-  
-  # Calcular el error cuadrático medio (RMSE)
-  errores[i] <- sqrt(mean((y[test_idx] - predicciones)^2))
-}
-
-# Promedio del error de la validación cruzada
-error_promedio <- mean(errores)
-cat("Error Promedio (RMSE) de la Validación Cruzada:", error_promedio)
-
+# Resultados de la validación cruzada
+print(modelo_cv)
 ```
 :::
 
-### Diagnóstico de sobreajuste
+Otra técnica común es dividir el conjunto de datos en un **conjunto de entrenamiento** (por ejemplo, el $70\%$) y un **conjunto de prueba** ($30\%$). El modelo se ajusta en el conjunto de entrenamiento y se evalúa en el conjunto de prueba.
 
-Un modelo sobreajustado sigue de cerca las fluctuaciones del ruido en los datos, lo que puede detectarse mediante:
+::: {.callout-tip title="Ejemplo: Train/Test" collapse="true"}
+```{r train_test}
+# Dividir el conjunto de datos en entrenamiento y prueba
+set.seed(123)
+library(caret)
+indices <- createDataPartition(Pima.tr$type, p = 0.7, list = FALSE)
+entrenamiento <- Pima.tr[indices, ]
+prueba <- Pima.tr[-indices, ]
 
-  - **Residuos estructurados:** Los residuos no deberían mostrar patrones sistemáticos.
-  - **Curvas excesivamente flexibles:** Si la curva suavizada presenta oscilaciones innecesarias, es señal de sobreajuste.
-  - **Baja generalización:** Evaluar el rendimiento del modelo en datos de prueba puede revelar problemas de sobreajuste.
+# Ajustar el modelo en el conjunto de entrenamiento
+modelo_entrenamiento <- glm(type ~ npreg + glu + bmi, data = entrenamiento, family = binomial)
 
----
+# Realizar predicciones en el conjunto de prueba
+predicciones <- predict(modelo_entrenamiento, newdata = prueba, type = "response")
 
+# Evaluar precisión
+predicciones_clase <- ifelse(predicciones > 0.5, "Yes", "No")
+confusionMatrix(as.factor(predicciones_clase), as.factor(prueba$type))
+```
+:::
+
+### Diagnóstico de residuos y buenas prácticas
+
+El análisis de **residuos** es fundamental para evaluar el ajuste del modelo y detectar problemas como la falta de ajuste, valores atípicos o violaciones de los supuestos del modelo.
+
+Los **residuos deviance** son una medida común en los **Modelos Lineales Generalizados (GLM)**. Representan la diferencia entre el modelo ajustado y el modelo perfecto (donde la predicción es exactamente igual al valor observado).
+
+**Tipos de residuos:**
+
+-   **Residuos Pearson:**\
+    $$
+    r_i = \frac{y_i - \hat{y}_i}{\sqrt{\hat{V}(y_i)}}
+    $$ Donde $\hat{V}(y_i)$ es la varianza estimada de $y_i$.
+
+-   **Residuos Deviance:**\
+    Representan la contribución de cada observación al deviance total del modelo.
+
+------------------------------------------------------------------------
+
+::: {.callout-tip title="Ejemplo: Análisis de los residuos" collapse="true"}
+```{r res1}
+# Gráfico de residuos deviance para un modelo de Poisson
+plot(residuals(modelo_poisson, type = "deviance"), 
+     main = "Residuos Deviance del Modelo Poisson", 
+     ylab = "Residuos Deviance", xlab = "Índice")
+abline(h = 0, col = "red", lwd = 2)
+
+# Gráfico de residuos para la regresión logística
+plot(residuals(modelo_entrenamiento, type = "deviance"), 
+     main = "Residuos Deviance del Modelo Logístico", 
+     ylab = "Residuos Deviance", xlab = "Índice")
+abline(h = 0, col = "blue", lwd = 2)
+```
+:::
+
+Para detectar valores atípicos y su influencia emplearemos:
+
+-   **Distancia de Cook:** Identifica observaciones influyentes que tienen un impacto significativo en los coeficientes del modelo.
+-   **Leverage:** Mide el impacto potencial de una observación en el ajuste del modelo.
+
+::: {.callout-tip title="Ejemplo: Detección de observaciones influyentes" collapse="true"}
+```{r influyentes}
+# Distancia de Cook para identificar observaciones influyentes
+cooksd <- cooks.distance(modelo_poisson)
+
+# Gráfico de la distancia de Cook
+plot(cooksd, main = "Distancia de Cook", ylab = "Influencia", xlab = "Índice")
+abline(h = 4 / length(cooksd), col = "red")  # Línea de referencia
+```
+:::

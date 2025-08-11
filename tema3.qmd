@@ -19,7 +19,6 @@ Al finalizar este capítulo, serás capaz de:
 4.  **Codificar variables categóricas** using ordinal encoding y one-hot encoding según la naturaleza de las categorías.
 5.  **Crear e interpretar términos de interacción** entre variables continuas, categóricas, y mixtas.
 6.  **Aplicar ingeniería de características** para crear nuevas variables predictivas mediante combinaciones, ratios y transformaciones.
-7.  **Evaluar la efectividad** de las transformaciones e interacciones usando métricas apropiadas.
 :::
 
 ## Transformaciones de variables: propósitos y aplicaciones
@@ -554,6 +553,14 @@ La elección entre codificación ordinal y one-hot encoding depende fundamentalm
 
 Las **interacciones entre variables** representan uno de los conceptos más poderosos y subestimados en el modelado estadístico. Mientras que los efectos principales capturan el impacto promedio de cada variable por separado, las interacciones revelan **cómo el efecto de una variable cambia según el nivel de otra variable**. Este fenómeno es omnipresente en el mundo real: el efecto del precio en las ventas depende del nivel de publicidad, el impacto de la experiencia en el salario varía según la educación, o la efectividad de un tratamiento médico puede diferir entre grupos demográficos.
 
+::: {.callout-important title="Principios para feature engineering efectivo"}
+1. **Justificación teórica**: Cada nueva variable debe tener sentido conceptual en el dominio
+2. **Validación rigurosa**: Evaluar el poder predictivo real en datos no vistos
+3. **Simplicidad primero**: Preferir transformaciones simples e interpretables
+4. **Documentación exhaustiva**: Registrar el proceso de creación y la lógica detrás de cada feature
+5. **Monitoreo continuo**: Verificar que las relaciones se mantienen en producción
+:::
+
 Ignorar las interacciones relevantes puede llevar a **conclusiones erróneas** y **pérdida significativa de poder predictivo**. Por otro lado, incluir interacciones irrelevantes incrementa la complejidad del modelo sin beneficios, violando el principio de parsimonia. La clave está en **identificar, interpretar y validar** interacciones de manera sistemática y teoricamente fundamentada.
 
 ### Interacciones entre variables continuas
@@ -568,7 +575,7 @@ $$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1 X_2 + \varepsilon$$
 - Si $\beta_3 < 0$: El efecto de $X_1$ se **atenúa** cuando $X_2$ aumenta 
 - Si $\beta_3 = 0$: No hay interacción (efectos aditivos)
 
-::: {.callout-tip title="Ejemplo: Interacción precio-publicidad en ventas"}
+::: {.callout-tip title="Ejemplo: Interacción precio-publicidad en ventas" collapse="true"}
 ```{r interaccion-continua-continua}
 # Simulación: efecto de precio y publicidad en ventas
 # con interacción (mayor publicidad reduce sensibilidad al precio)
@@ -660,7 +667,7 @@ Observando el gráfico, las líneas **parecen tener pendientes diferentes**, lo 
 - **Modelo parsimonioso**: Eliminar el término de interacción no significativo
 - **Interpretación conservadora**: Los efectos son aditivos hasta que se demuestre lo contrario
 
-**Lección pedagógica crucial:** 
+**Lección crucial:** 
 
 Este ejemplo demuestra por qué **la inspección visual nunca debe ser el único criterio** para decidir sobre la inclusión de términos de interacción. La estadística inferencial formal debe prevalecer sobre las impresiones visuales, especialmente cuando hay incertidumbre debido a la variabilidad muestral.
 
@@ -741,6 +748,38 @@ ggplot(datos_cat, aes(x = departamento, y = salario, fill = genero)) +
 - Posibles diferencias en **poder de negociación** o **demanda de talento**
 
 **Implicaciones organizacionales:** La interacción indica que las políticas salariales no son uniformes y que intervenciones de equidad deberían ser **diferenciadas por departamento**.
+
+**Gráfico de interacción clásico:**
+
+```{r grafico-interaccion-prep}
+# Calcular medias y errores estándar por grupo para el gráfico
+suppressPackageStartupMessages(library(dplyr))
+medias_se <- datos_cat %>%
+  group_by(genero, departamento) %>%
+  summarise(
+    media = mean(salario),
+    se = sd(salario) / sqrt(n()),
+    .groups = "drop"
+  )
+
+# Mostrar los datos calculados
+kable(medias_se, caption = "Medias y errores estándar por grupo")
+```
+
+```{r grafico-interaccion-viz}
+# Gráfico de interacción estilo clásico
+ggplot(medias_se, aes(x = departamento, y = media, color = genero, group = genero)) +
+  geom_point(size = 3) +
+  geom_line(linewidth = 1) +
+  geom_errorbar(aes(ymin = media - se, ymax = media + se), width = 0.1) +
+  labs(title = "Gráfico de Interacción: Género × Departamento",
+       subtitle = "Las líneas no paralelas indican presencia de interacción",
+       x = "Departamento", y = "Salario promedio (€)", color = "Género") +
+  theme_minimal() +
+  theme(plot.subtitle = element_text(size = 10, color = "gray50"))
+```
+
+**Interpretación del gráfico:** Las líneas **no son paralelas**, confirmando la presencia de interacción significativa. La brecha salarial de género varía considerablemente: mayor en IT, moderada en RRHH, y menor en Ventas.
 
 :::
 
@@ -858,25 +897,11 @@ ggplot(datos_mixta, aes(x = experiencia, y = salario, color = genero)) +
 
 La **detección sistemática de interacciones** requiere combinar **justificación teórica**, **exploración visual** y **validación estadística**. No debemos buscar interacciones aleatoriamente, sino guiados por el conocimiento del dominio y patrones observables en los datos.
 
-#### Métodos de identificación
+La **justificación teórica previa** es fundamental: la teoría del dominio debe sugerir dónde pueden existir interacciones. Por ejemplo, en **economía** esperamos efectos precio-publicidad o educación-experiencia; en **medicina** son comunes las interacciones dosis-edad o tratamiento-comorbilidad; en **marketing** encontramos interacciones producto-canal o temporada-promoción.
 
-**1. Justificación teórica previa:** La teoría del dominio debe sugerir dónde pueden existir interacciones. Por ejemplo:
+La **exploración visual sistemática** complementa la teoría con evidencia empírica. Para **variables continuas** utilizamos gráficos de dispersión coloreados por grupos categóricos; para **variables categóricas** empleamos gráficos de interacción (interaction plots); para interacciones **mixtas** analizamos líneas de regresión por grupo.
 
-- **Economía**: efectos precio-publicidad, educación-experiencia
-- **Medicina**: interacciones dosis-edad, tratamiento-comorbilidad  
-- **Marketing**: producto-canal, temporada-promoción
-
-**2. Exploración visual sistemática:**
-
-- **Variables continuas**: Gráficos de dispersión coloreados por grupos categóricos
-- **Variables categóricas**: Gráficos de interacción (interaction plots)
-- **Mixtas**: Líneas de regresión por grupo
-
-**3. Tests estadísticos formales:**
-
-- **Test F para interacciones**: Compara modelos con y sin términos de interacción
-- **Test de significancia individual**: t-test para coeficientes de interacción específicos
-- **Criterios de información**: AIC/BIC para selección de modelos
+Los **tests estadísticos formales** proporcionan validación objetiva: el **test F para interacciones** compara modelos con y sin términos de interacción, el **test de significancia individual** evalúa coeficientes específicos mediante t-test, y los **criterios de información** (AIC/BIC) guían la selección entre modelos alternativos.
 
 ::: {.callout-note title="Estrategia de modelado jerárquico"}
 **Principio de jerarquía:** Si incluimos una interacción A×B, **siempre debemos incluir los efectos principales** A y B, incluso si no son significativos individualmente. Esto preserva la interpretabilidad y evita sesgos en los coeficientes de interacción.
@@ -890,114 +915,17 @@ La **detección sistemática de interacciones** requiere combinar **justificaci�
 5. **Validación**: Verificar supuestos y estabilidad en datos de prueba
 :::
 
-#### Visualización de interacciones
-
-La **visualización efectiva** es crítica para comunicar interacciones, ya que su interpretación puede ser contraintuitiva. Diferentes tipos de interacciones requieren estrategias visuales específicas.
-
-::: {.callout-tip title="Ejemplo: Gráfico de interacción para variables categóricas" collapse="true"}
-Para visualizar efectivamente las interacciones entre variables categóricas, utilizaremos los datos del ejemplo anterior de género-departamento y crearemos un gráfico de interacción clásico. Este tipo de gráfico nos permite identificar visualmente la presencia de interacciones mediante el patrón de las líneas.
-
-**Preparación de los datos:**
-
-```{r grafico-interaccion-prep}
-# Usar datos del ejemplo anterior de género-departamento
-suppressPackageStartupMessages(library(ggplot2))
-suppressPackageStartupMessages(library(dplyr))
-
-# Calcular medias y errores estándar por grupo para el gráfico
-medias_se <- datos_cat %>%
-  group_by(genero, departamento) %>%
-  summarise(
-    media = mean(salario),
-    se = sd(salario) / sqrt(n()),
-    .groups = "drop"
-  )
-
-# Mostrar los datos calculados
-kable(medias_se, caption = "Medias y errores estándar por grupo")
-```
-
-**Visualización de la interacción:**
-
-```{r grafico-interaccion-viz}
-# Gráfico de interacción estilo clásico
-ggplot(medias_se, aes(x = departamento, y = media, color = genero, group = genero)) +
-  geom_point(size = 3) +
-  geom_line(linewidth = 1) +
-  geom_errorbar(aes(ymin = media - se, ymax = media + se), width = 0.1) +
-  labs(title = "Gráfico de Interacción: Género × Departamento",
-       subtitle = "Las líneas no paralelas indican presencia de interacción",
-       x = "Departamento", y = "Salario promedio (€)", color = "Género") +
-  theme_minimal() +
-  theme(plot.subtitle = element_text(size = 10, color = "gray50"))
-```
-
-**Interpretación del gráfico de interacción:**
-
-La interpretación visual de las interacciones se basa en el patrón de las líneas:
-
-- **Líneas paralelas**: Indican **ausencia de interacción**. El efecto de una variable es constante across los niveles de la otra variable.
-
-- **Líneas que convergen, divergen o se cruzan**: Indican **presencia de interacción**. El efecto de una variable cambia según el nivel de la otra variable.
-
-En nuestro ejemplo, las líneas **no son paralelas**, lo que confirma la presencia de una interacción significativa entre género y departamento. La brecha salarial de género varía considerablemente entre departamentos: es mayor en IT, moderada en RRHH, y menor en Ventas.
-
-**Implicaciones prácticas:** Este patrón sugiere que las políticas salariales no son uniformes across departamentos, y que factores como la cultura departamental, la demanda de talento, o las dinámicas de negociación pueden influir de manera diferencial en la brecha de género.
-:::
-
 ### Consideraciones prácticas y limitaciones
 
-#### Complejidad interpretativa
-
-Las interacciones incrementan exponencialmente la **complejidad interpretativa** del modelo. Un modelo con k efectos principales puede tener hasta k(k-1)/2 interacciones de segundo orden, y el número crece exponencialmente con interacciones de orden superior.
-
-**Reglas prácticas para la complejidad:**
-
-- **Máximo 2-3 interacciones de segundo orden** en modelos explicativos
-- **Evitar interacciones de tercer orden** salvo justificación teórica muy sólida
-- **Priorizar interacciones con efectos grandes** sobre significancia estadística
-
-#### Problemas de multicolinealidad
-
-Las interacciones pueden crear **multicolinealidad severa**, especialmente cuando:
-- Las variables principales están correlacionadas
-- Se incluyen múltiples interacciones con variables comunes
-- Se usan variables categóricas con muchos niveles
-
-**Estrategias de mitigación:**
-
-- **Centrado de variables continuas**: Reduce correlación entre X y X×Z
-- **Selección cuidadosa**: No incluir todas las interacciones posibles
-- **Regularización**: Métodos Ridge/Lasso cuando hay muchas interacciones
-
-#### Interpretación con variables transformadas
-
-Cuando las variables están **transformadas** (logarítmica, Box-Cox), la interpretación de interacciones se complica significativamente:
-
-$$\log(Y) = \beta_0 + \beta_1 \log(X_1) + \beta_2 X_2 + \beta_3 \log(X_1) \cdot X_2 + \varepsilon$$
-
-En este caso, $\beta_3$ representa cómo cambia la **elasticidad** de Y respecto a X₁ cuando X₂ aumenta en una unidad.
+Las interacciones incrementan exponencialmente la **complejidad interpretativa** del modelo. Un modelo con k efectos principales puede tener hasta $k(k-1)/2$ interacciones de segundo orden, y el número crece exponencialmente con interacciones de orden superior. Esta explosión combinatorial hace que incluso modelos aparentemente simples se vuelvan rápidamente inmanejables desde el punto de vista interpretativo. Como **reglas prácticas para la complejidad**, recomendamos limitar a **máximo 2-3 interacciones de segundo orden** en modelos explicativos, **evitar interacciones de tercer orden** salvo justificación teórica muy sólida, y **priorizar interacciones con efectos grandes** sobre mera significancia estadística.
 
 ::: {.callout-warning title="Advertencia sobre interpretación"}
 **Cuidado con la interpretación automática.** Las interacciones en escalas transformadas tienen significados diferentes que en escalas originales. Siempre verificar la interpretación en el contexto de la transformación aplicada y considerar la retransformación para comunicación con audiencias no técnicas.
 :::
 
-### Validación y robustez de interacciones
+Un problema adicional surge cuando las interacciones crean **multicolinealidad severa**, especialmente cuando las variables principales están correlacionadas, se incluyen múltiples interacciones con variables comunes, o se usan variables categóricas con muchos niveles. Esta multicolinealidad puede hacer que los coeficientes individuales sean inestables y difíciles de interpretar, incluso cuando el modelo en conjunto funcione bien predictivamente. Las **estrategias de mitigación** incluyen el **centrado de variables continuas** para reducir la correlación entre X y X×Z, la **selección cuidadosa** de interacciones sin incluir todas las combinaciones posibles, y el uso de **métodos de regularización** como Ridge o Lasso cuando hay múltiples interacciones.
 
-Las interacciones son particularmente susceptibles a **inestabilidad** y **sobreajuste**. Una interacción significativa en la muestra puede no replicarse en nuevos datos, especialmente si la muestra es pequeña o la interacción es débil.
-
-#### Estrategias de validación
-
-**1. Validación cruzada:** Dividir datos en entrenamiento/prueba y verificar que las interacciones se mantienen significativas y con signos consistentes.
-
-**2. Bootstrap:** Generar múltiples muestras bootstrap y verificar la estabilidad de los coeficientes de interacción.
-
-**3. Análisis de sensibilidad:** Verificar cómo cambian las interacciones al:
-- Eliminar observaciones influyentes
-- Cambiar transformaciones de variables
-- Modificar especificaciones del modelo
-
-**4. Replicación:** Cuando sea posible, validar interacciones en datasets independientes del mismo dominio.
+La situación se complica aún más cuando las variables están **transformadas** (logarítmica, Box-Cox). En estos casos, la interpretación de las interacciones adquiere significados completamente diferentes que en escalas originales. Por ejemplo, en un modelo como $\log(Y) = \beta_0 + \beta_1 \log(X_1) + \beta_2 X_2 + \beta_3 \log(X_1) \cdot X_2 + \varepsilon$, el coeficiente $\beta_3$ representa cómo cambia la **elasticidad** de Y respecto a X₁ cuando X₂ aumenta en una unidad, lo que requiere una interpretación mucho más sofisticada que una interacción en escalas lineales.
 
 ::: {.callout-important title="Principios para el uso de interacciones"}
 1. **Justificación teórica primero**: No buscar interacciones sin base conceptual
@@ -1009,3 +937,142 @@ Las interacciones son particularmente susceptibles a **inestabilidad** y **sobre
 :::
 
 Las interacciones son herramientas poderosas que pueden revelar patrones importantes ocultos en los efectos principales. Sin embargo, su uso requiere disciplina metodológica, justificación teórica sólida, y validación rigurosa para evitar conclusiones espurias y modelos sobreajustados.
+
+## Ingeniería de características avanzada: combinaciones, ratios y transformaciones
+
+Más allá de las transformaciones individuales e interacciones, la **ingeniería de características avanzada** implica crear nuevas variables predictivas mediante **combinaciones matemáticas**, **ratios** y **transformaciones compuestas** que capturen relaciones complejas no evidentes en las variables originales [@kuhn2019feature]. Esta aproximación es fundamental cuando las variables individuales contienen información parcial que, al combinarse, revelan patrones predictivos más potentes.
+
+### Combinaciones lineales y no lineales
+
+Las **combinaciones lineales** crean nuevas variables mediante sumas ponderadas de variables existentes, útiles especialmente cuando trabajamos con variables que miden aspectos relacionados del mismo fenómeno pero con diferentes escalas o unidades.
+
+**Ejemplos de combinaciones lineales efectivas:**
+
+- **Índices compuestos**: Combinan múltiples indicadores en un score único que captura un constructo multidimensional. Por ejemplo, un índice de riesgo cardiovascular podría definirse como `índice_salud = 0.4×presión_arterial_normalizada + 0.3×colesterol_normalizada + 0.3×IMC_normalizado`. Los pesos (0.4, 0.3, 0.3) reflejan la **importancia relativa** establecida por evidencia médica, creando una métrica integrada que es más informativa que cualquier indicador individual. Este tipo de índices son especialmente valiosos en **dominios donde múltiples factores** contribuyen conjuntamente al outcome de interés.
+
+- **Scores balanceados**: Representan equilibrios o trade-offs entre dimensiones competitivas. Un ejemplo típico es `balance_trabajo_vida = horas_trabajo / (tiempo_personal + tiempo_familia + tiempo_descanso)`. Esta métrica captura no solo la **intensidad laboral**, sino también su **contexto relativo** dentro del estilo de vida completo. Valores altos indican desbalance hacia el trabajo, mientras que valores cercanos a 1.0 sugieren equilibrio saludable. Los scores balanceados son fundamentales para capturar **dinámicas de compensación** que no son evidentes en variables absolutas.
+
+- **Factores sintéticos**: Cuando múltiples variables correlacionadas miden aspectos del mismo constructo subyacente, pueden condensarse en un factor común que **preserve la información esencial** eliminando redundancia. Por ejemplo, si tenemos variables `ingresos`, `educación`, y `prestigio_ocupacional` (todas correlacionadas), podemos crear un factor `estatus_socioeconomico` que capture la varianza común. Esto es especialmente útil cuando la **colinealidad** entre predictores compromete la estabilidad del modelo, pero cada variable aporta información valiosa.
+
+**Combinaciones no lineales** van más allá de las sumas ponderadas para capturar **interacciones multiplicativas**, **sinergias** y **compensaciones** entre variables mediante productos, cocientes, potencias y funciones más complejas:
+
+- **Productos de eficiencia**: Capturan sinergias multiplicativas donde el rendimiento depende de la **combinación simultánea** de múltiples factores. Por ejemplo, `rendimiento_efectivo = capacidad_instalada × utilización_porcentual × factor_calidad`. Esta métrica reconoce que el rendimiento real no es aditivo: tener alta capacidad pero baja utilización, o alta utilización con problemas de calidad, resulta en rendimiento subóptimo. Los productos de eficiencia son esenciales en **contextos operacionales** donde el desempeño emerge de la coordinación entre recursos.
+
+- **Ratios de rendimiento ajustado por riesgo**: Normalizan beneficios por su costo o riesgo asociado, creando métricas comparables entre contextos diferentes. Un ejemplo financiero sería `eficiencia_ajustada = (rendimiento_esperado - tasa_libre_riesgo) / (volatilidad + costos_transaccion)`. Esta formulación reconoce que los rendimientos absolutos son engañosos sin considerar el **riesgo asumido** y los **costos incurridos**. Los ratios ajustados son cruciales para **decisiones de optimización** donde debemos comparar alternativas con perfiles de riesgo-retorno heterogéneos.
+
+- **Funciones de utilidad**: Capturan **percepciones subjetivas** o **valores no lineales** mediante transformaciones que reflejan preferencias reales. Por ejemplo, `valor_percibido = √(calidad_producto) × precio⁻⁰·⁵` reconoce que la utilidad del consumidor tiene **rendimientos decrecientes** tanto en calidad como en ahorro de precio. La raíz cuadrada de la calidad refleja que mejoras incrementales tienen menor impacto en niveles altos, mientras que el exponente negativo del precio captura la sensibilidad decreciente a cambios de precio en productos caros.
+
+### Ratios y proporciones como features
+
+Los **ratios** son especialmente poderosos porque normalizan automáticamente las diferencias de escala y pueden revelar relaciones proporcionales fundamentales que permanecen ocultas en variables absolutas. A diferencia de las medidas absolutas, los ratios capturan **relaciones estructurales** que son invariantes bajo cambios de escala y contexto, lo que los convierte en herramientas fundamentales para crear features robustos y comparables.
+
+La **potencia de los ratios** radica en su capacidad para transformar información absoluta en **información relativa**. Por ejemplo, una empresa con €1M en ventas y €100K en marketing tiene un ratio ventas/marketing de 10, igual que una empresa con €10M en ventas y €1M en marketing. Esta normalización automática permite comparaciones directas y elimina sesgos de tamaño que podrían distorsionar el análisis.
+
+**Categorización detallada de ratios efectivos:**
+
+1. **Ratios de eficiencia**: Miden qué tan efectivamente se convierten los inputs en outputs, revelando productividad y optimización operacional. Ejemplos fundamentales incluyen:
+   - `ROI_marketing = (ventas_generadas - gasto_marketing) / gasto_marketing`: Captura el retorno neto por euro invertido
+   - `eficiencia_produccion = unidades_producidas / (horas_trabajo + costo_materiales)`: Normaliza productividad por recursos consumidos
+   - `conversion_rate = ventas_completadas / visitantes_web`: Revela la efectividad del funnel de conversión
+   
+   Estos ratios son especialmente valiosos porque **eliminan el efecto escala** y permiten comparar unidades de diferentes tamaños en términos de eficiencia pura.
+
+2. **Ratios de riesgo ajustado**: Normalizan retornos o beneficios por la incertidumbre o costo asociado, proporcionando métricas de **valor ajustado por riesgo**:
+   - `sharpe_ratio = (rendimiento_promedio - tasa_libre_riesgo) / volatilidad`: Mide retorno por unidad de riesgo asumido
+   - `stability_score = beneficio_promedio / desviacion_estandar_beneficios`: Indica consistencia en el desempeño
+   - `risk_adjusted_growth = crecimiento_promedio / max_drawdown`: Captura crecimiento sostenible
+   
+   Estos ratios son cruciales en **análisis financiero** y **gestión de riesgos**, donde los valores absolutos pueden ser engañosos sin considerar la variabilidad subyacente.
+
+3. **Ratios temporales**: Capturan dinámicas y tendencias mediante comparaciones entre períodos, revelando **momentum** y **patrones estacionales**:
+   - `momentum_growth = crecimiento_último_trimestre / crecimiento_promedio_histórico`: Identifica aceleración o desaceleración
+   - `estacionalidad = ventas_período_actual / media_móvil_12_meses`: Captura variaciones cíclicas
+   - `trend_strength = (valor_actual - valor_hace_12_meses) / volatilidad_histórica`: Mide significancia de cambios
+   
+   Estos ratios son especialmente útiles en **análisis de series temporales** donde necesitamos distinguir entre variación normal y cambios estructurales significativos.
+
+4. **Ratios de composición**: Revelan la estructura interna de agregados mediante proporciones parte-todo, fundamentales para **análisis de portafolios** y **segmentación**:
+   - `concentracion_cliente = ventas_top3_clientes / ventas_totales`: Mide dependencia y riesgo de concentración
+   - `diversificacion_producto = 1 - suma(proportion_i²)`: Índice de Herfindahl para medir dispersión
+   - `market_share = ventas_empresa / ventas_mercado_total`: Posición relativa competitiva
+   
+   Los ratios de composición son esenciales para **gestión de riesgos** y **análisis estratégico**, revelando vulnerabilidades y fortalezas estructurales.
+
+**Ventajas metodológicas profundizadas:**
+
+- **Normalización automática**: Los ratios eliminan efectos de escala absoluta, haciendo comparables entidades de diferentes tamaños. Una startup con €10K en ventas y €2K en marketing tiene el mismo ratio ventas/marketing (5.0) que una multinacional con €100M y €20M respectivamente, permitiendo benchmarking directo de eficiencia.
+
+- **Interpretación intuitiva**: Los ratios tienen significados naturales que facilitan la comunicación con stakeholders. Un ratio deuda/patrimonio de 0.3 es inmediatamente comprensible como "30 céntimos de deuda por cada euro de patrimonio", mientras que valores absolutos requieren más contexto.
+
+- **Robustez ante outliers**: Los ratios suelen ser menos sensibles a valores extremos que las variables absolutas. Si una empresa tiene ventas anómalamente altas pero también marketing proporcionalmente alto, el ratio ventas/marketing permanece estable, mientras que ambas variables individuales serían outliers.
+
+- **Invarianza bajo transformaciones**: Los ratios mantienen sus relaciones bajo cambios de unidades o inflación. El ratio precio/ingresos de una acción es el mismo si se mide en euros o dólares, proporcionando estabilidad interpretativa a lo largo del tiempo y contextos.
+
+**Consideraciones para construcción robusta de ratios:**
+
+Los ratios requieren cuidado especial en su construcción para evitar interpretaciones erróneas o inestabilidad numérica. Es fundamental **evitar denominadores cercanos a cero**, considerar **transformaciones logarítmicas** para ratios con rangos amplios, y validar que el **ratio tenga significado conceptual** en el dominio de aplicación.
+
+### Tratamiento de variables colineales mediante feature engineering
+
+Cuando enfrentamos **multicolinealidad entre predictores informativos**, la ingeniería de características ofrece alternativas más sofisticadas que simplemente eliminar variables o usar interacciones sin efectos principales. Este escenario es común en la práctica: tenemos múltiples variables que **aportan información valiosa** individualmente, pero están **suficientemente correlacionadas** como para crear problemas de estabilidad e interpretación en el modelo.
+
+El enfoque tradicional de **"eliminar variables correlacionadas"** es problemático porque puede resultar en **pérdida significativa de información predictiva**. Si `variable_A` y `variable_B` tienen correlación r = 0.75, ambas comparten 56% de varianza, pero cada una retiene 44% de información única. Eliminar cualquiera de ellas descarta información potencialmente valiosa que podría mejorar el poder predictivo del modelo.
+
+La **ingeniería de características para colinealidad** busca **condensar la información redundante** mientras **preserva la información única**, creando nuevas variables que capturen la esencia predictiva de las variables originales sin los problemas de multicolinealidad. Esta aproximación es especialmente valiosa cuando la correlación entre variables tiene **significado teórico**: por ejemplo, diferentes medidas de solvencia financiera que capturan aspectos relacionados pero distintos del riesgo crediticio.
+
+**Estrategias avanzadas de condensación de información:**
+
+1. **Componentes principales (PCA)**: Extraen direcciones de máxima varianza común, creando variables ortogonales que preservan la mayor cantidad de información con la menor dimensionalidad:
+   ```r
+   # Ejemplo: Variables financieras correlacionadas
+   pc_financiero <- prcomp(~ ingresos + patrimonio + crédito + liquidez, scale = TRUE)
+   score_financiero <- pc_financiero$x[,1]  # Primer componente (mayor varianza)
+   score_diversificacion <- pc_financiero$x[,2]  # Segundo componente (varianza residual)
+   ```
+   
+   **Ventajas del PCA**: Elimina completamente la multicolinealidad, preserva máxima varianza, proporciona interpretación de "factores latentes". **Desventajas**: Pérdida de interpretabilidad directa, todos los componentes dependen de todas las variables originales, sensible a outliers.
+
+2. **Ratios informativos**: Crean cocientes que preservan la información relativa más relevante, eliminando efectos de escala común:
+   ```r
+   # Ratios que capturan relaciones estructurales fundamentales
+   ratio_debt_income <- deuda_total / ingresos_anuales  # Capacidad de endeudamiento
+   ratio_assets_equity <- activos / patrimonio_neto     # Apalancamiento
+   ratio_liquidity <- activos_liquidos / pasivos_corrientes  # Solvencia a corto plazo
+   ```
+   
+   **Ventajas de los ratios**: Mantienen interpretabilidad económica directa, eliminan efectos de escala, capturan relaciones estructurales clave. **Aplicabilidad**: Especialmente efectivos cuando las variables correlacionadas miden aspectos del mismo fenómeno subyacente (ej. diferentes medidas de tamaño empresarial).
+
+3. **Índices ponderados**: Combinan variables usando pesos derivados de conocimiento teórico o empírico, creando métricas compuestas más robustas que sus componentes individuales:
+   ```r
+   # Índice de solvencia con pesos basados en evidencia empírica
+   indice_solvencia <- 0.4 * (ingresos/gastos) + 0.3 * (activos/deudas) + 0.3 * score_crediticio_normalizado
+   
+   # Índice de crecimiento balanceado
+   indice_crecimiento <- 0.5 * crecimiento_ventas + 0.3 * crecimiento_beneficios + 0.2 * crecimiento_empleados
+   ```
+   
+   **Determinación de pesos**: Pueden derivarse de **análisis factorial confirmatorio**, **regresión ridge**, **conocimiento experto**, o **optimización empírica**. Los pesos deben **justificarse teóricamente** y **validarse en datos independientes**.
+
+4. **Diferencias y cambios relativos**: Capturan dinámicas temporales y patrones de co-movimiento que revelan información única no presente en niveles absolutos:
+   ```r
+   # Dinámicas de crecimiento relativo
+   crecimiento_relativo <- (valor_actual - valor_anterior) / valor_anterior
+   aceleracion <- (crecimiento_t - crecimiento_t_1) / crecimiento_t_1
+   
+   # Medidas de estabilidad y volatilidad
+   volatilidad <- sd(ultimos_12_meses) / mean(ultimos_12_meses)
+   consistencia <- 1 / (1 + cv(ultimos_periodos))  # Coeficiente de variación invertido
+   ```
+   
+   **Aplicabilidad temporal**: Especialmente útiles para series temporales donde variables están correlacionadas en niveles pero divergen en tasas de cambio, revelando **dinámicas diferenciales** ocultas en análisis de niveles.
+
+::: {.callout-note}
+## Criterios de selección de estrategia
+
+- **PCA**: Cuando la interpretabilidad no es crítica y maximizar la retención de varianza es prioritario
+- **Ratios**: Cuando existe significado teórico claro en las relaciones proporcionales entre variables
+- **Índices ponderados**: Cuando hay conocimiento previo sobre la importancia relativa de cada componente
+- **Cambios relativos**: Cuando las dinámicas temporales son más informativas que los niveles absolutos
+:::
+
+La ingeniería de características es tanto arte como ciencia: requiere creatividad para identificar combinaciones útiles, pero también rigor metodológico para validar que las nuevas variables realmente aportan valor predictivo estable y generalizable.

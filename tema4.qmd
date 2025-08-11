@@ -1,833 +1,869 @@
-# Modelos de regresión generalizada {#sec-tema4}
+# Selección de variables, regularización y validación {#sec-tema2}
 
-Hasta ahora hemos estuadiado la regresión lineal como una herramienta poderosa para modelar la relación entre una variable dependiente continua y un conjunto de variables independientes. Sin embargo, en muchos contextos del mundo real, las suposiciones de la regresión lineal tradicional no son adecuadas. ¿Qué sucede si la variable dependiente es binaria, como en un diagnóstico médico (enfermo/sano)? ¿O si estás modelando el número de accidentes en una intersección o la cantidad de compras realizadas por un cliente?
+En los modelos de regresión, especialmente cuando se trabaja con conjuntos de datos que incluyen un gran número de variables predictoras, es común enfrentarse al desafío de identificar qué variables son realmente relevantes para explicar la variable respuesta. La inclusión de demasiadas variables en un modelo puede llevar a problemas como el sobreajuste, pérdida de interpretabilidad y complejidad innecesaria, mientras que la exclusión de variables importantes puede resultar en modelos subóptimos.
 
-Para abordar estos desafíos, se utilizan los llamados **Modelos Lineales Generalizados (GLM)**. Esta clase de modelos amplía la regresión lineal al permitir que la variable dependiente tenga distribuciones diferentes a la normal, como la binomial o la de Poisson. Además, los GLM utilizan funciones de enlace que transforman la relación entre la variable dependiente y los predictores, permitiendo una mayor flexibilidad en el modelado.
+Este tema aborda uno de los aspectos más críticos en la construcción de modelos de regresión: cómo seleccionar el subconjunto óptimo de variables predictoras y cómo validar la calidad del modelo resultante. El proceso completo involucra varias etapas interconectadas que van desde el filtrado inicial de variables hasta la validación final del modelo, pasando por técnicas sofisticadas de selección y regularización.
 
-Algunos de los modelos más comunes dentro de los GLM son:
+## Proceso completo de construcción y optimización del modelo
 
-  - Regresión Logística: Ideal para variables dependientes binarias (sí/no, éxito/fracaso).
-  -  Regresión de Poisson: Utilizada para modelar datos de conteo (número de eventos).
-  - Regresión Binomial Negativa: Una extensión de la regresión de Poisson para datos de conteo con sobredispersión.
-  -  Modelos de Gamma y Inverso Gaussiano: Utilizados para modelar variables continuas positivas y sesgadas, como tiempos de espera o costos.
+La construcción de un modelo de regresión múltiple es un proceso sistemático que busca explicar la relación entre una variable respuesta ($Y$) y múltiples variables predictoras ($X_1, X_2, \dots, X_k$). Este proceso consta de varias etapas clave [@kutner2005applied], que en este tema nos enfocaremos particularmente en las etapas de reducción de variables y validación:
 
-En este tema, exploraremos cómo utilizar estos modelos para resolver problemas del mundo real, interpretar sus resultados y evaluar su ajuste.
+1.  **Definición del problema y variables de interés:**
+    -   Identificar claramente el objetivo del análisis, ya sea realizar predicciones, evaluar relaciones o controlar por efectos de variables confusoras.
+    -   Seleccionar las variables predictoras potenciales en función de su relevancia teórica, conocimiento previo o exploración inicial de los datos.
+2.  **Recogida de datos:**
 
-## Introducción a los GLM
+-   La calidad de los datos recogidos influye directamente en la validez de los resultados y conclusiones obtenidas. El proceso de recogida de datos consiste en recopilar información de manera organizada y sistemática para responder a las preguntas de investigación planteadas. Dependiendo del diseño del estudio y los objetivos del análisis, se pueden emplear diferentes tipos de experimentos o métodos de recogida de datos.
+-   Debemos asegurar las siguientes características sobre los datos.
+    -   **Fiabilidad:** Asegurar que los datos sean consistentes y puedan reproducirse bajo condiciones similares.
+    -   **Validez:** Garantizar que los datos recojan realmente la información necesaria para responder a las preguntas de investigación.
+    -   **Ética:** Asegurar la privacidad y el consentimiento informado de los participantes.
+    -   **Control de Sesgos:** Diseñar el estudio de manera que se minimicen los sesgos que puedan distorsionar los resultados.
 
-### ¿Qué son los Modelos Lineales Generalizados?
+::: {.callout-note collapse="true" title="Tipos de experimentos"}
+La elección del tipo de experimento o método de recogida de datos dependerá de la naturaleza del problema a investigar, los recursos disponibles y las limitaciones del estudio. Una correcta planificación y ejecución de esta etapa sienta las bases para un análisis robusto y confiable.
 
-Los **Modelos Lineales Generalizados (GLM)** son una extensión de los modelos de regresión lineal que permiten manejar una mayor variedad de tipos de datos y relaciones entre variables [@nelder1972generalized]. Mientras que la regresión lineal tradicional asume que la variable dependiente es continua y sigue una distribución normal, los GLM permiten trabajar con variables dependientes que:
-
-  - Son **binarias** (como éxito/fracaso o sí/no).
-  - Representan **conteos** de eventos (número de llamadas, accidentes, etc.).
-  - Son **continuas positivas** y no siguen una distribución normal (como tiempos o costos).
-
-Los GLM proporcionan una estructura flexible para modelar la relación entre una o más variables independientes y una variable dependiente que sigue alguna distribución de la **familia exponencial** (binomial, Poisson, gamma, entre otras).
-
-### Componentes de un Modelo Lineal Generalizado
-
-Un GLM se define por tres componentes clave:
-
-1. **Componente Aleatorio:**  
-
-   Este componente describe la distribución de la variable dependiente. En la regresión lineal, la variable dependiente sigue una distribución normal. En los GLM, puede seguir otras distribuciones de la **familia exponencial**, como:
-
-   - **Distribución Binomial:** Para variables categóricas binarias (0/1, éxito/fracaso).
-   - **Distribución de Poisson:** Para datos de conteo (número de eventos).
-   - **Distribución Gamma:** Para variables continuas y positivas (como costos o tiempos).
-
-2. **Componente Sistemático:**  
-   Este componente describe cómo las variables independientes se combinan linealmente en el modelo. Se define como:
-
-   $$
-   \eta = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p
-   $$
-
-   Donde $\eta$ es el **predictor lineal** y $\beta$ representa los coeficientes del modelo.
-
-3. **Función de Enlace:**  
-   La función de enlace conecta el componente sistemático con la media de la variable dependiente. Mientras que en la regresión lineal la relación es directa ($Y = \eta $), en los GLM se utiliza una función de enlace $g(\mu)$ para transformar la media $\mu$ y ajustar diferentes tipos de datos.
-
-   $$
-   g(\mu) = \eta
-   $$
-
-**Ejemplos de funciones de enlace:**
-
-   - **Logística (Logit):** Para la regresión logística, que modela la probabilidad de un evento.
-     $$
-     g(\mu) = \log\left(\frac{\mu}{1 - \mu}\right)
-     $$
-   - **Logarítmica:** Para la regresión de Poisson, que modela tasas de eventos.
-     $$
-     g(\mu) = \log(\mu)
-     $$
-   - **Identidad:** Para la regresión lineal estándar.
-     $$
-     g(\mu) = \mu
-     $$
-
-
-::: {.callout-note collapse="true" title="Aplicaciones"}
-
-Los GLM se utilizan en una amplia variedad de disciplinas para resolver problemas del mundo real:
-
-**Regresión Logística (para variables binarias):**  
-
-   - **Medicina:** Predicción de la presencia o ausencia de una enfermedad basada en factores de riesgo.
-   - **Marketing:** Determinación de la probabilidad de que un cliente compre un producto.
-   - **Finanzas:** Evaluación de la probabilidad de incumplimiento de pago de un préstamo.
-
-**Regresión de Poisson (para datos de conteo):**  
-
-   - **Transporte:** Modelado del número de accidentes en una carretera en un período de tiempo.
-   - **Ecología:** Conteo de especies en un área determinada.
-   - **Telecomunicaciones:** Número de llamadas recibidas por un centro de atención.
-
-**Regresión Binomial Negativa (para conteos con sobredispersión):**  
-
-   - **Salud Pública:** Modelado del número de visitas al médico o incidentes de una enfermedad en una población.
-
-**Modelos Gamma (para variables continuas positivas):**  
-   
-   - **Seguros:** Estimación de los costos de reclamos de seguros.
-   - **Ingeniería:** Modelado de tiempos de falla en procesos industriales.
-
+1.  **Experimentos controlados:**
+    -   Los experimentos controlados son diseñados de manera que los investigadores manipulan deliberadamente una o más variables independientes (llamadas factores o variables controladas) para observar su efecto en la variable dependiente.
+    -   Incluyen la aleatorización de sujetos entre grupos (por ejemplo, grupos de control y tratamiento) para minimizar sesgos y asegurar comparabilidad.
+    -   En muchas ocasiones la información suplementaria no se puede incorporar en el diseño del experimento. A esas variables, no controladas, se les suel llamar covariables.
+    -   **Ejemplo:** Un estudio clínico donde se prueba un nuevo medicamento y se compara su efecto con un placebo.
+2.  **Estudios observacionales exploratorios:**
+    -   En este enfoque, los datos se recogen sin intervenir ni manipular las condiciones. Los investigadores observan y registran los fenómenos tal como ocurren en la naturaleza.
+    -   Pueden clasificarse en:
+        -   **Estudios transversales:** Los datos se recogen en un único punto temporal.
+        -   **Estudios longitudinales:** Los datos se recogen durante un periodo para analizar cambios a lo largo del tiempo.
+    -   **Ejemplo:** Investigar los hábitos alimenticios y su asociación con enfermedades cardiovasculares en una población.
+3.  **Estudios observacionales confirmatorios:**
+    -   En este enfoque, los datos se recogen para testear (confirmar o no) hipótesis derivadas de estudios previos o de ideas que pueden tener los investigadores.
+    -   En este contexto, las variables que aparecen involucradas en la hipótesis que se quiere confirmar se denominan variables primarias, y las variables explicativas que se sabe inluyen en la respuesta se llaman variables de control (en Epidemiología nos referimos a ellas como factores de riesgo)
+    -   **Ejemplo:** Un equipo de investigadores, basándose en estudios previos, plantea la hipótesis de que existe una relación positiva entre el hábito de fumar (variable explicativa principal) y la incidencia de cáncer de pulmón (variable respuesta). Para confirmar esta hipótesis, realizan un estudio observacional en el que recopilan datos de una población durante un periodo determinado. Dado que no es ético inducir a las personas a fumar para realizar un experimento controlado, este estudio se realiza de forma observacional. Los datos se analizan para evaluar la asociación entre las variables, permitiendo confirmar (o refutar) la hipótesis planteada con un diseño adecuado y controlando los posibles factores de confusión.
+4.  **Encuestas y cuestionarios:**
+    -   Las encuestas son una técnica común para recoger datos de manera estructurada sobre actitudes, opiniones, comportamientos o características demográficas.
+    -   Pueden aplicarse en formato presencial, en línea, por teléfono o mediante correo.
+    -   **Ejemplo:** Una encuesta para medir el grado de satisfacción de los clientes con un servicio.
+5.  **Experimentos naturales:**
+    -   Se producen cuando un fenómeno natural o social actúa como una intervención en un entorno sin que los investigadores tengan control sobre el experimento.
+    -   Este tipo de estudio aprovecha eventos únicos para analizar sus impactos.
+    -   **Ejemplo:** Estudiar los efectos económicos de una nueva política fiscal aplicada en una región específica.
+6.  **Estudios de simulación:**
+    -   Los datos se generan a través de modelos matemáticos o computacionales que representan un sistema real o hipotético.
+    -   Este método se usa cuando es difícil o costoso realizar experimentos reales.
+    -   **Ejemplo:** Simular el comportamiento de un mercado financiero bajo diferentes escenarios económicos.
+7.  **Recogida de datos secundarios:**
+    -   En lugar de recoger datos nuevos, se utilizan datos ya existentes recopilados por terceros, como censos, registros administrativos o bases de datos públicas.
+    -   Aunque es eficiente en tiempo y costos, el investigador tiene menor control sobre la calidad y las características de los datos.
+    -   **Ejemplo:** Analizar datos de encuestas nacionales para estudiar tendencias sociales.
 :::
 
-### Diferencias clave entre la Regresión Lineal y los GLM
+3.  **Análisis Exploratorio de Datos (EDA):**
+    -   Inspeccionar los datos mediante análisis descriptivo y visual para identificar posibles problemas como valores atípicos, datos faltantes y multicolinealidad.
+    -   Escalar o transformar las variables si es necesario, especialmente si están en diferentes escalas o presentan distribuciones no lineales.
+4.  **Ajuste del modelo:**
+    -   Especificar el modelo de regresión múltiple en su forma general:\
+        $$
+        Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p + \varepsilon,
+         $$ donde $\varepsilon$ representa los errores aleatorios.
+    -   Estimar los coeficientes del modelo ($\beta_0, \beta_1, \dots, \beta_p$) utilizando el método de mínimos cuadrados, que minimiza la suma de los errores al cuadrado.
+5.  **Evaluación del modelo:**
+    -   Analizar el ajuste general del modelo utilizando métricas como $R^2$ y $R^2$ ajustado, que miden la proporción de la variabilidad explicada.
+    -   Examinar la tabla ANOVA para evaluar la significancia global del modelo.
+    -   Realizar pruebas de hipótesis para los coeficientes individuales, verificando si las variables predictoras tienen un efecto significativo en la variable respuesta.
+6.  **Diagnóstico del modelo:**
+    -   Examinar los residuos para evaluar supuestos como la linealidad, homocedasticidad, normalidad de los errores y ausencia de autocorrelación.
+    -   Identificar observaciones atípicas, leverage y puntos de influencia utilizando herramientas como la distancia de Cook, DFBETAS y DFFITS.
+7.  **Reducción de variables:**
+    -   En análisis de regresión, especialmente cuando se trabaja con conjuntos de datos de alta dimensionalidad, es común enfrentar situaciones en las que el número de variables explicativas es muy grande. Esto puede llevar a problemas como el sobreajuste, dificultades en la interpretación del modelo y una mayor complejidad computacional. Por ello, reducir el número de variables explicativas, sin perder información relevante, se convierte en un paso crucial para construir modelos más eficientes y robustos.
+8.  **Validación del modelo:**
+    -   Evaluar el desempeño del modelo con datos de validación o mediante técnicas como validación cruzada para garantizar su capacidad predictiva en nuevos conjuntos de datos.
 
-| **Característica**       | **Regresión Lineal**                                | **Modelos Lineales Generalizados (GLM)**               |
-|--------------------------|----------------------------------------------------|-------------------------------------------------------|
-| **Distribución de la variable dependiente** | Normal                                       | Familia exponencial (binomial, Poisson, gamma, etc.)  |
-| **Tipo de variable dependiente**            | Continua                                     | Binaria, de conteo, continua positiva                 |
-| **Relación entre las variables**            | Lineal directa                               | Relación transformada mediante una función de enlace  |
-| **Función de Enlace**                       | Identidad ($g(\mu) = \mu$)               | Logit, logarítmica, inversa, etc.                     |
+### Enfoque de este tema: Selección, regularización y validación
 
----
+Una vez realizado el análisis exploratorio y el ajuste inicial del modelo, surge la necesidad crítica de optimizar la selección de variables. Cuando se dispone de $p$ variables explicativas, es posible construir hasta $2^p$ modelos diferentes considerando todas las combinaciones posibles. Sin embargo, explorar de manera exhaustiva todos estos modelos puede ser computacionalmente inviable cuando $p$ es grande.
 
-Las ventajas principales de los GLM son:
+Para superar este desafío, en este tema nos enfocaremos en cuatro enfoques principales:
 
-  - **Flexibilidad:** Los GLM permiten modelar diferentes tipos de variables dependientes, lo que amplía significativamente el rango de problemas que se pueden abordar.
+1. **Filtrado basado en información**: Eliminación preliminar de variables irrelevantes mediante criterios básicos (variabilidad, correlación, VIF)
 
-  - **Interpretación Coherente:** Aunque se utilizan funciones de enlace, los coeficientes de los GLM pueden interpretarse de manera similar a los modelos lineales, proporcionando información sobre el impacto de cada variable independiente.
+2. **Métodos de selección exhaustiva**: Evaluación sistemática de todas las combinaciones posibles (Best Subset Selection)
 
-  - **Evaluación Estadística Robusta:** Los GLM permiten la realización de pruebas de hipótesis, la construcción de intervalos de confianza y la evaluación de la bondad del ajuste mediante medidas como el **AIC** y el **BIC**.
+3. **Métodos automáticos paso a paso**: Selección iterativa mediante algoritmos forward, backward y stepwise
 
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r glm1}
-# Cargar librería y datos
-library(MASS)
-data(Pima.tr)  # Datos sobre diabetes en mujeres de origen pima
+4. **Métodos basados en regularización**: Técnicas que penalizan la complejidad del modelo (Ridge, Lasso, Elastic Net)
 
-# Ajustar un modelo de regresión logística
-modelo_logistico <- glm(type ~ npreg + glu + bmi, data = Pima.tr, family = binomial)
+5. **Validación del modelo**: Evaluación rigurosa de la capacidad predictiva mediante división train/test y validación cruzada
 
-# Resumen del modelo
-summary(modelo_logistico)
+Cada enfoque tiene sus propias ventajas y limitaciones, siendo apropiados para diferentes situaciones según el tamaño del dataset, el número de variables y los objetivos del análisis. El objetivo es presentar las técnicas más relevantes para la selección de variables y regularización, entender sus fundamentos teóricos, y aplicarlas a casos prácticos, culminando con métodos robustos de validación que aseguren la calidad y generalización del modelo final.
 
-# Predicciones de la probabilidad de tener diabetes
-predicciones <- predict(modelo_logistico, type = "response")
+## Filtrado basado en información
 
-# Ver primeras predicciones
-head(predicciones)
-```
-:::
+Antes de aplicar métodos sofisticados de selección de variables, es fundamental realizar un filtrado preliminar basado en información básica. Este primer paso consiste en identificar y descartar variables que claramente no aportan información relevante al modelo, reduciendo significativamente el espacio de búsqueda y mejorando la eficiencia de los métodos posteriores [@guyon2003introduction].
 
----
+Los criterios principales para este filtrado incluyen: **(1) Variabilidad de las variables predictoras**: Variables con varianza muy baja o constantes proporcionan poca información discriminatoria. Se descartan variables donde $\text{Var}(X_j) = \frac{1}{n-1}\sum_{i=1}^{n}(x_{ij} - \bar{x}_j)^2 < \epsilon$ para algún umbral pequeño $\epsilon$. **(2) Correlación con la variable respuesta**: Variables con correlación muy baja con $Y$ pueden ser candidatas a eliminación. Se calcula $r_{X_j,Y} = \frac{\sum_{i=1}^{n}(x_{ij} - \bar{x}_j)(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n}(x_{ij} - \bar{x}_j)^2\sum_{i=1}^{n}(y_i - \bar{y})^2}}$ y típicamente se establece un umbral mínimo $|r_{X_j,Y}| > \delta$ (ej: $\delta = 0.1$). **(3) Multicolinealidad extrema**: Variables altamente correlacionadas entre sí pueden ser redundantes. Se calcula $r_{X_j,X_k} = \frac{\text{Cov}(X_j, X_k)}{\sqrt{\text{Var}(X_j)\text{Var}(X_k)}}$ y si $|r_{X_j,X_k}| > 0.95$, se considera eliminar una de las dos variables. **(4) Factor de Inflación de la Varianza (VIF)**: Para detectar multicolinealidad más compleja se calcula $VIF_j = \frac{1}{1-R^2_j}$ donde $R^2_j$ es el coeficiente de determinación de la regresión de $X_j$ sobre las demás variables predictoras. Valores $VIF_j > 10$ indican multicolinealidad problemática.
 
-Los **Modelos Lineales Generalizados** amplían el alcance de la regresión lineal clásica, proporcionando herramientas para modelar una amplia variedad de tipos de datos, desde variables binarias hasta datos de conteo y variables continuas no normales. A través del uso de funciones de enlace y distribuciones flexibles, los GLM permiten resolver problemas complejos del mundo real en campos tan diversos como la medicina, el marketing, la ingeniería y las ciencias sociales.
-
-En las próximas secciones, exploraremos en detalle cómo aplicar estos modelos específicos, como la **regresión logística** y la **regresión de Poisson**, y cómo interpretar sus resultados en diferentes contextos.
-
-
-## Regresión Logística
-
-La **regresión logística** es una herramienta fundamental para modelar la probabilidad de eventos binarios en una variedad de contextos, desde la medicina hasta la economía y el marketing [@hosmer2013applied]. La correcta interpretación de los coeficientes mediante **odds ratios**, así como la evaluación del ajuste del modelo mediante curvas **ROC** y matrices de confusión, son esenciales para extraer conclusiones válidas de los datos.
-
-### Fundamentos de la Regresión Logística
-
-La **regresión logística** es una técnica estadística utilizada para modelar la probabilidad de ocurrencia de un evento binario, es decir, cuando la variable dependiente toma solo dos posibles valores (por ejemplo, **éxito/fracaso**, **sí/no**, **enfermo/sano**). A diferencia de la regresión lineal, que modela una relación lineal entre variables, la regresión logística utiliza una **función logística** para asegurar que las predicciones estén en el rango [0,1], lo cual es necesario para interpretar los resultados como probabilidades.
-
-**La función Logística (Sigmoide)**
-
-La función logística transforma cualquier valor real en un valor comprendido entre 0 y 1. La forma matemática de la función logística es:
-
-$$
-P(Y = 1 | X) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p)}}
-$$
-
-Donde:
-
-  - $P(Y = 1 | X)$ es la probabilidad de que el evento ocurra.
-  - $\beta_0$ es el intercepto y $\beta_1, \beta_2, \dots, \beta_p$ son los coeficientes asociados a las variables independientes $X_1, X_2, \dots, X_p$.
-
-La **curva sigmoide** que representa esta función tiene forma de "S", lo que refleja que para valores muy pequeños o muy grandes del predictor, la probabilidad se aplana hacia 0 o 1, respectivamente.
-
-
-**Función de Enlace Logit**
-
-En la regresión logística, la relación entre el predictor lineal y la probabilidad se establece mediante la **función de enlace logit**. El logit de una probabilidad $p$ se define como:
-
-$$
-\text{logit}(p) = \log\left(\frac{p}{1 - p}\right)
-$$
-
-Esta transformación convierte una probabilidad en una escala que va de $-\infty$ a $+\infty$, lo que permite ajustar un modelo lineal a los datos. El modelo logístico puede expresarse como:
-
-$$
-\log\left(\frac{p}{1 - p}\right) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p
-$$
-
-### Interpretación de coeficientes y Odds Ratios
-
-Uno de los aspectos más importantes de la regresión logística es la interpretación de los coeficientes. Dado que los coeficientes están en la escala del logit, su interpretación directa no es tan intuitiva como en la regresión lineal. Sin embargo, podemos interpretarlos utilizando **odds** y **odds ratios**.
-
-El **odds** o razón de probabilidades de que ocurra un evento es el cociente entre la probabilidad de que ocurra el evento y la probabilidad de que no ocurra:
-
-$$
-\text{odds} = \frac{p}{1 - p}
-$$
-
-Por ejemplo, si la probabilidad de éxito es 0.8, el odds sería:
-
-$$
-\text{odds} = \frac{0.8}{1 - 0.8} = 4
-$$
-
-Esto significa que el evento es **4 veces más probable** que no ocurra.
-
-
-El **odds ratio (OR)** mide el cambio en los odds cuando una variable independiente aumenta en una unidad. Se calcula como el exponencial del coeficiente de la regresión logística:
-
-$$
-\text{OR} = e^{\beta}
-$$
-
-**Interpretación de OR:**
-
-  - Si **OR > 1**, el evento es más probable a medida que aumenta la variable independiente.
-  - Si **OR < 1**, el evento es menos probable a medida que aumenta la variable independiente.
-  - Si **OR = 1**, no hay efecto.
-
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-
-Supongamos que ajustamos un modelo de regresión logística para predecir la probabilidad de tener diabetes en función del índice de masa corporal (BMI). El coeficiente asociado a **BMI** es 0.08.
-
-$$
-\text{OR} = e^{0.08} \approx 1.083
-$$
-
-Esto significa que por cada incremento de 1 unidad en el BMI, la **odds** de tener diabetes aumentan en un **8.3%**.
-:::
-
-### Evaluación del modelo Logístico
-
-A diferencia de la regresión lineal, donde se usa el coeficiente de determinación ($R^2$) para evaluar el ajuste, en la regresión logística se utilizan otros métodos para medir la calidad del modelo.
-
-
-**Matriz de Confusión**
-
-La **matriz de confusión** compara las predicciones del modelo con los valores reales, clasificando las observaciones en:
-
-  - **Verdaderos Positivos (VP):** Predijo positivo y es positivo.
-  - **Falsos Positivos (FP):** Predijo positivo pero es negativo.
-  - **Verdaderos Negativos (VN):** Predijo negativo y es negativo.
-  - **Falsos Negativos (FN):** Predijo negativo pero es positivo.
-
-A partir de esta matriz, se pueden calcular métricas importantes como:
-
-  - **Precisión (Accuracy):** $\frac{VP + VN}{\text{Total}}$
-  - **Sensibilidad (Recall o Tasa de Verdaderos Positivos):** $\frac{VP}{VP + FN}$
-  - **Especificidad (Tasa de Verdaderos Negativos):** $\frac{VN}{VN + FP}$
-
-::: {.callout-caution title="Aviso"}
-Los detalles de la evaluación de un modelo empleando la Matríz de Confusión son ampliamente tratados en la asignatura de Aprendizaje Automático.
-:::
-
-**Curva ROC y AUC**
-
-La **Curva ROC (Receiver Operating Characteristic)** muestra la relación entre la **tasa de verdaderos positivos** y la **tasa de falsos positivos** a diferentes umbrales de clasificación.
-
-El **AUC (Área Bajo la Curva ROC)** mide la capacidad del modelo para discriminar entre las clases. Un AUC de $0.5$ indica que el modelo no tiene capacidad predictiva, mientras que un AUC de $1.0$ indica un modelo perfecto.
-
-**Pseudo R² (Nagelkerke, McFadden)**
-
-Aunque el $R^2$ tradicional no se aplica directamente a la regresión logística, existen medidas como el **pseudo $R^2$** que proporcionan una idea de la bondad del ajuste del modelo.
-
-- **McFadden’s $R^2$:**  
-  $$
-  R^2_{\text{McFadden}} = 1 - \frac{\log L_{\text{modelo}}}{\log L_{\text{modelo nulo}}}
-  $$
-
-  Donde $\log L_{\text{modelo}}$ es el log-likelihood del modelo ajustado y $\log L_{\text{modelo nulo}}$ es el log-likelihood de un modelo sin predictores.
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-Vamos a aplicar la regresión logística en R utilizando el conjunto de datos `Pima.tr` del paquete `MASS`, que contiene información sobre mujeres pima y si tienen o no diabetes.
-
-```{r log1}
-# Cargar la librería y el conjunto de datos
-library(MASS)
-data(Pima.tr)
-
-# Ajustar el modelo de regresión logística
-modelo_logistico <- glm(type ~ npreg + glu + bmi, data = Pima.tr, family = binomial)
-
-# Resumen del modelo
-summary(modelo_logistico)
-
-# Predicciones de probabilidad
-predicciones_prob <- predict(modelo_logistico, type = "response")
-
-# Clasificación con un umbral de 0.5
-predicciones_clase <- ifelse(predicciones_prob > 0.5, "Yes", "No")
-
-# Crear matriz de confusión
-tabla_confusion <- table(Predicted = predicciones_clase, Actual = Pima.tr$type)
-print(tabla_confusion)
-
-# Calcular precisión
-accuracy <- sum(diag(tabla_confusion)) / sum(tabla_confusion)
-print(paste("Precisión:", round(accuracy, 3)))
-
-# Cargar librería para curvas ROC
-library(pROC)
-
-# Curva ROC
-roc_obj <- roc(Pima.tr$type, predicciones_prob)
-plot(roc_obj, main = "Curva ROC para Regresión Logística")
-
-# Calcular AUC
-auc_valor <- auc(roc_obj)
-print(paste("AUC:", round(auc_valor, 3)))
-```
-:::
-
-## Regresión de Poisson
-
-La **regresión de Poisson** es una técnica estadística utilizada para modelar **datos de conteo**, es decir, situaciones en las que la variable dependiente representa el número de veces que ocurre un evento en un período de tiempo o espacio específico [@coxe2009analysis]. Este tipo de modelo es adecuado cuando la variable dependiente toma valores enteros no negativos ($0, 1, 2, \dots$) y sigue una distribución de **Poisson**.
-
-La distribución de Poisson describe la probabilidad de que ocurra un número determinado de eventos en un intervalo fijo, dado que estos eventos ocurren de forma independiente y a una tasa constante.
-
-La **función de probabilidad** de la distribución de Poisson es:
-
-$$
-P(Y = y) = \frac{e^{-\lambda} \lambda^y}{y!}
-$$
-
-Donde:
-
-- $Y$ es la variable aleatoria que representa el número de eventos.
-- $\lambda$ es la **tasa media de ocurrencia** de los eventos (esperanza de $Y$).
-- $y$ es el número de eventos observados ($y = 0, 1, 2, \dots$).
-
-
-### Modelo de regresión de Poisson
-
-En la **regresión de Poisson**, el objetivo es modelar la relación entre la **tasa de ocurrencia de los eventos** ($\lambda$) y un conjunto de variables predictoras $X_1, X_2, \dots, X_p$.
-
-La **forma funcional** del modelo de Poisson es:
-
-$$
-\log(\lambda) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p
-$$
-
-Donde:
-
-  - $\log(\lambda)$ es la **función de enlace logarítmica** que asegura que la tasa $\lambda$ sea siempre positiva.
-  - $\beta_0, \beta_1, \dots, \beta_p$ son los coeficientes del modelo que describen la influencia de cada predictor sobre la tasa de eventos.
-
-El modelo puede expresarse en términos de la **tasa esperada de eventos** como:
-
-$$
-\lambda = e^{\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p}
-$$
-
-
-### Supuestos y limitaciones de la regresión de Poisson
-
-Tal y como ocurre en el modelo de regresión lineal, para que la regresión de Poisson sea adecuada, se deben cumplir ciertos **supuestos**:
-
-  - **Independencia de los eventos:** Los eventos deben ocurrir de manera independiente unos de otros.
-
-  - **Distribución de Poisson de la variable dependiente:** La variable de respuesta debe seguir una distribución de Poisson, donde la **media** y la **varianza** son iguales:
-
-   $$
-   E(Y) = Var(Y) = \lambda
-   $$
-
-  - **No sobredispersión:** Uno de los problemas comunes en los datos de conteo es la **sobredispersión**, que ocurre cuando la varianza de los datos es mayor que la media ($Var(Y) > E(Y)$). La presencia de sobredispersión indica que el modelo de Poisson puede no ser adecuado, y puede ser necesario considerar modelos alternativos como la **regresión binomial negativa**.
-
- - **No exceso de ceros:** Si hay demasiados ceros en los datos (por ejemplo, en el número de accidentes en diferentes localidades donde muchas tienen cero accidentes), puede ser necesario utilizar modelos de **Poisson inflados en ceros (ZIP)** [@lambert1992zero].
-
-
-### Interpretación de los resultados
-
-La interpretación de los coeficientes en la regresión de Poisson difiere de la regresión lineal debido al uso de la función de enlace logarítmica.
-
- Los coeficientes $\beta$ representan el **logaritmo de la tasa** de eventos asociados con un cambio en la variable independiente. Para interpretar en términos de la tasa de ocurrencia, se utiliza el **exponencial de los coeficientes**:
-
-$$
-  e^{\beta_i}
-$$
-
-Esto representa el **factor de cambio multiplicativo** en la tasa de eventos por cada unidad adicional en la variable $X_i$.
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-
-Si $\beta_1 = 0.5$, entonces $e^{0.5} \approx 1.65$. Esto significa que por cada unidad adicional en $X_1$, la tasa de ocurrencia de eventos **aumenta en un 65%**.
-
-Si $\beta_1 = -0.3$, entonces $e^{-0.3} \approx 0.74$. Esto indica que por cada unidad adicional en $X_1$, la tasa de eventos **disminuye en un 26%**.
-:::
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-
-Vamos a utilizar R para ajustar un modelo de regresión de Poisson. Supongamos que tenemos datos sobre el **número de accidentes de tráfico** en diferentes intersecciones de una ciudad, junto con variables como el volumen de tráfico y la visibilidad.
-
-```{r poiss1}
-# Simulación de datos para el número de accidentes
-set.seed(123)
-n <- 100  # Número de observaciones
-
-# Variables predictoras
-trafico <- rnorm(n, mean = 1000, sd = 300)  # Volumen de tráfico en vehículos por día
-visibilidad <- rnorm(n, mean = 5, sd = 2)   # Visibilidad en kilómetros
-
-# Generar la tasa de accidentes (lambda) usando un modelo logarítmico
-lambda <- exp(0.01 * trafico - 0.2 * visibilidad)
-
-# Generar el número de accidentes como una variable de Poisson
-accidentes <- rpois(n, lambda = lambda)
-
-# Crear el data frame
-datos_accidentes <- data.frame(accidentes, trafico, visibilidad)
-head(datos_accidentes)
-
-# Ajustar el modelo de regresión de Poisson
-modelo_poisson <- glm(accidentes ~ trafico + visibilidad, data = datos_accidentes, family = poisson)
-
-# Resumen del modelo
-summary(modelo_poisson)
-```
-
-
-El coeficiente asociado a `trafico` indica cómo el volumen de tráfico afecta la tasa de accidentes.
-
-El coeficiente asociado a `visibilidad` muestra cómo la visibilidad afecta la frecuencia de accidentes.
-
-```{r poiss}
-# Exponenciar los coeficientes para interpretar en términos de tasas
-exp(coef(modelo_poisson))
-```
-
-
-Un coeficiente positivo implica que un aumento en la variable está asociado con un **aumento en la tasa de accidentes**.
-
-Un coeficiente negativo implica que un aumento en la variable está asociado con una **disminución en la tasa de accidentes**.
-
-:::
-
-### Evaluación del modelo de Poisson
-
-La **sobredispersión** ocurre cuando la varianza de los datos es mayor que la media, lo que puede invalidar los supuestos de la regresión de Poisson.
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-
-```{r poiss3}
-# Calcular la relación entre el deviance y los grados de libertad
-deviance <- modelo_poisson$deviance
-grados_libertad <- modelo_poisson$df.residual
-sobredispersion <- deviance / grados_libertad
-
-print(paste("Índice de Sobredispersión:", round(sobredispersion, 2)))
-```
-:::
-
-Un valor del índice de sobredispersión cercano a $1$ sugiere que no hay sobredispersión. Por contra, un valor significativamente mayor que $1$ sugiere la presencia de sobredispersión, y puede ser necesario considerar una **regresión binomial negativa**.
-
-**Diagnóstico de Residuos:**
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-
-```{r diag1}
-# Gráfico de residuos deviance para evaluar el ajuste
-plot(residuals(modelo_poisson, type = "deviance"), main = "Residuos Deviance", ylab = "Residuos", xlab = "Índice")
-abline(h = 0, col = "red")
-```
-:::
-
-::: {.callout-tip title="Ejemplo sobre datos reales" collapse="true"}
-
-Un conjunto de datos clásico en R es **`warpbreaks`**, que contiene el número de roturas de hilo en diferentes condiciones de tensión y longitud del hilo.
-
-```{r pois_real1}
-# Datos de ejemplo: número de roturas de hilo
-data(warpbreaks)
-
-# Ajustar un modelo de Poisson para el número de roturas en función de la tensión
-modelo_poisson_real <- glm(breaks ~ wool + tension, data = warpbreaks, family = poisson)
-
-# Resumen del modelo
-summary(modelo_poisson_real)
-
-# Interpretación de coeficientes
-exp(coef(modelo_poisson_real))
-```
-:::
-
-### Limitaciones y alternativas
-
-Si la varianza de los datos es mayor que la media, el modelo de Poisson no será adecuado. En este caso, se recomienda utilizar la **regresión binomial negativa**, que introduce un parámetro adicional para manejar la sobredispersión.
-
-Si hay más ceros de los esperados (por ejemplo, muchas intersecciones con cero accidentes), puede ser necesario utilizar modelos de **Poisson inflados en ceros (ZIP)** o **binomial negativa inflada en ceros (ZINB)**.
-
-## Otros GLMs
-
-
-La **regresión binomial negativa** y los **modelos basados en distribuciones como Gamma e Inversa Gaussiana** amplían la capacidad de los **Modelos Lineales Generalizados (GLM)** para adaptarse a una amplia variedad de situaciones del mundo real. Estos modelos son especialmente útiles cuando los datos presentan características como sobredispersión, sesgo o restricciones en el dominio (por ejemplo, solo valores positivos). La elección adecuada del modelo y la función de enlace garantiza predicciones precisas y válidas, contribuyendo a la toma de decisiones informadas en campos como la salud, la ingeniería y la economía.
-
-### Regresión Binomial Negativa
-
-Tal y como hemos visto en apartados anteriores, la **sobredispersión** ocurre cuando la varianza de los datos de conteo es **mayor que la media**, lo cual viola uno de los supuestos clave de la regresión de Poisson, que asume que la media y la varianza son iguales ($E(Y) = Var(Y)$). La sobredispersión puede surgir por varias razones:
-
-  - **Heterogeneidad no modelada:** Existen factores que afectan la variable dependiente pero no han sido incluidos en el modelo.
-  - **Dependencia entre eventos:** Los eventos no ocurren de forma independiente.
-  - **Exceso de ceros:** Hay más ceros en los datos de los que predice la distribución de Poisson.
-
-Cuando la sobredispersión está presente, la regresión de Poisson subestima los errores estándar, lo que puede llevar a conclusiones incorrectas sobre la significancia de los predictores.
-
-La **regresión binomial negativa** es una extensión de la regresión de Poisson que introduce un parámetro adicional para manejar la sobredispersión. Este modelo permite que la varianza sea mayor que la media:
-
-$$
-Var(Y) = \lambda + \alpha \lambda^2
-$$
-
-Donde $\alpha$ es el parámetro de dispersión. Si $\alpha = 0$, el modelo se reduce a la regresión de Poisson.
-
-La forma funcional del modelo binomial negativa es similar al de Poisson:
-
-$$
-\log(\lambda) = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p
-$$
-
-Pero la varianza ahora incluye el término adicional $\alpha$ para capturar la sobredispersión.
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r bin_neg1}
-# Instalar y cargar la librería MASS que contiene la función glm.nb
-library(MASS)
-
-# Ajuste de un modelo binomial negativo con los datos simulados de accidentes
-modelo_binom_neg <- glm.nb(accidentes ~ trafico + visibilidad, data = datos_accidentes)
-
-# Resumen del modelo
-summary(modelo_binom_neg)
-
-# Comparar la dispersión con el modelo de Poisson
-cat("Dispersión en Poisson:", modelo_poisson$deviance / modelo_poisson$df.residual, "\n")
-cat("Dispersión en Binomial Negativa:", modelo_binom_neg$theta, "\n")
-```
-:::
-
-- El parámetro $\theta$ (dispersión) ajustado en el modelo binomial negativa ayuda a corregir la varianza subestimada en el modelo de Poisson.
-- Si $\theta$ es significativamente mayor que 1, se confirma la presencia de sobredispersión.
-
----
-
-### Modelos para variables continuas No Normales
-
-Existen situaciones en las que la variable dependiente es **continua**, pero **no sigue una distribución normal**. En estos casos, los **Modelos Lineales Generalizados (GLM)** permiten utilizar distribuciones alternativas como **Gamma** o **Inversa Gaussiana**, junto con funciones de enlace específicas.
-
-#### Regresión Gamma para datos positivos y sesgados
-
-La **regresión Gamma** es adecuada para modelar variables continuas que son **positivas** y tienen una distribución **sesgada a la derecha**. Ejemplos típicos incluyen tiempos de espera, costos médicos o duración de procesos.
-
-  - La distribución Gamma asume que la variable dependiente es continua y positiva.
-  - La varianza de la variable dependiente aumenta proporcionalmente al cuadrado de la media.
-
-**Función de Enlace Común:**
-$$
-\log(\mu) = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p
-$$
-
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r gamma_1}
-# Simulación de costos médicos
+::: {.callout-tip title="Ejemplo de filtrado inicial" collapse="true"}
+```{r filtrado-inicial}
+# Ejemplo de filtrado basado en información
 set.seed(123)
 n <- 100
-ingresos <- rnorm(n, mean = 50000, sd = 10000)
-edad <- rnorm(n, mean = 45, sd = 10)
-costos <- rgamma(n, shape = 2, rate = 0.00005 * ingresos + 0.01 * edad)
+p <- 15
 
-# Ajuste del modelo Gamma
-modelo_gamma <- glm(costos ~ ingresos + edad, family = Gamma(link = "log"))
+# Generar datos con diferentes características
+X <- matrix(rnorm(n * p), n, p)
+colnames(X) <- paste0("X", 1:p)
 
-# Resumen del modelo
-summary(modelo_gamma)
+# Variable constante (sin variabilidad)
+X[, 1] <- 5
+
+# Variable con muy baja variabilidad  
+X[, 2] <- 5 + rnorm(n, 0, 0.01)
+
+# Variables altamente correlacionadas
+X[, 4] <- X[, 3] + rnorm(n, 0, 0.1)
+X[, 5] <- X[, 3] + rnorm(n, 0, 0.1)
+
+# Variable respuesta
+beta <- c(0, 0, 2, 1.5, 1.2, -1, 0.8, rep(0, 8))
+y <- X %*% beta + rnorm(n)
+
+datos <- data.frame(y = y, X)
+
+# 1. Filtrar por variabilidad
+varianzas <- apply(X, 2, var)
+cat("Variables con baja variabilidad:\n")
+print(which(varianzas < 0.01))
+
+# 2. Filtrar por correlación con Y
+correlaciones <- cor(X, y)
+cat("\nCorrelaciones con Y:\n")
+print(round(correlaciones, 3))
+
+cat("\nVariables con correlación baja (|r| < 0.1):\n")
+print(which(abs(correlaciones) < 0.1))
+
+# 3. Matriz de correlaciones entre predictores
+cor_matrix <- cor(X)
+cat("\nPares de variables altamente correlacionadas (|r| > 0.8):\n")
+high_cor <- which(abs(cor_matrix) > 0.8 & abs(cor_matrix) < 1, arr.ind = TRUE)
+for(i in 1:nrow(high_cor)) {
+  cat("X", high_cor[i,1], " - X", high_cor[i,2], ": ", 
+      round(cor_matrix[high_cor[i,1], high_cor[i,2]], 3), "\n")
+}
+
+# 4. Calcular VIF
+library(car)
+modelo_completo <- lm(y ~ ., data = datos)
+vif_valores <- vif(modelo_completo)
+cat("\nFactores VIF:\n")
+print(round(vif_valores, 2))
 ```
-
-
-- Los coeficientes muestran cómo los ingresos y la edad afectan los costos médicos esperados.
-- El enlace logarítmico asegura que las predicciones sean siempre positivas.
-
 :::
 
-#### Regresión Inversa Gaussiana
+El proceso de filtrado se implementa secuencialmente: (1) eliminar variables constantes o con varianza cercana a cero, (2) eliminar variables con correlación muy baja con la variable respuesta, (3) identificar grupos de variables multicolineales y retener solo la más relevante de cada grupo, y (4) calcular VIF y eliminar variables con valores muy altos. Este filtrado inicial típicamente reduce el conjunto de variables candidatas en un 20-40%, facilitando significativamente los pasos posteriores de selección.
 
-La **regresión Inversa Gaussiana** es útil para modelar tiempos de respuesta o variables donde la varianza disminuye rápidamente a medida que la media aumenta. Este modelo se aplica en campos como la ingeniería, donde se analizan tiempos hasta fallas de sistemas.
+Es importante considerar que este filtrado no es definitivo, ya que variables eliminadas en esta etapa pueden ser importantes en combinaciones específicas. Además, está basado en relaciones lineales y puede omitir relaciones no lineales importantes. Por tanto, requiere validación posterior del modelo resultante y los umbrales deben ajustarse según el dominio de aplicación específico.
 
-**Función de Enlace Común:**
-$$
-\frac{1}{\mu^2} = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p
-$$
 
-::: {.callout-tip title="Ejemplo" collapse="true"}
-```{r inv_1}
-# Instalar y cargar la librería correcta
-library(statmod)
 
-# Simulación de datos
-set.seed(123)
-n <- 100
-carga_trabajo <- rnorm(n, mean = 50, sd = 10)
+## Selección de variables
 
-# Generar tiempos hasta el fallo usando la distribución inversa gaussiana
-# Aseguramos que los valores de carga_trabajo sean positivos para evitar problemas numéricos
-carga_trabajo[carga_trabajo <= 0] <- 1
-tiempo_fallo <- rinvgauss(n, mean = 100 / carga_trabajo, dispersion = 1)
+Simplificar un modelo eliminando variables irrelevantes es fundamental para mejorar su parsimonia y evitar el sobreajuste. Una vez realizado el filtrado inicial basado en información (descrito anteriormente), el siguiente paso es aplicar métodos más sofisticados para seleccionar el subconjunto óptimo de variables.
 
-# Ajuste del modelo Inversa Gaussiana con enlace logarítmico
-modelo_inversa_gauss <- glm(tiempo_fallo ~ carga_trabajo, family = inverse.gaussian(link = "1/mu^2"),start = c(0.01, 0.01))
+Cuando se dispone de $p$ variables explicativas (ya filtradas), es posible construir hasta $2^p$ modelos diferentes considerando todas las combinaciones posibles de estas variables. Sin embargo, explorar de manera exhaustiva todos estos modelos puede ser inviable, especialmente si $p$ es grande.
+
+Para superar este desafío, se han desarrollado tres enfoques principales:
+
+1. **Métodos de selección exhaustiva**: Evaluación sistemática de todas las combinaciones posibles (Best Subset Selection)
+2. **Métodos automáticos paso a paso**: Selección iterativa mediante algoritmos forward, backward y stepwise  
+3. **Métodos basados en regularización**: Ridge, Lasso y Elastic Net
+
+Cuando se dispone de $p$ variables explicativas, es posible construir hasta $2^p$ modelos diferentes considerando todas las combinaciones posibles de estas variables. Sin embargo, explorar de manera exhaustiva todos estos modelos puede ser inviable, especialmente si $p$ es grande. Por ejemplo, con solo 10 variables regresoras, se generarían $2^{10} = 1024$ modelos posibles. Aunque la tecnología actual permite ajustar todos estos modelos, evaluar cada uno en términos de bondad de ajuste, gráficos de residuos, detección de observaciones influyentes y otros diagnósticos sería extremadamente complejo y costoso.
+
+Para superar este desafío, se han desarrollado criterios específicos de selección de variables que ayudan a los analistas a identificar un pequeño subconjunto de modelos que cumplan con los estándares de calidad deseados. Este enfoque permite centrar el análisis en un grupo reducido de modelos “buenos”, generalmente entre 4 y 6, y realizar un estudio más profundo y detallado de ellos. Esta estrategia facilita tanto la interpretación como la eficiencia del proceso analítico, optimizando el uso de recursos computacionales y asegurando que los resultados sean robustos y fiables.
+
+## Métodos de selección exhaustiva
+
+Los métodos de selección exhaustiva son un enfoque fundamental en la búsqueda de un subconjunto óptimo de variables predictoras en modelos de regresión. Este enfoque evalúa de manera sistemática diferentes combinaciones de variables para identificar cuál de ellas proporciona el mejor ajuste al modelo en función de un criterio predefinido, como el coeficiente de determinación ajustado ($R^2$ ajustado), el error cuadrático medio (ECM) o criterios de información como AIC o BIC.
+
+A diferencia de los métodos automáticos, los métodos de selección exhaustiva no dependen de un proceso iterativo de adición o eliminación de variables. En cambio, buscan exhaustivamente (o mediante aproximaciones computacionalmente más eficientes) entre todas las posibles combinaciones de variables, lo que garantiza un análisis completo de las interacciones y relevancias potenciales.
+
+### Mejor subconjunto (Best Subset Selection)
+
+Este método evalúa todos los subconjuntos posibles de variables y selecciona el mejor para cada tamaño específico. Es el enfoque más completo pero también el más exigente computacionalmente.
+
+```{r}
+# Ejemplo de Best Subset Selection
+library(leaps)
+
+# Usando el dataset mtcars
+data(mtcars)
+
+# Realizar best subset selection
+best_subset <- regsubsets(mpg ~ ., data = mtcars, nvmax = 10)
 
 # Resumen del modelo
-summary(modelo_inversa_gauss)
+summary(best_subset)
 
+# Visualizar los resultados
+plot(best_subset, scale = "adjr2")
 
+# Obtener estadísticas de cada modelo
+subset_summary <- summary(best_subset)
+subset_summary$adjr2
+subset_summary$cp
+subset_summary$bic
+
+# Encontrar el mejor modelo según diferentes criterios
+which.max(subset_summary$adjr2)  # Mejor R² ajustado
+which.min(subset_summary$cp)     # Mejor Cp de Mallows
+which.min(subset_summary$bic)    # Mejor BIC
 ```
-:::
 
+### Ventajas y limitaciones de la selección exhaustiva
 
-## Comparación de modelos y evaluación del ajuste
+**Ventajas:**
+- **Optimalidad garantizada**: Encuentra el mejor subconjunto según el criterio elegido
+- **Evaluación completa**: Examina todas las posibles combinaciones de variables
+- **Referencia sólida**: Proporciona un estándar para comparar otros métodos
 
-Una vez que se han ajustado varios modelos, es crucial evaluar su rendimiento y seleccionar el más adecuado para el problema en cuestión. La **evaluación del ajuste** y la **comparación de modelos** permiten identificar cuál modelo describe mejor los datos sin caer en el sobreajuste, es decir, ajustarse demasiado a los datos de entrenamiento a costa de un mal desempeño en datos nuevos.
+**Limitaciones:**
+- **Complejidad computacional**: Con $p$ variables se generan $2^p$ modelos posibles
+- **Escalabilidad limitada**: Impracticable para $p$ grande (típicamente $p > 15-20$)
+- **Riesgo de sobreajuste**: Sin validación cruzada puede seleccionar modelos sobreajustados
 
-Esta sección abordará los métodos más comunes para evaluar y comparar modelos, incluyendo criterios estadísticos, técnicas de validación y análisis de residuos.
+Estos métodos son especialmente útiles cuando el número de predictores no es demasiado grande, ya que el esfuerzo computacional crece exponencialmente con el número de variables. Aunque el costo computacional puede ser elevado en datasets amplios, los métodos de selección exhaustiva proporcionan una referencia sólida y transparente para evaluar qué variables son fundamentales en el modelo.
 
+## Métodos automáticos paso a paso
 
-### La Deviance
+Los métodos automáticos de selección de variables son herramientas prácticas y eficientes diseñadas para identificar subconjuntos relevantes de predictores en un modelo de regresión. A diferencia de los métodos de selección directa, que exploran exhaustivamente todas las combinaciones posibles de variables, los métodos automáticos siguen un enfoque iterativo que simplifica el proceso de selección. Estos métodos son especialmente útiles en situaciones donde el número de predictores es elevado, ya que reducen significativamente el esfuerzo computacional.
 
-La **deviance** (o **desviación**) es una medida estadística que evalúa qué tan bien se ajusta un modelo estadístico a los datos observados. Se utiliza principalmente en modelos de regresión que no se basan en supuestos de normalidad estricta, como los **modelos lineales generalizados** (GLM), incluyendo:
+El principio clave detrás de los métodos automáticos es el ajuste dinámico del conjunto de variables en función de criterios estadísticos, como $p$-valores, coeficientes de determinación ajustados ($R^2$) ajustado), o criterios de información como AIC y BIC. Entre las estrategias más comunes se encuentran:
 
-- Regresión logística
-- Regresión de Poisson
-- Modelos exponenciales, etc.
+-   **Método Forward (selección progresiva):** Parte de un modelo vacío e incorpora variables de manera secuencial, añadiendo en cada paso la variable que mejora más el modelo.
 
-La deviance mide la **diferencia** entre el modelo propuesto y el **modelo saturado** (el modelo que predice perfectamente los datos observados).
+-   **Método Backward (eliminación regresiva):** Comienza con todas las variables en el modelo y elimina iterativamente aquellas que tienen menor impacto.
 
-- El **modelo saturado** tiene tantos parámetros como observaciones, por lo que ajusta cada punto de datos perfectamente.
-- El **modelo propuesto** es el modelo que intentamos evaluar.
+-   **Método Stepwise:** Combina las estrategias forward y backward, permitiendo tanto la inclusión como la exclusión de variables en cada iteración.
 
-La deviance se interpreta como una generalización de la **suma de cuadrados de los residuos** utilizada en regresión lineal.
+Estos métodos ofrecen una manera estructurada y ágil de seleccionar variables, aunque no garantizan encontrar el mejor modelo global debido a su naturaleza secuencial. A lo largo de esta sección, examinaremos cada uno de estos métodos, sus ventajas, limitaciones y aplicaciones en diferentes contextos de análisis.
 
-La deviance se define como:
+## Métodos basados en regularización
+
+En los modelos de regresión, especialmente cuando se trabaja con un gran número de variables predictoras o con datos multicolineales, los métodos tradicionales de selección de variables pueden resultar ineficaces o inestables. En estos casos, los métodos basados en regularización surgen como una alternativa poderosa que no solo selecciona variables, sino que también mejora la estabilidad y la precisión del modelo.
+
+La regularización consiste en introducir una penalización en la función de ajuste del modelo, lo que tiene dos efectos principales: controlar el sobreajuste al reducir la complejidad del modelo y forzar la selección de un subconjunto más parsimonioso de predictores. Estas penalizaciones ajustan los coeficientes de las variables predictoras, favoreciendo soluciones más simples y robustas [@james2013introduction].
+
+Entre los métodos de regularización más destacados se encuentran:
+
+-   **Ridge Regression:** Aplica una penalización proporcional al cuadrado de los coeficientes, lo que permite manejar problemas de multicolinealidad pero no conduce a la eliminación completa de variables.
+-   **Lasso (Least Absolute Shrinkage and Selection Operator):** Introduce una penalización basada en el valor absoluto de los coeficientes, lo que no solo reduce su magnitud, sino que también puede anularlos completamente, realizando una selección automática de variables.
+-   **Elastic Net:** Combina las penalizaciones de Ridge y Lasso, ofreciendo mayor flexibilidad en situaciones donde hay una gran correlación entre los predictores.
+
+Estos métodos son especialmente útiles en problemas donde el número de variables predictoras excede el número de observaciones, o cuando se desea un modelo más interpretable. En esta sección, exploraremos en detalle los fundamentos teóricos, la implementación práctica y las aplicaciones de cada uno de estos métodos, destacando sus ventajas en escenarios complejos y desafiantes.
+
+### Ridge regression
+
+La regresión Ridge introduce una penalización en la estimación de los coeficientes de regresión, lo que ayuda a reducir la varianza del modelo y mejora su capacidad predictiva en presencia de datos altamente correlacionados o con muchas variables [@marquardt1975ridge]. El modelo de regresión Ridge es una extensión de la regresión lineal estándar. Dado un conjunto de datos con $n$ observaciones y $p$ predictores, expresamos el modelo de regresión lineal múltiple como:
 
 $$
-D = 2 \sum_{i=1}^{n} \left[ \ell(y_i; y_i) - \ell(y_i; \hat{y}_i) \right]
+\mathbf{Y}= \mathbf{X} \beta + \boldsymbol{\varepsilon}
 $$
 
 donde:
 
-- $D$ = Deviance
-- $\ell(y_i; y_i)$ = Log-verosimilitud del modelo saturado (máxima verosimilitud posible)
-- $\ell(y_i; \hat{y}_i)$ = Log-verosimilitud del modelo propuesto
+-   $\mathbf{Y}$ es el vector de respuesta de dimensión $n \times 1$.
+-   $\mathbf{X}$ es la matriz de diseño de dimensión $n \times p$.
+-   $\beta$ es el vector de coeficientes de regresión de dimensión $p \times 1$.
+-   $\boldsymbol{\varepsilon}$ es el vector de errores aleatorios.
 
-En términos simples, mide cuánto peor es el modelo propuesto comparado con el modelo que se ajusta perfectamente.
-
-
-#### Interpretación
-
-- **Valores pequeños de deviance** → Indican que el modelo se ajusta bien a los datos.
-- **Valores grandes de deviance** → Indican que el modelo no se ajusta bien.
-
-Si el modelo es perfecto, la deviance es **cero**.
-
-
-#### Deviance Residuals 
-
-En lugar de evaluar la deviance global, los **residuos de deviance** permiten identificar qué observaciones individuales no se ajustan bien.
+En mínimos cuadrados ordinarios (OLS), los coeficientes se estiman minimizando la suma de los errores al cuadrado:
 
 $$
-d_i = \text{sign}(y_i - \hat{y}_i) \sqrt{2 \left[ \ell(y_i; y_i) - \ell(y_i; \hat{y}_i) \right]}
+SSE = \sum_{i=1}^{n} (Y_i - \hat{Y}_i)^2 = \| \mathbf{Y} - \mathbf{X} \beta \|^2.
 $$
 
-Los residuos de deviance se comportan de forma similar a los residuos en regresión lineal, permitiendo identificar observaciones atípicas o mal ajustadas.
-
-
-#### Relación con otros conceptos
-
-- En **regresión lineal**, la deviance es equivalente a la **suma de los cuadrados de los residuos** (RSS).
-- En **regresión logística**, la deviance se utiliza como alternativa a la suma de errores cuadráticos debido a que los residuos no se distribuyen normalmente.
-- En **pruebas de bondad de ajuste**, se usa la **deviance nula** para comparar el modelo sin predictores (solo la media) con el modelo completo.
-
-
-
-#### Ejemplo en Regresión Logística
-Supongamos que estamos modelando la probabilidad de que una persona compre un producto en función de su edad. La deviance nos ayuda a evaluar qué tan bien el modelo logra predecir esas probabilidades comparado con un modelo perfecto.
-
-- **Deviance baja:** El modelo ajusta bien las probabilidades.
-- **Deviance alta:** El modelo falla en capturar los patrones en los datos.
-
-### Criterios de selección de modelos (AIC, BIC)
-
-Los criterios de selección de modelos como el **AIC** y el **BIC** permiten comparar modelos que han sido ajustados a los mismos datos, penalizando la complejidad para evitar el sobreajuste.
-
-
-**Akaike Information Criterion (AIC)**
-
-El **Criterio de Información de Akaike (AIC)** es una medida que equilibra la calidad del ajuste y la complejidad del modelo. Se calcula como:
+Sin embargo, cuando hay multicolinealidad, la matriz $X^T X$ puede ser casi singular, generando coeficientes inestables. Para evitar esto, la regresión Ridge añade un **término de penalización** $\lambda$, de la siguiente manera:
 
 $$
-AIC = -2 \log(L) + 2k
+SSE_{ridge} = \| \mathbf{Y} - \mathbf{X} \beta \|^2 + \lambda \sum_{j=1}^{p} \beta_j^2.
 $$
 
-Donde:
-
-  - $L$ es el **log-likelihood** del modelo (medida de la probabilidad de los datos dados los parámetros del modelo).
-  - $k$ es el número de parámetros del modelo.
-
-Respecto a su interpretación, el AIC **no tiene una interpretación absoluta**, solo es útil para comparar modelos ajustados a los mismos datos. Un **AIC menor** indica un mejor equilibrio entre ajuste y simplicidad. 
-
-
-**Bayesian Information Criterion (BIC)**
-
-El **Criterio de Información Bayesiano (BIC)** es similar al AIC, pero penaliza más severamente la complejidad del modelo, especialmente cuando el número de observaciones es grande. Se calcula como:
+Este término adicional, es un **término de penalización** ($L_2=\sum \beta_j^2$) impone una restricción sobre los coeficientes, evitando que tomen valores excesivamente grandes. La estimación de $\beta$ en Ridge se obtiene resolviendo:
 
 $$
-BIC = -2 \log(L) + k \log(n)
+\hat{\beta}_{ridge} = (\mathbf{X}^T \mathbf{X} + \lambda I)^{-1} \mathbf{X}^T \mathbf{Y}.
 $$
 
-Donde:
-- $n$ es el número de observaciones.
+donde $I$ es la matriz identidad y $\lambda \geq 0$ es un hiperparámetro que controla la cantidad de penalización aplicada.
 
-El BIC favorece modelos más simples en comparación con el AIC. Un **BIC menor** indica un mejor modelo.
+**Interpretación del parámetro** $\lambda$
 
-::: {.callout-tip title="Ejemplo: comparación de AIC y BIC" collapse="true"}
+-   Si $\lambda = 0$, el modelo Ridge es equivalente a la regresión lineal tradicional (OLS).
+-   A medida que $\lambda$ aumenta, los coeficientes $\beta_j$ se reducen en magnitud, lo que ayuda a controlar la varianza del modelo y a prevenir el sobreajuste.
+-   Si $\lambda$ es demasiado grande, los coeficientes se acercan a cero y el modelo puede perder interpretabilidad.
 
-```{r eval1}
-# Comparación de modelos: Poisson vs Binomial Negativa
+La elección óptima de $\lambda$ se determina generalmente mediante **validación cruzada**.
 
-# Modelo de Poisson
-modelo_poisson <- glm(accidentes ~ trafico + visibilidad, family = poisson, data = datos_accidentes)
-
-# Modelo Binomial Negativa
-library(MASS)
-modelo_binom_neg <- glm.nb(accidentes ~ trafico + visibilidad, data = datos_accidentes)
-
-# Calcular AIC y BIC
-AIC(modelo_poisson, modelo_binom_neg)
-BIC(modelo_poisson, modelo_binom_neg)
-```
+::: {.callout-caution title="Aviso"}
+Los detalles de la validación cruzada son tratados en la asignatura de Aprendizaje Automático.
 :::
 
-El modelo con el menor **AIC** o **BIC** es preferido. Si ambos modelos tienen valores similares, se puede preferir el modelo más simple (con menos parámetros).
+::: {.callout-note title="Propiedades Clave" collapse="false"}
+-   **Manejo de la multicolinealidad:** La regularización reduce la sensibilidad del modelo cuando los predictores están altamente correlacionados.
 
+-   **Menor varianza en las predicciones:** El modelo Ridge tiende a ser más estable en comparación con OLS, lo que mejora la capacidad de generalización en conjuntos de datos nuevos.
 
-### Validación cruzada y técnicas de evaluación predictiva
-
-La **validación cruzada** y otras técnicas de evaluación predictiva permiten estimar cómo se desempeñará un modelo en datos no vistos, lo que es esencial para evitar el sobreajuste.
-
-La **validación cruzada k-fold** divide el conjunto de datos en **k** subconjuntos (o "folds"). El modelo se ajusta **k** veces, cada vez utilizando $k-1$ folds para el entrenamiento y el fold restante para la prueba. El rendimiento se promedia sobre todas las iteraciones. La validación cruzada utiliza eficientemente los datos disponibles, proporcionando una estimación robusta del rendimiento del modelo. 
-
-::: {.callout-tip title="Ejemplo: Validación cruzada" collapse="true"}
-
-```{r val1}
-# Instalar y cargar la librería caret
-library(caret)
-
-# Definir la validación cruzada de 5-fold
-control <- trainControl(method = "cv", number = 5)
-
-# Ajustar un modelo de regresión logística con validación cruzada
-modelo_cv <- train(type ~ npreg + glu + bmi, data = Pima.tr, method = "glm", family = "binomial", trControl = control)
-
-# Resultados de la validación cruzada
-print(modelo_cv)
-```
+-   **No realiza selección de variables:** A diferencia de Lasso, Ridge **no anula coeficientes**, sino que reduce su magnitud. Esto es útil cuando se sospecha que todas las variables tienen algún grado de importancia en el modelo.
 :::
 
-Otra técnica común es dividir el conjunto de datos en un **conjunto de entrenamiento** (por ejemplo, el $70\%$) y un **conjunto de prueba** ($30\%$). El modelo se ajusta en el conjunto de entrenamiento y se evalúa en el conjunto de prueba.
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r ridge}
+# Cargar librerías
+library(glmnet)
 
-::: {.callout-tip title="Ejemplo: Train/Test" collapse="true"}
-```{r train_test}
-# Dividir el conjunto de datos en entrenamiento y prueba
+# Datos simulados
 set.seed(123)
+X <- matrix(rnorm(100 * 10), 100, 10)  # 100 observaciones, 10 predictores
+Y <- X %*% rnorm(10) + rnorm(100)  # Variable de respuesta con ruido
+
+# Ajustar modelo Ridge
+modelo_ridge <- glmnet(X, Y, alpha = 0)  # alpha = 0 indica regresión Ridge
+
+# Seleccionar lambda óptimo con validación cruzada
+cv_ridge <- cv.glmnet(X, Y, alpha = 0)
+lambda_optimo <- cv_ridge$lambda.min  # Mejor valor de lambda
+
+print(lambda_optimo)
+
+# Ajustar modelo final con lambda óptimo
+modelo_ridge_final <- glmnet(X, Y, alpha = 0, lambda = lambda_optimo)
+
+modelo_ridge_final
+
+# Comparación modelo clásico
+
+modelo_lm <- lm(Y~X)
+
+# Mostrar coeficientes
+output=cbind(round(coef(modelo_ridge_final),3),
+            round(coef(modelo_lm),3))
+
+colnames(output)=c("RIDGE","OLS")
+
+output
+
+```
+:::
+
+
+La regresión Ridge es una técnica poderosa para mejorar la estabilidad de los modelos de regresión en presencia de multicolinealidad. A diferencia de OLS, que puede generar coeficientes inestables, Ridge introduce una penalización que reduce la magnitud de los coeficientes, evitando valores extremos. Aunque Ridge no realiza selección de variables, su capacidad para reducir la varianza y mejorar la capacidad predictiva lo convierte en una herramienta esencial en el análisis de datos modernos.
+
+En la siguiente sección, exploraremos la **regresión Lasso**, que extiende este concepto permitiendo la eliminación de variables irrelevantes del modelo.
+
+### Regresión Lasso
+
+Cuando se tiene un conjunto de predictores con posibles redundancias o ruido, Lasso permite identificar cuáles son las variables más relevantes para el modelo, lo que facilita la interpretación y reduce la complejidad del análisis.
+
+Al igual que ocurría en Ridge Regression, el modelo de regresión Lasso se basa en la minimización de la siguiente función de error [@ranstam2018lasso]: 
+$$
+SSE_{lasso} = \| \mathbf{Y}- \mathbf{X} \beta \|^2 + \lambda \sum_{j=1}^{p} |\beta_j|
+$$
+
+donde el **término de penalización**, ($L_1=\sum |\beta_j|$) hace que algunos coeficientes se reduzcan exactamente a **cero**, lo que significa que esas variables son eliminadas del modelo.
+
+La diferencia clave con **Ridge Regressión**, visto anteriormente, es que Ridge reduce la magnitud de los coeficientes pero no los anula, mientras que **Lasso puede eliminar variables por completo**.
+
+**Interpretación del parámetro** $\lambda$
+
+-   Si $\lambda = 0$, el modelo es equivalente a la regresión lineal tradicional (OLS).
+-   A medida que $\lambda$ aumenta, más coeficientes se reducen a cero, lo que equivale a realizar **selección de variables**.
+-   Si $\lambda$ es demasiado grande, se eliminan demasiadas variables, lo que puede resultar en un modelo subóptimo.
+
+Al igual que en el método *Ridge*, la selección óptima de $\lambda$ se realiza generalmente mediante **validación cruzada**.
+
+
+::: {.callout-note title="Propiedades Clave" collapse="false"}
+-   **Selección de variables automática:** Lasso no solo regulariza, sino que también selecciona las variables más importantes eliminando aquellas menos relevantes.
+-   **Manejo de la multicolinealidad:** Puede mejorar la interpretación del modelo cuando hay muchas variables correlacionadas.
+-   **Simplicidad y interpretabilidad:** Un modelo con menos variables es más fácil de interpretar y aplicar en la práctica.
+-   **Reduce el sobreajuste:** La penalización $L_1$ evita que el modelo se ajuste demasiado a los datos de entrenamiento, mejorando su capacidad predictiva en datos nuevos.
+:::
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r lasso}
+
+# Ajustar modelo Lasso
+modelo_lasso <- glmnet(X, Y, alpha = 1)  # alpha = 1 indica regresión Lasso
+
+# Seleccionar lambda óptimo con validación cruzada
+cv_lasso <- cv.glmnet(X, Y, alpha = 1)
+lambda_optimo <- cv_lasso$lambda.min  # Mejor valor de lambda
+
+print(lambda_optimo)
+
+# Ajustar modelo final con lambda óptimo
+modelo_lasso_final <- glmnet(X, Y, alpha = 1, lambda = lambda_optimo)
+
+
+# Mostrar coeficientes
+output=cbind(round(coef(modelo_lasso_final),3),output)
+
+colnames(output)=c("LASSO","RIDGE","OLS")
+
+output
+```
+:::
+
+**Consideraciones Importantes**
+
+La regresión Lasso es una poderosa técnica de regularización que no solo mejora la estabilidad del modelo en presencia de muchas variables predictoras, sino que también realiza una selección automática de las más relevantes. Su capacidad para reducir coeficientes a cero la convierte en una herramienta esencial en el análisis de datos de alta dimensión.
+
+-   **Lasso puede eliminar demasiadas variables si** $\lambda$ es demasiado grande, lo que puede llevar a la pérdida de información importante.
+-   **No maneja bien grupos de predictores altamente correlacionados**, ya que selecciona solo uno de ellos y elimina los demás.
+-   **Elastic Net**, que combina Ridge y Lasso, puede ser una mejor opción cuando hay **multicolinealidad fuerte** en los datos.
+
+En la siguiente sección, exploraremos **Elastic Net**, una técnica híbrida que combina las ventajas de Ridge y Lasso para mejorar la selección de variables en presencia de predictores altamente correlacionados.
+
+### Elastic Net
+
+La regresión **Elastic Net** es una técnica de regularización que combina las propiedades de **Ridge** y **Lasso**, abordando algunas de sus limitaciones individuales [@zou2005regularization]. Mientras que Ridge es útil para manejar la multicolinealidad sin eliminar variables y Lasso selecciona un subconjunto de predictores, Elastic Net equilibra ambos enfoques permitiendo la selección de variables en presencia de alta correlación entre los predictores.
+
+Este método es particularmente efectivo cuando el número de predictores es grande y existe **multicolinealidad**, ya que permite controlar simultáneamente la **reducción de la magnitud de los coeficientes** y la **eliminación de variables irrelevantes**.
+
+Elastic Net introduce una penalización que combina los términos de Ridge ($L_2$) y Lasso ($L_1$):
+
+$$
+SSE_{\text{Elastic Net}} = \| Y - X \beta \|^2 + \lambda_1 \sum_{j=1}^{p} |\beta_j| + \lambda_2 \sum_{j=1}^{p} \beta_j^2 $$
+
+donde:
+
+-   $\lambda_1$ (asociado a Lasso) controla la cantidad de coeficientes que se reducen a **cero**.
+-   $\lambda_2$ (asociado a Ridge) controla la **reducción de magnitud** de los coeficientes sin anularlos.
+-   $\alpha$ es un parámetro adicional que pondera la combinación entre Lasso y Ridge, con:
+    -   $\alpha = 1$ → Elastic Net se comporta como Lasso.
+    -   $\alpha = 0$ → Elastic Net se comporta como Ridge.
+    -   $0 < \alpha < 1$ → Elastic Net combina ambos métodos.
+
+La estimación de los coeficientes en Elastic Net se obtiene resolviendo:
+
+$$
+\hat{\beta}_{\text{Elastic Net}} = \arg \min_{\beta} \left( \| Y - X \beta \|^2 + \lambda \left( \alpha \sum |\beta_j| + (1 - \alpha) \sum \beta_j^2 \right) \right)
+$$
+
+
+::: {.callout-note title="Propiedades Clave" collapse="false"}
+-   **Manejo de la Multicolinealidad:** A diferencia de Lasso, que selecciona solo una de las variables correlacionadas y elimina las demás, Elastic Net distribuye la penalización entre todas las variables correlacionadas, evitando una selección arbitraria.
+
+-   **Selección de variables más estable:** La combinación de Lasso y Ridge permite una selección más robusta, manteniendo información relevante del modelo sin eliminar predictores clave.
+
+-   **Mejora del rendimiento predictivo:** Al utilizar validación cruzada para seleccionar los hiperparámetros $\lambda_1$, $\lambda_2$ y $\alpha$, se optimiza la capacidad del modelo para generalizar a nuevos datos.
+:::
+
+::: {.callout-tip title="Ejemplo" collapse="true"}
+```{r elastic}
+
+# Ajustar modelo Elastic Net
+modelo_elastic_net <- glmnet(X, Y, alpha = 0.5)  # Alpha = 0.5 (50% Ridge, 50% Lasso)
+
+# Seleccionar lambda óptimo con validación cruzada
+cv_elastic_net <- cv.glmnet(X, Y, alpha = 0.5)
+lambda_optimo <- cv_elastic_net$lambda.min  # Mejor valor de lambda
+
+print(lambda_optimo)
+# Ajustar modelo final con lambda óptimo
+modelo_elastic_final <- glmnet(X, Y, alpha = 0.5, lambda = lambda_optimo)
+
+# Mostrar coeficientes
+output=cbind(round(coef(modelo_elastic_final),3),output)
+
+colnames(output)=c("ELASTIC","LASSO","RIDGE","OLS")
+
+output
+```
+:::
+
+Para determinar el mejor valor de $\alpha$, se usa **validación cruzada** probando distintos valores entre $0$ y 1. Algunas estrategias comunes incluyen:
+
+-   **Si hay muchas variables irrelevantes**, se recomienda $\alpha$ cercano a 1 (Lasso).
+-   **Si hay fuerte multicolinealidad**, se recomienda $\alpha$ cercano a 0 (Ridge).
+-   **Si se desea un balance entre selección y estabilidad**, se suele usar $\alpha = 0.5$.
+
+La regresión Elastic Net combina lo mejor de Ridge y Lasso, ofreciendo un método de regularización robusto para modelos con muchas variables predictoras y posible multicolinealidad. Su capacidad para seleccionar variables sin eliminar información clave lo convierte en una opción ideal para modelos complejos y de alta dimensionalidad.
+
+### Comparación de los métodos de Regularización
+
+| Método | Penalización | Efecto sobre los coeficientes |
+|------------------------|------------------------|------------------------|
+| **OLS** | Ninguna | Sin restricción, puede haber multicolinealidad |
+| **Ridge** | $L_2$ | Reduce la magnitud de los coeficientes, pero no los anula |
+| **Lasso** | $L_1$ | Puede anular coeficientes, permitiendo selección de variables |
+| **Elastic Net** | $L_1 + L_2$ | Combinación de Ridge y Lasso |
+
+------------------------------------------------------------------------
+
+Lasso es especialmente útil cuando se sospecha que muchas variables son irrelevantes, mientras que Ridge es preferido cuando se espera que todas las variables aporten información al modelo.
+
+Elastic Net es ideal cuando hay **muchas variables correlacionadas** y se desea un modelo **estable y parsimonioso**.
+
+-   Elastic Net mejora la estabilidad del modelo en comparación con Lasso, especialmente cuando hay variables predictoras altamente correlacionadas.
+
+-   Es más flexible que Ridge y Lasso individualmente, permitiendo un ajuste más fino a distintos tipos de problemas.
+
+-   Requiere la selección de hiperparámetros ($\lambda$ y $\alpha$), por lo que debe usarse validación cruzada para encontrar la combinación óptima.
+
+
+## Validación del modelo
+
+La validación del modelo es una etapa fundamental en el proceso de construcción de modelos de regresión, ya que permite evaluar la calidad del ajuste, la capacidad predictiva y la generalización del modelo a nuevos conjuntos de datos. Sin una validación adecuada, es imposible determinar si un modelo es verdaderamente útil o si simplemente se ha ajustado en exceso a los datos de entrenamiento [@james2013introduction].
+
+La validación abarca dos aspectos complementarios: **la evaluación de la bondad de ajuste** mediante métricas específicas, y **la validación de la capacidad predictiva** utilizando estrategias como la división train/test y la validación cruzada. Ambos enfoques son esenciales para construir modelos robustos y confiables.
+
+### Métricas de evaluación del modelo
+
+Las métricas de evaluación proporcionan medidas cuantitativas de la calidad del modelo, permitiendo comparar diferentes especificaciones y seleccionar la más adecuada para el problema en cuestión. Aunque medidas como $R^2$ y $R^2$ ajustado son fundamentales (ya tratadas en temas anteriores), nos enfocaremos aquí en criterios de información y métricas de error que son especialmente relevantes para la selección de variables.
+
+#### Criterio de Información de Akaike (AIC)
+
+El AIC (Akaike Information Criterion) es una medida que equilibra la bondad de ajuste del modelo con su complejidad [@akaike1974new]:
+
+$$AIC = n \ln\left(\frac{SSE}{n}\right) + 2(p+1)$$
+
+donde el primer término representa la bondad de ajuste y el segundo término penaliza la complejidad del modelo.
+
+**Interpretación del AIC:**
+- **Valores más bajos indican mejores modelos**
+- Equilibra automáticamente el trade-off entre ajuste y complejidad
+- Es útil para comparar modelos con diferentes números de variables
+- No tiene una interpretación absoluta, solo relativa
+
+::: {.callout-tip}
+## Uso práctico del AIC
+El AIC es especialmente útil en procesos de selección de variables. Al comparar múltiples modelos candidatos, se prefiere aquel con el AIC más bajo, ya que representa el mejor balance entre explicación de la varianza y parsimonia.
+:::
+
+#### Criterio de Información Bayesiano (BIC)
+
+El BIC (Bayesian Information Criterion) es similar al AIC pero aplica una penalización más fuerte a la complejidad del modelo [@schwarz1978estimating]:
+
+$$BIC = n \ln\left(\frac{SSE}{n}\right) + (p+1) \ln(n)$$
+
+**Diferencias clave entre AIC y BIC:**
+- **BIC penaliza más fuertemente** la complejidad cuando $n > 7$
+- **BIC tiende a seleccionar modelos más simples** que AIC
+- **BIC es consistente**: si el modelo verdadero está entre los candidatos, BIC lo seleccionará con probabilidad que tiende a 1 cuando $n \to \infty$
+
+::: {.callout-note}
+## ¿Cuándo usar AIC vs BIC?
+
+- **Usa AIC** cuando el objetivo principal es la **predicción** y se desea minimizar el error predictivo
+- **Usa BIC** cuando el objetivo es **identificar el modelo verdadero** y se prefiere la parsimonia
+- **En muestras grandes**, BIC tiende a ser más conservador seleccionando modelos más simples
+:::
+
+#### Error cuadrático medio (RMSE)
+
+El RMSE (Root Mean Square Error) mide la magnitud promedio de los errores de predicción en las mismas unidades que la variable respuesta:
+
+$$RMSE = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}$$
+
+**Características del RMSE:**
+- **Interpretación directa**: Se expresa en las mismas unidades que la variable respuesta
+- **Sensible a valores atípicos**: Los errores grandes tienen un impacto desproporcionado
+- **Útil para evaluación predictiva**: Especialmente valioso cuando se evalúa el desempeño en datos de validación
+
+#### Error absoluto medio (MAE)
+
+El MAE (Mean Absolute Error) proporciona una medida alternativa del error que es menos sensible a valores atípicos:
+
+$$MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|$$
+
+**Comparación RMSE vs MAE:**
+- **MAE es más robusto** a valores atípicos
+- **RMSE penaliza más** los errores grandes
+- **MAE es más fácil de interpretar** como el error promedio
+- **RMSE es más sensible** a la variabilidad de los errores
+
+### Estrategias de validación
+
+Las estrategias de validación permiten evaluar la capacidad predictiva del modelo en datos no utilizados durante el entrenamiento, proporcionando una estimación más realista del desempeño en situaciones reales.
+
+#### División Train/Test
+
+La estrategia de división train/test es la aproximación más básica para validar un modelo [@hastie2009elements]:
+
+::: {.callout-note}
+## Procedimiento Train/Test
+
+1. **División de datos**: Separar aleatoriamente los datos en dos conjuntos:
+   - **Conjunto de entrenamiento** (típicamente 70-80% de los datos)
+   - **Conjunto de prueba** (20-30% restante)
+
+2. **Entrenamiento**: Ajustar el modelo usando únicamente los datos de entrenamiento
+
+3. **Evaluación**: Calcular las métricas de desempeño en el conjunto de prueba
+:::
+
+**Ventajas:**
+- Simplicidad de implementación
+- Evaluación no sesgada del desempeño predictivo
+- Computacionalmente eficiente
+
+**Limitaciones:**
+- **Variabilidad alta**: Los resultados dependen de la división específica
+- **Pérdida de datos**: No utiliza todos los datos para entrenamiento
+- **Problemático con muestras pequeñas**: Puede resultar en conjuntos de prueba muy pequeños
+
+#### Validación cruzada
+
+La validación cruzada aborda las limitaciones de la división train/test utilizando múltiples particiones de los datos [@stone1974cross].
+
+##### Validación cruzada k-fold
+
+En la validación cruzada k-fold, los datos se dividen en k subconjuntos (folds) de tamaño aproximadamente igual:
+
+::: {.callout-note}
+## Procedimiento k-fold
+
+1. **División**: Dividir aleatoriamente los datos en k folds de tamaño similar
+2. **Iteración**: Para cada fold $i = 1, 2, ..., k$:
+   - Usar el fold $i$ como conjunto de validación
+   - Usar los restantes $k-1$ folds como conjunto de entrenamiento
+   - Ajustar el modelo y calcular métricas de desempeño
+3. **Promedio**: Calcular el promedio de las métricas a través de los k folds
+:::
+
+**Valores típicos de k:**
+- **k = 5 o k = 10**: Más comunes, equilibran sesgo y varianza
+- **k grande**: Menor sesgo, mayor varianza computacional
+- **k pequeño**: Mayor sesgo, menor varianza
+
+**Métricas de validación cruzada:**
+
+$$CV_{(k)} = \frac{1}{k}\sum_{i=1}^{k} \text{Métrica}_i$$
+
+donde $\text{Métrica}_i$ puede ser RMSE, MAE, o cualquier otra medida de interés.
+
+##### Leave-One-Out Cross Validation (LOOCV)
+
+LOOCV es un caso especial de k-fold donde $k = n$ (número de observaciones):
+
+**Características del LOOCV:**
+- **Utiliza máxima información**: Entrena con $n-1$ observaciones
+- **Menor sesgo**: Estimación muy cercana al error verdadero  
+- **Mayor varianza**: Más sensible a observaciones individuales
+- **Computacionalmente intensivo**: Requiere ajustar $n$ modelos
+
+**Fórmula para regresión lineal:**
+En regresión lineal, LOOCV tiene una fórmula cerrada eficiente:
+
+$$CV_{(n)} = \frac{1}{n}\sum_{i=1}^{n}\left(\frac{e_i}{1-h_{ii}}\right)^2$$
+
+donde $e_i$ son los residuos ordinarios y $h_{ii}$ son los elementos diagonal de la matriz hat.
+
+### Ejemplo práctico de validación
+
+::: {.callout-tip title="Ejemplo completo de validación" collapse="true"}
+
+```{r validacion-ejemplo}
+# Cargar librerías necesarias
+library(glmnet)
 library(caret)
-indices <- createDataPartition(Pima.tr$type, p = 0.7, list = FALSE)
-entrenamiento <- Pima.tr[indices, ]
-prueba <- Pima.tr[-indices, ]
 
-# Ajustar el modelo en el conjunto de entrenamiento
-modelo_entrenamiento <- glm(type ~ npreg + glu + bmi, data = entrenamiento, family = binomial)
+# Generar datos de ejemplo
+set.seed(123)
+n <- 100
+p <- 8
+X <- matrix(rnorm(n * p), n, p)
+# Crear correlaciones entre algunas variables
+X[,2] <- X[,1] + 0.5*rnorm(n)
+X[,3] <- X[,1] + 0.3*X[,2] + 0.4*rnorm(n)
 
-# Realizar predicciones en el conjunto de prueba
-predicciones <- predict(modelo_entrenamiento, newdata = prueba, type = "response")
+# Variable respuesta con ruido
+beta_true <- c(3, 1.5, -2, 0.8, 0, 0, 0, 0.5)
+y <- X %*% beta_true + rnorm(n)
 
-# Evaluar precisión
-predicciones_clase <- ifelse(predicciones > 0.5, "Yes", "No")
-confusionMatrix(as.factor(predicciones_clase), as.factor(prueba$type))
+# Convertir a data frame
+datos <- data.frame(y = y, X)
+
+# ============================================
+# 1. Ajustar diferentes modelos
+# ============================================
+
+# Modelo completo (OLS)
+modelo_ols <- lm(y ~ ., data = datos)
+
+# Modelo Ridge
+modelo_ridge <- cv.glmnet(X, y, alpha = 0)
+ridge_pred <- predict(modelo_ridge, X, s = "lambda.min")
+
+# Modelo Lasso  
+modelo_lasso <- cv.glmnet(X, y, alpha = 1)
+lasso_pred <- predict(modelo_lasso, X, s = "lambda.min")
+
+# Modelo Elastic Net
+modelo_elastic <- cv.glmnet(X, y, alpha = 0.5)
+elastic_pred <- predict(modelo_elastic, X, s = "lambda.min")
+
+# ============================================
+# 2. Calcular métricas de bondad de ajuste
+# ============================================
+
+# Función para calcular métricas
+calcular_metricas <- function(y_real, y_pred, p) {
+  n <- length(y_real)
+  sse <- sum((y_real - y_pred)^2)
+  sst <- sum((y_real - mean(y_real))^2)
+  
+  r2 <- 1 - sse/sst
+  r2_adj <- 1 - (sse/(n-p-1))/(sst/(n-1))
+  rmse <- sqrt(mean((y_real - y_pred)^2))
+  mae <- mean(abs(y_real - y_pred))
+  
+  # AIC y BIC (aproximados para modelos regularizados)
+  aic <- n * log(sse/n) + 2*(p+1)
+  bic <- n * log(sse/n) + (p+1)*log(n)
+  
+  return(data.frame(
+    R2 = r2,
+    R2_adj = r2_adj,  
+    RMSE = rmse,
+    MAE = mae,
+    AIC = aic,
+    BIC = bic
+  ))
+}
+
+# Calcular métricas para cada modelo
+metricas_ols <- calcular_metricas(y, fitted(modelo_ols), p)
+metricas_ridge <- calcular_metricas(y, ridge_pred, p)  
+metricas_lasso <- calcular_metricas(y, lasso_pred, p)
+metricas_elastic <- calcular_metricas(y, elastic_pred, p)
+
+# Combinar resultados
+comparacion <- rbind(
+  OLS = metricas_ols,
+  Ridge = metricas_ridge,
+  Lasso = metricas_lasso,
+  Elastic = metricas_elastic
+)
+
+print(round(comparacion, 4))
+
+# ============================================
+# 3. Validación Train/Test
+# ============================================
+
+# Dividir datos
+set.seed(123)
+train_idx <- createDataPartition(y, p = 0.8, list = FALSE)
+train_data <- datos[train_idx, ]
+test_data <- datos[-train_idx, ]
+
+X_train <- as.matrix(train_data[, -1])
+y_train <- train_data$y
+X_test <- as.matrix(test_data[, -1])
+y_test <- test_data$y
+
+# Ajustar modelos en datos de entrenamiento
+modelo_train <- lm(y ~ ., data = train_data)
+lasso_train <- cv.glmnet(X_train, y_train, alpha = 1)
+
+# Predicciones en conjunto de prueba
+pred_ols_test <- predict(modelo_train, test_data)
+pred_lasso_test <- predict(lasso_train, X_test, s = "lambda.min")
+
+# Métricas en conjunto de prueba
+rmse_ols_test <- sqrt(mean((y_test - pred_ols_test)^2))
+rmse_lasso_test <- sqrt(mean((y_test - pred_lasso_test)^2))
+
+cat("RMSE en conjunto de prueba:\n")
+cat("OLS:", round(rmse_ols_test, 4), "\n")
+cat("Lasso:", round(rmse_lasso_test, 4), "\n")
+
+# ============================================
+# 4. Validación cruzada k-fold
+# ============================================
+
+# Validación cruzada para OLS
+set.seed(123)
+cv_ols <- train(y ~ ., data = datos, 
+                method = "lm",
+                trControl = trainControl(method = "cv", number = 10))
+
+# Validación cruzada para Lasso (ya calculada en cv.glmnet)
+cv_rmse_lasso <- sqrt(min(modelo_lasso$cvm))
+
+cat("\nValidación cruzada 10-fold (RMSE):\n")
+cat("OLS:", round(cv_ols$results$RMSE, 4), "\n") 
+cat("Lasso:", round(cv_rmse_lasso, 4), "\n")
+
+# ============================================
+# 5. Comparación de coeficientes
+# ============================================
+
+# Extraer coeficientes
+coef_ols <- coef(modelo_ols)
+coef_lasso <- as.numeric(coef(modelo_lasso, s = "lambda.min"))
+coef_true <- c(0, beta_true)  # Incluir intercepto
+
+# Comparar coeficientes
+coef_comparison <- data.frame(
+  Verdadero = coef_true,
+  OLS = coef_ols,
+  Lasso = coef_lasso
+)
+
+print("Comparación de coeficientes:")
+print(round(coef_comparison, 3))
 ```
 :::
 
-### Diagnóstico de residuos y buenas prácticas
+### Consideraciones prácticas en la validación
 
-El análisis de **residuos** es fundamental para evaluar el ajuste del modelo y detectar problemas como la falta de ajuste, valores atípicos o violaciones de los supuestos del modelo.
+#### Selección de la estrategia de validación
 
-Los **residuos deviance** son una medida común en los **Modelos Lineales Generalizados (GLM)**. Representan la diferencia entre el modelo ajustado y el modelo perfecto (donde la predicción es exactamente igual al valor observado).
+La elección de la estrategia de validación depende de varios factores:
 
-**Tipos de residuos:**
+::: {.callout-important}
+## Guía para seleccionar estrategia de validación
 
-- **Residuos Pearson:**  
-  $$
-  r_i = \frac{y_i - \hat{y}_i}{\sqrt{\hat{V}(y_i)}}
-  $$
-  Donde $\hat{V}(y_i)$ es la varianza estimada de $y_i$.
+**Usa Train/Test cuando:**
+- El dataset es grande (n > 1000)
+- Los recursos computacionales son limitados  
+- Se requiere una evaluación rápida
 
-- **Residuos Deviance:**  
-  Representan la contribución de cada observación al deviance total del modelo.
+**Usa validación cruzada k-fold cuando:**
+- El dataset es de tamaño moderado (n < 1000)
+- Se requiere una estimación más estable del desempeño
+- Se dispone de recursos computacionales adecuados
 
----
-
-::: {.callout-tip title="Ejemplo: Análisis de los residuos" collapse="true"}
-```{r res1}
-# Gráfico de residuos deviance para un modelo de Poisson
-plot(residuals(modelo_poisson, type = "deviance"), 
-     main = "Residuos Deviance del Modelo Poisson", 
-     ylab = "Residuos Deviance", xlab = "Índice")
-abline(h = 0, col = "red", lwd = 2)
-
-# Gráfico de residuos para la regresión logística
-plot(residuals(modelo_entrenamiento, type = "deviance"), 
-     main = "Residuos Deviance del Modelo Logístico", 
-     ylab = "Residuos Deviance", xlab = "Índice")
-abline(h = 0, col = "blue", lwd = 2)
-```
+**Usa LOOCV cuando:**
+- El dataset es pequeño (n < 100)
+- Se requiere la estimación menos sesgada posible
+- El tiempo computacional no es una restricción crítica
 :::
 
-Para detectar valores atípicos y su influencia emplearemos:
+#### Interpretación de las métricas
 
-  - **Distancia de Cook:** Identifica observaciones influyentes que tienen un impacto significativo en los coeficientes del modelo.
-  - **Leverage:** Mide el impacto potencial de una observación en el ajuste del modelo.
+**Para bondad de ajuste:**
+- **R² alto** indica buen ajuste, pero cuidado con el sobreajuste
+- **R² ajustado** es más confiable para comparar modelos
+- **AIC/BIC menores** indican mejor balance entre ajuste y complejidad
 
+**Para capacidad predictiva:**
+- **RMSE** da más peso a errores grandes
+- **MAE** es más robusto a outliers
+- **Métricas de validación cruzada** proporcionan estimaciones menos sesgadas
 
-::: {.callout-tip title="Ejemplo: Detección de observaciones influyentes" collapse="true"}
-```{r influyentes}
-# Distancia de Cook para identificar observaciones influyentes
-cooksd <- cooks.distance(modelo_poisson)
+#### Problemas comunes y soluciones
 
-# Gráfico de la distancia de Cook
-plot(cooksd, main = "Distancia de Cook", ylab = "Influencia", xlab = "Índice")
-abline(h = 4 / length(cooksd), col = "red")  # Línea de referencia
-```
-:::
+1. **Sobreajuste**: Indicado por gran diferencia entre métricas de entrenamiento y validación
+   - *Solución*: Usar regularización o reducir complejidad del modelo
+
+2. **Variabilidad alta en validación**: Resultados muy diferentes entre folds
+   - *Solución*: Aumentar k en validación cruzada o usar más datos
+
+3. **Sesgo de selección**: Usar el conjunto de prueba para seleccionar modelos
+   - *Solución*: Usar conjunto de validación separado o validación cruzada anidada
+
+La validación del modelo es un proceso multifacético que requiere considerar tanto métricas de bondad de ajuste como estrategias de validación robustas. Una validación adecuada no solo evalúa el desempeño del modelo, sino que también guía la selección de variables y la elección de hiperparámetros, asegurando que el modelo final sea tanto preciso como generalizable a nuevos datos.
