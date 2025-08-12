@@ -54,42 +54,60 @@ simultáneamente por varios factores, podemos aislar con mayor precisión
 el efecto de una variable de interés, reduciendo el riesgo de llegar a
 conclusiones sesgadas por variables omitidas.
 
-Para $n$ observaciones y $p$ variables predictoras, el modelo postula
-una relación lineal de la siguiente forma:
+### El modelo poblacional
 
-$$y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_p x_{ip} + \varepsilon_i, \quad i = 1,\dots,n$$
+Para $n$ observaciones y $p$ variables predictoras, el **modelo poblacional** postula que la relación verdadera entre la variable respuesta $Y$ y los predictores $X_1, X_2, \ldots, X_p$ sigue una relación lineal:
 
-Donde $y_i$ es la $i$-ésima observación de la variable respuesta,
-$x_{ij}$ es la $i$-ésima observación del $j$-ésimo predictor, y
-$\varepsilon_i$ es el término de error aleatorio. El coeficiente
-$\beta_j$ representa el cambio esperado en la media de $Y$ ante un
-cambio de una unidad en el predictor $x_j$, **manteniendo constantes
-todas las demás variables predictoras del modelo**. Este principio,
-conocido como *ceteris paribus* (del latín, "lo demás constante"), es la
-piedra angular de la interpretación en regresión múltiple.
+$$Y_i = \beta_0 + \beta_1 X_{i1} + \beta_2 X_{i2} + \cdots + \beta_p X_{ip} + \varepsilon_i, \quad i = 1,\dots,n$$
 
-La notación matricial es fundamental para el desarrollo teórico y
-computacional. Nos permite expresar el sistema de $n$ ecuaciones de
-forma compacta y elegante:
+Donde $Y_i$ es la $i$-ésima variable respuesta aleatoria, $X_{ij}$ es la $i$-ésima variable predictora aleatoria del $j$-ésimo predictor, y $\varepsilon_i$ es el término de error aleatorio. Los parámetros $\beta_0, \beta_1, \ldots, \beta_p$ son los coeficientes poblacionales verdaderos pero desconocidos.
 
-$$\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$$
+### El modelo muestral
+
+En la práctica, trabajamos con datos observados y estimamos el modelo usando la muestra disponible:
+
+$$\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_{i1} + \hat{\beta}_2 x_{i2} + \cdots + \hat{\beta}_p x_{ip}, \quad i = 1,\dots,n$$
+
+Donde $\hat{y}_i$ es la $i$-ésima predicción, $x_{ij}$ es la $i$-ésima observación del $j$-ésimo predictor, y $\hat{\beta}_j$ son los coeficientes estimados. El coeficiente $\hat{\beta}_j$ representa el cambio estimado en la media de $Y$ ante un cambio de una unidad en el predictor $X_j$, **manteniendo constantes todas las demás variables predictoras del modelo**. Este principio, conocido como *ceteris paribus* (del latín, "lo demás constante"), es la piedra angular de la interpretación en regresión múltiple.
+
+### Notación matricial
+
+La notación matricial es fundamental para el desarrollo teórico y computacional. Nos permite expresar el sistema de $n$ ecuaciones de forma compacta y elegante.
+
+**Modelo poblacional:**
+$$\mathbf{Y} = \tilde{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$$
 
 donde:
 
-$$\mathbf{y} = \begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_n \end{bmatrix}, \quad
+$$\mathbf{Y} = \begin{bmatrix} Y_1 \\ Y_2 \\ \vdots \\ Y_n \end{bmatrix}, \quad
+\tilde{X} = \begin{bmatrix}
+1 & X_{11} & X_{12} & \cdots & X_{1p} \\
+1 & X_{21} & X_{22} & \cdots & X_{2p} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+1 & X_{n1} & X_{n2} & \cdots & X_{np}
+\end{bmatrix}, \quad
+\boldsymbol{\beta} = \begin{bmatrix} \beta_0 \\ \beta_1 \\ \vdots \\ \beta_p \end{bmatrix}, \quad
+\boldsymbol{\varepsilon} = \begin{bmatrix} \varepsilon_1 \\ \varepsilon_2 \\ \vdots \\ \varepsilon_n \end{bmatrix}$$
+
+Donde $\tilde{X}$ contiene variables aleatorias (denotadas con mayúsculas $X_{ij}$).
+
+**Modelo muestral:**
+$$\hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol{\beta}}$$
+
+donde:
+
+$$\hat{\mathbf{y}} = \begin{bmatrix} \hat{y}_1 \\ \hat{y}_2 \\ \vdots \\ \hat{y}_n \end{bmatrix}, \quad
 \mathbf{X} = \begin{bmatrix}
 1 & x_{11} & x_{12} & \cdots & x_{1p} \\
 1 & x_{21} & x_{22} & \cdots & x_{2p} \\
 \vdots & \vdots & \vdots & \ddots & \vdots \\
 1 & x_{n1} & x_{n2} & \cdots & x_{np}
 \end{bmatrix}, \quad
-\boldsymbol{\beta} = \begin{bmatrix} \beta_0 \\ \beta_1 \\ \vdots \\ \beta_p \end{bmatrix}, \quad
-\boldsymbol{\varepsilon} = \begin{bmatrix} \varepsilon_1 \\ \varepsilon_2 \\ \vdots \\ \varepsilon_n \end{bmatrix}$$
+\hat{\boldsymbol{\beta}} = \begin{bmatrix} \hat{\beta}_0 \\ \hat{\beta}_1 \\ \vdots \\ \hat{\beta}_p \end{bmatrix}$$
 
-La matriz $\mathbf{X}$, de dimensión $n \times (p+1)$, se denomina
-**matriz de diseño** y contiene toda la información de los predictores.
-La primera columna de unos corresponde al término del intercepto
-$\beta_0$.
+Donde $\mathbf{X}$ contiene datos observados (denotados con minúsculas $x_{ij}$).
+
+La matriz $\mathbf{X}$ (datos observados) y $\tilde{X}$ (variables aleatorias), ambas de dimensión $n \times (p+1)$, se denominan **matriz de diseño** y contienen toda la información de los predictores. La primera columna de unos corresponde al término del intercepto $\beta_0$.
 
 ### Supuestos del modelo lineal múltiple
 
@@ -99,19 +117,11 @@ sobre el comportamiento del término de error, conocidos como las
 **condiciones de Gauss-Markov** [@kutner2005applied;
 @weisberg2005applied].
 
-1.  **Linealidad en los parámetros**: El valor esperado de la respuesta
-    es una función lineal de los parámetros $\boldsymbol{\beta}$. El
-    modelo $E[\mathbf{y}|\mathbf{X}] = \mathbf{X}\boldsymbol{\beta}$
-    está bien especificado.
-2.  **Exogeneidad (media del error nula)**: Los errores tienen una media
-    de cero para cualquier valor de los predictores,
-    $E[\boldsymbol{\varepsilon}|\mathbf{X}] = \mathbf{0}$. Esto implica
-    que los predictores no contienen información sobre el término de
-    error.
-3.  **Homocedasticidad e independencia**: Los errores no están
-    correlacionados entre sí y tienen una varianza constante $\sigma^2$
-    para cualquier valor de los predictores. En notación matricial:
-    $\text{Var}(\boldsymbol{\varepsilon}|\mathbf{X}) = \sigma^2\mathbf{I}_n$.
+1.  **Linealidad en los parámetros**: El valor esperado de la respuesta es una función lineal de los parámetros $\boldsymbol{\beta}$. El modelo $E[\mathbf{Y}|\tilde{X}] = \tilde{X}\boldsymbol{\beta}$ está bien especificado.
+
+2.  **Exogeneidad (media del error nula)**: Los errores tienen una media de cero para cualquier valor de los predictores, $E[\boldsymbol{\varepsilon}|\tilde{X}] = \mathbf{0}$. Esto implica que los predictores no contienen información sobre el término de error.
+
+3.  **Homocedasticidad e independencia**: Los errores no están correlacionados entre sí y tienen una varianza constante $\sigma^2$ para cualquier valor de los predictores. En notación matricial: $\text{Var}(\boldsymbol{\varepsilon}|\tilde{X}) = \sigma^2\mathbf{I}_n$.
 4.  **Ausencia de multicolinealidad perfecta**: Ningún predictor es una
     combinación lineal exacta de los otros. Esto asegura que la matriz
     $\mathbf{X}$ tiene rango completo $(p+1)$, lo cual es necesario para
@@ -129,34 +139,22 @@ más extendido es el de Mínimos Cuadrados Ordinarios.
 
 ### El principio de mínimos cuadrados y la función objetivo
 
-La idea de "mejor ajuste" se traduce matemáticamente en minimizar la
-discrepancia entre los valores observados $\mathbf{y}$ y los valores
-predichos por el modelo,
-$\hat{\mathbf{y}} = \mathbf{X}\boldsymbol{\beta}$. Esta discrepancia se
-captura a través de los residuos,
-$\mathbf{e} = \mathbf{y} - \hat{\mathbf{y}}$.
+La idea de "mejor ajuste" se traduce matemáticamente en minimizar la discrepancia entre los valores observados $\mathbf{y}$ (datos muestrales) y los valores predichos por el modelo, $\hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol{\beta}}$. Esta discrepancia se captura a través de los residuos, $\mathbf{e} = \mathbf{y} - \hat{\mathbf{y}}$.
 
-MCO no minimiza simplemente los residuos (ya que residuos positivos y
-negativos se cancelarían), sino la **Suma de los Cuadrados de los
-Residuos** (SCR o *SSR* en inglés). Al elevarlos al cuadrado, nos
-aseguramos de que todos los errores contribuyan positivamente y, además,
-penalizamos más fuertemente los errores grandes.
+MCO no minimiza simplemente los residuos (ya que residuos positivos y negativos se cancelarían), sino la **Suma de los Cuadrados de los Residuos** (SCR o *SSR* en inglés). Al elevarlos al cuadrado, nos aseguramos de que todos los errores contribuyan positivamente y, además, penalizamos más fuertemente los errores grandes.
 
-La función objetivo a minimizar, $S(\boldsymbol{\beta})$, es:
+La función objetivo a minimizar, $S(\boldsymbol{\beta})$, usando datos observados es:
 
 $$S(\boldsymbol{\beta}) = \sum_{i=1}^n e_i^2 = \mathbf{e}^T\mathbf{e} = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^T(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})$$
 
 ### Derivación de las ecuaciones normales
 
-Para encontrar el vector $\hat{\boldsymbol{\beta}}$ que minimiza esta
-función, utilizamos cálculo diferencial. Primero, expandimos la
-expresión cuadrática de $S(\boldsymbol{\beta})$:
+Para encontrar el vector $\hat{\boldsymbol{\beta}}$ que minimiza esta función, utilizamos cálculo diferencial. Primero, expandimos la expresión cuadrática de $S(\boldsymbol{\beta})$:
 
 $$S(\boldsymbol{\beta}) = (\mathbf{y}^T - \boldsymbol{\beta}^T\mathbf{X}^T)(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})$$
 $$S(\boldsymbol{\beta}) = \mathbf{y}^T\mathbf{y} - \mathbf{y}^T\mathbf{X}\boldsymbol{\beta} - \boldsymbol{\beta}^T\mathbf{X}^T\mathbf{y} + \boldsymbol{\beta}^T\mathbf{X}^T\mathbf{X}\boldsymbol{\beta}$$
 
-Un punto clave aquí es notar que
-$\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{y}$ es un escalar (una matriz
+Un punto clave aquí es notar que $\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{y}$ es un escalar (una matriz $1 \times 1$), por lo que es igual a su transpuesta: $\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{y} = \mathbf{y}^T\mathbf{X}\boldsymbol{\beta}$.
 $1 \times 1$). Por lo tanto, es igual a su propia transpuesta:
 $(\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{y})^T = \mathbf{y}^T\mathbf{X}\boldsymbol{\beta}$.
 Esto nos permite simplificar la expresión:
@@ -185,18 +183,13 @@ $\hat{\boldsymbol{\beta}}$ que cumple esta condición:
 
 $$-2\mathbf{X}^T\mathbf{y} + 2(\mathbf{X}^T\mathbf{X})\hat{\boldsymbol{\beta}} = \mathbf{0}$$
 
-Simplificando, llegamos al célebre sistema de $p+1$ ecuaciones conocido
-como las **Ecuaciones Normales**:
+Simplificando, llegamos al célebre sistema de $p+1$ ecuaciones conocido como las **Ecuaciones Normales**:
 
 $$(\mathbf{X}^T\mathbf{X})\hat{\boldsymbol{\beta}} = \mathbf{X}^T\mathbf{y}$$
 
 ### La solución MCO y la condición de invertibilidad
 
-Para resolver este sistema y despejar $\hat{\boldsymbol{\beta}}$,
-necesitamos multiplicar por la inversa de la matriz
-$(\mathbf{X}^T\mathbf{X})$. Esta inversa existe si y solo si la matriz
-es invertible, lo que está directamente garantizado por el **supuesto de
-ausencia de multicolinealidad perfecta**.
+Para resolver este sistema y despejar $\hat{\boldsymbol{\beta}}$, necesitamos multiplicar por la inversa de la matriz $(\mathbf{X}^T\mathbf{X})$. Esta inversa existe si y solo si la matriz es invertible, lo que está directamente garantizado por el **supuesto de ausencia de multicolinealidad perfecta**.
 
 Si el rango de la matriz de diseño $\mathbf{X}$ es $p+1$ (sus columnas
 son linealmente independientes), entonces la matriz
@@ -400,7 +393,7 @@ Es el efecto "puro" o "aislado" de $X_j$ sobre $Y$, después de haber
 controlado por la influencia de las otras variables incluidas en el
 modelo. Matemáticamente, es la derivada parcial del valor esperado de
 $Y$ con respecto a $X_j$:
-$$\beta_j = \frac{\partial E[Y|\mathbf{X}]}{\partial X_j}$$
+$$\beta_j = \frac{\partial E[Y|\tilde{X}]}{\partial X_j}$$
 
 Esta interpretación es crucialmente diferente de la que se obtiene en
 una regresión simple. El coeficiente de una regresión simple de $Y$

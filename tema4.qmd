@@ -518,43 +518,45 @@ Estos métodos son especialmente útiles en problemas donde el número de variab
 
 ### Ridge regression
 
-La regresión Ridge introduce una penalización en la estimación de los coeficientes de regresión, lo que ayuda a reducir la varianza del modelo y mejora su capacidad predictiva en presencia de datos altamente correlacionados o con muchas variables [@marquardt1975ridge]. El modelo de regresión Ridge es una extensión de la regresión lineal estándar. Dado un conjunto de datos con $n$ observaciones y $p$ predictores, expresamos el modelo de regresión lineal múltiple como:
+La regresión Ridge introduce una penalización en la estimación de los coeficientes de regresión, lo que ayuda a reducir la varianza del modelo y mejora su capacidad predictiva en presencia de datos altamente correlacionados o con muchas variables [@marquardt1975ridge]. El modelo de regresión Ridge es una extensión de la regresión lineal estándar. Con datos observados, escribimos:
 
 $$
-\mathbf{Y}= \mathbf{X} \beta + \boldsymbol{\varepsilon}
+\mathbf{y}= \mathbf{X} \, \boldsymbol{\beta} + \boldsymbol{\varepsilon}
 $$
 
 donde:
 
--   $\mathbf{Y}$ es el vector de respuesta de dimensión $n \times 1$.
--   $\mathbf{X}$ es la matriz de diseño de dimensión $n \times p$.
--   $\beta$ es el vector de coeficientes de regresión de dimensión $p \times 1$.
--   $\boldsymbol{\varepsilon}$ es el vector de errores aleatorios.
+-   $\mathbf{y}$ es el vector de respuesta observado de dimensión $n \times 1$.
+-   $\mathbf{X}$ es la matriz de diseño observada de dimensión $n \times (p+1)$ (la primera columna suele ser de unos para el intercepto).
+-   $\boldsymbol{\beta} = (\beta_0, \beta_1, \dots, \beta_p)^T$ es el vector de coeficientes.
+-   $\boldsymbol{\varepsilon}$ es el vector de errores.
 
 En mínimos cuadrados ordinarios (OLS), los coeficientes se estiman minimizando la suma de los errores al cuadrado:
 
 $$
-SSE = \sum_{i=1}^{n} (Y_i - \hat{Y}_i)^2 = \| \mathbf{Y} - \mathbf{X} \beta \|^2.
+SSE = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 = \| 
+\mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|^2.
 $$
 
-Sin embargo, cuando hay multicolinealidad, la matriz $X^T X$ puede ser casi singular, generando coeficientes inestables. Para evitar esto, la regresión Ridge añade un **término de penalización** $\lambda$, de la siguiente manera:
+Sin embargo, cuando hay multicolinealidad, la matriz $\mathbf{X}^T \mathbf{X}$ puede ser casi singular, generando coeficientes inestables. Para evitar esto, la regresión Ridge añade un **término de penalización** $\lambda$, de la siguiente manera (sin penalizar el intercepto $\beta_0$):
 
 $$
-SSE_{ridge} = \| \mathbf{Y} - \mathbf{X} \beta \|^2 + \lambda \sum_{j=1}^{p} \beta_j^2.
+SSE_{ridge} = \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|^2 + \lambda \sum_{j=1}^{p} \beta_j^2.
 $$
 
-Este término adicional, es un **término de penalización** ($L_2=\sum \beta_j^2$) impone una restricción sobre los coeficientes, evitando que tomen valores excesivamente grandes. La estimación de $\beta$ en Ridge se obtiene resolviendo:
+Este término adicional, es un **término de penalización** ($L_2=\sum \beta_j^2$) impone una restricción sobre los coeficientes, evitando que tomen valores excesivamente grandes. La estimación de $\boldsymbol{\beta}$ en Ridge se obtiene resolviendo:
 
 $$
-\hat{\beta}_{ridge} = (\mathbf{X}^T \mathbf{X} + \lambda I)^{-1} \mathbf{X}^T \mathbf{Y}.
+\hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^T \mathbf{X} + \lambda \, \mathbf{P})^{-1} 
+\mathbf{X}^T \mathbf{y}.
 $$
 
-donde $I$ es la matriz identidad y $\lambda \geq 0$ es un hiperparámetro que controla la cantidad de penalización aplicada.
+donde $\mathbf{P}$ es diagonal con $P_{11}=0$ (no penalizamos el intercepto) y $P_{jj}=1$ para $j=2,\dots,p+1$, y $\lambda \geq 0$ controla la cantidad de penalización aplicada. (Cuando no hay intercepto o se reparametriza, a menudo se escribe con $I$ para simplificar.)
 
 **Interpretación del parámetro** $\lambda$
 
 -   Si $\lambda = 0$, el modelo Ridge es equivalente a la regresión lineal tradicional (OLS).
--   A medida que $\lambda$ aumenta, los coeficientes $\beta_j$ se reducen en magnitud, lo que ayuda a controlar la varianza del modelo y a prevenir el sobreajuste.
+-   A medida que $\lambda$ aumenta, los coeficientes $\beta_j$ (pendientes) se reducen en magnitud, lo que ayuda a controlar la varianza del modelo y a prevenir el sobreajuste.
 -   Si $\lambda$ es demasiado grande, los coeficientes se acercan a cero y el modelo puede perder interpretabilidad.
 
 La elección óptima de $\lambda$ se determina generalmente mediante **validación cruzada**.
@@ -619,19 +621,19 @@ En la siguiente sección, exploraremos la **regresión Lasso**, que extiende est
 
 Cuando se tiene un conjunto de predictores con posibles redundancias o ruido, Lasso permite identificar cuáles son las variables más relevantes para el modelo, lo que facilita la interpretación y reduce la complejidad del análisis.
 
-Al igual que ocurría en Ridge Regression, el modelo de regresión Lasso se basa en la minimización de la siguiente función de error [@ranstam2018lasso]: 
+Al igual que en Ridge, el modelo de regresión Lasso se define sobre datos observados mediante la minimización [@ranstam2018lasso]: 
 $$
-SSE_{lasso} = \| \mathbf{Y}- \mathbf{X} \beta \|^2 + \lambda \sum_{j=1}^{p} |\beta_j|
+SSE_{\text{lasso}} = \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|^2 + \lambda \sum_{j=1}^{p} |\beta_j|
 $$
 
-donde el **término de penalización**, ($L_1=\sum |\beta_j|$) hace que algunos coeficientes se reduzcan exactamente a **cero**, lo que significa que esas variables son eliminadas del modelo.
+donde el **término de penalización** ($L_1=\sum |\beta_j|$) no penaliza el intercepto $\beta_0$ y hace que algunos coeficientes de pendiente se reduzcan exactamente a **cero**, eliminando variables del modelo.
 
 La diferencia clave con **Ridge Regressión**, visto anteriormente, es que Ridge reduce la magnitud de los coeficientes pero no los anula, mientras que **Lasso puede eliminar variables por completo**.
 
 **Interpretación del parámetro** $\lambda$
 
 -   Si $\lambda = 0$, el modelo es equivalente a la regresión lineal tradicional (OLS).
--   A medida que $\lambda$ aumenta, más coeficientes se reducen a cero, lo que equivale a realizar **selección de variables**.
+-   A medida que $\lambda$ aumenta, más coeficientes de pendiente se reducen a cero, lo que equivale a realizar **selección de variables**.
 -   Si $\lambda$ es demasiado grande, se eliminan demasiadas variables, lo que puede resultar en un modelo subóptimo.
 
 Al igual que en el método *Ridge*, la selección óptima de $\lambda$ se realiza generalmente mediante **validación cruzada**.
@@ -685,10 +687,10 @@ La regresión **Elastic Net** es una técnica de regularización que combina las
 
 Este método es particularmente efectivo cuando el número de predictores es grande y existe **multicolinealidad**, ya que permite controlar simultáneamente la **reducción de la magnitud de los coeficientes** y la **eliminación de variables irrelevantes**.
 
-Elastic Net introduce una penalización que combina los términos de Ridge ($L_2$) y Lasso ($L_1$):
+Elastic Net introduce una penalización que combina los términos de Ridge ($L_2$) y Lasso ($L_1$), sobre datos observados:
 
 $$
-SSE_{\text{Elastic Net}} = \| Y - X \beta \|^2 + \lambda_1 \sum_{j=1}^{p} |\beta_j| + \lambda_2 \sum_{j=1}^{p} \beta_j^2 $$
+SSE_{\text{Elastic Net}} = \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|^2 + \lambda_1 \sum_{j=1}^{p} |\beta_j| + \lambda_2 \sum_{j=1}^{p} \beta_j^2 $$
 
 donde:
 
@@ -699,10 +701,10 @@ donde:
     -   $\alpha = 0$ → Elastic Net se comporta como Ridge.
     -   $0 < \alpha < 1$ → Elastic Net combina ambos métodos.
 
-La estimación de los coeficientes en Elastic Net se obtiene resolviendo:
+La estimación de los coeficientes en Elastic Net se obtiene resolviendo (habitualmente sin penalizar el intercepto):
 
 $$
-\hat{\beta}_{\text{Elastic Net}} = \arg \min_{\beta} \left( \| Y - X \beta \|^2 + \lambda \left( \alpha \sum |\beta_j| + (1 - \alpha) \sum \beta_j^2 \right) \right)
+\hat{\boldsymbol{\beta}}_{\text{EN}} = \arg \min_{\boldsymbol{\beta}} \left( \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|^2 + \lambda \left( \alpha \sum_{j=1}^{p} |\beta_j| + (1 - \alpha) \sum_{j=1}^{p} \beta_j^2 \right) \right)
 $$
 
 
