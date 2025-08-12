@@ -1,8 +1,24 @@
 # Selección de variables, regularización y validación {#sec-tema2}
 
-En los modelos de regresión, especialmente cuando se trabaja con conjuntos de datos que incluyen un gran número de variables predictoras, es común enfrentarse al desafío de identificar qué variables son realmente relevantes para explicar la variable respuesta. La inclusión de demasiadas variables en un modelo puede llevar a problemas como el sobreajuste, pérdida de interpretabilidad y complejidad innecesaria, mientras que la exclusión de variables importantes puede resultar en modelos subóptimos.
+En los modelos de regresión, especialmente cuando se trabaja con conjuntos de datos que incluyen un gran número de variables predictoras, es común enfrentarse al desafío ntficar qué variables son realmente relevantes para explicar la variable respuesta. La inclusión de demasiadas variables en un modelo puede llevar a problemas como el sobreajuste, pérdida de interpretabilidad y complejidad innecesaria, mientras que la exclusión de variables importantes puede resultar en modelos subóptimos.
 
-Este tema aborda uno de los aspectos más críticos en la construcción de modelos de regresión: cómo seleccionar el subconjunto óptimo de variables predictoras y cómo validar la calidad del modelo resultante. El proceso completo involucra varias etapas interconectadas que van desde el filtrado inicial de variables hasta la validación final del modelo, pasando por técnicas sofisticadas de selección y regularización.
+Este tema aborda uno de los aspectos más críticos en la construcción de modelos de regresión: cómo seleccionar el subconjunto óptimo de variables predictoras y cómo validar la calidad del modelo resultante. Una vez realizado el análisis exploratorio y el ajuste inicial del modelo, surge la necesidad crítica de optimizar la selección de variables. Cuando se dispone de $p$ variables explicativas, es posible construir hasta $2^p$ modelos diferentes considerando todas las combinaciones posibles. Sin embargo, explorar de manera exhaustiva todos estos modelos puede ser computacionalmente inviable cuando $p$ es grande.
+
+Para superar este desafío, en este tema nos enfocaremos en cinco enfoques principales:
+
+1. **Filtrado basado en información básica**: Eliminación preliminar de variables irrelevantes mediante criterios básicos (variabilidad, correlación, VIF)
+
+2. **Criterios de bondad de ajuste**: Métricas para comparar modelos con diferente número de variables (AIC, BIC, Cp de Mallows)
+
+3. **Métodos de selección exhaustiva**: Evaluación sistemática de todas las combinaciones posibles (Best Subset Selection)
+
+4. **Métodos automáticos paso a paso**: Selección iterativa mediante algoritmos forward, backward y stepwise
+
+5. **Métodos basados en regularización**: Técnicas que penalizan la complejidad del modelo (Ridge, Lasso, Elastic Net)
+
+6. **Validación del modelo**: Evaluación rigurosa de la capacidad predictiva mediante división train/test y validación cruzada
+
+Cada enfoque tiene sus propias ventajas y limitaciones, siendo apropiados para diferentes situaciones según el tamaño del dataset, el número de variables y los objetivos del análisis. El objetivo es presentar las técnicas más relevantes para la selección de variables y regularización, entender sus fundamentos teóricos, y aplicarlas a casos prácticos, culminando con métodos robustos de validación que aseguren la calidad y generalización del modelo final.
 
 ## Proceso completo de construcción y optimización del modelo
 
@@ -75,35 +91,52 @@ La elección del tipo de experimento o método de recogida de datos dependerá d
 7.  **Reducción de variables:**
     -   En análisis de regresión, especialmente cuando se trabaja con conjuntos de datos de alta dimensionalidad, es común enfrentar situaciones en las que el número de variables explicativas es muy grande. Esto puede llevar a problemas como el sobreajuste, dificultades en la interpretación del modelo y una mayor complejidad computacional. Por ello, reducir el número de variables explicativas, sin perder información relevante, se convierte en un paso crucial para construir modelos más eficientes y robustos.
 8.  **Validación del modelo:**
-    -   Evaluar el desempeño del modelo con datos de validación o mediante técnicas como validación cruzada para garantizar su capacidad predictiva en nuevos conjuntos de datos.
+    -   Evaluar el rendimientodel modelo con datos de validación o mediante técnicas como validación cruzada para garantizar su capacidad predictiva en nuevos conjuntos de datos.
 
-### Enfoque de este tema: Selección, regularización y validación
+## Filtrado basado en información básica
 
-Una vez realizado el análisis exploratorio y el ajuste inicial del modelo, surge la necesidad crítica de optimizar la selección de variables. Cuando se dispone de $p$ variables explicativas, es posible construir hasta $2^p$ modelos diferentes considerando todas las combinaciones posibles. Sin embargo, explorar de manera exhaustiva todos estos modelos puede ser computacionalmente inviable cuando $p$ es grande.
+Antes de aplicar métodos sofisticados de selección de variables, es fundamental realizar un filtrado preliminar basado en información básica. Este primer paso consiste en identificar y descartar variables que claramente no aportan información relevante al modelo, reduciendo significativamente el espacio de búsqueda y mejorando la eficiencia de los métodos posteriores [@james2013introduction].
 
-Para superar este desafío, en este tema nos enfocaremos en cuatro enfoques principales:
+Los criterios principales para este filtrado incluyen:
 
-1. **Filtrado basado en información**: Eliminación preliminar de variables irrelevantes mediante criterios básicos (variabilidad, correlación, VIF)
+**1. Variabilidad de las variables predictoras**
 
-2. **Métodos de selección exhaustiva**: Evaluación sistemática de todas las combinaciones posibles (Best Subset Selection)
+Variables con varianza muy baja o constantes proporcionan poca información discriminatoria. Se descartan variables donde:
 
-3. **Métodos automáticos paso a paso**: Selección iterativa mediante algoritmos forward, backward y stepwise
+$$\text{Var}(X_j) = \frac{1}{n-1}\sum_{i=1}^{n}(x_{ij} - \bar{x}_j)^2 < \epsilon$$
 
-4. **Métodos basados en regularización**: Técnicas que penalizan la complejidad del modelo (Ridge, Lasso, Elastic Net)
+para algún umbral pequeño $\epsilon$ (típicamente $\epsilon = 0.01$).
 
-5. **Validación del modelo**: Evaluación rigurosa de la capacidad predictiva mediante división train/test y validación cruzada
+**2. Correlación con la variable respuesta**
 
-Cada enfoque tiene sus propias ventajas y limitaciones, siendo apropiados para diferentes situaciones según el tamaño del dataset, el número de variables y los objetivos del análisis. El objetivo es presentar las técnicas más relevantes para la selección de variables y regularización, entender sus fundamentos teóricos, y aplicarlas a casos prácticos, culminando con métodos robustos de validación que aseguren la calidad y generalización del modelo final.
+Variables con correlación muy baja con $Y$ pueden ser candidatas a eliminación. Se calcula:
 
-## Filtrado basado en información
+$$r_{X_j,Y} = \frac{\sum_{i=1}^{n}(x_{ij} - \bar{x}_j)(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n}(x_{ij} - \bar{x}_j)^2\sum_{i=1}^{n}(y_i - \bar{y})^2}}$$
 
-Antes de aplicar métodos sofisticados de selección de variables, es fundamental realizar un filtrado preliminar basado en información básica. Este primer paso consiste en identificar y descartar variables que claramente no aportan información relevante al modelo, reduciendo significativamente el espacio de búsqueda y mejorando la eficiencia de los métodos posteriores [@guyon2003introduction].
+y típicamente se establece un umbral mínimo $|r_{X_j,Y}| > \delta$ (ej: $\delta = 0.1$).
 
-Los criterios principales para este filtrado incluyen: **(1) Variabilidad de las variables predictoras**: Variables con varianza muy baja o constantes proporcionan poca información discriminatoria. Se descartan variables donde $\text{Var}(X_j) = \frac{1}{n-1}\sum_{i=1}^{n}(x_{ij} - \bar{x}_j)^2 < \epsilon$ para algún umbral pequeño $\epsilon$. **(2) Correlación con la variable respuesta**: Variables con correlación muy baja con $Y$ pueden ser candidatas a eliminación. Se calcula $r_{X_j,Y} = \frac{\sum_{i=1}^{n}(x_{ij} - \bar{x}_j)(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n}(x_{ij} - \bar{x}_j)^2\sum_{i=1}^{n}(y_i - \bar{y})^2}}$ y típicamente se establece un umbral mínimo $|r_{X_j,Y}| > \delta$ (ej: $\delta = 0.1$). **(3) Multicolinealidad extrema**: Variables altamente correlacionadas entre sí pueden ser redundantes. Se calcula $r_{X_j,X_k} = \frac{\text{Cov}(X_j, X_k)}{\sqrt{\text{Var}(X_j)\text{Var}(X_k)}}$ y si $|r_{X_j,X_k}| > 0.95$, se considera eliminar una de las dos variables. **(4) Factor de Inflación de la Varianza (VIF)**: Para detectar multicolinealidad más compleja se calcula $VIF_j = \frac{1}{1-R^2_j}$ donde $R^2_j$ es el coeficiente de determinación de la regresión de $X_j$ sobre las demás variables predictoras. Valores $VIF_j > 10$ indican multicolinealidad problemática.
+**3. Multicolinealidad extrema**
+
+Variables altamente correlacionadas entre sí pueden ser redundantes. Se calcula:
+
+$$r_{X_j,X_k} = \frac{\text{Cov}(X_j, X_k)}{\sqrt{\text{Var}(X_j)\text{Var}(X_k)}}$$
+
+Si $|r_{X_j,X_k}| > 0.95$, se considera eliminar una de las dos variables.
+
+**4. Factor de Inflación de la Varianza (VIF)**
+
+Para detectar multicolinealidad más compleja se calcula:
+
+$$VIF_j = \frac{1}{1-R^2_j}$$
+
+donde $R^2_j$ es el coeficiente de determinación de la regresión de $X_j$ sobre las demás variables predictoras. Valores $VIF_j > 10$ indican multicolinealidad problemática.
 
 ::: {.callout-tip title="Ejemplo de filtrado inicial" collapse="true"}
+
+En este ejemplo aplicamos el proceso completo de filtrado basado en información a un conjunto de datos simulado con diferentes características.
+
 ```{r filtrado-inicial}
-# Ejemplo de filtrado basado en información
+# Configuración y generación de datos
 set.seed(123)
 n <- 100
 p <- 15
@@ -118,82 +151,265 @@ X[, 1] <- 5
 # Variable con muy baja variabilidad  
 X[, 2] <- 5 + rnorm(n, 0, 0.01)
 
-# Variables altamente correlacionadas
-X[, 4] <- X[, 3] + rnorm(n, 0, 0.1)
-X[, 5] <- X[, 3] + rnorm(n, 0, 0.1)
+# Variables moderadamente correlacionadas
+X[, 4] <- X[, 3] + rnorm(n, 0, 0.5)
+X[, 5] <- 0.7 * X[, 3] + rnorm(n, 0, 0.6)
 
-# Variable respuesta
+# Variable respuesta con coeficientes conocidos
 beta <- c(0, 0, 2, 1.5, 1.2, -1, 0.8, rep(0, 8))
 y <- X %*% beta + rnorm(n)
 
 datos <- data.frame(y = y, X)
 
-# 1. Filtrar por variabilidad
+suppressPackageStartupMessages(library(car))
+
+# 1. Análisis de variabilidad
 varianzas <- apply(X, 2, var)
-cat("Variables con baja variabilidad:\n")
-print(which(varianzas < 0.01))
+vars_baja_var <- which(varianzas < 0.01)
 
 # 2. Filtrar por correlación con Y
-correlaciones <- cor(X, y)
-cat("\nCorrelaciones con Y:\n")
-print(round(correlaciones, 3))
-
-cat("\nVariables con correlación baja (|r| < 0.1):\n")
-print(which(abs(correlaciones) < 0.1))
-
-# 3. Matriz de correlaciones entre predictores
-cor_matrix <- cor(X)
-cat("\nPares de variables altamente correlacionadas (|r| > 0.8):\n")
-high_cor <- which(abs(cor_matrix) > 0.8 & abs(cor_matrix) < 1, arr.ind = TRUE)
-for(i in 1:nrow(high_cor)) {
-  cat("X", high_cor[i,1], " - X", high_cor[i,2], ": ", 
-      round(cor_matrix[high_cor[i,1], high_cor[i,2]], 3), "\n")
+X_filtrada <- if(length(vars_baja_var) > 0) X[, -vars_baja_var] else X
+correlaciones <- cor(X_filtrada, y)
+vars_baja_corr_idx <- which(abs(correlaciones) < 0.1)
+vars_baja_corr <- if(length(vars_baja_corr_idx) > 0) {
+  as.numeric(gsub("X", "", colnames(X_filtrada)[vars_baja_corr_idx]))
+} else {
+  c()
 }
 
-# 4. Calcular VIF
-library(car)
-modelo_completo <- lm(y ~ ., data = datos)
-vif_valores <- vif(modelo_completo)
-cat("\nFactores VIF:\n")
-print(round(vif_valores, 2))
+# 3. Identificar correlaciones altas entre predictores
+cor_matrix <- cor(X_filtrada)
+high_cor <- which(abs(cor_matrix) > 0.8 & abs(cor_matrix) < 1, arr.ind = TRUE)
+
+# 4. Calcular VIF para variables restantes
+vars_eliminar <- unique(c(vars_baja_var, vars_baja_corr))
+datos_final <- if(length(vars_eliminar) > 0) {
+  datos[, -(vars_eliminar + 1)] # +1 porque datos incluye y en primera columna
+} else {
+  datos
+}
+
+vif_valores <- if(ncol(datos_final) > 2) {
+  modelo <- lm(y ~ ., data = datos_final)
+  vif(modelo)
+} else {
+  NULL
+}
+
+# Preparar resumen de resultados
+resumen_vars_baja_var <- if(length(vars_baja_var) > 0) {
+  paste("X", vars_baja_var, collapse=", ")
+} else {
+  "Ninguna"
+}
+
+resumen_vars_baja_corr <- if(length(vars_baja_corr) > 0) {
+  paste("X", vars_baja_corr, collapse=", ")
+} else {
+  "Ninguna"
+}
+
+resumen_high_cor <- if(nrow(high_cor) > 0) {
+  correlaciones_altas <- character()
+  for(i in 1:nrow(high_cor)) {
+    var1 <- colnames(X_filtrada)[high_cor[i,1]]
+    var2 <- colnames(X_filtrada)[high_cor[i,2]]
+    corr_val <- round(cor_matrix[high_cor[i,1], high_cor[i,2]], 3)
+    correlaciones_altas <- c(correlaciones_altas, paste(var1, "y", var2, ":", corr_val))
+  }
+  correlaciones_altas
+} else {
+  "Ninguna"
+}
+
+vars_restantes <- ncol(datos_final) - 1
+vars_originales <- p
+
+resumen_vif <- if(!is.null(vif_valores)) {
+  vif_summary <- character()
+  for(i in 1:length(vif_valores)) {
+    estado <- if(vif_valores[i] > 10) " (ALTO)" else if(vif_valores[i] > 5) " (moderado)" else ""
+    vif_summary <- c(vif_summary, paste(names(vif_valores)[i], ":", round(vif_valores[i], 2), estado))
+  }
+  vif_summary
+} else {
+  "No calculado"
+}
 ```
+
+**Resultados del filtrado basado en información:**
+
+**1. Variables eliminadas por baja variabilidad:**
+`r resumen_vars_baja_var`
+
+**2. Variables eliminadas por baja correlación con Y:**
+`r resumen_vars_baja_corr`
+
+**3. Correlaciones altas entre predictores (|r| > 0.8):**
+`r if(length(resumen_high_cor) == 1 && resumen_high_cor == "Ninguna") "Ninguna" else paste("•", resumen_high_cor, collapse = "\n- ")`
+
+**4. Variables restantes:** `r vars_restantes` de `r vars_originales` originales
+
+**5. Factores VIF de variables finales:**
+`r if(length(resumen_vif) == 1 && resumen_vif == "No calculado") "No calculado" else paste("•", resumen_vif, collapse = "\n- ")`
+
+Este proceso de filtrado redujo el conjunto original de `r vars_originales` variables a `r vars_restantes` variables, eliminando efectivamente las variables con problemas de variabilidad y correlación identificados.
+
 :::
 
-El proceso de filtrado se implementa secuencialmente: (1) eliminar variables constantes o con varianza cercana a cero, (2) eliminar variables con correlación muy baja con la variable respuesta, (3) identificar grupos de variables multicolineales y retener solo la más relevante de cada grupo, y (4) calcular VIF y eliminar variables con valores muy altos. Este filtrado inicial típicamente reduce el conjunto de variables candidatas en un 20-40%, facilitando significativamente los pasos posteriores de selección.
+El proceso de filtrado se implementa secuencialmente: (1) eliminar variables constantes o con varianza cercana a cero, (2) eliminar variables con correlación muy baja con la variable respuesta, (3) identificar grupos de variables multicolineales y retener solo la más relevante de cada grupo, y (4) calcular VIF y eliminar variables con valores muy altos. Este filtrado inicial típicamente reduce el conjunto de variables candidatas, facilitando significativamente los pasos posteriores de selección.
 
 Es importante considerar que este filtrado no es definitivo, ya que variables eliminadas en esta etapa pueden ser importantes en combinaciones específicas. Además, está basado en relaciones lineales y puede omitir relaciones no lineales importantes. Por tanto, requiere validación posterior del modelo resultante y los umbrales deben ajustarse según el dominio de aplicación específico.
 
+¡Claro! El contenido que tienes es excelente y muy completo. Para hacerlo menos esquemático, lo he reescrito en un formato más narrativo, conectando las ideas en párrafos fluidos. La idea es transformar las listas y tablas en una explicación discursiva, como si lo estuvieras contando en una clase, lo que se adapta mejor al formato de un libro.
+
+Aquí tienes la propuesta:
+
+## Criterios de Bondad de Ajuste
+
+Una vez completado el filtrado preliminar de variables, nos enfrentamos a una de las tareas más importantes del modelado: seleccionar la combinación óptima de predictores. El objetivo es encontrar un equilibrio delicado. Un modelo con muy pocas variables puede ser demasiado simple y no capturar la relación real (**subajuste** o *underfitting*), mientras que un modelo con demasiadas variables puede ajustarse al ruido de la muestra y no generalizar bien a nuevos datos (**sobreajuste** u *overfitting*).
+
+Para navegar este compromiso, utilizamos criterios de información que cuantifican la calidad de un modelo, equilibrando su capacidad explicativa con su complejidad. Estos nos permiten comparar modelos con diferente número de predictores de forma rigurosa y objetiva. Los tres criterios más influyentes en la estadística clásica son el Criterio de Información de Akaike (AIC), el Criterio de Información Bayesiano (BIC) y el estadístico Cp de Mallows.
+
+### Criterio de Información de Akaike
+
+El **Criterio de Información de Akaike (AIC)**, desarrollado por Hirotugu Akaike, es una métrica fundamentada en la teoría de la información [@james2013introduction]. Su propósito es estimar la pérdida de información que ocurre cuando usamos un modelo para representar la realidad. El modelo que minimice esta pérdida de información será considerado el mejor.
+
+La fórmula del AIC para un modelo de regresión lineal es:
+
+$$AIC = n \ln\left(\frac{SSE}{n}\right) + 2(p+1)$$
+
+En esta ecuación, $n$ es el tamaño de la muestra, $SSE$ es la Suma de Cuadrados del Error y $p$ es el número de variables predictoras. La fórmula equilibra dos fuerzas opuestas:
+
+1.  **Bondad de ajuste**: El primer término, $n \ln(SSE/n)$, está directamente relacionado con la función de log-verosimilitud del modelo. Disminuye a medida que el modelo se ajusta mejor a los datos (es decir, a medida que el SSE se reduce).
+2.  **Penalización por complejidad**: El segundo término, $2(p+1)$, actúa como un castigo. Aumenta en 2 unidades por cada parámetro adicional que se incluye en el modelo (p pendientes + 1 intercepto).
+
+En la práctica, calculamos el AIC para varios modelos candidatos y **seleccionamos aquel con el valor de AIC más bajo**. Este criterio es asintóticamente eficiente, lo que significa que, con muestras suficientemente grandes, tiende a seleccionar el modelo que minimiza el error de predicción esperado en nuevos datos.
+
+### Criterio de Información Bayesiano 
+
+El **Criterio de Información Bayesiano (BIC)**, propuesto por Gideon Schwarz, es un competidor directo del AIC, pero con fundamentos en la estadística bayesiana [@hastie2009elements]. Mientras que el AIC busca el mejor modelo para la predicción, el BIC está diseñado para encontrar el **modelo más probable de ser el "verdadero"** generador de los datos.
+
+Su fórmula es muy similar a la del AIC, pero la penalización por complejidad es diferente y más severa:
+
+$$BIC = n \ln\left(\frac{SSE}{n}\right) + (p+1) \ln(n)$$
+
+La diferencia clave reside en el término de penalización. En lugar de $2(p+1)$, el BIC utiliza $(p+1)\ln(n)$. Dado que el logaritmo natural de $n$ es mayor que 2 para cualquier muestra con más de 7 observaciones ($e^2 \approx 7.4$), la penalización del BIC es casi siempre más fuerte que la del AIC. Esta penalización más estricta le confiere al BIC una tendencia hacia la **parsimonia**, favoreciendo modelos más simples. Una de sus propiedades teóricas más importantes es la **consistencia**: si el modelo verdadero se encuentra entre los candidatos, la probabilidad de que el BIC lo seleccione tiende a 1 a medida que el tamaño de la muestra crece.
+
+### Estadístico Cp de Mallows
+
+A diferencia del AIC y el BIC, el **estadístico Cp de Mallows** no se basa en la teoría de la información ni en la estadística bayesiana, sino que aborda directamente el **error cuadrático medio de predicción** del modelo [@james2013introduction]. Su objetivo es encontrar un modelo que tenga un bajo sesgo y una baja varianza.
+
+La fórmula para el estadístico Cp es:
+
+$$C_p = \frac{SSE_p}{MSE_{full}} - n + 2(p+1)$$
+
+Aquí, $SSE_p$ es la suma de cuadrados del error del modelo candidato con $p$ variables, y $MSE_{full}$ es el error cuadrático medio del **modelo completo** (el que incluye todas las variables predictoras disponibles), que se utiliza como una estimación insesgada de la varianza del error poblacional, $\sigma^2$.
+
+La interpretación del Cp es particularmente intuitiva. Si un modelo está bien especificado (es decir, no tiene un sesgo significativo porque incluye todas las variables relevantes), se espera que su valor de $C_p$ sea muy cercano a $p+1$. Por lo tanto, la estrategia es buscar modelos donde **$C_p \approx p+1$**.
+
+-   Un modelo con **$C_p > p+1$** sugiere que el modelo está sesgado, probablemente porque se ha omitido una variable predictora importante.
+-   Un modelo con **$C_p \le p+1$** indica un buen ajuste. Entre los modelos que cumplen esta condición, se suele elegir aquel con el valor de $C_p$ más bajo.
+
+::: {.callout-tip title="Visualización del Cp de Mallows" collapse="true"}
+
+Una de las aplicaciones más útiles del Cp de Mallows es su visualización gráfica para identificar el modelo óptimo. El siguiente ejemplo muestra cómo crear un gráfico de Cp que facilita la interpretación y selección del mejor modelo.
+
+```{r cp-mallows-grafico}
+# Cargar librerías necesarias
+suppressPackageStartupMessages({
+  library(leaps)      # Para best subset selection
+  library(ggplot2)    # Para gráficos
+  library(dplyr)      # Para manipulación de datos
+})
+
+# Usar el dataset mtcars para el ejemplo
+data(mtcars)
+
+# 1. Realizar best subset selection con todas las variables predictoras
+best_subset <- regsubsets(mpg ~ ., data = mtcars, nvmax = 10)
+subset_summary <- summary(best_subset)
+
+# 2. Extraer información relevante para el gráfico
+#    Este data frame contiene los datos para todos los modelos (de 1 a 10 variables)
+plot_data <- data.frame(
+  n_variables = 1:length(subset_summary$cp),
+  Cp = subset_summary$cp,
+  linea_referencia = (1:length(subset_summary$cp)) + 1
+)
+
+# 3. Identificar el mejor modelo según el criterio Cp
+#    La búsqueda del "mejor" se hace excluyendo los dos modelos más grandes
+n_modelos_a_evaluar <- length(plot_data$Cp) - 2
+distancias_cp <- abs(plot_data$Cp[1:n_modelos_a_evaluar] - plot_data$linea_referencia[1:n_modelos_a_evaluar])
+mejor_cp_idx <- which.min(distancias_cp)
+
+# 4. Crear el gráfico del Cp de Mallows
+#    Usamos el data frame completo 'plot_data' para que se muestren todos los puntos.
+ggplot(plot_data, aes(x = n_variables, y = Cp)) +
+  # Línea de referencia ideal (Cp = p+1)
+  geom_line(aes(y = linea_referencia), color = "red", linetype = "dashed", linewidth = 1) +
+  # Puntos y línea de los valores Cp de los modelos
+  geom_point(color = "#0072B2", size = 3) +
+  geom_line(color = "#0072B2") +
+  # Resaltar el mejor punto, usando el 'mejor_cp_idx' que calculamos
+  geom_point(data = plot_data[mejor_cp_idx, ], color = "red", size = 5, shape = 17) +
+  # Etiqueta para el mejor punto
+  annotate("text", x = plot_data$n_variables[mejor_cp_idx], y = plot_data$Cp[mejor_cp_idx] + 1.5,
+           label = paste("Óptimo Cp\n(", mejor_cp_idx, "variables)"), color = "red", size = 4) +
+  labs(
+    title = "Criterio Cp de Mallows para Selección de Variables (mtcars)",
+    subtitle = "Buscamos el modelo cuyo Cp sea bajo y cercano a la línea roja (Cp ≈ p+1)",
+    x = "Número de Variables Predictoras (p)",
+    y = "Valor de Cp"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(plot.title = element_text(face = "bold")) +
+  scale_x_continuous(breaks = 1:10)
+
+# 5. Mostrar las variables del modelo seleccionado
+variables_mejor_modelo_cp <- names(which(subset_summary$which[mejor_cp_idx, -1]))
+```
+
+El gráfico resultante nos permite diagnosticar visualmente la calidad de los modelos candidatos. La línea discontinua roja representa el escenario ideal donde el modelo no tiene sesgo ($C_p = p+1$). Nuestra estrategia es identificar el modelo más simple (con menos variables) que se encuentre cerca o por debajo de esta línea, eligiendo de entre ellos el que tenga el valor de Cp más bajo.
+
+Como se observa, el estadístico Cp disminuye drásticamente al pasar de uno a dos predictores, indicando una gran reducción del sesgo. El modelo con **`r mejor_cp_idx` variables** es el seleccionado como óptimo por nuestro criterio, ya que es el que, teniendo un sesgo bajo ($C_p \le p+1$), alcanza el valor mínimo del estadístico.
+
+Concretamente, este modelo presenta un valor de Cp de **`r round(plot_data$Cp[mejor_cp_idx], 2)`**. El análisis sugiere que el modelo más parsimonioso y con el mejor equilibrio entre sesgo y varianza para predecir `mpg` se compone de las siguientes variables: **`r paste(variables_mejor_modelo_cp, collapse = ", ")`**. Añadir más predictores, aunque reduce ligeramente el Cp, no compensa el aumento en la complejidad del modelo.
+
+:::
 
 
-## Selección de variables
+### ¿Cuándo Usar Cada Criterio?
 
-Simplificar un modelo eliminando variables irrelevantes es fundamental para mejorar su parsimonia y evitar el sobreajuste. Una vez realizado el filtrado inicial basado en información (descrito anteriormente), el siguiente paso es aplicar métodos más sofisticados para seleccionar el subconjunto óptimo de variables.
+La existencia de varios criterios plantea una pregunta natural: ¿cuál debemos usar? La respuesta depende en gran medida del objetivo final de nuestro análisis.
 
-Cuando se dispone de $p$ variables explicativas (ya filtradas), es posible construir hasta $2^p$ modelos diferentes considerando todas las combinaciones posibles de estas variables. Sin embargo, explorar de manera exhaustiva todos estos modelos puede ser inviable, especialmente si $p$ es grande.
+Si el **objetivo principal es la predicción**, el **AIC** suele ser la opción preferida. Su diseño para minimizar el error de predicción lo hace ideal en contextos de pronóstico, donde el rendimiento en datos nuevos es lo más importante. Su penalización más moderada permite incluir variables que, aunque no sean "verdaderas" en un sentido causal, ayudan a mejorar la precisión de las predicciones.
 
-Para superar este desafío, se han desarrollado tres enfoques principales:
+Por otro lado, si el **objetivo es la explicación o la inferencia** —es decir, identificar el modelo más parsimonioso que probablemente representa el verdadero proceso generador de los datos—, el **BIC** es la elección más sólida. Su penalización más fuerte protege de forma más robusta contra el sobreajuste y, en muestras grandes, su propiedad de consistencia le da una base teórica más fuerte para la selección del "modelo verdadero".
 
-1. **Métodos de selección exhaustiva**: Evaluación sistemática de todas las combinaciones posibles (Best Subset Selection)
-2. **Métodos automáticos paso a paso**: Selección iterativa mediante algoritmos forward, backward y stepwise  
-3. **Métodos basados en regularización**: Ridge, Lasso y Elastic Net
+El **Cp de Mallows** es especialmente valioso en un contexto más exploratorio, cuando queremos entender explícitamente el compromiso entre el sesgo y la varianza. Al graficar $C_p$ frente a $p+1$ para diferentes subconjuntos de modelos, podemos visualizar claramente el punto en el que añadir más variables deja de reducir el sesgo y solo empieza a inflar la varianza, ofreciendo una visión muy clara del "codo" de complejidad óptima.
 
-Cuando se dispone de $p$ variables explicativas, es posible construir hasta $2^p$ modelos diferentes considerando todas las combinaciones posibles de estas variables. Sin embargo, explorar de manera exhaustiva todos estos modelos puede ser inviable, especialmente si $p$ es grande. Por ejemplo, con solo 10 variables regresoras, se generarían $2^{10} = 1024$ modelos posibles. Aunque la tecnología actual permite ajustar todos estos modelos, evaluar cada uno en términos de bondad de ajuste, gráficos de residuos, detección de observaciones influyentes y otros diagnósticos sería extremadamente complejo y costoso.
+Es común que estos criterios no coincidan en su selección. Cuando esto ocurre, no debe verse como un fracaso, sino como una indicación de que no existe un único modelo "mejor" de forma inequívoca. En tales casos, el juicio del analista es clave, y se pueden usar herramientas adicionales como la **validación cruzada** (*cross-validation*) para comparar el rendimiento predictivo de los modelos finalistas y tomar una decisión informada.
 
-Para superar este desafío, se han desarrollado criterios específicos de selección de variables que ayudan a los analistas a identificar un pequeño subconjunto de modelos que cumplan con los estándares de calidad deseados. Este enfoque permite centrar el análisis en un grupo reducido de modelos “buenos”, generalmente entre 4 y 6, y realizar un estudio más profundo y detallado de ellos. Esta estrategia facilita tanto la interpretación como la eficiencia del proceso analítico, optimizando el uso de recursos computacionales y asegurando que los resultados sean robustos y fiables.
+::: {.callout-important}
+## El Principio de Parsimonia en la Selección de Modelos
+
+El **principio de parsimonia**, también conocido como la "navaja de Occam", es un concepto fundamental que subyace a todos los criterios de bondad de ajuste. Este principio establece que, entre modelos que explican igualmente bien un fenómeno, **se debe preferir el más simple**.
+:::
 
 ## Métodos de selección exhaustiva
 
-Los métodos de selección exhaustiva son un enfoque fundamental en la búsqueda de un subconjunto óptimo de variables predictoras en modelos de regresión. Este enfoque evalúa de manera sistemática diferentes combinaciones de variables para identificar cuál de ellas proporciona el mejor ajuste al modelo en función de un criterio predefinido, como el coeficiente de determinación ajustado ($R^2$ ajustado), el error cuadrático medio (ECM) o criterios de información como AIC o BIC.
+Los métodos de selección exhaustiva son un enfoque fundamental en la búsqueda de un subconjunto óptimo de variables predictoras en modelos de regresión. Este enfoque evalúa de manera sistemática diferentes combinaciones de variables para identificar cuál de ellas proporciona el mejor ajuste al modelo en función de un criterio predefinido, como el coeficiente de determinación ajustado ($R^2$ ajustado) o criterios de información como AIC o BIC.
 
 A diferencia de los métodos automáticos, los métodos de selección exhaustiva no dependen de un proceso iterativo de adición o eliminación de variables. En cambio, buscan exhaustivamente (o mediante aproximaciones computacionalmente más eficientes) entre todas las posibles combinaciones de variables, lo que garantiza un análisis completo de las interacciones y relevancias potenciales.
 
-### Mejor subconjunto (Best Subset Selection)
+El método más conocido dentro de este enfoque es la **selección del mejor subconjunto (Best Subset Selection)**, que evalúa todos los subconjuntos posibles de variables y selecciona el mejor para cada tamaño específico. Es el enfoque más completo pero también el más exigente computacionalmente. Para un conjunto de $p$ variables predictoras, este método construye todos los modelos posibles que incluyen $k$ variables, donde $k = 1, 2, ..., p$, seleccionando el mejor modelo de cada tamaño según el criterio elegido.
 
-Este método evalúa todos los subconjuntos posibles de variables y selecciona el mejor para cada tamaño específico. Es el enfoque más completo pero también el más exigente computacionalmente.
-
-```{r}
-# Ejemplo de Best Subset Selection
-library(leaps)
+::: {.callout-tip title="Ejemplo de selección exhaustiva" collapse="true"}
+```{r best-subset-ejemplo}
+# Ejemplo de Best Subset Selection maximizando R² ajustado
+suppressPackageStartupMessages(library(leaps))
 
 # Usando el dataset mtcars
 data(mtcars)
@@ -201,51 +417,90 @@ data(mtcars)
 # Realizar best subset selection
 best_subset <- regsubsets(mpg ~ ., data = mtcars, nvmax = 10)
 
-# Resumen del modelo
-summary(best_subset)
-
-# Visualizar los resultados
-plot(best_subset, scale = "adjr2")
-
-# Obtener estadísticas de cada modelo
+# Obtener estadísticas del mejor modelo según R² ajustado
 subset_summary <- summary(best_subset)
-subset_summary$adjr2
-subset_summary$cp
-subset_summary$bic
-
-# Encontrar el mejor modelo según diferentes criterios
-which.max(subset_summary$adjr2)  # Mejor R² ajustado
-which.min(subset_summary$cp)     # Mejor Cp de Mallows
-which.min(subset_summary$bic)    # Mejor BIC
+mejor_modelo_idx <- which.max(subset_summary$adjr2)
+mejor_r2_adj <- max(subset_summary$adjr2)
+total_variables <- ncol(mtcars) - 1  # Excluir variable respuesta
+variables_seleccionadas <- mejor_modelo_idx
 ```
 
-### Ventajas y limitaciones de la selección exhaustiva
+El método de selección exhaustiva aplicado al conjunto de datos `mtcars` identifica el modelo óptimo que maximiza el R² ajustado. Este modelo alcanza un **R² ajustado de `r round(mejor_r2_adj, 4)`**, utilizando **`r variables_seleccionadas` variables** del total de **`r total_variables` variables** predictoras disponibles. Esta selección representa un equilibrio óptimo entre la capacidad explicativa del modelo y la penalización por complejidad, demostrando cómo la evaluación exhaustiva puede identificar el subconjunto de variables que mejor explica la variabilidad en el consumo de combustible.
+:::
 
-**Ventajas:**
-- **Optimalidad garantizada**: Encuentra el mejor subconjunto según el criterio elegido
-- **Evaluación completa**: Examina todas las posibles combinaciones de variables
-- **Referencia sólida**: Proporciona un estándar para comparar otros métodos
+Esta aproximación presenta importantes **ventajas**: garantiza encontrar el mejor subconjunto según el criterio elegido (optimalidad garantizada), examina todas las posibles combinaciones de variables ofreciendo una evaluación completa, y proporciona un estándar sólido para comparar otros métodos de selección. Sin embargo, también tiene **limitaciones** significativas: la complejidad computacional crece exponencialmente ya que con $p$ variables se generan $2^p$ modelos posibles, lo que hace que sea impracticable para $p$ grande (típicamente $p > 15-20$). Además, sin una validación cruzada adecuada, puede seleccionar modelos sobreajustados.
 
-**Limitaciones:**
-- **Complejidad computacional**: Con $p$ variables se generan $2^p$ modelos posibles
-- **Escalabilidad limitada**: Impracticable para $p$ grande (típicamente $p > 15-20$)
-- **Riesgo de sobreajuste**: Sin validación cruzada puede seleccionar modelos sobreajustados
+Estos métodos son especialmente útiles cuando el número de predictores no es demasiado grande, ya que el esfuerzo computacional crece exponencialmente con el número de variables. Aunque el costo computacional puede ser elevado en datasets amplios, los métodos de selección exhaustiva proporcionan una referencia sólida y transparente para evaluar qué variables son fundamentales en el modelo, siendo particularmente valiosos en estudios donde la interpretabilidad y la certeza sobre la selección de variables son prioritarias.
 
-Estos métodos son especialmente útiles cuando el número de predictores no es demasiado grande, ya que el esfuerzo computacional crece exponencialmente con el número de variables. Aunque el costo computacional puede ser elevado en datasets amplios, los métodos de selección exhaustiva proporcionan una referencia sólida y transparente para evaluar qué variables son fundamentales en el modelo.
+¡Perfecto! El texto que tienes es una excelente introducción. Ahora vamos a expandir cada uno de esos puntos para darles la profundidad teórica y práctica que necesitan en el libro, explicando el algoritmo de cada método, sus criterios de decisión y sus ventajas y limitaciones.
+
+Aquí tienes una propuesta para desarrollar esa sección.
 
 ## Métodos automáticos paso a paso
 
-Los métodos automáticos de selección de variables son herramientas prácticas y eficientes diseñadas para identificar subconjuntos relevantes de predictores en un modelo de regresión. A diferencia de los métodos de selección directa, que exploran exhaustivamente todas las combinaciones posibles de variables, los métodos automáticos siguen un enfoque iterativo que simplifica el proceso de selección. Estos métodos son especialmente útiles en situaciones donde el número de predictores es elevado, ya que reducen significativamente el esfuerzo computacional.
+Los métodos automáticos de selección de variables, a menudo llamados métodos secuenciales o por pasos (*stepwise*), son algoritmos diseñados para explorar el espacio de posibles modelos de una manera computacionalmente eficiente. A diferencia del método de mejores subconjuntos (*best subset selection*), que evalúa todos los modelos posibles, estos enfoques siguen un camino restringido, añadiendo o quitando predictores de uno en uno.
 
-El principio clave detrás de los métodos automáticos es el ajuste dinámico del conjunto de variables en función de criterios estadísticos, como $p$-valores, coeficientes de determinación ajustados ($R^2$) ajustado), o criterios de información como AIC y BIC. Entre las estrategias más comunes se encuentran:
+El principio clave es construir un modelo de forma iterativa, tomando en cada paso una decisión "localmente óptima" basada en un criterio estadístico. Los criterios más comunes son el p-valor de un predictor, o el cambio que este produce en un indicador global como el **AIC**, el **BIC** o el **$R^2$ ajustado**.
 
--   **Método Forward (selección progresiva):** Parte de un modelo vacío e incorpora variables de manera secuencial, añadiendo en cada paso la variable que mejora más el modelo.
+### Selección progresiva (Forward Selection)
 
--   **Método Backward (eliminación regresiva):** Comienza con todas las variables en el modelo y elimina iterativamente aquellas que tienen menor impacto.
+Esta estrategia es la más intuitiva: parte de la nada y construye el modelo pieza por pieza, añadiendo en cada paso el predictor que aporta la mayor mejora. 
 
--   **Método Stepwise:** Combina las estrategias forward y backward, permitiendo tanto la inclusión como la exclusión de variables en cada iteración.
+**El Algoritmo**
 
-Estos métodos ofrecen una manera estructurada y ágil de seleccionar variables, aunque no garantizan encontrar el mejor modelo global debido a su naturaleza secuencial. A lo largo de esta sección, examinaremos cada uno de estos métodos, sus ventajas, limitaciones y aplicaciones en diferentes contextos de análisis.
+1.  **Inicio**: Se comienza con el **modelo nulo**, que solo contiene el intercepto ($Y \sim 1$).
+2.  **Primer Paso**: Se ajustan $p$ modelos de regresión simple, uno para cada una de las $p$ variables predictoras disponibles. Se elige la variable que mejor explica la respuesta (la que tiene el p-valor más bajo en su test t, o la que produce el AIC/BIC más bajo). Esta variable se convierte en el primer predictor del modelo.
+3.  **Pasos Siguientes**: Se ajustan $p-1$ nuevos modelos, cada uno de los cuales contiene la(s) variable(s) ya seleccionada(s) más una de las variables restantes. De nuevo, se selecciona y se añade la variable que produce la mayor mejora en el criterio elegido.
+4.  **Finalización**: El proceso se repite y se detiene cuando ninguna de las variables restantes mejora el modelo de forma significativa al ser añadida (por ejemplo, ninguna tiene un p-valor por debajo de un umbral predefinido, o el AIC/BIC del modelo deja de disminuir).
+
+**Ventajas y Limitaciones**
+
+* **Ventaja**: Es computacionalmente muy eficiente. Puede aplicarse en situaciones con un número de predictores muy grande, incluso cuando hay más predictores que observaciones ($p > n$).
+* **Limitación**: Su principal debilidad es su **"miopía"**. Una variable seleccionada en una etapa temprana se queda en el modelo para siempre. Sin embargo, es posible que esa variable se vuelva redundante una vez que se añadan otros predictores. El método *forward* no puede rectificar decisiones pasadas, por lo que no garantiza encontrar el mejor modelo posible.
+
+### Eliminación regresiva (Backward Elimination)
+
+Esta estrategia adopta el enfoque opuesto: empieza con todo y va eliminando lo que no es útil, como un escultor que retira el mármol sobrante. 
+
+**El Algoritmo**
+
+1.  **Inicio**: Se comienza con el **modelo completo**, que incluye todas las $p$ variables predictoras disponibles ($Y \sim X_1 + X_2 + \dots + X_p$).
+2.  **Primer Paso**: Se ajusta el modelo completo y se examina la significancia de cada predictor. Se identifica la variable **menos significativa**, es decir, aquella con el p-valor más alto en su test t (o la que, al ser eliminada, produce la menor disminución en la calidad del modelo según AIC/BIC).
+3.  **Pasos Siguientes**: Si el p-valor de esa variable supera un umbral de permanencia (p. ej., $\alpha_{out} = 0.10$), se elimina del modelo. A continuación, se vuelve a ajustar el modelo con las $p-1$ variables restantes.
+4.  **Finalización**: El proceso de identificar y eliminar la variable menos significativa se repite hasta que todas las variables que quedan en el modelo son estadísticamente significativas (es decir, todas tienen un p-valor por debajo del umbral de permanencia).
+
+**Ventajas y Limitaciones**
+
+* **Ventaja**: Generalmente se considera superior al método *forward* porque empieza evaluando el efecto de cada variable en presencia de todas las demás. Esto proporciona un contexto inicial más completo.
+* **Limitación**: No se puede utilizar si el número de predictores es mayor que el número de observaciones ($p > n$), ya que es imposible ajustar el modelo completo inicial. Además, al igual que el método *forward*, una vez que una variable es eliminada, no puede volver a entrar, lo que podría llevar a eliminar por error una variable que es importante en combinación con un subconjunto más pequeño de predictores.
+
+
+### Selección paso a paso (Stepwise Regression)
+
+Este método es un híbrido que intenta combinar lo mejor de las dos estrategias anteriores, permitiendo un proceso de "prueba y error" más flexible.
+
+**El Algoritmo**
+
+La selección *stepwise* es esencialmente una selección *forward* con un añadido crucial: en cada paso, después de añadir una nueva variable, se realiza una **verificación hacia atrás** para comprobar si alguna de las variables que ya estaban en el modelo se ha vuelto redundante.
+
+1.  **Paso Adelante (Forward)**: Al igual que en la selección progresiva, se añade la variable que más mejora el modelo.
+2.  **Paso Atrás (Backward)**: Después de añadir esa variable, se examinan **todas las variables ya incluidas** en el modelo. Si alguna de ellas ha perdido su significancia (su p-valor ha aumentado por encima de un umbral de eliminación), se elimina.
+3.  **Repetición**: El proceso continúa, alternando pasos hacia adelante y hacia atrás, hasta que se alcanza un punto de equilibrio en el que ninguna variable puede ser añadida ni eliminada según los umbrales establecidos.
+
+**Ventajas y Limitaciones**
+
+* **Ventaja**: Es más robusto que los métodos *forward* o *backward* puros, ya que puede corregir decisiones anteriores. Una variable que fue importante al principio puede ser eliminada más tarde si otra la hace redundante.
+* **Limitación**: A pesar de su flexibilidad, sigue siendo un algoritmo "codicioso" (*greedy*) que no explora todo el espacio de modelos. Por tanto, tampoco garantiza encontrar el mejor modelo global.
+
+::: {.callout-warning title="Advertencia sobre los métodos automáticos"}
+Aunque estos métodos son herramientas útiles para un primer cribado de variables, deben usarse con extrema cautela. Su naturaleza automática puede llevar a conclusiones erróneas si no se supervisan con criterio.
+
+1.  **No garantizan el mejor modelo**: Al seguir un camino fijo, pueden pasar por alto el subconjunto de variables verdaderamente óptimo.
+2.  **Invalidez de los p-valores**: Los p-valores, errores estándar e intervalos de confianza del modelo final están **sesgados** y son excesivamente optimistas. El proceso de selección ha "elegido a los ganadores" de antemano, y la teoría de la inferencia estándar no se aplica a un modelo que ha sido seleccionado de esta manera.
+3.  **Inestabilidad**: Los resultados pueden ser muy sensibles a pequeñas variaciones en los datos. Añadir o quitar unas pocas observaciones puede cambiar drásticamente el modelo seleccionado.
+
+Por estas razones, los métodos automáticos deben considerarse como **herramientas exploratorias** para generar modelos candidatos, no como un procedimiento definitivo. La selección final siempre debe estar guiada por el conocimiento del dominio, la teoría subyacente y un diagnóstico riguroso.
+:::
 
 ## Métodos basados en regularización
 
@@ -319,7 +574,7 @@ Los detalles de la validación cruzada son tratados en la asignatura de Aprendiz
 ::: {.callout-tip title="Ejemplo" collapse="true"}
 ```{r ridge}
 # Cargar librerías
-library(glmnet)
+suppressPackageStartupMessages(library(glmnet))
 
 # Datos simulados
 set.seed(123)
@@ -512,320 +767,67 @@ Elastic Net es ideal cuando hay **muchas variables correlacionadas** y se desea 
 -   Requiere la selección de hiperparámetros ($\lambda$ y $\alpha$), por lo que debe usarse validación cruzada para encontrar la combinación óptima.
 
 
-## Validación del modelo
+## Validación del Modelo
 
-La validación del modelo es una etapa fundamental en el proceso de construcción de modelos de regresión, ya que permite evaluar la calidad del ajuste, la capacidad predictiva y la generalización del modelo a nuevos conjuntos de datos. Sin una validación adecuada, es imposible determinar si un modelo es verdaderamente útil o si simplemente se ha ajustado en exceso a los datos de entrenamiento [@james2013introduction].
+Hemos ajustado un modelo, interpretado sus coeficientes y evaluado su significancia estadística. Pero, ¿cómo podemos estar seguros de que funcionará bien en el futuro, con datos que nunca ha visto? Esta es la pregunta fundamental que la **validación del modelo** busca responder.
 
-La validación abarca dos aspectos complementarios: **la evaluación de la bondad de ajuste** mediante métricas específicas, y **la validación de la capacidad predictiva** utilizando estrategias como la división train/test y la validación cruzada. Ambos enfoques son esenciales para construir modelos robustos y confiables.
+Imagina que estás preparando un examen. Si solo memorizas las respuestas de los exámenes de años anteriores (tus **datos de entrenamiento**), puede que saques una nota perfecta en ellos. Sin embargo, cuando te enfrentes al examen real con preguntas nuevas (los **datos de prueba**), es probable que tu rendimiento sea decepcionante. Esto, en esencia, es el **sobreajuste** (*overfitting*): un modelo que se aprende los datos de entrenamiento "de memoria", incluyendo su ruido y peculiaridades, pero que pierde su capacidad de **generalizar** a nuevas observaciones.
 
-### Métricas de evaluación del modelo
+La validación es el proceso de simular este "examen final" para obtener una estimación honesta del rendimiento predictivo de nuestro modelo en el mundo real [@james2013introduction]. Se compone de dos elementos clave: las **estrategias de validación**, que nos dicen cómo simular el examen, y las **métricas de evaluación**, que nos dicen cómo calificarlo.
 
-Las métricas de evaluación proporcionan medidas cuantitativas de la calidad del modelo, permitiendo comparar diferentes especificaciones y seleccionar la más adecuada para el problema en cuestión. Aunque medidas como $R^2$ y $R^2$ ajustado son fundamentales (ya tratadas en temas anteriores), nos enfocaremos aquí en criterios de información y métricas de error que son especialmente relevantes para la selección de variables.
 
-#### Criterio de Información de Akaike (AIC)
+### Estrategias de Validación
 
-El AIC (Akaike Information Criterion) es una medida que equilibra la bondad de ajuste del modelo con su complejidad [@akaike1974new]:
+Para evaluar la capacidad de generalización, necesitamos probar el modelo en datos que no se usaron para entrenarlo. Las siguientes estrategias nos permiten hacer precisamente eso.
 
-$$AIC = n \ln\left(\frac{SSE}{n}\right) + 2(p+1)$$
+::: {.callout-warning title="El primer paso no negociable: La partición inicial"}
+Antes de escribir una sola línea de código para ajustar un modelo, seleccionar variables o ejecutar una validación cruzada, el procedimiento **siempre** debe comenzar con una única acción:
 
-donde el primer término representa la bondad de ajuste y el segundo término penaliza la complejidad del modelo.
+**Dividir el conjunto de datos completo en dos partes y guardar una de ellas bajo llave.**
 
-**Interpretación del AIC:**
-- **Valores más bajos indican mejores modelos**
-- Equilibra automáticamente el trade-off entre ajuste y complejidad
-- Es útil para comparar modelos con diferentes números de variables
-- No tiene una interpretación absoluta, solo relativa
+1.  **Datos de modelado (p. ej., 80% del total):** Este es el conjunto de datos con el que trabajarás. Lo usarás para todas tus tareas de construcción y evaluación de modelos: entrenar, comparar diferentes conjuntos de variables, y ejecutar estrategias como la validación cruzada.
+2.  **Conjunto de prueba Final (p. ej., 20% restante):** Este conjunto de datos debe ser guardado y **no ser utilizado bajo ninguna circunstancia** durante el proceso de modelado. Es tu "examen final sorpresa", tu única oportunidad de obtener una estimación verdaderamente honesta y no sesgada del rendimiento del modelo que has seleccionado como el campeón definitivo.
 
-::: {.callout-tip}
-## Uso práctico del AIC
-El AIC es especialmente útil en procesos de selección de variables. Al comparar múltiples modelos candidatos, se prefiere aquel con el AIC más bajo, ya que representa el mejor balance entre explicación de la varianza y parsimonia.
+La validación cruzada y la división simple train/test que veremos a continuación son técnicas que se aplican **dentro** de los "datos de modelado".
 :::
 
-#### Criterio de Información Bayesiano (BIC)
+#### El Conjunto de entrenamiento y test (Train/Test Split)
 
-El BIC (Bayesian Information Criterion) es similar al AIC pero aplica una penalización más fuerte a la complejidad del modelo [@schwarz1978estimating]:
+La estrategia más directa es tomar nuestros "Datos de Modelado" (el 80% inicial) y volver a dividirlos, creando un único "examen" para el proceso de construcción del modelo [@hastie2009elements]:
 
-$$BIC = n \ln\left(\frac{SSE}{n}\right) + (p+1) \ln(n)$$
+1.  **Conjunto de entrenamiento (*Training Set*)**: Usualmente, el 70-80% de los datos. El modelo se construye y se ajusta usando únicamente esta porción. Es aquí donde el modelo "aprende".
+2.  **Conjunto de test (*Test Set*)**: El 20-30% restante. Estos datos se mantienen "ocultos" durante el entrenamiento. Una vez que el modelo está finalizado, lo usamos para predecir la variable respuesta en este conjunto. La comparación entre las predicciones ($\hat{y}$) y los valores reales ($y$) nos da una medida no sesgada de su rendimiento.
 
-**Diferencias clave entre AIC y BIC:**
-- **BIC penaliza más fuertemente** la complejidad cuando $n > 7$
-- **BIC tiende a seleccionar modelos más simples** que AIC
-- **BIC es consistente**: si el modelo verdadero está entre los candidatos, BIC lo seleccionará con probabilidad que tiende a 1 cuando $n \to \infty$
+Aunque es simple y computacionalmente barata, esta técnica tiene una debilidad importante: los resultados pueden depender mucho de la división aleatoria específica que se haya hecho. Si por mala suerte en el conjunto de prueba caen observaciones muy atípicas, nuestra evaluación del modelo será excesivamente pesimista. Si caen puntos muy fáciles de predecir, será demasiado optimista. Esta alta variabilidad es un problema, especialmente con muestras de datos pequeñas.
 
-::: {.callout-note}
-## ¿Cuándo usar AIC vs BIC?
+#### Validación cruzada (Cross-Validation)
 
-- **Usa AIC** cuando el objetivo principal es la **predicción** y se desea minimizar el error predictivo
-- **Usa BIC** cuando el objetivo es **identificar el modelo verdadero** y se prefiere la parsimonia
-- **En muestras grandes**, BIC tiende a ser más conservador seleccionando modelos más simples
-:::
+La **validación cruzada** es la solución a la variabilidad de la división simple y se aplica, de nuevo, **sobre el conjunto total de "datos de modelado"**. En lugar de hacer un único "examen final", la validación cruzada promedia los resultados de múltiples mini-exámenes, proporcionando una estimación del error mucho más estable y fiable [@james2013introduction].
 
-#### Error cuadrático medio (RMSE)
+El método más común es la **validación cruzada de k-particiones (*k-fold cross-validation*)**. Su nombre describe el proceso: los datos se dividen en *k* particiones y se "cruzan" los roles de entrenamiento y validación.
 
-El RMSE (Root Mean Square Error) mide la magnitud promedio de los errores de predicción en las mismas unidades que la variable respuesta:
-
-$$RMSE = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}$$
-
-**Características del RMSE:**
-- **Interpretación directa**: Se expresa en las mismas unidades que la variable respuesta
-- **Sensible a valores atípicos**: Los errores grandes tienen un impacto desproporcionado
-- **Útil para evaluación predictiva**: Especialmente valioso cuando se evalúa el desempeño en datos de validación
-
-#### Error absoluto medio (MAE)
-
-El MAE (Mean Absolute Error) proporciona una medida alternativa del error que es menos sensible a valores atípicos:
-
-$$MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|$$
-
-**Comparación RMSE vs MAE:**
-- **MAE es más robusto** a valores atípicos
-- **RMSE penaliza más** los errores grandes
-- **MAE es más fácil de interpretar** como el error promedio
-- **RMSE es más sensible** a la variabilidad de los errores
-
-### Estrategias de validación
-
-Las estrategias de validación permiten evaluar la capacidad predictiva del modelo en datos no utilizados durante el entrenamiento, proporcionando una estimación más realista del desempeño en situaciones reales.
-
-#### División Train/Test
-
-La estrategia de división train/test es la aproximación más básica para validar un modelo [@hastie2009elements]:
-
-::: {.callout-note}
-## Procedimiento Train/Test
-
-1. **División de datos**: Separar aleatoriamente los datos en dos conjuntos:
-   - **Conjunto de entrenamiento** (típicamente 70-80% de los datos)
-   - **Conjunto de prueba** (20-30% restante)
-
-2. **Entrenamiento**: Ajustar el modelo usando únicamente los datos de entrenamiento
-
-3. **Evaluación**: Calcular las métricas de desempeño en el conjunto de prueba
-:::
-
-**Ventajas:**
-- Simplicidad de implementación
-- Evaluación no sesgada del desempeño predictivo
-- Computacionalmente eficiente
-
-**Limitaciones:**
-- **Variabilidad alta**: Los resultados dependen de la división específica
-- **Pérdida de datos**: No utiliza todos los datos para entrenamiento
-- **Problemático con muestras pequeñas**: Puede resultar en conjuntos de prueba muy pequeños
-
-#### Validación cruzada
-
-La validación cruzada aborda las limitaciones de la división train/test utilizando múltiples particiones de los datos [@stone1974cross].
-
-##### Validación cruzada k-fold
-
-En la validación cruzada k-fold, los datos se dividen en k subconjuntos (folds) de tamaño aproximadamente igual:
-
-::: {.callout-note}
-## Procedimiento k-fold
-
-1. **División**: Dividir aleatoriamente los datos en k folds de tamaño similar
-2. **Iteración**: Para cada fold $i = 1, 2, ..., k$:
-   - Usar el fold $i$ como conjunto de validación
-   - Usar los restantes $k-1$ folds como conjunto de entrenamiento
-   - Ajustar el modelo y calcular métricas de desempeño
-3. **Promedio**: Calcular el promedio de las métricas a través de los k folds
-:::
-
-**Valores típicos de k:**
-- **k = 5 o k = 10**: Más comunes, equilibran sesgo y varianza
-- **k grande**: Menor sesgo, mayor varianza computacional
-- **k pequeño**: Mayor sesgo, menor varianza
-
-**Métricas de validación cruzada:**
+El resultado final de este procedimiento es el **error de validación cruzada**, que se calcula promediando los errores obtenidos en cada una de las *k* particiones. Esto nos da una única métrica de rendimiento para el modelo.
 
 $$CV_{(k)} = \frac{1}{k}\sum_{i=1}^{k} \text{Métrica}_i$$
 
-donde $\text{Métrica}_i$ puede ser RMSE, MAE, o cualquier otra medida de interés.
+donde $\text{Métrica}_i$ es la métrica de error (como RMSE o MAE) calculada en la i-ésima iteración. La elección de *k* suele ser 5 o 10, ya que se ha demostrado que estos valores ofrecen un buen equilibrio entre el sesgo y la varianza de la estimación del error.
 
-##### Leave-One-Out Cross Validation (LOOCV)
-
-LOOCV es un caso especial de k-fold donde $k = n$ (número de observaciones):
-
-**Características del LOOCV:**
-- **Utiliza máxima información**: Entrena con $n-1$ observaciones
-- **Menor sesgo**: Estimación muy cercana al error verdadero  
-- **Mayor varianza**: Más sensible a observaciones individuales
-- **Computacionalmente intensivo**: Requiere ajustar $n$ modelos
-
-**Fórmula para regresión lineal:**
-En regresión lineal, LOOCV tiene una fórmula cerrada eficiente:
-
-$$CV_{(n)} = \frac{1}{n}\sum_{i=1}^{n}\left(\frac{e_i}{1-h_{ii}}\right)^2$$
-
-donde $e_i$ son los residuos ordinarios y $h_{ii}$ son los elementos diagonal de la matriz hat.
-
-### Ejemplo práctico de validación
-
-::: {.callout-tip title="Ejemplo completo de validación" collapse="true"}
-
-```{r validacion-ejemplo}
-# Cargar librerías necesarias
-library(glmnet)
-library(caret)
-
-# Generar datos de ejemplo
-set.seed(123)
-n <- 100
-p <- 8
-X <- matrix(rnorm(n * p), n, p)
-# Crear correlaciones entre algunas variables
-X[,2] <- X[,1] + 0.5*rnorm(n)
-X[,3] <- X[,1] + 0.3*X[,2] + 0.4*rnorm(n)
-
-# Variable respuesta con ruido
-beta_true <- c(3, 1.5, -2, 0.8, 0, 0, 0, 0.5)
-y <- X %*% beta_true + rnorm(n)
-
-# Convertir a data frame
-datos <- data.frame(y = y, X)
-
-# ============================================
-# 1. Ajustar diferentes modelos
-# ============================================
-
-# Modelo completo (OLS)
-modelo_ols <- lm(y ~ ., data = datos)
-
-# Modelo Ridge
-modelo_ridge <- cv.glmnet(X, y, alpha = 0)
-ridge_pred <- predict(modelo_ridge, X, s = "lambda.min")
-
-# Modelo Lasso  
-modelo_lasso <- cv.glmnet(X, y, alpha = 1)
-lasso_pred <- predict(modelo_lasso, X, s = "lambda.min")
-
-# Modelo Elastic Net
-modelo_elastic <- cv.glmnet(X, y, alpha = 0.5)
-elastic_pred <- predict(modelo_elastic, X, s = "lambda.min")
-
-# ============================================
-# 2. Calcular métricas de bondad de ajuste
-# ============================================
-
-# Función para calcular métricas
-calcular_metricas <- function(y_real, y_pred, p) {
-  n <- length(y_real)
-  sse <- sum((y_real - y_pred)^2)
-  sst <- sum((y_real - mean(y_real))^2)
-  
-  r2 <- 1 - sse/sst
-  r2_adj <- 1 - (sse/(n-p-1))/(sst/(n-1))
-  rmse <- sqrt(mean((y_real - y_pred)^2))
-  mae <- mean(abs(y_real - y_pred))
-  
-  # AIC y BIC (aproximados para modelos regularizados)
-  aic <- n * log(sse/n) + 2*(p+1)
-  bic <- n * log(sse/n) + (p+1)*log(n)
-  
-  return(data.frame(
-    R2 = r2,
-    R2_adj = r2_adj,  
-    RMSE = rmse,
-    MAE = mae,
-    AIC = aic,
-    BIC = bic
-  ))
-}
-
-# Calcular métricas para cada modelo
-metricas_ols <- calcular_metricas(y, fitted(modelo_ols), p)
-metricas_ridge <- calcular_metricas(y, ridge_pred, p)  
-metricas_lasso <- calcular_metricas(y, lasso_pred, p)
-metricas_elastic <- calcular_metricas(y, elastic_pred, p)
-
-# Combinar resultados
-comparacion <- rbind(
-  OLS = metricas_ols,
-  Ridge = metricas_ridge,
-  Lasso = metricas_lasso,
-  Elastic = metricas_elastic
-)
-
-print(round(comparacion, 4))
-
-# ============================================
-# 3. Validación Train/Test
-# ============================================
-
-# Dividir datos
-set.seed(123)
-train_idx <- createDataPartition(y, p = 0.8, list = FALSE)
-train_data <- datos[train_idx, ]
-test_data <- datos[-train_idx, ]
-
-X_train <- as.matrix(train_data[, -1])
-y_train <- train_data$y
-X_test <- as.matrix(test_data[, -1])
-y_test <- test_data$y
-
-# Ajustar modelos en datos de entrenamiento
-modelo_train <- lm(y ~ ., data = train_data)
-lasso_train <- cv.glmnet(X_train, y_train, alpha = 1)
-
-# Predicciones en conjunto de prueba
-pred_ols_test <- predict(modelo_train, test_data)
-pred_lasso_test <- predict(lasso_train, X_test, s = "lambda.min")
-
-# Métricas en conjunto de prueba
-rmse_ols_test <- sqrt(mean((y_test - pred_ols_test)^2))
-rmse_lasso_test <- sqrt(mean((y_test - pred_lasso_test)^2))
-
-cat("RMSE en conjunto de prueba:\n")
-cat("OLS:", round(rmse_ols_test, 4), "\n")
-cat("Lasso:", round(rmse_lasso_test, 4), "\n")
-
-# ============================================
-# 4. Validación cruzada k-fold
-# ============================================
-
-# Validación cruzada para OLS
-set.seed(123)
-cv_ols <- train(y ~ ., data = datos, 
-                method = "lm",
-                trControl = trainControl(method = "cv", number = 10))
-
-# Validación cruzada para Lasso (ya calculada en cv.glmnet)
-cv_rmse_lasso <- sqrt(min(modelo_lasso$cvm))
-
-cat("\nValidación cruzada 10-fold (RMSE):\n")
-cat("OLS:", round(cv_ols$results$RMSE, 4), "\n") 
-cat("Lasso:", round(cv_rmse_lasso, 4), "\n")
-
-# ============================================
-# 5. Comparación de coeficientes
-# ============================================
-
-# Extraer coeficientes
-coef_ols <- coef(modelo_ols)
-coef_lasso <- as.numeric(coef(modelo_lasso, s = "lambda.min"))
-coef_true <- c(0, beta_true)  # Incluir intercepto
-
-# Comparar coeficientes
-coef_comparison <- data.frame(
-  Verdadero = coef_true,
-  OLS = coef_ols,
-  Lasso = coef_lasso
-)
-
-print("Comparación de coeficientes:")
-print(round(coef_comparison, 3))
-```
+::: {.callout-note title="Procedimiento de k-particiones"}
+1.  **División**: Dividir aleatoriamente los datos en *k* **particiones** de tamaño similar.
+2.  **Iteración**: Para cada partición $i = 1, 2, ..., k$:
+    * Usar la partición $i$ como conjunto de test.
+    * Usar las restantes $k-1$ particiones como conjunto de entrenamiento.
+    * Ajustar el modelo y calcular las métricas de desempeño en el conjunto de test.
+3.  **Promedio**: Calcular el promedio de las métricas a través de las *k* iteraciones.
 :::
 
-### Consideraciones prácticas en la validación
+Un caso extremo de este método es la **validación cruzada "dejando uno fuera" (LOOCV)**, donde *k* es igual al número de observaciones, *n*. En cada iteración, se entrena el modelo con *n-1* datos y se prueba en el único punto restante. Aunque es computacionalmente muy costoso, en regresión lineal existe una afortunada fórmula matemática que nos permite calcular el error LOOCV con la misma rapidez que un solo ajuste:
 
-#### Selección de la estrategia de validación
+$$CV_{(n)} = \frac{1}{n}\sum_{i=1}^{n}\left(\frac{y_i - \hat{y}_i}{1-h_{ii}}\right)^2$$
 
-La elección de la estrategia de validación depende de varios factores:
+donde $h_{ii}$ es el apalancamiento (*leverage*) de la i-ésima observación.
 
-::: {.callout-important}
-## Guía para seleccionar estrategia de validación
+::: {.callout-important title="Guía para seleccionar estrategia de validación"}
 
 **Usa Train/Test cuando:**
 - El dataset es grande (n > 1000)
@@ -843,27 +845,150 @@ La elección de la estrategia de validación depende de varios factores:
 - El tiempo computacional no es una restricción crítica
 :::
 
-#### Interpretación de las métricas
+### Métricas de rendimiento
 
-**Para bondad de ajuste:**
-- **R² alto** indica buen ajuste, pero cuidado con el sobreajuste
-- **R² ajustado** es más confiable para comparar modelos
-- **AIC/BIC menores** indican mejor balance entre ajuste y complejidad
+Una vez que usamos una estrategia de validación para generar predicciones sobre datos no vistos, necesitamos una "nota" para cuantificar qué tan buenos fueron esos pronósticos. Aquí es donde entran las métricas de error.
 
-**Para capacidad predictiva:**
-- **RMSE** da más peso a errores grandes
-- **MAE** es más robusto a outliers
-- **Métricas de validación cruzada** proporcionan estimaciones menos sesgadas
+#### Raíz del error cuadrático medio
 
-#### Problemas comunes y soluciones
+La métrica más utilizada es la **raíz del error cuadrático medio (RMSE)**. Es como una desviación típica de los residuos, y nos da una idea de la magnitud promedio de los errores de predicción.
 
-1. **Sobreajuste**: Indicado por gran diferencia entre métricas de entrenamiento y validación
-   - *Solución*: Usar regularización o reducir complejidad del modelo
+$$RMSE = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}$$
 
-2. **Variabilidad alta en validación**: Resultados muy diferentes entre folds
-   - *Solución*: Aumentar k en validación cruzada o usar más datos
+La característica clave del RMSE es que, al elevar los errores al cuadrado, **penaliza de forma desproporcionada los errores grandes**. Un solo error de predicción de 10 unidades contribuye al RMSE mucho más que 10 errores de 1 unidad. Esto lo hace muy sensible a valores atípicos. Su gran ventaja es que se expresa en las mismas unidades que la variable respuesta, facilitando su interpretación.
 
-3. **Sesgo de selección**: Usar el conjunto de prueba para seleccionar modelos
-   - *Solución*: Usar conjunto de validación separado o validación cruzada anidada
+#### Error absoluto medio
 
-La validación del modelo es un proceso multifacético que requiere considerar tanto métricas de bondad de ajuste como estrategias de validación robustas. Una validación adecuada no solo evalúa el desempeño del modelo, sino que también guía la selección de variables y la elección de hiperparámetros, asegurando que el modelo final sea tanto preciso como generalizable a nuevos datos.
+Una alternativa popular es el **error absoluto medio (MAE)**, que simplemente promedia el valor absoluto de los errores.
+
+$$MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|$$
+
+A diferencia del RMSE, el MAE no eleva los errores al cuadrado, por lo que **trata todos los errores de forma proporcional a su magnitud**. Un error de 10 unidades es simplemente el doble de malo que un error de 5. Esto hace que el MAE sea **más robusto frente a valores atípicos** y, para muchos, más fácil de interpretar como "el error promedio" que cometemos en nuestras predicciones.
+
+En resumen, la validación nos obliga a confrontar nuestro modelo con la realidad de datos nuevos. Usando una estrategia robusta como la **validación cruzada** para calcular una métrica interpretable como el **RMSE** o el **MAE**, podemos obtener una estimación fiable de su rendimiento predictivo y construir modelos en los que realmente podamos confiar.
+Claro, aquí tienes ese contenido reorganizado y resumido dentro de un recuadro (`callout`), ideal para destacar esta idea clave en tu libro.
+
+::: {.callout-important title="Interpretando el Error"}
+La comparación entre el error del modelo en los datos que ha visto (entrenamiento) y en datos que no ha visto (validación) es la herramienta de diagnóstico más importante para entender el ajuste del modelo.
+
+La regla general es que el error de entrenamiento siempre será más bajo (más optimista) que el de test. La clave está en analizar la **diferencia** entre ambos.
+
+**Sobreajuste (Overfitting)**
+
+* **Síntoma**: Error de entrenamiento **bajo** + Error de test **mucho más alto**.
+* **Diagnóstico**: El modelo ha "memorizado" el ruido de los datos de entrenamiento y no es capaz de generalizar a nuevos datos.
+* **Solución**: Simplificar el modelo (usar menos variables, aplicar regularización como Ridge o Lasso).
+
+**Subajuste (Underfitting)**
+
+* **Síntoma**: Error de entrenamiento **alto** + Error de test **alto y similar**.
+* **Diagnóstico**: El modelo es demasiado simple y no tiene la capacidad de capturar la estructura subyacente de los datos.
+* **Solución**: Aumentar la complejidad del modelo (añadir más variables, incluir interacciones o términos no lineales).
+:::
+
+::: {.callout-tip title="La maldición del sobreajuste" collapse="true"}
+
+Para ilustrar por qué la validación es indispensable, realizaremos un experimento controlado. Crearemos un conjunto de datos donde **conocemos la verdad**: sabemos exactamente qué variables influyen en la respuesta y cuáles son puro ruido. Luego, compararemos dos modelos:
+
+1.  **Modelo Completo**: Un modelo que incluye todas las variables disponibles, tanto las útiles como las de ruido.
+2.  **Modelo Correcto**: Un modelo que incluye únicamente las variables que realmente tienen un efecto sobre la respuesta.
+
+El objetivo es ver cuál de los dos modelos predice mejor en datos "no vistos", utilizando la validación cruzada para simular este escenario.
+
+**1. Simulación de Datos**
+
+Creamos un dataset con 100 observaciones. La variable `y` dependerá de `X1`, `X2` y `X3`. Las variables `X4` a `X10` no tendrán ninguna relación real con `y`; serán **predictores de ruido**.
+
+```{r}
+#| label: setup-validacion
+#| echo: true
+
+# Cargar la librería 'caret', que simplifica enormemente el proceso de validación
+suppressPackageStartupMessages(library(caret))
+
+# Para reproducibilidad
+set.seed(42)
+
+# Crear datos de ejemplo
+n <- 100
+# 3 predictores verdaderos y 7 de ruido
+X <- matrix(rnorm(n * 10), n, 10)
+colnames(X) <- paste0("X", 1:10)
+
+# La respuesta 'y' depende SOLO de X1, X2 y X3
+beta_true <- c(2.5, -1.5, 3, 0, 0, 0, 0, 0, 0, 0) 
+y <- X %*% beta_true + rnorm(n, sd = 2)
+
+# Combinar en un data frame
+datos <- data.frame(y = y, X)
+
+indices_modelado <- createDataPartition(datos$y, p = 0.8, list = FALSE)
+datos_modelado <- datos[indices_modelado, ]
+datos_prueba_final <- datos[-indices_modelado, ]
+
+```
+
+**2. Ajuste y Evaluación de Modelos con Validación Cruzada**
+
+Usaremos la función `train()` del paquete `caret`, que es una herramienta increíblemente potente para ajustar y validar modelos. Configuraremos una **validación cruzada de 10 particiones (10-fold CV)** para estimar el error de predicción (RMSE) de nuestros dos modelos.
+
+```{r}
+#| label: cv-comparacion
+#| echo: true
+
+# Configurar el método de validación cruzada de 10 particiones
+control_cv <- trainControl(method = "cv", number = 10)
+
+# Ajustar y validar el MODELO COMPLETO (incluye predictores de ruido)
+modelo_completo <- train(
+  y ~ ., 
+  data = datos_modelado, 
+  method = "lm",
+  trControl = control_cv
+)
+
+# Ajustar y validar el MODELO CORRECTO (solo los predictores relevantes)
+modelo_correcto <- train(
+  y ~ X1 + X2 + X3, 
+  data = datos_modelado, 
+  method = "lm",
+  trControl = control_cv
+)
+
+# Comparar los resultados de la validación cruzada de ambos modelos
+resultados_cv <- resamples(list(COMPLETO = modelo_completo, CORRECTO = modelo_correcto))
+resumen_cv <- summary(resultados_cv)
+resumen_cv
+
+# Extraer métricas RMSE para uso en el texto
+rmse_correcto <- round(resumen_cv$statistics$RMSE["CORRECTO", "Mean"], 3)
+rmse_completo <- round(resumen_cv$statistics$RMSE["COMPLETO", "Mean"], 3)
+```
+
+**3. Análisis de Resultados**
+
+Al comparar el **RMSE** promedio obtenido en la validación cruzada, la conclusión es clara: el **Modelo Correcto** (`r round(summary(resultados_cv)$statistics$RMSE["CORRECTO", "Mean"], 3)`) es consistentemente **mejor** (menor error) que el **Modelo Completo** (`r round(summary(resultados_cv)$statistics$RMSE["COMPLETO", "Mean"], 3)`).
+
+El **Modelo Completo** sufre de **sobreajuste**. Al incluir las 7 variables de ruido, se esfuerza por encontrar patrones en datos puramente aleatorios. "Aprende" estas relaciones falsas en los datos de entrenamiento, pero falla al predecir en datos nuevos. El **Modelo Correcto**, al ser más parsimonioso, captura la estructura fundamental y generaliza mejor.
+
+Este ejemplo demuestra la lección más importante del modelado: **un buen ajuste en los datos de entrenamiento no garantiza un buen rendimiento predictivo**. La validación es el único método fiable para estimar la verdadera calidad de un modelo.
+
+**4. El Veredicto Final en el Conjunto de Prueba**
+
+La validación cruzada nos ha servido como un juez imparcial para comparar nuestros modelos candidatos y seleccionar el `Modelo Correcto` como el claro ganador. Ahora, para obtener una estimación final y no sesgada de su rendimiento en el mundo real, tomamos ese modelo elegido y lo enfrentamos a los `datos_prueba_final`, el conjunto de datos que ha permanecido intacto durante todo el proceso.
+
+```{r}
+#| label: evaluacion-final
+#| echo: true
+
+# Usamos el modelo ganador (modelo_correcto) para predecir sobre los datos de prueba
+predicciones_finales <- predict(modelo_correcto, newdata = datos_prueba_final)
+
+# Calculamos el RMSE final comparando las predicciones con los valores reales de prueba
+rmse_final <- RMSE(predicciones_finales, datos_prueba_final$y)
+```
+
+Al evaluar nuestro modelo final, obtenemos un RMSE en el conjunto de prueba de **`r round(rmse_final, 3)`**.
+
+Este valor es nuestra estimación más honesta del error de predicción que podemos esperar de nuestro modelo al enfrentarse a nuevos datos. Es crucial compararlo con el error que estimamos durante la validación cruzada (`r rmse_correcto`). El hecho de que ambos valores sean muy similares confirma que nuestro proceso de validación fue robusto y que no hemos sobreajustado el modelo al conjunto de datos de modelado. Este RMSE final es el que reportaríamos como la medida definitiva del rendimiento predictivo de nuestro modelo.
+:::
