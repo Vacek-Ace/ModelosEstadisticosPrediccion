@@ -755,7 +755,7 @@ $E[Y|\mathbf{X}=\mathbf{x}_0]$ es:
 
 $$\hat{y}_0 \pm t_{\alpha/2, n-p-1} \cdot \sqrt{\hat{\sigma}^2 \mathbf{x}_0^T (\mathbf{X}^T\mathbf{X})^{-1} \mathbf{x}_0}$$
 
-### Intervalo de predicción para una bbservación individual
+### Intervalo de predicción para una observación individual
 
 Este intervalo responde a una pregunta más ambiciosa: *¿entre qué
 valores se encontrará la respuesta de una **única y nueva** observación
@@ -788,7 +788,7 @@ banda de confianza como la de predicción son más estrechas cerca del
 se ensanchan a medida que nos alejamos hacia valores más extremos de los
 predictores.
 
-## Diagnóstico del Modelo Múltiple
+## Diagnóstico del modelo múltiple
 
 Al igual que en la regresión simple, una vez ajustado el modelo es
 fundamental realizar un diagnóstico exhaustivo para verificar que los
@@ -798,7 +798,7 @@ validez de estos supuestos. El proceso sigue basándose en el **análisis
 de los residuos**, nuestra ventana a los errores teóricos no observables
 [@fox2018r; @harrell2015].
 
-### Verificación de los Supuestos Clásicos
+### Verificación de los supuestos clásicos
 
 Los supuestos de linealidad, homocedasticidad, normalidad e
 independencia se verifican con herramientas muy similares a las vistas
@@ -824,7 +824,7 @@ modelo es globalmente correcta. Sin embargo, en el contexto múltiple,
 este gráfico podría ocultar una relación no lineal con *una variable
 específica*. Para ello, disponemos de una herramienta más precisa.
 
-#### Gráficos de Componente más Residuo
+#### Gráficos de componente más residuo
 
 El gráfico de Componente más Residuo (CPR o Partial Residual Plots) nos
 permite visualizar la relación entre la variable respuesta y **un único
@@ -839,7 +839,7 @@ línea de regresión. Una desviación sistemática (una curva) sugiere que
 la relación con esa variable específica no es lineal y que podría
 necesitar una transformación (p.ej., logarítmica o cuadrática).
 
-::: {.callout-tip title="Ejemplo práctico: Gráficos de Componente + Residuo (CPR)"}
+::: {.callout-tip title="Ejemplo práctico: Gráficos de componente + residuo"}
 Los gráficos CPR nos permiten visualizar si la relación de cada
 predictor con la respuesta es verdaderamente lineal:
 
@@ -868,13 +868,13 @@ Si vemos curvas sistemáticas en algún gráfico CPR, es señal de que esa
 variable podría necesitar una transformación (log, cuadrática, etc.).
 :::
 
-### Diagnóstico de Multicolinealidad
+### Diagnóstico de multicolinealidad
 
 La **multicolinealidad** es un problema que solo existe en la regresión
 múltiple. Ocurre cuando dos o más variables predictoras están
 fuertemente correlacionadas entre sí.
 
-#### Consecuencias de la Multicolinealidad
+#### Consecuencias de la multicolinealidad
 
 La multicolinealidad no viola los supuestos de Gauss-Markov (los
 estimadores siguen siendo insesgados y eficientes), pero puede arruinar
@@ -893,7 +893,7 @@ la interpretación práctica de un modelo:
     $R^2$ alto) pero con ningún predictor individual significativo
     (tests t con p-valores altos).
 
-#### Detección de la Multicolinealidad
+#### Detección de la multicolinealidad
 
 1.  **Matriz de correlaciones**: Un primer paso es examinar la matriz de
     correlaciones entre los predictores. Coeficientes de correlación
@@ -1029,7 +1029,7 @@ La elección de la estrategia debe ser una decisión meditada, sopesando
 la simplicidad, la interpretabilidad y la robustez del modelo final.
 :::
 
-### Identificación de Observaciones Influyentes
+### Identificación de observaciones influyentes
 
 Los conceptos de *outlier* (residuo grande), *leverage* (valor atípico
 en los predictores) e *influencia* (impacto en el modelo) son los mismos
@@ -1050,7 +1050,7 @@ $i$ tiene un fuerte poder de atracción sobre la estimación de ese
 coeficiente en particular. Una regla común es considerar problemáticos
 los puntos con $|\text{DFBETA}_{j,i}| > \frac{2}{\sqrt{n}}$.
 
-#### Gráficos de Regresión Parcial
+#### Gráficos de regresión parcial
 
 Estos gráficos son una de las herramientas visuales más potentes y
 elegantes de la regresión múltiple. Un gráfico de regresión parcial para
@@ -1094,7 +1094,7 @@ Los gráficos de regresión parcial nos permiten visualizar la relación
 #| fig-height: 8
 
 # Gráficos de regresión parcial para todas las variables
-avPlots(modelo, main = "Gráficos de Regresión Parcial")
+avPlots(modelo, main = "Gráficos de regresión parcial")
 ```
 
 **¿Qué vemos en cada gráfico?**

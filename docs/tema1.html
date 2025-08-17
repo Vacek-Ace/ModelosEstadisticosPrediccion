@@ -219,19 +219,19 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tema3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelos no lineales. Transformación de variables. Ingeniería de características.</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ingeniería de características: transformaciones de variables e interacciones</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tema4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Selección de variables, regularización y validación</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tema5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Otros modelos de regresión: Modelos Aditivos Generalizados (GAMs)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -501,8 +501,8 @@ Y_i = \beta_0 + \beta_1 X_i + \varepsilon_i
 <h4 data-number="2.3.2.1" class="anchored" data-anchor-id="interpretación-práctica-de-los-coeficientes"><span class="header-section-number">2.3.2.1</span> Interpretación práctica de los coeficientes</h4>
 <p>Una vez estimados, los coeficientes tienen una interpretación muy concreta y útil:</p>
 <ul>
-<li><p><strong>Pendiente (</strong><span class="math inline">\(\hat{\beta}_1\)</span>): Representa el cambio promedio estimado en la variable respuesta <span class="math inline">\(Y\)</span> por cada <strong>aumento de una unidad</strong> en la variable predictora <span class="math inline">\(X\)</span>. En nuestro ejemplo, sería el número de puntos que se espera que aumente la calificación final por cada hora adicional de estudio semanal.</p></li>
-<li><p><strong>Intercepto (</strong><span class="math inline">\(\hat{\beta}_0\)</span>): Es el valor promedio estimado de la variable respuesta <span class="math inline">\(Y\)</span> cuando la variable predictora <span class="math inline">\(X\)</span> es igual a cero. La interpretación del intercepto solo tiene sentido práctico si <span class="math inline">\(X=0\)</span> es un valor plausible y se encuentra dentro del rango de nuestros datos. De lo contrario (como en nuestro ejemplo, donde nadie estudia 0 horas), a menudo se considera simplemente un ancla matemática para la recta de regresión.</p></li>
+<li><p><strong>Pendiente</strong> (<span class="math inline">\(\hat{\beta}_1\)</span>): Representa el cambio promedio estimado en la variable respuesta <span class="math inline">\(Y\)</span> por cada <strong>aumento de una unidad</strong> en la variable predictora <span class="math inline">\(X\)</span>. En nuestro ejemplo, sería el número de puntos que se espera que aumente la calificación final por cada hora adicional de estudio semanal.</p></li>
+<li><p><strong>Intercepto</strong> (<span class="math inline">\(\hat{\beta}_0\)</span>): Es el valor promedio estimado de la variable respuesta <span class="math inline">\(Y\)</span> cuando la variable predictora <span class="math inline">\(X\)</span> es igual a cero. La interpretación del intercepto solo tiene sentido práctico si <span class="math inline">\(X=0\)</span> es un valor plausible y se encuentra dentro del rango de nuestros datos. De lo contrario (como en nuestro ejemplo, donde nadie estudia 0 horas), a menudo se considera simplemente un ancla matemática para la recta de regresión.</p></li>
 </ul>
 <div class="callout callout-style-default callout-note callout-titled" title="Minimización de SSE">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
@@ -837,17 +837,15 @@ Interpretación de R²
 <h4 data-number="2.4.5.1" class="anchored" data-anchor-id="distribución-de-los-estimadores"><span class="header-section-number">2.4.5.1</span> Distribución de los estimadores</h4>
 <p>Bajo el supuesto de normalidad, se puede demostrar que los estimadores también siguen una distribución Normal: <span class="math display">\[
 \hat{\beta}_1 \sim N\left(\beta_1, \frac{\sigma^2}{S_{xx}}\right) \quad \quad \quad \hat{\beta}_0 \sim N\left(\beta_0, \sigma^2 \left[ \frac{1}{n} + \frac{\bar{x}^2}{S_{xx}} \right]\right)
-\]</span></p>
-<p>Al estandarizar y reemplazar la desconocida <span class="math inline">\(\sigma^2\)</span> por su estimador <span class="math inline">\(\hat{\sigma}^2 = \text{MSE}\)</span>, obtenemos un estadístico que sigue una distribución t-Student con <span class="math inline">\(n-2\)</span> grados de libertad: <span class="math display">\[
-t = \frac{\hat{\beta}_1 - \beta_1}{\text{SE}(\hat{\beta}_1)} \sim t_{n-2}
-\]</span> donde <span class="math inline">\(\text{SE}(\hat{\beta}_1) = \sqrt{\frac{\text{MSE}}{S_{xx}}}\)</span> es el <strong>error estándar</strong> del estimador <span class="math inline">\(\hat{\beta}_1\)</span>.</p>
+\]</span> Al estandarizar y reemplazar la desconocida <span class="math inline">\(\sigma^2\)</span> por su estimador <span class="math inline">\(\hat{\sigma}^2 = \text{MSE}\)</span>, obtenemos un estadístico que sigue una distribución t-Student con <span class="math inline">\(n-2\)</span> grados de libertad: <span class="math display">\[
+t = \frac{\hat{\beta}_1 - \beta_1}{\text{SE}(\hat{\beta}_1)} \sim t_{n-2}\]</span> donde <span class="math inline">\(\text{SE}(\hat{\beta}_1) = \sqrt{\frac{\text{MSE}}{S_{xx}}}\)</span> es el <strong>error estándar</strong> del estimador <span class="math inline">\(\hat{\beta}_1\)</span>.</p>
 </section>
 <section id="contraste-de-hipótesis-para-la-pendiente" class="level4" data-number="2.4.5.2">
 <h4 data-number="2.4.5.2" class="anchored" data-anchor-id="contraste-de-hipótesis-para-la-pendiente"><span class="header-section-number">2.4.5.2</span> Contraste de hipótesis para la pendiente</h4>
 <p>El contraste más común es el de la significancia de la pendiente: * <span class="math inline">\(H_0: \beta_1 = 0\)</span> * <span class="math inline">\(H_1: \beta_1 \neq 0\)</span></p>
 <p>Bajo <span class="math inline">\(H_0\)</span>, el estadístico de contraste es: <span class="math display">\[
-t_0 = \frac{\hat{\beta}_1}{\text{SE}(\hat{\beta}_1)}
-\]</span> Rechazamos <span class="math inline">\(H_0\)</span> si <span class="math inline">\(|t_0| &gt; t_{\alpha/2, n-2}\)</span> o, equivalentemente, si el p-valor asociado es menor que <span class="math inline">\(\alpha\)</span>.</p>
+t_0 = \frac{\hat{\beta}_1}{\text{SE}(\hat{\beta}_1)}\]</span></p>
+<p>Rechazamos <span class="math inline">\(H_0\)</span> si <span class="math inline">\(|t_0| &gt; t_{\alpha/2, n-2}\)</span> o, equivalentemente, si el p-valor asociado es menor que <span class="math inline">\(\alpha\)</span>.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Relación entre el contraste F y el contraste t">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
