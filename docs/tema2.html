@@ -286,13 +286,13 @@ window.Quarto = {
   <li><a href="#predicción-con-el-modelo-múltiple" id="toc-predicción-con-el-modelo-múltiple" class="nav-link" data-scroll-target="#predicción-con-el-modelo-múltiple"><span class="header-section-number">3.6</span> Predicción con el modelo múltiple</a>
   <ul class="collapse">
   <li><a href="#intervalo-de-confianza-para-la-respuesta-media" id="toc-intervalo-de-confianza-para-la-respuesta-media" class="nav-link" data-scroll-target="#intervalo-de-confianza-para-la-respuesta-media"><span class="header-section-number">3.6.1</span> Intervalo de confianza para la respuesta media</a></li>
-  <li><a href="#intervalo-de-predicción-para-una-bbservación-individual" id="toc-intervalo-de-predicción-para-una-bbservación-individual" class="nav-link" data-scroll-target="#intervalo-de-predicción-para-una-bbservación-individual"><span class="header-section-number">3.6.2</span> Intervalo de predicción para una bbservación individual</a></li>
+  <li><a href="#intervalo-de-predicción-para-una-observación-individual" id="toc-intervalo-de-predicción-para-una-observación-individual" class="nav-link" data-scroll-target="#intervalo-de-predicción-para-una-observación-individual"><span class="header-section-number">3.6.2</span> Intervalo de predicción para una observación individual</a></li>
   </ul></li>
-  <li><a href="#diagnóstico-del-modelo-múltiple" id="toc-diagnóstico-del-modelo-múltiple" class="nav-link" data-scroll-target="#diagnóstico-del-modelo-múltiple"><span class="header-section-number">3.7</span> Diagnóstico del Modelo Múltiple</a>
+  <li><a href="#diagnóstico-del-modelo-múltiple" id="toc-diagnóstico-del-modelo-múltiple" class="nav-link" data-scroll-target="#diagnóstico-del-modelo-múltiple"><span class="header-section-number">3.7</span> Diagnóstico del modelo múltiple</a>
   <ul class="collapse">
-  <li><a href="#verificación-de-los-supuestos-clásicos" id="toc-verificación-de-los-supuestos-clásicos" class="nav-link" data-scroll-target="#verificación-de-los-supuestos-clásicos"><span class="header-section-number">3.7.1</span> Verificación de los Supuestos Clásicos</a></li>
-  <li><a href="#diagnóstico-de-multicolinealidad" id="toc-diagnóstico-de-multicolinealidad" class="nav-link" data-scroll-target="#diagnóstico-de-multicolinealidad"><span class="header-section-number">3.7.2</span> Diagnóstico de Multicolinealidad</a></li>
-  <li><a href="#identificación-de-observaciones-influyentes" id="toc-identificación-de-observaciones-influyentes" class="nav-link" data-scroll-target="#identificación-de-observaciones-influyentes"><span class="header-section-number">3.7.3</span> Identificación de Observaciones Influyentes</a></li>
+  <li><a href="#verificación-de-los-supuestos-clásicos" id="toc-verificación-de-los-supuestos-clásicos" class="nav-link" data-scroll-target="#verificación-de-los-supuestos-clásicos"><span class="header-section-number">3.7.1</span> Verificación de los supuestos clásicos</a></li>
+  <li><a href="#diagnóstico-de-multicolinealidad" id="toc-diagnóstico-de-multicolinealidad" class="nav-link" data-scroll-target="#diagnóstico-de-multicolinealidad"><span class="header-section-number">3.7.2</span> Diagnóstico de multicolinealidad</a></li>
+  <li><a href="#identificación-de-observaciones-influyentes" id="toc-identificación-de-observaciones-influyentes" class="nav-link" data-scroll-target="#identificación-de-observaciones-influyentes"><span class="header-section-number">3.7.3</span> Identificación de observaciones influyentes</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -696,8 +696,8 @@ Interpretación de las pruebas estadísticas
 <p>Reemplazando <span class="math inline">\(\sigma^2\)</span> por su estimador insesgado <span class="math inline">\(\hat{\sigma}^2\)</span>, el <strong>intervalo de confianza al</strong> <span class="math inline">\(100(1-\alpha)\%\)</span> para la respuesta media <span class="math inline">\(E[Y|\mathbf{X}=\mathbf{x}_0]\)</span> es:</p>
 <p><span class="math display">\[\hat{y}_0 \pm t_{\alpha/2, n-p-1} \cdot \sqrt{\hat{\sigma}^2 \mathbf{x}_0^T (\mathbf{X}^T\mathbf{X})^{-1} \mathbf{x}_0}\]</span></p>
 </section>
-<section id="intervalo-de-predicción-para-una-bbservación-individual" class="level3" data-number="3.6.2">
-<h3 data-number="3.6.2" class="anchored" data-anchor-id="intervalo-de-predicción-para-una-bbservación-individual"><span class="header-section-number">3.6.2</span> Intervalo de predicción para una bbservación individual</h3>
+<section id="intervalo-de-predicción-para-una-observación-individual" class="level3" data-number="3.6.2">
+<h3 data-number="3.6.2" class="anchored" data-anchor-id="intervalo-de-predicción-para-una-observación-individual"><span class="header-section-number">3.6.2</span> Intervalo de predicción para una observación individual</h3>
 <p>Este intervalo responde a una pregunta más ambiciosa: <em>¿entre qué valores se encontrará la respuesta de una <strong>única y nueva</strong> observación con las características</em> <span class="math inline">\(\mathbf{x}_0\)</span>?</p>
 <p>Este intervalo debe considerar <strong>dos fuentes de incertidumbre</strong>:</p>
 <ol type="1">
@@ -712,10 +712,10 @@ Interpretación de las pruebas estadísticas
 </section>
 </section>
 <section id="diagnóstico-del-modelo-múltiple" class="level2" data-number="3.7">
-<h2 data-number="3.7" class="anchored" data-anchor-id="diagnóstico-del-modelo-múltiple"><span class="header-section-number">3.7</span> Diagnóstico del Modelo Múltiple</h2>
+<h2 data-number="3.7" class="anchored" data-anchor-id="diagnóstico-del-modelo-múltiple"><span class="header-section-number">3.7</span> Diagnóstico del modelo múltiple</h2>
 <p>Al igual que en la regresión simple, una vez ajustado el modelo es fundamental realizar un diagnóstico exhaustivo para verificar que los supuestos del modelo lineal se cumplen. La fiabilidad de todas nuestras inferencias (p-valores e intervalos de confianza) descansa sobre la validez de estos supuestos. El proceso sigue basándose en el <strong>análisis de los residuos</strong>, nuestra ventana a los errores teóricos no observables <span class="citation" data-cites="fox2018r harrell2015">(<a href="references.html#ref-fox2018r" role="doc-biblioref">Fox y Weisberg 2018</a>; <a href="references.html#ref-harrell2015" role="doc-biblioref">Harrell 2015</a>)</span>.</p>
 <section id="verificación-de-los-supuestos-clásicos" class="level3" data-number="3.7.1">
-<h3 data-number="3.7.1" class="anchored" data-anchor-id="verificación-de-los-supuestos-clásicos"><span class="header-section-number">3.7.1</span> Verificación de los Supuestos Clásicos</h3>
+<h3 data-number="3.7.1" class="anchored" data-anchor-id="verificación-de-los-supuestos-clásicos"><span class="header-section-number">3.7.1</span> Verificación de los supuestos clásicos</h3>
 <p>Los supuestos de linealidad, homocedasticidad, normalidad e independencia se verifican con herramientas muy similares a las vistas en el capítulo anterior, por lo que aquí las resumiremos y presentaremos una herramienta adicional para la linealidad.</p>
 <ul>
 <li><strong>Normalidad</strong>: El <strong>gráfico Q-Q</strong> de los residuos estudentizados y el <strong>test de Shapiro-Wilk</strong> siguen siendo las herramientas principales para comprobar que los errores se distribuyen de forma Normal.</li>
@@ -724,17 +724,17 @@ Interpretación de las pruebas estadísticas
 </ul>
 <p>Para la <strong>linealidad</strong>, el gráfico de <strong>Residuos vs.&nbsp;Valores Ajustados</strong> sigue siendo la primera herramienta a inspeccionar. Una nube de puntos sin patrones alrededor del cero sugiere que la forma funcional del modelo es globalmente correcta. Sin embargo, en el contexto múltiple, este gráfico podría ocultar una relación no lineal con <em>una variable específica</em>. Para ello, disponemos de una herramienta más precisa.</p>
 <section id="gráficos-de-componente-más-residuo" class="level4" data-number="3.7.1.1">
-<h4 data-number="3.7.1.1" class="anchored" data-anchor-id="gráficos-de-componente-más-residuo"><span class="header-section-number">3.7.1.1</span> Gráficos de Componente más Residuo</h4>
+<h4 data-number="3.7.1.1" class="anchored" data-anchor-id="gráficos-de-componente-más-residuo"><span class="header-section-number">3.7.1.1</span> Gráficos de componente más residuo</h4>
 <p>El gráfico de Componente más Residuo (CPR o Partial Residual Plots) nos permite visualizar la relación entre la variable respuesta y <strong>un único predictor</strong> <span class="math inline">\(X_j\)</span>, ajustando por el efecto de todos los demás predictores. Para cada predictor <span class="math inline">\(X_j\)</span>, el gráfico muestra:</p>
 <p><span class="math display">\[\text{Residuo Parcial} = e_i + \hat{\beta}_j x_{ij} \quad \text{vs.} \quad x_{ij}\]</span></p>
 <p>La pendiente de una línea ajustada a estos puntos es exactamente <span class="math inline">\(\hat{\beta}_j\)</span>. Si la relación es lineal, los puntos deben seguir la línea de regresión. Una desviación sistemática (una curva) sugiere que la relación con esa variable específica no es lineal y que podría necesitar una transformación (p.ej., logarítmica o cuadrática).</p>
-<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo práctico: Gráficos de Componente + Residuo (CPR)">
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo práctico: Gráficos de componente + residuo">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Ejemplo práctico: Gráficos de Componente + Residuo (CPR)
+Ejemplo práctico: Gráficos de componente + residuo
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -766,10 +766,10 @@ Ejemplo práctico: Gráficos de Componente + Residuo (CPR)
 </section>
 </section>
 <section id="diagnóstico-de-multicolinealidad" class="level3" data-number="3.7.2">
-<h3 data-number="3.7.2" class="anchored" data-anchor-id="diagnóstico-de-multicolinealidad"><span class="header-section-number">3.7.2</span> Diagnóstico de Multicolinealidad</h3>
+<h3 data-number="3.7.2" class="anchored" data-anchor-id="diagnóstico-de-multicolinealidad"><span class="header-section-number">3.7.2</span> Diagnóstico de multicolinealidad</h3>
 <p>La <strong>multicolinealidad</strong> es un problema que solo existe en la regresión múltiple. Ocurre cuando dos o más variables predictoras están fuertemente correlacionadas entre sí.</p>
 <section id="consecuencias-de-la-multicolinealidad" class="level4" data-number="3.7.2.1">
-<h4 data-number="3.7.2.1" class="anchored" data-anchor-id="consecuencias-de-la-multicolinealidad"><span class="header-section-number">3.7.2.1</span> Consecuencias de la Multicolinealidad</h4>
+<h4 data-number="3.7.2.1" class="anchored" data-anchor-id="consecuencias-de-la-multicolinealidad"><span class="header-section-number">3.7.2.1</span> Consecuencias de la multicolinealidad</h4>
 <p>La multicolinealidad no viola los supuestos de Gauss-Markov (los estimadores siguen siendo insesgados y eficientes), pero puede arruinar la interpretación práctica de un modelo:</p>
 <ol type="1">
 <li><strong>Varianza de los estimadores inflada</strong>: Los errores estándar de los coeficientes de las variables colineales se vuelven muy grandes. Esto dificulta o imposibilita declarar un predictor como estadísticamente significativo, incluso si lo es.</li>
@@ -778,7 +778,7 @@ Ejemplo práctico: Gráficos de Componente + Residuo (CPR)
 </ol>
 </section>
 <section id="detección-de-la-multicolinealidad" class="level4" data-number="3.7.2.2">
-<h4 data-number="3.7.2.2" class="anchored" data-anchor-id="detección-de-la-multicolinealidad"><span class="header-section-number">3.7.2.2</span> Detección de la Multicolinealidad</h4>
+<h4 data-number="3.7.2.2" class="anchored" data-anchor-id="detección-de-la-multicolinealidad"><span class="header-section-number">3.7.2.2</span> Detección de la multicolinealidad</h4>
 <ol type="1">
 <li><p><strong>Matriz de correlaciones</strong>: Un primer paso es examinar la matriz de correlaciones entre los predictores. Coeficientes de correlación altos (p.&nbsp;ej., &gt; 0.8) son una señal de alerta. Sin embargo, este método no detecta la colinealidad que involucra a tres o más variables.</p></li>
 <li><p><strong>Factor de Inflación de la Varianza (VIF)</strong>: Es la herramienta de diagnóstico definitiva. Para cada predictor <span class="math inline">\(X_j\)</span>, se calcula su VIF de la siguiente manera:</p>
@@ -914,7 +914,7 @@ Soluciones a los problemas de multicolinealidad
 </section>
 </section>
 <section id="identificación-de-observaciones-influyentes" class="level3" data-number="3.7.3">
-<h3 data-number="3.7.3" class="anchored" data-anchor-id="identificación-de-observaciones-influyentes"><span class="header-section-number">3.7.3</span> Identificación de Observaciones Influyentes</h3>
+<h3 data-number="3.7.3" class="anchored" data-anchor-id="identificación-de-observaciones-influyentes"><span class="header-section-number">3.7.3</span> Identificación de observaciones influyentes</h3>
 <p>Los conceptos de <em>outlier</em> (residuo grande), <em>leverage</em> (valor atípico en los predictores) e <em>influencia</em> (impacto en el modelo) son los mismos que en regresión simple. Sin embargo, el caso múltiple nos ofrece herramientas de diagnóstico más específicas.</p>
 <section id="dfbetas-influencia-sobre-coeficientes-individuales" class="level4" data-number="3.7.3.1">
 <h4 data-number="3.7.3.1" class="anchored" data-anchor-id="dfbetas-influencia-sobre-coeficientes-individuales"><span class="header-section-number">3.7.3.1</span> DFBETAS: Influencia sobre coeficientes individuales</h4>
@@ -923,7 +923,7 @@ Soluciones a los problemas de multicolinealidad
 <p>Un DFBETA grande para el coeficiente <span class="math inline">\(\beta_j\)</span> indica que la observación <span class="math inline">\(i\)</span> tiene un fuerte poder de atracción sobre la estimación de ese coeficiente en particular. Una regla común es considerar problemáticos los puntos con <span class="math inline">\(|\text{DFBETA}_{j,i}| &gt; \frac{2}{\sqrt{n}}\)</span>.</p>
 </section>
 <section id="gráficos-de-regresión-parcial" class="level4" data-number="3.7.3.2">
-<h4 data-number="3.7.3.2" class="anchored" data-anchor-id="gráficos-de-regresión-parcial"><span class="header-section-number">3.7.3.2</span> Gráficos de Regresión Parcial</h4>
+<h4 data-number="3.7.3.2" class="anchored" data-anchor-id="gráficos-de-regresión-parcial"><span class="header-section-number">3.7.3.2</span> Gráficos de regresión parcial</h4>
 <p>Estos gráficos son una de las herramientas visuales más potentes y elegantes de la regresión múltiple. Un gráfico de regresión parcial para un predictor <span class="math inline">\(X_j\)</span> nos permite ver su relación con la respuesta <span class="math inline">\(Y\)</span> <strong>después de haber eliminado el efecto lineal de todos los demás predictores</strong>.</p>
 <p>Se construye de la siguiente forma: 1. Se calculan los residuos de la regresión de <span class="math inline">\(Y\)</span> en función de todos los predictores excepto <span class="math inline">\(X_j\)</span>. Llamemos a estos residuos <span class="math inline">\(e_{Y|X_{-j}}\)</span>. 2. Se calculan los residuos de la regresión de <span class="math inline">\(X_j\)</span> en función de todos los demás predictores. Llamemos a estos residuos <span class="math inline">\(e_{X_j|X_{-j}}\)</span>. 3. Se grafica <span class="math inline">\(e_{Y|X_{-j}}\)</span> (eje Y) contra <span class="math inline">\(e_{X_j|X_{-j}}\)</span> (eje X).</p>
 <div class="callout callout-style-default callout-warning callout-titled" title="Propiedad clave de los gráficos de regresión parcial">
@@ -959,7 +959,7 @@ Ejemplo: Gráficos de Regresión Parcial
 <p>Los gráficos de regresión parcial nos permiten visualizar la relación “limpia” entre cada predictor y la variable respuesta:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráficos de regresión parcial para todas las variables</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">avPlots</span>(modelo, <span class="at">main =</span> <span class="st">"Gráficos de Regresión Parcial"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">avPlots</span>(modelo, <span class="at">main =</span> <span class="st">"Gráficos de regresión parcial"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
