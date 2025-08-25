@@ -93,7 +93,7 @@ Los GLM se utilizan en una amplia variedad de disciplinas para resolver problema
 ### Diferencias clave entre la Regresión Lineal y los GLM
 
 | **Característica** | **Regresión Lineal** | **Modelos Lineales Generalizados (GLM)** |
-|------------------|---------------------------|----------------------------|
+|------------------|---------------------------|---------------------------|
 | **Distribución de la variable dependiente** | Normal | Familia exponencial (binomial, Poisson, gamma, etc.) |
 | **Tipo de variable dependiente** | Continua | Binaria, de conteo, continua positiva |
 | **Relación entre las variables** | Lineal directa | Relación transformada mediante una función de enlace |

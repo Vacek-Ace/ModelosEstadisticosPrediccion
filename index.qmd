@@ -6,7 +6,7 @@ A lo largo de los capítulos, encontrarás una combinación de teoría rigurosa 
 
 El objetivo de este libro es doble: por un lado, proporcionar herramientas avanzadas para analizar relaciones sujetas a incertidumbre y, por otro, capacitarte para elegir el método más apropiado para resolver problemas de predicción o explicación, analizando la naturaleza de las variables y sus posibles interacciones. Al finalizar, habrás desarrollado una comprensión sólida de los modelos estadísticos y estarás preparado para enfrentar desafíos en el análisis predictivo con confianza y creatividad.
 
-## Filosofía pedagógica del volumen 
+## Filosofía pedagógica del volumen
 
 La filosofía que subyace a la obra es un enfoque **"teórico-práctico"** deliberado y sin concesiones. No nos conformamos con una mera aplicación de "recetas" o una guía de funciones de software. Buscamos fomentar una comprensión profunda del *modus operandi* de cada modelo y método. Perseguimos un equilibrio entre la técnica estadística y la estrategia de resolución de problemas, bajo la firme convicción de que la labor práctica se desarrolla con mayor fluidez, creatividad y éxito cuando se cimienta en una comprensión robusta de los principios matemáticos y estadísticos subyacentes, tal y como defiende [@harrell2015] en su influyente obra.
 
