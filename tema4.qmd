@@ -246,12 +246,12 @@ resumen_vif <- if(!is.null(vif_valores)) {
 `r resumen_vars_baja_corr`
 
 **3. Correlaciones altas entre predictores (|r| > 0.8):**
-`r if(length(resumen_high_cor) == 1 && resumen_high_cor == "Ninguna") "Ninguna" else paste("•", resumen_high_cor, collapse = "\n- ")`
+`r if(length(resumen_high_cor) == 1 && resumen_high_cor == "Ninguna") "Ninguna" else paste("", resumen_high_cor, collapse = "\n, ")`
 
 **4. Variables restantes:** `r vars_restantes` de `r vars_originales` originales
 
 **5. Factores VIF de variables finales:**
-`r if(length(resumen_vif) == 1 && resumen_vif == "No calculado") "No calculado" else paste("•", resumen_vif, collapse = "\n- ")`
+`r if(length(resumen_vif) == 1 && resumen_vif == "No calculado") "No calculado" else paste("", resumen_vif, collapse = "\n, ")`
 
 Este proceso de filtrado redujo el conjunto original de `r vars_originales` variables a `r vars_restantes` variables, eliminando efectivamente las variables con problemas de variabilidad y correlación identificados.
 
