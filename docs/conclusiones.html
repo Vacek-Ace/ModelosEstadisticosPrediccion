@@ -30,7 +30,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
 <link href="./tema5.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -70,6 +69,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -129,37 +157,31 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tema2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Métodos de selección de variables y problemas de regularización</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">El modelo de regresión lineal múltiple</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tema3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelos no lineales. Transformación de variables. Ingeniería de características.</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ingeniería de características: transformaciones de variables e interacciones</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tema4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Selección de variables, regularización y validación</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tema5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Otros modelos de regresión: Modelos Aditivos Generalizados (GAMs)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./conclusiones.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Bibliografía</span></a>
   </div>
 </li>
     </ul>
@@ -174,7 +196,7 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#resumen-de-los-aprendizajes" id="toc-resumen-de-los-aprendizajes" class="nav-link active" data-scroll-target="#resumen-de-los-aprendizajes"><span class="header-section-number">7.1</span> Resumen de los aprendizajes</a></li>
   <li><a href="#reflexiones-finales" id="toc-reflexiones-finales" class="nav-link" data-scroll-target="#reflexiones-finales"><span class="header-section-number">7.2</span> Reflexiones finales</a></li>
-  <li><a href="#mirando-hacia-adelante" id="toc-mirando-hacia-adelante" class="nav-link" data-scroll-target="#mirando-hacia-adelante"><span class="header-section-number">7.3</span> Mirando hacia adelante</a></li>
+  <li><a href="#proyección-futura-el-valor-del-rigor-matemático" id="toc-proyección-futura-el-valor-del-rigor-matemático" class="nav-link" data-scroll-target="#proyección-futura-el-valor-del-rigor-matemático"><span class="header-section-number">7.3</span> Proyección futura: El valor del rigor matemático</a></li>
   </ul>
 </nav>
     </div>
@@ -200,36 +222,32 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>A lo largo de cinco capítulos hemos presentado el material de la asignatura de <strong>Modelos de Regresión</strong> del grado en <strong>Ciencia e Ingeniería de Datos</strong> de la <strong>Universidad Rey Juan Carlos</strong>.</p>
-<p>En este capítulo final, te invitamos a reflexionar sobre las principales lecciones aprendidas durante el curso <strong>“Modelos de Regresión”</strong> y a destacar la importancia de las técnicas abordadas en la formación de futuros profesionales en el campo de la Ciencia e Ingeniería de Datos. Además, animamos a los estudiantes a continuar explorando y ampliando sus conocimientos en cursos posteriores, consolidando así una base sólida para afrontar los desafíos de la ciencia de datos moderna.</p>
-<p>Al finalizar este recorrido por los conceptos y técnicas de la regresión, queda claro que esta disciplina es fundamental en el análisis y la interpretación de datos en el mundo actual. Hemos explorado desde los <strong>fundamentos teóricos</strong> hasta las <strong>aplicaciones prácticas</strong>, proporcionando a los estudiantes las herramientas necesarias para construir sus habilidades en el análisis de datos y en la toma de decisiones basadas en evidencia.</p>
+<p>A lo largo de seis capítulos hemos presentado el material de la asignatura de <strong>Modelos Estadísticos para la Predicción</strong> del Grado en <strong>Matemáticas</strong>.</p>
+<p>En este capítulo final, te invitamos a reflexionar sobre las principales lecciones aprendidas durante el curso y a destacar cómo el rigor matemático que caracteriza vuestra formación se convierte en una herramienta indispensable para dominar el modelado estadístico. Además, animamos a los estudiantes a continuar explorando y ampliando sus conocimientos en cursos posteriores, consolidando así una base sólida para afrontar los desafíos de la ciencia de datos moderna desde una perspectiva analítica y fundamentada.</p>
+<p>Al finalizar este recorrido, queda patente que el modelado estadístico es mucho más que una colección de técnicas; es un marco de pensamiento estructurado para comprender la incertidumbre y extraer conocimiento a partir de los datos. Hemos transitado desde los axiomas teóricos de la regresión hasta su aplicación computacional, equipando a los futuros matemáticos con las herramientas para construir, validar e interpretar modelos robustos.</p>
 <section id="resumen-de-los-aprendizajes" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="resumen-de-los-aprendizajes"><span class="header-section-number">7.1</span> Resumen de los aprendizajes</h2>
-<p>A lo largo del libro, hemos abordado diversos temas que forman la columna vertebral del análisis de regresión:</p>
+<p>A lo largo de este manual, hemos construido un conocimiento progresivo sobre el modelado predictivo, cubriendo los siguientes pilares:</p>
 <ol type="1">
-<li><p><strong>Modelos de Regresión Lineal Simple y Múltiple:</strong><br>
-Comprendimos cómo los modelos lineales permiten describir la relación entre una variable dependiente y una o más variables independientes. Exploramos técnicas para estimar parámetros, interpretar coeficientes y diagnosticar la validez del modelo.</p></li>
-<li><p><strong>Métodos de selección de variables y Regularización:</strong><br>
-Aprendimos a identificar las variables más relevantes mediante técnicas de selección como el <strong>stepwise</strong>, así como métodos de regularización como <strong>Ridge</strong>, <strong>Lasso</strong> y <strong>Elastic Net</strong>, que ayudan a mejorar la generalización del modelo.</p></li>
-<li><p><strong>Modelos no lineales y transformación de variables:</strong><br>
-Introdujimos métodos para capturar relaciones no lineales entre variables, incluyendo la <strong>regresión polinomial</strong>, los <strong>splines</strong> y la <strong>ingeniería de características</strong> para mejorar el rendimiento predictivo.</p></li>
-<li><p><strong>Modelos de Regresión generalizada:</strong><br>
-Ampliamos nuestro conocimiento hacia modelos que permiten trabajar con diferentes tipos de variables dependientes, como la <strong>regresión logística</strong> para variables binarias y la <strong>regresión de Poisson</strong> para datos de conteo.</p></li>
-<li><p><strong>Otros modelos avanzados:</strong><br>
-Finalmente, exploramos técnicas avanzadas como los <strong>Modelos Aditivos Generalizados (GAMs)</strong>, que proporcionan una manera flexible de capturar relaciones no lineales complejas sin perder interpretabilidad.</p></li>
+<li><p><strong>Fundamentos del modelado lineal: simple y múltiple</strong> Hemos partido de la formulación teórica del <strong>modelo lineal</strong>, estableciendo sus componentes axiomáticos y los supuestos de Gauss-Markov que garantizan las propiedades óptimas de los estimadores de <strong>Mínimos Cuadrados Ordinarios (MCO)</strong>. Se ha hecho hincapié en la transición del modelo simple al múltiple, destacando el principio de <em>ceteris paribus</em> para la interpretación de coeficientes, el diagnóstico de la <strong>multicolinealidad</strong> mediante el VIF y la evaluación de la bondad de ajuste a través de la descomposición ANOVA y el <span class="math inline">\(R^2\)</span> ajustado.</p></li>
+<li><p><strong>Ingeniería de características y flexibilidad del Modelo</strong> Exploramos cómo superar las limitaciones de un modelo estrictamente lineal. Aprendimos a diagnosticar y corregir violaciones de los supuestos mediante <strong>transformaciones de variables</strong> (logarítmica, Box-Cox), a incorporar predictores no numéricos a través de la codificación de <strong>variables categóricas</strong>, y, fundamentalmente, a modelar relaciones complejas mediante la inclusión de <strong>términos de interacción</strong>, entendiendo cómo el efecto de un predictor puede depender del valor de otro.</p></li>
+<li><p><strong>Selección de variables, regularización y validación</strong> Abordamos el crucial dilema sesgo-varianza y la necesidad de construir modelos parsimoniosos que generalicen bien a datos no observados. Se presentaron los <strong>criterios de información (AIC, BIC)</strong> y los <strong>métodos por pasos (stepwise)</strong> como herramientas para comparar y seleccionar modelos. Profundizamos en los métodos de <strong>regularización (Ridge, Lasso y Elastic Net)</strong>, que ofrecen una alternativa moderna y robusta para manejar la multicolinealidad y realizar selección de variables de forma simultánea, especialmente en contextos de alta dimensionalidad. Finalmente, se consolidó la importancia de la <strong>validación cruzada</strong> como el estándar para una evaluación honesta del rendimiento predictivo del modelo.</p></li>
+<li><p><strong>Modelos lineales generalizados (GLM)</strong> Expandimos el marco de la regresión más allá de la asunción de normalidad en la variable respuesta. A través de la introducción de la <strong>familia exponencial</strong> de distribuciones y las <strong>funciones de enlace</strong>, entendimos cómo adaptar el modelo lineal a diferentes tipos de datos. Nos centramos en dos de los GLM más importantes: la <strong>Regresión Logística</strong> para modelar resultados binarios y la <strong>Regresión de Poisson</strong> para datos de conteo, aprendiendo a interpretar sus coeficientes en términos de odds ratios y tasas de eventos, respectivamente.</p></li>
 </ol>
 </section>
 <section id="reflexiones-finales" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="reflexiones-finales"><span class="header-section-number">7.2</span> Reflexiones finales</h2>
-<p>El aprendizaje de los <strong>Modelos de Regresión</strong> va más allá de la simple aplicación de fórmulas o técnicas estadísticas. A través de este curso, hemos desarrollado un enfoque crítico para <strong>analizar datos</strong>, <strong>identificar patrones</strong> y <strong>tomar decisiones basadas en evidencia</strong>. Hemos comprendido la importancia de realizar un diagnóstico adecuado del modelo, asegurando que los supuestos estadísticos se cumplan y que los resultados sean fiables y reproducibles.</p>
-<p>La <strong>interpretabilidad</strong> y la <strong>validación del modelo</strong> son pilares fundamentales en el análisis de regresión. Entender cómo y por qué un modelo llega a ciertas conclusiones es tan importante como la precisión de sus predicciones. En un mundo donde los datos juegan un papel cada vez más crucial, la habilidad para interpretar resultados y comunicar hallazgos de manera clara y concisa es esencial para cualquier profesional de la ciencia de datos.</p>
+<p>El estudio de los <strong>Modelos Estadísticos para la Predicción</strong> dota al matemático de un puente entre la teoría abstracta y la resolución de problemas del mundo real. A lo largo de este curso, hemos visto cómo conceptos rigurosos —espacios vectoriales en la geometría de MCO, optimización en la estimación de parámetros, y teoría de la probabilidad en la inferencia— se materializan en herramientas prácticas para la toma de decisiones bajo incertidumbre.</p>
+<p>Hemos aprendido que construir un modelo no es un acto mecánico, sino un proceso iterativo de <strong>diagnóstico, crítica y refinamiento</strong>. La capacidad para evaluar la validez de los supuestos, interpretar los resultados con cautela y comunicar tanto las fortalezas como las limitaciones de un modelo es lo que distingue a un analista competente. La <strong>interpretabilidad</strong> y la <strong>validación rigurosa</strong> no son meros pasos finales, sino el núcleo de una práctica estadística honesta y efectiva.</p>
+<p>En un mundo saturado de datos, la habilidad para construir modelos que no solo predicen, sino que también explican y ofrecen certidumbre cuantificable, es más valiosa que nunca.</p>
 </section>
-<section id="mirando-hacia-adelante" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="mirando-hacia-adelante"><span class="header-section-number">7.3</span> Mirando hacia adelante</h2>
-<p>Con el conocimiento y las habilidades adquiridas en este curso, los estudiantes están mejor preparados para profundizar en el vasto campo de la ciencia de datos. Los modelos de regresión seguirán evolucionando con el avance de la tecnología y la creciente disponibilidad de datos. Por lo tanto, es crucial que los futuros profesionales mantengan una <strong>mentalidad de aprendizaje continuo</strong> y estén abiertos a adoptar nuevas metodologías y herramientas.</p>
-<p>Los modelos de regresión son solo el comienzo de un camino más amplio en el análisis predictivo y el aprendizaje automático. En los próximos cursos, como <strong>Aprendizaje Automático I</strong> y <strong>Aprendizaje Automático II</strong>, aplicarás muchas de las técnicas y conceptos que hemos aprendido, avanzando hacia modelos más complejos como los <strong>árboles de decisión</strong>, las <strong>redes neuronales</strong> y los <strong>modelos de ensamblaje</strong>.</p>
-<p>En conclusión, esperamos que este libro haya proporcionado una comprensión profunda y práctica de los <strong>Modelos de Regresión</strong>, y que inspire a los estudiantes a aplicar estos conocimientos con confianza y creatividad en sus proyectos futuros. La capacidad de <strong>analizar datos de manera crítica</strong> y <strong>tomar decisiones basadas en evidencias</strong> es una habilidad poderosa y transformadora, que sin duda abrirá numerosas oportunidades en el ámbito profesional.</p>
-<p><strong>¡Buena suerte en tu camino en la ciencia de datos!</strong></p>
+<section id="proyección-futura-el-valor-del-rigor-matemático" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="proyección-futura-el-valor-del-rigor-matemático"><span class="header-section-number">7.3</span> Proyección futura: El valor del rigor matemático</h2>
+<p>Las competencias adquiridas en esta asignatura son la culminación de vuestra carrera, el punto donde el álgebra lineal, el cálculo y la optimización se convierten en el motor de la modelización estadística aplicada. Vuestra formación matemática os proporciona una ventaja fundamental: la capacidad de ir más allá de la aplicación mecánica de un algoritmo para comprender en profundidad los supuestos que lo sustentan, la geometría de su funcionamiento y la incertidumbre inherente a sus conclusiones.</p>
+<p>Conceptos como la regularización y la validación cruzada son el lenguaje compartido con el <strong>Aprendizaje Automático</strong>. Mientras que el <em>Aprendizaje Automático</em> a menudo se centra en la potencia predictiva de algoritmos complejos, este curso os ha proporcionado la “gramática” estadística para construir modelos interpretables, diagnosticar su validez y cuantificar la fiabilidad de sus resultados. Esta base teórica es indispensable para aplicar, y en un futuro desarrollar, cualquier técnica de modelado de forma rigurosa y responsable.</p>
+<p>Esta habilidad para analizar críticamente los modelos es precisamente lo que el mercado y el mundo académico demandan. Os posiciona de manera ideal para roles avanzados como <strong>Científico de Datos</strong>, <strong>Analista Cuantitativo (‘Quant’)</strong> en el sector financiero, o <strong>Bioestadístico</strong>, así como para continuar vuestra formación con <strong>estudios de postgrado (Máster o Doctorado)</strong> donde la investigación y el desarrollo de nuevos métodos es primordial.</p>
+<p>En definitiva, habéis adquirido un conjunto de herramientas analíticas que os permitirá traducir problemas complejos en modelos manejables y basados en evidencia.</p>
+<p>¡Mucha suerte en vuestra trayectoria profesional!</p>
 
 
 </section>
@@ -636,14 +654,11 @@ Finalmente, exploramos técnicas avanzadas como los <strong>Modelos Aditivos Gen
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./tema5.html" class="pagination-link" aria-label="Otros modelos de regresión: Modelos Aditivos Generalizados (GAMs)">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Otros modelos de regresión: Modelos Aditivos Generalizados (GAMs)</span></span>
+      <a href="./tema5.html" class="pagination-link" aria-label="Modelos de regresión generalizada">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link" aria-label="Bibliografía">
-        <span class="nav-page-text">Bibliografía</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->

@@ -30,7 +30,7 @@ Hemos aprendido que construir un modelo no es un acto mecánico, sino un proceso
 
 En un mundo saturado de datos, la habilidad para construir modelos que no solo predicen, sino que también explican y ofrecen certidumbre cuantificable, es más valiosa que nunca.
 
-## Proyección Futura: El valor del rigor matemático
+## Proyección futura: El valor del rigor matemático
 
 Las competencias adquiridas en esta asignatura son la culminación de vuestra carrera, el punto donde el álgebra lineal, el cálculo y la optimización se convierten en el motor de la modelización estadística aplicada. Vuestra formación matemática os proporciona una ventaja fundamental: la capacidad de ir más allá de la aplicación mecánica de un algoritmo para comprender en profundidad los supuestos que lo sustentan, la geometría de su funcionamiento y la incertidumbre inherente a sus conclusiones.
 
