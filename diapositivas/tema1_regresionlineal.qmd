@@ -36,8 +36,6 @@ Seguiremos el **ciclo completo** de un proyecto de modelado: exploración → fo
 
 # Objetivos de Aprendizaje
 
-Al finalizar este tema, serás capaz de:
-
 1. **Comprender y aplicar** el proceso de modelización estadística para problemas con una variable predictora
 
 2. **Identificar y medir** la correlación lineal entre dos variables como paso previo al modelado

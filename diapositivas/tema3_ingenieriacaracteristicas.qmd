@@ -1,0 +1,953 @@
+---
+title: "Ingeniería de Características"
+author: "Víctor Aceña - Isaac Martín"
+institute: "DSLab"
+date: last-modified
+format: 
+  beamer: 
+    template: dslab_fixed.beamer.tex
+    slide-level: 1
+    section-titles: false
+knitr:
+  opts_chunk:
+    fig.width: 6
+    fig.height: 4
+    fig.align: "center"
+    dev: "pdf"
+    out.width: "70%"
+execute:
+  echo: false
+  warning: false
+  message: false
+  cache: false
+---
+
+# La Ingeniería de Características como Arte y Ciencia
+
+La **ingeniería de características** es el proceso fundamental que transforma y crea variables para maximizar la capacidad predictiva y la interpretabilidad de los modelos.
+
+::::: columns
+:::: {.column width="50%"}
+**El problema:**
+
+- Los datos raramente están en forma óptima
+
+- Relaciones no lineales ocultas
+
+- Variables categóricas sin procesar
+
+- Efectos de interacción ignorados
+::::
+:::: {.column width="50%"}
+**La solución:**
+
+- Transformaciones matemáticas precisas
+
+- Codificación inteligente de categorías
+
+- Creación de interacciones significativas
+
+- Combinaciones y ratios informativos
+::::
+:::::
+
+**Principio clave:** "Los datos y la preparación de características determinan el límite superior del rendimiento; los modelos solo se aproximan a ese límite" - *Andrew Ng*
+
+# Objetivos de Aprendizaje
+
+1. **Identificar cuándo aplicar transformaciones** específicas según el problema detectado
+
+2. **Aplicar transformaciones clásicas y avanzadas** (logarítmica, Box-Cox, Yeo-Johnson) apropiadamente
+
+3. **Interpretar modelos transformados** comprendiendo cómo cambian los coeficientes
+
+4. **Codificar variables categóricas** usando ordinal encoding y one-hot encoding según su naturaleza
+
+5. **Crear e interpretar interacciones** entre variables continuas, categóricas y mixtas
+
+6. **Aplicar ingeniería avanzada** mediante combinaciones, ratios y transformaciones compuestas
+
+
+# Diagnóstico: ¿Cuándo Transformar?
+
+* **Principio Clave:** Diagnosticar antes de transformar.
+
+* **Riesgos de una Mala Práctica:**
+
+    * **Sobreajuste:** Se pierde capacidad de generalización.
+    * **Pérdida de Interpretabilidad:** Se aplican transformaciones sin base teórica.
+    * **Violación de Supuestos:** Solucionar un problema creando otro.
+    * **Sesgo de Selección:** Elegir por "mejor resultado" sin justificación.
+
+**Regla de oro**: No transformes sin un diagnóstico previo. Cada cambio debe estar justificado.
+
+# El Enfoque Metodológico
+
+* **Clave:** Proceso sistemático basado en evidencia, no solo en métricas de ajuste (como el R$^2$).
+
+* **Principios de Actuación:**
+
+    1.  **Diagnóstico Previo:** Análisis visual y estadístico.
+    2.  **Justificación Teórica:** Base conceptual para cada transformación.
+    3.  **Evaluación Integral:** Medir ajuste, interpretabilidad y robustez.
+    4.  **Validación Posterior:** Verificar la solución sin crear nuevos problemas.
+    5.  **Parsimonia:** Preferir siempre la solución más simple.
+
+
+# Escalado y Normalización
+
+**¿Por qué escalar?**
+
+- **Comparabilidad:** Coeficientes en misma escala
+- **Regularización:** Penalización justa en Ridge/Lasso
+- **Convergencia:** Optimización más eficiente
+- **Interpretación:** Efectos estandarizados
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| out-width: "60%"
+# Ejemplo de escalado
+library(ggplot2)
+library(gridExtra)
+
+# Crear datos de ejemplo
+set.seed(456)
+n <- 100
+ingresos <- rnorm(n, 50000, 15000)  # En euros
+edad <- rnorm(n, 40, 10)           # En años
+
+# Crear dataframe para visualización
+datos_escala <- data.frame(
+  Variable = rep(c("Ingresos (€)", "Edad (años)"), each = n),
+  Valor_Original = c(ingresos, edad)
+)
+
+# Gráfico 1 (Ingresos) - SIN TÍTULO
+p1 <- ggplot(datos_escala[datos_escala$Variable == "Ingresos (€)",], 
+             aes(x = Valor_Original)) +
+  geom_histogram(fill = "#0072B2", alpha = 0.7, bins = 20) +
+  labs(x = "Ingresos (€)", y = "Frecuencia") +
+  xlim(c(0, 100000)) +
+  theme_minimal(base_size = 10)
+
+# Gráfico 2 (Edad)
+p2 <- ggplot(datos_escala[datos_escala$Variable == "Edad (años)",], 
+             aes(x = Valor_Original)) +
+  geom_histogram(fill = "#D55E00", alpha = 0.7, bins = 20) +
+  labs(x = "Edad (años)", y = "Frecuencia") +
+  xlim(c(0, 100)) +
+  theme_minimal(base_size = 10)
+
+# Organizar los dos gráficos con un título centrado
+grid.arrange(p1, p2, ncol = 2, top = "Escalas Originales Dispares")
+```
+
+# Estandarización (Z-Score)
+
+$$X_{std} = \frac{X - \bar{X}}{\sigma_X}$$
+
+Es la técnica más común. Transforma los datos para que tengan una **media de 0** y una **desviación estándar de 1**, pero **preserva la forma** de la distribución original.
+
+::::: columns
+::: {.column width="50%"}
+**Propiedades Clave**
+
+* **Preserva la forma:** Una distribución normal seguirá siendo normal.
+* **Comparación fácil:** Permite evaluar el peso de variables con distintas unidades.
+* **Robustez moderada:** Es menos sensible a *outliers* que la normalización Min-Max.
+:::
+::: {.column width="50%"}
+**Aplicaciones Comunes**
+
+* En **regresión**, para comparar la importancia de los coeficientes.
+* Como paso previo a **PCA** o análisis discriminante.
+* Cuando las variables tienen distribuciones aproximadamente simétricas.
+:::
+:::::
+
+
+# Normalización Min-Max
+
+$$X_{norm} = \frac{X - X_{min}}{X_{max} - X_{min}}$$
+
+Esta técnica escala los datos a un rango fijo, comúnmente **[0, 1]**, donde 0 es el mínimo valor observado y 1 es el máximo.
+
+* **Cuándo Usarlo:**
+
+    * Algoritmos que requieren entradas en un rango específico, como las **redes neuronales**.
+    * Cuando la interpretación en términos de mínimo y máximo es útil para el problema.
+    * En datos con distribuciones uniformes o sin *outliers* extremos.
+
+* **Limitación Principal:**
+
+    * Es **muy sensible a *outliers***. Un solo valor extremo puede comprimir el resto de los datos en un rango muy pequeño, perdiendo información sobre su variabilidad.
+
+
+# Escalado Robusto
+
+$$X_{robust} = \frac{X - \text{mediana}(X)}{\text{IQR}(X)}$$
+
+Diseñado específicamente para datos con *outliers*. Utiliza la **mediana** y el **rango intercuartílico (IQR)**, que son medidas estadísticas no afectadas por valores extremos.
+
+* **Principio Clave:**
+
+    * Al no usar la media ni la desviación estándar, los *outliers* no distorsionan el resultado del escalado.
+
+* **Cuándo Usarlo:**
+
+    * Es la opción preferida cuando se sabe o se sospecha que los **datos contienen *outliers*** significativos.
+    * Cuando se quiere preservar la estructura de la mayor parte de los datos sin la influencia de los valores extremos.
+
+# Comparación de Métodos de Escalado
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| out-width: "80%"
+# Comparación visual de escalados
+set.seed(789)
+x_outliers <- c(rnorm(95, 10, 2), 25, 30, 35, 40, 45)  # Con outliers
+
+# Aplicar diferentes escalados
+x_std <- scale(x_outliers)[,1]
+x_norm <- (x_outliers - min(x_outliers)) / (max(x_outliers) - min(x_outliers))
+x_robust <- (x_outliers - median(x_outliers)) / IQR(x_outliers)
+
+# Crear dataframe para visualización
+datos_comp <- data.frame(
+  Método = rep(c("Original", "Estandarización", "Min-Max", "Robusto"), each = 100),
+  Valor = c(x_outliers, x_std, x_norm, x_robust)
+)
+
+ggplot(datos_comp, aes(x = Método, y = Valor, fill = Método)) +
+  geom_boxplot(alpha = 0.7) +
+  scale_fill_manual(values = c("#999999", "#0072B2", "#D55E00", "#009E73")) +
+  labs(title = "Impacto de Diferentes Métodos de Escalado",
+       subtitle = "Datos con outliers (puntos extremos en original)",
+       y = "Valor Escalado") +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "none")
+```
+
+**Observación:** El escalado robusto mantiene mejor la estructura central ante outliers
+
+# Catálogo de Transformaciones según el Propósito
+
+Una vez realizado el diagnóstico, debemos seleccionar la transformación más apropiada. La clave no está en *qué* transformación aplicar, sino en entender *por qué* esa transformación específica resuelve nuestro problema.
+
+**Exploraremos tres familias de transformaciones:**
+
+1.  Para **linearizar relaciones** no lineales.
+2.  Para **estabilizar la varianza** (heterocedasticidad).
+3.  Para **normalizar residuos** y controlar *outliers*.
+
+# Transformación Logarítmica (Linearizar)
+
+Es la transformación más versátil, ideal para linearizar relaciones de crecimiento exponencial o donde los efectos son multiplicativos.
+
+::::: columns
+::: {.column width="50%"}
+**Cuándo Usarla**
+
+* Relaciones **exponenciales** o **multiplicativas**.
+* Procesos de **crecimiento proporcional**.
+* Variables con **rendimientos decrecientes** (ingresos, precios).
+* **Casos Típicos:** Economía, biología, finanzas.
+:::
+::: {.column width="50%"}
+**Diagnóstico y Aplicación**
+
+* **Diagnóstico:** Curva cóncava que se aplana o varianza que aumenta con Y.
+* **Aplicación:** `log(Y) ~ X`, `Y ~ log(X)` o `log(Y) ~ log(X)`.
+* **Interpretación:** Los coeficientes se leen como cambios porcentuales o elasticidades.
+:::
+:::::
+
+# Transformación de Potencia (Linealizar)
+
+Fundamental para relaciones curvilíneas que siguen una **ley de potencia** del tipo `Y = a * X^b`.
+
+* **Diagnóstico:** La relación entre las variables se vuelve lineal al graficarla en una **escala log-log**.
+* **Aplicación:** Se toman **logaritmos en ambas variables** para linearizar el modelo: `log(Y) = log(a) + b * log(X)`.
+* **Interpretación:** El exponente `b` representa la **elasticidad** o el exponente de escalamiento.
+* **Ejemplos Clásicos:** Ley de Kleiber (relación masa-metabolismo), economía urbana (población-PIB).
+
+# Transformación Raíz Cuadrada (Estabilizar Varianza)
+
+Especialmente útil para **datos de conteo** (típicamente de una distribución de Poisson), donde la varianza es proporcional a la media.
+
+::::: columns
+::: {.column width="50%"}
+**Cuándo Aplicarla**
+
+* **Conteos de eventos:** número de defectos, llamadas, ventas por período.
+* **Datos de frecuencia:** visitas, clics, transacciones.
+* Para conteos con muchos ceros puede requerir `sqrt(Y + 0.5)`.
+:::
+::: {.column width="50%"}
+**Diagnóstico y Limitaciones**
+
+* **Diagnóstico:** Gráfico de residuos en forma de embudo donde la dispersión crece linealmente con la media.
+* **Limitaciones:** La interpretación es menos directa y solo es apropiada para valores no negativos.
+:::
+:::::
+
+# Transformación Logarítmica (Estabilizar Varianza)
+
+Es la solución natural cuando la **varianza es proporcional al cuadrado de la media**, lo que se conoce como heterocedasticidad multiplicativa.
+
+* **Cuándo Aplicarla:**
+    * **Variables monetarias** (ingresos, precios, costos), donde el error relativo tiende a ser constante.
+    * Porcentajes de crecimiento o procesos donde los **errores se acumulan multiplicativamente**.
+* **La Gran Ventaja (Efectos Múltiples):**
+    * Con frecuencia, esta única transformación resuelve varios problemas a la vez: **lineariza la relación, estabiliza la varianza, normaliza la distribución y reduce el impacto de *outliers***.
+
+# Transformación Inversa (Controlar Outliers)
+
+Útil para relaciones **hiperbólicas** (del tipo `Y = 1/X`) y para distribuciones con colas muy pesadas a la derecha.
+
+::::: columns
+::: {.column width="50%"}
+**Cuándo Usarla**
+
+* Relaciones que se aproximan a una **asíntota horizontal**.
+* **Tasas de decaimiento** o relaciones dosis-respuesta en farmacología.
+* **Tiempo hasta un evento**.
+:::
+::: {.column width="50%"}
+**Efecto y Precauciones**
+
+* **Efecto en *Outliers*:** Comprime fuertemente los valores grandes y expande los pequeños.
+* **Precaución:** Amplifica errores en valores pequeños y requiere tratamiento especial para datos cercanos a cero.
+* Solo aplicable a valores **no nulos**.
+:::
+:::::
+
+
+# Transformación de Box-Cox: La Teoría
+
+Es un método que **optimiza automáticamente** el parámetro de transformación $\lambda$ (lambda) para maximizar la normalidad y homocedasticidad de los residuos. En lugar de elegir manualmente, Box-Cox encuentra el valor $\lambda$ que mejor normaliza los datos.
+
+**Definición Matemática:**
+$$Y(\lambda) = \begin{cases} \frac{Y^\lambda - 1}{\lambda}, & \lambda \neq 0 \\ \log(Y), & \lambda = 0 \end{cases}$$
+
+**Casos Especiales de $\lambda$:**
+
+  * **$\lambda$ = 1:** Sin transformación (identidad).
+  * **$\lambda$ = 0.5:** Transformación de raíz cuadrada.
+  * **$\lambda$ = 0:** Transformación logarítmica.
+  * **$\lambda$ = -1:** Transformación inversa.
+
+
+# Box-Cox: Propósito y Limitaciones
+
+::::: columns
+::: {.column width="50%"}
+**Propósito y Ventajas**
+
+  * Encuentra la transformación **óptima** sin necesidad de prueba y error.
+
+  * Maximiza la verosimilitud del modelo, mejorando simultáneamente la **normalidad** y la **homocedasticidad**.
+
+  * Proporciona un método **objetivo** para seleccionar la transformación más apropiada.
+:::
+::: {.column width="50%"}
+
+**Limitaciones Importantes**
+
+  * **Requiere que los datos (Y) sean estrictamente positivos**. Esta es su principal restricción.
+
+  * La **interpretación** es compleja si $\lambda$ no es un valor simple (0, 0.5, 1).
+
+  * El $\lambda$ óptimo **depende del modelo** específico, por lo que puede cambiar si se modifican los predictores.
+:::
+:::::
+
+
+# Ejemplo Práctico: Aplicando Box-Cox
+
+A continuación, se visualiza cómo la transformación Box-Cox corrige la asimetría de una distribución original.
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| out-width: "75%"
+# Visualización de Box-Cox
+library(forecast)
+set.seed(222)
+y_skewed <- rexp(200, rate = 0.5)  # Datos sesgados
+
+# Encontrar lambda óptimo
+bc <- BoxCox.lambda(y_skewed)
+
+# Transformar
+y_boxcox <- BoxCox(y_skewed, lambda = bc)
+
+# Visualizar
+par(mfrow = c(1, 2))
+hist(y_skewed, breaks = 20, main = "Original (Sesgado)", 
+     xlab = "Y", col = "#0072B2", border = "white")
+hist(y_boxcox, breaks = 20, main = paste("Box-Cox (", round(bc, 2), ")"), 
+     xlab = "Y transformado", col = "#009E73", border = "white")
+```
+
+# La Extensión: Transformación de Yeo-Johnson
+
+Fue desarrollada para superar la principal limitación de Box-Cox: **acepta cualquier valor real (positivo, negativo o cero)**.
+
+::::: columns
+::: {.column width="50%"}
+**Cuándo Usar Box-Cox**
+
+  * Cuando los datos son **estrictamente positivos**.
+
+  * Si se busca comparabilidad con literatura existente que la utilice.
+:::
+::: {.column width="50%"}
+**Cuándo Usar Yeo-Johnson**
+
+  * Cuando los datos incluyen **valores negativos o cero**.
+
+  * Si se necesita mayor **flexibilidad** y no hay restricciones de dominio.
+:::
+:::::
+
+# Ejemplo Práctico: Yeo-Johnson con Datos Negativos
+
+Este ejemplo muestra cómo Yeo-Johnson maneja un conjunto de datos que incluye valores negativos, algo que Box-Cox no podría hacer.
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| out-width: "80%"
+# Comparación Box-Cox vs Yeo-Johnson
+set.seed(333)
+y_mixed <- c(rnorm(100, -2, 1), rnorm(100, 3, 2))  # Datos con negativos
+
+# Yeo-Johnson puede manejar estos datos, Box-Cox no
+library(car)
+library(gridExtra)
+
+# Crear visualización comparativa
+datos_comp_trans <- data.frame(
+  Original = y_mixed,
+  YeoJohnson = yjPower(y_mixed, lambda = 0)  # lambda=0 para log-like
+)
+
+p1 <- ggplot(datos_comp_trans, aes(x = Original)) +
+  geom_histogram(bins = 30, fill = "#D55E00", alpha = 0.7) +
+  labs(subtitle = "Datos con negativos",
+       x = "Valor", y = "Frecuencia") +
+  theme_minimal(base_size = 10)
+
+p2 <- ggplot(datos_comp_trans, aes(x = YeoJohnson)) +
+  geom_histogram(bins = 30, fill = "#009E73", alpha = 0.7) +
+  labs(subtitle = "Maneja valores negativos correctamente",
+       x = "Valor Transformado", y = "Frecuencia") +
+  theme_minimal(base_size = 10)
+
+grid.arrange(p1, p2, ncol = 2, top = "Original vs. Transformación Yeo-Johnson")
+```
+
+# Variables Categóricas: Principios de Codificación
+
+La mayoría de los algoritmos estadísticos requieren entradas numéricas. El objetivo de la codificación es transformar las categorías de texto en números, **preservando su información semántica sin introducir supuestos erróneos**.
+
+**Criterios para Seleccionar el Método de Codificación:**
+
+  * **Naturaleza de la variable:** ¿Existe un orden inherente entre las categorías? Esta es la pregunta más importante.
+      * **Nominal:** Sin orden (ej. color, país).
+      * **Ordinal:** Con orden (ej. nivel educativo, satisfacción).
+  * **Número de categorías:** Variables con muchas categorías ("alta cardinalidad") pueden requerir técnicas especiales.
+  * **Interpretabilidad del modelo:** ¿Qué método facilita una explicación clara de los resultados?
+
+# One-Hot Encoding (Variables Nominales)
+
+Transforma una variable con **k categorías sin orden** (ej. color, región) en **k-1 variables binarias** (0/1), también conocidas como *variables dummy*.
+
+**La "Dummy Variable Trap":**
+
+  * **Problema:** Usar `k` columnas (una para cada categoría) crea colinealidad perfecta en modelos lineales, ya que una columna es una combinación lineal de las otras.
+  * **Solución:** Siempre se omite una categoría, que se convierte en la **categoría de referencia** del modelo.
+
+::::: columns
+::: {.column width="50%"}
+**Ventajas**
+
+  * No asume un orden entre categorías.
+  * Cada nueva variable tiene un coeficiente directamente interpretable (la diferencia con la categoría de referencia).
+:::
+::: {.column width="50%"}
+**Desventajas**
+
+  * Aumenta mucho la dimensionalidad si hay muchas categorías.
+  * Genera matrices de datos con muchos ceros (*dispersas*).
+:::
+:::::
+
+
+# Ejemplo Práctico: One-Hot Encoding
+
+Imaginemos una variable `Region` con 4 categorías. Al codificarla, elegimos "Norte" como categoría de referencia.
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| out-width: "60%"
+#| fig-align: center
+library(ggplot2)
+library(fastDummies)
+library(reshape2)
+
+# 1. Creamos los datos originales
+datos <- data.frame(
+  ID = 1:5,
+  Region = factor(c("Sur", "Este", "Oeste", "Norte", "Sur"))
+)
+
+# 2. Aplicamos One-Hot Encoding
+datos_codificados <- dummy_cols(datos, 
+                                select_columns = "Region", 
+                                remove_selected_columns = TRUE)
+
+# 3. Preparamos los datos para el gráfico (excluimos la referencia "Norte")
+columnas_dummy <- datos_codificados[, c("ID", "Region_Este", "Region_Oeste", "Region_Sur")]
+datos_para_grafico <- melt(columnas_dummy, id.vars = "ID")
+
+# 4. Creamos el gráfico de mosaico
+ggplot(datos_para_grafico, aes(x = variable, y = factor(ID), fill = factor(value))) +
+  geom_tile(color = "white", size = 1.5) +
+  scale_fill_manual(values = c("0" = "gray90", "1" = "#0072B2"), name = "Valor") +
+  labs(
+    title = "Visualización de One-Hot Encoding",
+    subtitle = "Matriz binaria (Categoría de Referencia = 'Norte')",
+    x = "Nuevas Variables Dummy",
+    y = "ID de Observación"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(panel.grid = element_blank(), legend.position = "none")
+```
+
+En un modelo de regresión, el coeficiente de `Region_Sur` se interpretaría como la diferencia promedio en la variable respuesta al estar en la región "Sur" **en comparación con la región "Norte"**.
+
+# Codificación Ordinal (Variables Ordinales)
+
+Asigna números enteros consecutivos a las categorías, **respetando su orden o jerarquía natural**.
+
+**Ejemplo Práctico:**
+
+  * **Variable:** `Nivel_Satisfaccion` con categorías ["Bajo", "Medio", "Alto"].
+  * **Codificación:** Se asignan los valores [1, 2, 3].
+
+::::: columns
+::: {.column width="50%"}
+**Ventajas**
+
+  * Preserva la información jerárquica de la variable.
+  * Es muy eficiente: crea una sola columna, sin importar el número de categorías.
+:::
+::: {.column width="50%"}
+**Desventajas**
+
+  * **Supone que la "distancia" entre niveles es uniforme** (asume que el cambio de "Bajo" a "Medio" es igual que de "Medio" a "Alto").
+  * Puede imponer un orden artificial si se aplica por error a una variable nominal.
+:::
+:::::
+
+
+# Comparación: Ordinal vs. One-Hot Encoding
+
+La elección incorrecta del método puede llevar a modelos con menor rendimiento e interpretaciones erróneas.
+
+::::: columns
+::: {.column width="50%"}
+**Usar Codificación Ordinal**
+
+  * **Cuándo:** Para variables con un **orden natural y significativo** (ej. nivel educativo, satisfacción del cliente, grado de severidad).
+
+  * **Resultado:** Una sola columna numérica (`1, 2, 3, ...`).
+
+  * **Riesgo Principal:** Asumir que los intervalos entre categorías son iguales.
+:::
+::: {.column width="50%"}
+**Usar One-Hot Encoding**
+
+  * **Cuándo:** Para variables **nominales**, sin un orden inherente (ej. color, género, país).
+
+  * **Resultado:** `k-1` columnas binarias (`0` o `1`).
+
+  * **Riesgo Principal:** Aumento excesivo del número de variables si la cardinalidad es alta.
+:::
+:::::
+
+
+# ¿Qué es una Interacción?
+
+Mientras los efectos principales miden el impacto promedio de una variable, las **interacciones** revelan cómo el efecto de una variable **cambia según el nivel de otra**.
+
+**Modelo con Interacción:**
+$$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1 \times X_2 + \varepsilon$$
+
+**Interpretación de $\beta_3$:**
+
+* Si $\beta_3$ \> 0: Los efectos se **potencian** (sinergia).
+* Si $\beta_3$ \< 0: Los efectos se **atenúan** (compensación).
+
+# Ejemplo Visual: Interacción Experiencia × Género
+
+Un ejemplo clásico es cómo la relación entre experiencia y salario no es la misma para todos los grupos. La interacción permite que la pendiente de la experiencia sea diferente para cada género, como se ve en el gráfico.
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+#| out-width: "75%"
+#| fig-align: center
+# Visualización de interacción mixta (Continua x Categórica)
+set.seed(555)
+n <- 150
+experiencia <- runif(n, 0, 20)
+genero <- sample(c("Mujer", "Hombre"), n, replace = TRUE)
+salario <- 30000 + 1000 * experiencia * ifelse(genero == "Mujer", 1, 1.5) + rnorm(n, 0, 3000)
+datos_inter <- data.frame(experiencia, genero, salario)
+
+ggplot(datos_inter, aes(x = experiencia, y = salario/1000, color = genero)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = TRUE, alpha = 0.2) +
+  scale_color_manual(values = c("#E69F00", "#0072B2")) +
+  labs(title = "Interacción Experiencia × Género",
+       subtitle = "Pendientes diferentes = Interacción presente",
+       x = "Años de Experiencia", y = "Salario (miles €)",
+       color = "Género") +
+  theme_minimal(base_size = 11)
+```
+
+
+# Tipos de Interacciones: Continua × Continua
+
+Este tipo de interacción ocurre cuando el efecto de una variable continua sobre el resultado depende del valor de otra variable continua.
+
+* **Concepto:** El efecto de una variable se **amplifica** o **atenúa** a medida que otra variable cambia.
+* **Modelo:** $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1 \times X_2$. El coeficiente $\beta_3$ captura la interacción.
+
+**Sintaxis en R:**
+
+```{r}
+#| echo: true
+#| eval: false
+modelo <- lm(ventas ~ precio * publicidad, data = datos)
+# Interpretación: El efecto del precio sobre las ventas varía 
+# según el nivel de inversión en publicidad.
+```
+
+
+# Tipos de Interacciones: Categórica × Categórica
+
+Ocurre cuando el efecto de pertenecer a una categoría depende de la pertenencia a otra categoría.
+
+  * **Concepto:** Existe un **efecto específico para una combinación de categorías** que no se puede explicar sumando los efectos individuales.
+  * **Ejemplo:** El efecto del género en el salario puede ser diferente en cada departamento de una empresa.
+
+**Sintaxis en R:**
+
+
+```{r}
+#| echo: true
+#| eval: false
+modelo <- lm(salario ~ genero * departamento, data = datos)
+# Interpretación: La brecha salarial de género es diferente 
+# en cada departamento.
+```
+
+
+# Tipos de Interacciones: Continua × Categórica (Mixta)
+
+Este es uno de los tipos más comunes e intuitivos. Permite que la relación entre una variable continua y el resultado sea diferente para distintos grupos.
+
+  * **Concepto:** La **pendiente** de la variable continua es diferente para cada nivel de la variable categórica.
+  * **Ejemplo:** La relación entre los años de experiencia y el salario puede tener una pendiente más pronunciada para un grupo que para otro.
+
+**Sintaxis en R:**
+
+```{r}
+#| echo: true
+#| eval: false
+modelo <- lm(rendimiento ~ horas_estudio * metodo, data = datos)
+# Interpretación: La efectividad de las horas de estudio 
+# (la pendiente)
+# sobre el rendimiento varía según el método de estudio 
+# utilizado.
+```
+
+
+# Caso Práctico: Visualizando una Interacción Categórica
+
+Los *interaction plots* son la mejor herramienta para entender interacciones entre variables categóricas. **Las líneas no paralelas son una señal visual clara de una posible interacción**.
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3.5
+#| out-width: "60%"
+#| fig-align: center
+# Ejemplo completo de interacción categórica × categórica
+set.seed(666)
+n <- 200
+tratamiento <- sample(c("Placebo", "Droga A", "Droga B"), n, replace = TRUE)
+edad_grupo <- sample(c("Joven", "Adulto", "Mayor"), n, replace = TRUE)
+efecto_base <- 50
+efecto <- efecto_base +
+  ifelse(tratamiento == "Droga A", 10, 0) +
+  ifelse(tratamiento == "Droga B", 15, 0) +
+  ifelse(edad_grupo == "Adulto", 5, 0) +
+  ifelse(edad_grupo == "Mayor", -5, 0) +
+  ifelse(tratamiento == "Droga B" & edad_grupo == "Mayor", 20, 0) + # Interacción
+  rnorm(n, 0, 5)
+datos_inter_cat <- data.frame(tratamiento, edad_grupo, efecto)
+medias <- aggregate(efecto ~ tratamiento + edad_grupo, datos_inter_cat, mean)
+
+ggplot(medias, aes(x = edad_grupo, y = efecto, color = tratamiento, group = tratamiento)) +
+  geom_point(size = 3) +
+  geom_line(size = 1.2) +
+  scale_color_manual(values = c("#999999", "#E69F00", "#56B4E9")) +
+  labs(title = "Interacción Tratamiento × Edad",
+       subtitle = "Líneas no paralelas = Interacción significativa",
+       x = "Grupo de Edad", y = "Efecto del Tratamiento",
+       color = "Tratamiento") +
+  theme_minimal(base_size = 11)
+```
+
+La Droga B es especialmente efectiva en el grupo de "Mayor", un efecto que no se podría ver analizando las variables por separado.
+
+
+# Detección y Estrategia de Modelado
+
+No debemos buscar interacciones al azar. El enfoque correcto combina la teoría con la evidencia de los datos.
+
+::::: columns
+::: {.column width="50%"}
+**¿Cómo Detectarlas?**
+
+  * **Justificación Teórica:** El conocimiento del dominio es la guía principal para saber dónde buscar.
+
+  * **Exploración Visual:** Usar gráficos de dispersión por grupos o *interaction plots*.
+
+  * **Tests Estadísticos:** Utilizar el Test F para comparar formalmente un modelo con y sin la interacción.
+:::
+::: {.column width="50%"}
+**El Principio de Jerarquía**
+
+  * **Regla de Oro:** Si incluyes una interacción `A × B`, **siempre debes incluir los efectos principales `A` y `B` por separado**.
+
+  * **Justificación:** Preserva la interpretabilidad del modelo y evita sesgos en los coeficientes.
+:::
+:::::
+
+
+# Riesgos y Consideraciones Prácticas
+
+Las interacciones son poderosas, pero su uso requiere cuidado para no complicar el modelo innecesariamente.
+
+  * **Riesgo de Complejidad:**
+
+      * El número de interacciones posibles crece exponencialmente.
+      * **Recomendación:** Limitar el modelo a las 2 o 3 interacciones más importantes y con justificación teórica.
+
+  * **Riesgo de Multicolinealidad:**
+
+      * Las interacciones pueden hacer que los coeficientes sean inestables.
+      * **Mitigación:** Centrar las variables continuas antes de crear el término de interacción.
+
+  * **Interpretación con Transformaciones:**
+
+      * **Advertencia:** Una interacción en una escala `log` no significa lo mismo que en una escala lineal y requiere una interpretación mucho más cuidadosa.
+
+
+# Ingeniería Avanzada
+
+Consiste en crear nuevas variables mediante **combinaciones, ratios y transformaciones compuestas**. El objetivo es capturar relaciones complejas que no son evidentes en las variables originales.
+
+A menudo, las variables individuales contienen información parcial. Al combinarlas de forma inteligente, podemos revelar **patrones predictivos mucho más potentes**.
+
+**Técnicas Clave que Exploraremos:**
+
+  * **Combinaciones:** Creación de nuevas variables a partir de sumas o productos de las existentes.
+  * **Ratios y Proporciones:** Normalización de variables para revelar relaciones estructurales.
+  * **Manejo de Colinealidad:** Estrategias para condensar información de predictores correlacionados.
+
+
+# Creación de Features por Combinación
+
+::::: columns
+::: {.column width="50%"}
+**Combinaciones Lineales**
+
+  * **Concepto:** Sumas ponderadas de variables que miden aspectos de un mismo fenómeno.
+
+  * **Ejemplo (Índice Compuesto):** Un índice de riesgo cardiovascular.
+    `Índice_Riesgo = 0.4*Presión + 0.3*Colesterol + 0.3*IMC`
+
+  * **Aplicación:** Crear un *score* único a partir de múltiples indicadores para capturar un constructo multidimensional.
+:::
+::: {.column width="50%"}
+**Combinaciones No Lineales**
+
+  * **Concepto:** Productos, cocientes o funciones complejas que capturan sinergias o efectos multiplicativos.
+
+  * **Ejemplo (Producto de Eficiencia):**
+    `Rendimiento = Capacidad × Utilización × Calidad`
+
+  * **Aplicación:** Modelar efectos donde el resultado depende de la combinación simultánea de varios factores.
+:::
+:::::
+
+
+# El Poder de los Ratios
+
+Los ratios son muy potentes porque **normalizan automáticamente las diferencias de escala** y revelan relaciones estructurales que las variables absolutas ocultan.
+
+**Ventajas Principales:**
+
+  * **Normalización Automática:** Permiten comparar entidades de diferentes tamaños (ej. una startup vs. una multinacional).
+  * **Interpretación Intuitiva:** Tienen significados claros y directos (ej. `Deuda / Patrimonio`).
+  * **Robustez:** Suelen ser menos sensibles a valores atípicos (*outliers*).
+
+# Ejemplo Práctico: Retorno de Inversión (ROI)
+
+Un ratio clásico en negocio es el ROI, que mide la eficiencia de una inversión normalizando el beneficio obtenido por el coste de la misma.
+
+```{r}
+#| echo: false
+#| fig-width: 6
+#| fig-height: 4
+#| out-width: "75%"
+#| fig-align: center
+library(ggplot2)
+# Ejemplo de ratio informativo
+set.seed(777)
+n <- 100
+ventas <- runif(n, 10000, 100000)
+marketing <- runif(n, 1000, 20000)
+roi <- (ventas - marketing) / marketing  # Return on Investment
+
+datos_ratio <- data.frame(marketing = marketing/1000, roi = roi)
+
+ggplot(datos_ratio, aes(x = marketing, y = roi)) +
+  geom_point(alpha = 0.6, color = "#0072B2") +
+  geom_smooth(method = "loess", se = TRUE, color = "#D55E00", alpha = 0.2) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  labs(title = "Ratio ROI = (Ventas - Marketing) / Marketing",
+       subtitle = "Normaliza el retorno por la escala de la inversión",
+       x = "Inversión en Marketing (miles €)", y = "ROI") +
+  theme_minimal(base_size = 11)
+```
+
+
+# Manejo de Colinealidad con Features
+
+**El Problema:** Simplemente eliminar variables correlacionadas es una mala práctica, ya que **se pierde información predictiva valiosa**.
+
+**La Solución:** Condensar la información redundante en nuevas variables, **preservando la información única** de cada predictor original.
+
+**Estrategias Principales**
+
+  * **Componentes Principales (PCA):** Extrae la máxima varianza común en componentes ortogonales. Su principal desventaja es que **pierde interpretabilidad directa**.
+  * **Ratios Informativos:** Capturan la relación estructural entre dos variables (ej. `Deuda / Patrimonio`). **Preservan la interpretabilidad económica**.
+  * **Índices Ponderados:** Crean un *score* único a partir de varias variables, usando pesos teóricos o empíricos.
+
+# El Trade-Off: Complejidad vs. Interpretabilidad
+
+A medida que aumenta la complejidad de la técnica, generalmente se gana poder predictivo pero se pierde facilidad de interpretación.
+
+::::: columns
+::: {.column width="50%"}
+**Técnicas Más Simples**
+
+* **Estandarización**: La pérdida de interpretación es **mínima** (solo cambia la escala).
+* **Transformación Logarítmica**: La pérdida es **baja**, ya que se puede interpretar como cambios porcentuales.
+:::
+::: {.column width="50%"}
+**Técnicas Más Potentes**
+
+* **Box-Cox (con $\lambda$ complejo)**: La escala transformada no es intuitiva, dificultando la interpretación.
+* **PCA (Componentes Principales)**: La pérdida es **muy alta**, ya que los componentes son constructos abstractos.
+* **Interacciones Múltiples**: La interpretación se complica al haber **efectos condicionales**.
+:::
+:::::
+
+* **Si buscas EXPLICAR →** Prioriza la **Interpretabilidad**.
+* **Si buscas PREDECIR →** Prioriza el **Rendimiento**.
+
+# Errores Comunes a Evitar
+
+1.  **Transformar sin Diagnóstico Previo**
+    * Aplicar `log()` "por si acaso" en lugar de identificar un problema específico que lo justifique.
+
+2.  **Ignorar el Dominio del Problema**
+    * Usar transformaciones que no tienen sentido teórico (ej. `log(edad)`).
+
+3.  **Caer en la "Dummy Variable Trap"**
+    * Incluir `k` columnas para `k` categorías en lugar de `k-1` (categoría de referencia).
+
+4.  **Usar Interacciones sin Efectos Principales**
+    * Modelar `Y ~ A:B` en lugar de la forma correcta y jerárquica `Y ~ A + B + A:B`.
+
+5.  **Sobreingeniería (*Over-engineering*)**
+    * Crear cientos de *features* automáticamente sin una justificación clara y validada para cada uno.
+
+# Flujo de Trabajo Recomendado
+
+Un proceso sistemático garantiza resultados robustos y reproducibles.
+
+1.  **Análisis Exploratorio**
+    * Visualizar distribuciones, patrones y *outliers*.
+2.  **Diagnóstico de Problemas**
+    * Buscar no linealidad, heterocedasticidad, asimetría, etc., en los datos.
+3.  **Selección de Transformaciones**
+    * Elegir la técnica adecuada para el problema diagnosticado.
+4.  **Aplicación y Validación**
+    * Transformar las variables y verificar si el problema original se ha resuelto.
+5.  **Comparación de Modelos**
+    * Usar métricas (R², RMSE, AIC) y validación cruzada para evaluar la mejora.
+6.  **Interpretación Final**
+    * Traducir los resultados del modelo final al contexto del negocio o la investigación.
+
+# Mejores Prácticas en Feature Engineering
+
+1.  **Documentación Rigurosa**
+    * Registrar cada transformación y su justificación para mantener la trazabilidad.
+
+2.  **Validación en Datos Nuevos**
+    * Guardar los parámetros de transformación del set de entrenamiento (ej. media, sd, lambda) y aplicarlos al de test.
+
+3.  **Evitar *Data Leakage***
+    * Calcular todos los parámetros de las transformaciones **únicamente con los datos de entrenamiento**.
+
+4.  **Considerar el Contexto**
+    * Asegurarse de que las nuevas variables creadas son interpretables.
+
+5.  **Parsimonia**
+    * Preferir siempre el modelo más simple que funcione adecuadamente. No añadir complejidad por mejoras marginales.
+
+# Resumen y Conceptos Clave
+
+::::: columns
+::: {.column width="50%"}
+**¿Por Qué es Fundamental?**
+
+* **Resuelve problemas** específicos de los datos (no linealidad, etc.).
+* **Mejora el rendimiento** del modelo significativamente.
+* **Revela relaciones ocultas** mediante interacciones y combinaciones.
+* **Adapta los datos** a los requisitos de los algoritmos.
+:::
+::: {.column width="50%"}
+**Principios Clave**
+
+* **Diagnóstico** antes que transformación.
+* **Justificación** teórica o empírica.
+* **Validación** rigurosa.
+* **Balance** entre complejidad e interpretabilidad.
+* **Documentación** exhaustiva.
+:::
+:::::
+
+**Próximo tema:** Selección de variables, regularización y validación para manejar la complejidad agregada.

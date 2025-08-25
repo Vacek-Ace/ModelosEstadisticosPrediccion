@@ -353,11 +353,11 @@ Objetivos de aprendizaje
 <section id="transformaciones-de-variables-propósitos-y-aplicaciones" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="transformaciones-de-variables-propósitos-y-aplicaciones"><span class="header-section-number">4.1</span> Transformaciones de variables: propósitos y aplicaciones</h2>
 <p>En el análisis de datos y la construcción de modelos estadísticos, los datos en su forma original no siempre están preparados para obtener el máximo rendimiento de nuestros modelos. Las <strong>transformaciones de variables</strong> son herramientas fundamentales que nos permiten modificar la estructura matemática de nuestros datos para abordar problemas específicos y mejorar significativamente el ajuste del modelo <span class="citation" data-cites="box1964analysis carroll1988transformation">(<a href="references.html#ref-box1964analysis" role="doc-biblioref">Box y Cox 1964</a>; <a href="references.html#ref-carroll1988transformation" role="doc-biblioref">Carroll y Ruppert 1988</a>)</span>.</p>
-<p>La clave del éxito en las transformaciones está en <strong>diagnosticar correctamente el problema</strong> que enfrentamos y <strong>seleccionar la transformación apropiada</strong>. Cada transformación tiene propósitos específicos y consecuencias interpretativas que debemos comprender profundamente.</p>
+<p>La clave del éxito en las transformaciones está en diagnosticar correctamente el problema que enfrentamos y seleccionar la transformación apropiada. Cada transformación tiene propósitos específicos y consecuencias interpretativas que debemos comprender profundamente.</p>
 <section id="diagnóstico-cuándo-transformar" class="level3" data-number="4.1.1">
 <h3 data-number="4.1.1" class="anchored" data-anchor-id="diagnóstico-cuándo-transformar"><span class="header-section-number">4.1.1</span> Diagnóstico: ¿Cuándo transformar?</h3>
-<p>El arte de las transformaciones no está en aplicarlas indiscriminadamente, sino en <strong>diagnosticar correctamente</strong> cuál es el problema que enfrentamos y <strong>seleccionar la transformación más apropiada</strong> para resolverlo. Un diagnóstico erróneo puede llevarnos a aplicar una transformación innecesaria o, peor aún, contraproducente que distorsione las relaciones reales en los datos.</p>
-<p>La práctica común de “probar transformaciones hasta que mejore el ajuste” es metodológicamente peligrosa. Este enfoque de <strong>transformación por ensayo y error</strong> puede llevarnos a:</p>
+<p>El arte de las transformaciones no está en aplicarlas indiscriminadamente, sino en diagnosticar correctamente cuál es el problema que enfrentamos y seleccionar la transformación más apropiada para resolverlo. Un diagnóstico erróneo puede llevarnos a aplicar una transformación innecesaria o, peor aún, contraproducente que distorsione las relaciones reales en los datos.</p>
+<p>La práctica común de “probar transformaciones hasta que mejore el ajuste” es metodológicamente peligrosa. Este enfoque de transformación por ensayo y error puede llevarnos a:</p>
 <ul>
 <li><strong>Sobreajuste</strong>: Optimizar el modelo para los datos específicos que tenemos, perdiendo capacidad de generalización.</li>
 <li><strong>Pérdida de interpretabilidad</strong>: Aplicar transformaciones complejas sin comprender su significado teórico.</li>
@@ -365,7 +365,7 @@ Objetivos de aprendizaje
 <li><strong>Sesgo de selección</strong>: Elegir la transformación que da los “mejores” resultados sin justificación teórica.</li>
 </ul>
 <p>El proceso de diagnóstico debe ser <strong>sistemático y basado en evidencia visual y estadística</strong>. No basta con aplicar transformaciones porque “mejoran el R²”; debemos entender qué problema específico estamos resolviendo y cómo la transformación aborda ese problema desde una perspectiva teórica sólida.</p>
-<p>Un <strong>enfoque metodológicamente sólido</strong> sigue estos principios:</p>
+<p>Un enfoque metodológicamente sólido sigue estos principios:</p>
 <ol type="1">
 <li><p><strong>Diagnóstico previo</strong>: Identificar problemas específicos mediante análisis visual y tests estadísticos antes de decidir transformar.</p></li>
 <li><p><strong>Justificación teórica</strong>: Cada transformación debe tener una base conceptual sólida. Por ejemplo, usar logaritmos para relaciones multiplicativas o raíz cuadrada para estabilizar varianza Poisson.</p></li>
@@ -396,9 +396,9 @@ Recordatorio: Diagnóstico de problemas en regresión lineal
 </section>
 <section id="escalado-y-normalización-preparando-variables-para-el-análisis" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="escalado-y-normalización-preparando-variables-para-el-análisis"><span class="header-section-number">4.2</span> Escalado y normalización: preparando variables para el análisis</h2>
-<p>Antes de aplicar transformaciones complejas, es fundamental asegurar que nuestras variables estén en <strong>escalas comparables</strong>. Aunque la regresión lineal ordinaria no requiere estrictamente el escalado de variables para obtener estimadores insesgados, el escalado se vuelve <strong>crítico para la interpretación</strong> y <strong>esencial en métodos avanzados</strong> de modelado.</p>
-<p>En regresión múltiple, los coeficientes representan el cambio en Y por unidad de cambio en cada variable predictora. Cuando las variables tienen escalas muy diferentes, los coeficientes pierden comparabilidad directa. Una variable medida en miles de euros tendrá coeficientes numéricamente pequeños, mientras que una variable medida en porcentajes tendrá coeficientes grandes, <strong>independientemente de su importancia real</strong> en el modelo.</p>
-<p>Esta disparidad de escalas genera <strong>problemas interpretativos fundamentales</strong>: comparar la “importancia” relativa de las variables se vuelve imposible basándose únicamente en la magnitud de los coeficientes. El escalado resuelve este problema permitiendo que los coeficientes estandarizados (beta coefficients) representen cambios en desviaciones estándar, facilitando comparaciones directas entre predictores y proporcionando una base sólida para evaluar la importancia relativa de cada variable.</p>
+<p>Antes de aplicar transformaciones complejas, es fundamental asegurar que nuestras variables estén en escalas comparables. Aunque la regresión lineal ordinaria no requiere estrictamente el escalado de variables para obtener estimadores insesgados, el escalado se vuelve crítico para la interpretación y esencial en métodos avanzados de modelado.</p>
+<p>En regresión múltiple, los coeficientes representan el cambio en Y por unidad de cambio en cada variable predictora. Cuando las variables tienen escalas muy diferentes, los coeficientes pierden comparabilidad directa. Una variable medida en miles de euros tendrá coeficientes numéricamente pequeños, mientras que una variable medida en porcentajes tendrá coeficientes grandes, independientemente de su importancia real en el modelo.</p>
+<p>Esta disparidad de escalas genera problemas interpretativos fundamentales: comparar la “importancia” relativa de las variables se vuelve imposible basándose únicamente en la magnitud de los coeficientes. El escalado resuelve este problema permitiendo que los coeficientes estandarizados (beta coefficients) representen cambios en desviaciones estándar, facilitando comparaciones directas entre predictores y proporcionando una base sólida para evaluar la importancia relativa de cada variable.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Escalado en métodos de regularización">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -415,10 +415,10 @@ Escalado en métodos de regularización
 </div>
 </div>
 </div>
-<p>El escalado no es solo una cuestión técnica, sino una <strong>decisión metodológica</strong> que afecta directamente la interpretación y validez de nuestros resultados. La elección entre estandarización, normalización min-max, o escalado robusto debe basarse en las características de los datos y los objetivos del análisis, considerando siempre el impacto en la interpretabilidad de los resultados finales.</p>
+<p>El escalado no es solo una cuestión técnica, sino una decisión metodológica que afecta directamente la interpretación y validez de nuestros resultados. La elección entre estandarización, normalización min-max, o escalado robusto debe basarse en las características de los datos y los objetivos del análisis, considerando siempre el impacto en la interpretabilidad de los resultados finales.</p>
 <section id="estandarización-z-score" class="level3" data-number="4.2.1">
 <h3 data-number="4.2.1" class="anchored" data-anchor-id="estandarización-z-score"><span class="header-section-number">4.2.1</span> Estandarización (Z-Score)</h3>
-<p>La <strong>estandarización</strong> es la técnica de escalado más utilizada en estadística. Transforma cada variable para que tenga <strong>media cero</strong> y <strong>desviación estándar uno</strong>, preservando la forma de la distribución original.</p>
+<p>La <strong>estandarización</strong> es la técnica de escalado más utilizada en estadística. Transforma cada variable para que tenga media cero y desviación estándar uno, preservando la forma de la distribución original.</p>
 <p><span class="math display">\[X_{\text{estandarizado}} = \frac{X - \bar{X}}{\sigma_X}\]</span></p>
 <p><strong>Propiedades de la estandarización:</strong></p>
 <ul>
@@ -459,7 +459,7 @@ Escalado en métodos de regularización
 </section>
 <section id="escalado-robusto" class="level3" data-number="4.2.3">
 <h3 data-number="4.2.3" class="anchored" data-anchor-id="escalado-robusto"><span class="header-section-number">4.2.3</span> Escalado robusto</h3>
-<p>Para datos con <strong>outliers significativos</strong>, el escalado robusto utiliza la mediana y el rango intercuartílico (IQR) en lugar de la media y desviación estándar:</p>
+<p>Para datos con outliers significativos, el escalado robusto utiliza la mediana y el rango intercuartílico (IQR) en lugar de la media y desviación estándar:</p>
 <p><span class="math display">\[X_{\text{robusto}} = \frac{X - \text{mediana}(X)}{\text{IQR}(X)}\]</span></p>
 <p>Este método es menos sensible a valores extremos y preserva mejor la estructura de los datos en presencia de outliers.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo comparativo: Escalado de variables">
@@ -768,7 +768,7 @@ Ejemplo con outliers: Escalado robusto
 </section>
 <section id="transformación-de-box-cox" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="transformación-de-box-cox"><span class="header-section-number">4.4</span> Transformación de Box-Cox</h2>
-<p>La transformación de Box-Cox es un método que <strong>optimiza automáticamente</strong> el parámetro de transformación para maximizar la normalidad y homocedasticidad de los residuos <span class="citation" data-cites="box1964analysis">(<a href="references.html#ref-box1964analysis" role="doc-biblioref">Box y Cox 1964</a>)</span>. En lugar de elegir manualmente entre transformación logarítmica, raíz cuadrada o inversa, Box-Cox encuentra el valor <span class="math inline">\(\lambda\)</span> (lambda) que mejor normaliza los datos.</p>
+<p>La transformación de Box-Cox es un método que optimiza automáticamente el parámetro de transformación para maximizar la normalidad y homocedasticidad de los residuos <span class="citation" data-cites="box1964analysis">(<a href="references.html#ref-box1964analysis" role="doc-biblioref">Box y Cox 1964</a>)</span>. En lugar de elegir manualmente entre transformación logarítmica, raíz cuadrada o inversa, Box-Cox encuentra el valor <span class="math inline">\(\lambda\)</span> (lambda) que mejor normaliza los datos.</p>
 <section id="definición-matemática" class="level3" data-number="4.4.1">
 <h3 data-number="4.4.1" class="anchored" data-anchor-id="definición-matemática"><span class="header-section-number">4.4.1</span> Definición matemática</h3>
 <p><span class="math display">\[Y(\lambda) = \begin{cases}
@@ -803,8 +803,8 @@ Ejemplo con outliers: Escalado robusto
 </section>
 <section id="limitaciones-importantes" class="level3" data-number="4.4.3">
 <h3 data-number="4.4.3" class="anchored" data-anchor-id="limitaciones-importantes"><span class="header-section-number">4.4.3</span> Limitaciones importantes</h3>
-<p><strong>Restricción de dominio:</strong> Box-Cox requiere que <strong>todos los valores de Y sean estrictamente positivos</strong>. Esta es su limitación más importante, ya que muchos conjuntos de datos reales incluyen ceros o valores negativos.</p>
-<p><strong>Aplicación tradicional:</strong> Se aplica principalmente a la <strong>variable dependiente Y</strong>, no a las variables predictoras. Aunque técnicamente es posible aplicarla a X, la interpretación se complica considerablemente.</p>
+<p><strong>Restricción de dominio:</strong> Box-Cox requiere que todos los valores de Y sean estrictamente positivos. Esta es su limitación más importante, ya que muchos conjuntos de datos reales incluyen ceros o valores negativos.</p>
+<p><strong>Aplicación tradicional:</strong> Se aplica principalmente a la variable dependiente Y, no a las variables predictoras. Aunque técnicamente es posible aplicarla a X, la interpretación se complica considerablemente.</p>
 <p><strong>Interpretación compleja:</strong> Cuando <span class="math inline">\(\lambda\)</span> no corresponde a valores “simples” (como 0, 0.5, o 1), la interpretación de los coeficientes se vuelve difícil. Por ejemplo, si <span class="math inline">\(\lambda\)</span> = 0.37, ¿cómo interpretar un coeficiente en la escala transformada?</p>
 <p><strong>Dependencia del modelo:</strong> El <span class="math inline">\(\lambda\)</span> óptimo depende del modelo específico (predictores incluidos), por lo que cambiar el modelo puede requerir recalcular la transformación.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Extensión: Transformación de Yeo-Johnson">
@@ -840,7 +840,7 @@ Extensión: Transformación de Yeo-Johnson
 <p>Las <strong>variables categóricas</strong> son fundamentales en el modelado estadístico, pero requieren una preparación especial antes de ser utilizadas en algoritmos que esperan entradas numéricas <span class="citation" data-cites="potdar2017comparative">(<a href="references.html#ref-potdar2017comparative" role="doc-biblioref">Potdar, Pardawala, y Pai 2017</a>)</span>. La elección del método de codificación puede impactar significativamente tanto la interpretabilidad como el rendimiento del modelo.</p>
 <section id="principios-de-codificación-categórica" class="level3" data-number="4.5.1">
 <h3 data-number="4.5.1" class="anchored" data-anchor-id="principios-de-codificación-categórica"><span class="header-section-number">4.5.1</span> Principios de codificación categórica</h3>
-<p><strong>¿Por qué codificar?</strong> La mayoría de algoritmos de machine learning y modelos estadísticos requieren entradas numéricas. Las variables categóricas deben transformarse preservando su información semántica sin introducir supuestos erróneos sobre relaciones entre categorías.</p>
+<p>¿Por qué codificar? La mayoría de algoritmos de machine learning y modelos estadísticos requieren entradas numéricas. Las variables categóricas deben transformarse preservando su información semántica sin introducir supuestos erróneos sobre relaciones entre categorías.</p>
 <p><strong>Criterios de selección del método:</strong></p>
 <ul>
 <li><strong>Naturaleza de la variable</strong>: ¿Existe orden inherente entre categorías?</li>
@@ -867,7 +867,7 @@ Dummy Variable Trap
 <p><strong>Solución:</strong> Eliminar una categoría de referencia (usar k-1 columnas).</p>
 </div>
 </div>
-<p><strong>¿Por qué es necesario?</strong> La mayoría de algoritmos de machine learning requieren entradas numéricas y no pueden procesar directamente texto categórico. Más importante aún, el One-Hot Encoding <strong>no impone orden artificial</strong> entre categorías, tratando cada una como completamente independiente.</p>
+<p>¿Por qué es necesario? La mayoría de algoritmos de machine learning requieren entradas numéricas y no pueden procesar directamente texto categórico. Más importante aún, el One-Hot Encoding no impone orden artificial entre categorías, tratando cada una como completamente independiente.</p>
 <p><strong>Ejemplo práctico:</strong> Consideremos una variable “Color” con valores [Rojo, Verde, Azul]. La codificación One-Hot creará tres columnas:</p>
 <table class="caption-top table">
 <colgroup>
@@ -918,7 +918,7 @@ Dummy Variable Trap
 </tbody>
 </table>
 <p>Cada observación queda representada por un vector binario que identifica unívocamente su categoría sin asumir relaciones ordinales entre colores.</p>
-<p><strong>Interpretación en regresión:</strong> En un modelo de regresión lineal, cada variable binaria creada tendrá su propio coeficiente que representa la <strong>diferencia en la variable respuesta</strong> entre esa categoría específica y la categoría de referencia (la omitida). Por ejemplo, si omitimos “Azul”, el coeficiente de “Color_Rojo” indicará cuánto mayor (o menor) es el valor esperado de Y cuando el color es Rojo comparado con cuando es Azul.</p>
+<p><strong>Interpretación en regresión:</strong> En un modelo de regresión lineal, cada variable binaria creada tendrá su propio coeficiente que representa la diferencia en la variable respuesta entre esa categoría específica y la categoría de referencia (la omitida). Por ejemplo, si omitimos “Azul”, el coeficiente de “Color_Rojo” indicará cuánto mayor (o menor) es el valor esperado de Y cuando el color es Rojo comparado con cuando es Azul.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Implementación práctica">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -1029,7 +1029,7 @@ Cuándo usar codificación ordinal
 <p>La codificación ordinal es apropiada cuando las categorías tienen un orden natural claro y este orden es relevante para el fenómeno que estamos modelando. El modelo puede aprovechar esta información ordinal para capturar tendencias o patrones relacionados con la jerarquía de las categorías.</p>
 </div>
 </div>
-<p><strong>¿Por qué preservar el orden?</strong> Los algoritmos de machine learning pueden aprovechar la información ordinal para identificar tendencias y patrones que se perderían con one-hot encoding. Cuando el orden es significativo, la codificación ordinal es más eficiente y puede mejorar el rendimiento del modelo.</p>
+<p>¿Por qué preservar el orden? Los algoritmos de machine learning pueden aprovechar la información ordinal para identificar tendencias y patrones que se perderían con one-hot encoding. Cuando el orden es significativo, la codificación ordinal es más eficiente y puede mejorar el rendimiento del modelo.</p>
 <p><strong>Ejemplo práctico:</strong> Consideremos una variable “Satisfacción” con valores ordenados [Muy Insatisfecho, Insatisfecho, Neutral, Satisfecho, Muy Satisfecho]. La codificación ordinal asignará:</p>
 <table class="caption-top table">
 <thead>
@@ -1068,7 +1068,7 @@ Cuándo usar codificación ordinal
 </tbody>
 </table>
 <p>Cada observación queda representada por un número entero que preserva el orden jerárquico de las categorías originales.</p>
-<p><strong>Interpretación en regresión:</strong> En un modelo de regresión lineal, el coeficiente de la variable ordinal codificada representa el <strong>cambio promedio en la variable respuesta</strong> por cada incremento de una unidad en el nivel ordinal. Por ejemplo, si el coeficiente es 2.5, esto significa que pasar del nivel 1 al 2, o del 3 al 4, se asocia en promedio con un aumento de 2.5 unidades en la variable respuesta, asumiendo intervalos uniformes entre niveles.</p>
+<p><strong>Interpretación en regresión:</strong> En un modelo de regresión lineal, el coeficiente de la variable ordinal codificada representa el cambio promedio en la variable respuesta por cada incremento de una unidad en el nivel ordinal. Por ejemplo, si el coeficiente es 2.5, esto significa que pasar del nivel 1 al 2, o del 3 al 4, se asocia en promedio con un aumento de 2.5 unidades en la variable respuesta, asumiendo intervalos uniformes entre niveles.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Implementación práctica">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -1168,7 +1168,7 @@ Ventajas y desventajas
 </section>
 <section id="comparación-directa-ordinal-vs-one-hot-encoding" class="level3" data-number="4.5.4">
 <h3 data-number="4.5.4" class="anchored" data-anchor-id="comparación-directa-ordinal-vs-one-hot-encoding"><span class="header-section-number">4.5.4</span> Comparación directa: Ordinal vs One-Hot Encoding</h3>
-<p>La elección entre codificación ordinal y one-hot encoding depende fundamentalmente de la <strong>naturaleza de la variable categórica</strong> y los <strong>objetivos del análisis</strong>. Una decisión incorrecta puede llevar a interpretaciones erróneas y modelos subóptimos.</p>
+<p>La elección entre codificación ordinal y one-hot encoding depende fundamentalmente de la naturaleza de la variable categórica y los objetivos del análisis. Una decisión incorrecta puede llevar a interpretaciones erróneas y modelos subóptimos.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 29%">
@@ -1219,7 +1219,7 @@ Ventajas y desventajas
 </section>
 <section id="interacciones-entre-variables" class="level2" data-number="4.6">
 <h2 data-number="4.6" class="anchored" data-anchor-id="interacciones-entre-variables"><span class="header-section-number">4.6</span> Interacciones entre variables</h2>
-<p>Las <strong>interacciones entre variables</strong> representan uno de los conceptos más poderosos y subestimados en el modelado estadístico. Mientras que los efectos principales capturan el impacto promedio de cada variable por separado, las interacciones revelan <strong>cómo el efecto de una variable cambia según el nivel de otra variable</strong>. Este fenómeno es omnipresente en el mundo real: el efecto del precio en las ventas depende del nivel de publicidad, el impacto de la experiencia en el salario varía según la educación, o la efectividad de un tratamiento médico puede diferir entre grupos demográficos.</p>
+<p>Las <strong>interacciones entre variables</strong> representan uno de los conceptos más poderosos y subestimados en el modelado estadístico. Mientras que los efectos principales capturan el impacto promedio de cada variable por separado, las interacciones revelan cómo el efecto de una variable cambia según el nivel de otra variable. Este fenómeno es omnipresente en el mundo real: el efecto del precio en las ventas depende del nivel de publicidad, el impacto de la experiencia en el salario varía según la educación, o la efectividad de un tratamiento médico puede diferir entre grupos demográficos.</p>
 <div class="callout callout-style-default callout-important callout-titled" title="Principios para feature engineering efectivo">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1239,15 +1239,15 @@ Principios para feature engineering efectivo
 </ol>
 </div>
 </div>
-<p>Ignorar las interacciones relevantes puede llevar a <strong>conclusiones erróneas</strong> y <strong>pérdida significativa de poder predictivo</strong>. Por otro lado, incluir interacciones irrelevantes incrementa la complejidad del modelo sin beneficios, violando el principio de parsimonia. La clave está en <strong>identificar, interpretar y validar</strong> interacciones de manera sistemática y teoricamente fundamentada.</p>
+<p>Ignorar las interacciones relevantes puede llevar a conclusiones erróneas y pérdida significativa de poder predictivo. Por otro lado, incluir interacciones irrelevantes incrementa la complejidad del modelo sin beneficios, violando el principio de parsimonia. La clave está en identificar, interpretar y validar interacciones de manera sistemática y teoricamente fundamentada.</p>
 <section id="interacciones-entre-variables-continuas" class="level3" data-number="4.6.1">
 <h3 data-number="4.6.1" class="anchored" data-anchor-id="interacciones-entre-variables-continuas"><span class="header-section-number">4.6.1</span> Interacciones entre variables continuas</h3>
 <p>El caso más directo es la interacción entre dos variables continuas:</p>
 <p><span class="math display">\[Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1 X_2 + \varepsilon\]</span></p>
 <p><strong>Interpretación del coeficiente de interacción</strong> (<span class="math inline">\(\beta_3\)</span>):</p>
 <ul>
-<li>Si <span class="math inline">\(\beta_3 &gt; 0\)</span>: El efecto de <span class="math inline">\(X_1\)</span> se <strong>amplifica</strong> cuando <span class="math inline">\(X_2\)</span> aumenta</li>
-<li>Si <span class="math inline">\(\beta_3 &lt; 0\)</span>: El efecto de <span class="math inline">\(X_1\)</span> se <strong>atenúa</strong> cuando <span class="math inline">\(X_2\)</span> aumenta</li>
+<li>Si <span class="math inline">\(\beta_3 &gt; 0\)</span>: El efecto de <span class="math inline">\(X_1\)</span> se amplifica cuando <span class="math inline">\(X_2\)</span> aumenta</li>
+<li>Si $_3 &lt; 0: El efecto de <span class="math inline">\(X_1\)</span> se atenúa cuando <span class="math inline">\(X_2\)</span> aumenta</li>
 <li>Si <span class="math inline">\(\beta_3 = 0\)</span>: No hay interacción (efectos aditivos)</li>
 </ul>
 <div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo: Interacción precio-publicidad en ventas">
@@ -1406,7 +1406,7 @@ F-statistic:  1291 on 3 and 196 DF,  p-value: &lt; 2.2e-16</code></pre>
 </section>
 <section id="interacciones-entre-variables-categóricas" class="level3" data-number="4.6.2">
 <h3 data-number="4.6.2" class="anchored" data-anchor-id="interacciones-entre-variables-categóricas"><span class="header-section-number">4.6.2</span> Interacciones entre variables categóricas</h3>
-<p>Cuando ambas variables son categóricas, las interacciones representan efectos específicos de <strong>combinaciones de categorías</strong> que no pueden explicarse por los efectos principales por separado.</p>
+<p>Cuando ambas variables son categóricas, las interacciones representan efectos específicos de combinaciones de categorías que no pueden explicarse por los efectos principales por separado.</p>
 <p>Para dos variables categóricas A (con niveles i) y B (con niveles j), el modelo incluye:</p>
 <p><span class="math display">\[Y = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \varepsilon\]</span></p>
 <p>Donde <span class="math inline">\((\alpha\beta)_{ij}\)</span> representa la interacción específica entre el nivel i de A y el nivel j de B.</p>
@@ -1645,7 +1645,7 @@ F-statistic: 164.9 on 5 and 294 DF,  p-value: &lt; 2.2e-16</code></pre>
 </section>
 <section id="interacciones-mixtas-continua-categórica" class="level3" data-number="4.6.3">
 <h3 data-number="4.6.3" class="anchored" data-anchor-id="interacciones-mixtas-continua-categórica"><span class="header-section-number">4.6.3</span> Interacciones mixtas (continua × categórica)</h3>
-<p>Las interacciones mixtas son especialmente útiles para modelar <strong>cómo el efecto de una variable continua varía entre grupos categóricos</strong>. Esto es fundamental cuando sospechamos que la relación funcional cambia según el contexto definido por la variable categórica.</p>
+<p>Las interacciones mixtas son especialmente útiles para modelar cómo el efecto de una variable continua varía entre grupos categóricos. Esto es fundamental cuando sospechamos que la relación funcional cambia según el contexto definido por la variable categórica.</p>
 <p><strong>Formulación matemática:</strong> <span class="math display">\[Y = \beta_0 + \beta_1 X + \beta_2 D + \beta_3 X \cdot D + \varepsilon\]</span></p>
 <p>Donde D es una variable dummy (0/1) que representa la variable categórica.</p>
 <p><strong>Interpretación geométrica:</strong> La interacción permite que cada grupo categórico tenga:</p>
@@ -1812,10 +1812,10 @@ F-statistic: 656.2 on 3 and 246 DF,  p-value: &lt; 2.2e-16</code></pre>
 </section>
 <section id="identificación-y-detección-de-interacciones" class="level3" data-number="4.6.4">
 <h3 data-number="4.6.4" class="anchored" data-anchor-id="identificación-y-detección-de-interacciones"><span class="header-section-number">4.6.4</span> Identificación y detección de interacciones</h3>
-<p>La <strong>detección sistemática de interacciones</strong> requiere combinar <strong>justificación teórica</strong>, <strong>exploración visual</strong> y <strong>validación estadística</strong>. No debemos buscar interacciones aleatoriamente, sino guiados por el conocimiento del dominio y patrones observables en los datos.</p>
-<p>La <strong>justificación teórica previa</strong> es fundamental: la teoría del dominio debe sugerir dónde pueden existir interacciones. Por ejemplo, en <strong>economía</strong> esperamos efectos precio-publicidad o educación-experiencia; en <strong>medicina</strong> son comunes las interacciones dosis-edad o tratamiento-comorbilidad; en <strong>marketing</strong> encontramos interacciones producto-canal o temporada-promoción.</p>
-<p>La <strong>exploración visual sistemática</strong> complementa la teoría con evidencia empírica. Para <strong>variables continuas</strong> utilizamos gráficos de dispersión coloreados por grupos categóricos; para <strong>variables categóricas</strong> empleamos gráficos de interacción (interaction plots); para interacciones <strong>mixtas</strong> analizamos líneas de regresión por grupo.</p>
-<p>Los <strong>tests estadísticos formales</strong> proporcionan validación objetiva: el <strong>test F para interacciones</strong> compara modelos con y sin términos de interacción, el <strong>test de significancia individual</strong> evalúa coeficientes específicos mediante t-test, y los <strong>criterios de información</strong> (AIC/BIC) guían la selección entre modelos alternativos.</p>
+<p>La detección sistemática de interacciones requiere combinar justificación teórica, exploración visual y validación estadística. No debemos buscar interacciones aleatoriamente, sino guiados por el conocimiento del dominio y patrones observables en los datos.</p>
+<p>La justificación teórica previa es fundamental: la teoría del dominio debe sugerir dónde pueden existir interacciones. Por ejemplo, en economía esperamos efectos precio-publicidad o educación-experiencia; en medicina son comunes las interacciones dosis-edad o tratamiento-comorbilidad; en marketing encontramos interacciones producto-canal o temporada-promoción.</p>
+<p>La exploración visual sistemática complementa la teoría con evidencia empírica. Para variables continuas utilizamos gráficos de dispersión coloreados por grupos categóricos; para variables categóricas empleamos gráficos de interacción (interaction plots); para interacciones mixtas analizamos líneas de regresión por grupo.</p>
+<p>Los tests estadísticos formales proporcionan validación objetiva: el test F para interacciones compara modelos con y sin términos de interacción, el test de significancia individual evalúa coeficientes específicos mediante t-test, y los criterios de información (AIC/BIC) guían la selección entre modelos alternativos.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Estrategia de modelado jerárquico">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1826,7 +1826,7 @@ Estrategia de modelado jerárquico
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>Principio de jerarquía:</strong> Si incluimos una interacción A×B, <strong>siempre debemos incluir los efectos principales</strong> A y B, incluso si no son significativos individualmente. Esto preserva la interpretabilidad y evita sesgos en los coeficientes de interacción.</p>
+<p><strong>Principio de jerarquía:</strong> Si incluimos una interacción A×B, siempre debemos incluir los efectos principales A y B, incluso si no son significativos individualmente. Esto preserva la interpretabilidad y evita sesgos en los coeficientes de interacción.</p>
 <p><strong>Proceso de construcción del modelo:</strong></p>
 <ol type="1">
 <li><strong>Modelo base</strong>: Solo efectos principales</li>
@@ -1840,7 +1840,7 @@ Estrategia de modelado jerárquico
 </section>
 <section id="consideraciones-prácticas-y-limitaciones" class="level3" data-number="4.6.5">
 <h3 data-number="4.6.5" class="anchored" data-anchor-id="consideraciones-prácticas-y-limitaciones"><span class="header-section-number">4.6.5</span> Consideraciones prácticas y limitaciones</h3>
-<p>Las interacciones incrementan exponencialmente la <strong>complejidad interpretativa</strong> del modelo. Un modelo con k efectos principales puede tener hasta <span class="math inline">\(k(k-1)/2\)</span> interacciones de segundo orden, y el número crece exponencialmente con interacciones de orden superior. Esta explosión combinatorial hace que incluso modelos aparentemente simples se vuelvan rápidamente inmanejables desde el punto de vista interpretativo. Como <strong>reglas prácticas para la complejidad</strong>, recomendamos limitar a <strong>máximo 2-3 interacciones de segundo orden</strong> en modelos explicativos, <strong>evitar interacciones de tercer orden</strong> salvo justificación teórica muy sólida, y <strong>priorizar interacciones con efectos grandes</strong> sobre mera significancia estadística.</p>
+<p>Las interacciones incrementan exponencialmente la complejidad interpretativa del modelo. Un modelo con k efectos principales puede tener hasta <span class="math inline">\(k(k-1)/2\)</span> interacciones de segundo orden, y el número crece exponencialmente con interacciones de orden superior. Esta explosión combinatorial hace que incluso modelos aparentemente simples se vuelvan rápidamente inmanejables desde el punto de vista interpretativo. Como reglas prácticas para la complejidad, recomendamos limitar a máximo 2-3 interacciones de segundo orden en modelos explicativos, evitar interacciones de tercer orden salvo justificación teórica muy sólida, y priorizar interacciones con efectos grandes sobre mera significancia estadística.</p>
 <div class="callout callout-style-default callout-warning callout-titled" title="Advertencia sobre interpretación">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1854,8 +1854,8 @@ Advertencia sobre interpretación
 <p><strong>Cuidado con la interpretación automática.</strong> Las interacciones en escalas transformadas tienen significados diferentes que en escalas originales. Siempre verificar la interpretación en el contexto de la transformación aplicada y considerar la retransformación para comunicación con audiencias no técnicas.</p>
 </div>
 </div>
-<p>Un problema adicional surge cuando las interacciones crean <strong>multicolinealidad severa</strong>, especialmente cuando las variables principales están correlacionadas, se incluyen múltiples interacciones con variables comunes, o se usan variables categóricas con muchos niveles. Esta multicolinealidad puede hacer que los coeficientes individuales sean inestables y difíciles de interpretar, incluso cuando el modelo en conjunto funcione bien predictivamente. Las <strong>estrategias de mitigación</strong> incluyen el <strong>centrado de variables continuas</strong> para reducir la correlación entre X y X×Z, la <strong>selección cuidadosa</strong> de interacciones sin incluir todas las combinaciones posibles, y el uso de <strong>métodos de regularización</strong> como Ridge o Lasso cuando hay múltiples interacciones.</p>
-<p>La situación se complica aún más cuando las variables están <strong>transformadas</strong> (logarítmica, Box-Cox). En estos casos, la interpretación de las interacciones adquiere significados completamente diferentes que en escalas originales. Por ejemplo, en un modelo como <span class="math inline">\(\log(Y) = \beta_0 + \beta_1 \log(X_1) + \beta_2 X_2 + \beta_3 \log(X_1) \cdot X_2 + \varepsilon\)</span>, el coeficiente <span class="math inline">\(\beta_3\)</span> representa cómo cambia la <strong>elasticidad</strong> de Y respecto a X₁ cuando X₂ aumenta en una unidad, lo que requiere una interpretación mucho más sofisticada que una interacción en escalas lineales.</p>
+<p>Un problema adicional surge cuando las interacciones crean multicolinealidad severa, especialmente cuando las variables principales están correlacionadas, se incluyen múltiples interacciones con variables comunes, o se usan variables categóricas con muchos niveles. Esta multicolinealidad puede hacer que los coeficientes individuales sean inestables y difíciles de interpretar, incluso cuando el modelo en conjunto funcione bien predictivamente. Las estrategias de mitigación incluyen el centrado de variables continuas para reducir la correlación entre X y X×Z, la selección cuidadosa de interacciones sin incluir todas las combinaciones posibles, y el uso de métodos de regularización como Ridge o Lasso cuando hay múltiples interacciones.</p>
+<p>La situación se complica aún más cuando las variables están transformadas (logarítmica, Box-Cox). En estos casos, la interpretación de las interacciones adquiere significados completamente diferentes que en escalas originales. Por ejemplo, en un modelo como <span class="math inline">\(\log(Y) = \beta_0 + \beta_1 \log(X_1) + \beta_2 X_2 + \beta_3 \log(X_1) \cdot X_2 + \varepsilon\)</span>, el coeficiente <span class="math inline">\(\beta_3\)</span> representa cómo cambia la elasticidad de Y respecto a X₁ cuando X₂ aumenta en una unidad, lo que requiere una interpretación mucho más sofisticada que una interacción en escalas lineales.</p>
 <div class="callout callout-style-default callout-important callout-titled" title="Principios para el uso de interacciones">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1881,27 +1881,27 @@ Principios para el uso de interacciones
 </section>
 <section id="ingeniería-de-características-avanzada-combinaciones-ratios-y-transformaciones" class="level2" data-number="4.7">
 <h2 data-number="4.7" class="anchored" data-anchor-id="ingeniería-de-características-avanzada-combinaciones-ratios-y-transformaciones"><span class="header-section-number">4.7</span> Ingeniería de características avanzada: combinaciones, ratios y transformaciones</h2>
-<p>Más allá de las transformaciones individuales e interacciones, la <strong>ingeniería de características avanzada</strong> implica crear nuevas variables predictivas mediante <strong>combinaciones matemáticas</strong>, <strong>ratios</strong> y <strong>transformaciones compuestas</strong> que capturen relaciones complejas no evidentes en las variables originales <span class="citation" data-cites="kuhn2019feature">(<a href="references.html#ref-kuhn2019feature" role="doc-biblioref">Kuhn y Johnson 2019</a>)</span>. Esta aproximación es fundamental cuando las variables individuales contienen información parcial que, al combinarse, revelan patrones predictivos más potentes.</p>
+<p>Más allá de las transformaciones individuales e interacciones, la ingeniería de características avanzada implica crear nuevas variables predictivas mediante combinaciones matemáticas, ratios y transformaciones compuestas que capturen relaciones complejas no evidentes en las variables originales <span class="citation" data-cites="kuhn2019feature">(<a href="references.html#ref-kuhn2019feature" role="doc-biblioref">Kuhn y Johnson 2019</a>)</span>. Esta aproximación es fundamental cuando las variables individuales contienen información parcial que, al combinarse, revelan patrones predictivos más potentes.</p>
 <section id="combinaciones-lineales-y-no-lineales" class="level3" data-number="4.7.1">
 <h3 data-number="4.7.1" class="anchored" data-anchor-id="combinaciones-lineales-y-no-lineales"><span class="header-section-number">4.7.1</span> Combinaciones lineales y no lineales</h3>
-<p>Las <strong>combinaciones lineales</strong> crean nuevas variables mediante sumas ponderadas de variables existentes, útiles especialmente cuando trabajamos con variables que miden aspectos relacionados del mismo fenómeno pero con diferentes escalas o unidades.</p>
+<p>Las combinaciones lineales crean nuevas variables mediante sumas ponderadas de variables existentes, útiles especialmente cuando trabajamos con variables que miden aspectos relacionados del mismo fenómeno pero con diferentes escalas o unidades.</p>
 <p><strong>Ejemplos de combinaciones lineales efectivas:</strong></p>
 <ul>
-<li><p><strong>Índices compuestos</strong>: Combinan múltiples indicadores en un score único que captura un constructo multidimensional. Por ejemplo, un índice de riesgo cardiovascular podría definirse como <code>índice_salud = 0.4×presión_arterial_normalizada + 0.3×colesterol_normalizada + 0.3×IMC_normalizado</code>. Los pesos (0.4, 0.3, 0.3) reflejan la <strong>importancia relativa</strong> establecida por evidencia médica, creando una métrica integrada que es más informativa que cualquier indicador individual. Este tipo de índices son especialmente valiosos en <strong>dominios donde múltiples factores</strong> contribuyen conjuntamente al outcome de interés.</p></li>
-<li><p><strong>Scores balanceados</strong>: Representan equilibrios o trade-offs entre dimensiones competitivas. Un ejemplo típico es <code>balance_trabajo_vida = horas_trabajo / (tiempo_personal + tiempo_familia + tiempo_descanso)</code>. Esta métrica captura no solo la <strong>intensidad laboral</strong>, sino también su <strong>contexto relativo</strong> dentro del estilo de vida completo. Valores altos indican desbalance hacia el trabajo, mientras que valores cercanos a 1.0 sugieren equilibrio saludable. Los scores balanceados son fundamentales para capturar <strong>dinámicas de compensación</strong> que no son evidentes en variables absolutas.</p></li>
-<li><p><strong>Factores sintéticos</strong>: Cuando múltiples variables correlacionadas miden aspectos del mismo constructo subyacente, pueden condensarse en un factor común que <strong>preserve la información esencial</strong> eliminando redundancia. Por ejemplo, si tenemos variables <code>ingresos</code>, <code>educación</code>, y <code>prestigio_ocupacional</code> (todas correlacionadas), podemos crear un factor <code>estatus_socioeconomico</code> que capture la varianza común. Esto es especialmente útil cuando la <strong>colinealidad</strong> entre predictores compromete la estabilidad del modelo, pero cada variable aporta información valiosa.</p></li>
+<li><p><strong>Índices compuestos</strong>: Combinan múltiples indicadores en un score único que captura un constructo multidimensional. Por ejemplo, un índice de riesgo cardiovascular podría definirse como <code>índice_salud = 0.4×presión_arterial_normalizada + 0.3×colesterol_normalizada + 0.3×IMC_normalizado</code>. Los pesos (0.4, 0.3, 0.3) reflejan la importancia relativa establecida por evidencia médica, creando una métrica integrada que es más informativa que cualquier indicador individual. Este tipo de índices son especialmente valiosos en dominios donde múltiples factores contribuyen conjuntamente al outcome de interés.</p></li>
+<li><p><strong>Scores balanceados</strong>: Representan equilibrios o trade-offs entre dimensiones competitivas. Un ejemplo típico es <code>balance_trabajo_vida = horas_trabajo / (tiempo_personal + tiempo_familia + tiempo_descanso)</code>. Esta métrica captura no solo la intensidad laboral, sino también su contexto relativo dentro del estilo de vida completo. Valores altos indican desbalance hacia el trabajo, mientras que valores cercanos a 1.0 sugieren equilibrio saludable. Los scores balanceados son fundamentales para capturar dinámicas de compensación que no son evidentes en variables absolutas.</p></li>
+<li><p><strong>Factores sintéticos</strong>: Cuando múltiples variables correlacionadas miden aspectos del mismo constructo subyacente, pueden condensarse en un factor común que preserve la información esencial eliminando redundancia. Por ejemplo, si tenemos variables <code>ingresos</code>, <code>educación</code>, y <code>prestigio_ocupacional</code> (todas correlacionadas), podemos crear un factor <code>estatus_socioeconomico</code> que capture la varianza común. Esto es especialmente útil cuando la colinealidad entre predictores compromete la estabilidad del modelo, pero cada variable aporta información valiosa.</p></li>
 </ul>
-<p><strong>Combinaciones no lineales</strong> van más allá de las sumas ponderadas para capturar <strong>interacciones multiplicativas</strong>, <strong>sinergias</strong> y <strong>compensaciones</strong> entre variables mediante productos, cocientes, potencias y funciones más complejas:</p>
+<p>Las combinaciones no lineales van más allá de las sumas ponderadas para capturar interacciones multiplicativas, sinergias y compensaciones entre variables mediante productos, cocientes, potencias y funciones más complejas:</p>
 <ul>
-<li><p><strong>Productos de eficiencia</strong>: Capturan sinergias multiplicativas donde el rendimiento depende de la <strong>combinación simultánea</strong> de múltiples factores. Por ejemplo, <code>rendimiento_efectivo = capacidad_instalada × utilización_porcentual × factor_calidad</code>. Esta métrica reconoce que el rendimiento real no es aditivo: tener alta capacidad pero baja utilización, o alta utilización con problemas de calidad, resulta en rendimiento subóptimo. Los productos de eficiencia son esenciales en <strong>contextos operacionales</strong> donde el desempeño emerge de la coordinación entre recursos.</p></li>
-<li><p><strong>Ratios de rendimiento ajustado por riesgo</strong>: Normalizan beneficios por su costo o riesgo asociado, creando métricas comparables entre contextos diferentes. Un ejemplo financiero sería <code>eficiencia_ajustada = (rendimiento_esperado - tasa_libre_riesgo) / (volatilidad + costos_transaccion)</code>. Esta formulación reconoce que los rendimientos absolutos son engañosos sin considerar el <strong>riesgo asumido</strong> y los <strong>costos incurridos</strong>. Los ratios ajustados son cruciales para <strong>decisiones de optimización</strong> donde debemos comparar alternativas con perfiles de riesgo-retorno heterogéneos.</p></li>
-<li><p><strong>Funciones de utilidad</strong>: Capturan <strong>percepciones subjetivas</strong> o <strong>valores no lineales</strong> mediante transformaciones que reflejan preferencias reales. Por ejemplo, <code>valor_percibido = √(calidad_producto) × precio⁻⁰·⁵</code> reconoce que la utilidad del consumidor tiene <strong>rendimientos decrecientes</strong> tanto en calidad como en ahorro de precio. La raíz cuadrada de la calidad refleja que mejoras incrementales tienen menor impacto en niveles altos, mientras que el exponente negativo del precio captura la sensibilidad decreciente a cambios de precio en productos caros.</p></li>
+<li><p><strong>Productos de eficiencia</strong>: Capturan sinergias multiplicativas donde el rendimiento depende de la combinación simultánea de múltiples factores. Por ejemplo, <code>rendimiento_efectivo = capacidad_instalada × utilización_porcentual × factor_calidad</code>. Esta métrica reconoce que el rendimiento real no es aditivo: tener alta capacidad pero baja utilización, o alta utilización con problemas de calidad, resulta en rendimiento subóptimo. Los productos de eficiencia son esenciales en contextos operacionales donde el desempeño emerge de la coordinación entre recursos.</p></li>
+<li><p><strong>Ratios de rendimiento ajustado por riesgo</strong>: Normalizan beneficios por su costo o riesgo asociado, creando métricas comparables entre contextos diferentes. Un ejemplo financiero sería <code>eficiencia_ajustada = (rendimiento_esperado - tasa_libre_riesgo) / (volatilidad + costos_transaccion)</code>. Esta formulación reconoce que los rendimientos absolutos son engañosos sin considerar el riesgo asumido y los costos incurridos. Los ratios ajustados son cruciales para decisiones de optimización donde debemos comparar alternativas con perfiles de riesgo-retorno heterogéneos.</p></li>
+<li><p><strong>Funciones de utilidad</strong>: Capturan percepciones subjetivas o valores no lineales mediante transformaciones que reflejan preferencias reales. Por ejemplo, <code>valor_percibido = √(calidad_producto) × precio⁻⁰·⁵</code> reconoce que la utilidad del consumidor tiene rendimientos decrecientes tanto en calidad como en ahorro de precio. La raíz cuadrada de la calidad refleja que mejoras incrementales tienen menor impacto en niveles altos, mientras que el exponente negativo del precio captura la sensibilidad decreciente a cambios de precio en productos caros.</p></li>
 </ul>
 </section>
 <section id="ratios-y-proporciones-como-features" class="level3" data-number="4.7.2">
 <h3 data-number="4.7.2" class="anchored" data-anchor-id="ratios-y-proporciones-como-features"><span class="header-section-number">4.7.2</span> Ratios y proporciones como features</h3>
-<p>Los <strong>ratios</strong> son especialmente poderosos porque normalizan automáticamente las diferencias de escala y pueden revelar relaciones proporcionales fundamentales que permanecen ocultas en variables absolutas. A diferencia de las medidas absolutas, los ratios capturan <strong>relaciones estructurales</strong> que son invariantes bajo cambios de escala y contexto, lo que los convierte en herramientas fundamentales para crear features robustos y comparables.</p>
-<p>La <strong>potencia de los ratios</strong> radica en su capacidad para transformar información absoluta en <strong>información relativa</strong>. Por ejemplo, una empresa con €1M en ventas y €100K en marketing tiene un ratio ventas/marketing de 10, igual que una empresa con €10M en ventas y €1M en marketing. Esta normalización automática permite comparaciones directas y elimina sesgos de tamaño que podrían distorsionar el análisis.</p>
+<p>Los ratios son especialmente poderosos porque normalizan automáticamente las diferencias de escala y pueden revelar relaciones proporcionales fundamentales que permanecen ocultas en variables absolutas. A diferencia de las medidas absolutas, los ratios capturan relaciones estructurales que son invariantes bajo cambios de escala y contexto, lo que los convierte en herramientas fundamentales para crear features robustos y comparables.</p>
+<p>La potencia de los ratios radica en su capacidad para transformar información absoluta en información relativa. Por ejemplo, una empresa con €1M en ventas y €100K en marketing tiene un ratio ventas/marketing de 10, igual que una empresa con €10M en ventas y €1M en marketing. Esta normalización automática permite comparaciones directas y elimina sesgos de tamaño que podrían distorsionar el análisis.</p>
 <p><strong>Categorización detallada de ratios efectivos:</strong></p>
 <ol type="1">
 <li><p><strong>Ratios de eficiencia</strong>: Miden qué tan efectivamente se convierten los inputs en outputs, revelando productividad y optimización operacional. Ejemplos fundamentales incluyen:</p>
@@ -1910,28 +1910,28 @@ Principios para el uso de interacciones
 <li><code>eficiencia_produccion = unidades_producidas / (horas_trabajo + costo_materiales)</code>: Normaliza productividad por recursos consumidos</li>
 <li><code>conversion_rate = ventas_completadas / visitantes_web</code>: Revela la efectividad del funnel de conversión</li>
 </ul>
-<p>Estos ratios son especialmente valiosos porque <strong>eliminan el efecto escala</strong> y permiten comparar unidades de diferentes tamaños en términos de eficiencia pura.</p></li>
-<li><p><strong>Ratios de riesgo ajustado</strong>: Normalizan retornos o beneficios por la incertidumbre o costo asociado, proporcionando métricas de <strong>valor ajustado por riesgo</strong>:</p>
+<p>Estos ratios son especialmente valiosos porque eliminan el efecto escala y permiten comparar unidades de diferentes tamaños en términos de eficiencia pura.</p></li>
+<li><p><strong>Ratios de riesgo ajustado</strong>: Normalizan retornos o beneficios por la incertidumbre o costo asociado, proporcionando métricas de valor ajustado por riesgo:</p>
 <ul>
 <li><code>sharpe_ratio = (rendimiento_promedio - tasa_libre_riesgo) / volatilidad</code>: Mide retorno por unidad de riesgo asumido</li>
 <li><code>stability_score = beneficio_promedio / desviacion_estandar_beneficios</code>: Indica consistencia en el desempeño</li>
 <li><code>risk_adjusted_growth = crecimiento_promedio / max_drawdown</code>: Captura crecimiento sostenible</li>
 </ul>
-<p>Estos ratios son cruciales en <strong>análisis financiero</strong> y <strong>gestión de riesgos</strong>, donde los valores absolutos pueden ser engañosos sin considerar la variabilidad subyacente.</p></li>
-<li><p><strong>Ratios temporales</strong>: Capturan dinámicas y tendencias mediante comparaciones entre períodos, revelando <strong>momentum</strong> y <strong>patrones estacionales</strong>:</p>
+<p>Estos ratios son cruciales en análisis financiero y gestión de riesgos, donde los valores absolutos pueden ser engañosos sin considerar la variabilidad subyacente.</p></li>
+<li><p><strong>Ratios temporales</strong>: Capturan dinámicas y tendencias mediante comparaciones entre períodos, revelando momentum y patrones estacionales:</p>
 <ul>
 <li><code>momentum_growth = crecimiento_último_trimestre / crecimiento_promedio_histórico</code>: Identifica aceleración o desaceleración</li>
 <li><code>estacionalidad = ventas_período_actual / media_móvil_12_meses</code>: Captura variaciones cíclicas</li>
 <li><code>trend_strength = (valor_actual - valor_hace_12_meses) / volatilidad_histórica</code>: Mide significancia de cambios</li>
 </ul>
-<p>Estos ratios son especialmente útiles en <strong>análisis de series temporales</strong> donde necesitamos distinguir entre variación normal y cambios estructurales significativos.</p></li>
-<li><p><strong>Ratios de composición</strong>: Revelan la estructura interna de agregados mediante proporciones parte-todo, fundamentales para <strong>análisis de portafolios</strong> y <strong>segmentación</strong>:</p>
+<p>Estos ratios son especialmente útiles en análisis de series temporales donde necesitamos distinguir entre variación normal y cambios estructurales significativos.</p></li>
+<li><p><strong>Ratios de composición</strong>: Revelan la estructura interna de agregados mediante proporciones parte-todo, fundamentales para análisis de portafolios y segmentación:</p>
 <ul>
 <li><code>concentracion_cliente = ventas_top3_clientes / ventas_totales</code>: Mide dependencia y riesgo de concentración</li>
 <li><code>diversificacion_producto = 1 - suma(proportion_i²)</code>: Índice de Herfindahl para medir dispersión</li>
 <li><code>market_share = ventas_empresa / ventas_mercado_total</code>: Posición relativa competitiva</li>
 </ul>
-<p>Los ratios de composición son esenciales para <strong>gestión de riesgos</strong> y <strong>análisis estratégico</strong>, revelando vulnerabilidades y fortalezas estructurales.</p></li>
+<p>Los ratios de composición son esenciales para gestión de riesgos y análisis estratégico, revelando vulnerabilidades y fortalezas estructurales.</p></li>
 </ol>
 <p><strong>Ventajas metodológicas profundizadas:</strong></p>
 <ul>
@@ -1941,13 +1941,13 @@ Principios para el uso de interacciones
 <li><p><strong>Invarianza bajo transformaciones</strong>: Los ratios mantienen sus relaciones bajo cambios de unidades o inflación. El ratio precio/ingresos de una acción es el mismo si se mide en euros o dólares, proporcionando estabilidad interpretativa a lo largo del tiempo y contextos.</p></li>
 </ul>
 <p><strong>Consideraciones para construcción robusta de ratios:</strong></p>
-<p>Los ratios requieren cuidado especial en su construcción para evitar interpretaciones erróneas o inestabilidad numérica. Es fundamental <strong>evitar denominadores cercanos a cero</strong>, considerar <strong>transformaciones logarítmicas</strong> para ratios con rangos amplios, y validar que el <strong>ratio tenga significado conceptual</strong> en el dominio de aplicación.</p>
+<p>Los ratios requieren cuidado especial en su construcción para evitar interpretaciones erróneas o inestabilidad numérica. Es fundamental evitar denominadores cercanos a cero, considerar transformaciones logarítmicas para ratios con rangos amplios, y validar que el ratio tenga significado conceptual en el dominio de aplicación.</p>
 </section>
 <section id="tratamiento-de-variables-colineales-mediante-feature-engineering" class="level3" data-number="4.7.3">
 <h3 data-number="4.7.3" class="anchored" data-anchor-id="tratamiento-de-variables-colineales-mediante-feature-engineering"><span class="header-section-number">4.7.3</span> Tratamiento de variables colineales mediante feature engineering</h3>
-<p>Cuando enfrentamos <strong>multicolinealidad entre predictores informativos</strong>, la ingeniería de características ofrece alternativas más sofisticadas que simplemente eliminar variables o usar interacciones sin efectos principales. Este escenario es común en la práctica: tenemos múltiples variables que <strong>aportan información valiosa</strong> individualmente, pero están <strong>suficientemente correlacionadas</strong> como para crear problemas de estabilidad e interpretación en el modelo.</p>
-<p>El enfoque tradicional de <strong>“eliminar variables correlacionadas”</strong> es problemático porque puede resultar en <strong>pérdida significativa de información predictiva</strong>. Si <code>variable_A</code> y <code>variable_B</code> tienen correlación r = 0.75, ambas comparten 56% de varianza, pero cada una retiene 44% de información única. Eliminar cualquiera de ellas descarta información potencialmente valiosa que podría mejorar el poder predictivo del modelo.</p>
-<p>La <strong>ingeniería de características para colinealidad</strong> busca <strong>condensar la información redundante</strong> mientras <strong>preserva la información única</strong>, creando nuevas variables que capturen la esencia predictiva de las variables originales sin los problemas de multicolinealidad. Esta aproximación es especialmente valiosa cuando la correlación entre variables tiene <strong>significado teórico</strong>: por ejemplo, diferentes medidas de solvencia financiera que capturan aspectos relacionados pero distintos del riesgo crediticio.</p>
+<p>Cuando enfrentamos multicolinealidad entre predictores informativos, la ingeniería de características ofrece alternativas más sofisticadas que simplemente eliminar variables o usar interacciones sin efectos principales. Este escenario es común en la práctica: tenemos múltiples variables que aportan información valiosa individualmente, pero están suficientemente correlacionadas como para crear problemas de estabilidad e interpretación en el modelo.</p>
+<p>El enfoque tradicional de “eliminar variables correlacionadas” es problemático porque puede resultar en pérdida significativa de información predictiva. Si <code>variable_A</code> y <code>variable_B</code> tienen correlación r = 0.75, ambas comparten 56% de varianza, pero cada una retiene 44% de información única. Eliminar cualquiera de ellas descarta información potencialmente valiosa que podría mejorar el poder predictivo del modelo.</p>
+<p>La ingeniería de características para colinealidad busca condensar la información redundante mientras preserva la información única, creando nuevas variables que capturen la esencia predictiva de las variables originales sin los problemas de multicolinealidad. Esta aproximación es especialmente valiosa cuando la correlación entre variables tiene significado teórico: por ejemplo, diferentes medidas de solvencia financiera que capturan aspectos relacionados pero distintos del riesgo crediticio.</p>
 <p><strong>Estrategias avanzadas de condensación de información:</strong></p>
 <ol type="1">
 <li><p><strong>Componentes principales (PCA)</strong>: Extraen direcciones de máxima varianza común, creando variables ortogonales que preservan la mayor cantidad de información con la menor dimensionalidad:</p>
@@ -1955,20 +1955,20 @@ Principios para el uso de interacciones
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>pc_financiero <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(<span class="sc">~</span> ingresos <span class="sc">+</span> patrimonio <span class="sc">+</span> crédito <span class="sc">+</span> liquidez, <span class="at">scale =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>score_financiero <span class="ot">&lt;-</span> pc_financiero<span class="sc">$</span>x[,<span class="dv">1</span>]  <span class="co"># Primer componente (mayor varianza)</span></span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>score_diversificacion <span class="ot">&lt;-</span> pc_financiero<span class="sc">$</span>x[,<span class="dv">2</span>]  <span class="co"># Segundo componente (varianza residual)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>Ventajas del PCA</strong>: Elimina completamente la multicolinealidad, preserva máxima varianza, proporciona interpretación de “factores latentes”. <strong>Desventajas</strong>: Pérdida de interpretabilidad directa, todos los componentes dependen de todas las variables originales, sensible a outliers.</p></li>
+<p>Ventajas del PCA: Elimina completamente la multicolinealidad, preserva máxima varianza, proporciona interpretación de “factores latentes”. Desventajas: Pérdida de interpretabilidad directa, todos los componentes dependen de todas las variables originales, sensible a outliers.</p></li>
 <li><p><strong>Ratios informativos</strong>: Crean cocientes que preservan la información relativa más relevante, eliminando efectos de escala común:</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ratios que capturan relaciones estructurales fundamentales</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>ratio_debt_income <span class="ot">&lt;-</span> deuda_total <span class="sc">/</span> ingresos_anuales  <span class="co"># Capacidad de endeudamiento</span></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>ratio_assets_equity <span class="ot">&lt;-</span> activos <span class="sc">/</span> patrimonio_neto     <span class="co"># Apalancamiento</span></span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>ratio_liquidity <span class="ot">&lt;-</span> activos_liquidos <span class="sc">/</span> pasivos_corrientes  <span class="co"># Solvencia a corto plazo</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>Ventajas de los ratios</strong>: Mantienen interpretabilidad económica directa, eliminan efectos de escala, capturan relaciones estructurales clave. <strong>Aplicabilidad</strong>: Especialmente efectivos cuando las variables correlacionadas miden aspectos del mismo fenómeno subyacente (ej. diferentes medidas de tamaño empresarial).</p></li>
+<p>Ventajas de los ratios: Mantienen interpretabilidad económica directa, eliminan efectos de escala, capturan relaciones estructurales clave. Aplicabilidad: Especialmente efectivos cuando las variables correlacionadas miden aspectos del mismo fenómeno subyacente (ej. diferentes medidas de tamaño empresarial).</p></li>
 <li><p><strong>Índices ponderados</strong>: Combinan variables usando pesos derivados de conocimiento teórico o empírico, creando métricas compuestas más robustas que sus componentes individuales:</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Índice de solvencia con pesos basados en evidencia empírica</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>indice_solvencia <span class="ot">&lt;-</span> <span class="fl">0.4</span> <span class="sc">*</span> (ingresos<span class="sc">/</span>gastos) <span class="sc">+</span> <span class="fl">0.3</span> <span class="sc">*</span> (activos<span class="sc">/</span>deudas) <span class="sc">+</span> <span class="fl">0.3</span> <span class="sc">*</span> score_crediticio_normalizado</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Índice de crecimiento balanceado</span></span>
 <span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>indice_crecimiento <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> crecimiento_ventas <span class="sc">+</span> <span class="fl">0.3</span> <span class="sc">*</span> crecimiento_beneficios <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> crecimiento_empleados</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>Determinación de pesos</strong>: Pueden derivarse de <strong>análisis factorial confirmatorio</strong>, <strong>regresión ridge</strong>, <strong>conocimiento experto</strong>, o <strong>optimización empírica</strong>. Los pesos deben <strong>justificarse teóricamente</strong> y <strong>validarse en datos independientes</strong>.</p></li>
+<p>Determinación de pesos: Pueden derivarse de análisis factorial confirmatorio, regresión ridge, conocimiento experto, o optimización empírica. Los pesos deben justificarse teóricamente y validarse en datos independientes.</p></li>
 <li><p><strong>Diferencias y cambios relativos</strong>: Capturan dinámicas temporales y patrones de co-movimiento que revelan información única no presente en niveles absolutos:</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dinámicas de crecimiento relativo</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>crecimiento_relativo <span class="ot">&lt;-</span> (valor_actual <span class="sc">-</span> valor_anterior) <span class="sc">/</span> valor_anterior</span>
@@ -1977,7 +1977,7 @@ Principios para el uso de interacciones
 <span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Medidas de estabilidad y volatilidad</span></span>
 <span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>volatilidad <span class="ot">&lt;-</span> <span class="fu">sd</span>(ultimos_12_meses) <span class="sc">/</span> <span class="fu">mean</span>(ultimos_12_meses)</span>
 <span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>consistencia <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">cv</span>(ultimos_periodos))  <span class="co"># Coeficiente de variación invertido</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>Aplicabilidad temporal</strong>: Especialmente útiles para series temporales donde variables están correlacionadas en niveles pero divergen en tasas de cambio, revelando <strong>dinámicas diferenciales</strong> ocultas en análisis de niveles.</p></li>
+<p>Aplicabilidad temporal: Especialmente útiles para series temporales donde variables están correlacionadas en niveles pero divergen en tasas de cambio, revelando dinámicas diferenciales ocultas en análisis de niveles.</p></li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">

@@ -59,7 +59,7 @@ Un enfoque metodológicamente sólido sigue estos principios:
 
 **Evaluación de normalidad de residuos:** Aunque la normalidad no es crítica para estimación de coeficientes, sí es importante para inferencia estadística. *Diagnóstico visual:* histograma de residuos, QQ-plot de residuos. *Diagnóstico estadístico:* Test de Shapiro-Wilk (muestras pequeñas n\<50) y Test de Jarque-Bera.
 
-**Detección de outliers y observaciones influyentes:** Es fundamental distinguir entre outliers (valores extremos en Y) y observaciones influyentes (impacto en coeficientes). *Outliers:* boxplot de variable respuesta, residuos estudentizados, criterios \|t_i\| \> 2. *Observaciones influyentes:* análisis de leverage, distancia de Cook, DFBETAS, DFFITS, con criterios específicos como h_i \> 2p/n y D_i \> 4/n. Las observaciones se clasifican en: normales, outliers no influyentes, influyentes sin ser outliers, y outliers influyentes.
+**Detección de outliers y observaciones influyentes:** Es fundamental distinguir entre outliers (valores extremos en Y) y observaciones influyentes (impacto en coeficientes). *Outliers:* boxplot de variable respuesta, residuos estudentizados, criterios \|t$_i$\| \> 2. *Observaciones influyentes:* análisis de leverage, distancia de Cook, DFBETAS, DFFITS, con criterios específicos como h$_i$ \> 2p/n y D$_i$ \> 4/n. Las observaciones se clasifican en: normales, outliers no influyentes, influyentes sin ser outliers, y outliers influyentes.
 :::
 
 ## Escalado y normalización: preparando variables para el análisis

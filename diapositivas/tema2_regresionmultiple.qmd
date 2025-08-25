@@ -55,8 +55,6 @@ El modelo de regresión lineal múltiple constituye la **extensión natural y m�
 
 # Objetivos de Aprendizaje
 
-Al finalizar este tema, serás capaz de:
-
 1. **Formular y estimar** modelos de regresión lineal múltiple, comprendiendo las diferencias clave respecto al caso simple
 
 2. **Interpretar coeficientes** en el contexto multivariante, entendiendo el concepto de *ceteris paribus*
