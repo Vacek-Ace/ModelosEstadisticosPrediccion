@@ -562,7 +562,7 @@ donde $\mathbf{P}$ es diagonal con $P_{11}=0$ (no penalizamos el intercepto) y $
 La elección óptima de $\lambda$ se determina generalmente mediante **validación cruzada**.
 
 ::: {.callout-caution title="Aviso"}
-Los detalles de la validación cruzada son tratados en la asignatura de Aprendizaje Automático.
+Los detalles de la validación cruzada son tratados en la asignatura de Minería de Datos.
 :::
 
 ::: {.callout-note title="Propiedades Clave" collapse="false"}
@@ -832,16 +832,19 @@ donde $h_{ii}$ es el apalancamiento (*leverage*) de la i-ésima observación.
 ::: {.callout-important title="Guía para seleccionar estrategia de validación"}
 
 **Usa Train/Test cuando:**
+
 - El dataset es grande (n > 1000)
 - Los recursos computacionales son limitados  
 - Se requiere una evaluación rápida
 
 **Usa validación cruzada k-fold cuando:**
+
 - El dataset es de tamaño moderado (n < 1000)
 - Se requiere una estimación más estable del desempeño
 - Se dispone de recursos computacionales adecuados
 
 **Usa LOOCV cuando:**
+
 - El dataset es pequeño (n < 100)
 - Se requiere la estimación menos sesgada posible
 - El tiempo computacional no es una restricción crítica
