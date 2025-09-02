@@ -5,7 +5,7 @@ project:
 book:
   title: "Modelos Estadísticos para la Predicción"
   author: "Víctor Aceña - Isaac Martín"
-  date: "2025-08-07"
+  date: last-modified
   search: true
   chapters:
     - index.qmd

@@ -143,10 +143,12 @@ execute:
 $$AIC = n \ln\left(\frac{SSE}{n}\right) + 2(p+1)$$
 
 **Componentes:**
+
 - $n \ln(SSE/n)$: **Bondad de ajuste** (relacionado con log-verosimilitud)
 - $2(p+1)$: **Penalización por complejidad** (aumenta 2 unidades por parámetro)
 
 **Interpretación:** 
+
 - Menor AIC = mejor modelo
 - Asintóticamente eficiente
 - **Orientado a predicción**
@@ -161,10 +163,12 @@ $$AIC = n \ln\left(\frac{SSE}{n}\right) + 2(p+1)$$
 $$BIC = n \ln\left(\frac{SSE}{n}\right) + (p+1) \ln(n)$$
 
 **Diferencia clave con AIC:**
+
 - Penalización: $(p+1)\ln(n)$ en lugar de $2(p+1)$
 - Más restrictivo cuando $n > 7$ (ya que $\ln(n) > 2$)
 
 **Características:**
+
 - **Consistencia:** Si el modelo verdadero está entre candidatos, P(selección) → 1
 - **Orientado a explicación**
 - Favorece modelos más simples (parsimonia)
@@ -181,6 +185,7 @@ $$C_p = \frac{SSE_p}{MSE_{full}} - n + 2(p+1)$$
 donde $MSE_{full}$ es el error cuadrático medio del modelo completo
 
 **Interpretación:**
+
 - **Modelo bien especificado:** $C_p \approx p+1$
 - **$C_p > p+1$:** modelo sesgado (variable importante omitida)
 - **$C_p \leq p+1$:** buen ajuste
@@ -190,18 +195,21 @@ donde $MSE_{full}$ es el error cuadrático medio del modelo completo
 # ¿Cuándo Usar Cada Criterio?
 
 **Si el objetivo principal es la predicción:**
+
 - **AIC** es la opción preferida
 - Diseñado para minimizar error de predicción
 - Penalización más moderada
 - Ideal en contextos de pronóstico
 
 **Si el objetivo es la explicación/inferencia:**
+
 - **BIC** es la elección más sólida
 - Identifica el modelo más parsimonioso
 - Penalización más fuerte contra sobreajuste
 - Propiedad de consistencia en muestras grandes
 
 **Para análisis exploratorio:**
+
 - **Cp de Mallows** es especialmente valioso
 - Compromiso explícito entre sesgo y varianza
 - Visualización clara del "codo" de complejidad óptima
@@ -211,16 +219,19 @@ donde $MSE_{full}$ es el error cuadrático medio del modelo completo
 **Best Subset Selection:** Evalúa **todos** los subconjuntos posibles
 
 **Proceso:**
+
 - Para $k = 1, 2, ..., p$ variables
 - Construir todos los modelos posibles con $k$ variables
 - Seleccionar el mejor modelo de cada tamaño según criterio elegido
 
 **Ventajas:**
+
 - Garantiza encontrar el modelo óptimo según el criterio
 - Evaluación completa de todas las combinaciones
 - Estándar para comparar otros métodos
 
 **Limitaciones:**
+
 - Complejidad computacional: $2^p$ modelos posibles
 - Impracticable para $p > 15-20$
 - Puede seleccionar modelos sobreajustados sin validación cruzada
@@ -230,44 +241,53 @@ donde $MSE_{full}$ es el error cuadrático medio del modelo completo
 **Principio:** Construir modelo iterativamente, añadiendo o quitando predictores uno a uno
 
 **Forward Selection:**
+
 1. Comenzar con modelo nulo (solo intercepto)
 2. Añadir variable que más mejora el criterio
 3. Repetir hasta que ninguna variable mejore significativamente
 4. **Problema:** No puede eliminar variables una vez incluidas
 
 **Backward Elimination:**
+
 1. Comenzar con modelo completo (todas las variables)
 2. Eliminar variable menos significativa
 3. Repetir hasta que todas las variables sean significativas
 4. **Problema:** Requiere $n > p$
 
+# Métodos Automáticos Paso a Paso
+
 **Stepwise Regression:**
+
 1. Combina forward + backward
 2. Puede añadir y eliminar variables
 3. **Problema:** Solo encuentra óptimo local
+
+**Limitaciones importantes de métodos automáticos:**
+
+- **Inestabilidad:** Pequeños cambios en datos pueden alterar el modelo
+- **Invalidez de p-valores:** Múltiples comparaciones sesgan la inferencia
+- **Óptimo local:** No garantizan la mejor combinación
+- **Inflación del error tipo I:** Sin corrección para comparaciones múltiples
+
+**Uso recomendado:** Como herramientas exploratorias, no para inferencia final
 
 # Métodos Basados en Regularización
 
 **Principio:** Introducir penalización en la función de ajuste del modelo
 
 **Objetivos:**
+
 - Controlar el sobreajuste reduciendo complejidad
 - Forzar selección de subconjunto más parsimonioso
 - Mejorar estabilidad y precisión del modelo
 
-**Ridge Regression:** Penalización $L_2 = \lambda \sum \beta_j^2$
-- Reduce magnitud de coeficientes, no los elimina
-- Maneja multicolinealidad
-- No realiza selección de variables
+**Tres métodos principales:**
 
-**Lasso:** Penalización $L_1 = \lambda \sum |\beta_j|$
-- Puede anular coeficientes completamente
-- Selección automática de variables
-- Problemas con variables altamente correlacionadas
+- **Ridge Regression:** Penalización $L_2 = \lambda \sum \beta_j^2$
+- **Lasso:** Penalización $L_1 = \lambda \sum |\beta_j|$
+- **Elastic Net:** Combina $L_1 + $L_2$
 
-**Elastic Net:** Combina $L_1 + L_2$
-- Mayor flexibilidad con correlación entre predictores
-- Parámetro $\alpha$ controla la mezcla
+**Ventaja clave:** Control automático del balance sesgo-varianza
 
 # Ridge Regression
 
@@ -280,11 +300,13 @@ $$SSE_{ridge} = \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|^2 + \lambda 
 $$\hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^T \mathbf{X} + \lambda \, \mathbf{I})^{-1} \mathbf{X}^T \mathbf{y}$$
 
 **Interpretación del parámetro $\lambda$:**
+
 - $\lambda = 0$: equivalente a regresión lineal tradicional (OLS)
 - $\lambda$ aumenta: coeficientes se reducen en magnitud
 - $\lambda$ muy grande: coeficientes se acercan a cero
 
 **Propiedades:**
+
 - Manejo de multicolinealidad
 - Menor varianza en predicciones
 - **No realiza selección de variables** (no anula coeficientes)
@@ -296,61 +318,79 @@ $$\hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^T \mathbf{X} + \lambda \
 **Formulación:**
 $$SSE_{\text{lasso}} = \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|^2 + \lambda \sum_{j=1}^{p} |\beta_j|$$
 
+
+
 **Diferencia clave con Ridge:**
-- Ridge reduce magnitud de coeficientes pero no los anula
+
+- Ridge reduce magnitud de coeficientes
 - **Lasso puede eliminar variables por completo** (coeficientes = 0)
 
+::: {.columns}
+
+::: {.column width="50%"}
+
 **Interpretación del parámetro $\lambda$:**
-- $\lambda = 0$: equivalente a regresión lineal tradicional
-- $\lambda$ aumenta: más coeficientes se reducen a cero
-- $\lambda$ muy grande: se eliminan demasiadas variables
+
+- $\lambda = 0$: regresión lineal tradicional
+- $\lambda$ aumenta: más coeficientes → 0
+- $\lambda$ muy grande: elimina demasiadas variables
+
+:::
+
+::: {.column width="50%"}
 
 **Propiedades:**
+
 - Selección automática de variables
 - Manejo de multicolinealidad
 - Simplicidad e interpretabilidad
 - Reduce sobreajuste
 
-# Elastic Net
+:::
 
-**Fundamento:** Técnica de regularización que combina las propiedades de Ridge y Lasso
+:::
+
+
+# Elastic Net: Combinando lo Mejor de Ridge y Lasso
+
+**Fundamento:** Combinación de penalizaciones Ridge ($L_2$) y Lasso ($L_1$)
 
 **Formulación:**
-$$SSE_{\text{Elastic Net}} = \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|^2 + \lambda_1 \sum_{j=1}^{p} |\beta_j| + \lambda_2 \sum_{j=1}^{p} \beta_j^2$$
+$$SSE_{\text{Elastic Net}} = \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|^2 + \lambda \left[ \alpha \sum_{j=1}^{p} |\beta_j| + (1-\alpha) \sum_{j=1}^{p} \beta_j^2 \right]$$
 
 **Parámetro $\alpha$ controla la mezcla:**
+
 - $\alpha = 1$ → Comportamiento como Lasso
 - $\alpha = 0$ → Comportamiento como Ridge  
 - $0 < \alpha < 1$ → Combinación de ambos métodos
 
-**Ventajas sobre métodos individuales:**
-- Manejo superior de multicolinealidad
-- Selección de variables más estable
-- Evita selección arbitraria cuando hay grupos de variables correlacionadas
+**Ventajas principales:**
 
-# Comparación de Métodos de Regularización
+- **Manejo superior de multicolinealidad**
+- **Selección de variables más estable**
+- **Evita selección arbitraria cuando hay grupos correlacionados**
 
-**Métodos y sus características:**
+# Cuándo Usar Cada Método de Regularización
 
-- **Ridge Regression**
-  - Penalización: $L_2: \sum \beta_j^2$
-  - Efecto: Reduce magnitud de coeficientes
-  - Selección de variables: No
+**Ridge Regression:**
 
-- **Lasso (Least Absolute Shrinkage)**
-  - Penalización: $L_1: \sum |\beta_j|$
-  - Efecto: Puede anular coeficientes completamente
-  - Selección de variables: Sí
+- Todas las variables aportan información
+- Fuerte multicolinealidad presente
+- Objetivo: reducir varianza sin eliminar variables
 
-- **Elastic Net**
-  - Penalización: Combinación $L_1 + L_2$
-  - Efecto: Combina ambos efectos
-  - Selección de variables: Sí
+**Lasso:**
 
-**Cuándo usar cada método:**
-- **Ridge:** Todas las variables aportan información, hay multicolinealidad
-- **Lasso:** Muchas variables irrelevantes, selección sparse
-- **Elastic Net:** Variables correlacionadas, modelo estable y parsimonioso
+- Muchas variables irrelevantes esperadas
+- Selección sparse deseable
+- Interpretabilidad prioritaria
+
+**Elastic Net:**
+
+- Variables correlacionadas en grupos
+- Balance entre selección y estabilidad
+- Rendimiento predictivo como objetivo principal
+
+**Estrategia práctica:** Optimizar $\alpha$ mediante validación cruzada junto con $\lambda$
 
 # Selección del Parámetro de Regularización
 
@@ -359,11 +399,13 @@ $$SSE_{\text{Elastic Net}} = \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|
 **La solución:** Validación cruzada
 
 **Proceso:**
+
 1. Definir secuencia de valores $\lambda$ candidatos
 2. Para cada $\lambda$, calcular error de validación cruzada
 3. Seleccionar $\lambda$ que minimiza el error
 
 **Dos criterios principales:**
+
 - **$\lambda_{min}$:** Valor que minimiza el error de CV
 - **$\lambda_{1SE}$:** Valor más grande cuyo error está dentro de 1 error estándar del mínimo
 
@@ -376,6 +418,7 @@ $$SSE_{\text{Elastic Net}} = \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|
 **El problema del sobreajuste:**
 
 Un modelo puede "memorizar" los datos de entrenamiento, incluyendo:
+
 - Ruido aleatorio específico de la muestra
 - Patrones espurios que no se generalizan
 - Peculiaridades que no representan la población
@@ -383,6 +426,7 @@ Un modelo puede "memorizar" los datos de entrenamiento, incluyendo:
 **Analogía:** Como estudiar solo exámenes pasados para un examen nuevo
 
 **La validación simula este "examen final":**
+
 - Evalúa la capacidad de **generalización**
 - Proporciona estimación **honesta** del rendimiento predictivo
 - Permite comparar modelos de forma **objetiva**
@@ -392,6 +436,7 @@ Un modelo puede "memorizar" los datos de entrenamiento, incluyendo:
 **Partición inicial (paso obligatorio):**
 
 Antes de cualquier análisis, dividir datos originales en:
+
 1. **Datos de modelado (80%):** Para todo el proceso de construcción
 2. **Conjunto de prueba final (20%):** Guardado para evaluación final
 
@@ -408,15 +453,18 @@ Antes de cualquier análisis, dividir datos originales en:
 **Concepto:** División única de los datos de modelado
 
 **Proceso:**
+
 - **Conjunto de entrenamiento (70-80%):** Ajustar el modelo
 - **Conjunto de test (20-30%):** Evaluar rendimiento
 
 **Ventajas:**
+
 - Computacionalmente muy eficiente
 - Fácil de implementar y entender
 - Apropiado para datasets grandes
 
 **Desventajas:**
+
 - **Alta variabilidad:** Resultados dependen de la división específica
 - Puede ser optimista o pesimista según qué observaciones caigan en test
 - Menos datos disponibles para entrenamiento
@@ -428,6 +476,7 @@ Antes de cualquier análisis, dividir datos originales en:
 **Concepto:** Múltiples evaluaciones para obtener estimación más estable
 
 **Proceso de k-fold CV:**
+
 1. Dividir datos en $k$ particiones de tamaño similar
 2. Para cada partición $i = 1, 2, ..., k$:
    - Usar partición $i$ como conjunto de test
@@ -438,6 +487,7 @@ Antes de cualquier análisis, dividir datos originales en:
 **Valores típicos:** $k = 5$ o $k = 10$
 
 **Ventajas:**
+
 - Estimación más estable y menos sesgada
 - Todos los datos se usan para entrenamiento y test
 - Reduce variabilidad de la estimación
@@ -447,38 +497,42 @@ Antes de cualquier análisis, dividir datos originales en:
 **Concepto:** Caso extremo donde $k = n$ (número de observaciones)
 
 **Proceso:**
+
 - Para cada observación $i$:
   - Entrenar modelo con $n-1$ observaciones
   - Predecir la observación $i$ excluida
   - Calcular error de predicción
-- **Error LOOCV:** $CV_{(n)} = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2$
+- **Error LOOCV:** $CV_{(n)} = \frac{1}{n}\sum_{i=1}^{n}(\frac{y_i - \hat{y}_i}{1-h_{ii}})^2$
 
 **Ventajas:**
+
 - Estimación prácticamente insesgada
 - Determinística (no depende de divisiones aleatorias)
 - Máximo uso de datos para entrenamiento
 
 **Desventajas:**
+
 - Computacionalmente costoso
 - Alta varianza en la estimación
-
-**Para regresión lineal:** Fórmula rápida disponible usando leverage
 
 # Cuándo Usar Cada Estrategia de Validación
 
 **Train/Test Split:**
+
 - Dataset grande ($n > 1000$)
 - Recursos computacionales limitados
 - Necesidad de evaluación rápida
 - Primera aproximación al problema
 
 **Validación Cruzada k-fold:**
+
 - Dataset de tamaño moderado ($100 < n < 1000$)
 - Balance entre eficiencia y precisión
 - Estimación robusta del rendimiento
 - **Más recomendado en general**
 
 **LOOCV:**
+
 - Dataset pequeño ($n < 100$)
 - Necesidad de estimación menos sesgada
 - Recursos computacionales abundantes
@@ -492,34 +546,47 @@ Antes de cualquier análisis, dividir datos originales en:
 $$RMSE = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}$$
 
 **Características del RMSE:**
+
 - Penaliza desproporcionadamente errores grandes
 - Sensible a valores atípicos
 - Mismas unidades que la variable respuesta
 - Interpretación: "desviación típica de los residuos"
 
-**Error Absoluto Medio (MAE):**
+# Métricas de Rendimiento en Validación
+
+**Error Absoluto Medio:**
 $$MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|$$
 
 **Características del MAE:**
+
 - Trata todos los errores proporcionalmente
 - Más robusto frente a valores atípicos
 - Interpretación directa: "error promedio en valor absoluto"
+
+**¿Cuándo usar cada métrica?**
+
+- **RMSE:** Cuando errores grandes son especialmente problemáticos
+- **MAE:** Cuando se prefiere robustez frente a valores atípicos
+- **Ambas:** Para análisis completo del rendimiento predictivo
 
 # Interpretación de Errores: Diagnóstico del Ajuste
 
 **La comparación clave:** Error en entrenamiento vs Error en validación
 
 **Sobreajuste (Overfitting):**
+
 - **Síntoma:** Error entrenamiento bajo + Error validación mucho más alto
 - **Causa:** Modelo memoriza ruido específico de los datos de entrenamiento
 - **Solución:** Simplificar modelo, usar regularización, más datos
 
 **Subajuste (Underfitting):**
+
 - **Síntoma:** Error entrenamiento alto + Error validación alto y similar
 - **Causa:** Modelo demasiado simple, no captura estructura subyacente
 - **Solución:** Aumentar complejidad, añadir variables, términos de interacción
 
 **Modelo bien calibrado:**
+
 - **Síntoma:** Error entrenamiento y validación similares y bajos
 - **Interpretación:** Buen equilibrio entre sesgo y varianza
 
@@ -528,6 +595,7 @@ $$MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|$$
 # El Conjunto de Prueba Final: La Evaluación Definitiva
 
 **Después de todo el proceso de modelado:**
+
 1. Filtrado de variables
 2. Selección del mejor método
 3. Optimización de hiperparámetros
@@ -536,39 +604,42 @@ $$MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|$$
 **El paso final:** Evaluar el modelo seleccionado en el conjunto de prueba final
 
 **¿Por qué es necesario?**
+
 - La validación cruzada se usó para **tomar decisiones** sobre el modelo
 - Existe riesgo de sobreajuste al proceso de validación mismo
 - Necesitamos una evaluación completamente independiente
 
 **Interpretación:**
+
 - Error similar a validación cruzada → modelo robusto
 - Error mucho mayor → posible sobreajuste al proceso de modelado
 
-# Advertencias Importantes sobre los Métodos Automáticos
+# Advertencias Importantes
 
 **Los métodos stepwise (forward, backward, stepwise) requieren precaución especial**
 
 **Problemas fundamentales:**
+
 1. **Invalidez de p-valores:** Los p-valores y errores estándar están sesgados
 2. **Inestabilidad:** Pequeños cambios en datos pueden cambiar radicalmente el modelo
 3. **Óptimo local:** No garantizan encontrar la mejor combinación de variables
 4. **Inflación del error tipo I:** Múltiples comparaciones sin corrección
 
 **Uso recomendado:**
+
 - Como herramientas **exploratorias** únicamente
 - Generar modelos candidatos para evaluación posterior
 - Siempre validar con técnicas robustas
 - No reportar p-valores del modelo final como definitivos
 
-**Mejor práctica:** Usar como paso inicial, pero validar con validación cruzada rigurosa
-
-# Resumen: El Proceso Completo de Selección y Validación
+# Proceso Completo de Selección y Validación
 
 **Flujo de trabajo recomendado:**
 
 1. **Partición inicial:** Separar conjunto de prueba final (20%)
 
 2. **En datos de modelado (80%):**
+
    - Filtrado básico de variables
    - Aplicar métodos de selección (exhaustivos, stepwise, regularización)
    - Comparar modelos con validación cruzada
@@ -579,31 +650,35 @@ $$MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|$$
 4. **Reportar:** Error de validación cruzada Y error en conjunto de prueba
 
 **Criterios de decisión:**
+
 - Número de variables vs tamaño de muestra → método de selección
 - Objetivo (predicción vs explicación) → criterio de información
 - Multicolinealidad → regularización vs selección clásica
 
-# Consideraciones Prácticas Finales
+# Consideraciones Prácticas
 
 **Antes del modelado:**
+
 - EDA completo para entender los datos
 - Conocimiento del dominio para variables importantes
 - Objetivo claro: ¿predicción o explicación?
 - Relación entre tamaño muestral y número de variables
 
 **Durante la selección:**
+
 - Usar validación cruzada para todos los hiperparámetros
 - Comparar múltiples métodos de selección
 - No guiarse solo por métricas: considerar interpretabilidad
 - Documentar todas las decisiones tomadas
 
 **Después de la selección:**
+
 - Diagnóstico completo de residuos del modelo final
 - Análisis de sensibilidad a observaciones influyentes
 - Intervalos de confianza para coeficientes importantes
 - Validación en el conjunto de prueba final
 
-# Conclusiones y Recomendaciones Clave
+# Conclusiones 
 
 **Lo aprendido en este tema:**
 
@@ -614,138 +689,11 @@ $$MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|$$
 5. **Validación:** Indispensable para evaluar capacidad de generalización
 
 **Recomendaciones principales:**
+
 - **Combinar métodos:** Ningún método es perfecto en todas las situaciones
 - **Validar siempre:** Con datos que el modelo no ha visto
 - **Preferir simplicidad:** Cuando el rendimiento es comparable
 - **Incorporar conocimiento del dominio:** Los datos no lo dicen todo
 
-**Mensaje final:** El mejor modelo es aquel que resuelve el problema específico con la mayor simplicidad e interpretabilidad posible.
+El mejor modelo es aquel que resuelve el problema con la mayor simplicidad.
 
-# Elastic Net
-
-**Fundamento:** Combinación de penalizaciones Ridge ($L_2$) y Lasso ($L_1$)
-
-**Formulación:**
-$$SSE_{\text{Elastic Net}} = \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|^2 + \lambda_1 \sum_{j=1}^{p} |\beta_j| + \lambda_2 \sum_{j=1}^{p} \beta_j^2$$
-
-**Parámetro $\alpha$ controla la mezcla:**
-- $\alpha = 1$ → Comportamiento como Lasso
-- $\alpha = 0$ → Comportamiento como Ridge  
-- $0 < \alpha < 1$ → Combinación de ambos métodos
-
-**Ventajas:**
-- **Manejo de multicolinealidad:** Distribuye penalización entre variables correlacionadas
-- **Selección más estable:** Evita selección arbitraria de Lasso
-- **Mejora rendimiento predictivo:** Optimización mediante validación cruzada
-
-**Estrategias para $\alpha$:**
-- Variables irrelevantes → $\alpha$ cercano a 1 (Lasso)
-- Fuerte multicolinealidad → $\alpha$ cercano a 0 (Ridge)
-- Balance selección/estabilidad → $\alpha = 0.5$
-
-# Validación del Modelo
-
-**Pregunta fundamental:** ¿Cómo estar seguros de que el modelo funcionará bien con datos nuevos?
-
-**El problema del sobreajuste:**
-- Modelo "memoriza" datos de entrenamiento
-- Incluye ruido y peculiaridades específicas
-- Pierde capacidad de **generalizar** a nuevas observaciones
-
-**La validación simula el "examen final":**
-- Estimar rendimiento predictivo en el mundo real
-- **Estrategias de validación:** cómo simular el examen
-- **Métricas de evaluación:** cómo calificarlo
-
-**Principio clave:** Un buen ajuste en datos de entrenamiento NO garantiza buen rendimiento predictivo
-
-# Estrategias de Validación
-
-**Partición inicial (paso no negociable):**
-1. **Datos de modelado (80%):** Para construcción y evaluación de modelos
-2. **Conjunto de prueba final (20%):** Guardado bajo llave para evaluación final
-
-**Train/Test Split (dentro de datos de modelado):**
-- **Conjunto de entrenamiento (70-80%):** El modelo aprende
-- **Conjunto de test (20-30%):** Evaluación del rendimiento
-- **Problema:** Resultados dependen de la división aleatoria específica
-
-**Validación cruzada k-fold:**
-- Dividir datos en $k$ particiones
-- Usar cada partición como test una vez
-- Promediar resultados de las $k$ iteraciones
-- **Error de validación cruzada:** $CV_{(k)} = \frac{1}{k}\sum_{i=1}^{k} \text{Métrica}_i$
-
-# Cuándo Usar Cada Estrategia
-
-**Train/Test Split:**
-- Dataset grande (n > 1000)
-- Recursos computacionales limitados  
-- Evaluación rápida requerida
-
-**Validación cruzada k-fold:**
-- Dataset tamaño moderado (n < 1000)
-- Estimación más estable del desempeño
-- Recursos computacionales adecuados
-- Valores típicos: k = 5 o k = 10
-
-**LOOCV (Leave-One-Out):**
-- Dataset pequeño (n < 100)
-- Estimación menos sesgada posible
-- Tiempo computacional no es crítico
-- En regresión lineal: fórmula rápida disponible
-
-# Métricas de Rendimiento
-
-**Raíz del Error Cuadrático Medio (RMSE):**
-$$RMSE = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}$$
-
-- **Penaliza desproporcionadamente errores grandes**
-- Sensible a valores atípicos
-- Mismas unidades que la variable respuesta
-- Interpretación: desviación típica de los residuos
-
-**Error Absoluto Medio (MAE):**
-$$MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|$$
-
-- **Trata todos los errores proporcionalmente**
-- Más robusto frente a valores atípicos
-- Interpretación directa: "error promedio"
-- Más fácil de interpretar para muchos
-
-# Interpretando el Error
-
-**Comparación Error Entrenamiento vs Error Test:**
-
-**Sobreajuste (Overfitting):**
-- Error entrenamiento **bajo** + Error test **mucho más alto**
-- Modelo ha "memorizado" el ruido
-- **Solución:** Simplificar modelo, usar regularización
-
-**Subajuste (Underfitting):**
-- Error entrenamiento **alto** + Error test **alto y similar**
-- Modelo demasiado simple
-- **Solución:** Aumentar complejidad, añadir variables/interacciones
-
-**Modelo bien ajustado:**
-- Error entrenamiento y test **similares y bajos**
-- Buen equilibrio entre sesgo y varianza
-
-**Regla general:** Error entrenamiento siempre más bajo que error test. La clave está en analizar la **diferencia** entre ambos.
-
-# Resumen y Conclusiones
-
-**Proceso sistemático completo:**
-
-1. **Filtrado inicial** → Eliminar variables problemáticas
-2. **Criterios de información** → Comparar modelos objetivamente  
-3. **Métodos de selección** → Exhaustivos vs automáticos vs regularización
-4. **Validación rigurosa** → Evaluar capacidad de generalización
-
-**Principios clave:**
-- **No existe método perfecto** → Combinar enfoques
-- **Validación es indispensable** → Datos no vistos
-- **Simplicidad cuando es posible** → Parsimonia
-- **Conocimiento del dominio** → Siempre considerarlo
-
-**El mejor modelo es aquel que resuelve el problema específico con la mayor simplicidad posible**
