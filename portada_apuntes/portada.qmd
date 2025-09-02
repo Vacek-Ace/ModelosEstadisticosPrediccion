@@ -8,7 +8,6 @@ format:
 
 En el siguiente enlace se puede encontrar la versión html actualizada de los presentes apuntes: <https://urjcdslab.github.io/ModelosEstadisticosPrediccion/>
 
-\newpage
 
 # Índice de Apuntes
 

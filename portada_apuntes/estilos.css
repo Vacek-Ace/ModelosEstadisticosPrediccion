@@ -1,4 +1,7 @@
-/* estilos.css - Versión Definitiva y Robusta */
+/* ======================================================= */
+/* ===         ESTILO MAESTRO Y DEFINITIVO             === */
+/* ===      Úsalo para TODOS tus documentos            === */
+/* ======================================================= */
 
 /* --- CONFIGURACIÓN GENERAL --- */
 @page {
@@ -18,11 +21,9 @@ body {
   font-family: "Georgia", serif;
   line-height: 1.5;
   font-size: 11pt;
-  text-align: justify;
-  hyphens: auto;
 }
 
-/* --- PORTADA (desde portada.html) --- */
+/* --- PORTADA --- */
 .portada {
   position: relative;
   display: flex;
@@ -32,9 +33,9 @@ body {
   height: 24.5cm; /* Altura del área imprimible de un A4 */
   break-after: page;
 
-  /* Quitamos el centrado vertical automático y alineamos arriba */
+  /* Alinea el contenido principal arriba */
   justify-content: flex-start;
-  /* Damos un margen inicial desde el borde superior de la página */
+  /* Damos un margen inicial desde el borde superior */
   padding-top: 2.5cm; 
 }
 
@@ -54,7 +55,7 @@ body {
 .portada-titulo {
   font-family: "Helvetica", sans-serif;
   font-size: 22pt !important;
-  margin-top: 3cm; /* Aumentamos mucho el espacio aquí */
+  margin-top: 3cm; /* Espacio grande antes del título */
   line-height: 1.2;
 }
 .portada-subtitulo {
@@ -64,7 +65,7 @@ body {
   margin-top: 0.5cm;
 }
 .portada-autores {
-  margin-top: 3cm; /* Aumentamos mucho el espacio aquí */
+  margin-top: 3cm; /* Espacio grande antes de los autores */
   font-size: 12pt;
   line-height: 1.4;
 }
@@ -84,75 +85,46 @@ body {
   color: #777;
 }
 
-/* --- TABLA DE CONTENIDOS (TOC) --- */
-nav#TOC {
-  break-after: page;
-  padding-bottom: 2em;
-}
-nav#TOC h2 {
-  font-family: "Helvetica", sans-serif;
-  font-size: 20pt;
-  text-align: left;
-  border-bottom: 1px solid black;
-  padding-bottom: 8px;
-}
-nav#TOC ul { list-style-type: none; padding-left: 0; }
-nav#TOC a { text-decoration: none; color: black; }
-nav#TOC a::after { content: leader('.') target-counter(attr(href), page); }
-nav#TOC li { margin-bottom: 0.5em; }
 
-/* --- ENCABEZADOS Y CAPÍTULOS --- */
-h1, h2, h3 { font-family: "Helvetica", sans-serif; color: #333; }
-h1 { font-size: 20pt; border-bottom: 1.5px solid #555; padding-bottom: 6px; margin-top: 1em; }
-h2 { font-size: 16pt; border-bottom: 1px solid #ccc; padding-bottom: 4px; margin-top: 2em; }
-h3 { font-size: 12pt; font-weight: bold; margin-top: 1.5em; }
-
-/* --- ARREGLO PARA OCULTAR EL TÍTULO AUTOMÁTICO DE QUARTO --- */
-.quarto-title-block {
-  display: none;
-}
-
-/* --- ESTILOS DEL ÍNDICE --- */
-/* Párrafo con el enlace a la versión HTML */
-p {
-  text-align: justify;
-  margin-bottom: 2em;
-}
-
-/* Título "Índice de Apuntes" */
-#índice-de-apuntes {
+/* --- ÍNDICE (Sirve para ambos: automático y manual) --- */
+/* Título del índice */
+#índice-de-diapositivas, #índice-de-apuntes, nav#TOC h2 {
+  break-before: page;
   font-family: "Helvetica", sans-serif;
   font-size: 20pt;
   text-align: left;
   border-bottom: 1px solid black;
   padding-bottom: 10px;
+  margin: 2.5cm 0 1.5em 0;
 }
 
-/* La lista de enlaces (ul) que sigue al título */
-#índice-de-apuntes + ul {
-  list-style: none; /* Quitamos los guiones por defecto */
+/* La lista de enlaces */
+#índice-de-diapositivas + ul, #índice-de-apuntes + ul, nav#TOC ul {
+  list-style: none; 
   padding-left: 0;
-  margin-top: 1.5em;
-  font-size: 12pt;
+  text-align: left;
 }
 
-/* Cada elemento de la lista (li) */
-#índice-de-apuntes + ul li {
-  margin-bottom: 0.8em;
-}
-
-/* Añadimos el "•" que te gusta con CSS */
-#índice-de-apuntes + ul li::before {
-  content: "•";
-  color: #333;
-  font-weight: bold;
-  display: inline-block;
-  width: 1em;
-  margin-left: -1em;
+/* Cada elemento de la lista */
+#índice-de-diapositivas + ul li, #índice-de-apuntes + ul li, nav#TOC li {
+  margin-bottom: 1.2em;
+  border-bottom: 1px dotted #ccc;
+  padding-bottom: 0.8em;
 }
 
 /* El enlace en sí */
-#índice-de-apuntes + ul a {
+#índice-de-diapositivas + ul a, #índice-de-apuntes + ul a, nav#TOC a {
   text-decoration: none;
   color: #005f9e;
+  font-size: 14pt;
+  font-family: "Georgia", serif;
+}
+/* Puntos para el índice automático del libro */
+nav#TOC a::after {
+  content: leader('.') target-counter(attr(href), page);
+}
+
+/* Anulamos los bullets (guiones o puntos) en estos índices */
+#índice-de-diapositivas + ul li::before, #índice-de-apuntes + ul li::before {
+  content: ""; padding: 0; margin: 0;
 }
