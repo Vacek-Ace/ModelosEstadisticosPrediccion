@@ -306,10 +306,12 @@ $$C_p = \frac{SSE_p}{MSE_{full}} - n + 2(p+1)$$
 
 Aquí, $SSE_p$ es la suma de cuadrados del error del modelo candidato con $p$ variables, y $MSE_{full}$ es el error cuadrático medio del **modelo completo** (el que incluye todas las variables predictoras disponibles), que se utiliza como una estimación insesgada de la varianza del error poblacional, $\sigma^2$.
 
-La interpretación del Cp es particularmente intuitiva. Si un modelo está bien especificado (es decir, no tiene un sesgo significativo porque incluye todas las variables relevantes), se espera que su valor de $C_p$ sea muy cercano a $p+1$. Por lo tanto, la estrategia es buscar modelos donde **$C_p \approx p+1$**.
+La interpretación del Cp es particularmente intuitiva. Si un modelo está bien especificado (es decir, no incluye un sesgo significativo), se espera que su valor de $C_p$ sea cercano al número de parámetros, $p+1$.
 
--   Un modelo con **$C_p > p+1$** sugiere que el modelo está sesgado, probablemente porque se ha omitido una variable predictora importante.
--   Un modelo con **$C_p \le p+1$** indica un buen ajuste. Entre los modelos que cumplen esta condición, se suele elegir aquel con el valor de $C_p$ más bajo.
+Por lo tanto, la estrategia de selección consiste en **elegir el modelo que tenga el valor de Cp más bajo**. Este modelo representa el mejor equilibrio entre el sesgo y la varianza. Generalmente, observaremos dos cosas en un gráfico de Cp vs. p:
+
+- Los modelos con pocas variables y **$C_p$ muy por encima de la línea $p+1$** sufren de un sesgo elevado (subajuste).
+- El modelo con el **$C_p$ más bajo** es el preferido. Normalmente, este valor mínimo también estará cerca de la línea $p+1$, confirmando su buen ajuste.
 
 ::: {.callout-tip title="Visualización del Cp de Mallows" collapse="true"}
 
@@ -318,48 +320,44 @@ Una de las aplicaciones más útiles del Cp de Mallows es su visualización grá
 ```{r cp-mallows-grafico}
 # Cargar librerías necesarias
 suppressPackageStartupMessages({
-  library(leaps)      # Para best subset selection
-  library(ggplot2)    # Para gráficos
-  library(dplyr)      # Para manipulación de datos
+  library(leaps)     # Para best subset selection
+  library(ggplot2)   # Para gráficos
+  library(dplyr)     # Para manipulación de datos
 })
 
 # Usar el dataset mtcars para el ejemplo
 data(mtcars)
 
-# 1. Realizar best subset selection con todas las variables predictoras
+# 1. Realizar best subset selection
 best_subset <- regsubsets(mpg ~ ., data = mtcars, nvmax = 10)
 subset_summary <- summary(best_subset)
 
 # 2. Extraer información relevante para el gráfico
-#    Este data frame contiene los datos para todos los modelos (de 1 a 10 variables)
 plot_data <- data.frame(
   n_variables = 1:length(subset_summary$cp),
-  Cp = subset_summary$cp,
-  linea_referencia = (1:length(subset_summary$cp)) + 1
+  Cp = subset_summary$cp
 )
 
 # 3. Identificar el mejor modelo según el criterio Cp
-#    La búsqueda del "mejor" se hace excluyendo los dos modelos más grandes
-n_modelos_a_evaluar <- length(plot_data$Cp) - 2
-distancias_cp <- abs(plot_data$Cp[1:n_modelos_a_evaluar] - plot_data$linea_referencia[1:n_modelos_a_evaluar])
-mejor_cp_idx <- which.min(distancias_cp)
+#    La regla es simple: escoger el modelo con el menor valor de Cp.
+mejor_cp_idx <- which.min(subset_summary$cp)
+mejor_cp_valor <- subset_summary$cp[mejor_cp_idx]
 
 # 4. Crear el gráfico del Cp de Mallows
-#    Usamos el data frame completo 'plot_data' para que se muestren todos los puntos.
 ggplot(plot_data, aes(x = n_variables, y = Cp)) +
   # Línea de referencia ideal (Cp = p+1)
-  geom_line(aes(y = linea_referencia), color = "red", linetype = "dashed", linewidth = 1) +
+  geom_abline(intercept = 1, slope = 1, color = "red", linetype = "dashed", linewidth = 1) +
   # Puntos y línea de los valores Cp de los modelos
   geom_point(color = "#0072B2", size = 3) +
   geom_line(color = "#0072B2") +
-  # Resaltar el mejor punto, usando el 'mejor_cp_idx' que calculamos
-  geom_point(data = plot_data[mejor_cp_idx, ], color = "red", size = 5, shape = 17) +
+  # Resaltar el mejor punto (el que tiene el Cp mínimo)
+  geom_point(aes(x = mejor_cp_idx, y = mejor_cp_valor), color = "red", size = 5, shape = 17) +
   # Etiqueta para el mejor punto
-  annotate("text", x = plot_data$n_variables[mejor_cp_idx], y = plot_data$Cp[mejor_cp_idx] + 1.5,
+  annotate("text", x = mejor_cp_idx, y = mejor_cp_valor + 1.5,
            label = paste("Óptimo Cp\n(", mejor_cp_idx, "variables)"), color = "red", size = 4) +
   labs(
     title = "Criterio Cp de Mallows para Selección de Variables (mtcars)",
-    subtitle = "Buscamos el modelo cuyo Cp sea bajo y cercano a la línea roja (Cp ≈ p+1)",
+    subtitle = "Se busca el modelo con el valor de Cp más bajo",
     x = "Número de Variables Predictoras (p)",
     y = "Valor de Cp"
   ) +
@@ -371,13 +369,16 @@ ggplot(plot_data, aes(x = n_variables, y = Cp)) +
 variables_mejor_modelo_cp <- names(which(subset_summary$which[mejor_cp_idx, -1]))
 ```
 
-El gráfico resultante nos permite diagnosticar visualmente la calidad de los modelos candidatos. La línea discontinua roja representa el escenario ideal donde el modelo no tiene sesgo ($C_p = p+1$). Nuestra estrategia es identificar el modelo más simple (con menos variables) que se encuentre cerca o por debajo de esta línea, eligiendo de entre ellos el que tenga el valor de Cp más bajo.
+El gráfico resultante nos permite diagnosticar visualmente la calidad de los modelos candidatos. La línea discontinua roja representa la referencia para un modelo sin sesgo ($C_p = p+1$).
 
-Como se observa, el estadístico Cp disminuye drásticamente al pasar de uno a dos predictores, indicando una gran reducción del sesgo. El modelo con **`r mejor_cp_idx` variables** es el seleccionado como óptimo por nuestro criterio, ya que es el que, teniendo un sesgo bajo ($C_p \le p+1$), alcanza el valor mínimo del estadístico.
+La estrategia de selección es clara: **identificar el modelo que minimice el estadístico Cp**. Este punto representa el mejor equilibrio teórico entre el sesgo del modelo (subajuste) y su varianza (sobreajuste). La línea roja nos ayuda a confirmar visualmente que el modelo elegido, además de ser el de menor Cp, tiene un sesgo bajo.
 
-Concretamente, este modelo presenta un valor de Cp de **`r round(plot_data$Cp[mejor_cp_idx], 2)`**. El análisis sugiere que el modelo más parsimonioso y con el mejor equilibrio entre sesgo y varianza para predecir `mpg` se compone de las siguientes variables: **`r paste(variables_mejor_modelo_cp, collapse = ", ")`**. Añadir más predictores, aunque reduce ligeramente el Cp, no compensa el aumento en la complejidad del modelo.
+Como se observa, el estadístico Cp disminuye drásticamente al pasar de uno a dos predictores. El modelo con **`r mejor_cp_idx` variables** es el seleccionado como óptimo porque alcanza el valor de Cp más bajo de todos los candidatos, con un valor de **`r round(subset_summary$cp[mejor_cp_idx], 2)`**.
+
+El análisis sugiere que el modelo más parsimonioso y con el mejor rendimiento predictivo se compone de las siguientes variables: **`r paste(variables_mejor_modelo_cp, collapse = ", ")`**. Añadir más predictores más allá de este punto óptimo no mejora el modelo; de hecho, el valor de Cp comienza a aumentar, lo que indica que estamos añadiendo una complejidad innecesaria y empezando a sobreajustar los datos.
 
 :::
+
 
 
 ### ¿Cuándo Usar Cada Criterio?

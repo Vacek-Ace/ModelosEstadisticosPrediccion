@@ -1,7 +1,7 @@
 ---
 title: "Introducción a los Modelos Estadísticos para la Predicción"
 author: "Víctor Aceña - Isaac Martín"
-institute: "DSLab"
+institute: "DSLAB"
 date: last-modified
 format: 
   beamer: 
