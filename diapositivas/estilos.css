@@ -1,0 +1,151 @@
+/* estilos.css - Versión Definitiva y Robusta */
+
+/* --- CONFIGURACIÓN GENERAL --- */
+@page {
+  size: A4;
+  margin: 2.5cm;
+  @bottom-center {
+    content: "Página " counter(page);
+    font-size: 9pt;
+    color: #666;
+  }
+}
+@page :first {
+  @bottom-center { content: none; }
+}
+
+body {
+  font-family: "Georgia", serif;
+  line-height: 1.5;
+  font-size: 11pt;
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* --- PORTADA (desde portada.html) --- */
+.portada {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: 24.5cm; /* Altura del área imprimible de un A4 */
+  break-after: page;
+
+  /* Quitamos el centrado vertical automático y alineamos arriba */
+  justify-content: flex-start;
+  /* Damos un margen inicial desde el borde superior de la página */
+  padding-top: 2.5cm; 
+}
+
+/* Regla explícita para el logo */
+.portada img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --- Espaciado manual de los elementos de la portada --- */
+.portada .escuela {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1cm; /* Espacio después del logo */
+}
+.portada-titulo {
+  font-family: "Helvetica", sans-serif;
+  font-size: 22pt !important;
+  margin-top: 3cm; /* Aumentamos mucho el espacio aquí */
+  line-height: 1.2;
+}
+.portada-subtitulo {
+  font-size: 14pt;
+  font-style: italic;
+  color: #555;
+  margin-top: 0.5cm;
+}
+.portada-autores {
+  margin-top: 3cm; /* Aumentamos mucho el espacio aquí */
+  font-size: 12pt;
+  line-height: 1.4;
+}
+.portada-fecha {
+  margin-top: 0.5cm;
+  font-size: 12pt;
+}
+.portada p { text-align: center; }
+
+/* --- LICENCIA (DENTRO DE LA PORTADA) --- */
+.portada .licencia {
+  position: absolute; 
+  bottom: 2.5cm;      
+  left: 0;
+  right: 0;
+  font-size: 0.7em;
+  color: #777;
+}
+
+/* --- TABLA DE CONTENIDOS (TOC) --- */
+nav#TOC {
+  break-after: page;
+  padding-bottom: 2em;
+}
+nav#TOC h2 {
+  font-family: "Helvetica", sans-serif;
+  font-size: 20pt;
+  text-align: left;
+  border-bottom: 1px solid black;
+  padding-bottom: 8px;
+}
+nav#TOC ul { list-style-type: none; padding-left: 0; }
+nav#TOC a { text-decoration: none; color: black; }
+nav#TOC a::after { content: leader('.') target-counter(attr(href), page); }
+nav#TOC li { margin-bottom: 0.5em; }
+
+/* --- ENCABEZADOS Y CAPÍTULOS --- */
+h1, h2, h3 { font-family: "Helvetica", sans-serif; color: #333; }
+h1 { font-size: 20pt; border-bottom: 1.5px solid #555; padding-bottom: 6px; margin-top: 1em; }
+h2 { font-size: 16pt; border-bottom: 1px solid #ccc; padding-bottom: 4px; margin-top: 2em; }
+h3 { font-size: 12pt; font-weight: bold; margin-top: 1.5em; }
+
+/* --- ARREGLO PARA OCULTAR EL TÍTULO AUTOMÁTICO DE QUARTO --- */
+.quarto-title-block {
+  display: none;
+}
+
+/* --- ESTILOS DEL ÍNDICE --- */
+/* Título del índice ("Índice de Diapositivas") */
+#índice-de-diapositivas {
+  font-family: "Helvetica", sans-serif;
+  font-size: 20pt;
+  text-align: left;
+  border-bottom: 1px solid black;
+  padding-bottom: 10px;
+  /* El margen ahora es solo vertical, no añade márgenes laterales */
+  margin: 2.5cm 0 1.5em 0;
+}
+
+/* La lista de enlaces que sigue al título */
+#índice-de-diapositivas + ul {
+  list-style: none; 
+  /* Quitamos el padding lateral para que ocupe todo el ancho */
+  padding-left: 0;
+  text-align: left;
+}
+
+/* Resto de reglas para el estilo de la lista */
+#índice-de-diapositivas + ul li {
+  margin-bottom: 1.2em;
+  border-bottom: 1px dotted #ccc;
+  padding-bottom: 0.8em;
+}
+
+#índice-de-diapositivas + ul a {
+  text-decoration: none;
+  color: #005f9e;
+  font-size: 14pt;
+  font-family: "Georgia", serif;
+}
+
+#índice-de-diapositivas + ul a:hover {
+  text-decoration: underline;
+}

@@ -1,5 +1,5 @@
 ---
-title: "Tema 5: Modelos de Regresión Generalizada"
+title: "Modelos de Regresión Generalizada"
 subtitle: "Modelos Estadísticos para la Predicción"
 author: "Prof. Dr. José Luis Romero"
 date: today

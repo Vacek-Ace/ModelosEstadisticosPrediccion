@@ -1,0 +1,22 @@
+---
+format:
+  pdf:
+    pdf-engine: weasyprint
+    include-before-body: portada.html
+    css: estilos.css
+---
+
+En el siguiente enlace se puede encontrar la versión html actualizada de los presentes apuntes: <https://urjcdslab.github.io/ModelosEstadisticosPrediccion/>
+
+\newpage
+
+# Índice de Apuntes
+
+- [Prefacio](prefacio.pdf)
+- [Tema 1: Introducción a los Modelos de Regresión](tema0.pdf)
+- [Tema 2: El Modelo de Regresión Lineal Simple](tema1.pdf)
+- [Tema 3: El Modelo de Regresión Lineal Múltiple](tema2.pdf)
+- [Tema 4: Ingeniería de Características](tema3.pdf)
+- [Tema 5: Selección de Variables y Regularización](tema4.pdf)
+- [Tema 6: Modelos Lineales Generalizados (GLM)](tema5.pdf)
+- [Conclusiones](conclusiones.pdf)

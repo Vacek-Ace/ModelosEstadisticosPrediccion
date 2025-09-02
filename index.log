@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.21.0 (MiKTeX 25.3) (format=lualatex 2025.9.2)  2 SEP 2025 17:27
+This is LuaHBTeX, Version 1.21.0 (MiKTeX 25.3) (format=lualatex 2025.9.2)  2 SEP 2025 21:49
  restricted system commands enabled.
 **index.tex
 (./index.tex
@@ -89,8 +89,8 @@ Class scrreprt Info: File `scrsize11pt.clo' used instead of
 .clo
 File: scrsize11pt.clo 2025/08/28 v3.47 KOMA-Script font size class option (11pt
 )
-luaotfload | db : Font names database not found, generating new one.
-luaotfload | db : This can take several minutes; please be patient.)
+luaotfload | db : Font names database loaded from C:/Users/vacek/AppData/Local/M
+iKTeX/luatex-cache/generic/names/luaotfload-names.luc.gz)
 (C:/Users/vacek/AppData/Local/Programs/MiKTeX/tex/latex/koma-script/typearea.st
 y
 Package: typearea 2025/08/28 v3.47 KOMA-Script package (type area)
@@ -1956,6 +1956,6 @@ c, 383 attribute_list, 2 temp, 1 shape, 13 pdf_colorstack nodes
    avail lists: 1:3,2:3042,3:646,4:2199,5:315,6:22,7:7145,8:43,9:607,10:23,11:59
 0,12:1
  68207 multiletter control sequences out of 65536+600000
- 80 fonts using 25016883 bytes
+ 80 fonts using 25016583 bytes
  108i,13n,114p,11226b,1126s stack positions out of 10000i,1000n,20000p,200000b,200000s
 !  ==> Fatal error occurred, no output PDF file produced!
