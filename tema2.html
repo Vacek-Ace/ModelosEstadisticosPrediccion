@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.21">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3&nbsp; El modelo de regresión lineal múltiple – Modelos Estadísticos para la Predicción</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./tema3.html" rel="next">
+<link href="./tema1.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-0687a6949ae11671cfb8b930681aab34.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No se han encontrado resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema2.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">El modelo de regresión lineal múltiple</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Modelos Estadísticos para la Predicción</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Buscar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prefacio</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema0.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción a los modelos de regresión</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">El modelo de regresión lineal simple</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema2.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">El modelo de regresión lineal múltiple</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ingeniería de características: transformaciones de variables e interacciones</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Selección de variables, regularización y validación</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./conclusiones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bibliografía</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#formulación-teórica-del-modelo" id="toc-formulación-teórica-del-modelo" class="nav-link active" data-scroll-target="#formulación-teórica-del-modelo"><span class="header-section-number">3.1</span> Formulación teórica del modelo</a>
+  <ul class="collapse">
+  <li><a href="#el-modelo-poblacional" id="toc-el-modelo-poblacional" class="nav-link" data-scroll-target="#el-modelo-poblacional"><span class="header-section-number">3.1.1</span> El modelo poblacional</a></li>
+  <li><a href="#el-modelo-muestral" id="toc-el-modelo-muestral" class="nav-link" data-scroll-target="#el-modelo-muestral"><span class="header-section-number">3.1.2</span> El modelo muestral</a></li>
+  <li><a href="#notación-matricial" id="toc-notación-matricial" class="nav-link" data-scroll-target="#notación-matricial"><span class="header-section-number">3.1.3</span> Notación matricial</a></li>
+  <li><a href="#supuestos-del-modelo-lineal-múltiple" id="toc-supuestos-del-modelo-lineal-múltiple" class="nav-link" data-scroll-target="#supuestos-del-modelo-lineal-múltiple"><span class="header-section-number">3.1.4</span> Supuestos del modelo lineal múltiple</a></li>
+  </ul></li>
+  <li><a href="#estimación-de-los-parámetros" id="toc-estimación-de-los-parámetros" class="nav-link" data-scroll-target="#estimación-de-los-parámetros"><span class="header-section-number">3.2</span> Estimación de los parámetros</a>
+  <ul class="collapse">
+  <li><a href="#el-principio-de-mínimos-cuadrados-y-la-función-objetivo" id="toc-el-principio-de-mínimos-cuadrados-y-la-función-objetivo" class="nav-link" data-scroll-target="#el-principio-de-mínimos-cuadrados-y-la-función-objetivo"><span class="header-section-number">3.2.1</span> El principio de mínimos cuadrados y la función objetivo</a></li>
+  <li><a href="#derivación-de-las-ecuaciones-normales" id="toc-derivación-de-las-ecuaciones-normales" class="nav-link" data-scroll-target="#derivación-de-las-ecuaciones-normales"><span class="header-section-number">3.2.2</span> Derivación de las ecuaciones normales</a></li>
+  <li><a href="#la-solución-mco-y-la-condición-de-invertibilidad" id="toc-la-solución-mco-y-la-condición-de-invertibilidad" class="nav-link" data-scroll-target="#la-solución-mco-y-la-condición-de-invertibilidad"><span class="header-section-number">3.2.3</span> La solución MCO y la condición de invertibilidad</a></li>
+  <li><a href="#propiedades-de-los-estimadores-de-mco" id="toc-propiedades-de-los-estimadores-de-mco" class="nav-link" data-scroll-target="#propiedades-de-los-estimadores-de-mco"><span class="header-section-number">3.2.4</span> Propiedades de los estimadores de MCO</a></li>
+  <li><a href="#estimación-de-la-varianza-del-error" id="toc-estimación-de-la-varianza-del-error" class="nav-link" data-scroll-target="#estimación-de-la-varianza-del-error"><span class="header-section-number">3.2.5</span> Estimación de la varianza del error</a></li>
+  </ul></li>
+  <li><a href="#la-interpretación-de-los-coeficientes" id="toc-la-interpretación-de-los-coeficientes" class="nav-link" data-scroll-target="#la-interpretación-de-los-coeficientes"><span class="header-section-number">3.3</span> La interpretación de los coeficientes</a></li>
+  <li><a href="#evaluación-del-modelo-y-descomposición-de-la-varianza" id="toc-evaluación-del-modelo-y-descomposición-de-la-varianza" class="nav-link" data-scroll-target="#evaluación-del-modelo-y-descomposición-de-la-varianza"><span class="header-section-number">3.4</span> Evaluación del modelo y descomposición de la varianza</a>
+  <ul class="collapse">
+  <li><a href="#coeficiente-de-determinación-múltiple" id="toc-coeficiente-de-determinación-múltiple" class="nav-link" data-scroll-target="#coeficiente-de-determinación-múltiple"><span class="header-section-number">3.4.1</span> Coeficiente de determinación múltiple</a></li>
+  <li><a href="#el-coeficiente-de-determinación-ajustado" id="toc-el-coeficiente-de-determinación-ajustado" class="nav-link" data-scroll-target="#el-coeficiente-de-determinación-ajustado"><span class="header-section-number">3.4.2</span> El coeficiente de determinación ajustado</a></li>
+  </ul></li>
+  <li><a href="#inferencia-estadística-en-el-modelo-múltiple" id="toc-inferencia-estadística-en-el-modelo-múltiple" class="nav-link" data-scroll-target="#inferencia-estadística-en-el-modelo-múltiple"><span class="header-section-number">3.5</span> Inferencia Estadística en el Modelo Múltiple</a>
+  <ul class="collapse">
+  <li><a href="#contraste-de-hipótesis-sobre-los-coeficientes" id="toc-contraste-de-hipótesis-sobre-los-coeficientes" class="nav-link" data-scroll-target="#contraste-de-hipótesis-sobre-los-coeficientes"><span class="header-section-number">3.5.1</span> Contraste de hipótesis sobre los coeficientes</a></li>
+  <li><a href="#intervalo-de-confianza-para-los-coeficientes" id="toc-intervalo-de-confianza-para-los-coeficientes" class="nav-link" data-scroll-target="#intervalo-de-confianza-para-los-coeficientes"><span class="header-section-number">3.5.2</span> Intervalo de confianza para los coeficientes</a></li>
+  <li><a href="#inferencia-sobre-la-significancia-global-del-modelo" id="toc-inferencia-sobre-la-significancia-global-del-modelo" class="nav-link" data-scroll-target="#inferencia-sobre-la-significancia-global-del-modelo"><span class="header-section-number">3.5.3</span> Inferencia sobre la significancia global del modelo</a></li>
+  </ul></li>
+  <li><a href="#predicción-con-el-modelo-múltiple" id="toc-predicción-con-el-modelo-múltiple" class="nav-link" data-scroll-target="#predicción-con-el-modelo-múltiple"><span class="header-section-number">3.6</span> Predicción con el modelo múltiple</a>
+  <ul class="collapse">
+  <li><a href="#intervalo-de-confianza-para-la-respuesta-media" id="toc-intervalo-de-confianza-para-la-respuesta-media" class="nav-link" data-scroll-target="#intervalo-de-confianza-para-la-respuesta-media"><span class="header-section-number">3.6.1</span> Intervalo de confianza para la respuesta media</a></li>
+  <li><a href="#intervalo-de-predicción-para-una-observación-individual" id="toc-intervalo-de-predicción-para-una-observación-individual" class="nav-link" data-scroll-target="#intervalo-de-predicción-para-una-observación-individual"><span class="header-section-number">3.6.2</span> Intervalo de predicción para una observación individual</a></li>
+  </ul></li>
+  <li><a href="#diagnóstico-del-modelo-múltiple" id="toc-diagnóstico-del-modelo-múltiple" class="nav-link" data-scroll-target="#diagnóstico-del-modelo-múltiple"><span class="header-section-number">3.7</span> Diagnóstico del modelo múltiple</a>
+  <ul class="collapse">
+  <li><a href="#verificación-de-los-supuestos-clásicos" id="toc-verificación-de-los-supuestos-clásicos" class="nav-link" data-scroll-target="#verificación-de-los-supuestos-clásicos"><span class="header-section-number">3.7.1</span> Verificación de los supuestos clásicos</a></li>
+  <li><a href="#diagnóstico-de-multicolinealidad" id="toc-diagnóstico-de-multicolinealidad" class="nav-link" data-scroll-target="#diagnóstico-de-multicolinealidad"><span class="header-section-number">3.7.2</span> Diagnóstico de multicolinealidad</a></li>
+  <li><a href="#identificación-de-observaciones-influyentes" id="toc-identificación-de-observaciones-influyentes" class="nav-link" data-scroll-target="#identificación-de-observaciones-influyentes"><span class="header-section-number">3.7.3</span> Identificación de observaciones influyentes</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-regresion-lineal-multiple" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">El modelo de regresión lineal múltiple</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>El modelo de regresión lineal múltiple constituye la extensión natural y más potente del modelo simple que estudiamos en el capítulo anterior. Mientras que la regresión simple nos permitía examinar la relación entre una variable respuesta y un único predictor, la regresión múltiple nos capacita para <strong>modelar simultáneamente el efecto de múltiples variables predictoras</strong>, una situación mucho más realista en la mayoría de aplicaciones prácticas <span class="citation" data-cites="kutner2005applied james2021 fox2018r">(<a href="#ref-kutner2005applied" role="doc-biblioref">Kutner et&nbsp;al. 2005</a>; <a href="#ref-james2021" role="doc-biblioref">James et&nbsp;al. 2021</a>; <a href="#ref-fox2018r" role="doc-biblioref">Fox y Weisberg 2018</a>)</span>.</p>
+<p>En este capítulo profundizaremos en los aspectos únicos de la regresión múltiple que no están presentes en el caso simple: la <strong>interpretación de coeficientes en presencia de otros predictores</strong>, el <strong>diagnóstico específico</strong> del modelo múltiple, y el problema crucial de la <strong>multicolinealidad</strong>. Estos conceptos son fundamentales para desarrollar modelos predictivos robustos y interpretables <span class="citation" data-cites="harrell2015 draper1998applied">(<a href="#ref-harrell2015" role="doc-biblioref">Harrell 2015</a>; <a href="#ref-draper1998applied" role="doc-biblioref">Draper 1998</a>)</span>.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Objetivos de aprendizaje">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Importante</span>Objetivos de aprendizaje
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Al finalizar este capítulo, serás capaz de:</p>
+<ol type="1">
+<li><strong>Formular y estimar</strong> modelos de regresión lineal múltiple, comprendiendo las diferencias clave respecto al caso simple.</li>
+<li><strong>Interpretar coeficientes</strong> en el contexto multivariante, entendiendo el concepto de <em>ceteris paribus</em> (“manteniendo las demás variables constantes”).</li>
+<li><strong>Realizar inferencia estadística</strong> construyendo intervalos de confianza y contrastes de hipótesis para los parámetros del modelo múltiple.</li>
+<li><strong>Evaluar la calidad del ajuste</strong> usando medidas como <span class="math inline">\(R^2\)</span>, <span class="math inline">\(R^2\)</span> ajustado y la descomposición ANOVA.</li>
+<li><strong>Diagnosticar el modelo múltiple</strong>, aplicando técnicas específicas como gráficos CPR y gráficos de regresión parcial.</li>
+<li><strong>Identificar y tratar la multicolinealidad</strong>, comprendiendo sus causas, consecuencias y usando el VIF como herramienta de diagnóstico.</li>
+<li><strong>Realizar predicciones</strong> con el modelo ajustado, distinguiendo entre intervalos de confianza e intervalos de predicción.</li>
+</ol>
+</div>
+</div>
+<section id="formulación-teórica-del-modelo" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="formulación-teórica-del-modelo"><span class="header-section-number">3.1</span> Formulación teórica del modelo</h2>
+<p>El paso de la regresión simple a la múltiple es más que una simple adición de términos; es un salto conceptual. Nos permite construir modelos que reflejan mejor la complejidad del mundo real, donde los resultados raramente dependen de una única causa. Al controlar simultáneamente por varios factores, podemos aislar con mayor precisión el efecto de una variable de interés, reduciendo el riesgo de llegar a conclusiones sesgadas por variables omitidas.</p>
+<section id="el-modelo-poblacional" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="el-modelo-poblacional"><span class="header-section-number">3.1.1</span> El modelo poblacional</h3>
+<p>Para <span class="math inline">\(n\)</span> observaciones y <span class="math inline">\(p\)</span> variables predictoras, el <strong>modelo poblacional</strong> postula que la relación verdadera entre la variable respuesta <span class="math inline">\(Y\)</span> y los predictores <span class="math inline">\(X_1, X_2, \ldots, X_p\)</span> sigue una relación lineal:</p>
+<p><span class="math display">\[Y_i = \beta_0 + \beta_1 X_{i1} + \beta_2 X_{i2} + \cdots + \beta_p X_{ip} + \varepsilon_i, \quad i = 1,\dots,n\]</span></p>
+<p>Donde <span class="math inline">\(Y_i\)</span> es la <span class="math inline">\(i\)</span>-ésima variable respuesta aleatoria, <span class="math inline">\(X_{ij}\)</span> es la <span class="math inline">\(i\)</span>-ésima variable predictora aleatoria del <span class="math inline">\(j\)</span>-ésimo predictor, y <span class="math inline">\(\varepsilon_i\)</span> es el término de error aleatorio. Los parámetros <span class="math inline">\(\beta_0, \beta_1, \ldots, \beta_p\)</span> son los coeficientes poblacionales verdaderos pero desconocidos.</p>
+</section>
+<section id="el-modelo-muestral" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="el-modelo-muestral"><span class="header-section-number">3.1.2</span> El modelo muestral</h3>
+<p>En la práctica, trabajamos con datos observados y estimamos el modelo usando la muestra disponible:</p>
+<p><span class="math display">\[\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_{i1} + \hat{\beta}_2 x_{i2} + \cdots + \hat{\beta}_p x_{ip}, \quad i = 1,\dots,n\]</span></p>
+<p>Donde <span class="math inline">\(\hat{y}_i\)</span> es la <span class="math inline">\(i\)</span>-ésima predicción, <span class="math inline">\(x_{ij}\)</span> es la <span class="math inline">\(i\)</span>-ésima observación del <span class="math inline">\(j\)</span>-ésimo predictor, y <span class="math inline">\(\hat{\beta}_j\)</span> son los coeficientes estimados. El coeficiente <span class="math inline">\(\hat{\beta}_j\)</span> representa el cambio estimado en la media de <span class="math inline">\(Y\)</span> ante un cambio de una unidad en el predictor <span class="math inline">\(X_j\)</span>, <strong>manteniendo constantes todas las demás variables predictoras del modelo</strong>. Este principio, conocido como <em>ceteris paribus</em> (del latín, “lo demás constante”), es la piedra angular de la interpretación en regresión múltiple.</p>
+</section>
+<section id="notación-matricial" class="level3" data-number="3.1.3">
+<h3 data-number="3.1.3" class="anchored" data-anchor-id="notación-matricial"><span class="header-section-number">3.1.3</span> Notación matricial</h3>
+<p>La notación matricial es fundamental para el desarrollo teórico y computacional. Nos permite expresar el sistema de <span class="math inline">\(n\)</span> ecuaciones de forma compacta y elegante.</p>
+<p><strong>Modelo poblacional:</strong> <span class="math display">\[\mathbf{Y} = \tilde{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}\]</span></p>
+<p>donde:</p>
+<p><span class="math display">\[\mathbf{Y} = \begin{bmatrix} Y_1 \\ Y_2 \\ \vdots \\ Y_n \end{bmatrix}, \quad
+\tilde{X} = \begin{bmatrix}
+1 &amp; X_{11} &amp; X_{12} &amp; \cdots &amp; X_{1p} \\
+1 &amp; X_{21} &amp; X_{22} &amp; \cdots &amp; X_{2p} \\
+\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+1 &amp; X_{n1} &amp; X_{n2} &amp; \cdots &amp; X_{np}
+\end{bmatrix}, \quad
+\boldsymbol{\beta} = \begin{bmatrix} \beta_0 \\ \beta_1 \\ \vdots \\ \beta_p \end{bmatrix}, \quad
+\boldsymbol{\varepsilon} = \begin{bmatrix} \varepsilon_1 \\ \varepsilon_2 \\ \vdots \\ \varepsilon_n \end{bmatrix}\]</span></p>
+<p>Donde <span class="math inline">\(\tilde{X}\)</span> contiene variables aleatorias (denotadas con mayúsculas <span class="math inline">\(X_{ij}\)</span>).</p>
+<p><strong>Modelo muestral:</strong> <span class="math display">\[\hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol{\beta}}\]</span></p>
+<p>donde:</p>
+<p><span class="math display">\[\hat{\mathbf{y}} = \begin{bmatrix} \hat{y}_1 \\ \hat{y}_2 \\ \vdots \\ \hat{y}_n \end{bmatrix}, \quad
+\mathbf{X} = \begin{bmatrix}
+1 &amp; x_{11} &amp; x_{12} &amp; \cdots &amp; x_{1p} \\
+1 &amp; x_{21} &amp; x_{22} &amp; \cdots &amp; x_{2p} \\
+\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+1 &amp; x_{n1} &amp; x_{n2} &amp; \cdots &amp; x_{np}
+\end{bmatrix}, \quad
+\hat{\boldsymbol{\beta}} = \begin{bmatrix} \hat{\beta}_0 \\ \hat{\beta}_1 \\ \vdots \\ \hat{\beta}_p \end{bmatrix}\]</span></p>
+<p>Donde <span class="math inline">\(\mathbf{X}\)</span> contiene datos observados (denotados con minúsculas <span class="math inline">\(x_{ij}\)</span>).</p>
+<p>La matriz <span class="math inline">\(\mathbf{X}\)</span> (datos observados) y <span class="math inline">\(\tilde{X}\)</span> (variables aleatorias), ambas de dimensión <span class="math inline">\(n \times (p+1)\)</span>, se denominan <strong>matriz de diseño</strong> y contienen toda la información de los predictores. La primera columna de unos corresponde al término del intercepto <span class="math inline">\(\beta_0\)</span>.</p>
+</section>
+<section id="supuestos-del-modelo-lineal-múltiple" class="level3" data-number="3.1.4">
+<h3 data-number="3.1.4" class="anchored" data-anchor-id="supuestos-del-modelo-lineal-múltiple"><span class="header-section-number">3.1.4</span> Supuestos del modelo lineal múltiple</h3>
+<p>Para que nuestros estimadores tengan propiedades deseables (como ser insesgados y eficientes), el modelo debe cumplir una serie de supuestos sobre el comportamiento del término de error, conocidos como las <strong>condiciones de Gauss-Markov</strong> <span class="citation" data-cites="kutner2005applied weisberg2005applied">(<a href="#ref-kutner2005applied" role="doc-biblioref">Kutner et&nbsp;al. 2005</a>; <a href="#ref-weisberg2005applied" role="doc-biblioref">Weisberg 2005</a>)</span>.</p>
+<ol type="1">
+<li><p><strong>Linealidad en los parámetros</strong>: El valor esperado de la respuesta es una función lineal de los parámetros <span class="math inline">\(\boldsymbol{\beta}\)</span>. El modelo <span class="math inline">\(E[\mathbf{Y}|\tilde{X}] = \tilde{X}\boldsymbol{\beta}\)</span> está bien especificado.</p></li>
+<li><p><strong>Exogeneidad (media del error nula)</strong>: Los errores tienen una media de cero para cualquier valor de los predictores, <span class="math inline">\(E[\boldsymbol{\varepsilon}|\tilde{X}] = \mathbf{0}\)</span>. Esto implica que los predictores no contienen información sobre el término de error.</p></li>
+<li><p><strong>Homocedasticidad e independencia</strong>: Los errores no están correlacionados entre sí y tienen una varianza constante <span class="math inline">\(\sigma^2\)</span> para cualquier valor de los predictores. En notación matricial: <span class="math inline">\(\text{Var}(\boldsymbol{\varepsilon}|\tilde{X}) = \sigma^2\mathbf{I}_n\)</span>.</p></li>
+<li><p><strong>Ausencia de multicolinealidad perfecta</strong>: Ningún predictor es una combinación lineal exacta de los otros. Esto asegura que la matriz <span class="math inline">\(\mathbf{X}\)</span> tiene rango completo <span class="math inline">\((p+1)\)</span>, lo cual es necesario para poder estimar de forma única todos los coeficientes.</p></li>
+<li><p><strong>Normalidad de los errores (para inferencia)</strong>: Para poder realizar contrastes de hipótesis e intervalos de confianza, se añade el supuesto de que los errores siguen una distribución Normal: <span class="math inline">\(\boldsymbol{\varepsilon} \sim N(\mathbf{0}, \sigma^2\mathbf{I}_n)\)</span>.</p></li>
+</ol>
+</section>
+</section>
+<section id="estimación-de-los-parámetros" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="estimación-de-los-parámetros"><span class="header-section-number">3.2</span> Estimación de los parámetros</h2>
+<p>Una vez definido el modelo y sus supuestos, el siguiente paso es estimar los parámetros desconocidos del vector <span class="math inline">\(\boldsymbol{\beta}\)</span>. El método más extendido es el de Mínimos Cuadrados Ordinarios.</p>
+<section id="el-principio-de-mínimos-cuadrados-y-la-función-objetivo" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="el-principio-de-mínimos-cuadrados-y-la-función-objetivo"><span class="header-section-number">3.2.1</span> El principio de mínimos cuadrados y la función objetivo</h3>
+<p>La idea de “mejor ajuste” se traduce matemáticamente en minimizar la discrepancia entre los valores observados <span class="math inline">\(\mathbf{y}\)</span> (datos muestrales) y los valores predichos por el modelo, <span class="math inline">\(\hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol{\beta}}\)</span>. Esta discrepancia se captura a través de los residuos, <span class="math inline">\(\mathbf{e} = \mathbf{y} - \hat{\mathbf{y}}\)</span>.</p>
+<p>MCO no minimiza simplemente los residuos (ya que residuos positivos y negativos se cancelarían), sino la <strong>Suma de los Cuadrados de los Residuos</strong> (SCR o <em>SSR</em> en inglés). Al elevarlos al cuadrado, nos aseguramos de que todos los errores contribuyan positivamente y, además, penalizamos más fuertemente los errores grandes.</p>
+<p>La función objetivo a minimizar, <span class="math inline">\(S(\boldsymbol{\beta})\)</span>, usando datos observados es:</p>
+<p><span class="math display">\[S(\boldsymbol{\beta}) = \sum_{i=1}^n e_i^2 = \mathbf{e}^T\mathbf{e} = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^T(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})\]</span></p>
+</section>
+<section id="derivación-de-las-ecuaciones-normales" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="derivación-de-las-ecuaciones-normales"><span class="header-section-number">3.2.2</span> Derivación de las ecuaciones normales</h3>
+<p>Para encontrar el vector <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> que minimiza esta función, utilizamos cálculo diferencial. Primero, expandimos la expresión cuadrática de <span class="math inline">\(S(\boldsymbol{\beta})\)</span>:</p>
+<p><span class="math display">\[S(\boldsymbol{\beta}) = (\mathbf{y}^T - \boldsymbol{\beta}^T\mathbf{X}^T)(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})\]</span> <span class="math display">\[S(\boldsymbol{\beta}) = \mathbf{y}^T\mathbf{y} - \mathbf{y}^T\mathbf{X}\boldsymbol{\beta} - \boldsymbol{\beta}^T\mathbf{X}^T\mathbf{y} + \boldsymbol{\beta}^T\mathbf{X}^T\mathbf{X}\boldsymbol{\beta}\]</span></p>
+<p>Un punto clave aquí es notar que <span class="math inline">\(\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{y}\)</span> es un escalar (una matriz <span class="math inline">\(1 \times 1\)</span>), por lo que es igual a su transpuesta: <span class="math inline">\(\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{y} = \mathbf{y}^T\mathbf{X}\boldsymbol{\beta}\)</span>. <span class="math inline">\(1 \times 1\)</span>). Por lo tanto, es igual a su propia transpuesta: <span class="math inline">\((\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{y})^T = \mathbf{y}^T\mathbf{X}\boldsymbol{\beta}\)</span>. Esto nos permite simplificar la expresión:</p>
+<p><span class="math display">\[S(\boldsymbol{\beta}) = \mathbf{y}^T\mathbf{y} - 2\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{y} + \boldsymbol{\beta}^T(\mathbf{X}^T\mathbf{X})\boldsymbol{\beta}\]</span></p>
+<p>Ahora, derivamos esta función con respecto al vector <span class="math inline">\(\boldsymbol{\beta}\)</span> e igualamos el resultado a un vector de ceros para encontrar el mínimo. Usando las reglas de la derivación matricial:</p>
+<ul>
+<li>La derivada de <span class="math inline">\(\mathbf{y}^T\mathbf{y}\)</span> respecto a <span class="math inline">\(\boldsymbol{\beta}\)</span> es <span class="math inline">\(\mathbf{0}\)</span>.</li>
+<li>La derivada de <span class="math inline">\(2\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{y}\)</span> respecto a <span class="math inline">\(\boldsymbol{\beta}\)</span> es <span class="math inline">\(2\mathbf{X}^T\mathbf{y}\)</span>.</li>
+<li>La derivada de la forma cuadrática <span class="math inline">\(\boldsymbol{\beta}^T(\mathbf{X}^T\mathbf{X})\boldsymbol{\beta}\)</span> respecto a <span class="math inline">\(\boldsymbol{\beta}\)</span> es <span class="math inline">\(2(\mathbf{X}^T\mathbf{X})\boldsymbol{\beta}\)</span>.</li>
+</ul>
+<p>Aplicando estas reglas, obtenemos el gradiente de la función de pérdida:</p>
+<p><span class="math display">\[\frac{\partial S(\boldsymbol{\beta})}{\partial \boldsymbol{\beta}} = -2\mathbf{X}^T\mathbf{y} + 2(\mathbf{X}^T\mathbf{X})\boldsymbol{\beta}\]</span></p>
+<p>Igualando a cero y sustituyendo <span class="math inline">\(\boldsymbol{\beta}\)</span> por el estimador <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> que cumple esta condición:</p>
+<p><span class="math display">\[-2\mathbf{X}^T\mathbf{y} + 2(\mathbf{X}^T\mathbf{X})\hat{\boldsymbol{\beta}} = \mathbf{0}\]</span></p>
+<p>Simplificando, llegamos al célebre sistema de <span class="math inline">\(p+1\)</span> ecuaciones conocido como las <strong>Ecuaciones Normales</strong>:</p>
+<p><span class="math display">\[(\mathbf{X}^T\mathbf{X})\hat{\boldsymbol{\beta}} = \mathbf{X}^T\mathbf{y}\]</span></p>
+</section>
+<section id="la-solución-mco-y-la-condición-de-invertibilidad" class="level3" data-number="3.2.3">
+<h3 data-number="3.2.3" class="anchored" data-anchor-id="la-solución-mco-y-la-condición-de-invertibilidad"><span class="header-section-number">3.2.3</span> La solución MCO y la condición de invertibilidad</h3>
+<p>Para resolver este sistema y despejar <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, necesitamos multiplicar por la inversa de la matriz <span class="math inline">\((\mathbf{X}^T\mathbf{X})\)</span>. Esta inversa existe si y solo si la matriz es invertible, lo que está directamente garantizado por el <strong>supuesto de ausencia de multicolinealidad perfecta</strong>.</p>
+<p>Si el rango de la matriz de diseño <span class="math inline">\(\mathbf{X}\)</span> es <span class="math inline">\(p+1\)</span> (sus columnas son linealmente independientes), entonces la matriz <span class="math inline">\(\mathbf{X}^T\mathbf{X}\)</span> (de dimensión <span class="math inline">\((p+1) \times (p+1)\)</span>) será de rango completo, simétrica y definida positiva, y por tanto, invertible.</p>
+<p>La solución única para el vector de estimadores MCO es:</p>
+<p><span class="math display">\[\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}\]</span></p>
+<p>Esta compacta y poderosa ecuación es la base de la estimación en regresión lineal y es implementada por todo el software estadístico.</p>
+<p>Claro, aquí tienes el texto completo en formato Markdown y con las fórmulas clave sin los recuadros.</p>
+</section>
+<section id="propiedades-de-los-estimadores-de-mco" class="level3" data-number="3.2.4">
+<h3 data-number="3.2.4" class="anchored" data-anchor-id="propiedades-de-los-estimadores-de-mco"><span class="header-section-number">3.2.4</span> Propiedades de los estimadores de MCO</h3>
+<p>Una vez que hemos obtenido la fórmula para calcular nuestros coeficientes, <span class="math inline">\(\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}\)</span>, la pregunta fundamental es: ¿qué tan buenos son estos estimadores? La teoría estadística nos proporciona una respuesta contundente a través de sus propiedades en el muestreo, que son la base para toda la inferencia estadística posterior.</p>
+<p>El <strong>Teorema de Gauss-Markov</strong> es el resultado central. Afirma que, si se cumplen los supuestos del modelo lineal clásico (1-4), los estimadores de Mínimos Cuadrados Ordinarios son los <strong>Mejores Estimadores Lineales Insesgados (MELI o BLUE)</strong>. Desglosemos esto:</p>
+<ul>
+<li><strong>Lineal</strong>: <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> es una combinación lineal de la variable respuesta <span class="math inline">\(\mathbf{y}\)</span>.</li>
+<li><strong>Insesgado (Unbiased)</strong>: En promedio, a lo largo de infinitas muestras, nuestro estimador acertará al verdadero valor poblacional <span class="math inline">\(\boldsymbol{\beta}\)</span>. No tiene un sesgo sistemático. La demostración formal es directa: <span class="math display">\[\begin{align}
+  E[\hat{\boldsymbol{\beta}}] &amp;= E[(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}] \nonumber \\
+  &amp;= E[(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T(\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon})] \nonumber \\
+  &amp;= (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\boldsymbol{\beta} + (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T E[\boldsymbol{\varepsilon}] \nonumber \\
+  &amp;= \boldsymbol{I}\boldsymbol{\beta} + \mathbf{0} = \boldsymbol{\beta} \nonumber
+  \end{align}\]</span></li>
+<li><strong>Mejor (Best)</strong>: “Mejor” significa que tiene la mínima varianza posible dentro de la clase de todos los estimadores lineales e insesgados. No existe otro estimador de este tipo que sea más preciso. La precisión de nuestros estimadores se captura en su <strong>matriz de varianzas-covarianzas</strong>: <span class="math display">\[\begin{align}
+  \text{Var}(\hat{\boldsymbol{\beta}}) &amp;= \text{Var}[(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}] \nonumber \\
+  &amp;= (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T \, \text{Var}(\mathbf{y}) \, [(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T]^T \nonumber \\
+  &amp;= (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T \, (\sigma^2 \mathbf{I}_n) \, \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1} \nonumber \\
+  &amp;= \sigma^2 (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1} \nonumber \\
+  &amp;= \sigma^2 (\mathbf{X}^T\mathbf{X})^{-1} \nonumber
+  \end{align}\]</span> Por tanto, la matriz que define la incertidumbre de nuestro estimador es: <span class="math display">\[\text{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}\]</span> Los elementos de la diagonal de esta matriz nos dan la varianza de cada coeficiente individual, <span class="math inline">\(Var(\hat{\beta}_j)\)</span>, mientras que los elementos fuera de la diagonal nos dan la covarianza entre pares de coeficientes, <span class="math inline">\(Cov(\hat{\beta}_j, \hat{\beta}_k)\)</span>.</li>
+</ul>
+<p>Finalmente, si añadimos el <strong>supuesto de normalidad de los errores</strong> (<span class="math inline">\(\varepsilon_i \sim N(0, \sigma^2)\)</span>), las propiedades del estimador se completan. Dado que <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> es una combinación lineal de <span class="math inline">\(\mathbf{y}\)</span> (que ahora es normal), el propio estimador seguirá una distribución normal: <span class="math display">\[\hat{\boldsymbol{\beta}} \sim N\left(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}\right)\]</span>Esto implica que cada coeficiente individual también se distribuye normalmente:<span class="math display">\[\hat{\beta}_j \sim N\left(\beta_j, \sigma^2 [(\mathbf{X}^T\mathbf{X})^{-1}]_{jj}\right)\]</span> donde <span class="math inline">\([(\mathbf{X}^T\mathbf{X})^{-1}]_{jj}\)</span> es el j-ésimo elemento de la diagonal de la matriz inversa. Este resultado es la puerta de entrada a la inferencia, permitiéndonos construir intervalos de confianza y realizar contrastes de hipótesis (como los test-t).</p>
+</section>
+<section id="estimación-de-la-varianza-del-error" class="level3" data-number="3.2.5">
+<h3 data-number="3.2.5" class="anchored" data-anchor-id="estimación-de-la-varianza-del-error"><span class="header-section-number">3.2.5</span> Estimación de la varianza del error</h3>
+<p>La matriz de varianzas-covarianzas de <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> depende de <span class="math inline">\(\sigma^2\)</span>, la varianza de los errores poblacionales, que es desconocida. Por lo tanto, el siguiente paso lógico es encontrar un buen estimador para ella a partir de nuestros datos.</p>
+<p>El punto de partida natural son los residuos del modelo, <span class="math inline">\(\mathbf{e} = \mathbf{y} - \hat{\mathbf{y}}\)</span>, que son la contraparte muestral de los errores teóricos <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>. La suma de los cuadrados de los residuos (SSE) es la base de nuestro estimador:</p>
+<p><span class="math display">\[SSE = \mathbf{e}^T\mathbf{e} = \mathbf{y}^T(\mathbf{I}_n - \mathbf{H})^T(\mathbf{I}_n - \mathbf{H})\mathbf{y} = \mathbf{y}^T(\mathbf{I}_n - \mathbf{H})\mathbf{y}\]</span> (usando las propiedades de simetría e idempotencia de la matriz de proyección <span class="math inline">\(\mathbf{H}\)</span>).</p>
+<p>Para encontrar un estimador insesgado, calculamos el valor esperado de la SSE. Utilizando el lema <span class="math inline">\(E[\mathbf{z}^T\mathbf{A}\mathbf{z}] = \text{traza}(\mathbf{A}\boldsymbol{\Sigma}) + \boldsymbol{\mu}^T\mathbf{A}\boldsymbol{\mu}\)</span> con <span class="math inline">\(\mathbf{z} = \mathbf{y}\)</span>, <span class="math inline">\(\mathbf{A} = \mathbf{I}_n - \mathbf{H}\)</span>, <span class="math inline">\(\boldsymbol{\mu} = \mathbf{X}\boldsymbol{\beta}\)</span> y <span class="math inline">\(\boldsymbol{\Sigma} = \sigma^2\mathbf{I}_n\)</span>: <span class="math display">\[\begin{align}
+E[SSE] &amp;= \text{traza}[(\mathbf{I}_n - \mathbf{H})\sigma^2\mathbf{I}_n] + \boldsymbol{\beta}^T\mathbf{X}^T(\mathbf{I}_n - \mathbf{H})\mathbf{X}\boldsymbol{\beta} \nonumber
+\end{align}\]</span> El segundo término se anula porque <span class="math inline">\((\mathbf{I}_n - \mathbf{H})\mathbf{X} = \mathbf{X} - \mathbf{H}\mathbf{X} = \mathbf{X} - \mathbf{X} = \mathbf{0}\)</span>. Nos queda: <span class="math display">\[\begin{align}
+E[SSE] &amp;= \sigma^2 \text{traza}(\mathbf{I}_n - \mathbf{H}) \nonumber \\
+&amp;= \sigma^2 (\text{traza}(\mathbf{I}_n) - \text{traza}(\mathbf{H})) \nonumber \\
+&amp;= \sigma^2 (n - (p + 1)) \nonumber
+\end{align}\]</span> El valor esperado de la SSE no es <span class="math inline">\(\sigma^2\)</span>, sino un múltiplo de ella. Esto nos lleva directamente a un estimador insesgado para <span class="math inline">\(\sigma^2\)</span> dividiendo la SSE por sus <strong>grados de libertad</strong>, <span class="math inline">\(n - p - 1\)</span>: <span class="math display">\[\hat{\sigma}^2 = s^2 = \frac{SSE}{n - p - 1} = \frac{\mathbf{e}^T\mathbf{e}}{n - p - 1}\]</span> Intuitivamente, perdemos un grado de libertad por cada parámetro que hemos estimado en el modelo (los <span class="math inline">\(p\)</span> coeficientes de las pendientes y el intercepto). La raíz cuadrada de este valor, <span class="math inline">\(\hat{\sigma}\)</span>, se conoce como el <strong>Error Estándar de la Regresión</strong> y representa la magnitud de un error de predicción típico.</p>
+<p>Con este estimador, podemos calcular el <strong>error estándar de cada coeficiente</strong>, que mide la incertidumbre de nuestra estimación para <span class="math inline">\(\beta_j\)</span>: <span class="math display">\[\text{se}(\hat{\beta}_j) = \sqrt{\hat{\sigma}^2 [(\mathbf{X}^T\mathbf{X})^{-1}]_{jj}}\]</span> Bajo normalidad, se puede demostrar además que la cantidad <span class="math inline">\(\frac{SSE}{\sigma^2}\)</span> sigue una distribución <strong>Chi-cuadrado</strong> con <span class="math inline">\(n-p-1\)</span> grados de libertad, un resultado clave para la inferencia formal.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo: Estimación de un modelo múltiple">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Ejemplo: Estimación de un modelo múltiple
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Para ilustrar estos conceptos, usemos un ejemplo con datos de precios de viviendas. Supongamos que queremos predecir el precio de una vivienda basándonos en su superficie, número de habitaciones, antigüedad, distancia al centro y si tiene garaje.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = precio ~ superficie + habitaciones + antiguedad + 
+    distancia_centro + garaje, data = viviendas)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-38847 -11074    867   9898  38486 
+
+Coefficients:
+                 Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      53750.97    6666.71   8.063 7.53e-14 ***
+superficie        1171.78      47.28  24.783  &lt; 2e-16 ***
+habitaciones     15072.31    1303.42  11.564  &lt; 2e-16 ***
+antiguedad        -744.59      75.42  -9.872  &lt; 2e-16 ***
+distancia_centro -2028.27     164.88 -12.302  &lt; 2e-16 ***
+garajeSí         25829.43    2349.44  10.994  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 15950 on 194 degrees of freedom
+Multiple R-squared:  0.9094,    Adjusted R-squared:  0.9071 
+F-statistic: 389.4 on 5 and 194 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>Este output nos muestra:</p>
+<ul>
+<li><strong>Coeficientes estimados</strong> (<span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>) y sus errores estándar</li>
+<li><strong>Estadísticos t</strong> y p-valores para cada coeficiente</li>
+<li><strong>Error estándar residual</strong> ($ = 1.5952^{4} euros)</li>
+<li><strong>R² múltiple</strong> (0.9094) - proporción de varianza explicada</li>
+<li><strong>Estadístico F global</strong> para contrastar la significancia del modelo</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="la-interpretación-de-los-coeficientes" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="la-interpretación-de-los-coeficientes"><span class="header-section-number">3.3</span> La interpretación de los coeficientes</h2>
+<p>Estimar los coeficientes y sus errores estándar es solo la mitad del trabajo. La otra mitad, y a menudo la más importante, es interpretarlos correctamente.</p>
+<p>El concepto fundamental en regresión múltiple es el de <strong>ceteris paribus</strong> (“lo demás constante”). Cada coeficiente <span class="math inline">\(\beta_j\)</span> representa el cambio esperado en <span class="math inline">\(Y\)</span> por un cambio de una unidad en <span class="math inline">\(X_j\)</span>, <strong>manteniendo todas las demás variables predictoras del modelo fijas</strong>. Es el efecto “puro” o “aislado” de <span class="math inline">\(X_j\)</span> sobre <span class="math inline">\(Y\)</span>, después de haber controlado por la influencia de las otras variables incluidas en el modelo. Matemáticamente, es la derivada parcial del valor esperado de <span class="math inline">\(Y\)</span> con respecto a <span class="math inline">\(X_j\)</span>: <span class="math display">\[\beta_j = \frac{\partial E[Y|\tilde{X}]}{\partial X_j}\]</span></p>
+<p>Esta interpretación es crucialmente diferente de la que se obtiene en una regresión simple. El coeficiente de una regresión simple de <span class="math inline">\(Y\)</span> sobre <span class="math inline">\(X_j\)</span> captura no solo el efecto directo de <span class="math inline">\(X_j\)</span>, sino también los efectos indirectos de cualquier otra variable omitida que esté correlacionada tanto con <span class="math inline">\(Y\)</span> como con <span class="math inline">\(X_j\)</span>. Por ello, el valor de <span class="math inline">\(\hat{\beta}_j\)</span> en una regresión múltiple casi nunca es igual al de una regresión simple.</p>
+<p>La forma más precisa de entender <span class="math inline">\(\hat{\beta}_j\)</span> es a través del concepto de <strong>regresión parcial</strong>. El coeficiente <span class="math inline">\(\hat{\beta}_j\)</span> de la regresión múltiple es idéntico al coeficiente de una regresión simple entre dos conjuntos de residuos:</p>
+<ol type="1">
+<li>Los residuos de una regresión de <span class="math inline">\(\mathbf{y}\)</span> sobre todas las demás variables predictoras (excepto <span class="math inline">\(X_j\)</span>).</li>
+<li>Los residuos de una regresión de <span class="math inline">\(\mathbf{x_j}\)</span> sobre todas las demás variables predictoras.</li>
+</ol>
+<p>En otras palabras, <span class="math inline">\(\hat{\beta}_j\)</span> mide la relación entre la parte de <span class="math inline">\(Y\)</span> que no puede ser explicada por las otras variables y la parte de <span class="math inline">\(X_j\)</span> que tampoco puede ser explicada por las otras variables. Es la asociación entre <span class="math inline">\(Y\)</span> y <span class="math inline">\(X_j\)</span> después de haber “limpiado” o “netado” la influencia de todos los demás predictores de ambas. Este concepto se visualiza en los <strong>gráficos de regresión parcial</strong> (o <em>added-variable plots</em>), que son una herramienta de diagnóstico fundamental.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Interpretación práctica de los coeficientes">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Interpretación práctica de los coeficientes
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Volviendo a nuestro ejemplo de viviendas, interpretemos cada coeficiente aplicando el principio <em>ceteris paribus</em>:</p>
+<ul>
+<li><p><strong>Superficie</strong> (1172 €/m²): Por cada metro cuadrado adicional, el precio aumenta en promedio 1172 euros, <strong>manteniendo constantes</strong> el número de habitaciones, antigüedad, distancia al centro y presencia de garaje.</p></li>
+<li><p><strong>Habitaciones</strong> (1.5072^{4} €): Cada habitación adicional incrementa el precio en 1.5072^{4} euros en promedio, <strong>controlando por</strong> la superficie y demás variables.</p></li>
+<li><p><strong>Antigüedad</strong> (-745 €/año): Por cada año de antigüedad, el precio disminuye en 745 euros en promedio, <strong>ceteris paribus</strong>.</p></li>
+<li><p><strong>Distancia al centro</strong> (-2028 €/km): Cada kilómetro adicional de distancia reduce el precio en 2028 euros en promedio, <strong>manteniendo todo lo demás constante</strong>.</p></li>
+<li><p><strong>Garaje</strong> (2.5829^{4} €): Las viviendas con garaje cuestan 2.5829^{4} euros más que las que no tienen, <strong>en promedio y controlando por las demás variables</strong>.</p></li>
+</ul>
+<p><strong>Punto clave</strong>: Estos efectos son diferentes de los que obtendríamos con regresiones simples, ya que aquí hemos “limpiado” la influencia de las otras variables.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="La perspectiva geométrica de mínimos cuadrados">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>La perspectiva geométrica de mínimos cuadrados
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La estimación por mínimos cuadrados tiene una interpretación geométrica elegante y potente que nos ayuda a comprender qué está ocurriendo.</p>
+<p>Podemos pensar en el vector de observaciones <span class="math inline">\(\mathbf{y}\)</span> como un punto en un espacio de <span class="math inline">\(n\)</span> dimensiones. Las columnas de la matriz de diseño <span class="math inline">\(\mathbf{X}\)</span> generan un subespacio vectorial dentro de <span class="math inline">\(\mathbb{R}^n\)</span>, conocido como el <strong>espacio columna</strong> de <span class="math inline">\(\mathbf{X}\)</span>, denotado <span class="math inline">\(C(\mathbf{X})\)</span>. Este subespacio contiene todas las posibles combinaciones lineales de nuestros predictores.</p>
+<p>El método MCO encuentra el vector de valores ajustados <span class="math inline">\(\hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol{\beta}}\)</span> que está “más cerca” de <span class="math inline">\(\mathbf{y}\)</span>. Geométricamente, este punto no es otro que la <strong>proyección ortogonal</strong> del vector <span class="math inline">\(\mathbf{y}\)</span> sobre el subespacio <span class="math inline">\(C(\mathbf{X})\)</span>.</p>
+<p>Esta proyección se realiza a través de una matriz especial llamada <strong>matriz de proyección</strong> o <strong>matriz sombrero</strong> (<em>hat matrix</em>), denotada por <span class="math inline">\(\mathbf{H}\)</span>:</p>
+<p><span class="math display">\[\hat{\mathbf{y}} = \text{Proj}_{C(\mathbf{X})}\,\mathbf{y} = \mathbf{H}\,\mathbf{y}, \qquad \text{donde} \quad \mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\]</span></p>
+<p>Esta operación induce la <strong>descomposición ortogonal fundamental</strong> del vector de respuesta:</p>
+<p><span class="math display">\[\mathbf{y} = \hat{\mathbf{y}} + \mathbf{e}\]</span></p>
+<p>El hecho de que la proyección sea ortogonal implica que el vector de residuos <span class="math inline">\(\mathbf{e}\)</span> es ortogonal (perpendicular) al vector de valores ajustados <span class="math inline">\(\hat{\mathbf{y}}\)</span> y, de hecho, a todo el subespacio <span class="math inline">\(C(\mathbf{X})\)</span>. Esta ortogonalidad, <span class="math inline">\(\hat{\mathbf{y}}^T\mathbf{e}=0\)</span>, es la base del <strong>Teorema de Pitágoras para la regresión</strong>, que permite la descomposición de la variabilidad total en una parte explicada y una no explicada.</p>
+</div>
+</div>
+</section>
+<section id="evaluación-del-modelo-y-descomposición-de-la-varianza" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="evaluación-del-modelo-y-descomposición-de-la-varianza"><span class="header-section-number">3.4</span> Evaluación del modelo y descomposición de la varianza</h2>
+<p>Una vez estimado el modelo, el siguiente paso es evaluar su desempeño. ¿Qué tan bien se ajustan nuestras predicciones a los datos reales? Aunque ya vimos la perspectiva geométrica y el Teorema de Pitágoras en regresión simple, es importante revisitar estos conceptos porque en regresión múltiple la interpretación y el cálculo de la descomposición de varianza presenta matices adicionales que debemos entender claramente.</p>
+<p>En regresión múltiple, la <strong>Descomposición de la Varianza</strong> o <strong>ANOVA</strong> (<em>Analysis of Variance</em>) cobra especial relevancia porque ahora tenemos múltiples variables explicativas y necesitamos evaluar el aporte conjunto de todas ellas, así como su significancia global.</p>
+<p>La idea fundamental es que la variabilidad total de la variable respuesta (<span class="math inline">\(Y\)</span>) puede descomponerse en dos partes: una parte que es explicada por nuestro modelo de regresión (ahora con múltiples variables) y otra parte que queda sin explicar, atribuida al error aleatorio.</p>
+<p>Partimos de la identidad: <span class="math inline">\((y_i - \bar{y}) = (\hat{y}_i - \bar{y}) + (y_i - \hat{y}_i) = (\hat{y}_i - \bar{y}) + e_i\)</span>.</p>
+<p>Elevando al cuadrado y sumando para todas las observaciones (y gracias a la propiedad de ortogonalidad <span class="math inline">\(\hat{\mathbf{y}}^T\mathbf{e}=0\)</span>, que hace que los productos cruzados se anulen), llegamos a la descomposición fundamental de las sumas de cuadrados:</p>
+<p><span class="math display">\[\sum_{i=1}^n (y_i - \bar{y})^2 = \sum_{i=1}^n (\hat{y}_i - \bar{y})^2 + \sum_{i=1}^n e_i^2\]</span></p>
+<p>Esto se conoce como la <strong>ecuación de ANOVA</strong>:</p>
+<p><span class="math display">\[SST = SSR + SSE\]</span></p>
+<p>Donde:</p>
+<ul>
+<li><strong>SST (Suma de Cuadrados Total)</strong>: Es la variabilidad total de <span class="math inline">\(Y\)</span>. Mide la dispersión de los datos observados alrededor de su media.</li>
+<li><strong>SSR (Suma de Cuadrados de la Regresión)</strong>: Es la variabilidad <strong>explicada</strong> por el modelo. Mide la dispersión de los valores predichos alrededor de la media.</li>
+<li><strong>SSE (Suma de Cuadrados del Error)</strong>: Es la variabilidad <strong>no explicada</strong> o residual. Mide la dispersión de los datos observados alrededor de la línea de regresión.</li>
+</ul>
+<p>Esta tabla no es solo un resumen; es el motor de las principales herramientas de evaluación e inferencia del modelo.</p>
+<section id="coeficiente-de-determinación-múltiple" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="coeficiente-de-determinación-múltiple"><span class="header-section-number">3.4.1</span> Coeficiente de determinación múltiple</h3>
+<p>El <strong>coeficiente de determinación</strong>, <span class="math inline">\(R^2\)</span>, es la medida de ajuste más popular. Responde a la pregunta: <em>¿Qué proporción de la variabilidad total de Y es explicada por las variables predictoras del modelo?</em></p>
+<p><span class="math display">\[R^2 = \frac{SSR}{SST} = 1 - \frac{SSE}{SST}\]</span></p>
+<p><strong>Propiedades clave</strong>:</p>
+<ul>
+<li>Su valor siempre está entre 0 (el modelo no explica nada) y 1 (el modelo explica toda la variabilidad).</li>
+<li>Puede interpretarse como el cuadrado de la correlación entre los valores observados y los valores predichos, <span class="math inline">\(R^2 = \text{corr}^2(\mathbf{y}, \hat{\mathbf{y}})\)</span>.</li>
+<li><strong>Problema</strong>: <span class="math inline">\(R^2\)</span> <strong>nunca decrece</strong> al añadir una nueva variable predictora al modelo, incluso si esta es completamente irrelevante. Esto lo convierte en una métrica engañosa para comparar modelos con distinto número de predictores.</li>
+</ul>
+</section>
+<section id="el-coeficiente-de-determinación-ajustado" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="el-coeficiente-de-determinación-ajustado"><span class="header-section-number">3.4.2</span> El coeficiente de determinación ajustado</h3>
+<p>Para solucionar el problema de <span class="math inline">\(R^2\)</span>, utilizamos el <span class="math inline">\(R^2\)</span> ajustado, que introduce una penalización por cada variable añadida. Lo hace comparando las varianzas (sumas de cuadrados divididas por sus grados de libertad) en lugar de solo las sumas de cuadrados:</p>
+<p><span class="math display">\[R^2_{adj} = 1 - \frac{SSE/(n-p-1)}{SST/(n-1)} = 1 - \frac{\hat{\sigma}^2}{s_Y^2}\]</span></p>
+<p>Donde <span class="math inline">\(s_Y^2\)</span> es la varianza muestral de <span class="math inline">\(Y\)</span>. El <span class="math inline">\(R^2_{ajustado}\)</span> solo aumentará si la nueva variable mejora el modelo más de lo que se esperaría por puro azar. Es, por tanto, la métrica preferida para comparar la calidad de ajuste de modelos anidados.</p>
+<p>¡Excelente observación! Tienes toda la razón. En la sección de “Inferencia” me centré en los contrastes de hipótesis (el test t y el test F) pero omití una parte igualmente importante que sí estaba en tu Tema 1: la <strong>construcción de intervalos de confianza para los parámetros</strong>.</p>
+<p>Un contraste de hipótesis te da una respuesta de “sí/no” sobre la significancia, pero un intervalo de confianza te ofrece un rango de valores plausibles para el efecto, lo cual es mucho más informativo.</p>
+<p>Aquí tienes una versión revisada y ampliada de la sección <strong>“Inferencia estadística en el modelo múltiple”</strong> que incluye explícitamente los intervalos de confianza, manteniendo el flujo que hemos construido. Puedes reemplazar la sección anterior por esta.</p>
+</section>
+</section>
+<section id="inferencia-estadística-en-el-modelo-múltiple" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="inferencia-estadística-en-el-modelo-múltiple"><span class="header-section-number">3.5</span> Inferencia Estadística en el Modelo Múltiple</h2>
+<p>La estimación nos da los valores de los coeficientes para nuestra muestra, pero la inferencia nos permite usar esos valores para sacar conclusiones sobre los parámetros de la población. ¿Son estos coeficientes “reales” o podrían ser fruto del azar muestral? Para responder, nos basamos en las propiedades distributivas de nuestros estimadores.</p>
+<section id="contraste-de-hipótesis-sobre-los-coeficientes" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="contraste-de-hipótesis-sobre-los-coeficientes"><span class="header-section-number">3.5.1</span> Contraste de hipótesis sobre los coeficientes</h3>
+<p>El <strong>test t</strong> nos permite decidir si una variable predictora <span class="math inline">\(X_j\)</span> tiene una relación estadísticamente significativa con <span class="math inline">\(Y\)</span>, después de controlar por el efecto de todas las demás variables en el modelo.</p>
+<ul>
+<li><strong>Hipótesis</strong>: La hipótesis nula es que el coeficiente es cero en la población (<span class="math inline">\(H_0: \beta_j = 0\)</span>), lo que implicaría que <span class="math inline">\(X_j\)</span> no tiene un efecto lineal sobre <span class="math inline">\(Y\)</span> una vez que se consideran los otros predictores. La alternativa es que el coeficiente es distinto de cero (<span class="math inline">\(H_1: \beta_j \neq 0\)</span>).</li>
+<li><strong>Estadístico de contraste</strong>: Construimos el estadístico t, que mide cuántos errores estándar separan nuestro coeficiente estimado del valor nulo (cero). <span class="math display">\[\frac{\hat{\beta}_j - \beta_j}{\text{se}(\hat{\beta}_j)} \sim t_{n-p-1}\]</span> Bajo la hipótesis nula, el estadístico que calculamos con nuestra muestra es <span class="math inline">\(t_{obs} = \hat{\beta}_j / \text{se}(\hat{\beta}_j)\)</span>.</li>
+<li><strong>Decisión</strong>: Comparamos el valor observado <span class="math inline">\(t_{obs}\)</span> con la distribución t de Student con <span class="math inline">\(n-p-1\)</span> grados de libertad. Si el <strong>p-valor</strong> asociado es suficientemente pequeño (normalmente &lt; 0.05), rechazamos la hipótesis nula y concluimos que la variable es un predictor estadísticamente significativo.</li>
+</ul>
+</section>
+<section id="intervalo-de-confianza-para-los-coeficientes" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="intervalo-de-confianza-para-los-coeficientes"><span class="header-section-number">3.5.2</span> Intervalo de confianza para los coeficientes</h3>
+<p>Mientras que el test t nos da una decisión binaria, el <strong>intervalo de confianza</strong> nos proporciona un <strong>rango de valores plausibles</strong> para el verdadero parámetro poblacional <span class="math inline">\(\beta_j\)</span>. Es una herramienta de estimación más informativa.</p>
+<p>La estructura del intervalo se basa en la distribución t que acabamos de ver:</p>
+<p><span class="math display">\[\text{Estimación puntual} \pm (\text{Valor crítico}) \times (\text{Error estándar})\]</span></p>
+<p>Para un nivel de confianza del <span class="math inline">\(100(1-\alpha)\%\)</span>, el intervalo para <span class="math inline">\(\beta_j\)</span> es:</p>
+<p><span class="math display">\[\hat{\beta}_j \pm t_{\alpha/2, n-p-1} \cdot \text{se}(\hat{\beta}_j)\]</span></p>
+<ul>
+<li><strong>Interpretación</strong>: Tenemos una confianza del <span class="math inline">\(100(1-\alpha)\%\)</span> de que el verdadero valor del parámetro poblacional <span class="math inline">\(\beta_j\)</span> se encuentra dentro de este rango.</li>
+<li><strong>Dualidad con el Contraste de Hipótesis</strong>: Existe una relación directa entre el intervalo de confianza y el test t. Si el valor 0 <strong>no está incluido</strong> en el intervalo de confianza del 95% para <span class="math inline">\(\hat{\beta}_j\)</span>, es matemáticamente equivalente a rechazar la hipótesis nula <span class="math inline">\(H_0: \beta_j = 0\)</span> con un nivel de significancia <span class="math inline">\(\alpha=0.05\)</span>. Esto nos da dos formas de llegar a la misma conclusión sobre la significancia de un predictor.</li>
+</ul>
+</section>
+<section id="inferencia-sobre-la-significancia-global-del-modelo" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="inferencia-sobre-la-significancia-global-del-modelo"><span class="header-section-number">3.5.3</span> Inferencia sobre la significancia global del modelo</h3>
+<p>El <strong>test F</strong> evalúa si el modelo en su conjunto tiene poder predictivo. Es decir, contrasta si <strong>al menos uno</strong> de los predictores tiene una relación significativa con <span class="math inline">\(Y\)</span>.</p>
+<ul>
+<li><strong>Hipótesis</strong>: La hipótesis nula es que todos los coeficientes de las pendientes son simultáneamente cero (<span class="math inline">\(H_0: \beta_1 = \beta_2 = \dots = \beta_p = 0\)</span>), frente a la alternativa de que al menos uno es distinto de cero (<span class="math inline">\(H_1: \text{Algún } \beta_j \neq 0\)</span>).</li>
+<li><strong>Estadístico de contraste</strong>: El estadístico F se construye a partir de la tabla ANOVA, comparando la varianza explicada por el modelo con la varianza residual, ajustando por sus respectivos grados de libertad. <span class="math display">\[F = \frac{\text{Varianza Explicada}}{\text{Varianza No Explicada}} = \frac{SSR / p}{SSE / (n-p-1)}\]</span></li>
+<li><strong>Decisión</strong>: Comparamos el valor del estadístico F con una distribución F de Snedecor con <span class="math inline">\(p\)</span> y <span class="math inline">\(n-p-1\)</span> grados de libertad. Un p-valor pequeño indica que el modelo es globalmente significativo y que, como conjunto, nuestros predictores explican una parte de la variabilidad de <span class="math inline">\(Y\)</span> que no es atribuible al azar.</li>
+</ul>
+<p>El test F es una herramienta fundamental, ya que representa el primer paso en la validación de cualquier modelo de regresión múltiple.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Interpretación de las pruebas estadísticas">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Interpretación de las pruebas estadísticas
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En nuestro ejemplo de viviendas:</p>
+<p><strong>Prueba F global</strong>:</p>
+<ul>
+<li>F(5, 194) = 389.45, p &lt; 0.001</li>
+<li><strong>Conclusión</strong>: El modelo es globalmente significativo. Al menos una variable predictora tiene una relación real con el precio.</li>
+</ul>
+<p><strong>Pruebas t individuales</strong> (ejemplos):</p>
+<ul>
+<li><strong>Superficie</strong>: t = 24.78, p &lt; 0.001 → <strong>Significativa</strong></li>
+<li><strong>Garaje</strong>: t = 10.99, p &lt; 0.001 → <strong>Significativa</strong></li>
+</ul>
+<p><strong>Intervalos de confianza</strong> (95%):</p>
+<ul>
+<li><strong>Superficie</strong>: [1079, 1265] euros/m²</li>
+<li>No incluye el 0, confirma la significancia estadística</li>
+</ul>
+<p><strong>Interpretación práctica</strong>: Estamos 95% confiados de que el verdadero efecto de la superficie está entre 1079 y 1265 euros por m², controlando por las demás variables.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="predicción-con-el-modelo-múltiple" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="predicción-con-el-modelo-múltiple"><span class="header-section-number">3.6</span> Predicción con el modelo múltiple</h2>
+<p>Una vez que hemos ajustado y validado nuestro modelo, podemos utilizarlo para uno de sus propósitos más poderosos: hacer predicciones para nuevas observaciones. Es fundamental distinguir entre dos objetivos de predicción diferentes, ya que cada uno conlleva un nivel de incertidumbre distinto.</p>
+<p>Supongamos que tenemos un nuevo conjunto de valores para las variables predictoras, representado por el vector <span class="math inline">\(\mathbf{x}_0^T = [1, x_{01}, x_{02}, \dots, x_{0p}]\)</span>. La <strong>predicción puntual</strong> en ambos casos es la misma:</p>
+<p><span class="math display">\[\hat{y}_0 = \mathbf{x}_0^T \hat{\boldsymbol{\beta}}\]</span></p>
+<p>Sin embargo, esta estimación puntual está sujeta a error. Para cuantificar esta incertidumbre, construimos dos tipos de intervalos.</p>
+<section id="intervalo-de-confianza-para-la-respuesta-media" class="level3" data-number="3.6.1">
+<h3 data-number="3.6.1" class="anchored" data-anchor-id="intervalo-de-confianza-para-la-respuesta-media"><span class="header-section-number">3.6.1</span> Intervalo de confianza para la respuesta media</h3>
+<p>Este intervalo responde a la pregunta: <em>¿cuál es el valor <strong>promedio</strong> de Y para todas las observaciones con las características</em> <span class="math inline">\(\mathbf{x}_0\)</span>? Su objetivo es acotar la posición de la verdadera (pero desconocida) superficie de regresión poblacional en el punto <span class="math inline">\(\mathbf{x}_0\)</span>.</p>
+<p>La incertidumbre aquí proviene únicamente de la estimación de los coeficientes <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>. La varianza de esta predicción media es:</p>
+<p><span class="math display">\[\text{Var}(\hat{y}_0) = \text{Var}(\mathbf{x}_0^T \hat{\boldsymbol{\beta}}) = \mathbf{x}_0^T \text{Var}(\hat{\boldsymbol{\beta}}) \mathbf{x}_0 = \sigma^2 \mathbf{x}_0^T (\mathbf{X}^T\mathbf{X})^{-1} \mathbf{x}_0\]</span></p>
+<p>Reemplazando <span class="math inline">\(\sigma^2\)</span> por su estimador insesgado <span class="math inline">\(\hat{\sigma}^2\)</span>, el <strong>intervalo de confianza al</strong> <span class="math inline">\(100(1-\alpha)\%\)</span> para la respuesta media <span class="math inline">\(E[Y|\mathbf{X}=\mathbf{x}_0]\)</span> es:</p>
+<p><span class="math display">\[\hat{y}_0 \pm t_{\alpha/2, n-p-1} \cdot \sqrt{\hat{\sigma}^2 \mathbf{x}_0^T (\mathbf{X}^T\mathbf{X})^{-1} \mathbf{x}_0}\]</span></p>
+</section>
+<section id="intervalo-de-predicción-para-una-observación-individual" class="level3" data-number="3.6.2">
+<h3 data-number="3.6.2" class="anchored" data-anchor-id="intervalo-de-predicción-para-una-observación-individual"><span class="header-section-number">3.6.2</span> Intervalo de predicción para una observación individual</h3>
+<p>Este intervalo responde a una pregunta más ambiciosa: <em>¿entre qué valores se encontrará la respuesta de una <strong>única y nueva</strong> observación con las características</em> <span class="math inline">\(\mathbf{x}_0\)</span>?</p>
+<p>Este intervalo debe considerar <strong>dos fuentes de incertidumbre</strong>:</p>
+<ol type="1">
+<li>La incertidumbre sobre la localización de la verdadera superficie de regresión (la misma que en el intervalo de confianza).</li>
+<li>La variabilidad aleatoria inherente a una sola observación, que se desvía de la media poblacional (el error <span class="math inline">\(\varepsilon_0\)</span>, cuya varianza es <span class="math inline">\(\sigma^2\)</span>).</li>
+</ol>
+<p>Por esta razón, un intervalo de predicción <strong>siempre será más ancho</strong> que un intervalo de confianza para el mismo nivel de significancia. La varianza del error de predicción es la suma de las dos fuentes de varianza:</p>
+<p><span class="math display">\[\text{Var}(y_0 - \hat{y}_0) = \text{Var}(\varepsilon_0) + \text{Var}(\hat{y}_0) = \sigma^2 + \sigma^2 \mathbf{x}_0^T (\mathbf{X}^T\mathbf{X})^{-1} \mathbf{x}_0\]</span></p>
+<p>El <strong>intervalo de predicción al</strong> <span class="math inline">\(100(1-\alpha)\%\)</span> para una observación individual <span class="math inline">\(y_0\)</span> es:</p>
+<p><span class="math display">\[\hat{y}_0 \pm t_{\alpha/2, n-p-1} \cdot \sqrt{\hat{\sigma}^2 \left(1 + \mathbf{x}_0^T (\mathbf{X}^T\mathbf{X})^{-1} \mathbf{x}_0\right)}\]</span></p>
+<p>La diferencia clave es el <strong>“+1”</strong> dentro de la raíz cuadrada, que representa la varianza de la nueva observación. Visualmente, tanto la banda de confianza como la de predicción son más estrechas cerca del “centroide” de los datos (la media multivariante de los predictores) y se ensanchan a medida que nos alejamos hacia valores más extremos de los predictores.</p>
+</section>
+</section>
+<section id="diagnóstico-del-modelo-múltiple" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="diagnóstico-del-modelo-múltiple"><span class="header-section-number">3.7</span> Diagnóstico del modelo múltiple</h2>
+<p>Al igual que en la regresión simple, una vez ajustado el modelo es fundamental realizar un diagnóstico exhaustivo para verificar que los supuestos del modelo lineal se cumplen. La fiabilidad de todas nuestras inferencias (p-valores e intervalos de confianza) descansa sobre la validez de estos supuestos. El proceso sigue basándose en el <strong>análisis de los residuos</strong>, nuestra ventana a los errores teóricos no observables <span class="citation" data-cites="fox2018r harrell2015">(<a href="#ref-fox2018r" role="doc-biblioref">Fox y Weisberg 2018</a>; <a href="#ref-harrell2015" role="doc-biblioref">Harrell 2015</a>)</span>.</p>
+<section id="verificación-de-los-supuestos-clásicos" class="level3" data-number="3.7.1">
+<h3 data-number="3.7.1" class="anchored" data-anchor-id="verificación-de-los-supuestos-clásicos"><span class="header-section-number">3.7.1</span> Verificación de los supuestos clásicos</h3>
+<p>Los supuestos de linealidad, homocedasticidad, normalidad e independencia se verifican con herramientas muy similares a las vistas en el capítulo anterior, por lo que aquí las resumiremos y presentaremos una herramienta adicional para la linealidad.</p>
+<ul>
+<li><strong>Normalidad</strong>: El <strong>gráfico Q-Q</strong> de los residuos estudentizados y el <strong>test de Shapiro-Wilk</strong> siguen siendo las herramientas principales para comprobar que los errores se distribuyen de forma Normal.</li>
+<li><strong>Independencia</strong>: Para datos de series temporales, el <strong>gráfico de residuos contra el tiempo</strong> y el <strong>test de Durbin-Watson</strong> se utilizan de la misma manera para detectar autocorrelación.</li>
+<li><strong>Homocedasticidad (Varianza Constante)</strong>: El <strong>gráfico Scale-Location</strong> y el <strong>test de Breusch-Pagan</strong> siguen siendo los métodos de referencia para detectar heterocedasticidad (patrones de embudo en la dispersión de los residuos).</li>
+</ul>
+<p>Para la <strong>linealidad</strong>, el gráfico de <strong>Residuos vs.&nbsp;Valores Ajustados</strong> sigue siendo la primera herramienta a inspeccionar. Una nube de puntos sin patrones alrededor del cero sugiere que la forma funcional del modelo es globalmente correcta. Sin embargo, en el contexto múltiple, este gráfico podría ocultar una relación no lineal con <em>una variable específica</em>. Para ello, disponemos de una herramienta más precisa.</p>
+<section id="gráficos-de-componente-más-residuo" class="level4" data-number="3.7.1.1">
+<h4 data-number="3.7.1.1" class="anchored" data-anchor-id="gráficos-de-componente-más-residuo"><span class="header-section-number">3.7.1.1</span> Gráficos de componente más residuo</h4>
+<p>El gráfico de Componente más Residuo (CPR o Partial Residual Plots) nos permite visualizar la relación entre la variable respuesta y <strong>un único predictor</strong> <span class="math inline">\(X_j\)</span>, ajustando por el efecto de todos los demás predictores. Para cada predictor <span class="math inline">\(X_j\)</span>, el gráfico muestra:</p>
+<p><span class="math display">\[\text{Residuo Parcial} = e_i + \hat{\beta}_j x_{ij} \quad \text{vs.} \quad x_{ij}\]</span></p>
+<p>La pendiente de una línea ajustada a estos puntos es exactamente <span class="math inline">\(\hat{\beta}_j\)</span>. Si la relación es lineal, los puntos deben seguir la línea de regresión. Una desviación sistemática (una curva) sugiere que la relación con esa variable específica no es lineal y que podría necesitar una transformación (p.ej., logarítmica o cuadrática).</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo práctico: Gráficos de componente + residuo">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Ejemplo práctico: Gráficos de componente + residuo
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Los gráficos CPR nos permiten visualizar si la relación de cada predictor con la respuesta es verdaderamente lineal:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar librerías necesarias</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(car))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráficos de Componente más Residuo (CPR)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">crPlots</span>(modelo, <span class="at">main =</span> <span class="st">"Gráficos de Componente + Residuo"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema2_files/figure-html/diagnostico-cpr-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Interpretación:</strong></p>
+<ul>
+<li><strong>Línea sólida</strong>: Muestra la relación lineal esperada (pendiente = coeficiente de regresión)</li>
+<li><strong>Línea punteada</strong>: Suavizado no paramétrico de los puntos</li>
+<li><strong>Coincidencia de líneas</strong>: Sugiere linealidad adecuada</li>
+<li><strong>Divergencia significativa</strong>: Indica posible no-linealidad que requiere transformación</li>
+</ul>
+<p>Si vemos curvas sistemáticas en algún gráfico CPR, es señal de que esa variable podría necesitar una transformación (log, cuadrática, etc.).</p>
+</div>
+</div>
+</section>
+</section>
+<section id="diagnóstico-de-multicolinealidad" class="level3" data-number="3.7.2">
+<h3 data-number="3.7.2" class="anchored" data-anchor-id="diagnóstico-de-multicolinealidad"><span class="header-section-number">3.7.2</span> Diagnóstico de multicolinealidad</h3>
+<p>La <strong>multicolinealidad</strong> es un problema que solo existe en la regresión múltiple. Ocurre cuando dos o más variables predictoras están fuertemente correlacionadas entre sí.</p>
+<section id="consecuencias-de-la-multicolinealidad" class="level4" data-number="3.7.2.1">
+<h4 data-number="3.7.2.1" class="anchored" data-anchor-id="consecuencias-de-la-multicolinealidad"><span class="header-section-number">3.7.2.1</span> Consecuencias de la multicolinealidad</h4>
+<p>La multicolinealidad no viola los supuestos de Gauss-Markov (los estimadores siguen siendo insesgados y eficientes), pero puede arruinar la interpretación práctica de un modelo:</p>
+<ol type="1">
+<li><strong>Varianza de los estimadores inflada</strong>: Los errores estándar de los coeficientes de las variables colineales se vuelven muy grandes. Esto dificulta o imposibilita declarar un predictor como estadísticamente significativo, incluso si lo es.</li>
+<li><strong>Inestabilidad de los coeficientes</strong>: Pequeños cambios en los datos (o añadir/quitar una variable) pueden provocar cambios drásticos en las estimaciones de los coeficientes, incluso cambiando su signo, lo que hace que la interpretación sea poco fiable.</li>
+<li><strong>Contradicciones en los contrastes</strong>: Se puede dar la paradoja de tener un modelo globalmente significativo (test F con p-valor bajo y <span class="math inline">\(R^2\)</span> alto) pero con ningún predictor individual significativo (tests t con p-valores altos).</li>
+</ol>
+</section>
+<section id="detección-de-la-multicolinealidad" class="level4" data-number="3.7.2.2">
+<h4 data-number="3.7.2.2" class="anchored" data-anchor-id="detección-de-la-multicolinealidad"><span class="header-section-number">3.7.2.2</span> Detección de la multicolinealidad</h4>
+<ol type="1">
+<li><p><strong>Matriz de correlaciones</strong>: Un primer paso es examinar la matriz de correlaciones entre los predictores. Coeficientes de correlación altos (p.&nbsp;ej., &gt; 0.8) son una señal de alerta. Sin embargo, este método no detecta la colinealidad que involucra a tres o más variables.</p></li>
+<li><p><strong>Factor de Inflación de la Varianza (VIF)</strong>: Es la herramienta de diagnóstico definitiva. Para cada predictor <span class="math inline">\(X_j\)</span>, se calcula su VIF de la siguiente manera:</p>
+<ol type="1">
+<li>Se ajusta una regresión lineal de <span class="math inline">\(X_j\)</span> en función de <strong>todas las demás variables predictoras</strong>: <span class="math inline">\(X_j \sim X_1 + \dots + X_{j-1} + X_{j+1} + \dots + X_p\)</span>.</li>
+<li>Se obtiene el <span class="math inline">\(R^2\)</span> de este modelo auxiliar, que llamamos <span class="math inline">\(R_j^2\)</span>. Este valor nos dice qué proporción de la varianza de <span class="math inline">\(X_j\)</span> es explicada por los otros predictores.</li>
+<li>El VIF se calcula como: <span class="math display">\[VIF_j = \frac{1}{1 - R_j^2}\]</span></li>
+</ol>
+<ul>
+<li><strong>Interpretación</strong>: El VIF nos dice por qué factor se infla la varianza del estimador <span class="math inline">\(\hat{\beta}_j\)</span> debido a su relación con los otros predictores.</li>
+</ul></li>
+</ol>
+<div class="callout callout-style-default callout-important callout-titled" title="Reglas prácticas para interpretar VIF">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Importante</span>Reglas prácticas para interpretar VIF
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>VIF = 1</strong>: Ausencia de colinealidad (ideal)</li>
+<li><strong>VIF &gt; 5</strong>: Valores preocupantes que requieren atención</li>
+<li><strong>VIF &gt; 10</strong>: Multicolinealidad seria que debe ser tratada</li>
+</ul>
+<p><strong>Recordar</strong>: El VIF indica por qué factor se multiplica la varianza del coeficiente debido a la multicolinealidad.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo: Diagnóstico de multicolinealidad">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Ejemplo: Diagnóstico de multicolinealidad
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Caso 1: Sin problemas de multicolinealidad (nuestro modelo actual)</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculamos VIF para nuestro modelo de viviendas</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>vif_values <span class="ot">&lt;-</span> <span class="fu">vif</span>(modelo)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"VIF en nuestro modelo:</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>VIF en nuestro modelo:</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(vif_values, <span class="dv">2</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      superficie     habitaciones       antiguedad distancia_centro 
+            1.40             1.40             1.01             1.01 
+          garaje 
+            1.01 </code></pre>
+</div>
+</div>
+<p>Como todos los VIF &lt; 5, no hay problemas de multicolinealidad.</p>
+<p><strong>Caso 2: Ejemplo con multicolinealidad problemática</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulamos un caso con multicolinealidad</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">456</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Creamos variables altamente correlacionadas</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>superficie <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="dv">50</span>, <span class="dv">200</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>habitaciones_sim <span class="ot">&lt;-</span> <span class="fu">round</span>(superficie<span class="sc">/</span><span class="dv">25</span> <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="fl">0.5</span>))  <span class="co"># Muy correlacionada con superficie</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>metros_cuadrados <span class="ot">&lt;-</span> superficie <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">5</span>)  <span class="co"># Esencialmente la misma que superficie</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>precio_sim <span class="ot">&lt;-</span> <span class="dv">1000</span><span class="sc">*</span>superficie <span class="sc">+</span> <span class="dv">5000</span><span class="sc">*</span>habitaciones_sim <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">10000</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Modelo con multicolinealidad</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>modelo_colineal <span class="ot">&lt;-</span> <span class="fu">lm</span>(precio_sim <span class="sc">~</span> superficie <span class="sc">+</span> habitaciones_sim <span class="sc">+</span> metros_cuadrados)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># VIF del modelo problemático</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>vif_problematico <span class="ot">&lt;-</span> <span class="fu">vif</span>(modelo_colineal)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">VIF en modelo con multicolinealidad:</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+VIF en modelo con multicolinealidad:</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(vif_problematico, <span class="dv">2</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      superficie habitaciones_sim metros_cuadrados 
+           90.96            10.55            76.57 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Matriz de correlaciones para explicar el problema</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>datos_problema <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(superficie, habitaciones_sim, metros_cuadrados)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>cor_problema <span class="ot">&lt;-</span> <span class="fu">cor</span>(datos_problema)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Matriz de correlaciones:</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Matriz de correlaciones:</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(cor_problema, <span class="dv">3</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 superficie habitaciones_sim metros_cuadrados
+superficie            1.000            0.951            0.993
+habitaciones_sim      0.951            1.000            0.942
+metros_cuadrados      0.993            0.942            1.000</code></pre>
+</div>
+</div>
+<p><strong>Interpretación:</strong> - VIF &gt; 10: Problema serio de multicolinealidad<br>
+- La correlación superficie-metros_cuadrados ≈ 1 explica el problema</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Soluciones a los problemas de multicolinealidad">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Soluciones a los problemas de multicolinealidad
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Enfrentar la multicolinealidad no siempre significa que debamos alterar el modelo. La solución adecuada depende de la severidad del problema (medido con el VIF) y, sobre todo, del <strong>objetivo de nuestro análisis</strong>.</p>
+<ol type="1">
+<li><p><strong>No hacer nada</strong>: Si el objetivo principal del modelo es la <strong>predicción</strong> y no la interpretación de los coeficientes individuales, la multicolinealidad no es un problema grave. El modelo en su conjunto puede tener un buen poder predictivo, aunque los efectos individuales de las variables colineales sean inestables. Además, si las variables colineales no son las variables de interés de nuestra investigación, podemos ignorar su multicolinealidad.</p></li>
+<li><p><strong>Eliminar una de las variables correlacionadas</strong>: Esta es la solución más simple y común. Si dos o más variables miden esencialmente el mismo concepto (p.&nbsp;ej., “educación en años” y “nivel educativo alcanzado”), una de ellas es redundante. Se puede eliminar la que tenga menor relevancia teórica o la que, individualmente, tenga una menor correlación con la variable respuesta.</p></li>
+<li><p><strong>Combinar las variables colineales</strong>: En lugar de eliminar información, podemos combinar las variables colineales en un único predictor compuesto. Por ejemplo, si tenemos <code>gasto_en_publicidad_tv</code> y <code>gasto_en_publicidad_radio</code>, podríamos crear una nueva variable <code>gasto_total_en_medios</code>. Para casos más complejos, se pueden utilizar técnicas de reducción de dimensionalidad como el <strong>Análisis de Componentes Principales (PCA)</strong> para crear un índice que capture la información conjunta de las variables correlacionadas.</p></li>
+<li><p><strong>Utilizar métodos de estimación alternativos</strong>: Si no es posible o deseable modificar los predictores, se pueden usar técnicas de regresión penalizada que están diseñadas para manejar la multicolinealidad.</p>
+<ul>
+<li><strong>Regresión Ridge</strong>: Es el método por excelencia para este problema. Añade un pequeño sesgo a las estimaciones de los coeficientes para reducir drásticamente su varianza, produciendo un modelo mucho más estable y fiable.</li>
+<li><strong>Lasso y Elastic Net</strong>: Son otras técnicas de regresión penalizada que también manejan bien la colinealidad y, además, pueden realizar selección de variables al hacer que algunos coeficientes sean exactamente cero.</li>
+</ul></li>
+<li><p><strong>Aumentar el tamaño de la muestra</strong>: En algunos casos, la multicolinealidad puede ser un artefacto de una muestra pequeña. Recolectar más datos puede, en ocasiones, reducir la correlación entre los predictores y disminuir la varianza de los coeficientes.</p></li>
+</ol>
+<p>La elección de la estrategia debe ser una decisión meditada, sopesando la simplicidad, la interpretabilidad y la robustez del modelo final.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="identificación-de-observaciones-influyentes" class="level3" data-number="3.7.3">
+<h3 data-number="3.7.3" class="anchored" data-anchor-id="identificación-de-observaciones-influyentes"><span class="header-section-number">3.7.3</span> Identificación de observaciones influyentes</h3>
+<p>Los conceptos de <em>outlier</em> (residuo grande), <em>leverage</em> (valor atípico en los predictores) e <em>influencia</em> (impacto en el modelo) son los mismos que en regresión simple. Sin embargo, el caso múltiple nos ofrece herramientas de diagnóstico más específicas.</p>
+<section id="dfbetas-influencia-sobre-coeficientes-individuales" class="level4" data-number="3.7.3.1">
+<h4 data-number="3.7.3.1" class="anchored" data-anchor-id="dfbetas-influencia-sobre-coeficientes-individuales"><span class="header-section-number">3.7.3.1</span> DFBETAS: Influencia sobre coeficientes individuales</h4>
+<p>Mientras que la Distancia de Cook mide la influencia global de una observación sobre <em>todos</em> los coeficientes a la vez, los <strong>DFBETAS</strong> miden el impacto que tiene eliminar la observación <span class="math inline">\(i\)</span> sobre <strong>cada coeficiente</strong> <span class="math inline">\(\beta_j\)</span> individualmente.</p>
+<p><span class="math display">\[\text{DFBETA}_{j,i} = \frac{\hat{\beta}_j - \hat{\beta}_{j(-i)}}{\text{se}(\hat{\beta}_{j(-i)})}\]</span></p>
+<p>Un DFBETA grande para el coeficiente <span class="math inline">\(\beta_j\)</span> indica que la observación <span class="math inline">\(i\)</span> tiene un fuerte poder de atracción sobre la estimación de ese coeficiente en particular. Una regla común es considerar problemáticos los puntos con <span class="math inline">\(|\text{DFBETA}_{j,i}| &gt; \frac{2}{\sqrt{n}}\)</span>.</p>
+</section>
+<section id="gráficos-de-regresión-parcial" class="level4" data-number="3.7.3.2">
+<h4 data-number="3.7.3.2" class="anchored" data-anchor-id="gráficos-de-regresión-parcial"><span class="header-section-number">3.7.3.2</span> Gráficos de regresión parcial</h4>
+<p>Estos gráficos son una de las herramientas visuales más potentes y elegantes de la regresión múltiple. Un gráfico de regresión parcial para un predictor <span class="math inline">\(X_j\)</span> nos permite ver su relación con la respuesta <span class="math inline">\(Y\)</span> <strong>después de haber eliminado el efecto lineal de todos los demás predictores</strong>.</p>
+<p>Se construye de la siguiente forma: 1. Se calculan los residuos de la regresión de <span class="math inline">\(Y\)</span> en función de todos los predictores excepto <span class="math inline">\(X_j\)</span>. Llamemos a estos residuos <span class="math inline">\(e_{Y|X_{-j}}\)</span>. 2. Se calculan los residuos de la regresión de <span class="math inline">\(X_j\)</span> en función de todos los demás predictores. Llamemos a estos residuos <span class="math inline">\(e_{X_j|X_{-j}}\)</span>. 3. Se grafica <span class="math inline">\(e_{Y|X_{-j}}\)</span> (eje Y) contra <span class="math inline">\(e_{X_j|X_{-j}}\)</span> (eje X).</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Propiedad clave de los gráficos de regresión parcial">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Advertencia</span>Propiedad clave de los gráficos de regresión parcial
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>La magia de este gráfico</strong>: La pendiente de la línea de regresión ajustada a estos puntos es <strong>exactamente</strong> el coeficiente de regresión múltiple <span class="math inline">\(\hat{\beta}_j\)</span>.</p>
+<p>Esta equivalencia matemática es lo que hace que estos gráficos sean tan poderosos para entender la interpretación de los coeficientes en regresión múltiple.</p>
+</div>
+</div>
+<p>Estos gráficos son útiles para:</p>
+<ul>
+<li>Visualizar la magnitud y significancia del efecto de una variable “ajustada”.</li>
+<li>Detectar no-linealidades en la relación parcial de una variable.</li>
+<li>Identificar observaciones que son influyentes para la estimación de un coeficiente específico (puntos con alto leverage o residuos grandes en este gráfico parcial).</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo: Gráficos de Regresión Parcial">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Ejemplo: Gráficos de Regresión Parcial
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Los gráficos de regresión parcial nos permiten visualizar la relación “limpia” entre cada predictor y la variable respuesta:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráficos de regresión parcial para todas las variables</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">avPlots</span>(modelo, <span class="at">main =</span> <span class="st">"Gráficos de regresión parcial"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema2_files/figure-html/graficos-regresion-parcial-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>¿Qué vemos en cada gráfico?</strong></p>
+<ul>
+<li><strong>Eje X</strong>: Residuos de la regresión de <span class="math inline">\(X_j\)</span> vs.&nbsp;todos los demás predictores</li>
+<li><strong>Eje Y</strong>: Residuos de la regresión de <span class="math inline">\(Y\)</span> vs.&nbsp;todos los demás predictores (excepto <span class="math inline">\(X_j\)</span>)</li>
+<li><strong>Pendiente</strong>: Es exactamente el coeficiente <span class="math inline">\(\hat{\beta}_j\)</span> del modelo múltiple</li>
+<li><strong>Puntos alejados</strong>: Observaciones influyentes para ese coeficiente específico</li>
+</ul>
+<p><strong>Interpretación práctica:</strong> - Una relación lineal clara confirma la validez del modelo - Puntos muy alejados de la línea pueden ser observaciones influyentes - Patrones curvos sugieren no-linealidad en esa variable específica</p>
+</div>
+</div>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-draper1998applied" class="csl-entry" role="listitem">
+Draper, NR. 1998. <em>Applied regression analysis</em>. McGraw-Hill. Inc.
+</div>
+<div id="ref-fox2018r" class="csl-entry" role="listitem">
+Fox, John, y Sanford Weisberg. 2018. <em>An R companion to applied regression</em>. Sage publications.
+</div>
+<div id="ref-harrell2015" class="csl-entry" role="listitem">
+Harrell, Frank E., Jr. 2015. <em>Regression Modeling Strategies: With Applications to Linear Models, Logistic and Ordinal Regression, and Survival Analysis</em>. Second. Springer.
+</div>
+<div id="ref-james2021" class="csl-entry" role="listitem">
+James, Gareth, Daniela Witten, Trevor Hastie, y Robert Tibshirani. 2021. <em>An Introduction to Statistical Learning with Applications in R</em>. Second. Springer.
+</div>
+<div id="ref-kutner2005applied" class="csl-entry" role="listitem">
+Kutner, Michael H, Christopher J Nachtsheim, John Neter, y William Li. 2005. <em>Applied linear statistical models</em>. McGraw-hill.
+</div>
+<div id="ref-weisberg2005applied" class="csl-entry" role="listitem">
+Weisberg, S. 2005. <span>«Applied linear regression»</span>. Wiley.
+</div>
+</div>
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./tema1.html" class="pagination-link" aria-label="El modelo de regresión lineal simple">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">El modelo de regresión lineal simple</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./tema3.html" class="pagination-link" aria-label="Ingeniería de características: transformaciones de variables e interacciones">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ingeniería de características: transformaciones de variables e interacciones</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
