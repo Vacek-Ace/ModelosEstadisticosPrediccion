@@ -342,7 +342,7 @@ window.Quarto = {
 <h2 data-number="6.1" class="anchored" data-anchor-id="introducción-a-los-glm"><span class="header-section-number">6.1</span> Introducción a los GLM</h2>
 <section id="qué-son-los-modelos-lineales-generalizados" class="level3" data-number="6.1.1">
 <h3 data-number="6.1.1" class="anchored" data-anchor-id="qué-son-los-modelos-lineales-generalizados"><span class="header-section-number">6.1.1</span> ¿Qué son los modelos lineales generalizados?</h3>
-<p>Los <strong>Modelos Lineales Generalizados (GLM)</strong> son una extensión de los modelos de regresión lineal que permiten manejar una mayor variedad de tipos de datos y relaciones entre variables <span class="citation" data-cites="nelder1972generalized">(<a href="#ref-nelder1972generalized" role="doc-biblioref">Nelder y Wedderburn 1972</a>)</span>. Mientras que la regresión lineal tradicional asume que la variable dependiente es continua y sigue una distribución normal, los GLM permiten trabajar con variables dependientes que:</p>
+<p>Los <strong>Modelos Lineales Generalizados (GLM)</strong> son una extensión de los modelos de regresión lineal que permiten manejar una mayor variedad de tipos de datos y relaciones entre variables <span class="citation" data-cites="nelder1972generalized">(<a href="references.html#ref-nelder1972generalized" role="doc-biblioref">Nelder y Wedderburn 1972</a>)</span>. Mientras que la regresión lineal tradicional asume que la variable dependiente es continua y sigue una distribución normal, los GLM permiten trabajar con variables dependientes que:</p>
 <ul>
 <li>Son <strong>binarias</strong> (como éxito/fracaso o sí/no).</li>
 <li>Representan <strong>conteos</strong> de eventos (número de llamadas, accidentes, etc.).</li>
@@ -829,7 +829,7 @@ Model 2: am ~ wt + disp
 </section>
 <section id="regresión-logística" class="level2" data-number="6.5">
 <h2 data-number="6.5" class="anchored" data-anchor-id="regresión-logística"><span class="header-section-number">6.5</span> Regresión logística</h2>
-<p>La <strong>regresión logística</strong> es una herramienta fundamental para modelar la probabilidad de eventos binarios en una variedad de contextos, desde la medicina hasta la economía y el marketing <span class="citation" data-cites="hosmer2013applied">(<a href="#ref-hosmer2013applied" role="doc-biblioref">Hosmer Jr, Lemeshow, y Sturdivant 2013</a>)</span>. La correcta interpretación de los coeficientes mediante <strong>odds ratios</strong>, así como la evaluación del ajuste del modelo mediante curvas <strong>ROC</strong> y matrices de confusión, son esenciales para extraer conclusiones válidas de los datos.</p>
+<p>La <strong>regresión logística</strong> es una herramienta fundamental para modelar la probabilidad de eventos binarios en una variedad de contextos, desde la medicina hasta la economía y el marketing <span class="citation" data-cites="hosmer2013applied">(<a href="references.html#ref-hosmer2013applied" role="doc-biblioref">Hosmer Jr, Lemeshow, y Sturdivant 2013</a>)</span>. La correcta interpretación de los coeficientes mediante <strong>odds ratios</strong>, así como la evaluación del ajuste del modelo mediante curvas <strong>ROC</strong> y matrices de confusión, son esenciales para extraer conclusiones válidas de los datos.</p>
 <section id="fundamentos-de-la-regresión-logística" class="level3" data-number="6.5.1">
 <h3 data-number="6.5.1" class="anchored" data-anchor-id="fundamentos-de-la-regresión-logística"><span class="header-section-number">6.5.1</span> Fundamentos de la regresión logística</h3>
 <p>La <strong>regresión logística</strong> es una técnica estadística utilizada para modelar la probabilidad de ocurrencia de un evento binario, es decir, cuando la variable dependiente toma solo dos posibles valores (por ejemplo, <strong>éxito/fracaso</strong>, <strong>sí/no</strong>, <strong>enfermo/sano</strong>). A diferencia de la regresión lineal, que modela una relación lineal entre variables, la regresión logística utiliza una <strong>función logística</strong> para asegurar que las predicciones estén en el rango [0,1], lo cual es necesario para interpretar los resultados como probabilidades.</p>
@@ -1176,7 +1176,7 @@ Attaching package: 'pROC'</code></pre>
 </section>
 <section id="regresión-de-poisson" class="level2" data-number="6.6">
 <h2 data-number="6.6" class="anchored" data-anchor-id="regresión-de-poisson"><span class="header-section-number">6.6</span> Regresión de Poisson</h2>
-<p>La <strong>regresión de Poisson</strong> es una técnica estadística utilizada para modelar <strong>datos de conteo</strong>, es decir, situaciones en las que la variable dependiente representa el número de veces que ocurre un evento en un período de tiempo o espacio específico <span class="citation" data-cites="coxe2009analysis">(<a href="#ref-coxe2009analysis" role="doc-biblioref">Coxe, West, y Aiken 2009</a>)</span>. Este tipo de modelo es adecuado cuando la variable dependiente toma valores enteros no negativos (<span class="math inline">\(0, 1, 2, \dots\)</span>) y sigue una distribución de <strong>Poisson</strong>.</p>
+<p>La <strong>regresión de Poisson</strong> es una técnica estadística utilizada para modelar <strong>datos de conteo</strong>, es decir, situaciones en las que la variable dependiente representa el número de veces que ocurre un evento en un período de tiempo o espacio específico <span class="citation" data-cites="coxe2009analysis">(<a href="references.html#ref-coxe2009analysis" role="doc-biblioref">Coxe, West, y Aiken 2009</a>)</span>. Este tipo de modelo es adecuado cuando la variable dependiente toma valores enteros no negativos (<span class="math inline">\(0, 1, 2, \dots\)</span>) y sigue una distribución de <strong>Poisson</strong>.</p>
 <p>La distribución de Poisson describe la probabilidad de que ocurra un número determinado de eventos en un intervalo fijo, dado que estos eventos ocurren de forma independiente y a una tasa constante.</p>
 <p>La <strong>función de probabilidad</strong> de la distribución de Poisson es:</p>
 <p><span class="math display">\[
@@ -1217,7 +1217,7 @@ P(Y = y) = \frac{e^{-\lambda} \lambda^y}{y!}
    \]</span></p>
 <ul>
 <li><p><strong>No sobredispersión:</strong> Uno de los problemas comunes en los datos de conteo es la <strong>sobredispersión</strong>, que ocurre cuando la varianza de los datos es mayor que la media (<span class="math inline">\(Var(Y) &gt; E(Y)\)</span>). La presencia de sobredispersión indica que el modelo de Poisson puede no ser adecuado, y puede ser necesario considerar modelos alternativos como la <strong>regresión binomial negativa</strong>.</p></li>
-<li><p><strong>No exceso de ceros:</strong> Si hay demasiados ceros en los datos (por ejemplo, en el número de accidentes en diferentes localidades donde muchas tienen cero accidentes), puede ser necesario utilizar modelos de <strong>Poisson inflados en ceros (ZIP)</strong> <span class="citation" data-cites="lambert1992zero">(<a href="#ref-lambert1992zero" role="doc-biblioref">Lambert 1992</a>)</span>.</p></li>
+<li><p><strong>No exceso de ceros:</strong> Si hay demasiados ceros en los datos (por ejemplo, en el número de accidentes en diferentes localidades donde muchas tienen cero accidentes), puede ser necesario utilizar modelos de <strong>Poisson inflados en ceros (ZIP)</strong> <span class="citation" data-cites="lambert1992zero">(<a href="references.html#ref-lambert1992zero" role="doc-biblioref">Lambert 1992</a>)</span>.</p></li>
 </ul>
 </section>
 <section id="interpretación-de-los-resultados" class="level3" data-number="6.6.3">
@@ -1777,7 +1777,7 @@ Number of Fisher Scoring iterations: 5</code></pre>
 </div>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
 <div id="ref-coxe2009analysis" class="csl-entry" role="listitem">
 Coxe, Stefany, Stephen G West, y Leona S Aiken. 2009. <span>«The analysis of count data: A gentle introduction to Poisson regression and its alternatives»</span>. <em>Journal of personality assessment</em> 91 (2): 121-36.
 </div>
