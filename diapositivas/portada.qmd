@@ -8,9 +8,9 @@ format:
 
 # Índice de Diapositivas
 
-- [Tema 0: Introducción a los Modelos de Regresión](tema0_introduccion.pdf)
-- [Tema 1: El Modelo de Regresión Lineal Simple](tema1_regresionlineal.pdf)
-- [Tema 2: El Modelo de Regresión Lineal Múltiple](tema2_regresionmultiple.pdf)
-- [Tema 3: Ingeniería de Características](tema3_ingenieriacaracteristicas.pdf)
-- [Tema 4: Selección de Variables y Regularización](tema4_seleccion_variables.pdf)
-- [Tema 5: Modelos Lineales Generalizados (GLM)](tema5_glm.pdf)
+- Tema 0: Introducción a los Modelos de Regresión
+- Tema 1: El Modelo de Regresión Lineal Simple
+- Tema 2: El Modelo de Regresión Lineal Múltiple
+- Tema 3: Ingeniería de Características
+- Tema 4: Selección de Variables y Regularización
+- Tema 5: Modelos Lineales Generalizados (GLM)

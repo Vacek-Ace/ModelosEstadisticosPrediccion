@@ -1,0 +1,32 @@
+project:
+  type: book
+  output-dir: _build
+
+book:
+  # Metadatos para el PDF, pero no se mostrarán en la portada personalizada
+  # title: "Ejercicios de Modelos Estadísticos de Predicción"
+  # author: "Víctor Aceña Gil & Isaac Martín de Diego"
+  
+  # La lista de capítulos, que ahora no tienen YAML propio
+  chapters:
+    - index.qmd
+    - tema1_regresion_simple.qmd
+    - tema2_regresion_multiple.qmd
+    - tema3_ingenieria_caracteristicas.qmd
+    - tema4_seleccion_validacion.qmd
+    - tema5_glm.qmd
+
+# --- Formato de Salida PDF con WeasyPrint ---
+format:
+  pdf:
+    pdf-engine: weasyprint
+    # Desactivamos el bloque de título automático de Quarto
+    title-block-banner: false 
+    # Opciones para la Tabla de Contenidos
+    toc: true
+    toc-depth: 3
+    toc-title: "Índice de Ejercicios"
+    number-sections: false
+    # Portada y estilo personalizado
+    include-before-body: portada.html
+    css: estilos.css

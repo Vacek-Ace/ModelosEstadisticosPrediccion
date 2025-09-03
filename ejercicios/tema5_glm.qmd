@@ -1,32 +1,18 @@
----
-title: "Ejercicios: Modelos de Regresión Generalizada"
-subtitle: "Modelos Estadísticos de Predicción"
-author: "Víctor Aceña Gil - Isaac Martín de Diego"
-date: today
-format: 
-  html:
-    toc: true
-    toc-depth: 3
-    code-fold: false
-    theme: cosmo
-execute:
-  warning: false
-  message: false
----
+# Modelos de Regresión Generalizada
 
-### **Ejercicio 1: Conceptual (Fundamentos de GLM)**
+## **Ejercicio 1: Conceptual (Fundamentos de GLM)**
 
 Explica los **tres componentes clave** que definen a cualquier Modelo Lineal Generalizado (GLM) y describe brevemente la función de cada uno.
 
------
 
-### **Ejercicio 2: Conceptual (Función de Enlace)**
+
+## Ejercicio 2: Conceptual (Función de Enlace)
 
 ¿Cuál es el propósito fundamental de la **función de enlace** en un GLM? ¿Por qué la regresión lineal clásica es considerada un caso particular de un GLM? (Pista: piensa en su función de enlace). 
 
------
 
-### **Ejercicio 3: Práctico (Ajuste de un Modelo Logístico)**
+
+## Ejercicio 3: Práctico (Ajuste de un Modelo Logístico)
 
 Usa el conjunto de datos `mtcars` de R. La variable `am` indica si la transmisión de un coche es automática (0) o manual (1).
 
@@ -34,18 +20,18 @@ Usa el conjunto de datos `mtcars` de R. La variable `am` indica si la transmisi�
 - **b)** Utiliza la función `summary()` para examinar el modelo. ¿Qué variables parecen ser significativas?
 - **c)** Obtén los coeficientes del modelo. ¿Cómo interpretarías el signo del coeficiente para la variable `wt`?
 
------
 
-### **Ejercicio 4: Interpretación (Odds Ratios)**
+
+## Ejercicio 4: Interpretación (Odds Ratios)
 
 Basado en el modelo del ejercicio anterior:
 
 - **a)** Calcula el **Odds Ratio (OR)** para el coeficiente de la variable `hp`.
 - **b)** Interpreta este Odds Ratio en el contexto del problema. Específicamente, ¿cómo cambian las "odds" (la razón de probabilidad) de tener una transmisión manual por cada caballo de fuerza adicional, manteniendo el peso constante? 
 
------
 
-### **Ejercicio 5: Práctico (Validación del Modelo Logístico)**
+
+## Ejercicio 5: Práctico (Validación del Modelo Logístico)
 
 Continuando con el modelo logístico de `mtcars`:
 
@@ -55,17 +41,17 @@ Continuando con el modelo logístico de `mtcars`:
 - **d)** Calcula la **precisión (accuracy)** global del modelo.
 - **e)** (Bonus) Utiliza el paquete `pROC` para calcular y visualizar la **curva ROC** y obtener el valor del **AUC**. ¿Qué tan buena es la capacidad discriminativa del modelo? 
 
------
 
-### **Ejercicio 6: Conceptual (Regresión de Poisson)**
+
+## Ejercicio 6: Conceptual (Regresión de Poisson)
 
 - **a)** ¿Qué tipo de variable respuesta está diseñada para modelar la regresión de Poisson?
 - **b)** ¿Cuál es el supuesto fundamental de la distribución de Poisson respecto a la relación entre la media y la varianza?
 - **c)** ¿Cómo se llama el problema que surge cuando este supuesto se viola y la varianza es mayor que la media?
 
------
 
-### **Ejercicio 7: Práctico (Ajuste de un Modelo de Poisson)**
+
+## Ejercicio 7: Práctico (Ajuste de un Modelo de Poisson)
 
 El dataset `discoveries` de R es una serie temporal que cuenta el número de "grandes inventos" por año.
 
@@ -73,23 +59,23 @@ El dataset `discoveries` de R es una serie temporal que cuenta el número de "gr
 - **b)** Ajusta un modelo de regresión de Poisson simple donde `discoveries` es la respuesta y el tiempo (`time(discoveries)`) es el predictor.
 - **c)** Interpreta el coeficiente del tiempo. (Pista: recuerda exponenciarlo para obtener el Incidence Rate Ratio - IRR). 
 
------
 
-### **Ejercicio 8: Diagnóstico (Sobredispersión)**
+
+## Ejercicio 8: Diagnóstico (Sobredispersión)
 
 - **a)** Para el modelo de Poisson del ejercicio anterior, calcula el **estadístico de dispersión ($\hat{\phi}$)**. (Pista: $\hat{\phi} = \frac{\sum r_i^2}{n-p}$, donde los $r_i$ son los residuos Pearson).
 - **b)** Basándote en el valor de $\hat{\phi}$, ¿hay evidencia de sobredispersión?
 - **c)** Si encuentras sobredispersión, ¿cuál es el modelo alternativo que proponen los apuntes? ¿Qué ventaja teórica ofrece este modelo alternativo?
 
------
 
-### **Ejercicio 9: Conceptual (Deviance)**
+
+## Ejercicio 9: Conceptual (Deviance)
 
 La **deviance** es la medida principal de bondad de ajuste en los GLM. Explica conceptualmente qué mide. ¿Cómo se utiliza la diferencia en deviance entre dos modelos anidados para decidir cuál es mejor?
 
------
 
-### **Ejercicio 10: Elección del Modelo Adecuado**
+
+## Ejercicio 10: Elección del Modelo Adecuado
 
 Para cada uno de los siguientes escenarios, indica qué tipo de GLM (Logístico, Poisson, Binomial Negativo, Gamma...) sería el más apropiado y por qué. 
 

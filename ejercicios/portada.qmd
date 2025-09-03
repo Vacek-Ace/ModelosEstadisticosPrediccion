@@ -1,0 +1,16 @@
+---
+format:
+  pdf:
+    pdf-engine: weasyprint
+    include-before-body: portada.html
+    css: estilos.css
+---
+
+
+# Índice de Ejercicios
+
+- [Regresión Lineal Simple](tema1.pdf)
+- [Regresión Lineal Múltiple](tema2.pdf)
+- [Ingeniería de Características](tema3.pdf)
+- [Selección de Variables, Regularización y Validación](tema4.pdf)
+- [Modelos Lineales Generalizados (GLM)](tema5.pdf)
