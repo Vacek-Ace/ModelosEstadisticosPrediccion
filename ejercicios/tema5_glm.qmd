@@ -1,3 +1,19 @@
+<!-- ---
+title: "Ejercicios: Modelos de Regresión Generalizada"
+subtitle: "Modelos Estadísticos de Predicción"
+author: "Víctor Aceña Gil - Isaac Martín de Diego"
+date: today
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+execute:
+  warning: false
+  message: false
+--- -->
+
 # Modelos de Regresión Generalizada
 
 ## **Ejercicio 1: Conceptual (Fundamentos de GLM)**
