@@ -1,0 +1,301 @@
+---
+title: "Ejercicios: Popurrí"
+subtitle: "Modelos Estadísticos de Predicción"
+author: "Víctor Aceña Gil - Isaac Martín de Diego"
+date: today
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+execute:
+  warning: false
+  message: false
+---
+
+### **Ejercicio 1: Derivación de Estimadores**
+
+**Enunciado:** Considera el modelo de regresión lineal simple $Y_i = \beta_0 + \beta_1 X_i + \varepsilon_i$. Partiendo de la función objetivo de Mínimos Cuadrados Ordinarios (MCO), $S(\beta_0, \beta_1) = \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2$, realiza la derivación matemática completa para obtener las expresiones de los estimadores $\hat{\beta}_0$ y $\hat{\beta}_1$.
+
+**Solución:**
+
+El objetivo es encontrar los valores de $\beta_0$ y $\beta_1$ que minimizan la Suma de Cuadrados del Error (SSE). Para ello, calculamos las derivadas parciales de la función $S(\beta_0, \beta_1)$ con respecto a cada parámetro y las igualamos a cero.
+
+1.  **Derivada parcial con respecto a $\beta_0$:**
+    $$
+    \frac{\partial S}{\partial \beta_0} = \sum_{i=1}^{n} 2(y_i - \beta_0 - \beta_1 x_i)(-1) = -2 \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)
+    $$
+    Igualando a cero y dividiendo por -2:
+    $$
+    \sum_{i=1}^{n} (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i) = 0 \implies \sum y_i - n\hat{\beta}_0 - \hat{\beta}_1 \sum x_i = 0
+    $$
+    Reordenando, obtenemos la primera **ecuación normal**:
+    $$
+    n\hat{\beta}_0 + \hat{\beta}_1 \sum x_i = \sum y_i \quad \text{(1)}
+    $$
+
+2.  **Derivada parcial con respecto a $\beta_1$:**
+    $$
+    \frac{\partial S}{\partial \beta_1} = \sum_{i=1}^{n} 2(y_i - \beta_0 - \beta_1 x_i)(-x_i) = -2 \sum_{i=1}^{n} x_i(y_i - \beta_0 - \beta_1 x_i)
+    $$
+    Igualando a cero y dividiendo por -2:
+    $$
+    \sum_{i=1}^{n} x_i(y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i) = 0 \implies \sum x_iy_i - \hat{\beta}_0 \sum x_i - \hat{\beta}_1 \sum x_i^2 = 0
+    $$
+    Reordenando, obtenemos la segunda **ecuación normal**:
+    $$
+    \hat{\beta}_0 \sum x_i + \hat{\beta}_1 \sum x_i^2 = \sum x_iy_i \quad \text{(2)}
+    $$
+
+3.  **Resolución del sistema:**
+    De la ecuación (1), dividiendo por $n$, podemos despejar $\hat{\beta}_0$:
+    $$
+    \hat{\beta}_0 + \hat{\beta}_1 \bar{x} = \bar{y} \implies \hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}
+    $$
+    Esta es la fórmula para el intercepto, que depende de la pendiente.
+
+    Sustituimos esta expresión de $\hat{\beta}_0$ en la ecuación (2):
+    $$
+    (\bar{y} - \hat{\beta}_1 \bar{x})\sum x_i + \hat{\beta}_1 \sum x_i^2 = \sum x_iy_i
+    $$   $$
+    \bar{y}\sum x_i - \hat{\beta}_1 \bar{x}\sum x_i + \hat{\beta}_1 \sum x_i^2 = \sum x_iy_i
+    $$
+    Agrupamos los términos con $\hat{\beta}_1$:
+    $$
+    \hat{\beta}_1 (\sum x_i^2 - \bar{x}\sum x_i) = \sum x_iy_i - \bar{y}\sum x_i
+    $$
+    Sabiendo que $\sum x_i = n\bar{x}$ y $\sum y_i = n\bar{y}$:
+    $$
+    \hat{\beta}_1 (\sum x_i^2 - n\bar{x}^2) = \sum x_iy_i - n\bar{x}\bar{y}
+    $$
+    Las expresiones entre paréntesis son las fórmulas de la suma de cuadrados de X ($S_{xx}$) y la suma de productos cruzados de X e Y ($S_{xy}$):
+    $$
+    \hat{\beta}_1 S_{xx} = S_{xy}
+    $$
+    Finalmente, despejamos el estimador de la pendiente:
+    $$
+    \hat{\beta}_1 = \frac{S_{xy}}{S_{xx}} = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^{n}(x_i - \bar{x})^2}
+    $$
+    Estas son las expresiones para los estimadores de MCO.
+
+***
+### **Ejercicio 2: El Impacto de la Multicolinealidad**
+
+**Enunciado:** En un modelo de regresión múltiple con dos predictores estandarizados ($X_1, X_2$), la varianza del estimador $\hat{\beta}_1$ viene dada por $\text{Var}(\hat{\beta}_1) = \frac{\sigma^2}{n(1-r_{12}^2)}$, donde $r_{12}$ es la correlación entre $X_1$ y $X_2$. a) Explica matemáticamente qué le ocurre a la varianza de $\hat{\beta}_1$ cuando la correlación ($r_{12}$) se aproxima a 1. b) Relaciona esta fórmula con la del VIF.
+
+**Solución:**
+
+- **a) Efecto de la correlación en la varianza:**
+  La varianza del estimador, $\text{Var}(\hat{\beta}_1)$, es una medida de su imprecisión. La fórmula $\frac{\sigma^2}{n(1-r_{12}^2)}$ muestra que la varianza depende inversamente del término $(1-r_{12}^2)$.
+  - Si $r_{12} = 0$ (no hay correlación), la varianza es mínima: $\text{Var}(\hat{\beta}_1) = \sigma^2/n$.
+  - A medida que la correlación $|r_{12}|$ aumenta y se acerca a 1 (multicolinealidad perfecta), el término $r_{12}^2$ también se acerca a 1.
+  - Consecuentemente, el denominador $(1-r_{12}^2)$ se aproxima a 0.
+  - Matemáticamente, cuando el denominador de una fracción tiende a cero, el valor de la fracción tiende a infinito. Por lo tanto:
+    $$
+    \lim_{|r_{12}| \to 1} \text{Var}(\hat{\beta}_1) = \lim_{|r_{12}| \to 1} \frac{\sigma^2}{n(1-r_{12}^2)} = \infty
+    $$
+  Esto significa que con multicolinealidad severa, la varianza de los estimadores de los coeficientes "explota", volviéndolos extremadamente inestables y poco fiables.
+
+- **b) Relación con el Factor de Inflación de la Varianza (VIF):**
+  El VIF para un predictor $X_j$ se define como $VIF_j = \frac{1}{1 - R_j^2}$, donde $R_j^2$ es el R-cuadrado de la regresión de $X_j$ sobre todos los demás predictores.
+  En el caso de solo dos predictores ($X_1, X_2$), el $R^2$ de la regresión de $X_1$ sobre $X_2$ es simplemente el cuadrado de su coeficiente de correlación, es decir, $R_1^2 = r_{12}^2$.
+  Sustituyendo esto en la fórmula del VIF, tenemos:
+  $$
+  VIF_1 = \frac{1}{1 - r_{12}^2}
+  $$
+  Ahora podemos reescribir la fórmula de la varianza de $\hat{\beta}_1$ usando el VIF:
+  $$
+  \text{Var}(\hat{\beta}_1) = \frac{\sigma^2}{n} \cdot \frac{1}{1-r_{12}^2} = \frac{\sigma^2}{n} \cdot VIF_1
+  $$
+  Esta expresión demuestra que el VIF es, literalmente, el **factor multiplicativo** por el cual la varianza del estimador del coeficiente se "infla" en comparación con el caso base en el que no habría correlación (donde VIF = 1).
+
+***
+### **Ejercicio 3: Interpretación de Coeficientes en Modelos Transformados**
+
+**Enunciado:** Considera un modelo de regresión **log-log**: $\log(Y_i) = \beta_0 + \beta_1 \log(X_i) + \varepsilon_i$. Demuestra matemáticamente que el coeficiente $\beta_1$ puede interpretarse como una **elasticidad**.
+
+**Solución:**
+
+La elasticidad de Y con respecto a X se define como el cambio porcentual en Y para un cambio del 1% en X. Para cambios infinitesimales, esta se expresa como:
+$$\eta = \frac{\% \Delta Y}{\% \Delta X} = \frac{dY/Y}{dX/X}$$
+Una propiedad matemática de los logaritmos es que para cambios pequeños, $d(\log(z)) \approx \frac{dz}{z}$, que representa un cambio relativo o porcentual. Por lo tanto, la elasticidad puede expresarse como la derivada del logaritmo de Y con respecto al logaritmo de X:
+$$\eta = \frac{d(\log Y)}{d(\log X)}$$
+Partiendo de nuestro modelo poblacional (ignorando el término de error para analizar la relación sistemática):
+$$\log(Y) = \beta_0 + \beta_1 \log(X)$$
+Ahora, simplemente calculamos la derivada de la ecuación con respecto a $\log(X)$:
+$$\frac{d(\log Y)}{d(\log X)} = \frac{d}{d(\log X)} (\beta_0 + \beta_1 \log(X))$$
+El término $\beta_0$ es una constante, por lo que su derivada es 0. El término $\beta_1 \log(X)$ tiene una derivada de $\beta_1$ con respecto a $\log(X)$. Por lo tanto:
+$$\frac{d(\log Y)}{d(\log X)} = \beta_1$$
+Hemos demostrado que el coeficiente $\beta_1$ es igual a la elasticidad de Y con respecto a X. Así, $\beta_1$ representa el cambio porcentual promedio en Y que se asocia con un aumento del 1% en X.
+
+***
+### **Ejercicio 4: Fundamentos de la Regularización**
+
+**Enunciado:** Explica desde una perspectiva geométrica por qué la regularización **Lasso (L1)** puede anular coeficientes, mientras que **Ridge (L2)** solo los encoge.
+
+**Solución:**
+
+La estimación en regresión regularizada puede entenderse como un problema de optimización restringida. El objetivo es encontrar el conjunto de coeficientes ($\beta_1, \beta_2, \dots$) que minimice la Suma de Cuadrados del Error (SSE), sujeto a una restricción en el tamaño de dichos coeficientes.
+
+- **Geometría del problema:** El conjunto de todos los posibles valores de los coeficientes para un mismo valor de SSE forma una elipse (en un espacio de dos coeficientes, $\beta_1, \beta_2$) centrada en la solución de Mínimos Cuadrados Ordinarios (MCO). El objetivo es encontrar la elipse más pequeña posible que toque la "región de restricción".
+
+
+
+- **Regresión Ridge (Penalización L2):** La restricción es $\sum \beta_j^2 \leq s$. En dos dimensiones, $\beta_1^2 + \beta_2^2 \leq s$ es la ecuación de un **círculo**. Esta región es convexa y no tiene "esquinas". Cuando las elipses del SSE se expanden desde el punto MCO, el primer punto de contacto con el círculo será un punto de tangencia. Debido a la forma suave y redondeada del círculo, es extremadamente improbable que este punto de tangencia ocurra exactamente sobre un eje (donde uno de los coeficientes sería cero). Por lo tanto, Ridge reduce la magnitud de ambos coeficientes, pero no los anula.
+
+- **Regresión Lasso (Penalización L1):** La restricción es $\sum |\beta_j| \leq s$. En dos dimensiones, $|\beta_1| + |\beta_2| \leq s$ es la ecuación de un **rombo (o diamante)**, rotado 45 grados. La característica clave de esta región son sus **vértices afilados, que se encuentran sobre los ejes**. Cuando las elipses del SSE se expanden, es mucho más probable que toquen la región de restricción en uno de estos vértices que en una de las aristas. Si el punto de contacto es un vértice sobre un eje (por ejemplo, el punto (0, $\beta_2$)), significa que el otro coeficiente ($\beta_1$) es **exactamente cero**. Es esta propiedad geométrica, las "esquinas" de la región de penalización L1, lo que induce la escasez (*sparsity*) y permite a Lasso realizar selección de variables.
+
+***
+### **Ejercicio 5: La Familia Exponencial y los GLM**
+
+**Enunciado:** Explica cuál es la función de varianza $V(\mu)$ para un modelo de Poisson y para un modelo Binomial, y qué implicaciones tiene sobre los supuestos del modelo.
+
+**Solución:**
+
+La **función de varianza** $V(\mu)$ es la "firma" de cada distribución dentro de la familia exponencial, ya que define la relación teórica entre la media $\mu$ y la varianza de la variable respuesta.
+
+- **Modelo de Poisson:**
+  - **Función de Varianza:** $V(\mu) = \mu$.
+  - **Implicación:** Esto implica que la varianza de la variable respuesta es teóricamente igual a su media: $\text{Var}(Y) = \mu$. Este supuesto se conoce como **equidispersión**. La implicación más importante para el modelado es que, si los datos reales muestran una varianza significativamente mayor que la media (un fenómeno muy común llamado **sobredispersión**), el modelo de Poisson será inadecuado. Los errores estándar de los coeficientes estarán subestimados, llevando a p-valores incorrectamente bajos y a una inferencia errónea.
+
+- **Modelo Binomial:**
+  - **Función de Varianza:** $V(\mu) = \mu(1-\mu)$.
+  - **Implicación:** En este caso, la varianza no es constante, sino que es una función cuadrática de la media (la probabilidad de éxito). La varianza es mínima cuando $\mu$ se acerca a 0 o 1, y es máxima cuando $\mu = 0.5$. Esta es la heterocedasticidad inherente a los datos de proporciones. El modelo GLM maneja esto de forma natural a través del algoritmo de estimación (IRLS), que da más peso a las observaciones con menor varianza (aquellas con probabilidades predichas cercanas a 0 o 1) y menos peso a las más inciertas (aquellas con probabilidades cercanas a 0.5).
+
+***
+### **Ejercicio 6: El Problema de la Inferencia en Métodos Stepwise**
+
+**Enunciado:** Explica el razonamiento estadístico detrás de la advertencia de que los p-valores de un modelo final obtenido mediante selección por pasos (stepwise) están sesgados y son excesivamente optimistas.
+
+**Solución:**
+
+La advertencia se debe a que los métodos stepwise violan un principio fundamental de la prueba de hipótesis: el modelo y las hipótesis deben ser especificados **a priori**, antes de examinar las relaciones en los datos. Los métodos stepwise hacen exactamente lo contrario.
+
+1.  **Problema de Múltiples Comparaciones:** En cada paso, un algoritmo como la selección *forward* realiza múltiples tests (un test t para cada variable candidata a entrar) y selecciona la variable "ganadora", que es la que tiene el p-valor más pequeño. Al elegir el valor mínimo de un conjunto de pruebas, estamos seleccionando un valor extremo de la distribución de p-valores bajo la hipótesis nula. El p-valor reportado para esa variable (p. ej., 0.03) no refleja la probabilidad de observar un resultado tan extremo en un solo intento, sino la probabilidad de que *el mejor de varios intentos* sea tan extremo, lo cual es una probabilidad mucho mayor.
+
+2.  **Invalidez de la Distribución Teórica:** El p-valor de un test t se calcula asumiendo que el coeficiente sigue una distribución t de Student. Sin embargo, el coeficiente de una variable seleccionada por un algoritmo stepwise no sigue esta distribución. Sigue una distribución más compleja (una "distribución de un estadístico de orden"), porque ha sido seleccionado condicionalmente por ser el mejor.
+
+3.  **Sesgo de Selección:** El proceso está diseñado para encontrar relaciones, incluso en datos puramente aleatorios. Si tenemos muchas variables de ruido, la probabilidad de que una de ellas parezca significativa por puro azar es alta. El método stepwise seleccionará esa variable y reportará un p-valor bajo y engañoso.
+
+En resumen, los p-valores de un modelo stepwise están **sesgados a la baja (son demasiado pequeños)** porque no tienen en cuenta el proceso de búsqueda y selección que los ha producido. Esto lleva a una **inflación de la tasa de error de Tipo I**, haciendo que concluyamos que ciertas variables son significativas cuando en realidad no lo son.
+
+***
+### **Ejercicio 7: Propiedades de los Estimadores MCO**
+
+**Enunciado:** Demuestra la propiedad de **insesgadez** para el estimador $\hat{\boldsymbol{\beta}}$ en notación matricial. Es decir, demuestra que $E[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta}$.
+
+**Solución:**
+
+1.  Comenzamos con la fórmula del estimador MCO en notación matricial:
+    $$
+    \hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}
+    $$
+    
+2.  Sustituimos el modelo poblacional verdadero para el vector $\mathbf{y}$, que es $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$:
+    $$
+    \hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T(\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon})
+    $$
+
+3.  Aplicamos el operador de valor esperado $E[\cdot]$ a ambos lados. Tratamos la matriz de diseño $\mathbf{X}$ como fija (no aleatoria):
+    $$
+    E[\hat{\boldsymbol{\beta}}] = E[(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T(\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon})]
+    $$
+4.  Distribuimos el término $(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$ dentro del paréntesis:
+    $$
+    E[\hat{\boldsymbol{\beta}}] = E[(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\boldsymbol{\beta} + (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\boldsymbol{\varepsilon}]
+    $$
+5.  Usamos la propiedad de linealidad del valor esperado ($E[A+B] = E[A] + E[B]$):
+    $$
+    E[\hat{\boldsymbol{\beta}}] = E[(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\boldsymbol{\beta}] + E[(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\boldsymbol{\varepsilon}]
+    $$
+6.  Analizamos cada término por separado:
+    -   En el primer término, todo es constante excepto el operador de valor esperado, y $(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}$ es la matriz identidad $\mathbf{I}$. Por lo tanto, $E[\mathbf{I}\boldsymbol{\beta}] = \boldsymbol{\beta}$.
+    -   En el segundo término, podemos sacar las constantes del valor esperado: $(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T E[\boldsymbol{\varepsilon}]$.
+
+7.  Aplicamos el supuesto de **exogeneidad** (o media del error nula), que establece que el valor esperado del término de error es cero: $E[\boldsymbol{\varepsilon}] = \mathbf{0}$.
+    $$
+    (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T E[\boldsymbol{\varepsilon}] = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T \mathbf{0} = \mathbf{0}
+    $$
+8.  Uniendo los resultados, concluimos:
+    $$
+    E[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta} + \mathbf{0} = \boldsymbol{\beta}
+    $$
+    Esto demuestra que el estimador MCO $\hat{\boldsymbol{\beta}}$ es insesgado, ya que su valor esperado es el verdadero parámetro poblacional $\boldsymbol{\beta}$.
+
+***
+### **Ejercicio 8: Intervalos de Confianza vs. Predicción**
+
+**Enunciado:** La fórmula para el intervalo de predicción en RLS es $\hat{y}_0 \pm t_{\alpha/2, n-2} \cdot \sqrt{\text{MSE} \left( 1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right)}$. Explica el origen y el significado de cada uno de los tres términos dentro del paréntesis.
+
+**Solución:**
+
+La fórmula cuantifica la incertidumbre total de predecir una *única* nueva observación. Esta incertidumbre proviene de dos fuentes: la incertidumbre sobre la posición de la verdadera línea de regresión y la variabilidad inherente de un punto individual alrededor de esa línea. Los tres términos dentro del paréntesis representan estas fuentes de varianza (escaladas por MSE, que estima $\sigma^2$):
+
+1.  **Término `1`**: Esta es la componente más importante y la que distingue al intervalo de predicción. Representa la **varianza del error aleatorio de la nueva observación**, $\text{Var}(\varepsilon_0) = \sigma^2$. Es la incertidumbre irreducible o inherente de un solo punto, que siempre se desviará de la media. Esta es la razón principal por la que un intervalo de predicción es siempre más ancho que uno de confianza.
+
+2.  **Término `1/n`**: Esta componente está relacionada con la **incertidumbre en la estimación del intercepto $\hat{\beta}_0$**. Representa la incertidumbre sobre la "altura" general de la línea de regresión. A medida que el tamaño de la muestra ($n$) aumenta, nuestra confianza en la posición de la línea mejora, y este término de incertidumbre se hace más pequeño.
+
+3.  **Término `(x_0 - \bar{x})^2 / S_{xx}`**: Esta componente representa la **incertidumbre debida a la estimación de la pendiente $\hat{\beta}_1$**. La incertidumbre en la pendiente tiene un mayor impacto cuanto más nos alejamos del centro de los datos ($\bar{x}$). Si predecimos en el punto medio de nuestros datos ($x_0 = \bar{x}$), este término se anula. A medida que $x_0$ se aleja de $\bar{x}$, el efecto de un pequeño error en la estimación de la pendiente se magnifica, ensanchando el intervalo.
+
+En resumen, los términos `1/n` y `(x_0 - \bar{x})^2 / S_{xx}` juntos cuantifican la incertidumbre sobre dónde está la **línea de regresión verdadera** (lo que cubre el intervalo de confianza). El término `1` añade la incertidumbre de **un nuevo punto individual** alrededor de esa línea.
+
+***
+### **Ejercicio 9: Estimación por Máxima Verosimilitud**
+
+**Enunciado:** Para un modelo de regresión logística, deriva la ecuación de puntuación para un coeficiente $\beta_j$ y demuestra que se iguala a cero cuando $\sum_{i=1}^{n} x_{ij}(y_i - p_i) = 0$.
+
+**Solución:**
+
+1.  La función de log-verosimilitud para la regresión logística es:
+    $$
+    \ell(\boldsymbol{\beta}) = \sum_{i=1}^{n} \left[y_i \mathbf{x}_i^T\boldsymbol{\beta} - \log(1 + e^{\mathbf{x}_i^T\boldsymbol{\beta}})\right]
+    $$
+    
+2.  La ecuación de puntuación (*score equation*) se obtiene al calcular la primera derivada de la log-verosimilitud con respecto a un parámetro, en este caso $\beta_j$. Debemos calcular $\frac{\partial \ell}{\partial \beta_j}$ y igualarla a cero.
+3.  La derivada de una suma es la suma de las derivadas, por lo que podemos analizar el término dentro del sumatorio para una observación $i$:
+    $$
+    \frac{\partial}{\partial \beta_j} \left[y_i \mathbf{x}_i^T\boldsymbol{\beta} - \log(1 + e^{\mathbf{x}_i^T\boldsymbol{\beta}})\right]
+    $$
+4.  La derivada del primer término, $y_i \mathbf{x}_i^T\boldsymbol{\beta} = y_i(\beta_0 + \beta_1x_{i1} + \dots + \beta_jx_{ij} + \dots)$, con respecto a $\beta_j$ es simplemente $y_i x_{ij}$.
+5.  La derivada del segundo término, $\log(1 + e^{\mathbf{x}_i^T\boldsymbol{\beta}})$, requiere la regla de la cadena. Sea $u = 1 + e^{\mathbf{x}_i^T\boldsymbol{\beta}}$.
+    $$
+    \frac{\partial}{\partial \beta_j} \log(u) = \frac{1}{u} \cdot \frac{\partial u}{\partial \beta_j} = \frac{1}{1 + e^{\mathbf{x}_i^T\boldsymbol{\beta}}} \cdot \frac{\partial}{\partial \beta_j} (1 + e^{\mathbf{x}_i^T\boldsymbol{\beta}})
+    $$   $$
+    = \frac{1}{1 + e^{\mathbf{x}_i^T\boldsymbol{\beta}}} \cdot (e^{\mathbf{x}_i^T\boldsymbol{\beta}} \cdot x_{ij}) = \left(\frac{e^{\mathbf{x}_i^T\boldsymbol{\beta}}}{1 + e^{\mathbf{x}_i^T\boldsymbol{\beta}}}\right) x_{ij}
+    $$
+6.  Reconocemos que el término entre paréntesis es la definición de la probabilidad $p_i$ en el modelo logístico ($p_i = \frac{1}{1+e^{-\mathbf{x}_i^T\boldsymbol{\beta}}}$). Por lo tanto, la derivada del segundo término es $p_i x_{ij}$.
+7.  Uniendo ambos resultados, la derivada para la observación $i$ es $y_i x_{ij} - p_i x_{ij}$.
+8.  La ecuación de puntuación completa es la suma sobre todas las observaciones:
+    $$
+    \frac{\partial \ell}{\partial \beta_j} = \sum_{i=1}^{n} (y_i x_{ij} - p_i x_{ij}) = \sum_{i=1}^{n} x_{ij}(y_i - p_i)
+    $$
+9.  Los estimadores de máxima verosimilitud se encuentran al igualar esta ecuación a cero:
+    $$
+    \sum_{i=1}^{n} x_{ij}(y_i - p_i) = 0
+    $$
+    
+**Interpretación:** Esta condición final significa que los estimadores de máxima verosimilitud se encuentran cuando los residuos del modelo ($y_i - p_i$, la diferencia entre lo observado y la probabilidad predicha) son **ortogonales** (no están correlacionados) a los predictores $x_{ij}$. Esto es análogo a las ecuaciones normales de MCO y significa que el modelo ha extraído toda la información linealmente asociable a los predictores, no quedando ningún patrón relacionado con ellos en los errores.
+
+***
+### **Ejercicio 10: El Coeficiente de Regresión Parcial**
+
+**Enunciado:** Explica el concepto de **regresión parcial** y su relación con el coeficiente de regresión múltiple $\hat{\beta}_j$.
+
+**Solución:**
+
+El concepto de regresión parcial es fundamental para entender la interpretación *ceteris paribus* de un coeficiente en regresión múltiple. Afirma que el coeficiente $\hat{\beta}_j$ del predictor $X_j$ en un modelo múltiple es matemáticamente idéntico a la pendiente de una regresión simple entre dos conjuntos de residuos.
+
+El proceso de "parcialización" consiste en eliminar la influencia de todos los demás predictores (denotados como $X_{-j}$) tanto de la variable respuesta $Y$ como del predictor de interés $X_j$.
+
+1.  **Parcialización de Y:** Se ajusta un modelo de regresión de $Y$ en función de todos los demás predictores: $Y \sim X_{-j}$. Los residuos de este modelo, $e_{Y|X_{-j}}$, representan la parte de la variabilidad de $Y$ que **no puede ser explicada** por el resto de variables del modelo. Es la "información única" de Y.
+
+2.  **Parcialización de $X_j$:** Se ajusta un modelo de regresión de $X_j$ en función de todos los demás predictores: $X_j \sim X_{-j}$. Los residuos de este modelo, $e_{X_j|X_{-j}}$, representan la parte de la variabilidad de $X_j$ que es **única** y no está correlacionada con el resto de variables. Es la "información única" que $X_j$ aporta.
+
+3.  **Relación entre los residuos:** Si ahora ajustamos una regresión lineal simple entre estos dos conjuntos de residuos:
+    $$
+    e_{Y|X_{-j}} \sim e_{X_j|X_{-j}}
+    $$
+    La pendiente de esta regresión simple es **exactamente igual** al coeficiente de regresión múltiple $\hat{\beta}_j$ del modelo original completo.
+
+**Conclusión:** Esto demuestra que $\hat{\beta}_j$ no mide la relación "bruta" entre Y y $X_j$, sino la relación entre la parte de Y que no es explicada por los otros predictores y la parte de $X_j$ que es única. Es la asociación "limpia" entre Y y $X_j$ después de haber controlado estadísticamente por la influencia de todas las demás variables en el modelo. Esto es, precisamente, la formalización matemática del principio *ceteris paribus*.

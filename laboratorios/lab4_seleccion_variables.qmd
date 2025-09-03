@@ -1,0 +1,1126 @@
+---
+title: "Laboratorio 4: Selección de Variables, Regularización y Validación"
+subtitle: "Modelos Estadísticos de Predicción"
+author: "Víctor Aceña Gil - Isaac Martín de Diego"
+date: today
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+execute:
+  warning: false
+  message: false
+---
+
+## Objetivos del Laboratorio
+
+Al finalizar este laboratorio, serás capaz de:
+
+- Aplicar filtros básicos para eliminación preliminar de variables
+- Utilizar criterios de información (AIC, BIC, Cp) para comparar modelos
+- Implementar métodos de selección exhaustiva (Best Subset Selection)
+- Ejecutar métodos automáticos paso a paso (forward, backward, stepwise)
+- Aplicar técnicas de regularización (Ridge, Lasso, Elastic Net)
+- Validar modelos usando estrategias train/test y validación cruzada
+- Interpretar métricas de rendimiento predictivo
+
+## Configuración Inicial
+
+```{r setup}
+# Cargar librerías necesarias
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(car)          # Para VIF
+  library(leaps)        # Para best subset selection
+  library(glmnet)       # Para regularización
+  library(caret)        # Para validación cruzada
+  library(corrplot)     # Para matrices de correlación
+  library(MASS)         # Para métodos stepwise
+  library(broom)        # Para resultados ordenados
+  library(gridExtra)    # Para múltiples gráficos
+})
+
+set.seed(123)
+```
+
+## Parte 1: Preparación de Datos y Análisis Exploratorio
+
+### Dataset de Trabajo
+
+Utilizaremos el dataset Boston Housing para demonstrar todas las técnicas. Este dataset contiene información sobre precios de viviendas en Boston y sus características.
+
+```{r data_preparation}
+# Cargar y explorar el dataset
+data(Boston)
+
+# Información básica del dataset
+cat("=== INFORMACIÓN DEL DATASET ===\n")
+cat("Dimensiones:", nrow(Boston), "observaciones,", ncol(Boston), "variables\n\n")
+
+# Mostrar las primeras filas
+head(Boston)
+
+# Resumen estadístico
+summary(Boston)
+
+# Verificar valores faltantes
+cat("\n=== VALORES FALTANTES ===\n")
+colSums(is.na(Boston))
+
+# Descripción de variables
+cat("\n=== DESCRIPCIÓN DE VARIABLES ===\n")
+cat("medv: Valor mediano de viviendas (variable respuesta)\n")
+cat("crim: Tasa de criminalidad per cápita\n")
+cat("zn: Proporción de lotes residenciales > 25,000 sq.ft\n")
+cat("indus: Proporción de acres comerciales no retail\n")
+cat("chas: Variable dummy para río Charles (1 si limita, 0 si no)\n")
+cat("nox: Concentración de óxidos nítricos\n")
+cat("rm: Número promedio de habitaciones\n")
+cat("age: Proporción de unidades ocupadas construidas antes de 1940\n")
+cat("dis: Distancias ponderadas a centros de empleo\n")
+cat("rad: Índice de accesibilidad a autopistas radiales\n")
+cat("tax: Tasa de impuesto a la propiedad\n")
+cat("ptratio: Proporción alumno-profesor\n")
+cat("black: Proporción de población afroamericana\n")
+cat("lstat: Porcentaje de población de bajo estatus\n")
+```
+
+### Visualización de Relaciones
+
+```{r exploratory_visualization}
+# Matriz de correlaciones
+cor_matrix <- cor(Boston)
+
+# Visualizar matriz de correlaciones
+corrplot(cor_matrix, method = "color", type = "upper", 
+         order = "hclust", tl.cex = 0.8, tl.col = "black",
+         addCoef.col = "black", number.cex = 0.6)
+title("Matriz de Correlaciones - Boston Housing")
+
+# Histograma de la variable respuesta
+ggplot(Boston, aes(x = medv)) +
+  geom_histogram(bins = 30, fill = "lightblue", color = "black", alpha = 0.7) +
+  labs(title = "Distribución del Precio de Viviendas",
+       x = "Valor Mediano (miles de $)", y = "Frecuencia") +
+  theme_minimal()
+
+# Boxplot para identificar outliers
+ggplot(Boston, aes(y = medv)) +
+  geom_boxplot(fill = "lightgreen", alpha = 0.7) +
+  labs(title = "Boxplot del Precio de Viviendas",
+       y = "Valor Mediano (miles de $)") +
+  theme_minimal()
+```
+
+## Parte 2: Filtrado Basado en Información Básica
+
+### Análisis de Variabilidad
+
+```{r variability_analysis}
+# Calcular varianzas de todas las variables predictoras
+varianzas <- Boston %>%
+  dplyr::select(-medv) %>%
+  summarise_all(var) %>%
+  gather(variable, varianza) %>%
+  arrange(varianza)
+
+print(varianzas)
+
+# Identificar variables con baja variabilidad (umbral arbitrario)
+umbral_varianza <- 0.01
+vars_baja_varianza <- varianzas$variable[varianzas$varianza < umbral_varianza]
+
+cat("\n=== VARIABLES CON BAJA VARIABILIDAD ===\n")
+if(length(vars_baja_varianza) > 0) {
+  cat("Variables con varianza <", umbral_varianza, ":", paste(vars_baja_varianza, collapse = ", "), "\n")
+} else {
+  cat("No hay variables con varianza excesivamente baja\n")
+}
+
+# Visualizar varianzas
+ggplot(varianzas, aes(x = reorder(variable, varianza), y = varianza)) +
+  geom_col(fill = "steelblue", alpha = 0.7) +
+  coord_flip() +
+  labs(title = "Varianza de Variables Predictoras",
+       x = "Variable", y = "Varianza") +
+  theme_minimal()
+```
+
+### Análisis de Correlación con Variable Respuesta
+
+```{r correlation_analysis}
+# Calcular correlaciones con la variable respuesta
+correlaciones_y <- cor(Boston[, -which(names(Boston) == "medv")], Boston$medv) %>%
+  as.data.frame() %>%
+  rownames_to_column("variable") %>%
+  rename(correlacion = V1) %>%
+  mutate(correlacion_abs = abs(correlacion)) %>%
+  arrange(desc(correlacion_abs))
+
+print(correlaciones_y)
+
+# Visualizar correlaciones
+ggplot(correlaciones_y, aes(x = reorder(variable, correlacion), y = correlacion)) +
+  geom_col(aes(fill = correlacion > 0), alpha = 0.7) +
+  coord_flip() +
+  scale_fill_manual(values = c("red", "blue"), 
+                    labels = c("Negativa", "Positiva"),
+                    name = "Correlación") +
+  labs(title = "Correlación de Variables Predictoras con Precio",
+       x = "Variable", y = "Correlación con medv") +
+  theme_minimal()
+
+# Identificar variables con correlación muy baja
+umbral_correlacion <- 0.1
+vars_baja_corr <- correlaciones_y$variable[correlaciones_y$correlacion_abs < umbral_correlacion]
+
+cat("\n=== VARIABLES CON BAJA CORRELACIÓN ===\n")
+if(length(vars_baja_corr) > 0) {
+  cat("Variables con |correlación| <", umbral_correlacion, ":", paste(vars_baja_corr, collapse = ", "), "\n")
+} else {
+  cat("Todas las variables tienen correlación > 0.1 con la respuesta\n")
+}
+```
+
+### Análisis de Multicolinealidad
+
+```{r multicollinearity_analysis}
+# Ajustar modelo completo para calcular VIF
+modelo_completo <- lm(medv ~ ., data = Boston)
+
+# Calcular VIF
+vif_valores <- vif(modelo_completo)
+vif_df <- data.frame(
+  variable = names(vif_valores),
+  VIF = vif_valores
+) %>%
+  arrange(desc(VIF))
+
+print(vif_df)
+
+# Visualizar VIF
+ggplot(vif_df, aes(x = reorder(variable, VIF), y = VIF)) +
+  geom_col(fill = "orange", alpha = 0.7) +
+  geom_hline(yintercept = 10, color = "red", linetype = "dashed", size = 1) +
+  geom_hline(yintercept = 5, color = "orange", linetype = "dashed", size = 1) +
+  coord_flip() +
+  labs(title = "Factor de Inflación de la Varianza (VIF)",
+       subtitle = "Línea roja: VIF = 10 (problemático), Línea naranja: VIF = 5 (moderado)",
+       x = "Variable", y = "VIF") +
+  theme_minimal()
+
+# Identificar variables con VIF alto
+vars_alto_vif <- vif_df$variable[vif_df$VIF > 5]
+
+cat("\n=== VARIABLES CON VIF ALTO ===\n")
+if(length(vars_alto_vif) > 0) {
+  cat("Variables con VIF > 5:", paste(vars_alto_vif, collapse = ", "), "\n")
+  cat("Considera eliminar algunas de estas variables para reducir multicolinealidad\n")
+} else {
+  cat("No hay problemas severos de multicolinealidad\n")
+}
+
+# Matriz de correlación entre predictores altamente correlacionados
+if(length(vars_alto_vif) > 0) {
+  high_vif_cors <- cor(Boston[, vars_alto_vif])
+  corrplot(high_vif_cors, method = "color", addCoef.col = "black",
+           title = "Correlaciones entre Variables con VIF Alto", mar = c(0,0,1,0))
+}
+```
+
+### Resumen del Filtrado Inicial
+
+```{r summary_filtering}
+# Resumen de filtrado
+cat("=== RESUMEN DEL FILTRADO INICIAL ===\n\n")
+
+cat("Variables originales:", ncol(Boston) - 1, "\n")
+cat("Variables con baja variabilidad:", length(vars_baja_varianza), "\n")
+cat("Variables con baja correlación:", length(vars_baja_corr), "\n")
+cat("Variables con VIF alto:", length(vars_alto_vif), "\n\n")
+
+# Variables a considerar eliminar
+vars_eliminar_candidatas <- unique(c(vars_baja_varianza, vars_baja_corr))
+if(length(vars_eliminar_candidatas) > 0) {
+  cat("Variables candidatas a eliminar:", paste(vars_eliminar_candidatas, collapse = ", "), "\n")
+} else {
+  cat("No se identificaron variables claras para eliminar en filtrado básico\n")
+}
+
+# Para continuar, mantendremos todas las variables y dejaremos que los métodos 
+# de selección decidan cuáles son importantes
+variables_finales <- setdiff(names(Boston), "medv")
+cat("Variables para análisis posterior:", length(variables_finales), "\n")
+```
+
+## Parte 3: Criterios de Bondad de Ajuste
+
+### Modelos Candidatos con Diferentes Números de Variables
+
+```{r model_comparison_setup}
+# Crear algunos modelos candidatos de diferentes complejidades
+modelo_simple <- lm(medv ~ lstat, data = Boston)
+modelo_dos_vars <- lm(medv ~ lstat + rm, data = Boston)
+modelo_tres_vars <- lm(medv ~ lstat + rm + ptratio, data = Boston)
+modelo_intermedio <- lm(medv ~ lstat + rm + ptratio + nox + crim, data = Boston)
+modelo_complejo <- lm(medv ~ lstat + rm + ptratio + nox + crim + dis + age, data = Boston)
+modelo_completo <- lm(medv ~ ., data = Boston)
+
+# Lista de modelos para comparación
+modelos_candidatos <- list(
+  "Simple (1 var)" = modelo_simple,
+  "Dos variables" = modelo_dos_vars,
+  "Tres variables" = modelo_tres_vars,
+  "Intermedio (5 vars)" = modelo_intermedio,
+  "Complejo (7 vars)" = modelo_complejo,
+  "Completo (13 vars)" = modelo_completo
+)
+```
+
+### Comparación usando AIC, BIC y Cp de Mallows
+
+```{r criteria_comparison}
+# Función para extraer métricas de los modelos
+extraer_metricas <- function(modelo) {
+  summ <- summary(modelo)
+  n <- nobs(modelo)
+  p <- length(coef(modelo)) - 1  # Excluir intercepto
+  
+  # Calcular Cp de Mallows usando el modelo completo como referencia
+  mse_full <- summary(modelo_completo)$sigma^2
+  sse_model <- sum(residuals(modelo)^2)
+  cp <- sse_model / mse_full - n + 2 * (p + 1)
+  
+  return(data.frame(
+    n_variables = p,
+    R2 = summ$r.squared,
+    R2_adj = summ$adj.r.squared,
+    AIC = AIC(modelo),
+    BIC = BIC(modelo),
+    Cp = cp,
+    RMSE = sqrt(mean(residuals(modelo)^2))
+  ))
+}
+
+# Extraer métricas para todos los modelos
+comparacion_modelos <- map_dfr(modelos_candidatos, extraer_metricas, .id = "Modelo")
+
+print(comparacion_modelos)
+
+# Identificar mejores modelos según cada criterio
+mejor_aic <- comparacion_modelos$Modelo[which.min(comparacion_modelos$AIC)]
+mejor_bic <- comparacion_modelos$Modelo[which.min(comparacion_modelos$BIC)]
+mejor_cp <- comparacion_modelos$Modelo[which.min(comparacion_modelos$Cp)]
+mejor_r2_adj <- comparacion_modelos$Modelo[which.max(comparacion_modelos$R2_adj)]
+
+cat("\n=== MEJORES MODELOS SEGÚN CADA CRITERIO ===\n")
+cat("Mejor AIC:", mejor_aic, "\n")
+cat("Mejor BIC:", mejor_bic, "\n")
+cat("Mejor Cp:", mejor_cp, "\n")
+cat("Mejor R² ajustado:", mejor_r2_adj, "\n")
+```
+
+### Visualización de Criterios
+
+```{r criteria_visualization}
+# Gráfico de AIC vs número de variables
+p1 <- ggplot(comparacion_modelos, aes(x = n_variables, y = AIC)) +
+  geom_point(color = "blue", size = 3) +
+  geom_line(color = "blue") +
+  geom_point(data = comparacion_modelos[comparacion_modelos$Modelo == mejor_aic, ],
+             color = "red", size = 5) +
+  labs(title = "AIC vs Número de Variables",
+       x = "Número de Variables", y = "AIC") +
+  theme_minimal()
+
+# Gráfico de BIC vs número de variables
+p2 <- ggplot(comparacion_modelos, aes(x = n_variables, y = BIC)) +
+  geom_point(color = "green", size = 3) +
+  geom_line(color = "green") +
+  geom_point(data = comparacion_modelos[comparacion_modelos$Modelo == mejor_bic, ],
+             color = "red", size = 5) +
+  labs(title = "BIC vs Número de Variables",
+       x = "Número de Variables", y = "BIC") +
+  theme_minimal()
+
+# Gráfico de Cp vs número de variables
+p3 <- ggplot(comparacion_modelos, aes(x = n_variables, y = Cp)) +
+  geom_point(color = "purple", size = 3) +
+  geom_line(color = "purple") +
+  geom_abline(intercept = 1, slope = 1, color = "red", linetype = "dashed") +
+  geom_point(data = comparacion_modelos[comparacion_modelos$Modelo == mejor_cp, ],
+             color = "red", size = 5) +
+  labs(title = "Cp de Mallows vs Número de Variables",
+       subtitle = "Línea roja: Cp = p + 1 (referencia ideal)",
+       x = "Número de Variables", y = "Cp") +
+  theme_minimal()
+
+# Gráfico de R² ajustado vs número de variables
+p4 <- ggplot(comparacion_modelos, aes(x = n_variables, y = R2_adj)) +
+  geom_point(color = "orange", size = 3) +
+  geom_line(color = "orange") +
+  geom_point(data = comparacion_modelos[comparacion_modelos$Modelo == mejor_r2_adj, ],
+             color = "red", size = 5) +
+  labs(title = "R² Ajustado vs Número de Variables",
+       x = "Número de Variables", y = "R² Ajustado") +
+  theme_minimal()
+
+# Mostrar todos los gráficos
+grid.arrange(p1, p2, p3, p4, ncol = 2)
+```
+
+## Parte 4: Métodos de Selección Exhaustiva
+
+### Best Subset Selection
+
+```{r best_subset_selection}
+# Realizar best subset selection
+best_subset <- regsubsets(medv ~ ., data = Boston, nvmax = 13)
+subset_summary <- summary(best_subset)
+
+# Crear dataframe con resultados
+subset_results <- data.frame(
+  n_vars = 1:13,
+  RSS = subset_summary$rss,
+  R2 = subset_summary$rsq,
+  R2_adj = subset_summary$adjr2,
+  Cp = subset_summary$cp,
+  BIC = subset_summary$bic
+)
+
+print(subset_results)
+
+# Identificar mejores modelos
+mejor_r2_adj_idx <- which.max(subset_results$R2_adj)
+mejor_cp_idx <- which.min(subset_results$Cp)
+mejor_bic_idx <- which.min(subset_results$BIC)
+
+cat("\n=== MEJORES MODELOS - BEST SUBSET SELECTION ===\n")
+cat("Mejor R² ajustado:", mejor_r2_adj_idx, "variables\n")
+cat("Mejor Cp:", mejor_cp_idx, "variables\n")
+cat("Mejor BIC:", mejor_bic_idx, "variables\n")
+
+# Variables en cada modelo óptimo
+cat("\n=== VARIABLES EN MODELOS ÓPTIMOS ===\n")
+cat("Modelo con mejor R² ajustado (", mejor_r2_adj_idx, "vars):\n")
+vars_mejor_r2 <- names(which(subset_summary$which[mejor_r2_adj_idx, -1]))
+cat(paste(vars_mejor_r2, collapse = ", "), "\n\n")
+
+cat("Modelo con mejor Cp (", mejor_cp_idx, "vars):\n")
+vars_mejor_cp <- names(which(subset_summary$which[mejor_cp_idx, -1]))
+cat(paste(vars_mejor_cp, collapse = ", "), "\n\n")
+
+cat("Modelo con mejor BIC (", mejor_bic_idx, "vars):\n")
+vars_mejor_bic <- names(which(subset_summary$which[mejor_bic_idx, -1]))
+cat(paste(vars_mejor_bic, collapse = ", "), "\n")
+```
+
+### Visualización del Best Subset Selection
+
+```{r best_subset_visualization}
+# Gráfico de R² ajustado
+p1 <- ggplot(subset_results, aes(x = n_vars, y = R2_adj)) +
+  geom_point(color = "blue", size = 2) +
+  geom_line(color = "blue") +
+  geom_point(aes(x = mejor_r2_adj_idx, y = R2_adj[mejor_r2_adj_idx]), 
+             color = "red", size = 4) +
+  labs(title = "R² Ajustado - Best Subset",
+       x = "Número de Variables", y = "R² Ajustado") +
+  theme_minimal()
+
+# Gráfico de Cp
+p2 <- ggplot(subset_results, aes(x = n_vars, y = Cp)) +
+  geom_point(color = "purple", size = 2) +
+  geom_line(color = "purple") +
+  geom_abline(intercept = 1, slope = 1, color = "red", linetype = "dashed") +
+  geom_point(aes(x = mejor_cp_idx, y = Cp[mejor_cp_idx]), 
+             color = "red", size = 4) +
+  labs(title = "Cp de Mallows - Best Subset",
+       x = "Número de Variables", y = "Cp") +
+  theme_minimal()
+
+# Gráfico de BIC
+p3 <- ggplot(subset_results, aes(x = n_vars, y = BIC)) +
+  geom_point(color = "green", size = 2) +
+  geom_line(color = "green") +
+  geom_point(aes(x = mejor_bic_idx, y = BIC[mejor_bic_idx]), 
+             color = "red", size = 4) +
+  labs(title = "BIC - Best Subset",
+       x = "Número de Variables", y = "BIC") +
+  theme_minimal()
+
+# Mostrar gráficos
+grid.arrange(p1, p2, p3, ncol = 2)
+
+# Mostrar matriz de selección de variables
+plot(best_subset, scale = "adjr2", main = "Variables Seleccionadas por Tamaño de Modelo")
+```
+
+## Parte 5: Métodos Automáticos Paso a Paso
+
+### Forward Selection
+
+```{r forward_selection}
+# Modelo inicial (solo intercepto)
+modelo_inicial <- lm(medv ~ 1, data = Boston)
+
+# Modelo completo (todas las variables)
+modelo_completo_step <- lm(medv ~ ., data = Boston)
+
+# Forward selection usando AIC
+forward_aic <- step(modelo_inicial, 
+                    scope = list(lower = modelo_inicial, upper = modelo_completo_step),
+                    direction = "forward", 
+                    trace = FALSE)
+
+cat("=== FORWARD SELECTION (AIC) ===\n")
+cat("Variables seleccionadas:\n")
+forward_vars <- names(coef(forward_aic))[-1]  # Excluir intercepto
+cat(paste(forward_vars, collapse = ", "), "\n")
+cat("AIC final:", AIC(forward_aic), "\n")
+cat("Número de variables:", length(forward_vars), "\n\n")
+
+# Resumen del modelo final
+summary(forward_aic)
+```
+
+### Backward Elimination
+
+```{r backward_elimination}
+# Backward elimination usando AIC
+backward_aic <- step(modelo_completo_step, 
+                     direction = "backward", 
+                     trace = FALSE)
+
+cat("=== BACKWARD ELIMINATION (AIC) ===\n")
+cat("Variables seleccionadas:\n")
+backward_vars <- names(coef(backward_aic))[-1]  # Excluir intercepto
+cat(paste(backward_vars, collapse = ", "), "\n")
+cat("AIC final:", AIC(backward_aic), "\n")
+cat("Número de variables:", length(backward_vars), "\n\n")
+
+# Resumen del modelo final
+summary(backward_aic)
+```
+
+### Stepwise Selection
+
+```{r stepwise_selection}
+# Stepwise selection usando AIC
+stepwise_aic <- step(modelo_inicial, 
+                     scope = list(lower = modelo_inicial, upper = modelo_completo_step),
+                     direction = "both", 
+                     trace = FALSE)
+
+cat("=== STEPWISE SELECTION (AIC) ===\n")
+cat("Variables seleccionadas:\n")
+stepwise_vars <- names(coef(stepwise_aic))[-1]  # Excluir intercepto
+cat(paste(stepwise_vars, collapse = ", "), "\n")
+cat("AIC final:", AIC(stepwise_aic), "\n")
+cat("Número de variables:", length(stepwise_vars), "\n\n")
+
+# Comparación de métodos automáticos
+metodos_automaticos <- data.frame(
+  Metodo = c("Forward", "Backward", "Stepwise"),
+  N_Variables = c(length(forward_vars), length(backward_vars), length(stepwise_vars)),
+  AIC = c(AIC(forward_aic), AIC(backward_aic), AIC(stepwise_aic)),
+  R2_adj = c(summary(forward_aic)$adj.r.squared,
+             summary(backward_aic)$adj.r.squared,
+             summary(stepwise_aic)$adj.r.squared)
+)
+
+print(metodos_automaticos)
+```
+
+### Comparación de Variables Seleccionadas
+
+```{r compare_selections}
+# Crear matriz de comparación de variables seleccionadas
+todas_vars <- names(Boston)[-which(names(Boston) == "medv")]
+
+comparacion_seleccion <- data.frame(
+  Variable = todas_vars,
+  Forward = todas_vars %in% forward_vars,
+  Backward = todas_vars %in% backward_vars,
+  Stepwise = todas_vars %in% stepwise_vars,
+  Best_Subset_BIC = todas_vars %in% vars_mejor_bic,
+  Best_Subset_Cp = todas_vars %in% vars_mejor_cp
+)
+
+print(comparacion_seleccion)
+
+# Contar coincidencias
+cat("\n=== ANÁLISIS DE COINCIDENCIAS ===\n")
+cat("Variables seleccionadas por todos los métodos:\n")
+vars_todas <- todas_vars[apply(comparacion_seleccion[,-1], 1, all)]
+if(length(vars_todas) > 0) {
+  cat(paste(vars_todas, collapse = ", "), "\n")
+} else {
+  cat("Ninguna variable fue seleccionada por todos los métodos\n")
+}
+
+cat("\nVariables seleccionadas por al menos 3 métodos:\n")
+vars_mayoria <- todas_vars[apply(comparacion_seleccion[,-1], 1, sum) >= 3]
+cat(paste(vars_mayoria, collapse = ", "), "\n")
+```
+
+## Parte 6: Métodos de Regularización
+
+### Preparación de Datos para Regularización
+
+```{r regularization_setup}
+# Preparar matrices para glmnet
+X <- model.matrix(medv ~ ., Boston)[, -1]  # Excluir intercepto
+y <- Boston$medv
+
+# División train/test para regularización
+set.seed(123)
+train_indices <- sample(1:nrow(X), 0.7 * nrow(X))
+X_train <- X[train_indices, ]
+y_train <- y[train_indices]
+X_test <- X[-train_indices, ]
+y_test <- y[-train_indices]
+
+cat("=== DATOS PARA REGULARIZACIÓN ===\n")
+cat("Entrenamiento:", nrow(X_train), "observaciones\n")
+cat("Prueba:", nrow(X_test), "observaciones\n")
+cat("Variables predictoras:", ncol(X), "\n")
+```
+
+### Ridge Regression
+
+```{r ridge_regression}
+# Grid de valores lambda
+lambda_grid <- 10^seq(10, -2, length = 100)
+
+# Ajustar Ridge regression
+ridge_model <- glmnet(X_train, y_train, alpha = 0, lambda = lambda_grid)
+
+# Validación cruzada para seleccionar lambda óptimo
+ridge_cv <- cv.glmnet(X_train, y_train, alpha = 0, lambda = lambda_grid, nfolds = 10)
+
+# Lambda óptimo
+lambda_ridge_min <- ridge_cv$lambda.min
+lambda_ridge_1se <- ridge_cv$lambda.1se
+
+cat("=== RIDGE REGRESSION ===\n")
+cat("Lambda mínimo:", lambda_ridge_min, "\n")
+cat("Lambda 1SE:", lambda_ridge_1se, "\n")
+
+# Predicciones en conjunto de prueba
+ridge_pred_min <- predict(ridge_model, s = lambda_ridge_min, newx = X_test)
+ridge_pred_1se <- predict(ridge_model, s = lambda_ridge_1se, newx = X_test)
+
+# Métricas de rendimiento
+ridge_rmse_min <- sqrt(mean((ridge_pred_min - y_test)^2))
+ridge_rmse_1se <- sqrt(mean((ridge_pred_1se - y_test)^2))
+
+cat("RMSE (lambda min):", round(ridge_rmse_min, 3), "\n")
+cat("RMSE (lambda 1SE):", round(ridge_rmse_1se, 3), "\n")
+
+# Coeficientes finales
+ridge_coefs <- predict(ridge_model, type = "coefficients", s = lambda_ridge_min)[1:14, ]
+print(round(ridge_coefs, 4))
+
+# Gráfico de validación cruzada
+plot(ridge_cv, main = "Validación Cruzada - Ridge Regression")
+```
+
+### Lasso Regression
+
+```{r lasso_regression}
+# Ajustar Lasso regression
+lasso_model <- glmnet(X_train, y_train, alpha = 1, lambda = lambda_grid)
+
+# Validación cruzada para seleccionar lambda óptimo
+lasso_cv <- cv.glmnet(X_train, y_train, alpha = 1, lambda = lambda_grid, nfolds = 10)
+
+# Lambda óptimo
+lambda_lasso_min <- lasso_cv$lambda.min
+lambda_lasso_1se <- lasso_cv$lambda.1se
+
+cat("\n=== LASSO REGRESSION ===\n")
+cat("Lambda mínimo:", lambda_lasso_min, "\n")
+cat("Lambda 1SE:", lambda_lasso_1se, "\n")
+
+# Predicciones en conjunto de prueba
+lasso_pred_min <- predict(lasso_model, s = lambda_lasso_min, newx = X_test)
+lasso_pred_1se <- predict(lasso_model, s = lambda_lasso_1se, newx = X_test)
+
+# Métricas de rendimiento
+lasso_rmse_min <- sqrt(mean((lasso_pred_min - y_test)^2))
+lasso_rmse_1se <- sqrt(mean((lasso_pred_1se - y_test)^2))
+
+cat("RMSE (lambda min):", round(lasso_rmse_min, 3), "\n")
+cat("RMSE (lambda 1SE):", round(lasso_rmse_1se, 3), "\n")
+
+# Coeficientes finales (Lasso puede hacer coeficientes = 0)
+lasso_coefs <- predict(lasso_model, type = "coefficients", s = lambda_lasso_min)[1:14, ]
+print(round(lasso_coefs, 4))
+
+# Variables seleccionadas por Lasso
+vars_lasso <- names(lasso_coefs[lasso_coefs != 0])[-1]  # Excluir intercepto
+cat("\nVariables seleccionadas por Lasso:", paste(vars_lasso, collapse = ", "), "\n")
+cat("Número de variables seleccionadas:", length(vars_lasso), "\n")
+
+# Gráfico de validación cruzada
+plot(lasso_cv, main = "Validación Cruzada - Lasso Regression")
+```
+
+### Elastic Net
+
+```{r elastic_net}
+# Grid de valores alpha para Elastic Net
+alpha_grid <- seq(0, 1, length = 11)
+
+# Función para encontrar el mejor alpha
+best_alpha_search <- function(alpha_val) {
+  cv_result <- cv.glmnet(X_train, y_train, alpha = alpha_val, lambda = lambda_grid, nfolds = 10)
+  return(data.frame(alpha = alpha_val, 
+                   lambda_min = cv_result$lambda.min,
+                   cvm_min = min(cv_result$cvm)))
+}
+
+# Buscar mejor alpha
+alpha_results <- map_dfr(alpha_grid, best_alpha_search)
+best_alpha <- alpha_results$alpha[which.min(alpha_results$cvm_min)]
+
+cat("\n=== ELASTIC NET ===\n")
+cat("Mejor alpha:", best_alpha, "\n")
+
+# Ajustar Elastic Net con mejor alpha
+elastic_model <- glmnet(X_train, y_train, alpha = best_alpha, lambda = lambda_grid)
+elastic_cv <- cv.glmnet(X_train, y_train, alpha = best_alpha, lambda = lambda_grid, nfolds = 10)
+
+lambda_elastic_min <- elastic_cv$lambda.min
+cat("Lambda óptimo:", lambda_elastic_min, "\n")
+
+# Predicciones en conjunto de prueba
+elastic_pred <- predict(elastic_model, s = lambda_elastic_min, newx = X_test)
+elastic_rmse <- sqrt(mean((elastic_pred - y_test)^2))
+
+cat("RMSE:", round(elastic_rmse, 3), "\n")
+
+# Coeficientes finales
+elastic_coefs <- predict(elastic_model, type = "coefficients", s = lambda_elastic_min)[1:14, ]
+print(round(elastic_coefs, 4))
+
+# Variables seleccionadas por Elastic Net
+vars_elastic <- names(elastic_coefs[abs(elastic_coefs) > 1e-6])[-1]  # Excluir intercepto
+cat("\nVariables seleccionadas por Elastic Net:", paste(vars_elastic, collapse = ", "), "\n")
+cat("Número de variables seleccionadas:", length(vars_elastic), "\n")
+```
+
+### Comparación de Métodos de Regularización
+
+```{r regularization_comparison}
+# Comparar todos los métodos de regularización
+comparacion_reg <- data.frame(
+  Metodo = c("Ridge (min)", "Ridge (1SE)", "Lasso (min)", "Lasso (1SE)", "Elastic Net"),
+  RMSE = c(ridge_rmse_min, ridge_rmse_1se, lasso_rmse_min, lasso_rmse_1se, elastic_rmse),
+  N_Variables = c(sum(abs(ridge_coefs[-1]) > 1e-6),
+                  sum(abs(predict(ridge_model, type = "coefficients", s = lambda_ridge_1se)[2:14, ]) > 1e-6),
+                  length(vars_lasso),
+                  sum(abs(predict(lasso_model, type = "coefficients", s = lambda_lasso_1se)[2:14, ]) > 1e-6),
+                  length(vars_elastic))
+)
+
+print(comparacion_reg)
+
+# Gráfico de comparación
+ggplot(comparacion_reg, aes(x = N_Variables, y = RMSE, color = Metodo)) +
+  geom_point(size = 4) +
+  geom_text(aes(label = Metodo), hjust = 0, vjust = -0.5, size = 3) +
+  labs(title = "Comparación de Métodos de Regularización",
+       x = "Número de Variables Efectivas", 
+       y = "RMSE en Conjunto de Prueba") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+## Parte 7: Validación Rigurosa del Modelo
+
+### Partición Final de Datos
+
+```{r final_data_partition}
+# Partición inicial: 60% modelado, 40% validación final
+set.seed(42)
+indices_final <- createDataPartition(Boston$medv, p = 0.6, list = FALSE)
+datos_modelado <- Boston[indices_final, ]
+datos_validacion_final <- Boston[-indices_final, ]
+
+cat("=== PARTICIÓN FINAL DE DATOS ===\n")
+cat("Datos para modelado:", nrow(datos_modelado), "observaciones\n")
+cat("Datos para validación final:", nrow(datos_validacion_final), "observaciones\n")
+
+# Dentro de datos de modelado: 75% entrenamiento, 25% test para comparar modelos
+indices_train <- createDataPartition(datos_modelado$medv, p = 0.75, list = FALSE)
+datos_train <- datos_modelado[indices_train, ]
+datos_test <- datos_modelado[-indices_train, ]
+
+cat("Datos de entrenamiento:", nrow(datos_train), "observaciones\n")
+cat("Datos de test (comparación):", nrow(datos_test), "observaciones\n")
+```
+
+### Validación Cruzada de Modelos Seleccionados
+
+```{r cross_validation_comparison}
+# Configurar validación cruzada 10-fold
+control_cv <- trainControl(method = "cv", number = 10, verboseIter = FALSE)
+
+# Modelos a comparar basados en selecciones anteriores
+modelos_finales <- list()
+
+# 1. Modelo basado en Best Subset (BIC)
+formula_bic <- as.formula(paste("medv ~", paste(vars_mejor_bic, collapse = " + ")))
+modelo_bic_cv <- train(formula_bic, data = datos_modelado, method = "lm", trControl = control_cv)
+modelos_finales[["Best_Subset_BIC"]] <- modelo_bic_cv
+
+# 2. Modelo basado en Stepwise
+formula_stepwise <- as.formula(paste("medv ~", paste(stepwise_vars, collapse = " + ")))
+modelo_stepwise_cv <- train(formula_stepwise, data = datos_modelado, method = "lm", trControl = control_cv)
+modelos_finales[["Stepwise"]] <- modelo_stepwise_cv
+
+# 3. Modelo basado en Lasso (usando variables seleccionadas)
+if(length(vars_lasso) > 0) {
+  formula_lasso <- as.formula(paste("medv ~", paste(vars_lasso, collapse = " + ")))
+  modelo_lasso_cv <- train(formula_lasso, data = datos_modelado, method = "lm", trControl = control_cv)
+  modelos_finales[["Lasso_Selection"]] <- modelo_lasso_cv
+}
+
+# 4. Modelo Ridge (regularizado)
+# Preparar datos para glmnet en caret
+X_modelado <- model.matrix(medv ~ ., datos_modelado)[, -1]
+y_modelado <- datos_modelado$medv
+
+# Grid de lambda para Ridge
+ridge_grid <- expand.grid(alpha = 0, lambda = seq(0.1, 10, length = 50))
+modelo_ridge_cv <- train(X_modelado, y_modelado, method = "glmnet", 
+                        tuneGrid = ridge_grid, trControl = control_cv)
+modelos_finales[["Ridge"]] <- modelo_ridge_cv
+
+# 5. Modelo Lasso (regularizado)
+lasso_grid <- expand.grid(alpha = 1, lambda = seq(0.01, 1, length = 50))
+modelo_lasso_reg_cv <- train(X_modelado, y_modelado, method = "glmnet",
+                            tuneGrid = lasso_grid, trControl = control_cv)
+modelos_finales[["Lasso_Regularized"]] <- modelo_lasso_reg_cv
+
+# Comparar resultados de validación cruzada
+resultados_cv <- resamples(modelos_finales[1:3])  # Solo modelos lm
+summary(resultados_cv)
+
+# Extraer métricas de todos los modelos
+metricas_cv <- data.frame(
+  Modelo = names(modelos_finales),
+  RMSE_CV = c(
+    modelo_bic_cv$results$RMSE,
+    modelo_stepwise_cv$results$RMSE,
+    if(exists("modelo_lasso_cv")) modelo_lasso_cv$results$RMSE else NA,
+    min(modelo_ridge_cv$results$RMSE),
+    min(modelo_lasso_reg_cv$results$RMSE)
+  ),
+  R2_CV = c(
+    modelo_bic_cv$results$Rsquared,
+    modelo_stepwise_cv$results$Rsquared,
+    if(exists("modelo_lasso_cv")) modelo_lasso_cv$results$Rsquared else NA,
+    max(modelo_ridge_cv$results$Rsquared),
+    max(modelo_lasso_reg_cv$results$Rsquared)
+  )
+)
+
+print(metricas_cv)
+```
+
+### Evaluación Final en Datos No Vistos
+
+```{r final_evaluation}
+# Seleccionar el mejor modelo basado en validación cruzada
+mejor_modelo_idx <- which.min(metricas_cv$RMSE_CV[!is.na(metricas_cv$RMSE_CV)])
+mejor_modelo_nombre <- metricas_cv$Modelo[mejor_modelo_idx]
+mejor_modelo <- modelos_finales[[mejor_modelo_nombre]]
+
+cat("=== EVALUACIÓN FINAL ===\n")
+cat("Mejor modelo según CV:", mejor_modelo_nombre, "\n")
+cat("RMSE de validación cruzada:", round(min(metricas_cv$RMSE_CV, na.rm = TRUE), 3), "\n")
+
+# Predicciones en conjunto de validación final
+if(mejor_modelo_nombre %in% c("Ridge", "Lasso_Regularized")) {
+  # Para modelos glmnet, preparar matriz
+  X_validacion <- model.matrix(medv ~ ., datos_validacion_final)[, -1]
+  predicciones_finales <- predict(mejor_modelo, X_validacion)
+} else {
+  # Para modelos lm
+  predicciones_finales <- predict(mejor_modelo, datos_validacion_final)
+}
+
+# Métricas en conjunto de validación final
+rmse_final <- RMSE(predicciones_finales, datos_validacion_final$medv)
+mae_final <- MAE(predicciones_finales, datos_validacion_final$medv)
+r2_final <- cor(predicciones_finales, datos_validacion_final$medv)^2
+
+cat("\n=== RENDIMIENTO EN DATOS DE VALIDACIÓN FINAL ===\n")
+cat("RMSE:", round(rmse_final, 3), "\n")
+cat("MAE:", round(mae_final, 3), "\n")
+cat("R²:", round(r2_final, 3), "\n")
+
+# Comparación CV vs Final
+cat("\nComparación CV vs Final:\n")
+cat("RMSE CV:", round(min(metricas_cv$RMSE_CV, na.rm = TRUE), 3), "\n")
+cat("RMSE Final:", round(rmse_final, 3), "\n")
+diferencia_rmse <- rmse_final - min(metricas_cv$RMSE_CV, na.rm = TRUE)
+cat("Diferencia:", round(diferencia_rmse, 3), "\n")
+
+if(abs(diferencia_rmse) < 0.5) {
+  cat("✓ El modelo generaliza bien - diferencia mínima entre CV y validación final\n")
+} else if(diferencia_rmse > 0.5) {
+  cat("⚠ Posible sobreajuste - el modelo funciona peor en datos nuevos\n")
+} else {
+  cat("⚠ El modelo puede estar subestimado por validación cruzada\n")
+}
+```
+
+### Diagnóstico Visual del Modelo Final
+
+```{r final_diagnostics}
+# Gráfico de predicciones vs valores reales
+diagnostic_data <- data.frame(
+  Real = datos_validacion_final$medv,
+  Predicho = as.numeric(predicciones_finales),
+  Residuo = datos_validacion_final$medv - as.numeric(predicciones_finales)
+)
+
+# Gráfico de predicciones vs reales
+p1 <- ggplot(diagnostic_data, aes(x = Real, y = Predicho)) +
+  geom_point(alpha = 0.7, color = "blue") +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Predicciones vs Valores Reales",
+       subtitle = paste("Modelo:", mejor_modelo_nombre),
+       x = "Valores Reales", y = "Predicciones") +
+  theme_minimal()
+
+# Gráfico de residuos
+p2 <- ggplot(diagnostic_data, aes(x = Predicho, y = Residuo)) +
+  geom_point(alpha = 0.7, color = "blue") +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+  geom_smooth(se = FALSE, color = "orange") +
+  labs(title = "Residuos vs Predicciones",
+       x = "Predicciones", y = "Residuos") +
+  theme_minimal()
+
+# Histograma de residuos
+p3 <- ggplot(diagnostic_data, aes(x = Residuo)) +
+  geom_histogram(bins = 20, fill = "lightblue", color = "black", alpha = 0.7) +
+  labs(title = "Distribución de Residuos",
+       x = "Residuos", y = "Frecuencia") +
+  theme_minimal()
+
+# Q-Q plot de residuos
+p4 <- ggplot(diagnostic_data, aes(sample = Residuo)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Q-Q Plot de Residuos",
+       x = "Cuantiles Teóricos", y = "Cuantiles de Residuos") +
+  theme_minimal()
+
+# Mostrar todos los gráficos
+grid.arrange(p1, p2, p3, p4, ncol = 2)
+```
+
+## Parte 8: Ejercicios Prácticos
+
+### Ejercicio 1: Dataset mtcars
+
+```{r ejercicio_mtcars}
+# Aplicar todo el pipeline a mtcars
+data(mtcars)
+
+cat("=== EJERCICIO 1: DATASET MTCARS ===\n")
+cat("Tu tarea: Aplicar el pipeline completo de selección de variables\n")
+cat("Variable respuesta: mpg (millas por galón)\n")
+cat("Variables predictoras:", ncol(mtcars) - 1, "\n\n")
+
+cat("Pasos a seguir:\n")
+cat("1. Análisis exploratorio y filtrado básico\n")
+cat("2. Comparar modelos usando AIC, BIC, Cp\n")
+cat("3. Aplicar best subset selection\n")
+cat("4. Probar métodos automáticos (forward, backward, stepwise)\n")
+cat("5. Aplicar regularización (Ridge, Lasso, Elastic Net)\n")
+cat("6. Validar el mejor modelo con validación cruzada\n")
+cat("7. Evaluación final en conjunto de prueba\n\n")
+
+# Tu código aquí:
+# Ejemplo de inicio:
+head(mtcars)
+# Continúa con el análisis completo...
+```
+
+### Ejercicio 2: Dataset Simulado con Ruido
+
+```{r ejercicio_simulado}
+# Crear dataset desafiante para selección de variables
+set.seed(456)
+n <- 200
+p_real <- 5      # Variables verdaderamente importantes
+p_ruido <- 15    # Variables de ruido
+
+# Variables importantes
+X_real <- matrix(rnorm(n * p_real), n, p_real)
+beta_real <- c(2.5, -1.8, 3.2, -2.1, 1.7)
+
+# Variables de ruido
+X_ruido <- matrix(rnorm(n * p_ruido), n, p_ruido)
+
+# Crear algunas correlaciones entre variables de ruido para mayor desafío
+X_ruido[, 2] <- 0.7 * X_ruido[, 1] + 0.3 * rnorm(n)
+X_ruido[, 3] <- 0.6 * X_ruido[, 1] + 0.4 * rnorm(n)
+
+# Combinar variables
+X_total <- cbind(X_real, X_ruido)
+colnames(X_total) <- c(paste0("Important_", 1:p_real), paste0("Noise_", 1:p_ruido))
+
+# Variable respuesta
+y_sim <- X_real %*% beta_real + rnorm(n, sd = 1.5)
+
+# Dataset final
+datos_simulados <- data.frame(y = y_sim, X_total)
+
+cat("=== EJERCICIO 2: DATASET SIMULADO ===\n")
+cat("Observaciones:", nrow(datos_simulados), "\n")
+cat("Variables predictoras:", ncol(datos_simulados) - 1, "\n")
+cat("Variables verdaderamente importantes:", p_real, "\n")
+cat("Variables de ruido:", p_ruido, "\n\n")
+
+cat("Desafío:\n")
+cat("¿Pueden los métodos de selección identificar correctamente\n")
+cat("las 5 variables importantes y descartar las 15 de ruido?\n\n")
+
+# Tu código aquí:
+# Aplica todos los métodos y compara los resultados
+# ¿Qué método identifica mejor las variables verdaderas?
+```
+
+### Ejercicio 3: Comparación Sistemática
+
+```{r ejercicio_comparacion}
+# Función para evaluar todos los métodos en un dataset
+evaluar_metodos_seleccion <- function(datos, var_respuesta) {
+  # Esta función debería implementar todo el pipeline
+  # y retornar una tabla de comparación
+  
+  cat("=== EJERCICIO 3: FUNCIÓN DE EVALUACIÓN ===\n")
+  cat("Implementa una función que:\n")
+  cat("1. Reciba un dataset y nombre de variable respuesta\n")
+  cat("2. Aplique todos los métodos de selección\n")
+  cat("3. Compare los resultados usando validación cruzada\n")
+  cat("4. Retorne un resumen con las mejores opciones\n\n")
+  
+  # Tu implementación aquí...
+  
+  return(NULL)
+}
+
+# Prueba la función con diferentes datasets
+# evaluar_metodos_seleccion(Boston, "medv")
+# evaluar_metodos_seleccion(mtcars, "mpg")
+# evaluar_metodos_seleccion(datos_simulados, "y")
+```
+
+## Parte 9: Conceptos Clave para Recordar
+
+### Resumen de Métodos
+
+::: {.callout-important title="Guía de Decisión para Selección de Variables"}
+
+**¿Cuándo usar cada método?**
+
+**Filtrado Básico:**
+
+- Siempre como primer paso
+- Elimina variables obvialmente problemáticas
+- Reduce dimensionalidad para métodos posteriores
+
+**Best Subset Selection:**
+
+- Cuando p < 15-20 variables
+- Se requiere la solución óptima garantizada
+- Recursos computacionales suficientes
+
+**Métodos Automáticos (Forward/Backward/Stepwise):**
+
+- Cuando p es moderado a grande (p > 20)
+- Exploración rápida del espacio de modelos
+- Como punto de partida para otros métodos
+
+**Regularización:**
+
+- **Ridge:** Todas las variables son potencialmente relevantes, hay multicolinealidad
+- **Lasso:** Se sospecha que muchas variables son irrelevantes
+- **Elastic Net:** Hay grupos de variables correlacionadas, se busca estabilidad
+
+**Criterios de Información:**
+
+- **AIC:** Objetivo predictivo
+- **BIC:** Objetivo de identificar el "modelo verdadero"
+- **Cp de Mallows:** Análisis del sesgo-varianza
+:::
+
+### Métricas de Validación
+
+::: {.callout-note title="Interpretación de Métricas"}
+
+**RMSE (Root Mean Square Error):**
+
+- Unidades de la variable respuesta
+- Penaliza errores grandes desproporcionadamente
+- Sensible a outliers
+
+**MAE (Mean Absolute Error):**
+
+- Unidades de la variable respuesta
+- Trata todos los errores proporcionalmente
+- Más robusto a outliers
+
+**R² de Validación Cruzada:**
+
+- Proporción de varianza explicada en datos no vistos
+- Mejor indicador que R² de entrenamiento
+- Valores similares entre CV y test indican buena generalización
+:::
+
+### Señales de Alerta
+
+::: {.callout-warning title="Problemas Comunes"}
+
+**Sobreajuste:**
+
+- Error de entrenamiento << Error de validación
+- Modelo muy complejo para el tamaño de muestra
+- R² muy alto pero RMSE de validación alto
+
+**Subajuste:**
+
+- Error de entrenamiento ≈ Error de validación (ambos altos)
+- Modelo demasiado simple
+- Patrones no capturados en los residuos
+
+**Selección Inestable:**
+
+- Métodos diferentes seleccionan variables muy distintas
+- Resultados cambian mucho con pequeñas variaciones en datos
+- Indica posible sobreajuste o datos insuficientes
+:::
+
+### Mejores Prácticas
+
+1. **Siempre partir datos antes de cualquier análisis**
+2. **Usar validación cruzada para selección, conjunto independiente para evaluación final**
+3. **Comparar múltiples métodos y buscar consenso**
+4. **Validar supuestos del modelo final**
+5. **Considerar interpretabilidad vs precisión predictiva**
+6. **Documentar todo el proceso de selección**
+
+## Próximo Laboratorio
+
+En el Laboratorio 5 exploraremos modelos lineales generalizados (GLM), incluyendo regresión logística y regresión de Poisson, ampliando nuestras herramientas para variables respuesta no continuas.

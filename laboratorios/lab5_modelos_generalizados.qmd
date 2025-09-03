@@ -1,0 +1,1000 @@
+---
+title: "Laboratorio 5: Modelos Lineales Generalizados"
+subtitle: "Modelos Estadísticos de Predicción"
+author: "Víctor Aceña Gil - Isaac Martín de Diego"
+date: today
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+execute:
+  warning: false
+  message: false
+---
+
+## Objetivos del Laboratorio
+
+Al finalizar este laboratorio, serás capaz de:
+
+- Entender los fundamentos de los Modelos Lineales Generalizados (GLM)
+- Ajustar e interpretar modelos de regresión logística
+- Implementar regresión de Poisson para datos de conteo
+- Aplicar regresión binomial negativa para datos con sobredispersión
+- Evaluar la bondad de ajuste usando deviance y criterios de información
+- Realizar diagnósticos específicos para GLMs
+- Validar modelos usando métricas apropiadas para cada tipo de respuesta
+
+## Configuración Inicial
+
+```{r setup}
+# Cargar librerías necesarias
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(MASS)         # Para datasets y binomial negativa
+  library(car)          # Para diagnósticos
+  library(broom)        # Para resultados ordenados
+  library(pROC)         # Para curvas ROC
+  library(caret)        # Para matrices de confusión
+  library(corrplot)     # Para visualizaciones
+  library(gridExtra)    # Para múltiples gráficos
+  library(performance)  # Para diagnósticos de modelos
+  library(see)          # Para visualizaciones de performance
+})
+
+set.seed(123)
+```
+
+## Parte 1: Introducción a los GLMs
+
+### Conceptos Fundamentales
+
+```{r glm_conceptos}
+cat("=== COMPONENTES DE UN MODELO LINEAL GENERALIZADO ===\n\n")
+
+cat("1. COMPONENTE ALEATORIO:\n")
+cat("   - Define la distribución de la variable respuesta\n")
+cat("   - Debe pertenecer a la familia exponencial\n")
+cat("   - Ejemplos: Normal, Binomial, Poisson, Gamma\n\n")
+
+cat("2. COMPONENTE SISTEMÁTICO:\n")
+cat("   - Combinación lineal de predictores: η = β₀ + β₁X₁ + ... + βₚXₚ\n")
+cat("   - η es el predictor lineal\n\n")
+
+cat("3. FUNCIÓN DE ENLACE:\n")
+cat("   - Conecta la media de Y con el predictor lineal: g(μ) = η\n")
+cat("   - Debe ser monótona y diferenciable\n\n")
+
+# Tabla de distribuciones comunes y sus enlaces
+distribuciones_glm <- data.frame(
+  Distribucion = c("Normal", "Binomial", "Poisson", "Gamma", "Inversa Gaussiana"),
+  Uso_Tipico = c("Variables continuas", "Proporciones/Binarias", "Conteos", 
+                 "Variables positivas sesgadas", "Tiempos hasta evento"),
+  Funcion_Varianza = c("1", "μ(1-μ)", "μ", "μ²", "μ³"),
+  Enlace_Canonico = c("Identidad: μ", "Logit: log(μ/(1-μ))", "Log: log(μ)", 
+                      "Inverso: 1/μ", "Inverso cuadrado: 1/μ²"),
+  Enlace_Comun = c("Identidad", "Logit", "Log", "Log", "Log")
+)
+
+print(distribuciones_glm)
+```
+
+### Comparación con Regresión Lineal
+
+```{r glm_vs_linear}
+# Generar datos para mostrar limitaciones de regresión lineal con respuesta binaria
+n <- 200
+x <- seq(-3, 3, length.out = n)
+# Generar probabilidades usando función logística
+prob_real <- 1 / (1 + exp(-2 - 1.5*x))
+y_binario <- rbinom(n, 1, prob_real)
+
+datos_ejemplo <- data.frame(x = x, y = y_binario, prob_real = prob_real)
+
+# Ajustar modelo lineal (incorrecto)
+modelo_lineal <- lm(y ~ x, data = datos_ejemplo)
+
+# Ajustar modelo logístico (correcto)
+modelo_logistico <- glm(y ~ x, data = datos_ejemplo, family = binomial)
+
+# Predicciones
+datos_ejemplo$pred_lineal <- predict(modelo_lineal)
+datos_ejemplo$pred_logistico <- predict(modelo_logistico, type = "response")
+
+# Visualización
+ggplot(datos_ejemplo, aes(x = x)) +
+  geom_point(aes(y = y), alpha = 0.5, color = "black") +
+  geom_line(aes(y = prob_real), color = "green", size = 1.2, linetype = "dashed") +
+  geom_line(aes(y = pred_lineal), color = "red", size = 1) +
+  geom_line(aes(y = pred_logistico), color = "blue", size = 1) +
+  labs(title = "Comparación: Regresión Lineal vs Logística",
+       subtitle = "Verde: Probabilidad real, Rojo: Modelo lineal, Azul: Modelo logístico",
+       x = "Variable Predictora", y = "Probabilidad / Respuesta") +
+  theme_minimal()
+
+cat("=== PROBLEMAS DE LA REGRESIÓN LINEAL PARA RESPUESTA BINARIA ===\n")
+cat("1. Predicciones fuera del rango [0,1]\n")
+cat("2. Varianza no constante (heterocedasticidad)\n")
+cat("3. Residuos no normales\n")
+cat("4. Relación no lineal entre predictores y probabilidad\n\n")
+
+# Mostrar predicciones problemáticas del modelo lineal
+pred_problematicas <- sum(datos_ejemplo$pred_lineal < 0 | datos_ejemplo$pred_lineal > 1)
+cat("Predicciones fuera de [0,1] en modelo lineal:", pred_problematicas, "de", n, "\n")
+```
+
+## Parte 2: Regresión Logística
+
+### Dataset de Trabajo
+
+```{r logistic_data}
+# Usar el dataset Pima Indians Diabetes
+data(Pima.tr)
+data(Pima.te)
+
+# Combinar datasets para mayor tamaño de muestra
+pima_completo <- rbind(Pima.tr, Pima.te)
+
+# Información del dataset
+cat("=== DATASET PIMA INDIANS DIABETES ===\n")
+cat("Observaciones:", nrow(pima_completo), "\n")
+cat("Variables:", ncol(pima_completo), "\n\n")
+
+# Descripción de variables
+cat("Variables:\n")
+cat("type: Diabetes (Yes/No) - Variable respuesta\n")
+cat("npreg: Número de embarazos\n")
+cat("glu: Concentración de glucosa en plasma\n")
+cat("bp: Presión arterial diastólica\n")
+cat("skin: Grosor del pliegue cutáneo del tríceps\n")
+cat("bmi: Índice de masa corporal\n")
+cat("ped: Función de pedigrí de diabetes\n")
+cat("age: Edad\n\n")
+
+# Resumen estadístico
+summary(pima_completo)
+
+# Distribución de la variable respuesta
+table(pima_completo$type)
+prop.table(table(pima_completo$type))
+```
+
+### Ajuste del Modelo Logístico
+
+```{r logistic_model}
+# Dividir datos en entrenamiento y prueba
+set.seed(123)
+indices_train <- createDataPartition(pima_completo$type, p = 0.7, list = FALSE)
+datos_train <- pima_completo[indices_train, ]
+datos_test <- pima_completo[-indices_train, ]
+
+cat("=== DIVISIÓN DE DATOS ===\n")
+cat("Entrenamiento:", nrow(datos_train), "observaciones\n")
+cat("Prueba:", nrow(datos_test), "observaciones\n\n")
+
+# Ajustar modelo logístico completo
+modelo_logit_completo <- glm(type ~ ., data = datos_train, family = binomial)
+
+# Resumen del modelo
+summary(modelo_logit_completo)
+
+# Interpretación de coeficientes mediante odds ratios
+odds_ratios <- exp(coef(modelo_logit_completo))
+conf_intervals <- exp(confint(modelo_logit_completo))
+
+cat("\n=== ODDS RATIOS E INTERVALOS DE CONFIANZA ===\n")
+resultados_or <- data.frame(
+  Variable = names(odds_ratios),
+  OR = round(odds_ratios, 3),
+  IC_2.5 = round(conf_intervals[,1], 3),
+  IC_97.5 = round(conf_intervals[,2], 3)
+)
+print(resultados_or)
+
+# Interpretación práctica
+cat("\n=== INTERPRETACIÓN DE ODDS RATIOS ===\n")
+cat("glu (Glucosa): OR =", round(odds_ratios["glu"], 3), "\n")
+cat("  → Por cada mg/dl adicional de glucosa, las odds de diabetes se multiplican por", round(odds_ratios["glu"], 3), "\n")
+cat("  → Esto representa un cambio de", round((odds_ratios["glu"] - 1) * 100, 1), "% en las odds\n\n")
+
+cat("bmi (IMC): OR =", round(odds_ratios["bmi"], 3), "\n")
+cat("  → Por cada unidad adicional de IMC, las odds de diabetes se multiplican por", round(odds_ratios["bmi"], 3), "\n")
+cat("  → Esto representa un cambio de", round((odds_ratios["bmi"] - 1) * 100, 1), "% en las odds\n")
+```
+
+### Selección de Variables
+
+```{r logistic_selection}
+# Método stepwise para selección de variables
+modelo_inicial <- glm(type ~ 1, data = datos_train, family = binomial)
+modelo_stepwise <- step(modelo_inicial, 
+                       scope = list(lower = modelo_inicial, upper = modelo_logit_completo),
+                       direction = "both", trace = FALSE)
+
+cat("=== SELECCIÓN STEPWISE ===\n")
+cat("Variables seleccionadas:\n")
+formula_final <- formula(modelo_stepwise)
+print(formula_final)
+
+# Comparar modelos
+cat("\n=== COMPARACIÓN DE MODELOS ===\n")
+cat("Modelo completo - AIC:", round(AIC(modelo_logit_completo), 2), "\n")
+cat("Modelo stepwise - AIC:", round(AIC(modelo_stepwise), 2), "\n")
+
+# Test de razón de verosimilitudes
+lrt_test <- anova(modelo_stepwise, modelo_logit_completo, test = "LRT")
+print(lrt_test)
+
+# Usar modelo final (stepwise)
+modelo_final <- modelo_stepwise
+summary(modelo_final)
+```
+
+### Bondad de Ajuste
+
+```{r logistic_goodness_fit}
+# Pseudo R²
+mcfadden_r2 <- 1 - (logLik(modelo_final) / logLik(modelo_inicial))
+nagelkerke_r2 <- function(modelo_null, modelo_full) {
+  n <- nobs(modelo_full)
+  cox_snell <- 1 - (exp(logLik(modelo_null))/exp(logLik(modelo_full)))^(2/n)
+  max_r2 <- 1 - exp(logLik(modelo_null))^(2/n)
+  return(cox_snell / max_r2)
+}
+
+cat("=== MEDIDAS DE BONDAD DE AJUSTE ===\n")
+cat("McFadden R²:", round(as.numeric(mcfadden_r2), 3), "\n")
+cat("Nagelkerke R²:", round(nagelkerke_r2(modelo_inicial, modelo_final), 3), "\n")
+cat("AIC:", round(AIC(modelo_final), 2), "\n")
+cat("Deviance:", round(deviance(modelo_final), 2), "\n")
+cat("Deviance nula:", round(modelo_final$null.deviance, 2), "\n")
+
+# Test de significancia global
+deviance_diff <- modelo_final$null.deviance - deviance(modelo_final)
+df_diff <- modelo_final$df.null - modelo_final$df.residual
+p_valor_global <- 1 - pchisq(deviance_diff, df_diff)
+
+cat("\n=== TEST DE SIGNIFICANCIA GLOBAL ===\n")
+cat("Chi-cuadrado:", round(deviance_diff, 2), "\n")
+cat("Grados de libertad:", df_diff, "\n")
+cat("p-valor:", format.pval(p_valor_global, digits = 3), "\n")
+```
+
+### Diagnósticos del Modelo
+
+```{r logistic_diagnostics}
+# Calcular diferentes tipos de residuos
+datos_train$residuos_pearson <- residuals(modelo_final, type = "pearson")
+datos_train$residuos_deviance <- residuals(modelo_final, type = "deviance")
+datos_train$valores_ajustados <- fitted(modelo_final)
+datos_train$leverage <- hatvalues(modelo_final)
+datos_train$cook_distance <- cooks.distance(modelo_final)
+
+# Gráficos de diagnóstico
+p1 <- ggplot(datos_train, aes(x = valores_ajustados, y = residuos_deviance)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(se = FALSE, color = "red") +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(title = "Residuos Deviance vs Valores Ajustados",
+       x = "Probabilidades Predichas", y = "Residuos Deviance") +
+  theme_minimal()
+
+p2 <- ggplot(datos_train, aes(sample = residuos_deviance)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Q-Q Plot de Residuos Deviance",
+       x = "Cuantiles Teóricos", y = "Cuantiles Muestra") +
+  theme_minimal()
+
+p3 <- ggplot(datos_train, aes(x = leverage, y = residuos_deviance)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(se = FALSE, color = "red") +
+  labs(title = "Residuos vs Leverage",
+       x = "Leverage", y = "Residuos Deviance") +
+  theme_minimal()
+
+p4 <- ggplot(datos_train, aes(x = seq_along(cook_distance), y = cook_distance)) +
+  geom_col() +
+  geom_hline(yintercept = 4/nrow(datos_train), color = "red", linetype = "dashed") +
+  labs(title = "Distancia de Cook",
+       x = "Observación", y = "Distancia de Cook") +
+  theme_minimal()
+
+grid.arrange(p1, p2, p3, p4, ncol = 2)
+
+# Identificar observaciones influyentes
+n_obs <- nrow(datos_train)
+outliers_cook <- which(datos_train$cook_distance > 4/n_obs)
+outliers_leverage <- which(datos_train$leverage > 2*length(coef(modelo_final))/n_obs)
+
+cat("\n=== DIAGNÓSTICO DE OBSERVACIONES INFLUYENTES ===\n")
+cat("Observaciones con alta distancia de Cook (>4/n):", length(outliers_cook), "\n")
+if(length(outliers_cook) > 0) {
+  cat("Índices:", head(outliers_cook, 10), "\n")
+}
+cat("Observaciones con alto leverage (>2p/n):", length(outliers_leverage), "\n")
+```
+
+### Validación y Predicción
+
+```{r logistic_validation}
+# Predicciones en conjunto de prueba
+pred_prob <- predict(modelo_final, newdata = datos_test, type = "response")
+pred_class <- ifelse(pred_prob > 0.5, "Yes", "No")
+
+# Matriz de confusión
+matriz_confusion <- table(Predicho = pred_class, Real = datos_test$type)
+print(matriz_confusion)
+
+# Métricas de clasificación
+accuracy <- sum(diag(matriz_confusion)) / sum(matriz_confusion)
+sensitivity <- matriz_confusion[2,2] / sum(matriz_confusion[,2])  # VP / (VP + FN)
+specificity <- matriz_confusion[1,1] / sum(matriz_confusion[,1])  # VN / (VN + FP)
+precision <- matriz_confusion[2,2] / sum(matriz_confusion[2,])    # VP / (VP + FP)
+
+cat("\n=== MÉTRICAS DE CLASIFICACIÓN ===\n")
+cat("Accuracy (Precisión):", round(accuracy, 3), "\n")
+cat("Sensitivity (Sensibilidad):", round(sensitivity, 3), "\n")
+cat("Specificity (Especificidad):", round(specificity, 3), "\n")
+cat("Precision (Precisión Positiva):", round(precision, 3), "\n")
+
+# Curva ROC
+roc_curve <- roc(datos_test$type, pred_prob)
+auc_value <- auc(roc_curve)
+
+# Gráfico ROC
+plot(roc_curve, main = "Curva ROC - Regresión Logística", 
+     col = "blue", lwd = 2)
+text(0.6, 0.4, paste("AUC =", round(auc_value, 3)), cex = 1.2)
+
+cat("\n=== ANÁLISIS ROC ===\n")
+cat("AUC (Área bajo la curva):", round(auc_value, 3), "\n")
+
+# Interpretación del AUC
+if(auc_value >= 0.9) {
+  cat("Interpretación: Excelente discriminación\n")
+} else if(auc_value >= 0.8) {
+  cat("Interpretación: Buena discriminación\n")
+} else if(auc_value >= 0.7) {
+  cat("Interpretación: Discriminación aceptable\n")
+} else if(auc_value >= 0.6) {
+  cat("Interpretación: Discriminación pobre\n")
+} else {
+  cat("Interpretación: Sin capacidad discriminativa útil\n")
+}
+
+# Punto óptimo en la curva ROC
+coords_optimo <- coords(roc_curve, "best", ret = c("threshold", "sensitivity", "specificity"))
+cat("\nPunto óptimo:\n")
+cat("Umbral:", round(coords_optimo$threshold, 3), "\n")
+cat("Sensibilidad:", round(coords_optimo$sensitivity, 3), "\n")
+cat("Especificidad:", round(coords_optimo$specificity, 3), "\n")
+```
+
+## Parte 3: Regresión de Poisson
+
+### Simulación de Datos de Conteo
+
+```{r poisson_data}
+# Simular datos de conteo realistas
+set.seed(456)
+n <- 200
+
+# Variables predictoras
+hospital_size <- sample(c("Pequeño", "Mediano", "Grande"), n, replace = TRUE, prob = c(0.4, 0.4, 0.2))
+quality_score <- rnorm(n, mean = 75, sd = 10)
+patient_complexity <- rnorm(n, mean = 50, sd = 15)
+
+# Codificar tamaño del hospital
+size_medium <- ifelse(hospital_size == "Mediano", 1, 0)
+size_large <- ifelse(hospital_size == "Grande", 1, 0)
+
+# Generar número de infecciones (variable de conteo)
+# Log-tasa lineal con los predictores
+log_lambda <- 1.5 - 0.02*quality_score + size_medium*0.5 + size_large*0.8 + 0.01*patient_complexity
+lambda <- exp(log_lambda)
+infecciones <- rpois(n, lambda)
+
+# Crear dataset
+datos_hospitales <- data.frame(
+  infecciones = infecciones,
+  tamaño = hospital_size,
+  calidad = quality_score,
+  complejidad = patient_complexity,
+  size_medium = size_medium,
+  size_large = size_large
+)
+
+# Información del dataset
+cat("=== DATASET SIMULADO: INFECCIONES HOSPITALARIAS ===\n")
+cat("Observaciones:", nrow(datos_hospitales), "\n")
+cat("Variable respuesta: Número de infecciones por hospital\n\n")
+
+# Estadísticas descriptivas
+cat("=== ESTADÍSTICAS DESCRIPTIVAS ===\n")
+summary(datos_hospitales)
+
+# Distribución de la variable respuesta
+cat("\n=== DISTRIBUCIÓN DE INFECCIONES ===\n")
+table(datos_hospitales$infecciones)
+
+# Verificar supuesto de equidispersión
+media_infecciones <- mean(datos_hospitales$infecciones)
+var_infecciones <- var(datos_hospitales$infecciones)
+cat("\nMedia:", round(media_infecciones, 3), "\n")
+cat("Varianza:", round(var_infecciones, 3), "\n")
+cat("Razón Varianza/Media:", round(var_infecciones/media_infecciones, 3), "\n")
+
+# Histograma
+ggplot(datos_hospitales, aes(x = infecciones)) +
+  geom_histogram(bins = 15, fill = "lightblue", color = "black", alpha = 0.7) +
+  labs(title = "Distribución del Número de Infecciones",
+       x = "Número de Infecciones", y = "Frecuencia") +
+  theme_minimal()
+```
+
+### Ajuste del Modelo de Poisson
+
+```{r poisson_model}
+# Dividir datos
+indices_train_pois <- createDataPartition(datos_hospitales$infecciones, p = 0.7, list = FALSE)
+train_pois <- datos_hospitales[indices_train_pois, ]
+test_pois <- datos_hospitales[-indices_train_pois, ]
+
+# Ajustar modelo de Poisson
+modelo_poisson <- glm(infecciones ~ calidad + size_medium + size_large + complejidad, 
+                     data = train_pois, family = poisson)
+
+summary(modelo_poisson)
+
+# Interpretación de coeficientes como IRR (Incidence Rate Ratios)
+irr <- exp(coef(modelo_poisson))
+conf_int_pois <- exp(confint(modelo_poisson))
+
+cat("\n=== INCIDENCE RATE RATIOS (IRR) ===\n")
+resultados_irr <- data.frame(
+  Variable = names(irr),
+  IRR = round(irr, 3),
+  IC_2.5 = round(conf_int_pois[,1], 3),
+  IC_97.5 = round(conf_int_pois[,2], 3)
+)
+print(resultados_irr)
+
+# Interpretación práctica
+cat("\n=== INTERPRETACIÓN DE IRR ===\n")
+cat("calidad: IRR =", round(irr["calidad"], 3), "\n")
+cat("  → Por cada punto adicional en calidad, la tasa de infecciones se multiplica por", round(irr["calidad"], 3), "\n")
+cat("  → Esto representa una disminución del", round((1 - irr["calidad"]) * 100, 1), "% en la tasa\n\n")
+
+cat("size_large: IRR =", round(irr["size_large"], 3), "\n")
+cat("  → Hospitales grandes tienen una tasa", round(irr["size_large"], 2), "veces mayor que pequeños\n")
+cat("  → Esto representa un aumento del", round((irr["size_large"] - 1) * 100, 1), "% en la tasa\n")
+```
+
+### Diagnóstico del Modelo de Poisson
+
+```{r poisson_diagnostics}
+# Residuos y diagnósticos
+train_pois$residuos_pearson <- residuals(modelo_poisson, type = "pearson")
+train_pois$residuos_deviance <- residuals(modelo_poisson, type = "deviance")
+train_pois$valores_ajustados <- fitted(modelo_poisson)
+train_pois$leverage <- hatvalues(modelo_poisson)
+
+# Estadístico de dispersión
+pearson_stat <- sum(train_pois$residuos_pearson^2)
+df_residual <- modelo_poisson$df.residual
+dispersion_stat <- pearson_stat / df_residual
+
+cat("=== DIAGNÓSTICO DE SOBREDISPERSIÓN ===\n")
+cat("Estadístico de Pearson:", round(pearson_stat, 2), "\n")
+cat("Grados de libertad:", df_residual, "\n")
+cat("Estadístico de dispersión:", round(dispersion_stat, 3), "\n")
+
+if(dispersion_stat > 1.5) {
+  cat("CONCLUSIÓN: Hay evidencia de sobredispersión (φ > 1.5)\n")
+  cat("RECOMENDACIÓN: Considerar modelo binomial negativo\n")
+} else if(dispersion_stat > 1.2) {
+  cat("CONCLUSIÓN: Posible sobredispersión leve (φ > 1.2)\n")
+  cat("RECOMENDACIÓN: Verificar con modelo binomial negativo\n")
+} else {
+  cat("CONCLUSIÓN: No hay evidencia clara de sobredispersión\n")
+  cat("RECOMENDACIÓN: Modelo de Poisson es apropiado\n")
+}
+
+# Gráficos de diagnóstico
+p1 <- ggplot(train_pois, aes(x = valores_ajustados, y = residuos_deviance)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(se = FALSE, color = "red") +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(title = "Residuos Deviance vs Valores Ajustados",
+       x = "Valores Ajustados", y = "Residuos Deviance") +
+  theme_minimal()
+
+p2 <- ggplot(train_pois, aes(sample = residuos_deviance)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Q-Q Plot de Residuos Deviance",
+       x = "Cuantiles Teóricos", y = "Cuantiles Muestra") +
+  theme_minimal()
+
+p3 <- ggplot(train_pois, aes(x = valores_ajustados, y = sqrt(abs(residuos_deviance)))) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(se = FALSE, color = "red") +
+  labs(title = "Escala-Localización",
+       x = "Valores Ajustados", y = "√|Residuos Deviance|") +
+  theme_minimal()
+
+p4 <- ggplot(train_pois, aes(x = leverage, y = residuos_deviance)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(se = FALSE, color = "red") +
+  labs(title = "Residuos vs Leverage",
+       x = "Leverage", y = "Residuos Deviance") +
+  theme_minimal()
+
+grid.arrange(p1, p2, p3, p4, ncol = 2)
+```
+
+### Modelo Binomial Negativo
+
+```{r negative_binomial}
+# Ajustar modelo binomial negativo para comparar
+modelo_nb <- glm.nb(infecciones ~ calidad + size_medium + size_large + complejidad, 
+                   data = train_pois)
+
+summary(modelo_nb)
+
+# Comparar modelos
+cat("\n=== COMPARACIÓN POISSON VS BINOMIAL NEGATIVO ===\n")
+cat("AIC Poisson:", round(AIC(modelo_poisson), 2), "\n")
+cat("AIC Binomial Negativo:", round(AIC(modelo_nb), 2), "\n")
+cat("Diferencia AIC:", round(AIC(modelo_poisson) - AIC(modelo_nb), 2), "\n")
+
+cat("\nParámetro theta (binomial negativo):", round(modelo_nb$theta, 3), "\n")
+
+if(modelo_nb$theta < 10) {
+  cat("Interpretación: Theta bajo indica sobredispersión significativa\n")
+  cat("RECOMENDACIÓN: Usar modelo binomial negativo\n")
+} else {
+  cat("Interpretación: Theta alto, poca sobredispersión\n")
+  cat("RECOMENDACIÓN: Modelo de Poisson puede ser suficiente\n")
+}
+
+# Test formal de sobredispersión (LR test)
+lr_stat <- 2 * (logLik(modelo_nb) - logLik(modelo_poisson))
+p_valor_lr <- 1 - pchisq(lr_stat, df = 1)
+
+cat("\n=== TEST DE RAZÓN DE VEROSIMILITUDES ===\n")
+cat("Estadístico LR:", round(as.numeric(lr_stat), 3), "\n")
+cat("p-valor:", format.pval(p_valor_lr, digits = 3), "\n")
+
+if(p_valor_lr < 0.05) {
+  cat("CONCLUSIÓN: Rechazamos H0, hay sobredispersión significativa\n")
+  modelo_final_count <- modelo_nb
+} else {
+  cat("CONCLUSIÓN: No rechazamos H0, Poisson es adecuado\n")
+  modelo_final_count <- modelo_poisson
+}
+```
+
+### Validación del Modelo de Conteo
+
+```{r poisson_validation}
+# Predicciones en conjunto de prueba
+if(exists("modelo_final_count") && class(modelo_final_count)[1] == "negbin") {
+  pred_count <- predict(modelo_final_count, newdata = test_pois, type = "response")
+  modelo_name <- "Binomial Negativo"
+} else {
+  pred_count <- predict(modelo_poisson, newdata = test_pois, type = "response")
+  modelo_name <- "Poisson"
+}
+
+# Métricas de validación para datos de conteo
+rmse_count <- sqrt(mean((test_pois$infecciones - pred_count)^2))
+mae_count <- mean(abs(test_pois$infecciones - pred_count))
+
+cat("=== VALIDACIÓN DEL MODELO DE CONTEO ===\n")
+cat("Modelo utilizado:", modelo_name, "\n")
+cat("RMSE:", round(rmse_count, 3), "\n")
+cat("MAE:", round(mae_count, 3), "\n")
+
+# Gráfico de predicciones vs reales
+test_pois$predicciones <- pred_count
+
+ggplot(test_pois, aes(x = infecciones, y = predicciones)) +
+  geom_point(alpha = 0.6, color = "blue") +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  geom_smooth(method = "lm", se = FALSE, color = "orange") +
+  labs(title = paste("Predicciones vs Valores Reales -", modelo_name),
+       x = "Infecciones Observadas", y = "Infecciones Predichas") +
+  theme_minimal()
+
+# Análisis de residuos en validación
+residuos_validacion <- test_pois$infecciones - pred_count
+cat("\n=== ANÁLISIS DE RESIDUOS EN VALIDACIÓN ===\n")
+cat("Media de residuos:", round(mean(residuos_validacion), 4), "\n")
+cat("Desviación estándar de residuos:", round(sd(residuos_validacion), 3), "\n")
+
+# Histograma de residuos
+ggplot(data.frame(residuos = residuos_validacion), aes(x = residuos)) +
+  geom_histogram(bins = 15, fill = "lightcoral", color = "black", alpha = 0.7) +
+  geom_vline(xintercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Distribución de Residuos en Validación",
+       x = "Residuos", y = "Frecuencia") +
+  theme_minimal()
+```
+
+## Parte 4: Otros GLMs
+
+### Regresión Gamma
+
+```{r gamma_regression}
+# Simular datos gamma (ej: costos médicos)
+set.seed(789)
+n_gamma <- 150
+
+# Variables predictoras
+edad <- rnorm(n_gamma, mean = 50, sd = 15)
+severidad <- sample(1:5, n_gamma, replace = TRUE, prob = c(0.3, 0.25, 0.2, 0.15, 0.1))
+tratamiento <- sample(c("Básico", "Estándar", "Avanzado"), n_gamma, replace = TRUE)
+
+# Codificar tratamiento
+trat_estandar <- ifelse(tratamiento == "Estándar", 1, 0)
+trat_avanzado <- ifelse(tratamiento == "Avanzado", 1, 0)
+
+# Generar costos (distribución gamma)
+# Los costos aumentan con edad y severidad, y según tipo de tratamiento
+mu_gamma <- exp(3 + 0.02*edad + 0.3*severidad + 0.4*trat_estandar + 0.8*trat_avanzado)
+# Parámetros gamma: shape y rate
+shape_param <- 2
+rate_param <- shape_param / mu_gamma
+costos <- rgamma(n_gamma, shape = shape_param, rate = rate_param)
+
+datos_gamma <- data.frame(
+  costos = costos,
+  edad = edad,
+  severidad = severidad,
+  tratamiento = tratamiento,
+  trat_estandar = trat_estandar,
+  trat_avanzado = trat_avanzado
+)
+
+cat("=== REGRESIÓN GAMMA: COSTOS MÉDICOS ===\n")
+cat("Observaciones:", nrow(datos_gamma), "\n")
+summary(datos_gamma)
+
+# Verificar distribución de costos
+ggplot(datos_gamma, aes(x = costos)) +
+  geom_histogram(bins = 20, fill = "lightgreen", color = "black", alpha = 0.7) +
+  labs(title = "Distribución de Costos Médicos",
+       x = "Costos (€)", y = "Frecuencia") +
+  theme_minimal()
+
+# Ajustar modelo gamma
+modelo_gamma <- glm(costos ~ edad + severidad + trat_estandar + trat_avanzado,
+                   data = datos_gamma, family = Gamma(link = "log"))
+
+summary(modelo_gamma)
+
+# Interpretación de coeficientes (efectos multiplicativos)
+exp_coefs_gamma <- exp(coef(modelo_gamma))
+cat("\n=== INTERPRETACIÓN MULTIPLICATIVA (GAMMA) ===\n")
+print(round(exp_coefs_gamma, 3))
+
+cat("\nedad: Por cada año adicional, los costos se multiplican por", round(exp_coefs_gamma["edad"], 4), "\n")
+cat("severidad: Por cada nivel adicional de severidad, los costos se multiplican por", round(exp_coefs_gamma["severidad"], 3), "\n")
+cat("trat_avanzado: Tratamiento avanzado vs básico multiplica costos por", round(exp_coefs_gamma["trat_avanzado"], 3), "\n")
+```
+
+### Comparación de Familias de Distribución
+
+```{r glm_comparison}
+# Comparar diferentes familias para el mismo dataset
+# Usar datos de infecciones pero probando diferentes distribuciones
+
+cat("=== COMPARACIÓN DE FAMILIAS DE DISTRIBUCIÓN ===\n")
+cat("Dataset: Infecciones hospitalarias\n\n")
+
+# Modelos con diferentes distribuciones
+modelo_gaussian <- glm(infecciones ~ calidad + size_medium + size_large + complejidad, 
+                      data = train_pois, family = gaussian)
+
+modelo_poisson_comp <- glm(infecciones ~ calidad + size_medium + size_large + complejidad, 
+                          data = train_pois, family = poisson)
+
+modelo_quasipoisson <- glm(infecciones ~ calidad + size_medium + size_large + complejidad, 
+                          data = train_pois, family = quasipoisson)
+
+# Comparar AIC (no disponible para quasipoisson)
+modelos_comp <- list(
+  "Gaussiano" = modelo_gaussian,
+  "Poisson" = modelo_poisson_comp
+)
+
+comparacion_aic <- data.frame(
+  Modelo = names(modelos_comp),
+  AIC = sapply(modelos_comp, AIC),
+  Deviance = sapply(modelos_comp, deviance),
+  Dispersion = c(
+    summary(modelo_gaussian)$dispersion,
+    summary(modelo_poisson_comp)$dispersion
+  )
+)
+
+print(comparacion_aic)
+
+# Información adicional sobre quasipoisson
+cat("\n=== MODELO QUASI-POISSON ===\n")
+cat("Dispersión estimada:", round(summary(modelo_quasipoisson)$dispersion, 3), "\n")
+
+if(summary(modelo_quasipoisson)$dispersion > 1.5) {
+  cat("Interpretación: Sobredispersión confirmada\n")
+} else {
+  cat("Interpretación: Dispersión cercana a 1, Poisson adecuado\n")
+}
+
+# Predicciones para comparar
+pred_gaussian <- predict(modelo_gaussian, newdata = test_pois, type = "response")
+pred_poisson_comp <- predict(modelo_poisson_comp, newdata = test_pois, type = "response")
+pred_quasipoisson <- predict(modelo_quasipoisson, newdata = test_pois, type = "response")
+
+# RMSE de cada modelo
+rmse_comparison <- data.frame(
+  Modelo = c("Gaussiano", "Poisson", "Quasi-Poisson"),
+  RMSE = c(
+    sqrt(mean((test_pois$infecciones - pred_gaussian)^2)),
+    sqrt(mean((test_pois$infecciones - pred_poisson_comp)^2)),
+    sqrt(mean((test_pois$infecciones - pred_quasipoisson)^2))
+  )
+)
+
+cat("\n=== COMPARACIÓN DE RMSE EN VALIDACIÓN ===\n")
+print(rmse_comparison)
+
+# El mejor modelo según RMSE
+mejor_modelo <- rmse_comparison$Modelo[which.min(rmse_comparison$RMSE)]
+cat("\nMejor modelo según RMSE:", mejor_modelo, "\n")
+```
+
+## Parte 5: Ejercicios Prácticos
+
+### Ejercicio 1: Análisis Completo de Regresión Logística
+
+```{r ejercicio_logistica}
+# Dataset para análisis de admisión universitaria
+set.seed(999)
+n_admit <- 300
+
+# Simular datos de admisión
+gre_score <- rnorm(n_admit, mean = 550, sd = 100)
+gpa <- rnorm(n_admit, mean = 3.2, sd = 0.5)
+rank_school <- sample(1:4, n_admit, replace = TRUE, prob = c(0.15, 0.25, 0.35, 0.25))
+
+# Probabilidad de admisión
+logit_p <- -4 + 0.003*gre_score + 1.2*gpa - 0.5*rank_school
+prob_admit <- 1 / (1 + exp(-logit_p))
+admit <- rbinom(n_admit, 1, prob_admit)
+
+datos_admision <- data.frame(
+  admit = admit,
+  gre = gre_score,
+  gpa = gpa,
+  rank = factor(rank_school)
+)
+
+cat("=== EJERCICIO 1: ADMISIÓN UNIVERSITARIA ===\n")
+cat("Tareas a realizar:\n")
+cat("1. Análisis exploratorio de los datos\n")
+cat("2. Ajustar modelo de regresión logística\n")
+cat("3. Interpretar odds ratios\n")
+cat("4. Evaluar bondad de ajuste\n")
+cat("5. Realizar diagnósticos\n")
+cat("6. Validar el modelo\n")
+cat("7. Crear curva ROC y calcular AUC\n\n")
+
+# Información básica
+summary(datos_admision)
+table(datos_admision$admit)
+
+cat("Tu análisis aquí...\n")
+```
+
+### Ejercicio 2: Análisis de Datos de Conteo
+
+```{r ejercicio_conteo}
+# Dataset para análisis de reclamaciones de seguros
+set.seed(888)
+n_claims <- 250
+
+# Simular datos de reclamaciones
+age_driver <- rnorm(n_claims, mean = 40, sd = 12)
+years_exp <- pmax(0, age_driver - 18 + rnorm(n_claims, 0, 3))
+car_age <- sample(1:15, n_claims, replace = TRUE, prob = exp(-0.2*(1:15)))
+coverage_type <- sample(c("Básica", "Completa", "Premium"), n_claims, 
+                       replace = TRUE, prob = c(0.4, 0.4, 0.2))
+
+# Número de reclamaciones (con sobredispersión)
+lambda_claims <- exp(0.5 - 0.02*years_exp + 0.05*car_age + 
+                    ifelse(coverage_type == "Completa", 0.3, 0) +
+                    ifelse(coverage_type == "Premium", 0.6, 0))
+
+# Añadir sobredispersión usando binomial negativa
+claims <- rnbinom(n_claims, size = 2, mu = lambda_claims)
+
+datos_seguros <- data.frame(
+  claims = claims,
+  age_driver = age_driver,
+  years_exp = years_exp,
+  car_age = car_age,
+  coverage = coverage_type
+)
+
+cat("=== EJERCICIO 2: RECLAMACIONES DE SEGUROS ===\n")
+cat("Tareas a realizar:\n")
+cat("1. Análisis exploratorio (media, varianza, distribución)\n")
+cat("2. Ajustar modelo de Poisson\n")
+cat("3. Diagnósticar sobredispersión\n")
+cat("4. Comparar con modelo binomial negativo\n")
+cat("5. Interpretar coeficientes como IRR\n")
+cat("6. Validar el modelo final\n\n")
+
+summary(datos_seguros)
+cat("Media de reclamaciones:", round(mean(datos_seguros$claims), 3), "\n")
+cat("Varianza de reclamaciones:", round(var(datos_seguros$claims), 3), "\n")
+cat("Razón varianza/media:", round(var(datos_seguros$claims)/mean(datos_seguros$claims), 3), "\n\n")
+
+cat("Tu análisis aquí...\n")
+```
+
+### Ejercicio 3: Selección de Modelo GLM
+
+```{r ejercicio_seleccion}
+# Dataset con múltiples tipos de respuesta para practicar selección
+set.seed(777)
+n_multi <- 200
+
+# Variables predictoras
+income <- exp(rnorm(n_multi, mean = 10, sd = 0.5))  # Income log-normal
+education <- sample(1:5, n_multi, replace = TRUE)
+age <- rnorm(n_multi, mean = 45, sd = 12)
+urban <- rbinom(n_multi, 1, 0.6)
+
+# Múltiples variables respuesta
+# 1. Binaria: Posee casa propia
+own_house <- rbinom(n_multi, 1, plogis(-2 + 0.00002*income + 0.3*education + 0.02*age + 0.5*urban))
+
+# 2. Conteo: Número de productos financieros
+n_products <- rpois(n_multi, exp(0.5 + 0.00001*income + 0.1*education + 0.01*age + 0.2*urban))
+
+# 3. Continua positiva: Gasto anual en seguros
+insurance_spend <- rgamma(n_multi, shape = 2, 
+                         rate = 2/exp(5 + 0.00001*income + 0.1*education + 0.02*age + 0.3*urban))
+
+datos_financieros <- data.frame(
+  income = income,
+  education = education,
+  age = age,
+  urban = urban,
+  own_house = own_house,
+  n_products = n_products,
+  insurance_spend = insurance_spend
+)
+
+cat("=== EJERCICIO 3: SELECCIÓN DE MODELO GLM ===\n")
+cat("Dataset con múltiples tipos de respuesta:\n")
+cat("- own_house: Binaria (posee casa propia)\n")
+cat("- n_products: Conteo (número de productos financieros)\n")
+cat("- insurance_spend: Continua positiva (gasto en seguros)\n\n")
+
+cat("Tareas a realizar:\n")
+cat("1. Para cada variable respuesta, determinar la familia de distribución apropiada\n")
+cat("2. Ajustar modelos GLM apropiados\n")
+cat("3. Comparar diferentes especificaciones\n")
+cat("4. Realizar diagnósticos específicos\n")
+cat("5. Validar y comparar modelos\n\n")
+
+summary(datos_financieros)
+
+cat("Tu análisis aquí...\n")
+```
+
+## Parte 6: Conceptos Clave para Recordar
+
+### Guía de Decisión para GLMs
+
+::: {.callout-important title="¿Qué GLM usar según el tipo de variable respuesta?"}
+
+**Variable Binaria (0/1, Sí/No, Éxito/Fracaso):**
+
+- **Modelo:** Regresión Logística
+- **Familia:** Binomial
+- **Enlace:** Logit (canónico)
+- **Interpretación:** Odds Ratios
+- **Validación:** Matriz de confusión, Curva ROC, AUC
+
+**Variable de Conteo (0, 1, 2, 3, ...):**
+
+- **Modelo inicial:** Regresión de Poisson
+- **Familia:** Poisson
+- **Enlace:** Log (canónico)
+- **Diagnóstico clave:** Verificar sobredispersión
+- **Si hay sobredispersión:** Cambiar a Binomial Negativa
+- **Interpretación:** Incidence Rate Ratios (IRR)
+
+**Variable Continua Positiva y Sesgada:**
+
+- **Modelo:** Regresión Gamma
+- **Familia:** Gamma
+- **Enlace:** Log (común) o Inverso (canónico)
+- **Interpretación:** Efectos multiplicativos
+- **Uso típico:** Costos, tiempos, valores monetarios
+:::
+
+### Diagnósticos Específicos para GLMs
+
+::: {.callout-note title="Herramientas de diagnóstico"}
+
+**Deviance:**
+
+- Medida principal de bondad de ajuste
+- Basada en verosimilitud
+- Útil para comparar modelos anidados
+
+**Residuos en GLMs:**
+
+- **Pearson:** Para verificar dispersión
+- **Deviance:** Para gráficos diagnósticos
+- **Estudentizados:** Para detectar outliers
+
+**Sobredispersión (crucial en Poisson):**
+
+- **Estadístico:** φ = χ²Pearson / gl
+- **Si φ > 1.5:** Considerar Binomial Negativa
+- **Test formal:** LRT entre Poisson y Binomial Negativa
+:::
+
+### Interpretación de Coeficientes
+
+::: {.callout-warning title="Interpretación según el enlace"}
+
+**Enlace Logit (Regresión Logística):**
+
+- **Coeficiente β:** Cambio en log-odds por unidad
+- **exp(β) = OR:** Odds Ratio
+- **Interpretación:** Cambio multiplicativo en odds
+
+**Enlace Log (Poisson/Gamma):**
+
+- **Coeficiente β:** Cambio en log-tasa por unidad
+- **exp(β) = IRR:** Incidence Rate Ratio
+- **Interpretación:** Cambio multiplicativo en tasa/media
+
+**Enlace Identidad (Gaussiano):**
+
+- **Coeficiente β:** Cambio en media por unidad
+- **Interpretación:** Cambio aditivo directo
+:::
+
+### Validación por Tipo de Modelo
+
+::: {.callout-tip title="Métricas de validación apropiadas"}
+
+**Regresión Logística:**
+
+- Matriz de confusión (Accuracy, Sensitivity, Specificity)
+- Curva ROC y AUC
+- Calibración (gráfico de probabilidades)
+
+**Regresión de Poisson/Binomial Negativa:**
+
+- RMSE y MAE en escala original
+- Gráfico predicciones vs observados
+- Análisis de sobredispersión residual
+
+**Regresión Gamma:**
+
+- RMSE y MAE en escala original
+- Gráfico de residuos vs ajustados
+- Verificación de forma de distribución
+:::
+

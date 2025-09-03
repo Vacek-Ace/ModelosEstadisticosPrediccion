@@ -1,0 +1,336 @@
+---
+title: "Laboratorio 1: Introducción a R y Análisis Estadístico"
+subtitle: "Modelos Estadísticos de Predicción"
+author: "Víctor Aceña Gil - Isaac Martín de Diego"
+date: today
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+execute:
+  warning: false
+  message: false
+---
+
+## Objetivos del Laboratorio
+
+Al finalizar este laboratorio, serás capaz de:
+
+- Familiarizarte con el entorno de R y RStudio
+- Realizar análisis exploratorio de datos básico
+- Calcular estadísticas descriptivas
+- Crear visualizaciones informativas
+- Entender conceptos fundamentales de probabilidad y estadística
+
+## Parte 1: Configuración Inicial
+
+### Librerías necesarias
+
+```{r setup}
+# Instalar paquetes si no los tienes (ejecuta solo una vez)
+# install.packages(c("tidyverse", "MASS", "corrplot", "ggplot2"))
+
+# Cargar librerías
+library(tidyverse)
+library(MASS)
+library(corrplot)
+library(ggplot2)
+
+# Configurar para resultados reproducibles
+set.seed(123)
+```
+
+### Familiarización con R
+
+```{r basic_r}
+# Operaciones básicas
+2 + 3
+10 * 5
+sqrt(16)
+
+# Crear vectores
+numeros <- c(1, 2, 3, 4, 5)
+nombres <- c("Ana", "Juan", "María", "Carlos")
+
+# Operaciones con vectores
+mean(numeros)
+sum(numeros)
+length(nombres)
+
+# Crear un data frame simple
+datos_ejemplo <- data.frame(
+  nombre = nombres,
+  edad = c(25, 30, 28, 35),
+  salario = c(45000, 55000, 48000, 62000)
+)
+
+print(datos_ejemplo)
+```
+
+## Parte 2: Análisis Exploratorio de Datos
+
+### Dataset: mtcars
+
+```{r explore_mtcars}
+# Cargar el dataset mtcars (datos de automóviles)
+data(mtcars)
+
+# Exploración básica
+head(mtcars)
+str(mtcars)
+summary(mtcars)
+
+# Dimensiones del dataset
+dim(mtcars)
+names(mtcars)
+```
+
+### Estadísticas Descriptivas
+
+```{r descriptive_stats}
+# Estadísticas para variables numéricas
+mean(mtcars$mpg)
+median(mtcars$mpg)
+sd(mtcars$mpg)
+var(mtcars$mpg)
+
+# Cuartiles y rango intercuartílico
+quantile(mtcars$mpg)
+IQR(mtcars$mpg)
+
+# Resumen estadístico completo
+summary(mtcars$mpg)
+
+# Estadísticas por grupos
+aggregate(mpg ~ cyl, data = mtcars, FUN = mean)
+```
+
+### Visualizaciones Básicas
+
+```{r basic_plots}
+# Histograma
+hist(mtcars$mpg, 
+     main = "Distribución de Millas por Galón",
+     xlab = "MPG", 
+     ylab = "Frecuencia",
+     col = "lightblue",
+     border = "black")
+
+# Boxplot
+boxplot(mtcars$mpg, 
+        main = "Boxplot de MPG",
+        ylab = "Millas por Galón")
+
+# Scatterplot
+plot(mtcars$wt, mtcars$mpg,
+     main = "Relación entre Peso y Consumo",
+     xlab = "Peso (1000 lbs)",
+     ylab = "Millas por Galón",
+     pch = 19,
+     col = "blue")
+
+# Añadir línea de tendencia
+abline(lm(mpg ~ wt, data = mtcars), col = "red", lwd = 2)
+```
+
+### Visualizaciones con ggplot2
+
+```{r ggplot_intro}
+# Histograma con ggplot2
+ggplot(mtcars, aes(x = mpg)) +
+  geom_histogram(bins = 10, fill = "lightblue", color = "black") +
+  labs(title = "Distribución de MPG",
+       x = "Millas por Galón",
+       y = "Frecuencia") +
+  theme_minimal()
+
+# Boxplot por grupos
+ggplot(mtcars, aes(x = factor(cyl), y = mpg)) +
+  geom_boxplot(fill = "lightgreen") +
+  labs(title = "MPG por Número de Cilindros",
+       x = "Cilindros",
+       y = "Millas por Galón") +
+  theme_minimal()
+
+# Scatterplot con colores por grupos
+ggplot(mtcars, aes(x = wt, y = mpg, color = factor(cyl))) +
+  geom_point(size = 3) +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(title = "Relación Peso-Consumo por Cilindros",
+       x = "Peso (1000 lbs)",
+       y = "Millas por Galón",
+       color = "Cilindros") +
+  theme_minimal()
+```
+
+## Parte 3: Conceptos de Probabilidad
+
+### Distribuciones de Probabilidad
+
+```{r probability_distributions}
+# Distribución Normal
+# Generar datos normales
+datos_normales <- rnorm(1000, mean = 50, sd = 10)
+
+# Visualizar
+hist(datos_normales, probability = TRUE, 
+     main = "Distribución Normal (μ=50, σ=10)",
+     xlab = "Valores", col = "lightcyan")
+
+# Añadir curva teórica
+curve(dnorm(x, mean = 50, sd = 10), add = TRUE, col = "red", lwd = 2)
+
+# Probabilidades con distribución normal
+# P(X < 45)
+pnorm(45, mean = 50, sd = 10)
+
+# P(40 < X < 60)
+pnorm(60, mean = 50, sd = 10) - pnorm(40, mean = 50, sd = 10)
+
+# Cuantiles
+qnorm(0.95, mean = 50, sd = 10)  # Percentil 95
+```
+
+### Simulaciones
+
+```{r simulations}
+# Simulación del Teorema Central del Límite
+medias_muestrales <- replicate(1000, {
+  muestra <- runif(30, min = 0, max = 10)  # Distribución uniforme
+  mean(muestra)
+})
+
+# Visualizar las medias muestrales
+hist(medias_muestrales, probability = TRUE,
+     main = "Distribución de Medias Muestrales (n=30)",
+     xlab = "Media Muestral",
+     col = "lightpink")
+
+# La distribución de medias debería ser aproximadamente normal
+curve(dnorm(x, mean = 5, sd = sqrt(10^2/12/30)), add = TRUE, col = "blue", lwd = 2)
+
+# Estadísticas de las medias muestrales
+cat("Media de las medias muestrales:", mean(medias_muestrales), "\n")
+cat("Desviación estándar de las medias:", sd(medias_muestrales), "\n")
+cat("Error estándar teórico:", sqrt(10^2/12/30), "\n")
+```
+
+## Parte 4: Correlación y Asociación
+
+### Análisis de Correlación
+
+```{r correlation_analysis}
+# Matriz de correlación
+cor_matrix <- cor(mtcars)
+print(round(cor_matrix, 2))
+
+# Visualización de la matriz de correlación
+corrplot(cor_matrix, method = "color", type = "upper", 
+         order = "hclust", tl.cex = 0.8, tl.col = "black")
+
+# Correlaciones específicas
+cor(mtcars$mpg, mtcars$wt)
+cor(mtcars$hp, mtcars$qsec)
+
+# Test de correlación
+cor.test(mtcars$mpg, mtcars$wt)
+```
+
+### Análisis de Variables Categóricas
+
+```{r categorical_analysis}
+# Crear versión categórica de algunas variables
+mtcars$cyl_cat <- factor(mtcars$cyl)
+mtcars$am_cat <- factor(mtcars$am, labels = c("Automático", "Manual"))
+
+# Tabla de contingencia
+tabla_contingencia <- table(mtcars$cyl_cat, mtcars$am_cat)
+print(tabla_contingencia)
+
+# Proporciones
+prop.table(tabla_contingencia, margin = 1)  # Por filas
+
+# Test de independencia chi-cuadrado
+chi_test <- chisq.test(tabla_contingencia)
+print(chi_test)
+```
+
+## Parte 5: Ejercicios Prácticos
+
+### Ejercicio 1: Análisis del Dataset Boston
+
+```{r exercise_boston}
+# Cargar dataset Boston
+data(Boston)
+
+# Tu tarea:
+# 1. Explora las primeras filas y la estructura del dataset
+# 2. Calcula estadísticas descriptivas para la variable 'medv' (valor mediano de viviendas)
+# 3. Crea un histograma de 'medv'
+# 4. Investiga la relación entre 'medv' y 'rm' (número promedio de habitaciones)
+
+# Código de ejemplo (completa el resto):
+head(Boston)
+summary(Boston$medv)
+
+# Continúa aquí...
+```
+
+### Ejercicio 2: Simulación de Dados
+
+```{r exercise_dice}
+# Simula el lanzamiento de dos dados 1000 veces
+# Calcula la suma de los dos dados en cada lanzamiento
+# Crea un histograma de las sumas
+# ¿Qué valor es más probable? ¿Por qué?
+
+# Tu código aquí:
+```
+
+### Ejercicio 3: Análisis de Iris
+
+```{r exercise_iris}
+# Usa el dataset iris
+data(iris)
+
+# Tareas:
+# 1. Calcula la media de Sepal.Length por especie
+# 2. Crea un boxplot de Sepal.Width por especie
+# 3. Calcula la correlación entre Petal.Length y Petal.Width
+# 4. Crea un scatterplot de estas dos variables, coloreado por especie
+
+# Tu código aquí:
+```
+
+## Parte 6: Conceptos Clave para Recordar
+
+### Estadísticas Descriptivas Importantes
+
+- **Media**: Medida de tendencia central sensible a valores extremos
+- **Mediana**: Medida de tendencia central robusta
+- **Desviación estándar**: Mide la dispersión alrededor de la media
+- **Cuartiles**: Dividen los datos en cuatro partes iguales
+
+### Visualizaciones Clave
+
+- **Histograma**: Para ver la distribución de una variable continua
+- **Boxplot**: Para identificar valores atípicos y comparar grupos
+- **Scatterplot**: Para explorar relaciones entre dos variables continuas
+
+### Correlación
+
+- **Correlación positiva**: Variables aumentan juntas
+- **Correlación negativa**: Una variable aumenta mientras la otra disminuye
+- **Correlación cerca de 0**: No hay relación lineal aparente
+
+## Recursos Adicionales
+
+- [R for Data Science](https://r4ds.had.co.nz/)
+- [Quick-R](https://www.statmethods.net/)
+- [RStudio Cheat Sheets](https://rstudio.com/resources/cheatsheets/)
+
+## Próximo Laboratorio
+
+En el Laboratorio 2 exploraremos la regresión lineal simple, incluyendo ajuste de modelos, interpretación de coeficientes y evaluación de supuestos.

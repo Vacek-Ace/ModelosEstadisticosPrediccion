@@ -1,0 +1,530 @@
+---
+title: "Laboratorio 3: Regresión Lineal Múltiple"
+subtitle: "Modelos Estadísticos de Predicción"
+author: "Víctor Aceña Gil - Isaac Martín de Diego"
+date: today
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+execute:
+  warning: false
+  message: false
+---
+
+## Objetivos del Laboratorio
+
+Al finalizar este laboratorio, serás capaz de:
+
+- Ajustar modelos de regresión lineal múltiple
+- Interpretar coeficientes en presencia de múltiples predictores
+- Detectar y manejar problemas de multicolinealidad
+- Realizar selección de variables con diferentes criterios
+- Evaluar interacciones entre variables
+- Validar modelos usando técnicas de validación cruzada
+
+## Configuración Inicial
+
+```{r setup}
+# Cargar librerías necesarias
+library(tidyverse)
+library(MASS)
+library(car)          # Para VIF y diagnósticos
+library(corrplot)     # Para matrices de correlación
+library(leaps)        # Para selección de variables
+library(broom)        # Para resultados ordenados
+library(GGally)       # Para gráficos de pares
+library(caret)        # Para validación cruzada
+library(performance)  # Para evaluación de modelos
+
+set.seed(123)
+```
+
+## Parte 1: Introducción a la Regresión Múltiple
+
+### Modelo Teórico
+
+La regresión lineal múltiple extiende la regresión simple para incluir múltiples predictores:
+
+$$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \ldots + \beta_p X_p + \epsilon$$
+
+### Ejemplo Básico con mtcars
+
+```{r basic_multiple}
+# Cargar datos
+data(mtcars)
+
+# Modelo simple vs múltiple
+modelo_simple <- lm(mpg ~ wt, data = mtcars)
+modelo_multiple <- lm(mpg ~ wt + hp + cyl, data = mtcars)
+
+# Comparar modelos
+cat("=== COMPARACIÓN DE MODELOS ===\n")
+cat("Modelo Simple - R²:", round(summary(modelo_simple)$r.squared, 3), "\n")
+cat("Modelo Múltiple - R²:", round(summary(modelo_multiple)$r.squared, 3), "\n")
+cat("Modelo Múltiple - R² Ajustado:", round(summary(modelo_multiple)$adj.r.squared, 3), "\n")
+
+# Resumen del modelo múltiple
+summary(modelo_multiple)
+```
+
+### Interpretación de Coeficientes
+
+```{r coefficient_interpretation}
+# Extraer coeficientes y estadísticas
+coef_df <- tidy(modelo_multiple)
+print(coef_df)
+
+cat("\n=== INTERPRETACIÓN DE COEFICIENTES ===\n")
+cat("Intercepto:", round(coef_df$estimate[1], 2), "\n")
+cat("  - MPG esperado cuando wt=0, hp=0, cyl=0 (extrapolación)\n\n")
+
+cat("Peso (wt):", round(coef_df$estimate[2], 2), "\n")
+cat("  - Por cada 1000 lbs adicionales, MPG disminuye en", abs(round(coef_df$estimate[2], 2)), 
+    "unidades, manteniendo hp y cyl constantes\n\n")
+
+cat("Potencia (hp):", round(coef_df$estimate[3], 3), "\n")
+cat("  - Por cada hp adicional, MPG disminuye en", abs(round(coef_df$estimate[3], 3)), 
+    "unidades, manteniendo wt y cyl constantes\n\n")
+
+cat("Cilindros (cyl):", round(coef_df$estimate[4], 2), "\n")
+cat("  - Por cada cilindro adicional, MPG disminuye en", abs(round(coef_df$estimate[4], 2)), 
+    "unidades, manteniendo wt y hp constantes\n")
+```
+
+## Parte 2: Análisis Exploratorio Multivariado
+
+### Matriz de Correlaciones
+
+```{r correlation_matrix}
+# Seleccionar variables numéricas relevantes
+vars_interes <- mtcars[, c("mpg", "wt", "hp", "cyl", "disp", "qsec")]
+
+# Matriz de correlación
+cor_matrix <- cor(vars_interes)
+print(round(cor_matrix, 3))
+
+# Visualización de correlaciones
+corrplot(cor_matrix, method = "color", type = "upper", 
+         order = "hclust", tl.cex = 0.8, tl.col = "black",
+         addCoef.col = "black", number.cex = 0.7)
+```
+
+### Gráficos de Pares
+
+```{r pairs_plot}
+# Gráfico de pares con correlaciones
+ggpairs(vars_interes, 
+        title = "Matriz de Gráficos de Pares",
+        upper = list(continuous = wrap("cor", size = 3)),
+        lower = list(continuous = wrap("points", alpha = 0.7))) +
+  theme_minimal()
+```
+
+## Parte 3: Multicolinealidad
+
+### Detección de Multicolinealidad
+
+```{r multicollinearity}
+# Factor de Inflación de la Varianza (VIF)
+vif_values <- vif(modelo_multiple)
+cat("=== FACTOR DE INFLACIÓN DE LA VARIANZA (VIF) ===\n")
+print(vif_values)
+
+cat("\nInterpretación del VIF:\n")
+cat("- VIF < 5: No hay problema de multicolinealidad\n")
+cat("- 5 ≤ VIF < 10: Multicolinealidad moderada\n")
+cat("- VIF ≥ 10: Multicolinealidad severa\n\n")
+
+for(i in 1:length(vif_values)) {
+  var_name <- names(vif_values)[i]
+  vif_val <- vif_values[i]
+  
+  if(vif_val < 5) {
+    status <- "OK"
+  } else if(vif_val < 10) {
+    status <- "Moderada"
+  } else {
+    status <- "Severa"
+  }
+  
+  cat(var_name, ": VIF =", round(vif_val, 2), "(", status, ")\n")
+}
+
+# Modelo con mayor multicolinealidad
+modelo_colineal <- lm(mpg ~ wt + hp + cyl + disp, data = mtcars)
+vif_colineal <- vif(modelo_colineal)
+cat("\n=== MODELO CON MÁS VARIABLES (mayor multicolinealidad) ===\n")
+print(round(vif_colineal, 2))
+```
+
+### Manejo de Multicolinealidad
+
+```{r handle_multicollinearity}
+# Estrategia 1: Eliminar variables con VIF alto
+# Identificar variable con VIF más alto
+max_vif <- which.max(vif_colineal)
+var_eliminar <- names(max_vif)
+
+cat("Variable con VIF más alto:", var_eliminar, "=", round(vif_colineal[max_vif], 2), "\n")
+
+# Modelo sin la variable problemática
+formula_nueva <- as.formula(paste("mpg ~", paste(names(vif_colineal)[names(vif_colineal) != var_eliminar], collapse = " + ")))
+modelo_reducido <- lm(formula_nueva, data = mtcars)
+
+cat("\nVIF después de eliminar", var_eliminar, ":\n")
+print(round(vif(modelo_reducido), 2))
+
+# Comparar R² ajustado
+cat("\nComparación de modelos:\n")
+cat("Modelo completo - R² ajustado:", round(summary(modelo_colineal)$adj.r.squared, 4), "\n")
+cat("Modelo reducido - R² ajustado:", round(summary(modelo_reducido)$adj.r.squared, 4), "\n")
+```
+
+## Parte 4: Selección de Variables
+
+### Métodos Automáticos de Selección
+
+```{r variable_selection}
+# Preparar datos completos
+data(mtcars)
+mtcars_complete <- mtcars[, c("mpg", "cyl", "disp", "hp", "drat", "wt", "qsec", "vs", "am", "gear", "carb")]
+
+# Método Forward
+modelo_forward <- step(lm(mpg ~ 1, data = mtcars_complete), 
+                      scope = list(lower = ~ 1, upper = ~ cyl + disp + hp + drat + wt + qsec + vs + am + gear + carb),
+                      direction = "forward", trace = FALSE)
+
+# Método Backward
+modelo_completo <- lm(mpg ~ cyl + disp + hp + drat + wt + qsec + vs + am + gear + carb, data = mtcars_complete)
+modelo_backward <- step(modelo_completo, direction = "backward", trace = FALSE)
+
+# Método Stepwise
+modelo_stepwise <- step(lm(mpg ~ 1, data = mtcars_complete),
+                       scope = list(lower = ~ 1, upper = ~ cyl + disp + hp + drat + wt + qsec + vs + am + gear + carb),
+                       direction = "both", trace = FALSE)
+
+# Comparar resultados
+cat("=== COMPARACIÓN DE MÉTODOS DE SELECCIÓN ===\n")
+cat("Forward - Variables:", paste(names(coef(modelo_forward))[-1], collapse = ", "), "\n")
+cat("Forward - AIC:", round(AIC(modelo_forward), 2), "\n\n")
+
+cat("Backward - Variables:", paste(names(coef(modelo_backward))[-1], collapse = ", "), "\n")
+cat("Backward - AIC:", round(AIC(modelo_backward), 2), "\n\n")
+
+cat("Stepwise - Variables:", paste(names(coef(modelo_stepwise))[-1], collapse = ", "), "\n")
+cat("Stepwise - AIC:", round(AIC(modelo_stepwise), 2), "\n")
+```
+
+### Selección por Criterios de Información
+
+```{r information_criteria}
+# Usar leaps para selección exhaustiva
+regsubsets_result <- regsubsets(mpg ~ cyl + disp + hp + drat + wt + qsec + vs + am + gear + carb, 
+                               data = mtcars_complete, nvmax = 10)
+
+# Resumen de resultados
+reg_summary <- summary(regsubsets_result)
+
+# Crear dataframe con métricas
+selection_metrics <- data.frame(
+  n_vars = 1:length(reg_summary$rss),
+  RSS = reg_summary$rss,
+  R2 = reg_summary$rsq,
+  R2_adj = reg_summary$adjr2,
+  Cp = reg_summary$cp,
+  BIC = reg_summary$bic
+)
+
+print(selection_metrics)
+
+# Encontrar mejores modelos según cada criterio
+best_r2_adj <- which.max(selection_metrics$R2_adj)
+best_cp <- which.min(selection_metrics$Cp)
+best_bic <- which.min(selection_metrics$BIC)
+
+cat("\n=== MEJORES MODELOS POR CRITERIO ===\n")
+cat("Mejor R² ajustado: modelo con", best_r2_adj, "variables\n")
+cat("Mejor Cp: modelo con", best_cp, "variables\n")
+cat("Mejor BIC: modelo con", best_bic, "variables\n")
+
+# Variables en el mejor modelo por BIC
+coef_bic <- coef(regsubsets_result, best_bic)
+cat("\nVariables en el mejor modelo (BIC):", paste(names(coef_bic)[-1], collapse = ", "), "\n")
+```
+
+### Visualización de Criterios de Selección
+
+```{r selection_plots}
+# Gráficos de criterios de selección
+par(mfrow = c(2, 2))
+
+# R² ajustado
+plot(selection_metrics$n_vars, selection_metrics$R2_adj, 
+     type = "b", xlab = "Número de Variables", ylab = "R² Ajustado",
+     main = "R² Ajustado vs Número de Variables")
+points(best_r2_adj, selection_metrics$R2_adj[best_r2_adj], col = "red", pch = 19, cex = 1.5)
+
+# Cp
+plot(selection_metrics$n_vars, selection_metrics$Cp, 
+     type = "b", xlab = "Número de Variables", ylab = "Cp",
+     main = "Cp vs Número de Variables")
+abline(a = 0, b = 1, col = "red", lty = 2)
+points(best_cp, selection_metrics$Cp[best_cp], col = "red", pch = 19, cex = 1.5)
+
+# BIC
+plot(selection_metrics$n_vars, selection_metrics$BIC, 
+     type = "b", xlab = "Número de Variables", ylab = "BIC",
+     main = "BIC vs Número de Variables")
+points(best_bic, selection_metrics$BIC[best_bic], col = "red", pch = 19, cex = 1.5)
+
+# RSS
+plot(selection_metrics$n_vars, selection_metrics$RSS, 
+     type = "b", xlab = "Número de Variables", ylab = "RSS",
+     main = "RSS vs Número de Variables")
+
+par(mfrow = c(1, 1))
+```
+
+## Parte 5: Interacciones entre Variables
+
+### Modelos con Interacciones
+
+```{r interactions}
+# Modelo con interacción
+modelo_interaccion <- lm(mpg ~ wt + hp + wt:hp, data = mtcars)
+
+# Comparar con modelo sin interacción
+modelo_sin_interaccion <- lm(mpg ~ wt + hp, data = mtcars)
+
+# Resúmenes
+cat("=== MODELO SIN INTERACCIÓN ===\n")
+print(summary(modelo_sin_interaccion)$coefficients)
+
+cat("\n=== MODELO CON INTERACCIÓN ===\n")
+print(summary(modelo_interaccion)$coefficients)
+
+# Test F para la interacción
+anova_test <- anova(modelo_sin_interaccion, modelo_interaccion)
+print(anova_test)
+
+cat("\nInterpretación de la interacción:\n")
+coef_int <- coef(modelo_interaccion)
+cat("- Cuando hp = 0, el efecto de wt es:", round(coef_int[2], 3), "\n")
+cat("- Por cada unidad adicional de hp, el efecto de wt cambia en:", round(coef_int[4], 5), "\n")
+```
+
+### Visualización de Interacciones
+
+```{r interaction_plots}
+# Crear datos para visualización
+wt_range <- range(mtcars$wt)
+hp_levels <- quantile(mtcars$hp, c(0.25, 0.5, 0.75))
+
+# Generar predicciones
+pred_data <- expand.grid(
+  wt = seq(wt_range[1], wt_range[2], length.out = 50),
+  hp = hp_levels
+)
+
+pred_data$mpg_pred <- predict(modelo_interaccion, newdata = pred_data)
+pred_data$hp_level <- factor(pred_data$hp, 
+                            levels = hp_levels,
+                            labels = paste("HP =", round(hp_levels)))
+
+# Gráfico de interacción
+ggplot(pred_data, aes(x = wt, y = mpg_pred, color = hp_level)) +
+  geom_line(size = 1.2) +
+  geom_point(data = mtcars, aes(x = wt, y = mpg), 
+             color = "black", alpha = 0.6, inherit.aes = FALSE) +
+  labs(title = "Interacción entre Peso y Potencia",
+       subtitle = "Efecto del peso sobre MPG a diferentes niveles de potencia",
+       x = "Peso (1000 lbs)", y = "MPG Predicho",
+       color = "Nivel de Potencia") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+## Parte 6: Validación de Modelos
+
+### Validación Cruzada
+
+```{r cross_validation}
+# Configurar validación cruzada
+set.seed(123)
+train_control <- trainControl(method = "cv", number = 10)
+
+# Modelo final seleccionado
+formula_final <- mpg ~ wt + qsec + am
+modelo_final <- lm(formula_final, data = mtcars)
+
+# Validación cruzada con caret
+cv_results <- train(formula_final, data = mtcars, 
+                   method = "lm", trControl = train_control)
+
+print(cv_results)
+
+# Métricas de validación cruzada
+cat("=== VALIDACIÓN CRUZADA (10-fold) ===\n")
+cat("RMSE promedio:", round(cv_results$results$RMSE, 3), "\n")
+cat("R² promedio:", round(cv_results$results$Rsquared, 3), "\n")
+cat("MAE promedio:", round(cv_results$results$MAE, 3), "\n")
+```
+
+### Comparación Final de Modelos
+
+```{r final_comparison}
+# Lista de modelos a comparar
+modelos <- list(
+  "Simple" = lm(mpg ~ wt, data = mtcars),
+  "Múltiple_Básico" = lm(mpg ~ wt + hp + cyl, data = mtcars),
+  "Seleccionado" = modelo_final,
+  "Con_Interacción" = modelo_interaccion
+)
+
+# Función para extraer métricas
+extraer_metricas <- function(modelo) {
+  summ <- summary(modelo)
+  return(data.frame(
+    R2 = summ$r.squared,
+    R2_adj = summ$adj.r.squared,
+    RMSE = sqrt(mean(residuals(modelo)^2)),
+    AIC = AIC(modelo),
+    BIC = BIC(modelo),
+    n_params = length(coef(modelo))
+  ))
+}
+
+# Calcular métricas para todos los modelos
+comparacion <- do.call(rbind, lapply(modelos, extraer_metricas))
+rownames(comparacion) <- names(modelos)
+
+cat("=== COMPARACIÓN FINAL DE MODELOS ===\n")
+print(round(comparacion, 3))
+
+# Identificar el mejor modelo
+cat("\n=== RECOMENDACIONES ===\n")
+mejor_r2_adj <- which.max(comparacion$R2_adj)
+mejor_aic <- which.min(comparacion$AIC)
+mejor_bic <- which.min(comparacion$BIC)
+
+cat("Mejor R² ajustado:", rownames(comparacion)[mejor_r2_adj], "\n")
+cat("Mejor AIC:", rownames(comparacion)[mejor_aic], "\n")
+cat("Mejor BIC:", rownames(comparacion)[mejor_bic], "\n")
+```
+
+## Parte 7: Ejercicios Prácticos
+
+### Ejercicio 1: Dataset Boston Housing
+
+```{r exercise_boston}
+# Cargar dataset Boston
+data(Boston)
+
+# Objetivo: Predecir 'medv' (valor de vivienda)
+# Variables disponibles: crim, zn, indus, chas, nox, rm, age, dis, rad, tax, ptratio, black, lstat
+
+# Tareas:
+# 1. Realizar análisis exploratorio (correlaciones, gráficos de pares)
+# 2. Ajustar modelo completo y evaluar multicolinealidad
+# 3. Usar selección de variables para encontrar el mejor modelo
+# 4. Evaluar interacciones relevantes
+# 5. Validar el modelo final
+
+# Tu código aquí:
+# Ejemplo de inicio:
+head(Boston)
+dim(Boston)
+
+# Continúa el análisis...
+```
+
+### Ejercicio 2: Análisis de Ventas
+
+```{r exercise_sales}
+# Crear dataset simulado de ventas
+set.seed(456)
+n <- 200
+
+# Variables predictoras
+inversion_marketing <- rnorm(n, 50, 15)
+precio <- rnorm(n, 100, 20)
+competencia <- sample(c("Baja", "Media", "Alta"), n, replace = TRUE)
+estacion <- sample(c("Primavera", "Verano", "Otoño", "Invierno"), n, replace = TRUE)
+
+# Variable dependiente (ventas) con interacciones
+comp_numeric <- as.numeric(factor(competencia, levels = c("Baja", "Media", "Alta")))
+est_numeric <- as.numeric(factor(estacion))
+
+ventas <- 20 + 0.8*inversion_marketing - 0.3*precio - 10*comp_numeric + 
+          5*est_numeric + 0.01*inversion_marketing*precio + rnorm(n, 0, 10)
+
+datos_ventas <- data.frame(
+  ventas = ventas,
+  marketing = inversion_marketing,
+  precio = precio,
+  competencia = competencia,
+  estacion = estacion
+)
+
+# Tareas:
+# 1. Ajustar modelo con todas las variables
+# 2. Evaluar si las interacciones son significativas
+# 3. Interpretar coeficientes de variables categóricas
+# 4. Realizar predicciones para nuevos escenarios
+
+# Tu código aquí:
+head(datos_ventas)
+```
+
+### Ejercicio 3: Análisis Comparativo
+
+```{r exercise_comparison}
+# Usar dataset airquality
+data(airquality)
+airquality_clean <- na.omit(airquality)
+
+# Objetivo: Predecir Ozone usando diferentes combinaciones de variables
+# Variables: Solar.R, Wind, Temp, Month, Day
+
+# Tareas:
+# 1. Comparar modelos con 1, 2, 3, y todas las variables
+# 2. Evaluar cual tiene mejor capacidad predictiva
+# 3. Verificar supuestos del mejor modelo
+# 4. Realizar validación cruzada
+
+# Tu código aquí:
+```
+
+## Parte 8: Conceptos Clave para Recordar
+
+### Interpretación en Regresión Múltiple
+
+- Los coeficientes se interpretan **manteniendo constantes** las demás variables
+- El **R² ajustado** penaliza la inclusión de variables irrelevantes
+- La **multicolinealidad** inflata los errores estándar y hace inestables los coeficientes
+
+### Selección de Variables
+
+- **Forward**: Empieza con modelo vacío y añade variables
+- **Backward**: Empieza con modelo completo y elimina variables
+- **Stepwise**: Combina forward y backward
+- **Criterios**: AIC (menor es mejor), BIC (más conservador), R² ajustado (mayor es mejor)
+
+### Interacciones
+
+- Una **interacción** significa que el efecto de una variable depende del valor de otra
+- Se incluyen como **productos** de las variables: `X1:X2` o `X1*X2`
+- Siempre incluir los **efectos principales** cuando hay interacciones
+
+### Validación
+
+- **Validación cruzada** estima el rendimiento en datos no vistos
+- **RMSE** mide el error de predicción promedio
+- Comparar modelos usando métricas **fuera de muestra**
+
+## Próximo Laboratorio
+
+En el Laboratorio 4 exploraremos temas avanzados incluyendo regresión polinomial, regularización, y diagnósticos avanzados.
