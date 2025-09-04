@@ -275,8 +275,6 @@ El algoritmo aproxima el problema no lineal del GLM a una **serie de regresiones
 3.  Se resuelve una **regresión por mínimos cuadrados ponderada** para obtener una nueva y mejor estimación de $\boldsymbol{\beta}$.
 4.  Se repite el proceso hasta que las estimaciones de $\boldsymbol{\beta}$ se estabilizan (convergen).
 
-
-
 # Propiedades de los Estimadores
 
 Los estimadores MLE poseen propiedades **asintóticas** (se cumplen cuando $n \to \infty$) muy deseables, que los validan como el método de estimación preferido.
@@ -816,6 +814,47 @@ La estimación se adapta a la distribución de Poisson con enlace logarítmico.
     $$\frac{\partial \ell}{\partial \beta_j} = \sum_{i=1}^{n} x_{ij}(y_i - \lambda_i) = 0$$
 
 
+# Ejemplo Práctico: Salida del Modelo Poisson
+
+**Objetivo:** Ajustamos un modelo para predecir el `número de accidentes` en función del `tráfico` y la `visibilidad`.
+
+-----
+
+**Salida de Coeficientes (`summary`)**
+
+```
+Coefficients:
+              Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  9.607e-04  2.316e-03   0.415  0.678    
+trafico      9.999e-03  1.360e-06 < 2e-16 ***
+visibilidad -2.000e-01  1.012e-04 < 2e-16 ***
+```
+
+**Métricas Globales del Modelo**
+
+  * **Null deviance:** 1.68e+08 (con 99 g.l.)
+  * **Residual deviance:** 89.3 (con 97 g.l.)
+  * **AIC:** 1220.4
+
+
+# Ejemplo Práctico: Interpretación de Resultados
+
+**Significancia de los Predictores**
+
+Basado en los p-valores (`Pr(>|z|)`) de la diapositiva anterior:
+
+  * Tanto `trafico` como `visibilidad` son predictores **altamente significativos** (sus p-valores son prácticamente cero).
+
+
+**Interpretación de los Coeficientes (vía IRR)**
+
+Para interpretar el efecto práctico, exponenciamos los coeficientes ($\text{IRR} = e^\beta$):
+
+  * **IRR (tráfico):** $e^{0.01} \approx 1.01$.
+      * Un aumento de 1 unidad en `trafico` **incrementa** la tasa de accidentes esperada en un **1%**.
+  * **IRR (visibilidad):** $e^{-0.20} \approx 0.82$.
+      * Un aumento de 1 km en `visibilidad` **reduce** la tasa de accidentes esperada en un **18%**.
+
 # Implementación del Algoritmo IRLS para Poisson
 
 Como no hay solución analítica cerrada, se utiliza el algoritmo IRLS con componentes específicos para Poisson.
@@ -825,6 +864,8 @@ Como no hay solución analítica cerrada, se utiliza el algoritmo IRLS con compo
 * **Variable Dependiente Ajustada ($z_i$):**
     $$z_i = \log(\lambda_i^{(t)}) + \frac{y_i - \lambda_i^{(t)}}{\lambda_i^{(t)}}$$
 
+* **Actualización de parámetros:**
+$$\boldsymbol{\beta}^{(t+1)} = (\mathbf{X}^T \mathbf{W}^{(t)} \mathbf{X})^{-1} \mathbf{X}^T \mathbf{W}^{(t)} \mathbf{z}^{(t)}$$
 
 # Propiedades Específicas de la Estimación Poisson
 
@@ -857,3 +898,117 @@ La validación se enfoca en la **capacidad de predicción**: ¿qué tan cerca es
     * **Error Absoluto Medio (MAE):** Mide la magnitud promedio de los errores. Es menos sensible a outliers.
         $$\text{MAE} = \frac{1}{n}\sum|y_i - \hat{\mu}_i|$$
 * **Herramienta Visual:** **Gráfico de valores predichos vs. valores reales**. En un buen modelo, los puntos deben agruparse cerca de la línea diagonal $y=x$.
+
+
+# Ejemplo Práctico: Diagnóstico del Modelo Poisson
+
+Este segundo ejemplo se centra en verificar dos aspectos clave de la estimación: la **convergencia del algoritmo** y el supuesto de **equidispersión**.
+
+Comprobamos si se cumple el supuesto clave de Poisson ($media \approx varianza$).
+
+```
+Verificación de Equidispersión:
+
+Media observada:     0.15 
+Varianza observada:  0.149 
+Razón varianza/media: 0.993
+```
+
+* **Conclusión:** La razón es **muy cercana a 1**, por lo que **se cumple el supuesto**. No hay evidencia de sobredispersión y el modelo de Poisson es adecuado.
+
+
+# Otros GLMs: Adaptándose a la Realidad de los Datos
+
+Más allá de la regresión logística y de Poisson, existen otros GLM para manejar situaciones más complejas.
+
+Estos modelos son especialmente útiles cuando los datos presentan características como:
+
+* **Sobredispersión:** La varianza es mayor de lo esperado.
+* **Sesgo:** La distribución de los datos es asimétrica.
+* **Restricciones en el dominio:** La variable respuesta solo puede tomar valores positivos.
+
+Exploraremos los tres modelos más importantes para estos casos:
+
+* **Regresión Binomial Negativa**
+* **Regresión Gamma**
+* **Regresión Inversa Gaussiana**
+
+
+# Regresión Binomial Negativa
+
+**El Problema: Sobredispersión**
+
+* Ocurre en datos de conteo cuando la **varianza es mayor que la media**, violando el supuesto clave de la regresión de Poisson ($Var(Y) = \mu$).
+* **Causas comunes:** Heterogeneidad no modelada, dependencia entre eventos o exceso de ceros.
+* **Consecuencia:** La regresión de Poisson subestima los errores estándar, llevando a conclusiones incorrectas sobre la significancia de los predictores.
+
+**La Solución: El Modelo Binomial Negativo**
+
+* Es una extensión del modelo de Poisson que introduce un **parámetro de dispersión ($\alpha$)** para permitir que la varianza sea mayor que la media:
+    $$Var(Y) = \mu + \alpha \mu^2$$
+* Si $\alpha = 0$, el modelo se reduce a la regresión de Poisson.
+
+
+# Interpretación y Comparación
+
+La forma funcional del modelo es la misma que la de Poisson (con enlace logarítmico), pero debemos interpretar el nuevo parámetro de dispersión y comparar ambos modelos.
+
+**Interpretación del Parámetro de Dispersión ($\theta$)**
+
+* El software (como la función `glm.nb` en R) estima un parámetro $\theta$, donde $\alpha = 1/\theta$.
+* **Valores altos de $\theta$** (ej. > 100): Poca sobredispersión. El modelo es similar a Poisson.
+* **Valores bajos de $\theta$** (ej. < 10): Mucha sobredispersión. El modelo Binomial Negativo es claramente más apropiado.
+
+**Comparación de Modelos (Poisson vs. Binomial Negativa)**
+
+* Se utiliza el **Criterio de Información de Akaike (AIC)**.
+* Si el **AIC de la Binomial Negativa es menor** que el AIC de Poisson, debemos preferir el modelo Binomial Negativo.
+
+# Modelos para Variables Continuas No Normales
+
+Cuando la variable dependiente (Y) es **continua**, pero **no sigue una distribución normal**, la regresión lineal clásica no es adecuada.
+
+Este escenario es común en variables que son:
+
+* **Estrictamente positivas** (ej. costos, tiempos).
+* Tienen una distribución **sesgada a la derecha**.
+
+Los GLM nos ofrecen alternativas como la **Regresión Gamma** y la **Regresión Inversa Gaussiana**.
+
+# Comparación: Regresión Gamma vs. Inversa Gaussiana
+
+::::: columns
+::: {.column width="50%"}
+**Regresión Gamma**
+
+* **Uso Típico:** Para variables continuas **positivas y con sesgo a la derecha** (tiempos, costos, reclamos de seguros).
+* **Varianza:** Aumenta proporcionalmente al **cuadrado de la media** ($V(\mu)=\mu^2$).
+* **Enlace Común:** Logarítmico ($\log(\mu) = X\beta$).
+:::
+::: {.column width="50%"}
+**Regresión Inversa Gaussiana**
+
+* **Uso Típico:** Para tiempos de respuesta o variables con un **sesgo aún más pronunciado** que la Gamma.
+* **Varianza:** Aumenta proporcionalmente al **cubo de la media** ($V(\mu)=\mu^3$).
+* **Enlace Común:** Inverso al cuadrado ($1/\mu^2 = X\beta$).
+:::
+:::::
+
+# Guía de Decisión: ¿Qué GLM Debo Usar?
+
+La elección del modelo depende casi exclusivamente de la naturaleza de tu variable respuesta (Y).
+
+* **¿Es Y binaria (0/1, Éxito/Fracaso)?**
+Usa **Regresión Logística**.
+
+* **¿Es Y un conteo de eventos (nº de accidentes, nº de clientes)?**
+
+Empieza con una **Regresión de Poisson**.
+
+* **Importante:** Después, comprueba si hay **sobredispersión**. Si la hay ($\hat{\phi} > 1.5$), cambia a una **Regresión Binomial Negativa**.
+
+* **¿Es Y continua, positiva y con sesgo a la derecha (tiempos, costos)?**
+Usa **Regresión Gamma**. Es una excelente alternativa a transformar la variable con logaritmos y usar un modelo lineal.
+
+* **¿Es Y un tiempo hasta un evento con una asimetría muy pronunciada?**
+Considera una **Regresión Inversa Gaussiana**.
