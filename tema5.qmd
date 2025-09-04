@@ -296,6 +296,7 @@ D = 2 \sum_{i=1}^{n} \left[ \ell(y_i; y_i) - \ell(y_i; \hat{\mu}_i) \right]
 $$
 
 donde:
+
 - $\ell(y_i; y_i)$ = Log-verosimilitud del modelo saturado para la observación $i$.
 - $\ell(y_i; \hat{\mu}_i)$ = Log-verosimilitud del modelo propuesto para la observación $i$.
 - El factor 2 se incluye para que la deviance siga aproximadamente una distribución chi-cuadrado bajo ciertas condiciones.
