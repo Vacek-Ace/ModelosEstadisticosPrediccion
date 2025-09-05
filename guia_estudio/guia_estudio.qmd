@@ -85,7 +85,6 @@ El curso se desarrolla a lo largo de 15 semanas, con dos sesiones semanales. La 
 - **Semana 15: Presentación de Proyectos Finales**
   - Exposición y defensa del Trabajo Colectivo 2 por parte de los alumnos, donde aplicarán las técnicas de la asignatura a un problema de modelado real.
 
----
 
 # Bibliografía
 

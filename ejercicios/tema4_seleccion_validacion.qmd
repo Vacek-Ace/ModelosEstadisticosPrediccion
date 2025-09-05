@@ -14,21 +14,21 @@ execute:
   message: false
 --- -->
 
-# Ejercicios: Selección de variables, Regularización y Validación
+## **Selección de variables, Regularización y Validación**
 
-## Ejercicio 1: Conceptual (Sobreajuste vs. Subajuste)
+### Ejercicio 1: Conceptual (Sobreajuste vs. Subajuste)
 
 Explica con tus propias palabras qué es el **sobreajuste (overfitting)** y el **subajuste (underfitting)**. Describe los síntomas de cada uno comparando el error de entrenamiento con el error de validación (o de test), y menciona la solución principal para cada problema.
 
 
 
-## Ejercicio 2: Práctico (Filtrado Básico)
+### Ejercicio 2: Práctico (Filtrado Básico)
 
 Imagina que recibes un nuevo conjunto de datos con 50 predictores para un modelo de regresión. Antes de aplicar métodos computacionalmente costosos, decides hacer un filtrado inicial. Describe los **cuatro criterios básicos** que aplicarías para descartar variables de forma preliminar, según lo explicado en los apuntes.
 
 
 
-## Ejercicio 3: Conceptual (AIC vs. BIC)
+### Ejercicio 3: Conceptual (AIC vs. BIC)
 
 Tanto el AIC como el BIC son criterios para comparar modelos, pero se basan en filosofías distintas y tienen penalizaciones diferentes.
 
@@ -38,7 +38,7 @@ c) Si tu objetivo principal es la **precisión predictiva**, ¿cuál de los dos 
 
 
 
-## Ejercicio 4: Práctico (Best Subset y Criterios de Información)
+### Ejercicio 4: Práctico (Best Subset y Criterios de Información)
 
 Usa el conjunto de datos `mtcars` y la librería `leaps`.
 
@@ -49,13 +49,13 @@ d) ¿Coinciden ambos criterios en el número de variables del modelo óptimo?
 
 
 
-## Ejercicio 5: Conceptual (Métodos Stepwise)
+### Ejercicio 5: Conceptual (Métodos Stepwise)
 
 Los métodos automáticos paso a paso (forward, backward, stepwise) son computacionalmente eficientes, pero el texto advierte sobre su uso. Menciona y explica brevemente **tres de las principales limitaciones o problemas** de estos métodos.
 
 
 
-## Ejercicio 6: Práctico (Selección Backward Stepwise)
+### Ejercicio 6: Práctico (Selección Backward Stepwise)
 
 Utiliza el conjunto de datos `swiss` para predecir `Fertility`.
 
@@ -65,7 +65,7 @@ c) Reporta la fórmula del modelo final que selecciona el algoritmo y su valor d
 
 
 
-## Ejercicio 7: Conceptual (Ridge vs. Lasso)
+### Ejercicio 7: Conceptual (Ridge vs. Lasso)
 
 La regresión Ridge y Lasso son dos métodos de regularización muy populares, pero tienen un efecto fundamentalmente diferente sobre los coeficientes del modelo.
 
@@ -75,7 +75,7 @@ c) Describe un escenario en el que preferirías usar Ridge sobre Lasso.
 
 
 
-## Ejercicio 8: Práctico (Regresión Lasso)
+### Ejercicio 8: Práctico (Regresión Lasso)
 
 Utiliza el paquete `glmnet` y el conjunto de datos `mtcars` para predecir `mpg`.
 
@@ -86,13 +86,13 @@ d) ¿Qué variables ha eliminado el modelo (coeficientes iguales a cero)?
 
 
 
-## Ejercicio 9: Conceptual (Validación)
+### Ejercicio 9: Conceptual (Validación)
 
 Explica la diferencia entre la estrategia de validación **Train/Test Split simple** y la **Validación Cruzada k-fold**. ¿Cuál es la principal ventaja de la validación cruzada sobre la división simple? ¿En qué situación (tamaño del dataset) recomendarías usar cada una?
 
 
 
-## Ejercicio 10: Práctico (Validación Cruzada)
+### Ejercicio 10: Práctico (Validación Cruzada)
 
 Imagina que has ajustado dos modelos para predecir `mpg` en el dataset `mtcars`:
 1.  Un modelo simple: `mpg ~ wt + hp`

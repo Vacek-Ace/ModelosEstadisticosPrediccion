@@ -14,9 +14,9 @@ execute:
   message: false
 --- -->
 
-# Ejercicios: Regresión Lineal Múltiple
+## **Regresión Lineal Múltiple**
 
-## Ejercicio 1: Conceptual (Interpretación *Ceteris Paribus*)
+### Ejercicio 1: Conceptual (Interpretación *Ceteris Paribus*)
 
 Un analista ajusta dos modelos para predecir el consumo de un coche (`mpg`):
 
@@ -27,7 +27,7 @@ Explica detalladamente por qué el coeficiente para la variable `wt` (peso) camb
 
 
 
-## Ejercicio 2: Práctico (Ajuste e Interpretación de un Modelo Múltiple)
+### Ejercicio 2: Práctico (Ajuste e Interpretación de un Modelo Múltiple)
 
 Usa el conjunto de datos `iris` de R. Queremos modelar la anchura del pétalo (`Petal.Width`) en función de la longitud del pétalo (`Petal.Length`) y la anchura del sépalo (`Sepal.Width`).
 
@@ -38,7 +38,7 @@ Usa el conjunto de datos `iris` de R. Queremos modelar la anchura del pétalo (`
 
 
 
-## Ejercicio 3: Conceptual (R² vs. R² Ajustado)
+### Ejercicio 3: Conceptual (R² vs. R² Ajustado)
 
 Cuando pasamos de un modelo simple a uno múltiple, introducimos el **R² ajustado** como medida de bondad de ajuste.
 
@@ -47,7 +47,7 @@ Cuando pasamos de un modelo simple a uno múltiple, introducimos el **R² ajusta
 
 
 
-## Ejercicio 4: Interpretación de Salidas de R
+### Ejercicio 4: Interpretación de Salidas de R
 
 Te presentan el siguiente resumen de un modelo que predice el prestigio de una ocupación (`prestige`) en función de los ingresos (`income`) y el nivel educativo (`education`).
 
@@ -68,13 +68,13 @@ F-statistic: 185.6 on 2 and 99 DF,  p-value: < 2.2e-16
 
 
 
-## Ejercicio 5: Conceptual (Multicolinealidad)
+### Ejercicio 5: Conceptual (Multicolinealidad)
 
 Describe con tus propias palabras qué es la **multicolinealidad**. Menciona tres consecuencias negativas que puede tener la multicolinealidad severa en un modelo de regresión y si afecta más a la **predicción** o a la **inferencia**.
 
 
 
-## Ejercicio 6: Práctico (Diagnóstico de Multicolinealidad)
+### Ejercicio 6: Práctico (Diagnóstico de Multicolinealidad)
 
 Usa el dataset `mtcars`. Ajusta un modelo para predecir el consumo (`mpg`) usando como predictores el número de cilindros (`cyl`), la cilindrada (`disp`), los caballos de fuerza (`hp`) y el peso (`wt`).
 
@@ -84,14 +84,14 @@ Usa el dataset `mtcars`. Ajusta un modelo para predecir el consumo (`mpg`) usand
 
 
 
-## Ejercicio 7: Teórico (Notación Matricial)
+### Ejercicio 7: Teórico (Notación Matricial)
 
   a) Escribe la fórmula del estimador de Mínimos Cuadrados Ordinarios ($\hat{\mathbf{\beta}}$) en notación matricial.
   b) ¿Qué supuesto fundamental del modelo de regresión múltiple garantiza que la matriz $(\mathbf{X}^T\mathbf{X})$ sea invertible?
 
 
 
-## Ejercicio 8: Práctico (Gráficos de Regresión Parcial)
+### Ejercicio 8: Práctico (Gráficos de Regresión Parcial)
 
 Usa el dataset `Prestige` de la librería `car`.
 
@@ -101,13 +101,13 @@ Usa el dataset `Prestige` de la librería `car`.
 
 
 
-## Ejercicio 9: Inferencia (F-test vs. t-tests)
+### Ejercicio 9: Inferencia (F-test vs. t-tests)
 
 Describe un escenario hipotético en el que el **test F global** de un modelo de regresión múltiple sea altamente significativo (p \< 0.001), pero **ninguno de los tests t individuales** para los coeficientes sea significativo. ¿Cuál es la causa estadística más probable de este fenómeno?
 
 
 
-## Ejercicio 10: Práctico (Comparación de Modelos Anidados)
+### Ejercicio 10: Práctico (Comparación de Modelos Anidados)
 
 Usa el dataset `swiss`.
 

@@ -14,15 +14,15 @@ execute:
   message: false
 --- -->
 
-# Ejercicios: Ingeniería de Características
+## **Ingeniería de Características**
 
-## Ejercicio 1: Conceptual (Diagnóstico antes de Transformar)
+### Ejercicio 1: Conceptual (Diagnóstico antes de Transformar)
 
 El texto desaconseja fuertemente el enfoque de "ensayo y error" al aplicar transformaciones. Explica con tus propias palabras por qué la práctica de probar transformaciones hasta que mejore el R² es metodológicamente peligrosa. Menciona al menos tres de los riesgos específicos discutidos en los apuntes.
 
 
 
-## Ejercicio 2: Práctico (Escalado de Variables)
+### Ejercicio 2: Práctico (Escalado de Variables)
 
 Utiliza el dataset `iris` de R y céntrate en las cuatro variables predictoras continuas (`Sepal.Length`, `Sepal.Width`, `Petal.Length`, `Petal.Width`).
 
@@ -32,7 +32,7 @@ c) ¿Por qué este paso de escalado es crucial antes de aplicar métodos de regu
 
 
 
-## Ejercicio 3: Conceptual (Elección del Método de Escalado)
+### Ejercicio 3: Conceptual (Elección del Método de Escalado)
 
 Describe un escenario hipotético para cada uno de los siguientes casos, explicando por qué el método de escalado elegido sería el más apropiado:
 
@@ -42,7 +42,7 @@ c) Un escenario donde el **escalado robusto** (usando mediana y IQR) es necesari
 
 
 
-## Ejercicio 4: Práctico (Transformación para Linealizar)
+### Ejercicio 4: Práctico (Transformación para Linealizar)
 
 En el tema anterior vimos que la relación en el dataset `cars` (entre `speed` y `dist`) no era perfectamente lineal.
 
@@ -52,7 +52,7 @@ c) Genera de nuevo el gráfico de residuos vs. valores ajustados para el nuevo m
 
 
 
-## Ejercicio 5: Práctico (Transformación de Box-Cox)
+### Ejercicio 5: Práctico (Transformación de Box-Cox)
 
 Usa el dataset `Boston` de la librería `MASS`. La variable respuesta `medv` (valor mediano de la vivienda) es estrictamente positiva y tiene cierta asimetría.
 
@@ -62,7 +62,7 @@ c) Basándote en este resultado, ¿cuál de las transformaciones clásicas (loga
 
 
 
-## Ejercicio 6: Conceptual (Codificación de Variables Categóricas)
+### Ejercicio 6: Conceptual (Codificación de Variables Categóricas)
 
 Explica la diferencia fundamental entre la **Codificación Ordinal** y la **Codificación One-Hot**. Para cada una de las siguientes variables, indica qué método de codificación usarías y justifica tu elección:
 
@@ -72,7 +72,7 @@ Explica la diferencia fundamental entre la **Codificación Ordinal** y la **Codi
 
 
 
-## Ejercicio 7: Práctico (Interacción entre Variables Continuas)
+### Ejercicio 7: Práctico (Interacción entre Variables Continuas)
 
 Usa el dataset `mtcars` para investigar si el efecto del peso de un coche (`wt`) sobre su consumo (`mpg`) depende de su potencia (`hp`).
 
@@ -82,7 +82,7 @@ c) Basándote en el signo del coeficiente de la interacción, ¿cómo cambia el 
 
 
 
-## Ejercicio 8: Interpretación de una Interacción (Continua x Categórica)
+### Ejercicio 8: Interpretación de una Interacción (Continua x Categórica)
 
 Un investigador modela el salario (`salario`, en euros) en función de los años de experiencia (`experiencia`) y si el empleado tiene o no un máster (`master`, con "No" como categoría de referencia). El modelo ajustado es:
 
@@ -94,13 +94,13 @@ c) Interpreta el coeficiente de la interacción (300). ¿Qué nos dice sobre el 
 
 
 
-## Ejercicio 9: Conceptual (Principio de Jerarquía)
+### Ejercicio 9: Conceptual (Principio de Jerarquía)
 
 Explica el **principio de jerarquía** en el contexto de los modelos de regresión con interacciones. Si un modelo incluye el término de interacción `A:B`, ¿por qué es una buena práctica incluir siempre los efectos principales `A` y `B`, incluso si sus tests t individuales no son significativos?
 
 
 
-## Ejercicio 10: Conceptual (Ingeniería de Características Avanzada)
+### Ejercicio 10: Conceptual (Ingeniería de Características Avanzada)
 
 Los apuntes discuten la creación de nuevas variables mediante **ratios** y **combinaciones**. Para cada uno de los siguientes escenarios, propón una nueva variable (feature) que podrías crear y explica qué relación podría capturar mejor que las variables originales por sí solas.
 
