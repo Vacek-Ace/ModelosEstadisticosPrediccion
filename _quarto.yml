@@ -17,7 +17,7 @@ book:
     - tema5.qmd
     - conclusiones.qmd
     - references.qmd
-  cover-image: DSLab_logo_2.png
+  cover-image: images/DSLab_logo_2.png
 
 bibliography: references.bib
 
