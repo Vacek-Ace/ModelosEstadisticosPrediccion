@@ -9,7 +9,7 @@ library(pdftools)
 library(quarto)
 
 #' Función principal para crear el PDF completo con portada y bookmarks
-crear_pdf_completo <- function(nombre_salida = "diapositivas/diapositivas_pdf/diapositivas_completas.pdf") {
+crear_pdf_completo <- function(nombre_salida = "diapositivas/diapositivas_pdf/DiapositivasModelosEstadisticosPrediccion.pdf") {
   
   cat("=== CREANDO PDF COMPLETO ===\n\n")
   
@@ -516,7 +516,7 @@ verificar_entorno <- function() {
 }
 
 #' Función para crear versión con temas específicos
-crear_pdf_personalizado <- function(temas_incluir = NULL, nombre_salida = "diapositivas/diapositivas_pdf/diapositivas_personalizadas.pdf") {
+crear_pdf_personalizado <- function(temas_incluir = NULL, nombre_salida = "diapositivas/diapositivas_pdf/DiapositivasPersonalizadasModelosEstadisticosPrediccion.pdf") {
   
   if (is.null(temas_incluir)) {
     temas_incluir <- 0:5
@@ -568,7 +568,7 @@ crear_pdf_personalizado <- function(temas_incluir = NULL, nombre_salida = "diapo
 # === FUNCIONES DE USO RÁPIDO ===
 
 #' Crear PDF completo con portada clicable + bookmarks
-crear <- function(nombre = "diapositivas/diapositivas_pdf/diapositivas_completas.pdf") {
+crear <- function(nombre = "diapositivas/diapositivas_pdf/DiapositivasModelosEstadisticosPrediccion.pdf") {
   crear_pdf_completo(nombre)
 }
 

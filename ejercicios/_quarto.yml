@@ -15,11 +15,12 @@ book:
     - tema3_ingenieria_caracteristicas.qmd
     - tema4_seleccion_validacion.qmd
     - tema5_glm.qmd
+    - ejercicios_avanzados.qmd
 
-# --- Formato de Salida PDF con WeasyPrint ---
+# --- Formato de Salida PDF (igual que el proyecto principal) ---
 format:
   pdf:
-    pdf-engine: weasyprint
+    documentclass: scrreprt
     # Desactivamos el bloque de título automático de Quarto
     title-block-banner: false 
     # Opciones para la Tabla de Contenidos
@@ -27,6 +28,5 @@ format:
     toc-depth: 3
     toc-title: "Índice de Ejercicios"
     number-sections: false
-    # Portada y estilo personalizado
+    # Portada y estilo personalizado para HTML (ignorado en PDF)
     include-before-body: portada.html
-    css: estilos.css

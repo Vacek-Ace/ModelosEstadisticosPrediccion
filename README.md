@@ -42,7 +42,7 @@ Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); crear()"
 - ✅ Genera portada automática
 - ✅ Bookmarks laterales navegables
 - ✅ Unifica todos los temas en un solo PDF
-- ✅ Guarda en `diapositivas/diapositivas_pdf/diapositivas_completas.pdf`
+- ✅ Guarda en `diapositivas/diapositivas_pdf/DiapositivasModelosEstadisticosPrediccion.pdf`
 
 #### Otras opciones disponibles:
 ```r
@@ -69,46 +69,57 @@ quarto render --to html
 
 #### PDF (con portada y formato profesional):
 ```bash
-Rscript -e "source('apuntes/generar_libro.R'); crear_libro_completo()"
+Rscript -e "source('apuntes/generar_apuntes.R'); crear_libro_completo()"
 ```
 - Genera un PDF unificado con portada personalizada
 - Remueve páginas duplicadas automáticamente
-- Salida en `apuntes/apuntes_pdf/ModelosEstadisticosPrediccion.pdf`
+- Salida en `apuntes/apuntes_pdf/ApuntesModelosEstadisticosPrediccion.pdf`
 - Requiere LaTeX y PDFtk instalados
 
 
 ### 3. 🧮 Ejercicios
 
-#### Generar todos los ejercicios:
+#### Generar ejercicios completos con portada personalizada y fórmulas LaTeX:
+```r
+# Ejecutar desde la raíz del proyecto
+Rscript -e "source('ejercicios/generar_ejercicios.R'); crear_ejercicios_completos()"
+```
+
+#### Solo HTML (sin portada personalizada):
 ```bash
 cd ejercicios
 quarto render
 ```
 
-#### PDF específico:
-```bash
-cd ejercicios
-quarto render --to pdf --output-dir ejercicios_pdf
-```
-
-**Contenido:**
+**Características:**
+- Portada personalizada igual que el libro principal
+- Fórmulas LaTeX renderizadas correctamente
 - Ejercicios por cada tema  
-- Ejercicios de repaso general con soluciones
-- Material de práctica adicional
+- Ejercicios avanzados con demostraciones matemáticas
+- Archivo final: `ejercicios/ejercicios_pdf/EjerciciosModelosEstadisticosPrediccion.pdf`
 
 ### 4. 📋 Guía de Estudio
 
-#### Generar guía PDF:
+#### Generar guía PDF con portada personalizada (recomendado):
+```r
+# Ejecutar desde la raíz del proyecto
+Rscript -e "source('guia_estudio/generar_guia.R'); crear_guia_completa()"
+```
+
+#### Generar guía PDF básica (usando configuración original):
 ```bash
 cd guia_estudio
 quarto render guia_estudio.qmd --to pdf
 ```
 
 **Características:**
+- **Método 1**: Portada personalizada separada + contenido con LaTeX (mejor calidad)
+- **Método 2**: Todo-en-uno con WeasyPrint (más simple, menos opciones de formato)
 - Resumen ejecutivo de todos los temas
 - Puntos clave para estudio
 - Preparación para exámenes
-- Formato compacto y portable
+- Archivo final (Método 1): `guia_estudio/GuiaEstudioModelosEstadisticosPrediccion.pdf`
+- Archivo final (Método 2): `guia_estudio/guia_estudio.pdf`
 
 ### 5. 🔬 Laboratorios
 
@@ -159,6 +170,25 @@ quarto render laboratorios/
    - **macOS**: `brew install pdftk-java`
    - **Linux**: `sudo apt-get install pdftk`
 
+## 📋 Archivos Finales Generados
+
+Todos los archivos PDF finales siguen la nomenclatura estandarizada:
+
+| Contenido | Comando | Archivo Final |
+|-----------|---------|---------------|
+| **Apuntes** | `Rscript -e "source('apuntes/generar_libro.R'); crear_libro_completo()"` | `apuntes/apuntes_pdf/ApuntesModelosEstadisticosPrediccion.pdf` |
+| **Diapositivas** | `Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); crear()"` | `diapositivas/diapositivas_pdf/DiapositivasModelosEstadisticosPrediccion.pdf` |
+| **Ejercicios** | `Rscript -e "source('ejercicios/generar_ejercicios.R'); crear_ejercicios_completos()"` | `ejercicios/ejercicios_pdf/EjerciciosModelosEstadisticosPrediccion.pdf` |
+| **Guía de Estudio** | `Rscript -e "source('guia_estudio/generar_guia.R'); crear_guia_completa()"` | `guia_estudio/GuiaEstudioModelosEstadisticosPrediccion.pdf` |
+| **Guía Básica** | `cd guia_estudio && quarto render guia_estudio.qmd --to pdf` | `guia_estudio/guia_estudio.pdf` |
+
+**Características comunes:**
+- ✅ Portadas personalizadas con diseño unificado
+- ✅ Fórmulas LaTeX renderizadas correctamente  
+- ✅ Tabla de contenidos navegable
+- ✅ Formato profesional consistente
+- ✅ Optimizados para impresión y distribución
+
 ### Dependencias de R
 
 ```r
@@ -183,36 +213,40 @@ ModelosEstadisticosPrediccion/
 ├── README.md                      # Este archivo
 ├── estilos.css                    # Estilos personalizados
 │
-├── index.qmd                      # Página principal del libro
+├── index.qmd                     # Página principal del libro
 ├── tema0.qmd - tema5.qmd         # Capítulos principales
 ├── conclusiones.qmd              # Conclusiones del curso
 ├── references.qmd                # Referencias bibliográficas
 │
-├── apuntes/                      # Generación de libro PDF
-│   ├── generar_libro.R           # Script para libro PDF profesional
-│   ├── portada.qmd               # Portada del libro
+├── apuntes/                      # Generación de apuntes PDF
+│   ├── generar_apuntes.R         # Script para apuntes PDF profesional
+│   ├── portada.qmd               # Portada de los apuntes
 │   └── apuntes_pdf/              # PDFs generados
-│       └── ModelosEstadisticosPrediccion.pdf
+│       └── ApuntesModelosEstadisticosPrediccion.pdf
 │
 ├── diapositivas/                 # Diapositivas de clase
 │   ├── crear_diapositivas_completas.R  # Script automatizado
 │   ├── portada.qmd               # Portada de diapositivas
-│   ├── tema0_introduccion.qmd    # Diapositivas por tema
+│   ├── tema**.qmd                # Diapositivas por tema
 │   └── diapositivas_pdf/         # PDFs generados
-│       └── diapositivas_completas.pdf
+│       └── DiapositivasModelosEstadisticosPrediccion.pdf
 │
-├── ejercicios/                   # Ejercicios y soluciones
+├── ejercicios/                  # Ejercicios
 │   ├── _quarto.yml              # Configuración específica
+│   ├── generar_ejercicios.R     # Script para ejercicios PDF profesional
 │   ├── index.qmd                # Índice de ejercicios
-│   ├── tema1_regresion_simple.qmd
-│   ├── popurri.qmd              # Ejercicios de repaso general
-│   ├── popurri_soluciones.qmd   # Soluciones del repaso
+│   ├── tema**.qmd               # Ejercicios por tema
+│   ├── ejercicios_avanzados.qmd # Ejercicios avanzados con matemáticas
+│   ├── ejercicios_avanzados_soluciones.qmd   # Soluciones avanzadas
 │   └── ejercicios_pdf/          # PDFs generados
+│       └── EjerciciosModelosEstadisticosPrediccion.pdf
 │
 ├── guia_estudio/                # Guía de estudio compacta
+│   ├── generar_guia.R           # Script para guía PDF profesional
 │   ├── guia_estudio.qmd         # Guía principal
 │   ├── portada.html             # Portada de la guía
-│   └── guia_estudio.pdf         # PDF generado
+│   ├── guia_estudio.pdf         # PDF básico generado
+│   └── GuiaEstudioModelosEstadisticosPrediccion.pdf  # PDF con portada profesional
 │
 ├── laboratorios/                # Labs prácticos
 │   ├── lab0_introduccion.qmd
@@ -221,7 +255,7 @@ ModelosEstadisticosPrediccion/
 │
 ├── images/                      # Imágenes y logos
 ├── intro/                       # Material introductorio  
-└── docs/                       # Libro HTML generado
+└── docs/                        # Libro HTML generado
 ```
 
 ## 🎯 Flujos de Trabajo Comunes
@@ -230,11 +264,12 @@ ModelosEstadisticosPrediccion/
 
 ```bash
 # 1. Actualizar todo el contenido automáticamente
-quarto render                     # Libro HTML
+quarto render --to html                  # Libro HTML
 Rscript -e "source('apuntes/generar_libro.R'); crear_libro_completo()"  # Libro PDF profesional
 Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); crear()"  # Diapositivas
-cd ejercicios && quarto render --to pdf  # Ejercicios
-cd ../guia_estudio && quarto render guia_estudio.qmd --to pdf  # Guía de estudio
+Rscript -e "source('ejercicios/generar_ejercicios.R'); crear_ejercicios_completos()"  # Ejercicios
+Rscript -e "source('guia_estudio/generar_guia.R'); crear_guia_completa()"  # Guía de estudio
+cd laboratorios && quarto render --to html  # Laboratorios
 
 # 2. Solo actualizar diapositivas para clase
 Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); crear()"
@@ -244,17 +279,20 @@ Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); crear()"
 
 ```bash
 # 1. Generar libro de estudio (HTML navegable)
-quarto render
+quarto render --to html
 
 # 2. Generar libro PDF para imprimir
 Rscript -e "source('apuntes/generar_libro.R'); crear_libro_completo()"
 
 # 3. Generar guía de estudio compacta
-cd guia_estudio && quarto render guia_estudio.qmd --to pdf
+Rscript -e "source('guia_estudio/generar_guia.R'); crear_guia_completa()"
 
 # 4. Generar ejercicios para imprimir  
-cd ejercicios
-quarto render --to pdf
+Rscript -e "source('ejercicios/generar_ejercicios.R'); crear_ejercicios_completos()"
+
+# 5. Generar laboratorios interactivos
+cd laboratorios
+quarto render --to html
 ```
 
 ## 🐛 Solución de Problemas
@@ -298,8 +336,8 @@ Este material está licenciado bajo [Creative Commons BY-SA 4.0](https://creativ
 
 ## 👥 Autores
 
-- **Víctor Aceña** - [GitHub](https://github.com/Vacek-Ace)
-- **Isaac Martín** - DSLAB
+- **Víctor C. Aceña Gil** - [GitHub](https://github.com/Vacek-Ace)
+- **Isaac Martín de Diego** - DSLAB
 
 ---
 
@@ -311,20 +349,6 @@ Este material está licenciado bajo [Creative Commons BY-SA 4.0](https://creativ
 4. **¡Listo!** Navegar a `docs/index.html`
 
 Para soporte adicional, consultar la [documentación de Quarto](https://quarto.org/docs/) o abrir un issue en el repositorio.
-
-## 📝 Notas de Organización
-
-### Sugerencias de Mejora en Nomenclatura
-
-Para una mejor organización y claridad, se recomienda renombrar los siguientes archivos:
-
-```bash
-# En el directorio ejercicios/
-mv popurri.qmd ejercicios_repaso_general.qmd
-mv popurri_soluciones.qmd ejercicios_repaso_general_soluciones.qmd
-```
-
-Esto haría los nombres más descriptivos y profesionales, reemplazando "popurrí" por "repaso general".
 
 ## 📄 Licencia
 

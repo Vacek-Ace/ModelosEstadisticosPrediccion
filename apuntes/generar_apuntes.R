@@ -49,7 +49,7 @@ unir_pdfs <- function() {
   system(paste0("pdftk ", apuntes_pdf, " cat 2-end output libro_sin_primera.pdf"))
   
   # Unir portada + libro sin primera página  
-  system("pdftk ../portada.pdf libro_sin_primera.pdf cat output ModelosEstadisticosPrediccion.pdf")
+  system("pdftk ../portada.pdf libro_sin_primera.pdf cat output ApuntesModelosEstadisticosPrediccion.pdf")
   
   # Limpiar temporales
   file.remove(c(apuntes_pdf, "libro_sin_primera.pdf"))
@@ -61,7 +61,7 @@ unir_pdfs <- function() {
   
   setwd("..")
   
-  cat("Libro completo: apuntes/apuntes_pdf/ModelosEstadisticosPrediccion.pdf\n")
+  cat("Libro completo: apuntes/apuntes_pdf/ApuntesModelosEstadisticosPrediccion.pdf\n")
 }
 
 crear_libro_completo <- function() {
