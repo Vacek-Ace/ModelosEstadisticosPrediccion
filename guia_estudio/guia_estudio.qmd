@@ -7,7 +7,7 @@ format:
     toc: true
     toc-title: "Índice de Contenidos"
     include-before-body: portada.html
-    css: estilos.css
+    css: ../estilos.css
 ---
 
 # Introducción a la asignatura

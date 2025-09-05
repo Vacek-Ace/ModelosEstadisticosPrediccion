@@ -60,27 +60,22 @@ Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); crear('mi_dia
 
 #### HTML (recomendado):
 ```bash
-quarto render
+quarto render --to html
 ```
 - Genera el libro completo en HTML navegable
-- Salida en el directorio `_book/`
+- Salida en el directorio `docs/` 
 - Incluye navegación interactiva y buscador
+- Perfecto para consulta online
 
-#### PDF:
+#### PDF (con portada y formato profesional):
 ```bash
-quarto render --to pdf
+Rscript -e "source('apuntes/generar_libro.R'); crear_libro_completo()"
 ```
-- Genera un PDF unificado con todos los apuntes
-- Requiere LaTeX instalado
+- Genera un PDF unificado con portada personalizada
+- Remueve páginas duplicadas automáticamente
+- Salida en `apuntes/apuntes_pdf/ModelosEstadisticosPrediccion.pdf`
+- Requiere LaTeX y PDFtk instalados
 
-#### Desde R:
-```r
-# Generar libro en HTML
-quarto::quarto_render()
-
-# Generar libro en PDF  
-quarto::quarto_render(output_format = "pdf")
-```
 
 ### 3. 🧮 Ejercicios
 
@@ -97,10 +92,25 @@ quarto render --to pdf --output-dir ejercicios_pdf
 ```
 
 **Contenido:**
-- Ejercicios por cada tema
-- Ejercicios popurrí adicionales
+- Ejercicios por cada tema  
+- Ejercicios de repaso general con soluciones
+- Material de práctica adicional
 
-### 4. 🔬 Laboratorios
+### 4. 📋 Guía de Estudio
+
+#### Generar guía PDF:
+```bash
+cd guia_estudio
+quarto render guia_estudio.qmd --to pdf
+```
+
+**Características:**
+- Resumen ejecutivo de todos los temas
+- Puntos clave para estudio
+- Preparación para exámenes
+- Formato compacto y portable
+
+### 5. 🔬 Laboratorios
 
 Los laboratorios se pueden ejecutar individualmente:
 
@@ -178,6 +188,12 @@ ModelosEstadisticosPrediccion/
 ├── conclusiones.qmd              # Conclusiones del curso
 ├── references.qmd                # Referencias bibliográficas
 │
+├── apuntes/                      # Generación de libro PDF
+│   ├── generar_libro.R           # Script para libro PDF profesional
+│   ├── portada.qmd               # Portada del libro
+│   └── apuntes_pdf/              # PDFs generados
+│       └── ModelosEstadisticosPrediccion.pdf
+│
 ├── diapositivas/                 # Diapositivas de clase
 │   ├── crear_diapositivas_completas.R  # Script automatizado
 │   ├── portada.qmd               # Portada de diapositivas
@@ -189,7 +205,14 @@ ModelosEstadisticosPrediccion/
 │   ├── _quarto.yml              # Configuración específica
 │   ├── index.qmd                # Índice de ejercicios
 │   ├── tema1_regresion_simple.qmd
+│   ├── popurri.qmd              # Ejercicios de repaso general
+│   ├── popurri_soluciones.qmd   # Soluciones del repaso
 │   └── ejercicios_pdf/          # PDFs generados
+│
+├── guia_estudio/                # Guía de estudio compacta
+│   ├── guia_estudio.qmd         # Guía principal
+│   ├── portada.html             # Portada de la guía
+│   └── guia_estudio.pdf         # PDF generado
 │
 ├── laboratorios/                # Labs prácticos
 │   ├── lab0_introduccion.qmd
@@ -198,7 +221,7 @@ ModelosEstadisticosPrediccion/
 │
 ├── images/                      # Imágenes y logos
 ├── intro/                       # Material introductorio  
-└── _book/                      # Libro HTML generado
+└── docs/                       # Libro HTML generado
 ```
 
 ## 🎯 Flujos de Trabajo Comunes
@@ -208,21 +231,28 @@ ModelosEstadisticosPrediccion/
 ```bash
 # 1. Actualizar todo el contenido automáticamente
 quarto render                     # Libro HTML
-cd diapositivas && Rscript -e "source('crear_diapositivas_completas.R'); crear()"
-cd ../ejercicios && quarto render --to pdf
+Rscript -e "source('apuntes/generar_libro.R'); crear_libro_completo()"  # Libro PDF profesional
+Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); crear()"  # Diapositivas
+cd ejercicios && quarto render --to pdf  # Ejercicios
+cd ../guia_estudio && quarto render guia_estudio.qmd --to pdf  # Guía de estudio
 
 # 2. Solo actualizar diapositivas para clase
-cd diapositivas
-Rscript -e "source('crear_diapositivas_completas.R'); crear()"
+Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); crear()"
 ```
 
 ### Para el Estudiante
 
 ```bash
-# 1. Generar libro de estudio
+# 1. Generar libro de estudio (HTML navegable)
 quarto render
 
-# 2. Generar ejercicios para imprimir  
+# 2. Generar libro PDF para imprimir
+Rscript -e "source('apuntes/generar_libro.R'); crear_libro_completo()"
+
+# 3. Generar guía de estudio compacta
+cd guia_estudio && quarto render guia_estudio.qmd --to pdf
+
+# 4. Generar ejercicios para imprimir  
 cd ejercicios
 quarto render --to pdf
 ```
@@ -278,6 +308,29 @@ Este material está licenciado bajo [Creative Commons BY-SA 4.0](https://creativ
 1. **Clonar** el repositorio
 2. **Verificar** requisitos con `source('diapositivas/crear_diapositivas_completas.R'); check()`
 3. **Generar** todo con `quarto render`
-4. **¡Listo!** Navegar a `_book/index.html`
+4. **¡Listo!** Navegar a `docs/index.html`
 
 Para soporte adicional, consultar la [documentación de Quarto](https://quarto.org/docs/) o abrir un issue en el repositorio.
+
+## 📝 Notas de Organización
+
+### Sugerencias de Mejora en Nomenclatura
+
+Para una mejor organización y claridad, se recomienda renombrar los siguientes archivos:
+
+```bash
+# En el directorio ejercicios/
+mv popurri.qmd ejercicios_repaso_general.qmd
+mv popurri_soluciones.qmd ejercicios_repaso_general_soluciones.qmd
+```
+
+Esto haría los nombres más descriptivos y profesionales, reemplazando "popurrí" por "repaso general".
+
+## 📄 Licencia
+
+Este material está licenciado bajo [Creative Commons BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+
+## 👥 Autores
+
+- **Víctor Aceña** - [GitHub](https://github.com/Vacek-Ace)
+- **Isaac Martín** - DSLAB

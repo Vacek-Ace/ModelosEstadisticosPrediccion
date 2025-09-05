@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.21">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>1&nbsp; Introducción a los modelos de regresión – Modelos Estadísticos para la Predicción</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./tema1.html" rel="next">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-0687a6949ae11671cfb8b930681aab34.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No se han encontrado resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema0.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción a los modelos de regresión</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Modelos Estadísticos para la Predicción</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Buscar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prefacio</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema0.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción a los modelos de regresión</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">El modelo de regresión lineal simple</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">El modelo de regresión lineal múltiple</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ingeniería de características: transformaciones de variables e interacciones</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Selección de variables, regularización y validación</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./conclusiones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bibliografía</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#sec-proposito" id="toc-sec-proposito" class="nav-link active" data-scroll-target="#sec-proposito"><span class="header-section-number">1.1</span> Predecir vs.&nbsp;explicar</a></li>
+  <li><a href="#sec-componentes" id="toc-sec-componentes" class="nav-link" data-scroll-target="#sec-componentes"><span class="header-section-number">1.2</span> Anatomía de un modelo de regresión: los componentes axiomáticos</a>
+  <ul class="collapse">
+  <li><a href="#la-variable-de-respuesta" id="toc-la-variable-de-respuesta" class="nav-link" data-scroll-target="#la-variable-de-respuesta"><span class="header-section-number">1.2.1</span> La variable de respuesta</a></li>
+  <li><a href="#las-variables-predictoras" id="toc-las-variables-predictoras" class="nav-link" data-scroll-target="#las-variables-predictoras"><span class="header-section-number">1.2.2</span> Las variables predictoras</a></li>
+  <li><a href="#el-término-de-error-aleatorio" id="toc-el-término-de-error-aleatorio" class="nav-link" data-scroll-target="#el-término-de-error-aleatorio"><span class="header-section-number">1.2.3</span> El término de error aleatorio</a></li>
+  </ul></li>
+  <li><a href="#sec-tipos-modelos" id="toc-sec-tipos-modelos" class="nav-link" data-scroll-target="#sec-tipos-modelos"><span class="header-section-number">1.3</span> Un viaje preliminar por el universo de los modelos de regresión</a>
+  <ul class="collapse">
+  <li><a href="#modelos-lineales-lms" id="toc-modelos-lineales-lms" class="nav-link" data-scroll-target="#modelos-lineales-lms"><span class="header-section-number">1.3.1</span> Modelos lineales (LMs)</a></li>
+  <li><a href="#modelos-lineales-generalizados-glms" id="toc-modelos-lineales-generalizados-glms" class="nav-link" data-scroll-target="#modelos-lineales-generalizados-glms"><span class="header-section-number">1.3.2</span> Modelos lineales generalizados (GLMs)</a></li>
+  <li><a href="#modelos-de-efectos-mixtos-mixed-models" id="toc-modelos-de-efectos-mixtos-mixed-models" class="nav-link" data-scroll-target="#modelos-de-efectos-mixtos-mixed-models"><span class="header-section-number">1.3.3</span> Modelos de efectos mixtos (Mixed Models)</a></li>
+  <li><a href="#modelos-aditivos-generalizados-gams" id="toc-modelos-aditivos-generalizados-gams" class="nav-link" data-scroll-target="#modelos-aditivos-generalizados-gams"><span class="header-section-number">1.3.4</span> Modelos aditivos generalizados (GAMs)</a></li>
+  </ul></li>
+  <li><a href="#sec-historia" id="toc-sec-historia" class="nav-link" data-scroll-target="#sec-historia"><span class="header-section-number">1.4</span> Una breve crónica del desarrollo de la regresión</a>
+  <ul class="collapse">
+  <li><a href="#los-orígenes-galton-y-la-regresión-a-la-mediocridad" id="toc-los-orígenes-galton-y-la-regresión-a-la-mediocridad" class="nav-link" data-scroll-target="#los-orígenes-galton-y-la-regresión-a-la-mediocridad"><span class="header-section-number">1.4.1</span> Los orígenes: Galton y la “regresión a la mediocridad”</a></li>
+  <li><a href="#la-formalización-matemática-legendre-y-gauss" id="toc-la-formalización-matemática-legendre-y-gauss" class="nav-link" data-scroll-target="#la-formalización-matemática-legendre-y-gauss"><span class="header-section-number">1.4.2</span> La formalización matemática: Legendre y Gauss</a></li>
+  <li><a href="#el-desarrollo-moderno-la-revolución-de-los-glms" id="toc-el-desarrollo-moderno-la-revolución-de-los-glms" class="nav-link" data-scroll-target="#el-desarrollo-moderno-la-revolución-de-los-glms"><span class="header-section-number">1.4.3</span> El desarrollo moderno: la revolución de los GLMs</a></li>
+  <li><a href="#la-evolución-contemporánea" id="toc-la-evolución-contemporánea" class="nav-link" data-scroll-target="#la-evolución-contemporánea"><span class="header-section-number">1.4.4</span> La evolución contemporánea</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-intro" class="quarto-section-identifier"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción a los modelos de regresión</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Este tema inaugural tiene como misión construir el andamiaje conceptual y filosófico sobre el que se asienta el modelado estadístico moderno. A lo largo de estas páginas, contextualizaremos la regresión no solo como una técnica, sino como un marco de pensamiento indispensable en la ciencia de datos y en cualquier disciplina de investigación cuantitativa. Exploraremos en profundidad su propósito dual, desgranaremos sus componentes axiomáticos hasta el último detalle, y ofreceremos una visión panorámica, rica en matices, de la vasta familia de modelos de regresión. El objetivo es preparar al lector, con solidez y sin prisas, para las inmersiones técnicas que seguirán en los capítulos posteriores. Como lectura complementaria que comparte esta filosofía de aprendizaje profundo pero aplicado, recomendamos encarecidamente la obra de <span class="citation" data-cites="james2021">(<a href="references.html#ref-james2021" role="doc-biblioref">James et&nbsp;al. 2021</a>)</span>.</p>
+<section id="sec-proposito" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="sec-proposito"><span class="header-section-number">1.1</span> Predecir vs.&nbsp;explicar</h2>
+<p>El modelado de regresión constituye una de las herramientas más potentes y flexibles del arsenal estadístico. Ofrece un marco metodológico riguroso para investigar y cuantificar las relaciones entre un conjunto de variables, y su aplicabilidad abarca un espectro extraordinariamente amplio de disciplinas: desde la física de partículas y la ingeniería aeroespacial, donde se usa para modelar sistemas complejos, hasta la econometría, la psicometría, la epidemiología o las finanzas, donde es fundamental para entender mercados y comportamientos.</p>
+<p>Aunque en la práctica ambos objetivos a menudo se entrelazan, conceptualmente, el modelado estadístico se orienta hacia uno de dos polos, una dicotomía fundamental articulada brillantemente por <span class="citation" data-cites="shmueli2010">(<a href="references.html#ref-shmueli2010" role="doc-biblioref">Shmueli 2010</a>)</span>: la <strong>predicción</strong> o la <strong>inferencia (explicación)</strong>. Comprender esta distinción es el primer paso para convertirse en un modelador eficaz.</p>
+<ol type="1">
+<li><strong>Predicción</strong>: El objetivo principal es la <strong>precisión</strong>. Se busca construir un modelo que pueda estimar con el menor error posible el valor de una variable de interés (la <em>respuesta</em>) basándose en la información proporcionada por otras variables (las <em>predictoras</em>). En este paradigma, el modelo puede ser tratado como una “caja negra” (<em>black box</em>). Su funcionamiento interno o la interpretabilidad de sus componentes son secundarios, siempre y cuando sus predicciones sean consistentemente fiables y robustas en datos no observados previamente.</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Una entidad financiera quiere predecir la probabilidad de que un cliente incurra en impago de un crédito. Utilizan variables como la edad, ingresos, nivel de estudios y historial crediticio. El banco no necesita necesariamente entender la “causa” exacta del impago; su principal interés es tener un modelo que clasifique correctamente a los futuros solicitantes como de alto o bajo riesgo para minimizar pérdidas.</p>
+</div>
+</div>
+</div>
+<ol start="2" type="1">
+<li><strong>Inferencia</strong>: El foco se desplaza radicalmente hacia la <strong>comprensión</strong> y la <strong>interpretación</strong>. El objetivo no es solo predecir, sino dilucidar la naturaleza de las interdependencias entre las variables. Se busca cuantificar cómo un cambio en una variable predictora influye, ya sea de forma causal o asociativa, en la variable de respuesta. Aquí, la interpretabilidad del modelo es primordial. El interés reside en la magnitud, el signo y, crucialmente, la incertidumbre estadística (expresada mediante errores estándar, intervalos de confianza y p-valores) de los parámetros estimados.</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Ejemplo">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Ejemplo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Una epidemióloga investiga los factores de riesgo de una enfermedad cardíaca. Modela la presión arterial en función de variables como el índice de masa corporal (IMC), el consumo diario de sal y las horas de ejercicio semanales. Su objetivo no es solo predecir la presión arterial de un paciente, sino entender y cuantificar la relación: “¿En cuántos mmHg aumenta la presión arterial, en promedio, por cada gramo adicional de sal consumido al día, manteniendo constantes el IMC y el ejercicio?”. La respuesta a esta pregunta tiene implicaciones directas para la salud pública y las recomendaciones dietéticas.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled" title="Una relación simbiótica">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Importante</span>Una relación simbiótica
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Aunque conceptualmente distintos, ambos objetivos no son mutuamente excluyentes; a menudo se benefician el uno del otro. Un modelo con una base inferencial sólida, que captura relaciones causales o asociativas verdaderas, suele tener un buen rendimiento predictivo. A la inversa, un modelo que demuestra una alta precisión predictiva en datos nuevos nos da confianza en que las relaciones que ha aprendido no son meras casualidades del conjunto de datos de entrenamiento, sino que probablemente reflejen patrones reales y generalizables. La tensión entre interpretabilidad y precisión es uno de los debates más fascinantes en la ciencia de datos moderna.</p>
+</div>
+</div>
+</section>
+<section id="sec-componentes" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="sec-componentes"><span class="header-section-number">1.2</span> Anatomía de un modelo de regresión: los componentes axiomáticos</h2>
+<p>Todo modelo de regresión, desde el más simple hasta el más sofisticado, se construye sobre tres pilares fundamentales. Estos componentes, definidos en textos clásicos como el de <span class="citation" data-cites="kutner2005applied">(<a href="references.html#ref-kutner2005applied" role="doc-biblioref">Kutner et&nbsp;al. 2005</a>)</span>, son los ladrillos con los que edificaremos todo nuestro conocimiento.</p>
+<section id="la-variable-de-respuesta" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="la-variable-de-respuesta"><span class="header-section-number">1.2.1</span> La variable de respuesta</h3>
+<p>También designada como <strong>variable dependiente</strong>, <strong>variable de salida</strong>, <strong>target</strong>, <strong>variable objetivo</strong> o <strong>variable explicada</strong>. Representa el fenómeno o la característica principal cuyo comportamiento se busca modelar, comprender o predecir. La naturaleza de esta variable es, quizás, el factor más determinante a la hora de elegir el tipo de modelo de regresión. Puede ser:</p>
+<ul>
+<li><strong>Continua</strong>: Una variable que puede tomar cualquier valor dentro de un rango. Ej: temperatura, altura, precio de una acción, concentración de un compuesto químico.</li>
+<li><strong>Discreta de Conteo</strong>: Una variable que representa un número de eventos. Ej: número de accidentes en una intersección, número de clientes que entran en una tienda, número de mutaciones en un gen.</li>
+<li><strong>Binaria o Dicotómica</strong>: Una variable con solo dos resultados posibles. Ej: éxito/fracaso, enfermo/sano, compra/no compra, spam/no spam.</li>
+<li><strong>Categórica</strong>: Una variable que representa grupos o categorías. Si no tiene orden, es <strong>nominal</strong> (ej: tipo de sangre, partido político); si tiene un orden intrínseco, es <strong>ordinal</strong> (ej: nivel de satisfacción “bajo/medio/alto”, estadio de una enfermedad “I/II/III/IV”).</li>
+</ul>
+</section>
+<section id="las-variables-predictoras" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="las-variables-predictoras"><span class="header-section-number">1.2.2</span> Las variables predictoras</h3>
+<p>Conocidas indistintamente como <strong>variables independientes</strong>, <strong>explicativas</strong>, <strong>regresoras</strong>, <strong>covariables</strong> o <strong>características</strong> (<em>features</em>). Son las magnitudes, atributos o factores que se postula que influyen o están asociados con el comportamiento de la variable de respuesta. Al igual que la variable de respuesta, pueden ser de diversa naturaleza (continuas, categóricas, etc.). La selección de estas variables es una de las fases más críticas del modelado, requiriendo una combinación de conocimiento del dominio, análisis exploratorio de datos y técnicas estadísticas formales.</p>
+</section>
+<section id="el-término-de-error-aleatorio" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="el-término-de-error-aleatorio"><span class="header-section-number">1.2.3</span> El término de error aleatorio</h3>
+<p>Este componente, a menudo subestimado, es conceptualmente crucial. Simboliza la variabilidad intrínseca de la variable de respuesta que <strong>no es capturada o explicada</strong> por las variables predictoras incluidas explícitamente en el modelo. El término de error <span class="math inline">\(\epsilon\)</span> no es un simple “error” en el sentido de equivocación; es un componente estocástico que amalgama múltiples fuentes de variabilidad:</p>
+<ul>
+<li><strong>Variables Omitidas</strong>: Ningún modelo es perfecto. Siempre habrá factores que influyen en <span class="math inline">\(Y\)</span> pero que no han sido medidos o incluidos en el modelo (variables latentes).</li>
+<li><strong>Error de Medición</strong>: Las mediciones de <span class="math inline">\(Y\)</span> (y también de <span class="math inline">\(X\)</span>) pueden no ser perfectamente precisas.</li>
+<li><strong>Aleatoriedad Intrínseca</strong>: Muchos fenómenos naturales y sociales tienen un componente de variabilidad irreducible. Dos individuos con idénticos valores en todas las variables predictoras pueden, aun así, tener valores distintos en la variable de respuesta.</li>
+</ul>
+<p>Formalmente, la relación fundamental de la regresión se expresa como la descomposición de la variable de respuesta en una parte sistemática y una parte aleatoria:</p>
+<p><span class="math display">\[Y = \underbrace{f(X_1, \ldots, X_k)}_{\text{Componente Sistemática}} + \underbrace{\epsilon}_{\text{Componente Aleatoria}}\]</span></p>
+<p>donde <span class="math inline">\(f(\cdot)\)</span> denota la <strong>componente sistemática</strong> (o determinística) del modelo, que representa el valor esperado de <span class="math inline">\(Y\)</span> para unos valores dados de las <span class="math inline">\(X\)</span>. La función <span class="math inline">\(f\)</span> es lo que intentamos estimar a partir de los datos. Por su parte, <span class="math inline">\(\epsilon\)</span> es la <strong>componente aleatoria</strong>, y gran parte del diagnóstico y la inferencia en regresión se basa en verificar los supuestos que hacemos sobre la distribución de este término (ej: que su media es cero, que su varianza es constante, etc.).</p>
+<div class="callout callout-style-default callout-caution callout-titled" title="Linealidad en los parámetros, no en las variables">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Precaución</span>Linealidad en los parámetros, no en las variables
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Una característica que define a los <strong>modelos de regresión lineal</strong> (y que se extiende a muchos otros tipos de modelos) es que la función <span class="math inline">\(f(\cdot)\)</span> mantiene una relación lineal con respecto a sus <strong>parámetros desconocidos</strong> (los coeficientes beta, <span class="math inline">\(\beta_j\)</span>). Es crucial enfatizar que esta “linealidad en los parámetros” <strong>no impone una restricción de linealidad en las variables predictoras mismas</strong>.</p>
+<p>Por el contrario, es común y metodológicamente válido incorporar transformaciones no lineales de los predictores o interacciones complejas entre ellos para capturar relaciones más sofisticadas. Por ejemplo, el siguiente modelo es un <strong>modelo de regresión lineal</strong>:</p>
+<p><span class="math display">\[Y = \beta_0 + \beta_1 X_1 + \beta_2 X_1^2 + \beta_3 \log(X_2) + \beta_4 (X_1 \cdot X_2) + \epsilon\]</span></p>
+<p>Aunque la relación entre <span class="math inline">\(Y\)</span> y las variables <span class="math inline">\(X_1\)</span> y <span class="math inline">\(X_2\)</span> es claramente no lineal (es cuadrática en <span class="math inline">\(X_1\)</span>, logarítmica en <span class="math inline">\(X_2\)</span> e incluye una interacción), el modelo es <strong>lineal en los parámetros</strong> <span class="math inline">\(\beta_0, \beta_1, \beta_2, \beta_3, \beta_4\)</span>. La función <span class="math inline">\(f\)</span> es una combinación lineal de estos coeficientes. Esta flexibilidad es una de las razones de la enorme potencia de los modelos lineales.</p>
+<p>El siguiente bloque de código en R genera un ejemplo visual. Simulamos datos que siguen una relación cuadrática y luego ajustamos un modelo lineal que incluye un término cuadrático (<span class="math inline">\(X^2\)</span>). Como se puede observar en la figura, la línea de regresión (azul) captura perfectamente la curvatura de los datos, demostrando que un modelo lineal en sus parámetros puede modelar relaciones no lineales en sus variables.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar la librería necesaria para la visualización</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Simulación de datos</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>) <span class="co"># Para reproducibilidad</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="co"># Número de observaciones</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># La relación verdadera es cuadrática: y = 1.5 + 0.5*x + 0.8*x^2 + error</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fl">1.5</span> <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">*</span> x <span class="sc">+</span> <span class="fl">0.8</span> <span class="sc">*</span> x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">5</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>datos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x, y)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Ajuste del modelo lineal</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Usamos I(x^2) para indicar que tratamos x^2 como una variable</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>modelo_cuadratico <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x <span class="sc">+</span> <span class="fu">I</span>(x<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> datos)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Visualización con ggplot2</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">color =</span> <span class="st">"gray40"</span>) <span class="sc">+</span> <span class="co"># Puntos de los datos originales</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">formula =</span> y <span class="sc">~</span> x <span class="sc">+</span> <span class="fu">I</span>(x<span class="sc">^</span><span class="dv">2</span>), <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"#0072B2"</span>, <span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span> <span class="co"># Línea del modelo ajustado</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Modelo Lineal con Término Cuadrático"</span>,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Variable Predictora (X)"</span>,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Variable de Respuesta (Y)"</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-linear-params" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-linear-params-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="tema0_files/figure-html/fig-linear-params-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-linear-params-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;1.1: Ejemplo de un modelo lineal en los parámetros que captura una relación no lineal (cuadrática) en los datos.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-tipos-modelos" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="sec-tipos-modelos"><span class="header-section-number">1.3</span> Un viaje preliminar por el universo de los modelos de regresión</h2>
+<p>La regresión lineal clásica, que será el objeto de estudio de los primeros capítulos, es el punto de partida y la piedra angular sobre la cual se erige una prolífica y fascinante gama de metodologías estadísticas avanzadas. Este volumen se dedicará a desentrañar con rigor las siguientes extensiones y especializaciones, que permiten al analista abordar una variedad casi infinita de problemas.</p>
+<section id="modelos-lineales-lms" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="modelos-lineales-lms"><span class="header-section-number">1.3.1</span> Modelos lineales (LMs)</h3>
+<p>Constituyen el paradigma fundamental, el alfabeto sobre el que se escribe el lenguaje del modelado estadístico. Son mucho más que una simple técnica para ajustar una recta a una nube de puntos; son el laboratorio donde se forjan y se comprenden los conceptos esenciales que nos acompañarán durante todo nuestro viaje. Es aquí donde aprenderemos a:</p>
+<ul>
+<li><strong>Estimar parámetros</strong> e interpretar su significado en el contexto del problema.</li>
+<li><strong>Cuantificar la incertidumbre</strong> de nuestras estimaciones mediante errores estándar e intervalos de confianza.</li>
+<li><strong>Realizar contrastes de hipótesis</strong> para evaluar si la relación entre nuestras variables es estadísticamente significativa o fruto del azar.</li>
+<li><strong>Diagnosticar la “salud” de un modelo</strong>, examinando si los supuestos sobre los que se construye son razonables para nuestros datos.</li>
+</ul>
+<p>En su forma más clásica, el modelo lineal asume que la variable de respuesta (y, por consecuencia, el término de error aleatorio) sigue una distribución Normal o Gaussiana. Esta asunción es la clave que desbloquea todo el elegante aparato de la inferencia estadística, permitiéndonos realizar pruebas exactas y derivar propiedades matemáticas bien conocidas. Técnicas tan ubicuas en la ciencia como el Análisis de la Varianza (ANOVA) o el Análisis de la Covarianza (ANCOVA) no son más que casos particulares de la gran familia de los modelos lineales, un hecho que unifica campos de la estadística que históricamente se estudiaban por separado. Dominar los LMs es, sencillamente, un requisito indispensable.</p>
+</section>
+<section id="modelos-lineales-generalizados-glms" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="modelos-lineales-generalizados-glms"><span class="header-section-number">1.3.2</span> Modelos lineales generalizados (GLMs)</h3>
+<p>Si los LMs son el alfabeto, los GLMs son la gramática que nos permite construir frases complejas y con significado en una variedad de contextos mucho más amplia. Introducidos en el influyente y verdaderamente revolucionario trabajo de <span class="citation" data-cites="nelder1972generalized">(<a href="references.html#ref-nelder1972generalized" role="doc-biblioref">Nelder y Wedderburn 1972</a>)</span>, los GLMs representan un salto conceptual que expande de forma masiva el universo de problemas que podemos abordar. Suponen una generalización elegante que nos permite escapar de la “tiranía” de la distribución Normal y modelar respuestas con una variedad mucho más amplia de naturalezas y escalas.</p>
+<p>Esta flexibilidad se logra mediante la combinación de dos ingeniosos mecanismos que son el corazón de la teoría:</p>
+<ol type="1">
+<li><p><strong>La familia exponencial de distribuciones</strong>: Los GLMs no funcionan con cualquier distribución, sino con aquellas que pertenecen a una “familia” matemática con propiedades muy convenientes: la <strong>familia exponencial</strong>. Este “club” de distribuciones es muy selecto, pero incluye a miembros tan importantes como la Normal, la Poisson (para datos de conteo), la Binomial (para datos de proporciones o binarios), la Gamma (para datos continuos positivos y asimétricos) o la Binomial Negativa. Su estructura matemática común permite desarrollar una teoría unificada para la estimación de parámetros, lo que es un logro teórico de primer orden.</p></li>
+<li><p><strong>La función de enlace (link function)</strong>: Este es el verdadero golpe de genialidad. El predictor lineal de nuestro modelo, <span class="math inline">\(\boldsymbol{X\beta}\)</span>, puede tomar cualquier valor en la recta real, desde <span class="math inline">\(-\infty\)</span> hasta <span class="math inline">\(+\infty\)</span>. Sin embargo, la media de nuestra variable de respuesta, <span class="math inline">\(E[Y] = \mu\)</span>, a menudo está restringida. Por ejemplo, una probabilidad (<span class="math inline">\(\mu\)</span> en un modelo binomial) debe estar entre 0 y 1; un conteo (<span class="math inline">\(\mu\)</span> en un modelo de Poisson) debe ser positivo. La función de enlace, <span class="math inline">\(g(\cdot)\)</span>, actúa como un <strong>“traductor”</strong> o un <strong>“puente”</strong> que conecta estos dos mundos. Transforma la media restringida de la respuesta para que pueda ser modelada por el predictor lineal no restringido. La relación fundamental es, por tanto, <span class="math inline">\(g(E[Y]) = g(\mu) = \boldsymbol{X\beta}\)</span>.</p></li>
+</ol>
+<ul>
+<li>Para datos de <strong>conteo</strong> (Poisson), se usa un <strong>enlace logarítmico</strong> (<span class="math inline">\(g(\mu) = \log(\mu)\)</span>). Esto garantiza que, al invertir la función para obtener la media (<span class="math inline">\(\mu = \exp(\boldsymbol{X\beta})\)</span>), el resultado será siempre positivo, como debe ser un conteo.</li>
+<li>Para datos <strong>binarios</strong> (Binomial), se usa un <strong>enlace logit</strong> (<span class="math inline">\(g(\mu) = \log(\frac{\mu}{1-\mu})\)</span>). Esta función toma una probabilidad <span class="math inline">\(\mu\)</span> en el rango (0, 1) y la proyecta sobre toda la recta real, permitiendo que sea modelada por <span class="math inline">\(\boldsymbol{X\beta}\)</span>.</li>
+</ul>
+<p>Gracias a los GLMs, podemos usar el mismo marco conceptual de la regresión lineal para modelar una gama de fenómenos increíblemente diversa, desde predecir la cantidad de ciclistas en una ciudad (Poisson) hasta la probabilidad de que un paciente responda a un tratamiento (logística).</p>
+</section>
+<section id="modelos-de-efectos-mixtos-mixed-models" class="level3" data-number="1.3.3">
+<h3 data-number="1.3.3" class="anchored" data-anchor-id="modelos-de-efectos-mixtos-mixed-models"><span class="header-section-number">1.3.3</span> Modelos de efectos mixtos (Mixed Models)</h3>
+<p>Su desarrollo responde a la necesidad crítica de analizar datos que exhiben estructuras de dependencia o correlación, como agrupamientos, anidamientos o jerarquías. En datos estándar, asumimos que las observaciones son independientes, pero esta asunción se viola en casos como: * <strong>Medidas repetidas</strong> sobre los mismos sujetos (ej: medir la presión arterial de un paciente cada mes). * <strong>Datos longitudinales</strong> (un tipo de medida repetida a lo largo del tiempo). * <strong>Datos agrupados</strong> (ej: estudiantes anidados dentro de clases, que a su vez están anidadas dentro de colegios). Estos modelos, detallados en obras como la de <span class="citation" data-cites="pinheiro2000">(<a href="references.html#ref-pinheiro2000" role="doc-biblioref">Pinheiro y Bates 2000</a>)</span>, introducen explícitamente una estructura de correlación en el término de error mediante la incorporación de <strong>efectos aleatorios</strong>, que permiten capturar la variabilidad entre los diferentes grupos o individuos, además de los <strong>efectos fijos</strong> que representan a la población general.</p>
+</section>
+<section id="modelos-aditivos-generalizados-gams" class="level3" data-number="1.3.4">
+<h3 data-number="1.3.4" class="anchored" data-anchor-id="modelos-aditivos-generalizados-gams"><span class="header-section-number">1.3.4</span> Modelos aditivos generalizados (GAMs)</h3>
+<p>Representan una extensión natural y altamente flexible de los GLMs que relaja el supuesto de linealidad entre el predictor transformado y las covariables. Los GAMs, cuya implementación moderna se debe en gran parte al trabajo de <span class="citation" data-cites="wood2017">(<a href="references.html#ref-wood2017" role="doc-biblioref">Wood 2017</a>)</span>, permiten modelar estas relaciones mediante <strong>funciones suaves</strong> no paramétricas (como <em>splines</em>), manteniendo al mismo tiempo la estructura aditiva del modelo. La forma general es <span class="math inline">\(g(\mu) = \alpha + f_1(x_1) + f_2(x_2) + \ldots + f_p(x_p)\)</span>, donde las <span class="math inline">\(f_i(\cdot)\)</span> son funciones suaves de los predictores estimadas a partir de los datos. Esto permite capturar patrones no lineales complejos sin necesidad de especificar una forma funcional paramétrica a priori, logrando un equilibrio excepcional entre flexibilidad e interpretabilidad.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="R como lenguaje del modelado estadístico">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>R como lenguaje del modelado estadístico
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Este compendio no es un texto puramente teórico. Fusiona intrínsecamente la exposición de los conceptos con su aplicación computacional directa a través del lenguaje y entorno estadístico <strong>R</strong>. R se ha consolidado como el estándar de facto en la investigación estadística y la ciencia de datos académica por su potencia, flexibilidad y el inmenso ecosistema de paquetes contribuidos por la comunidad científica. Se presupone en el lector una familiaridad operativa básica con R, y se fomenta activamente el desarrollo de una fluidez progresiva mediante la reproducción, modificación y experimentación con los numerosos ejemplos y fragmentos de código presentados.</p>
+<p>La capacidad de ejecutar análisis en R es fundamental para todo el ciclo de vida del modelado:</p>
+<ul>
+<li>La <strong>exploración de datos</strong> y la visualización inicial.</li>
+<li>La <strong>estimación de parámetros</strong> y el ajuste de los modelos.</li>
+<li>El <strong>diagnóstico riguroso</strong> de la adecuación del modelo y la validación de sus supuestos.</li>
+<li>La <strong>producción de gráficos</strong> y tablas de alta calidad para comunicar los resultados.</li>
+</ul>
+<p>En R, las herramientas fundamentales para la regresión lineal (<code>lm()</code>) y los modelos lineales generalizados (<code>glm()</code>) están incluidas en el paquete <strong><code>stats</code></strong>, que es uno de los <strong>paquetes base</strong> y se carga automáticamente con cada sesión. Por lo tanto, no necesitamos instalarlo ni cargarlo.</p>
+<p>A lo largo del libro, extenderemos esta funcionalidad base con paquetes especializados que sí requieren instalación y carga. Entre los más importantes que usaremos se encuentran:</p>
+<ul>
+<li><code>mgcv</code>: La implementación de referencia para GAMs, mantenida por su creador, Simon Wood, y citada en <span class="citation" data-cites="wood2017">(<a href="references.html#ref-wood2017" role="doc-biblioref">Wood 2017</a>)</span>.</li>
+<li><code>lme4</code> y <code>nlme</code>: Los dos paquetes fundamentales para el ajuste de modelos de efectos mixtos, desarrollados por los pioneros en el campo <span class="citation" data-cites="pinheiro2000 bates2015">(<a href="references.html#ref-pinheiro2000" role="doc-biblioref">Pinheiro y Bates 2000</a>; <a href="references.html#ref-bates2015" role="doc-biblioref">Bates et&nbsp;al. 2015</a>)</span>.</li>
+<li><code>rms</code>: Un paquete y una filosofía de trabajo para implementar estrategias de modelado de regresión robustas, como se detalla en la obra de <span class="citation" data-cites="harrell2015">(<a href="references.html#ref-harrell2015" role="doc-biblioref">Harrell 2015</a>)</span>.</li>
+<li><code>gamair</code>: Contiene numerosos conjuntos de datos que acompañan al libro de <span class="citation" data-cites="wood2017">(<a href="references.html#ref-wood2017" role="doc-biblioref">Wood 2017</a>)</span>, ideales para practicar con GAMs.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-historia" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="sec-historia"><span class="header-section-number">1.4</span> Una breve crónica del desarrollo de la regresión</h2>
+<section id="los-orígenes-galton-y-la-regresión-a-la-mediocridad" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="los-orígenes-galton-y-la-regresión-a-la-mediocridad"><span class="header-section-number">1.4.1</span> Los orígenes: Galton y la “regresión a la mediocridad”</h3>
+<p>La gestación de la metodología de regresión se traza hasta las investigaciones pioneras de Sir <strong>Francis Galton</strong>, un polímata de la era victoriana. A finales del siglo XIX, estudiando la herencia de la estatura, Galton recopiló datos de padres e hijos y notó un fenómeno curioso: los padres muy altos tendían a tener hijos altos, pero, en promedio, no tan altos como ellos. Análogamente, los padres muy bajos tenían hijos bajos, pero no tan bajos como ellos. Acuñó el término <strong>“regresión a la mediocridad”</strong> (hoy diríamos “regresión a la media”) para describir esta tendencia de las características de la descendencia a “regresar” hacia la media de la población, en lugar de perpetuar los extremos de los progenitores <span class="citation" data-cites="galton1886">(<a href="references.html#ref-galton1886" role="doc-biblioref">Galton 1886</a>)</span>.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Estudios de Galton sobre estatura">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Estudios de Galton sobre estatura
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Datos recopilados</strong></p>
+<ul>
+<li>Galton recopiló datos sobre las estaturas de <strong>928 hijos</strong> y sus respectivos <strong>padres</strong>.</li>
+<li>Las medidas fueron expresadas en pulgadas (1 pulgada = 2.54 cm).<br>
+</li>
+<li>En sus análisis, utilizó el promedio de las estaturas de ambos padres, conocido como <strong>estatura media parental</strong>, para compararlo con la estatura de los hijos.</li>
+</ul>
+<p><strong>Principales hallazgos</strong></p>
+<ol type="1">
+<li><p><strong>Relación lineal entre padres e hijos:</strong><br>
+Galton observó que existe una relación positiva entre la estatura de los padres y la de los hijos. Los padres altos tienden a tener hijos altos, y los padres bajos tienden a tener hijos bajos. Esta relación puede modelarse con una línea recta, lo que inspiró la formulación de la regresión lineal.</p></li>
+<li><p><strong>Regresión a la media:</strong></p>
+<ul>
+<li>Aunque los hijos de padres altos son, en promedio, más altos que el promedio general de la población, también tienden a ser <strong>menos altos que sus padres</strong>.<br>
+</li>
+<li>De manera similar, los hijos de padres bajos son más bajos que el promedio general, pero suelen ser <strong>menos bajos que sus padres</strong>.<br>
+</li>
+<li>Este fenómeno, que Galton llamó “regresión a la media”, ocurre porque las características extremas tienden a suavizarse en la siguiente generación debido a la influencia de múltiples factores genéticos y ambientales.</li>
+</ul></li>
+<li><p><strong>Ecuación de la recta de regresión:</strong><br>
+Galton ajustó una recta para describir la relación entre la estatura media parental (<span class="math inline">\(X\)</span>) y la estatura de los hijos (<span class="math inline">\(Y\)</span>): <span class="math display">\[
+Y = \beta_0 + \beta_1 X
+\]</span> Donde:</p>
+<ul>
+<li><span class="math inline">\(\beta_0\)</span>: Intercepto, representa la estatura promedio de los hijos cuando la estatura parental es promedio.</li>
+<li><span class="math inline">\(\beta_1\)</span>: Pendiente, indica cómo cambia la estatura de los hijos por cada unidad de cambio en la estatura media parental.</li>
+</ul></li>
+</ol>
+<p><strong>Importancia en la Estadística</strong></p>
+<ol type="1">
+<li><p><strong>Regresión lineal:</strong><br>
+Este estudio introdujo el concepto de <strong>recta de regresión</strong>, que describe cómo varía la media de una variable dependiente en función de una variable independiente.</p></li>
+<li><p><strong>Correlación:</strong><br>
+Galton también estudió el grado de relación entre variables, precursor del concepto de <strong>coeficiente de correlación</strong> desarrollado posteriormente por Karl Pearson, un discípulo suyo.</p></li>
+<li><p><strong>Regresión a la media:</strong><br>
+El término y la idea detrás de “regresión a la media” surgieron de estos estudios y son hoy fundamentales en estadística y genética.</p></li>
+</ol>
+<p><strong>Ejemplo Gráfico</strong></p>
+<p>Galton representó sus datos en gráficos de dispersión, mostrando cómo los puntos (pares de estatura media parental y estatura de los hijos) se agrupan alrededor de la recta de regresión, ilustrando la tendencia general de la relación.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar los paquetes necesarios</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(HistData)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar los datos de Galton</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"GaltonFamilies"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear el modelo de regresión lineal para obtener los coeficientes</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(childHeight <span class="sc">~</span> midparentHeight, <span class="at">data =</span> GaltonFamilies)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear la etiqueta para la ecuación de la recta de forma más limpia</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Usamos sprintf() para un formato más controlado y legible</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>eq_label <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">"y = %.2f + %.2f * x"</span>, <span class="fu">coef</span>(modelo)[<span class="dv">1</span>], <span class="fu">coef</span>(modelo)[<span class="dv">2</span>])</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Gráfico Mejorado ---</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Usamos un tema más limpio y colores más suaves para una apariencia profesional.</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># geom_jitter() es mejor que geom_point() para estos datos, ya que evita la superposición de puntos.</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(GaltonFamilies, <span class="fu">aes</span>(<span class="at">x =</span> midparentHeight, <span class="at">y =</span> childHeight)) <span class="sc">+</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 1. Puntos de datos: Usamos geom_jitter para visualizar mejor los puntos superpuestos</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="co">#    y añadimos transparencia (alpha) para ver la densidad.</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">color =</span> <span class="st">"gray50"</span>, <span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">height =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. Línea de regresión: En un color azul profesional y más gruesa para que destaque.</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"#0072B2"</span>, <span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 3. Anotación: Añadimos la ecuación de la recta de forma elegante,</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  <span class="co">#    usando el mismo color que la línea para crear cohesión visual.</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="st">"text"</span>,</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="dv">66</span>, <span class="at">y =</span> <span class="dv">74</span>, <span class="co"># Posición ajustada para mejor visibilidad</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> eq_label,</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"#0072B2"</span>, <span class="co"># Mismo color que la línea</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">4.5</span>, <span class="co"># Tamaño de la fuente</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">fontface =</span> <span class="st">"italic"</span> <span class="co"># Cursiva para la ecuación</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 4. Títulos y etiquetas: Mejorados para mayor claridad y contexto.</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  <span class="co">#    Añadimos un subtítulo y una fuente.</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Regresión de la Estatura de Hijos vs. Padres"</span>,</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Promedio de Estatura de los Padres (pulgadas)"</span>,</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Estatura del Hijo/a (pulgadas)"</span>,</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Fuente: Paquete HistData de R"</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 5. Tema: Usamos un tema limpio y profesional como base.</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="tema0_files/figure-html/galtonn-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Datos históricos del estudio sobre la ‘regresión a la media’.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="la-formalización-matemática-legendre-y-gauss" class="level3" data-number="1.4.2">
+<h3 data-number="1.4.2" class="anchored" data-anchor-id="la-formalización-matemática-legendre-y-gauss"><span class="header-section-number">1.4.2</span> La formalización matemática: Legendre y Gauss</h3>
+<p>Aunque Galton sentó las bases conceptuales e introdujo el término, la formalización matemática de la estimación de parámetros en modelos lineales se atribuye a dos de los más grandes matemáticos de la historia. <strong>Adrien-Marie Legendre</strong> publicó en 1805 el “Método de los mínimos cuadrados” como un procedimiento numérico para ajustar observaciones astronómicas. Pocos años después, <strong>Carl Friedrich Gauss</strong> no solo publicó que había desarrollado el mismo método de forma independiente años antes, sino que lo dotó de una profundidad teórica mucho mayor, conectándolo con la teoría de la probabilidad y derivándolo bajo el supuesto de errores distribuidos normalmente, convirtiéndolo en la técnica fundamental para la estimación en modelos lineales que sigue siendo hoy.</p>
+</section>
+<section id="el-desarrollo-moderno-la-revolución-de-los-glms" class="level3" data-number="1.4.3">
+<h3 data-number="1.4.3" class="anchored" data-anchor-id="el-desarrollo-moderno-la-revolución-de-los-glms"><span class="header-section-number">1.4.3</span> El desarrollo moderno: la revolución de los GLMs</h3>
+<p>A lo largo del siglo XX, la regresión experimentó un desarrollo explosivo. Sin embargo, el hito que probablemente más ha influido en la práctica estadística moderna fue la publicación del artículo sobre <strong>Modelos Lineales Generalizados (GLMs)</strong> por <strong>John Nelder</strong> y <strong>Robert Wedderburn</strong> en 1972 <span class="citation" data-cites="nelder1972generalized">(<a href="references.html#ref-nelder1972generalized" role="doc-biblioref">Nelder y Wedderburn 1972</a>)</span>. Esta obra seminal fue revolucionaria porque unificó bajo un mismo paraguas conceptual y computacional diversas clases de modelos que hasta entonces se trataban por separado: la regresión lineal para datos normales, la regresión logística para datos binarios y la regresión de Poisson para datos de conteo. Esto estimuló enormemente el desarrollo de software y la aplicación del modelado estadístico a una nueva y vasta gama de problemas.</p>
+</section>
+<section id="la-evolución-contemporánea" class="level3" data-number="1.4.4">
+<h3 data-number="1.4.4" class="anchored" data-anchor-id="la-evolución-contemporánea"><span class="header-section-number">1.4.4</span> La evolución contemporánea</h3>
+<p>Este legado continúa evolucionando a un ritmo vertiginoso, con la inclusión de modelos jerárquicos y bayesianos, métodos no paramétricos y de <em>machine learning</em> como los árboles de regresión, y la adaptación de la regresión al análisis de datos masivos (<em>big data</em>). La regresión ha evolucionado desde una observación sobre la herencia biológica hasta convertirse en una de las herramientas más versátiles y poderosas del arsenal analítico moderno.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-bates2015" class="csl-entry" role="listitem">
+Bates, Douglas, Martin Mächler, Ben Bolker, y Steve Walker. 2015. <span>«Fitting Linear Mixed-Effects Models Using lme4»</span>. <em>Journal of Statistical Software</em> 67 (1): 1-48.
+</div>
+<div id="ref-galton1886" class="csl-entry" role="listitem">
+Galton, Francis. 1886. <span>«Regression towards mediocrity in hereditary stature»</span>. <em>The Journal of the Anthropological Institute of Great Britain and Ireland</em> 15: 246-63.
+</div>
+<div id="ref-harrell2015" class="csl-entry" role="listitem">
+Harrell, Frank E., Jr. 2015. <em>Regression Modeling Strategies: With Applications to Linear Models, Logistic and Ordinal Regression, and Survival Analysis</em>. Second. Springer.
+</div>
+<div id="ref-james2021" class="csl-entry" role="listitem">
+James, Gareth, Daniela Witten, Trevor Hastie, y Robert Tibshirani. 2021. <em>An Introduction to Statistical Learning with Applications in R</em>. Second. Springer.
+</div>
+<div id="ref-kutner2005applied" class="csl-entry" role="listitem">
+Kutner, Michael H, Christopher J Nachtsheim, John Neter, y William Li. 2005. <em>Applied linear statistical models</em>. McGraw-hill.
+</div>
+<div id="ref-nelder1972generalized" class="csl-entry" role="listitem">
+Nelder, John Ashworth, y Robert WM Wedderburn. 1972. <span>«Generalized linear models»</span>. <em>Journal of the Royal Statistical Society Series A: Statistics in Society</em> 135 (3): 370-84.
+</div>
+<div id="ref-pinheiro2000" class="csl-entry" role="listitem">
+Pinheiro, José C., y Douglas M. Bates. 2000. <em>Mixed-Effects Models in S and S-PLUS</em>. New York: Springer.
+</div>
+<div id="ref-shmueli2010" class="csl-entry" role="listitem">
+Shmueli, Galit. 2010. <span>«To Explain or to Predict?»</span> <em>Statistical Science</em> 25 (3): 289-310.
+</div>
+<div id="ref-wood2017" class="csl-entry" role="listitem">
+Wood, Simon N. 2017. <em>Generalized Additive Models: An Introduction with R</em>. Second. Chapman; Hall/CRC.
+</div>
+</div>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="Prefacio">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Prefacio</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./tema1.html" class="pagination-link" aria-label="El modelo de regresión lineal simple">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">El modelo de regresión lineal simple</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
