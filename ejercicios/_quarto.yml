@@ -1,6 +1,6 @@
 project:
   type: book
-  output-dir: _build
+  output-dir: ejercicios_pdf
 
 book:
   # Metadatos para el PDF, pero no se mostrarán en la portada personalizada

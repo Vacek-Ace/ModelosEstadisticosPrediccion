@@ -28,8 +28,9 @@ format:
     css: styles.css
   pdf:
     documentclass: scrreprt
+    toc-title: "Índice"
 
-editor: visual
+editor: source
 
 
 
