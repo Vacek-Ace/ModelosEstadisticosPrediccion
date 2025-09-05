@@ -321,13 +321,7 @@ quarto render --to html
    - Verificar que las rutas en los archivos QMD sean relativas al archivo
    - Asegurar que las imágenes existan en el directorio `images/`
 
-### Verificación del Entorno
-
-```r
-# Verificar setup completo
-source('diapositivas/crear_diapositivas_completas.R')
-check()
-```
+---
 
 ## 📄 Licencia
 
@@ -336,24 +330,4 @@ Este material está licenciado bajo [Creative Commons BY-SA 4.0](https://creativ
 ## 👥 Autores
 
 - **Víctor C. Aceña Gil** - [GitHub](https://github.com/Vacek-Ace)
-- **Isaac Martín de Diego** - DSLAB
-
----
-
-## 🚀 ¡Empezar Ahora!
-
-1. **Clonar** el repositorio
-2. **Verificar** requisitos con `source('diapositivas/crear_diapositivas_completas.R'); check()`
-3. **Generar** todo con `quarto render`
-4. **¡Listo!** Navegar a `docs/index.html`
-
-Para soporte adicional, consultar la [documentación de Quarto](https://quarto.org/docs/) o abrir un issue en el repositorio.
-
-## 📄 Licencia
-
-Este material está licenciado bajo [Creative Commons BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
-
-## 👥 Autores
-
-- **Víctor Aceña** - [GitHub](https://github.com/Vacek-Ace)
-- **Isaac Martín** - DSLAB
+- **Isaac Martín de Diego** - [GitHub](https://github.com/IsaacMartindeDiego)
