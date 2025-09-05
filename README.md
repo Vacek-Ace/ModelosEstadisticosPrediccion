@@ -180,7 +180,6 @@ Todos los archivos PDF finales siguen la nomenclatura estandarizada:
 | **Diapositivas** | `Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); crear()"` | `diapositivas/diapositivas_pdf/DiapositivasModelosEstadisticosPrediccion.pdf` |
 | **Ejercicios** | `Rscript -e "source('ejercicios/generar_ejercicios.R'); crear_ejercicios_completos()"` | `ejercicios/ejercicios_pdf/EjerciciosModelosEstadisticosPrediccion.pdf` |
 | **Guía de Estudio** | `Rscript -e "source('guia_estudio/generar_guia.R'); crear_guia_completa()"` | `guia_estudio/GuiaEstudioModelosEstadisticosPrediccion.pdf` |
-| **Guía Básica** | `cd guia_estudio && quarto render guia_estudio.qmd --to pdf` | `guia_estudio/guia_estudio.pdf` |
 
 **Características comunes:**
 - ✅ Portadas personalizadas con diseño unificado
