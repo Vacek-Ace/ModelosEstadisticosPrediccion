@@ -29,7 +29,7 @@ cd ModelosEstadisticosPrediccion
 
 ## 📖 Generación de Documentos
 
-### 1. � Libro de Apuntes
+### 1. 📚 Libro de Apuntes
 
 #### HTML (recomendado):
 ```bash
@@ -49,7 +49,7 @@ Rscript -e "source('apuntes/generar_apuntes.R'); crear_libro_completo()"
 - Salida en `apuntes/apuntes_pdf/ApuntesModelosEstadisticosPrediccion.pdf`
 - Requiere LaTeX y PDFtk instalados
 
-### 2. �📑 Diapositivas (PDF)
+### 2.�📑 Diapositivas (PDF)
 
 #### Generar todas las diapositivas automáticamente:
 ```r
