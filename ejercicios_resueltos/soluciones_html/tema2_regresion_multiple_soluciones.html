@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es-ES" xml:lang="es-ES"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.8.21">
@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Regresión Lineal Múltiple – Problemas de Modelos Estadísticos para la Predicción</title>
+<title>2&nbsp; Regresión Lineal Múltiple – Problemas de Modelos Estadísticos para la Predicción</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -148,7 +148,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema2_regresion_multiple_soluciones.html"><span class="chapter-title">Regresión Lineal Múltiple</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema2_regresion_multiple_soluciones.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Regresión Lineal Múltiple</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -183,32 +183,38 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema1_regresion_simple_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Regresión Lineal Simple</span></a>
+  <a href="./tema1_regresion_simple_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Regresión Lineal Simple</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Regresión Lineal Múltiple</span></a>
+  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Regresión Lineal Múltiple</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ingeniería de Características</span></a>
+  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Ingeniería de Características</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Selección de variables, Regularización y Validación</span></a>
+  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Selección de variables, Regularización y Validación</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Modelos de Regresión Generalizada</span></a>
+  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelos de Regresión Generalizada</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ejercicios Avanzados</span></a>
+  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Ejercicios Avanzados</span></span></a>
   </div>
 </li>
     </ul>
@@ -221,25 +227,129 @@ window.Quarto = {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#ejercicio-1-conceptual-interpretación-ceteris-paribus" id="toc-ejercicio-1-conceptual-interpretación-ceteris-paribus" class="nav-link active" data-scroll-target="#ejercicio-1-conceptual-interpretación-ceteris-paribus">Ejercicio 1: Conceptual (Interpretación <em>Ceteris Paribus</em>)</a></li>
-  <li><a href="#ejercicio-2-práctico-ajuste-e-interpretación-de-un-modelo-múltiple" id="toc-ejercicio-2-práctico-ajuste-e-interpretación-de-un-modelo-múltiple" class="nav-link" data-scroll-target="#ejercicio-2-práctico-ajuste-e-interpretación-de-un-modelo-múltiple">Ejercicio 2: Práctico (Ajuste e Interpretación de un Modelo Múltiple)</a></li>
-  <li><a href="#ejercicio-3-conceptual-r²-vs.-r²-ajustado" id="toc-ejercicio-3-conceptual-r²-vs.-r²-ajustado" class="nav-link" data-scroll-target="#ejercicio-3-conceptual-r²-vs.-r²-ajustado">Ejercicio 3: Conceptual (R² vs.&nbsp;R² Ajustado)</a></li>
-  <li><a href="#ejercicio-4-interpretación-de-salidas-de-r" id="toc-ejercicio-4-interpretación-de-salidas-de-r" class="nav-link" data-scroll-target="#ejercicio-4-interpretación-de-salidas-de-r">Ejercicio 4: Interpretación de Salidas de R</a></li>
-  <li><a href="#ejercicio-5-conceptual-multicolinealidad" id="toc-ejercicio-5-conceptual-multicolinealidad" class="nav-link" data-scroll-target="#ejercicio-5-conceptual-multicolinealidad">Ejercicio 5: Conceptual (Multicolinealidad)</a></li>
-  <li><a href="#ejercicio-6-práctico-diagnóstico-de-multicolinealidad" id="toc-ejercicio-6-práctico-diagnóstico-de-multicolinealidad" class="nav-link" data-scroll-target="#ejercicio-6-práctico-diagnóstico-de-multicolinealidad">Ejercicio 6: Práctico (Diagnóstico de Multicolinealidad)</a></li>
-  <li><a href="#ejercicio-7-teórico-notación-matricial" id="toc-ejercicio-7-teórico-notación-matricial" class="nav-link" data-scroll-target="#ejercicio-7-teórico-notación-matricial">Ejercicio 7: Teórico (Notación Matricial)</a></li>
-  <li><a href="#ejercicio-8-práctico-gráficos-de-regresión-parcial" id="toc-ejercicio-8-práctico-gráficos-de-regresión-parcial" class="nav-link" data-scroll-target="#ejercicio-8-práctico-gráficos-de-regresión-parcial">Ejercicio 8: Práctico (Gráficos de Regresión Parcial)</a></li>
-  <li><a href="#ejercicio-9-inferencia-f-test-vs.-t-tests" id="toc-ejercicio-9-inferencia-f-test-vs.-t-tests" class="nav-link" data-scroll-target="#ejercicio-9-inferencia-f-test-vs.-t-tests">Ejercicio 9: Inferencia (F-test vs.&nbsp;t-tests)</a></li>
-  <li><a href="#ejercicio-10-práctico-comparación-de-modelos-anidados" id="toc-ejercicio-10-práctico-comparación-de-modelos-anidados" class="nav-link" data-scroll-target="#ejercicio-10-práctico-comparación-de-modelos-anidados">Ejercicio 10: Práctico (Comparación de Modelos Anidados)</a></li>
+  <li><a href="#ejercicio-1-conceptual-interpretación-ceteris-paribus" id="toc-ejercicio-1-conceptual-interpretación-ceteris-paribus" class="nav-link active" data-scroll-target="#ejercicio-1-conceptual-interpretación-ceteris-paribus"><span class="header-section-number">2.1</span> Ejercicio 1: Conceptual (Interpretación <em>Ceteris Paribus</em>)</a></li>
+  <li><a href="#ejercicio-2-práctico-ajuste-e-interpretación-de-un-modelo-múltiple" id="toc-ejercicio-2-práctico-ajuste-e-interpretación-de-un-modelo-múltiple" class="nav-link" data-scroll-target="#ejercicio-2-práctico-ajuste-e-interpretación-de-un-modelo-múltiple"><span class="header-section-number">2.2</span> Ejercicio 2: Práctico (Ajuste e Interpretación de un Modelo Múltiple)</a></li>
+  <li><a href="#ejercicio-3-conceptual-r²-vs.-r²-ajustado" id="toc-ejercicio-3-conceptual-r²-vs.-r²-ajustado" class="nav-link" data-scroll-target="#ejercicio-3-conceptual-r²-vs.-r²-ajustado"><span class="header-section-number">2.3</span> Ejercicio 3: Conceptual (R² vs.&nbsp;R² Ajustado)</a></li>
+  <li><a href="#ejercicio-4-interpretación-de-salidas-de-r" id="toc-ejercicio-4-interpretación-de-salidas-de-r" class="nav-link" data-scroll-target="#ejercicio-4-interpretación-de-salidas-de-r"><span class="header-section-number">2.4</span> Ejercicio 4: Interpretación de Salidas de R</a></li>
+  <li><a href="#ejercicio-5-conceptual-multicolinealidad" id="toc-ejercicio-5-conceptual-multicolinealidad" class="nav-link" data-scroll-target="#ejercicio-5-conceptual-multicolinealidad"><span class="header-section-number">2.5</span> Ejercicio 5: Conceptual (Multicolinealidad)</a></li>
+  <li><a href="#ejercicio-6-práctico-diagnóstico-de-multicolinealidad" id="toc-ejercicio-6-práctico-diagnóstico-de-multicolinealidad" class="nav-link" data-scroll-target="#ejercicio-6-práctico-diagnóstico-de-multicolinealidad"><span class="header-section-number">2.6</span> Ejercicio 6: Práctico (Diagnóstico de Multicolinealidad)</a></li>
+  <li><a href="#ejercicio-7-teórico-notación-matricial" id="toc-ejercicio-7-teórico-notación-matricial" class="nav-link" data-scroll-target="#ejercicio-7-teórico-notación-matricial"><span class="header-section-number">2.7</span> Ejercicio 7: Teórico (Notación Matricial)</a></li>
+  <li><a href="#ejercicio-8-práctico-gráficos-de-regresión-parcial" id="toc-ejercicio-8-práctico-gráficos-de-regresión-parcial" class="nav-link" data-scroll-target="#ejercicio-8-práctico-gráficos-de-regresión-parcial"><span class="header-section-number">2.8</span> Ejercicio 8: Práctico (Gráficos de Regresión Parcial)</a></li>
+  <li><a href="#ejercicio-9-inferencia-f-test-vs.-t-tests" id="toc-ejercicio-9-inferencia-f-test-vs.-t-tests" class="nav-link" data-scroll-target="#ejercicio-9-inferencia-f-test-vs.-t-tests"><span class="header-section-number">2.9</span> Ejercicio 9: Inferencia (F-test vs.&nbsp;t-tests)</a></li>
+  <li><a href="#ejercicio-10-práctico-comparación-de-modelos-anidados" id="toc-ejercicio-10-práctico-comparación-de-modelos-anidados" class="nav-link" data-scroll-target="#ejercicio-10-práctico-comparación-de-modelos-anidados"><span class="header-section-number">2.10</span> Ejercicio 10: Práctico (Comparación de Modelos Anidados)</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
+<div class="portada">
+
+    <div class="portada-container">
+
+        <!-- Header -->
+
+        <div class="portada-header">
+
+            <img src="../images/urjc_logo.png" alt="Logo URJC" class="portada-logo">
+
+            
+
+            <div class="portada-escuela">
+
+                Escuela Técnica Superior de<br>
+
+                Ingeniería Informática
+
+            </div>
+
+        </div>
+
+        
+
+        <!-- Contenido principal -->
+
+        <div class="portada-main">
+
+            <h1 class="portada-titulo">
+
+                Modelos Estadísticos para la Predicción
+
+            </h1>
+
+            
+
+            <h2 class="portada-subtitulo anchored">
+
+                Ejercicios Resueltos
+
+            </h2>
+
+            
+
+            <div class="portada-grado">
+
+                Grado en Ciencia de Datos e Inteligencia Artificial
+
+            </div>
+
+            
+
+            <div class="portada-autores-section">
+
+                <div class="portada-autores-titulo">Autores</div>
+
+                <div class="portada-autor">Víctor Aceña Gil</div>
+
+                <div class="portada-autor">Isaac Martín de Diego</div>
+
+            </div>
+
+            
+
+            <div class="portada-fecha">2024-2025</div>
+
+        </div>
+
+        
+
+        <!-- Footer -->
+
+        <div class="portada-footer">
+
+            <img src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" alt="Licencia Creative Commons" class="portada-licencia-logo">
+
+            
+
+            <div class="portada-licencia-texto">
+
+                Copyright © 2024 Víctor Aceña Gil, Isaac Martín de Diego. Esta obra está licenciada bajo CC BY-SA 4.0, Creative Commons Atribución-Compartir Igual 4.0 Internacional.
+
+            </div>
+
+        </div>
+
+        
+
+        <!-- Elementos decorativos -->
+
+        <div class="portada-deco-lines">
+
+            <div class="portada-deco-line"></div>
+
+            <div class="portada-deco-line"></div>
+
+            <div class="portada-deco-line"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">Regresión Lineal Múltiple</span></h1>
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Regresión Lineal Múltiple</span></h1>
 </div>
 
 
@@ -256,8 +366,8 @@ window.Quarto = {
 </header>
 
 
-<section id="ejercicio-1-conceptual-interpretación-ceteris-paribus" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-1-conceptual-interpretación-ceteris-paribus">Ejercicio 1: Conceptual (Interpretación <em>Ceteris Paribus</em>)</h2>
+<section id="ejercicio-1-conceptual-interpretación-ceteris-paribus" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="ejercicio-1-conceptual-interpretación-ceteris-paribus"><span class="header-section-number">2.1</span> Ejercicio 1: Conceptual (Interpretación <em>Ceteris Paribus</em>)</h2>
 <p>Un analista ajusta dos modelos para predecir el consumo de un coche (<code>mpg</code>):</p>
 <ol type="1">
 <li><code>lm(mpg ~ wt)</code> obtiene un coeficiente para <code>wt</code> de -5.3.</li>
@@ -282,8 +392,8 @@ window.Quarto = {
 <p><strong>El coeficiente que representa el efecto “puro”</strong> es el del modelo múltiple (-3.8), porque aísla el efecto del peso de otras variables correlacionadas.</p>
 </details>
 </section>
-<section id="ejercicio-2-práctico-ajuste-e-interpretación-de-un-modelo-múltiple" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-2-práctico-ajuste-e-interpretación-de-un-modelo-múltiple">Ejercicio 2: Práctico (Ajuste e Interpretación de un Modelo Múltiple)</h2>
+<section id="ejercicio-2-práctico-ajuste-e-interpretación-de-un-modelo-múltiple" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="ejercicio-2-práctico-ajuste-e-interpretación-de-un-modelo-múltiple"><span class="header-section-number">2.2</span> Ejercicio 2: Práctico (Ajuste e Interpretación de un Modelo Múltiple)</h2>
 <p>Usa el conjunto de datos <code>iris</code> de R. Queremos modelar la anchura del pétalo (<code>Petal.Width</code>) en función de la longitud del pétalo (<code>Petal.Length</code>) y la anchura del sépalo (<code>Sepal.Width</code>).</p>
 <ol type="a">
 <li>Ajusta un modelo de regresión lineal múltiple: <code>lm(Petal.Width ~ Petal.Length + Sepal.Width, data = iris)</code>.</li>
@@ -325,8 +435,8 @@ F-statistic: 972.7 on 2 and 147 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><strong>d) Interpretación del intercepto:</strong> Representa la anchura predicha del pétalo cuando tanto la longitud del pétalo como la anchura del sépalo son 0 cm. <strong>No tiene significado práctico</strong> en este contexto biológico porque no existen flores con estas dimensiones cero.</p>
 </details>
 </section>
-<section id="ejercicio-3-conceptual-r²-vs.-r²-ajustado" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-3-conceptual-r²-vs.-r²-ajustado">Ejercicio 3: Conceptual (R² vs.&nbsp;R² Ajustado)</h2>
+<section id="ejercicio-3-conceptual-r²-vs.-r²-ajustado" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="ejercicio-3-conceptual-r²-vs.-r²-ajustado"><span class="header-section-number">2.3</span> Ejercicio 3: Conceptual (R² vs.&nbsp;R² Ajustado)</h2>
 <p>Cuando pasamos de un modelo simple a uno múltiple, introducimos el <strong>R² ajustado</strong> como medida de bondad de ajuste.</p>
 <ol type="a">
 <li>¿Cuál es el principal problema de usar el R² tradicional para comparar modelos con diferente número de predictores?</li>
@@ -342,8 +452,8 @@ F-statistic: 972.7 on 2 and 147 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Esta penalización hace que el R² ajustado pueda <strong>disminuir</strong> si añadimos predictores que no mejoran suficientemente el ajuste.</p>
 </details>
 </section>
-<section id="ejercicio-4-interpretación-de-salidas-de-r" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-4-interpretación-de-salidas-de-r">Ejercicio 4: Interpretación de Salidas de R</h2>
+<section id="ejercicio-4-interpretación-de-salidas-de-r" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="ejercicio-4-interpretación-de-salidas-de-r"><span class="header-section-number">2.4</span> Ejercicio 4: Interpretación de Salidas de R</h2>
 <p>Te presentan el siguiente resumen de un modelo que predice el prestigio de una ocupación (<code>prestige</code>) en función de los ingresos (<code>income</code>) y el nivel educativo (<code>education</code>).</p>
 <pre><code>Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
@@ -375,8 +485,8 @@ F-statistic: 185.6 on 2 and 99 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Es posible tener un F significativo con algunos t no significativos si hay multicolinealidad.</p>
 </details>
 </section>
-<section id="ejercicio-5-conceptual-multicolinealidad" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-5-conceptual-multicolinealidad">Ejercicio 5: Conceptual (Multicolinealidad)</h2>
+<section id="ejercicio-5-conceptual-multicolinealidad" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="ejercicio-5-conceptual-multicolinealidad"><span class="header-section-number">2.5</span> Ejercicio 5: Conceptual (Multicolinealidad)</h2>
 <p>Describe con tus propias palabras qué es la <strong>multicolinealidad</strong>. Menciona tres consecuencias negativas que puede tener la multicolinealidad severa en un modelo de regresión y si afecta más a la <strong>predicción</strong> o a la <strong>inferencia</strong>.</p>
 <details>
 <summary>
@@ -392,8 +502,8 @@ F-statistic: 185.6 on 2 and 99 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>La multicolinealidad afecta más a la <strong>inferencia</strong> que a la <strong>predicción</strong>. Las predicciones pueden seguir siendo buenas, pero la interpretación de los coeficientes se vuelve problemática.</p>
 </details>
 </section>
-<section id="ejercicio-6-práctico-diagnóstico-de-multicolinealidad" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-6-práctico-diagnóstico-de-multicolinealidad">Ejercicio 6: Práctico (Diagnóstico de Multicolinealidad)</h2>
+<section id="ejercicio-6-práctico-diagnóstico-de-multicolinealidad" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="ejercicio-6-práctico-diagnóstico-de-multicolinealidad"><span class="header-section-number">2.6</span> Ejercicio 6: Práctico (Diagnóstico de Multicolinealidad)</h2>
 <p>Usa el dataset <code>mtcars</code>. Ajusta un modelo para predecir el consumo (<code>mpg</code>) usando como predictores el número de cilindros (<code>cyl</code>), la cilindrada (<code>disp</code>), los caballos de fuerza (<code>hp</code>) y el peso (<code>wt</code>).</p>
 <ol type="a">
 <li>Observa el <code>summary()</code> del modelo. ¿Hay alguna variable que, a pesar de tener una alta correlación simple con <code>mpg</code>, no resulte significativa en el modelo múltiple?</li>
@@ -473,8 +583,8 @@ wt   -0.868  0.782  0.888  0.659  1.000</code></pre>
 <p><strong>Recomendación:</strong> Las variables <code>disp</code> y <code>cyl</code> presentan una fuerte multicolinealidad, como indican sus VIFs altos. Dado que <code>disp</code> típicamente tiene el VIF más alto y, además, su p-valor en el modelo suele ser el menos significativo, <strong>es el candidato principal a ser eliminado del modelo</strong>. Después de eliminarla, se debería volver a ajustar el modelo y re-evaluar los VIFs para confirmar que la multicolinealidad se ha reducido.</p>
 </details>
 </section>
-<section id="ejercicio-7-teórico-notación-matricial" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-7-teórico-notación-matricial">Ejercicio 7: Teórico (Notación Matricial)</h2>
+<section id="ejercicio-7-teórico-notación-matricial" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="ejercicio-7-teórico-notación-matricial"><span class="header-section-number">2.7</span> Ejercicio 7: Teórico (Notación Matricial)</h2>
 <ol type="a">
 <li>Escribe la fórmula del estimador de Mínimos Cuadrados Ordinarios (<span class="math inline">\(\hat{\mathbf{\beta}}\)</span>) en notación matricial.</li>
 <li>¿Qué supuesto fundamental del modelo de regresión múltiple garantiza que la matriz <span class="math inline">\((\mathbf{X}^T\mathbf{X})\)</span> sea invertible?</li>
@@ -486,8 +596,8 @@ wt   -0.868  0.782  0.888  0.659  1.000</code></pre>
 <p><strong>b) Supuesto fundamental:</strong> El supuesto de <strong>no multicolinealidad perfecta</strong> garantiza que las columnas de <span class="math inline">\(\mathbf{X}\)</span> sean linealmente independientes, lo que asegura que <span class="math inline">\((\mathbf{X}^T\mathbf{X})\)</span> sea invertible.</p>
 </details>
 </section>
-<section id="ejercicio-8-práctico-gráficos-de-regresión-parcial" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-8-práctico-gráficos-de-regresión-parcial">Ejercicio 8: Práctico (Gráficos de Regresión Parcial)</h2>
+<section id="ejercicio-8-práctico-gráficos-de-regresión-parcial" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="ejercicio-8-práctico-gráficos-de-regresión-parcial"><span class="header-section-number">2.8</span> Ejercicio 8: Práctico (Gráficos de Regresión Parcial)</h2>
 <p>Usa el dataset <code>Prestige</code> de la librería <code>car</code>.</p>
 <ol type="a">
 <li>Ajusta el modelo <code>lm(prestige ~ income + education + women, data = Prestige)</code>.</li>
@@ -528,8 +638,8 @@ wt   -0.868  0.782  0.888  0.659  1.000</code></pre>
 <p>Por ejemplo, si miramos el gráfico para <strong><code>wt | others</code></strong>, la pendiente negativa de la línea azul representa visualmente el coeficiente negativo para la variable <code>wt</code> en el modelo múltiple. Nos muestra que, incluso después de descontar el efecto de los caballos de fuerza (<code>hp</code>) y el tiempo de cuarto de milla (<code>qsec</code>), un mayor peso (<code>wt</code>) sigue estando asociado a un menor consumo (<code>mpg</code>).</p>
 </details>
 </section>
-<section id="ejercicio-9-inferencia-f-test-vs.-t-tests" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-9-inferencia-f-test-vs.-t-tests">Ejercicio 9: Inferencia (F-test vs.&nbsp;t-tests)</h2>
+<section id="ejercicio-9-inferencia-f-test-vs.-t-tests" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="ejercicio-9-inferencia-f-test-vs.-t-tests"><span class="header-section-number">2.9</span> Ejercicio 9: Inferencia (F-test vs.&nbsp;t-tests)</h2>
 <p>Describe un escenario hipotético en el que el <strong>test F global</strong> de un modelo de regresión múltiple sea altamente significativo (p &lt; 0.001), pero <strong>ninguno de los tests t individuales</strong> para los coeficientes sea significativo. ¿Cuál es la causa estadística más probable de este fenómeno?</p>
 <details>
 <summary>
@@ -543,8 +653,8 @@ wt   -0.868  0.782  0.888  0.659  1.000</code></pre>
 <p>Una analogía sería un dúo de cantantes que siempre actúan juntos. Sabemos que el dúo en su conjunto es un éxito (F-test significativo), pero es imposible determinar estadísticamente cuál de los dos es el responsable principal del éxito (ningún t-test es significativo), porque sus contribuciones están perfectamente correlacionadas.</p>
 </details>
 </section>
-<section id="ejercicio-10-práctico-comparación-de-modelos-anidados" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-10-práctico-comparación-de-modelos-anidados">Ejercicio 10: Práctico (Comparación de Modelos Anidados)</h2>
+<section id="ejercicio-10-práctico-comparación-de-modelos-anidados" class="level2" data-number="2.10">
+<h2 data-number="2.10" class="anchored" data-anchor-id="ejercicio-10-práctico-comparación-de-modelos-anidados"><span class="header-section-number">2.10</span> Ejercicio 10: Práctico (Comparación de Modelos Anidados)</h2>
 <p>Usa el dataset <code>swiss</code>.</p>
 <ol type="a">
 <li>Ajusta un <strong>modelo reducido</strong> para predecir <code>Fertility</code> usando solo <code>Agriculture</code> y <code>Education</code>.</li>
@@ -989,12 +1099,12 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./tema1_regresion_simple_soluciones.html" class="pagination-link" aria-label="Regresión Lineal Simple">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Regresión Lineal Simple</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Regresión Lineal Simple</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="pagination-link" aria-label="Ingeniería de Características">
-        <span class="nav-page-text"><span class="chapter-title">Ingeniería de Características</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Ingeniería de Características</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es-ES" xml:lang="es-ES"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.8.21">
@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Regresión Lineal Simple – Problemas de Modelos Estadísticos para la Predicción</title>
+<title>1&nbsp; Regresión Lineal Simple – Problemas de Modelos Estadísticos para la Predicción</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -148,7 +148,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema1_regresion_simple_soluciones.html"><span class="chapter-title">Regresión Lineal Simple</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema1_regresion_simple_soluciones.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Regresión Lineal Simple</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -183,32 +183,38 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema1_regresion_simple_soluciones.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Regresión Lineal Simple</span></a>
+  <a href="./tema1_regresion_simple_soluciones.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Regresión Lineal Simple</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Regresión Lineal Múltiple</span></a>
+  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Regresión Lineal Múltiple</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ingeniería de Características</span></a>
+  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Ingeniería de Características</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Selección de variables, Regularización y Validación</span></a>
+  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Selección de variables, Regularización y Validación</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Modelos de Regresión Generalizada</span></a>
+  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelos de Regresión Generalizada</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ejercicios Avanzados</span></a>
+  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Ejercicios Avanzados</span></span></a>
   </div>
 </li>
     </ul>
@@ -221,27 +227,131 @@ window.Quarto = {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#ejercicio-1-fundamentos-conceptuales" id="toc-ejercicio-1-fundamentos-conceptuales" class="nav-link active" data-scroll-target="#ejercicio-1-fundamentos-conceptuales">Ejercicio 1: Fundamentos Conceptuales</a></li>
-  <li><a href="#ejercicio-2-interpretación-de-coeficientes" id="toc-ejercicio-2-interpretación-de-coeficientes" class="nav-link" data-scroll-target="#ejercicio-2-interpretación-de-coeficientes">Ejercicio 2: Interpretación de Coeficientes</a>
+  <li><a href="#ejercicio-1-fundamentos-conceptuales" id="toc-ejercicio-1-fundamentos-conceptuales" class="nav-link active" data-scroll-target="#ejercicio-1-fundamentos-conceptuales"><span class="header-section-number">1.1</span> Ejercicio 1: Fundamentos Conceptuales</a></li>
+  <li><a href="#ejercicio-2-interpretación-de-coeficientes" id="toc-ejercicio-2-interpretación-de-coeficientes" class="nav-link" data-scroll-target="#ejercicio-2-interpretación-de-coeficientes"><span class="header-section-number">1.2</span> Ejercicio 2: Interpretación de Coeficientes</a>
   <ul class="collapse">
-  <li><a href="#ejercicio-3-aplicación-práctica-con-r-ajuste-e-inferencia" id="toc-ejercicio-3-aplicación-práctica-con-r-ajuste-e-inferencia" class="nav-link" data-scroll-target="#ejercicio-3-aplicación-práctica-con-r-ajuste-e-inferencia">Ejercicio 3: Aplicación Práctica con R (Ajuste e Inferencia)</a></li>
-  <li><a href="#ejercicio-4-intervalos-de-confianza-y-predicción" id="toc-ejercicio-4-intervalos-de-confianza-y-predicción" class="nav-link" data-scroll-target="#ejercicio-4-intervalos-de-confianza-y-predicción">Ejercicio 4: Intervalos de Confianza y Predicción</a></li>
-  <li><a href="#ejercicio-5-supuestos-del-modelo" id="toc-ejercicio-5-supuestos-del-modelo" class="nav-link" data-scroll-target="#ejercicio-5-supuestos-del-modelo">Ejercicio 5: Supuestos del Modelo</a></li>
-  <li><a href="#ejercicio-6-diagnóstico-de-linealidad-y-homocedasticidad" id="toc-ejercicio-6-diagnóstico-de-linealidad-y-homocedasticidad" class="nav-link" data-scroll-target="#ejercicio-6-diagnóstico-de-linealidad-y-homocedasticidad">Ejercicio 6: Diagnóstico de Linealidad y Homocedasticidad</a></li>
-  <li><a href="#ejercicio-7-diagnóstico-de-normalidad" id="toc-ejercicio-7-diagnóstico-de-normalidad" class="nav-link" data-scroll-target="#ejercicio-7-diagnóstico-de-normalidad">Ejercicio 7: Diagnóstico de Normalidad</a></li>
-  <li><a href="#ejercicio-8-descomposición-de-la-varianza-anova" id="toc-ejercicio-8-descomposición-de-la-varianza-anova" class="nav-link" data-scroll-target="#ejercicio-8-descomposición-de-la-varianza-anova">Ejercicio 8: Descomposición de la Varianza (ANOVA)</a></li>
-  <li><a href="#ejercicio-9-observaciones-influyentes" id="toc-ejercicio-9-observaciones-influyentes" class="nav-link" data-scroll-target="#ejercicio-9-observaciones-influyentes">Ejercicio 9: Observaciones Influyentes</a></li>
-  <li><a href="#ejercicio-10-relación-entre-pruebas-de-hipótesis" id="toc-ejercicio-10-relación-entre-pruebas-de-hipótesis" class="nav-link" data-scroll-target="#ejercicio-10-relación-entre-pruebas-de-hipótesis">Ejercicio 10: Relación entre Pruebas de Hipótesis</a></li>
+  <li><a href="#ejercicio-3-aplicación-práctica-con-r-ajuste-e-inferencia" id="toc-ejercicio-3-aplicación-práctica-con-r-ajuste-e-inferencia" class="nav-link" data-scroll-target="#ejercicio-3-aplicación-práctica-con-r-ajuste-e-inferencia"><span class="header-section-number">1.2.1</span> Ejercicio 3: Aplicación Práctica con R (Ajuste e Inferencia)</a></li>
+  <li><a href="#ejercicio-4-intervalos-de-confianza-y-predicción" id="toc-ejercicio-4-intervalos-de-confianza-y-predicción" class="nav-link" data-scroll-target="#ejercicio-4-intervalos-de-confianza-y-predicción"><span class="header-section-number">1.2.2</span> Ejercicio 4: Intervalos de Confianza y Predicción</a></li>
+  <li><a href="#ejercicio-5-supuestos-del-modelo" id="toc-ejercicio-5-supuestos-del-modelo" class="nav-link" data-scroll-target="#ejercicio-5-supuestos-del-modelo"><span class="header-section-number">1.2.3</span> Ejercicio 5: Supuestos del Modelo</a></li>
+  <li><a href="#ejercicio-6-diagnóstico-de-linealidad-y-homocedasticidad" id="toc-ejercicio-6-diagnóstico-de-linealidad-y-homocedasticidad" class="nav-link" data-scroll-target="#ejercicio-6-diagnóstico-de-linealidad-y-homocedasticidad"><span class="header-section-number">1.2.4</span> Ejercicio 6: Diagnóstico de Linealidad y Homocedasticidad</a></li>
+  <li><a href="#ejercicio-7-diagnóstico-de-normalidad" id="toc-ejercicio-7-diagnóstico-de-normalidad" class="nav-link" data-scroll-target="#ejercicio-7-diagnóstico-de-normalidad"><span class="header-section-number">1.2.5</span> Ejercicio 7: Diagnóstico de Normalidad</a></li>
+  <li><a href="#ejercicio-8-descomposición-de-la-varianza-anova" id="toc-ejercicio-8-descomposición-de-la-varianza-anova" class="nav-link" data-scroll-target="#ejercicio-8-descomposición-de-la-varianza-anova"><span class="header-section-number">1.2.6</span> Ejercicio 8: Descomposición de la Varianza (ANOVA)</a></li>
+  <li><a href="#ejercicio-9-observaciones-influyentes" id="toc-ejercicio-9-observaciones-influyentes" class="nav-link" data-scroll-target="#ejercicio-9-observaciones-influyentes"><span class="header-section-number">1.2.7</span> Ejercicio 9: Observaciones Influyentes</a></li>
+  <li><a href="#ejercicio-10-relación-entre-pruebas-de-hipótesis" id="toc-ejercicio-10-relación-entre-pruebas-de-hipótesis" class="nav-link" data-scroll-target="#ejercicio-10-relación-entre-pruebas-de-hipótesis"><span class="header-section-number">1.2.8</span> Ejercicio 10: Relación entre Pruebas de Hipótesis</a></li>
   </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
+<div class="portada">
+
+    <div class="portada-container">
+
+        <!-- Header -->
+
+        <div class="portada-header">
+
+            <img src="../images/urjc_logo.png" alt="Logo URJC" class="portada-logo">
+
+            
+
+            <div class="portada-escuela">
+
+                Escuela Técnica Superior de<br>
+
+                Ingeniería Informática
+
+            </div>
+
+        </div>
+
+        
+
+        <!-- Contenido principal -->
+
+        <div class="portada-main">
+
+            <h1 class="portada-titulo">
+
+                Modelos Estadísticos para la Predicción
+
+            </h1>
+
+            
+
+            <h2 class="portada-subtitulo anchored">
+
+                Ejercicios Resueltos
+
+            </h2>
+
+            
+
+            <div class="portada-grado">
+
+                Grado en Ciencia de Datos e Inteligencia Artificial
+
+            </div>
+
+            
+
+            <div class="portada-autores-section">
+
+                <div class="portada-autores-titulo">Autores</div>
+
+                <div class="portada-autor">Víctor Aceña Gil</div>
+
+                <div class="portada-autor">Isaac Martín de Diego</div>
+
+            </div>
+
+            
+
+            <div class="portada-fecha">2024-2025</div>
+
+        </div>
+
+        
+
+        <!-- Footer -->
+
+        <div class="portada-footer">
+
+            <img src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" alt="Licencia Creative Commons" class="portada-licencia-logo">
+
+            
+
+            <div class="portada-licencia-texto">
+
+                Copyright © 2024 Víctor Aceña Gil, Isaac Martín de Diego. Esta obra está licenciada bajo CC BY-SA 4.0, Creative Commons Atribución-Compartir Igual 4.0 Internacional.
+
+            </div>
+
+        </div>
+
+        
+
+        <!-- Elementos decorativos -->
+
+        <div class="portada-deco-lines">
+
+            <div class="portada-deco-line"></div>
+
+            <div class="portada-deco-line"></div>
+
+            <div class="portada-deco-line"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">Regresión Lineal Simple</span></h1>
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Regresión Lineal Simple</span></h1>
 </div>
 
 
@@ -259,8 +369,8 @@ window.Quarto = {
 
 
 <p>En este capítulo encontrarás las soluciones detalladas a todos los ejercicios del Tema 1. Cada ejercicio incluye tanto el enunciado como la solución completa con código R y explicaciones teóricas.</p>
-<section id="ejercicio-1-fundamentos-conceptuales" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-1-fundamentos-conceptuales">Ejercicio 1: Fundamentos Conceptuales</h2>
+<section id="ejercicio-1-fundamentos-conceptuales" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="ejercicio-1-fundamentos-conceptuales"><span class="header-section-number">1.1</span> Ejercicio 1: Fundamentos Conceptuales</h2>
 <p>Basándote en el texto, explica con tus propias palabras por qué un coeficiente de correlación de Pearson (<span class="math inline">\(r\)</span>) alto no es suficiente para modelar una relación y por qué la regresión lineal es un paso más allá. Menciona al menos dos cosas que el modelo de regresión proporciona y que la correlación por sí sola no ofrece.</p>
 <details>
 <summary>
@@ -279,8 +389,8 @@ window.Quarto = {
 </ol>
 </details>
 </section>
-<section id="ejercicio-2-interpretación-de-coeficientes" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-2-interpretación-de-coeficientes">Ejercicio 2: Interpretación de Coeficientes</h2>
+<section id="ejercicio-2-interpretación-de-coeficientes" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="ejercicio-2-interpretación-de-coeficientes"><span class="header-section-number">1.2</span> Ejercicio 2: Interpretación de Coeficientes</h2>
 <p>Un analista ajusta un modelo para predecir el gasto anual en compras online (<code>gasto</code>, en euros) basándose en la edad del cliente (<code>edad</code>). El modelo ajustado es:</p>
 <p><code>gasto = 1500 + 12 * edad</code></p>
 <ol type="a">
@@ -308,8 +418,8 @@ window.Quarto = {
 <li>El modelo probablemente no es válido para edades tan bajas</li>
 </ul>
 </details>
-<section id="ejercicio-3-aplicación-práctica-con-r-ajuste-e-inferencia" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-3-aplicación-práctica-con-r-ajuste-e-inferencia">Ejercicio 3: Aplicación Práctica con R (Ajuste e Inferencia)</h3>
+<section id="ejercicio-3-aplicación-práctica-con-r-ajuste-e-inferencia" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="ejercicio-3-aplicación-práctica-con-r-ajuste-e-inferencia"><span class="header-section-number">1.2.1</span> Ejercicio 3: Aplicación Práctica con R (Ajuste e Inferencia)</h3>
 <p>Utiliza el conjunto de datos <code>pressure</code> de R, que contiene mediciones de temperatura y presión de vapor de mercurio.</p>
 <ol type="a">
 <li>Ajusta un modelo de regresión lineal simple para predecir la presión (<code>pressure</code>) en función de la temperatura (<code>temperature</code>). Guarda el modelo en un objeto.</li>
@@ -352,15 +462,13 @@ F-statistic: 22.93 on 1 and 17 DF,  p-value: 0.000171</code></pre>
 <p><strong>c), d) y e) Interpretación de la Salida del Modelo</strong></p>
 <p>La forma más eficiente de analizar el modelo es observar directamente la salida de la función <code>summary()</code>.</p>
 <p>A partir de esta salida, interpretamos:</p>
-<ul>
-<li><p><strong>c) Coeficiente de determinación R²</strong>: El valor de <code>Multiple R-squared</code> es <strong>0.5742</strong>. Esto significa que la temperatura explica el <strong>57.42%</strong> de la variabilidad en la presión.</p></li>
-<li><p><strong>d) p-valor del estadístico F</strong>: En la última línea, el <code>p-value</code> del <code>F-statistic</code> es <strong>0.000171</strong>. Al ser un valor muy inferior a 0.05, rechazamos la hipótesis nula (<span class="math inline">\(H_0\)</span>) de que el modelo no tiene capacidad predictiva. Concluimos que <strong>el modelo es globalmente significativo</strong>.</p></li>
-<li><p><strong>e) Significancia del coeficiente</strong>: En la tabla de coeficientes, el p-valor (<code>Pr(&gt;|t|)</code>) para <code>temperature</code> es <strong>0.000171</strong>. Rechazamos la hipótesis nula (<span class="math inline">\(H_0: \beta_1 = 0\)</span>) y concluimos que la temperatura tiene una <strong>relación estadísticamente significativa</strong> con la presión.</p></li>
-</ul>
+<p><strong>c) Coeficiente de determinación R²</strong>: El valor de <code>Multiple R-squared</code> es <strong>0.5742</strong>. Esto significa que la temperatura explica el <strong>57.42%</strong> de la variabilidad en la presión.</p>
+<p><strong>d) p-valor del estadístico F</strong>: En la última línea, el <code>p-value</code> del <code>F-statistic</code> es <strong>0.000171</strong>. Al ser un valor muy inferior a 0.05, rechazamos la hipótesis nula (<span class="math inline">\(H_0\)</span>) de que el modelo no tiene capacidad predictiva. Concluimos que <strong>el modelo es globalmente significativo</strong>.</p>
+<p><strong>e) Significancia del coeficiente</strong>: En la tabla de coeficientes, el p-valor (<code>Pr(&gt;|t|)</code>) para <code>temperature</code> es <strong>0.000171</strong>. Rechazamos la hipótesis nula (<span class="math inline">\(H_0: \beta_1 = 0\)</span>) y concluimos que la temperatura tiene una <strong>relación estadísticamente significativa</strong> con la presión.</p>
 </details>
 </section>
-<section id="ejercicio-4-intervalos-de-confianza-y-predicción" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-4-intervalos-de-confianza-y-predicción">Ejercicio 4: Intervalos de Confianza y Predicción</h3>
+<section id="ejercicio-4-intervalos-de-confianza-y-predicción" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="ejercicio-4-intervalos-de-confianza-y-predicción"><span class="header-section-number">1.2.2</span> Ejercicio 4: Intervalos de Confianza y Predicción</h3>
 <p>Usando el modelo del ejercicio anterior (<code>lm(pressure ~ temperature, data = pressure)</code>):</p>
 <ol type="a">
 <li>Calcula el <strong>intervalo de confianza al 95%</strong> para la <em>presión media</em> esperada cuando la temperatura es de 250 grados.</li>
@@ -447,8 +555,8 @@ F-statistic: 22.93 on 1 and 17 DF,  p-value: 0.000171</code></pre>
 </ol>
 </details>
 </section>
-<section id="ejercicio-5-supuestos-del-modelo" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-5-supuestos-del-modelo">Ejercicio 5: Supuestos del Modelo</h3>
+<section id="ejercicio-5-supuestos-del-modelo" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="ejercicio-5-supuestos-del-modelo"><span class="header-section-number">1.2.3</span> Ejercicio 5: Supuestos del Modelo</h3>
 <p>Enumera los cuatro supuestos del modelo de regresión lineal clásico (también conocidos como supuestos de Gauss-Markov) y explica brevemente la importancia de cada uno.</p>
 <details>
 <summary>
@@ -462,8 +570,8 @@ F-statistic: 22.93 on 1 and 17 DF,  p-value: 0.000171</code></pre>
 </ol>
 </details>
 </section>
-<section id="ejercicio-6-diagnóstico-de-linealidad-y-homocedasticidad" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-6-diagnóstico-de-linealidad-y-homocedasticidad">Ejercicio 6: Diagnóstico de Linealidad y Homocedasticidad</h3>
+<section id="ejercicio-6-diagnóstico-de-linealidad-y-homocedasticidad" class="level3" data-number="1.2.4">
+<h3 data-number="1.2.4" class="anchored" data-anchor-id="ejercicio-6-diagnóstico-de-linealidad-y-homocedasticidad"><span class="header-section-number">1.2.4</span> Ejercicio 6: Diagnóstico de Linealidad y Homocedasticidad</h3>
 <p>Para el modelo del ejercicio 3:</p>
 <ol type="a">
 <li>Genera y muestra el gráfico de <strong>Residuos vs.&nbsp;Valores Ajustados</strong>. Basándote en este gráfico, ¿se cumple el supuesto de <strong>linealidad</strong>? Explica en qué te basas.</li>
@@ -497,8 +605,8 @@ F-statistic: 22.93 on 1 and 17 DF,  p-value: 0.000171</code></pre>
 </div>
 <p><strong>a) Linealidad</strong>: En el gráfico de residuos vs.&nbsp;valores ajustados, observamos un <strong>patrón curvado</strong> en lugar de una distribución aleatoria alrededor de cero. Esto indica que <strong>NO se cumple perfectamente el supuesto de linealidad</strong>.</p>
 <p><strong>b) Homocedasticidad</strong>: En el gráfico Scale-Location, la línea roja muestra una tendencia creciente, lo que sugiere <strong>heterocedasticidad</strong> (varianza no constante). Un problema de heterocedasticidad se manifestaría como un patrón de embudo o una tendencia clara en este gráfico.</p>
-<section id="y-ahora-qué-pasos-siguientes" class="level4">
-<h4 class="anchored" data-anchor-id="y-ahora-qué-pasos-siguientes"><strong>¿Y ahora qué? Pasos Siguientes</strong></h4>
+<section id="y-ahora-qué-pasos-siguientes" class="level4" data-number="1.2.4.1">
+<h4 data-number="1.2.4.1" class="anchored" data-anchor-id="y-ahora-qué-pasos-siguientes"><span class="header-section-number">1.2.4.1</span> <strong>¿Y ahora qué? Pasos Siguientes</strong></h4>
 <p>Un buen análisis no termina al detectar un problema, sino al proponer una solución.</p>
 <ol type="1">
 <li><p><strong>Contexto</strong>: El mal ajuste del modelo tiene una razón física. La relación entre temperatura y presión de vapor no es lineal, sino <strong>exponencial</strong>.</p></li>
@@ -524,8 +632,8 @@ F-statistic: 22.93 on 1 and 17 DF,  p-value: 0.000171</code></pre>
 </section></details>
 </section>
 </section>
-<section id="ejercicio-7-diagnóstico-de-normalidad" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-7-diagnóstico-de-normalidad">Ejercicio 7: Diagnóstico de Normalidad</h3>
+<section id="ejercicio-7-diagnóstico-de-normalidad" class="level3" data-number="1.2.5">
+<h3 data-number="1.2.5" class="anchored" data-anchor-id="ejercicio-7-diagnóstico-de-normalidad"><span class="header-section-number">1.2.5</span> Ejercicio 7: Diagnóstico de Normalidad</h3>
 <p>Para el modelo del ejercicio 3:</p>
 <ol type="a">
 <li>Genera un gráfico <strong>Normal Q-Q</strong> de los residuos. ¿Parecen seguir los residuos una distribución normal?</li>
@@ -567,8 +675,8 @@ W = 0.89337, p-value = 0.03697</code></pre>
 <p><strong>Conexión con el Ejercicio 6</strong>: Es importante destacar que la <strong>falta de linealidad</strong> (detectada en el ejercicio anterior) es frecuentemente la <strong>causa raíz de la no normalidad</strong> en los residuos. Al corregir el problema estructural del modelo con la transformación logarítmica, el supuesto de normalidad también mejora de forma significativa.</p>
 </details>
 </section>
-<section id="ejercicio-8-descomposición-de-la-varianza-anova" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-8-descomposición-de-la-varianza-anova">Ejercicio 8: Descomposición de la Varianza (ANOVA)</h3>
+<section id="ejercicio-8-descomposición-de-la-varianza-anova" class="level3" data-number="1.2.6">
+<h3 data-number="1.2.6" class="anchored" data-anchor-id="ejercicio-8-descomposición-de-la-varianza-anova"><span class="header-section-number">1.2.6</span> Ejercicio 8: Descomposición de la Varianza (ANOVA)</h3>
 <p>Explica qué representan la <strong>Suma de Cuadrados Total (SST)</strong>, la <strong>Suma de Cuadrados de la Regresión (SSR)</strong> y la <strong>Suma de Cuadrados del Error (SSE)</strong>. ¿Cuál es la ecuación fundamental que las relaciona?</p>
 <details>
 <summary>
@@ -582,8 +690,8 @@ W = 0.89337, p-value = 0.03697</code></pre>
 <p>Esta descomposición permite calcular el coeficiente de determinación: <span class="math inline">\(R^2 = \frac{SSR}{SST} = 1 - \frac{SSE}{SST}\)</span></p>
 </details>
 </section>
-<section id="ejercicio-9-observaciones-influyentes" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-9-observaciones-influyentes">Ejercicio 9: Observaciones Influyentes</h3>
+<section id="ejercicio-9-observaciones-influyentes" class="level3" data-number="1.2.7">
+<h3 data-number="1.2.7" class="anchored" data-anchor-id="ejercicio-9-observaciones-influyentes"><span class="header-section-number">1.2.7</span> Ejercicio 9: Observaciones Influyentes</h3>
 <p>Basado en la teoría de los apuntes:</p>
 <ol type="a">
 <li>Explica la diferencia entre un residuo simple (<span class="math inline">\(e_i\)</span>), un residuo estandarizado y un residuo estudentizado. ¿Por qué se prefieren los estudentizados para el diagnóstico?</li>
@@ -607,8 +715,8 @@ W = 0.89337, p-value = 0.03697</code></pre>
 <p><strong>Sí, una observación puede tener leverage alto pero no ser influyente</strong> si está cerca de la línea de regresión (residuo pequeño).</p>
 </details>
 </section>
-<section id="ejercicio-10-relación-entre-pruebas-de-hipótesis" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-10-relación-entre-pruebas-de-hipótesis">Ejercicio 10: Relación entre Pruebas de Hipótesis</h3>
+<section id="ejercicio-10-relación-entre-pruebas-de-hipótesis" class="level3" data-number="1.2.8">
+<h3 data-number="1.2.8" class="anchored" data-anchor-id="ejercicio-10-relación-entre-pruebas-de-hipótesis"><span class="header-section-number">1.2.8</span> Ejercicio 10: Relación entre Pruebas de Hipótesis</h3>
 <p>En el contexto <strong>exclusivo</strong> de la regresión lineal simple, ¿qué relación matemática existe entre el estadístico <strong>F</strong> del test ANOVA y el estadístico <strong>t</strong> del test para la pendiente <span class="math inline">\(\beta_1\)</span>? ¿Qué implica esto para sus respectivos p-valores?</p>
 <details>
 <summary>
@@ -1041,7 +1149,7 @@ W = 0.89337, p-value = 0.03697</code></pre>
   </div>
   <div class="nav-page nav-page-next">
       <a href="./tema2_regresion_multiple_soluciones.html" class="pagination-link" aria-label="Regresión Lineal Múltiple">
-        <span class="nav-page-text"><span class="chapter-title">Regresión Lineal Múltiple</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Regresión Lineal Múltiple</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

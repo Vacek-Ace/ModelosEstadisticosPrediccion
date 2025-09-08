@@ -1,6 +1,6 @@
 # Modelos Estadísticos para la Predicción
 
-Este repositorio contiene el material completo del curso de **Modelos Estadísticos para la Predicción**, incluyendo apuntes, diapositivas, ejercicios y laboratorios prácticos.
+Este repositorio contiene el material completo del curso de **Modelos Estadísticos para la Predicción**, incluyendo apuntes, diapositivas, ejercicios, soluciones y laboratorios prácticos.
 
 ## 📚 Contenido del Curso
 
@@ -29,7 +29,27 @@ cd ModelosEstadisticosPrediccion
 
 ## 📖 Generación de Documentos
 
-### 1. 📑 Diapositivas (PDF)
+### 1. � Libro de Apuntes
+
+#### HTML (recomendado):
+```bash
+quarto render --to html
+```
+- Genera el libro completo en HTML navegable
+- Salida en el directorio `docs/` 
+- Incluye navegación interactiva y buscador
+- Perfecto para consulta online
+
+#### PDF (con portada y formato profesional):
+```bash
+Rscript -e "source('apuntes/generar_apuntes.R'); crear_libro_completo()"
+```
+- Genera un PDF unificado con portada personalizada
+- Remueve páginas duplicadas automáticamente
+- Salida en `apuntes/apuntes_pdf/ApuntesModelosEstadisticosPrediccion.pdf`
+- Requiere LaTeX y PDFtk instalados
+
+### 2. �📑 Diapositivas (PDF)
 
 #### Generar todas las diapositivas automáticamente:
 ```r
@@ -55,27 +75,6 @@ Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); parcial(c(1,2
 # Crear con nombre personalizado
 Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); crear('mi_diapositivas.pdf')"
 ```
-
-### 2. 📚 Libro de Apuntes
-
-#### HTML (recomendado):
-```bash
-quarto render --to html
-```
-- Genera el libro completo en HTML navegable
-- Salida en el directorio `docs/` 
-- Incluye navegación interactiva y buscador
-- Perfecto para consulta online
-
-#### PDF (con portada y formato profesional):
-```bash
-Rscript -e "source('apuntes/generar_apuntes.R'); crear_libro_completo()"
-```
-- Genera un PDF unificado con portada personalizada
-- Remueve páginas duplicadas automáticamente
-- Salida en `apuntes/apuntes_pdf/ApuntesModelosEstadisticosPrediccion.pdf`
-- Requiere LaTeX y PDFtk instalados
-
 
 ### 3. 🧮 Ejercicios
 
@@ -121,35 +120,51 @@ quarto render guia_estudio.qmd --to pdf
 - Archivo final (Método 1): `guia_estudio/GuiaEstudioModelosEstadisticosPrediccion.pdf`
 - Archivo final (Método 2): `guia_estudio/guia_estudio.pdf`
 
-### 5. 🧮 Soluciones de Ejercicios
+### 5. ✅ Soluciones de Ejercicios
 
-#### Generar todas las soluciones en HTML:
+El proyecto incluye **dos sistemas de soluciones** independientes:
+
+#### 📁 Sistema `ejercicios/soluciones/` - Soluciones en proceso de desarrollo
+
+Este directorio contiene las primeras versiones de las soluciones.
+
 ```bash
-# Desde el directorio ejercicios/soluciones/
+# Generar soluciones HTML
 cd ejercicios/soluciones
 quarto render --to html
+
+# Usar el script R para más opciones
+Rscript -e "source('ejercicios/soluciones/generar_soluciones.R'); generar_todas_soluciones()"
 ```
 
-#### Generar solución específica:
+#### 📁 Sistema `ejercicios_resueltos/` - Soluciones completas y definitivas ⭐
+
+Este directorio contiene las soluciones **completas y validadas** con portada profesional.
+
 ```bash
-# Ejemplo: solo tema 1
-cd ejercicios/soluciones
-quarto render tema1_regresion_simple_soluciones.qmd --to html
+# HTML (recomendado para consulta)
+Rscript -e "source('ejercicios_resueltos/generar_soluciones.R'); generar_todas_soluciones()"
 
-# Ejemplo: ejercicios avanzados
-quarto render ejercicios_avanzados_soluciones.qmd --to html
+# PDF completo con portada profesional
+Rscript -e "source('ejercicios_resueltos/generar_soluciones.R'); crear_soluciones_completas()"
+
+# Solución específica
+Rscript -e "source('ejercicios_resueltos/generar_soluciones.R'); generar_solucion(1)"
+
+# Abrir en navegador
+Rscript -e "source('ejercicios_resueltos/generar_soluciones.R'); abrir_soluciones()"
 ```
 
-**Características:**
-- ✅ **HTML únicamente** - Sin problemas de compilación LaTeX
+**Características de las soluciones definitivas:**
+- ✅ **PDF profesional** con portada personalizada y manipulación avanzada de PDFs
+- ✅ **HTML navegable** con diseño responsivo y tema cerulean
 - ✅ Código R completo y comentado paso a paso
 - ✅ Explicaciones matemáticas detalladas con derivaciones
 - ✅ Interpretaciones prácticas de todos los resultados
 - ✅ Secciones colapsibles para mejor navegación
-- ✅ Styling profesional con tema cerulean
-- ✅ Archivos auto-contenidos (embed-resources)
-- ✅ Validación de código con ejemplos reales
-- 📁 Salida en: `ejercicios/soluciones/soluciones_html/`
+- ✅ Styling profesional y consistente
+- ✅ Validación completa de código con ejemplos reales
+- ✅ Seguimiento del patrón profesional del proyecto
 
 **Soluciones disponibles:**
 - `tema1_regresion_simple_soluciones.qmd` - Regresión lineal simple con análisis completo
@@ -158,18 +173,10 @@ quarto render ejercicios_avanzados_soluciones.qmd --to html
 - `tema4_seleccion_validacion_soluciones.qmd` - Selección de variables y validación cruzada
 - `tema5_glm_soluciones.qmd` - Modelos lineales generalizados (logística, Poisson)
 - `ejercicios_avanzados_soluciones.qmd` - Demostraciones matemáticas y derivaciones teóricas
-- ✅ Interpretaciones prácticas de resultados
-- ✅ Navegación web entre temas
-- ✅ Archivos auto-contenidos (embed-resources)
-- 📁 Salida en: `ejercicios/soluciones/soluciones_html/`
 
-**Soluciones disponibles:**
-- `tema1_regresion_simple_soluciones.qmd` - Regresión lineal simple
-- `tema2_regresion_multiple_soluciones.qmd` - Regresión múltiple
-- `tema3_ingenieria_caracteristicas_soluciones.qmd` - Transformación de variables
-- `tema4_seleccion_validacion_soluciones.qmd` - Selección y validación
-- `tema5_glm_soluciones.qmd` - Modelos lineales generalizados
-- `ejercicios_avanzados_soluciones.qmd` - Ejercicios avanzados con demostraciones
+📁 **Archivos generados:**
+- HTML: `ejercicios_resueltos/soluciones_html/`
+- PDF: `ejercicios_resueltos/soluciones_pdf/SolucionesModelosEstadisticosPrediccion.pdf`
 
 ### 6. 🔬 Laboratorios
 
@@ -226,9 +233,10 @@ Todos los archivos PDF finales siguen la nomenclatura estandarizada:
 
 | Contenido | Comando | Archivo Final |
 |-----------|---------|---------------|
-| **Apuntes** | `Rscript -e "source('apuntes/generar_libro.R'); crear_libro_completo()"` | `apuntes/apuntes_pdf/ApuntesModelosEstadisticosPrediccion.pdf` |
+| **Apuntes** | `Rscript -e "source('apuntes/generar_apuntes.R'); crear_libro_completo()"` | `apuntes/apuntes_pdf/ApuntesModelosEstadisticosPrediccion.pdf` |
 | **Diapositivas** | `Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); crear()"` | `diapositivas/diapositivas_pdf/DiapositivasModelosEstadisticosPrediccion.pdf` |
 | **Ejercicios** | `Rscript -e "source('ejercicios/generar_ejercicios.R'); crear_ejercicios_completos()"` | `ejercicios/ejercicios_pdf/EjerciciosModelosEstadisticosPrediccion.pdf` |
+| **Soluciones** | `Rscript -e "source('ejercicios_resueltos/generar_soluciones.R'); crear_soluciones_completas()"` | `ejercicios_resueltos/soluciones_pdf/SolucionesModelosEstadisticosPrediccion.pdf` |
 | **Guía de Estudio** | `Rscript -e "source('guia_estudio/generar_guia.R'); crear_guia_completa()"` | `guia_estudio/GuiaEstudioModelosEstadisticosPrediccion.pdf` |
 
 **Características comunes:**
@@ -258,111 +266,144 @@ install.packages(c(
 
 ```
 ModelosEstadisticosPrediccion/
-├── _quarto.yml                    # Configuración principal de Quarto
-├── README.md                      # Este archivo
-├── estilos.css                    # Estilos personalizados
+├── _quarto.yml                               # Configuración principal del libro
+├── index.qmd                                # Página principal
+├── tema*.qmd                                # Contenido de cada tema (0-5)
+├── conclusiones.qmd                         # Conclusiones del curso
+├── references.qmd                           # Referencias bibliográficas
+├── references.bib                           # Base de datos bibliográfica
+├── estilos.css / estilos_html.css          # Estilos personalizados
 │
-├── index.qmd                     # Página principal del libro
-├── tema0.qmd - tema5.qmd         # Capítulos principales
-├── conclusiones.qmd              # Conclusiones del curso
-├── references.qmd                # Referencias bibliográficas
+├── docs/                                   # 📖 LIBRO WEB (salida HTML)
+│   ├── index.html                         # Página principal del libro web
+│   ├── tema*.html                         # Temas en formato web
+│   ├── search.json                        # Índice de búsqueda
+│   └── site_libs/                         # Librerías de Quarto para web
 │
-├── apuntes/                      # Generación de apuntes PDF
-│   ├── generar_apuntes.R         # Script para apuntes PDF profesional
-│   ├── portada.qmd               # Portada de los apuntes
-│   └── apuntes_pdf/              # PDFs generados
+├── apuntes/                               # 📚 GENERACIÓN DE APUNTES PDF
+│   ├── generar_apuntes.R                  # Script principal para PDFs
+│   ├── portada.qmd                        # Portada personalizada
+│   └── apuntes_pdf/                       # 📋 Salida de apuntes
 │       └── ApuntesModelosEstadisticosPrediccion.pdf
 │
-├── diapositivas/                 # Diapositivas de clase
-│   ├── crear_diapositivas_completas.R  # Script automatizado
-│   ├── portada.qmd               # Portada de diapositivas
-│   ├── tema**.qmd                # Diapositivas por tema
-│   └── diapositivas_pdf/         # PDFs generados
+├── diapositivas/                          # 📊 DIAPOSITIVAS BEAMER
+│   ├── tema*_*.qmd                        # Diapositivas por tema
+│   ├── crear_diapositivas_completas.R     # Script de generación automática
+│   ├── beamercolorthemeDSLAB.sty         # Tema personalizado Beamer
+│   ├── dslab_fixed.beamer.tex            # Template LaTeX
+│   ├── portada.qmd                        # Portada de diapositivas
+│   └── diapositivas_pdf/                  # 📋 Salida de diapositivas
 │       └── DiapositivasModelosEstadisticosPrediccion.pdf
 │
-├── ejercicios/                  # Ejercicios
-│   ├── _quarto.yml              # Configuración específica
-│   ├── generar_ejercicios.R     # Script para ejercicios PDF profesional
-│   ├── index.qmd                # Índice de ejercicios
-│   ├── tema**.qmd               # Ejercicios por tema
-│   ├── ejercicios_avanzados.qmd # Ejercicios avanzados con matemáticas
-│   ├── ejercicios_pdf/          # PDFs generados
-│   │   └── EjerciciosModelosEstadisticosPrediccion.pdf
-│   └── soluciones/              # Soluciones detalladas
-│       ├── soluciones.css       # Estilos para soluciones
-│       ├── tema1_regresion_simple_soluciones.qmd
-│       ├── tema2_regresion_multiple_soluciones.qmd
-│       ├── tema3_ingenieria_caracteristicas_soluciones.qmd
-│       ├── tema4_seleccion_validacion_soluciones.qmd
-│       ├── tema5_glm_soluciones.qmd
-│       ├── ejercicios_avanzados_soluciones.qmd
-│       └── soluciones_html/     # HTMLs generados
-│           ├── tema1_regresion_simple_soluciones.html
-│           ├── tema2_regresion_multiple_soluciones.html
-│           ├── tema3_ingenieria_caracteristicas_soluciones.html
-│           ├── tema4_seleccion_validacion_soluciones.html
-│           ├── tema5_glm_soluciones.html
-│           └── ejercicios_avanzados_soluciones.html
+├── ejercicios/                            # 💪 EJERCICIOS PRÁCTICOS
+│   ├── _quarto.yml                        # Configuración específica
+│   ├── tema*_*.qmd                        # Ejercicios por tema
+│   ├── ejercicios_avanzados.qmd          # Ejercicios avanzados
+│   ├── generar_ejercicios.R              # Script de generación PDF
+│   ├── portada.qmd                        # Portada de ejercicios
+│   └── ejercicios_pdf/                    # 📋 Salida de ejercicios
+│       └── EjerciciosModelosEstadisticosPrediccion.pdf
 │
-├── guia_estudio/                # Guía de estudio compacta
-│   ├── generar_guia.R           # Script para guía PDF profesional
-│   ├── guia_estudio.qmd         # Guía principal
-│   ├── portada.html             # Portada de la guía
-│   ├── guia_estudio.pdf         # PDF básico generado
-│   └── GuiaEstudioModelosEstadisticosPrediccion.pdf  # PDF con portada profesional
+├── ejercicios_resueltos/                  # ✅ SOLUCIONES COMPLETAS ⭐
+│   ├── _quarto.yml                        # Configuración para HTML y PDF
+│   ├── tema*_*_soluciones.qmd            # Soluciones detalladas por tema
+│   ├── ejercicios_avanzados_soluciones.qmd # Soluciones de ejercicios avanzados
+│   ├── soluciones_globales.qmd           # Página índice de soluciones
+│   ├── generar_soluciones.R              # Script completo de generación
+│   ├── portada.qmd                        # Portada para PDF (weasyprint)
+│   ├── portada.html                       # Portada HTML para inclusión
+│   ├── collapse-handler.js               # JavaScript para secciones colapsibles
+│   ├── soluciones.css                     # Estilos específicos para soluciones
+│   ├── soluciones_html/                   # 📋 Salida HTML navegable
+│   │   ├── index.html                     # Índice principal de soluciones
+│   │   └── tema*_*_soluciones.html       # Soluciones individuales
+│   └── soluciones_pdf/                    # 📋 Salida PDF profesional
+│       └── SolucionesModelosEstadisticosPrediccion.pdf
 │
-├── laboratorios/                # Labs prácticos
-│   ├── lab0_introduccion.qmd
-│   ├── lab1_regresion_simple.qmd
-│   └── ...
+├── guia_estudio/                          # 📖 GUÍA DE ESTUDIO
+│   ├── guia_estudio.qmd                   # Contenido de la guía
+│   ├── generar_guia.R                     # Script de generación
+│   ├── portada.html                       # Portada personalizada
+│   └── GuiaEstudioModelosEstadisticosPrediccion.pdf
 │
-├── images/                      # Imágenes y logos
-├── intro/                       # Material introductorio  
-└── docs/                        # Libro HTML generado
+├── laboratorios/                          # 🔬 LABORATORIOS PRÁCTICOS
+│   ├── lab*_*.qmd                         # Laboratorios por tema
+│   └── (salida HTML individual por laboratorio)
+│
+└── images/                                # 🖼️ RECURSOS GRÁFICOS
+    ├── DSLab_logo_*.png                   # Logos institucionales
+    ├── URJC_logo.png                      # Logo universidad
+    └── (otras imágenes del curso)
 ```
 
-## 🎯 Flujos de Trabajo Comunes
+### 🎯 Puntos de Entrada Principales
 
-### Para el Docente
+| **Propósito** | **Comando de Generación** | **Archivo Final** |
+|---------------|----------------------------|-------------------|
+| **Libro Web** | `quarto render --to html` | `docs/index.html` |
+| **Apuntes PDF** | `Rscript -e "source('apuntes/generar_apuntes.R'); crear_libro_completo()"` | `apuntes/apuntes_pdf/ApuntesModelosEstadisticosPrediccion.pdf` |
+| **Diapositivas** | `Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); crear()"` | `diapositivas/diapositivas_pdf/DiapositivasModelosEstadisticosPrediccion.pdf` |
+| **Ejercicios** | `Rscript -e "source('ejercicios/generar_ejercicios.R'); crear_ejercicios_completos()"` | `ejercicios/ejercicios_pdf/EjerciciosModelosEstadisticosPrediccion.pdf` |
+| **Soluciones HTML** | `Rscript -e "source('ejercicios_resueltos/generar_soluciones.R'); generar_todas_soluciones()"` | `ejercicios_resueltos/soluciones_html/index.html` |
+| **Soluciones PDF** | `Rscript -e "source('ejercicios_resueltos/generar_soluciones.R'); crear_soluciones_completas()"` | `ejercicios_resueltos/soluciones_pdf/SolucionesModelosEstadisticosPrediccion.pdf` |
+| **Guía Estudio** | `Rscript -e "source('guia_estudio/generar_guia.R'); crear_guia_completa()"` | `guia_estudio/GuiaEstudioModelosEstadisticosPrediccion.pdf` |
 
+### 📝 Scripts de Generación Automática
+
+El proyecto incluye **6 scripts principales** que automatizan completamente la generación:
+
+1. **`apuntes/generar_apuntes.R`** - Libro PDF con portada profesional
+2. **`diapositivas/crear_diapositivas_completas.R`** - Diapositivas unificadas con bookmarks
+3. **`ejercicios/generar_ejercicios.R`** - Ejercicios PDF con portada y LaTeX
+4. **`ejercicios_resueltos/generar_soluciones.R`** - Soluciones HTML y PDF completas ⭐
+5. **`guia_estudio/generar_guia.R`** - Guía de estudio con portada
+6. **Quarto nativo** - Libro web y laboratorios individuales
+
+## 🚀 Flujo de Trabajo Típico
+
+### Para estudiantes:
 ```bash
-# 1. Actualizar todo el contenido automáticamente
-quarto render --to html                  # Libro HTML
-Rscript -e "source('apuntes/generar_libro.R'); crear_libro_completo()"  # Libro PDF profesional
-Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); crear()"  # Diapositivas
-Rscript -e "source('ejercicios/generar_ejercicios.R'); crear_ejercicios_completos()"  # Ejercicios
-Rscript -e "source('guia_estudio/generar_guia.R'); crear_guia_completa()"  # Guía de estudio
-cd ejercicios/soluciones && quarto render --to html  # Soluciones de ejercicios
-cd laboratorios && quarto render --to html  # Laboratorios
-
-# 2. Solo actualizar diapositivas para clase
-Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); crear()"
-
-# 3. Solo actualizar soluciones
-cd ejercicios/soluciones && quarto render --to html
-```
-
-### Para el Estudiante
-
-```bash
-# 1. Generar libro de estudio (HTML navegable)
+# 1. Libro web para consulta diaria
 quarto render --to html
 
-# 2. Generar libro PDF para imprimir
-Rscript -e "source('apuntes/generar_libro.R'); crear_libro_completo()"
+# 2. Soluciones HTML para práctica
+Rscript -e "source('ejercicios_resueltos/generar_soluciones.R'); generar_todas_soluciones()"
 
-# 3. Generar guía de estudio compacta
-Rscript -e "source('guia_estudio/generar_guia.R'); crear_guia_completa()"
-
-# 4. Generar ejercicios para imprimir  
-Rscript -e "source('ejercicios/generar_ejercicios.R'); crear_ejercicios_completos()"
-
-# 5. Consultar soluciones de ejercicios
-cd ejercicios/soluciones && quarto render --to html
-
-# 6. Generar laboratorios interactivos
-cd laboratorios && quarto render --to html
+# 3. Abrir soluciones en navegador
+Rscript -e "source('ejercicios_resueltos/generar_soluciones.R'); abrir_soluciones()"
 ```
+
+### Para profesores/distribución:
+```bash
+# Generar todos los PDFs profesionales
+Rscript -e "source('apuntes/generar_apuntes.R'); crear_libro_completo()"
+Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); crear()"
+Rscript -e "source('ejercicios/generar_ejercicios.R'); crear_ejercicios_completos()"
+Rscript -e "source('ejercicios_resueltos/generar_soluciones.R'); crear_soluciones_completas()"
+Rscript -e "source('guia_estudio/generar_guia.R'); crear_guia_completa()"
+```
+
+## 🎨 Características Técnicas
+
+### Diseño y Estilos
+- **Diseño unificado** con logo institucional (DSLAB + URJC)
+- **Paleta de colores consistente** (azul URJC #003366)
+- **Tipografía profesional** con fuentes system-ui optimizadas
+- **Responsive design** para dispositivos móviles
+
+### Funcionalidades Avanzadas
+- **Búsqueda integrada** en el libro web
+- **Navegación por bookmarks** en PDFs
+- **Secciones colapsibles** en soluciones HTML
+- **Fórmulas LaTeX** renderizadas correctamente
+- **Código R ejecutable** con salidas incluidas
+- **Enlaces cruzados** entre secciones
+
+### Optimizaciones
+- **PDFs optimizados** para impresión y distribución
+- **HTML auto-contenido** (embed-resources) para distribución offline
+- **Manipulación avanzada de PDFs** con portadas separadas
+- **Control de calidad** con validación automática de código
 
 ## 🐛 Solución de Problemas
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es-ES" xml:lang="es-ES"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.8.21">
@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Selección de variables, Regularización y Validación – Problemas de Modelos Estadísticos para la Predicción</title>
+<title>4&nbsp; Selección de variables, Regularización y Validación – Problemas de Modelos Estadísticos para la Predicción</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -148,7 +148,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema4_seleccion_validacion_soluciones.html"><span class="chapter-title">Selección de variables, Regularización y Validación</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema4_seleccion_validacion_soluciones.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Selección de variables, Regularización y Validación</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -183,32 +183,38 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema1_regresion_simple_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Regresión Lineal Simple</span></a>
+  <a href="./tema1_regresion_simple_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Regresión Lineal Simple</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Regresión Lineal Múltiple</span></a>
+  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Regresión Lineal Múltiple</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ingeniería de Características</span></a>
+  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Ingeniería de Características</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Selección de variables, Regularización y Validación</span></a>
+  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Selección de variables, Regularización y Validación</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Modelos de Regresión Generalizada</span></a>
+  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelos de Regresión Generalizada</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ejercicios Avanzados</span></a>
+  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Ejercicios Avanzados</span></span></a>
   </div>
 </li>
     </ul>
@@ -221,25 +227,129 @@ window.Quarto = {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#ejercicio-1-conceptual-sobreajuste-vs.-subajuste" id="toc-ejercicio-1-conceptual-sobreajuste-vs.-subajuste" class="nav-link active" data-scroll-target="#ejercicio-1-conceptual-sobreajuste-vs.-subajuste">Ejercicio 1: Conceptual (Sobreajuste vs.&nbsp;Subajuste)</a></li>
-  <li><a href="#ejercicio-2-práctico-filtrado-básico" id="toc-ejercicio-2-práctico-filtrado-básico" class="nav-link" data-scroll-target="#ejercicio-2-práctico-filtrado-básico">Ejercicio 2: Práctico (Filtrado Básico)</a></li>
-  <li><a href="#ejercicio-3-conceptual-aic-vs.-bic" id="toc-ejercicio-3-conceptual-aic-vs.-bic" class="nav-link" data-scroll-target="#ejercicio-3-conceptual-aic-vs.-bic">Ejercicio 3: Conceptual (AIC vs.&nbsp;BIC)</a></li>
-  <li><a href="#ejercicio-4-práctico-best-subset-y-criterios-de-información" id="toc-ejercicio-4-práctico-best-subset-y-criterios-de-información" class="nav-link" data-scroll-target="#ejercicio-4-práctico-best-subset-y-criterios-de-información">Ejercicio 4: Práctico (Best Subset y Criterios de Información)</a></li>
-  <li><a href="#ejercicio-5-conceptual-métodos-stepwise" id="toc-ejercicio-5-conceptual-métodos-stepwise" class="nav-link" data-scroll-target="#ejercicio-5-conceptual-métodos-stepwise">Ejercicio 5: Conceptual (Métodos Stepwise)</a></li>
-  <li><a href="#ejercicio-6-práctico-selección-backward-stepwise" id="toc-ejercicio-6-práctico-selección-backward-stepwise" class="nav-link" data-scroll-target="#ejercicio-6-práctico-selección-backward-stepwise">Ejercicio 6: Práctico (Selección Backward Stepwise)</a></li>
-  <li><a href="#ejercicio-7-conceptual-ridge-vs.-lasso" id="toc-ejercicio-7-conceptual-ridge-vs.-lasso" class="nav-link" data-scroll-target="#ejercicio-7-conceptual-ridge-vs.-lasso">Ejercicio 7: Conceptual (Ridge vs.&nbsp;Lasso)</a></li>
-  <li><a href="#ejercicio-8-práctico-regresión-lasso" id="toc-ejercicio-8-práctico-regresión-lasso" class="nav-link" data-scroll-target="#ejercicio-8-práctico-regresión-lasso">Ejercicio 8: Práctico (Regresión Lasso)</a></li>
-  <li><a href="#ejercicio-9-conceptual-validación" id="toc-ejercicio-9-conceptual-validación" class="nav-link" data-scroll-target="#ejercicio-9-conceptual-validación">Ejercicio 9: Conceptual (Validación)</a></li>
-  <li><a href="#ejercicio-10-práctico-validación-cruzada" id="toc-ejercicio-10-práctico-validación-cruzada" class="nav-link" data-scroll-target="#ejercicio-10-práctico-validación-cruzada">Ejercicio 10: Práctico (Validación Cruzada)</a></li>
+  <li><a href="#ejercicio-1-conceptual-sobreajuste-vs.-subajuste" id="toc-ejercicio-1-conceptual-sobreajuste-vs.-subajuste" class="nav-link active" data-scroll-target="#ejercicio-1-conceptual-sobreajuste-vs.-subajuste"><span class="header-section-number">4.1</span> Ejercicio 1: Conceptual (Sobreajuste vs.&nbsp;Subajuste)</a></li>
+  <li><a href="#ejercicio-2-práctico-filtrado-básico" id="toc-ejercicio-2-práctico-filtrado-básico" class="nav-link" data-scroll-target="#ejercicio-2-práctico-filtrado-básico"><span class="header-section-number">4.2</span> Ejercicio 2: Práctico (Filtrado Básico)</a></li>
+  <li><a href="#ejercicio-3-conceptual-aic-vs.-bic" id="toc-ejercicio-3-conceptual-aic-vs.-bic" class="nav-link" data-scroll-target="#ejercicio-3-conceptual-aic-vs.-bic"><span class="header-section-number">4.3</span> Ejercicio 3: Conceptual (AIC vs.&nbsp;BIC)</a></li>
+  <li><a href="#ejercicio-4-práctico-best-subset-y-criterios-de-información" id="toc-ejercicio-4-práctico-best-subset-y-criterios-de-información" class="nav-link" data-scroll-target="#ejercicio-4-práctico-best-subset-y-criterios-de-información"><span class="header-section-number">4.4</span> Ejercicio 4: Práctico (Best Subset y Criterios de Información)</a></li>
+  <li><a href="#ejercicio-5-conceptual-métodos-stepwise" id="toc-ejercicio-5-conceptual-métodos-stepwise" class="nav-link" data-scroll-target="#ejercicio-5-conceptual-métodos-stepwise"><span class="header-section-number">4.5</span> Ejercicio 5: Conceptual (Métodos Stepwise)</a></li>
+  <li><a href="#ejercicio-6-práctico-selección-backward-stepwise" id="toc-ejercicio-6-práctico-selección-backward-stepwise" class="nav-link" data-scroll-target="#ejercicio-6-práctico-selección-backward-stepwise"><span class="header-section-number">4.6</span> Ejercicio 6: Práctico (Selección Backward Stepwise)</a></li>
+  <li><a href="#ejercicio-7-conceptual-ridge-vs.-lasso" id="toc-ejercicio-7-conceptual-ridge-vs.-lasso" class="nav-link" data-scroll-target="#ejercicio-7-conceptual-ridge-vs.-lasso"><span class="header-section-number">4.7</span> Ejercicio 7: Conceptual (Ridge vs.&nbsp;Lasso)</a></li>
+  <li><a href="#ejercicio-8-práctico-regresión-lasso" id="toc-ejercicio-8-práctico-regresión-lasso" class="nav-link" data-scroll-target="#ejercicio-8-práctico-regresión-lasso"><span class="header-section-number">4.8</span> Ejercicio 8: Práctico (Regresión Lasso)</a></li>
+  <li><a href="#ejercicio-9-conceptual-validación" id="toc-ejercicio-9-conceptual-validación" class="nav-link" data-scroll-target="#ejercicio-9-conceptual-validación"><span class="header-section-number">4.9</span> Ejercicio 9: Conceptual (Validación)</a></li>
+  <li><a href="#ejercicio-10-práctico-validación-cruzada" id="toc-ejercicio-10-práctico-validación-cruzada" class="nav-link" data-scroll-target="#ejercicio-10-práctico-validación-cruzada"><span class="header-section-number">4.10</span> Ejercicio 10: Práctico (Validación Cruzada)</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
+<div class="portada">
+
+    <div class="portada-container">
+
+        <!-- Header -->
+
+        <div class="portada-header">
+
+            <img src="../images/urjc_logo.png" alt="Logo URJC" class="portada-logo">
+
+            
+
+            <div class="portada-escuela">
+
+                Escuela Técnica Superior de<br>
+
+                Ingeniería Informática
+
+            </div>
+
+        </div>
+
+        
+
+        <!-- Contenido principal -->
+
+        <div class="portada-main">
+
+            <h1 class="portada-titulo">
+
+                Modelos Estadísticos para la Predicción
+
+            </h1>
+
+            
+
+            <h2 class="portada-subtitulo anchored">
+
+                Ejercicios Resueltos
+
+            </h2>
+
+            
+
+            <div class="portada-grado">
+
+                Grado en Ciencia de Datos e Inteligencia Artificial
+
+            </div>
+
+            
+
+            <div class="portada-autores-section">
+
+                <div class="portada-autores-titulo">Autores</div>
+
+                <div class="portada-autor">Víctor Aceña Gil</div>
+
+                <div class="portada-autor">Isaac Martín de Diego</div>
+
+            </div>
+
+            
+
+            <div class="portada-fecha">2024-2025</div>
+
+        </div>
+
+        
+
+        <!-- Footer -->
+
+        <div class="portada-footer">
+
+            <img src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" alt="Licencia Creative Commons" class="portada-licencia-logo">
+
+            
+
+            <div class="portada-licencia-texto">
+
+                Copyright © 2024 Víctor Aceña Gil, Isaac Martín de Diego. Esta obra está licenciada bajo CC BY-SA 4.0, Creative Commons Atribución-Compartir Igual 4.0 Internacional.
+
+            </div>
+
+        </div>
+
+        
+
+        <!-- Elementos decorativos -->
+
+        <div class="portada-deco-lines">
+
+            <div class="portada-deco-line"></div>
+
+            <div class="portada-deco-line"></div>
+
+            <div class="portada-deco-line"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">Selección de variables, Regularización y Validación</span></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Selección de variables, Regularización y Validación</span></h1>
 </div>
 
 
@@ -256,8 +366,8 @@ window.Quarto = {
 </header>
 
 
-<section id="ejercicio-1-conceptual-sobreajuste-vs.-subajuste" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-1-conceptual-sobreajuste-vs.-subajuste">Ejercicio 1: Conceptual (Sobreajuste vs.&nbsp;Subajuste)</h2>
+<section id="ejercicio-1-conceptual-sobreajuste-vs.-subajuste" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="ejercicio-1-conceptual-sobreajuste-vs.-subajuste"><span class="header-section-number">4.1</span> Ejercicio 1: Conceptual (Sobreajuste vs.&nbsp;Subajuste)</h2>
 <p>Explica con tus propias palabras qué es el <strong>sobreajuste (overfitting)</strong> y el <strong>subajuste (underfitting)</strong>. Describe los síntomas de cada uno comparando el error de entrenamiento con el error de validación (o de test), y menciona la solución principal para cada problema.</p>
 <details>
 <summary>
@@ -326,8 +436,8 @@ window.Quarto = {
 </blockquote>
 </details>
 </section>
-<section id="ejercicio-2-práctico-filtrado-básico" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-2-práctico-filtrado-básico">Ejercicio 2: Práctico (Filtrado Básico)</h2>
+<section id="ejercicio-2-práctico-filtrado-básico" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="ejercicio-2-práctico-filtrado-básico"><span class="header-section-number">4.2</span> Ejercicio 2: Práctico (Filtrado Básico)</h2>
 <p>Imagina que recibes un nuevo conjunto de datos con 50 predictores para un modelo de regresión. Antes de aplicar métodos computacionalmente costosos, decides hacer un filtrado inicial. Describe los <strong>cuatro criterios básicos</strong> que aplicarías para descartar variables de forma preliminar, según lo explicado en los apuntes.</p>
 <details>
 <summary>
@@ -341,8 +451,8 @@ window.Quarto = {
 </ol>
 </details>
 </section>
-<section id="ejercicio-3-conceptual-aic-vs.-bic" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-3-conceptual-aic-vs.-bic">Ejercicio 3: Conceptual (AIC vs.&nbsp;BIC)</h2>
+<section id="ejercicio-3-conceptual-aic-vs.-bic" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="ejercicio-3-conceptual-aic-vs.-bic"><span class="header-section-number">4.3</span> Ejercicio 3: Conceptual (AIC vs.&nbsp;BIC)</h2>
 <p>Tanto el AIC como el BIC son criterios para comparar modelos, pero se basan en filosofías distintas y tienen penalizaciones diferentes.</p>
 <ol type="a">
 <li>Escribe la fórmula de la penalización por complejidad para el AIC y para el BIC.</li>
@@ -362,8 +472,8 @@ window.Quarto = {
 <p><strong>c) Para precisión predictiva:</strong> <strong>AIC</strong> es generalmente preferido para precisión predictiva porque está más orientado a minimizar el error de predicción, mientras que BIC está más orientado a encontrar el “modelo verdadero”.</p>
 </details>
 </section>
-<section id="ejercicio-4-práctico-best-subset-y-criterios-de-información" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-4-práctico-best-subset-y-criterios-de-información">Ejercicio 4: Práctico (Best Subset y Criterios de Información)</h2>
+<section id="ejercicio-4-práctico-best-subset-y-criterios-de-información" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="ejercicio-4-práctico-best-subset-y-criterios-de-información"><span class="header-section-number">4.4</span> Ejercicio 4: Práctico (Best Subset y Criterios de Información)</h2>
 <p>Usa el conjunto de datos <code>mtcars</code> y la librería <code>leaps</code>.</p>
 <ol type="a">
 <li>Utiliza la función <code>regsubsets()</code> para realizar una selección del mejor subconjunto (<code>best subset selection</code>) para predecir <code>mpg</code> usando el resto de variables.</li>
@@ -446,8 +556,8 @@ window.Quarto = {
 </div>
 </details>
 </section>
-<section id="ejercicio-5-conceptual-métodos-stepwise" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-5-conceptual-métodos-stepwise">Ejercicio 5: Conceptual (Métodos Stepwise)</h2>
+<section id="ejercicio-5-conceptual-métodos-stepwise" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="ejercicio-5-conceptual-métodos-stepwise"><span class="header-section-number">4.5</span> Ejercicio 5: Conceptual (Métodos Stepwise)</h2>
 <p>Los métodos automáticos paso a paso (forward, backward, stepwise) son computacionalmente eficientes, pero el texto advierte sobre su uso. Menciona y explica brevemente <strong>tres de las principales limitaciones o problemas</strong> de estos métodos.</p>
 <details>
 <summary>
@@ -460,8 +570,8 @@ window.Quarto = {
 </ol>
 </details>
 </section>
-<section id="ejercicio-6-práctico-selección-backward-stepwise" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-6-práctico-selección-backward-stepwise">Ejercicio 6: Práctico (Selección Backward Stepwise)</h2>
+<section id="ejercicio-6-práctico-selección-backward-stepwise" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="ejercicio-6-práctico-selección-backward-stepwise"><span class="header-section-number">4.6</span> Ejercicio 6: Práctico (Selección Backward Stepwise)</h2>
 <p>Utiliza el conjunto de datos <code>swiss</code> para predecir <code>Fertility</code>.</p>
 <ol type="a">
 <li>Ajusta el modelo completo: <code>modelo_completo &lt;- lm(Fertility ~ ., data = swiss)</code>.</li>
@@ -496,8 +606,8 @@ window.Quarto = {
 </div>
 </details>
 </section>
-<section id="ejercicio-7-conceptual-ridge-vs.-lasso" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-7-conceptual-ridge-vs.-lasso">Ejercicio 7: Conceptual (Ridge vs.&nbsp;Lasso)</h2>
+<section id="ejercicio-7-conceptual-ridge-vs.-lasso" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="ejercicio-7-conceptual-ridge-vs.-lasso"><span class="header-section-number">4.7</span> Ejercicio 7: Conceptual (Ridge vs.&nbsp;Lasso)</h2>
 <p>La regresión Ridge y Lasso son dos métodos de regularización muy populares, pero tienen un efecto fundamentalmente diferente sobre los coeficientes del modelo.</p>
 <ol type="a">
 <li>¿Qué tipo de penalización utiliza cada método (<span class="math inline">\(L_1\)</span> o <span class="math inline">\(L_2\)</span>)?</li>
@@ -517,8 +627,8 @@ window.Quarto = {
 <p><strong>c) Escenario para preferir Ridge:</strong> Cuando hay muchas variables con efectos pequeños pero reales, y queremos mantenerlas todas con coeficientes reducidos. Por ejemplo, en genómica donde miles de genes pueden tener efectos pequeños pero relevantes.</p>
 </details>
 </section>
-<section id="ejercicio-8-práctico-regresión-lasso" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-8-práctico-regresión-lasso">Ejercicio 8: Práctico (Regresión Lasso)</h2>
+<section id="ejercicio-8-práctico-regresión-lasso" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="ejercicio-8-práctico-regresión-lasso"><span class="header-section-number">4.8</span> Ejercicio 8: Práctico (Regresión Lasso)</h2>
 <p>Utiliza el paquete <code>glmnet</code> y el conjunto de datos <code>mtcars</code> para predecir <code>mpg</code>.</p>
 <ol type="a">
 <li>Prepara los datos: crea una matriz <code>x</code> para los predictores y un vector <code>y</code> para la respuesta.</li>
@@ -594,8 +704,8 @@ carb         .         </code></pre>
 </div>
 </details>
 </section>
-<section id="ejercicio-9-conceptual-validación" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-9-conceptual-validación">Ejercicio 9: Conceptual (Validación)</h2>
+<section id="ejercicio-9-conceptual-validación" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="ejercicio-9-conceptual-validación"><span class="header-section-number">4.9</span> Ejercicio 9: Conceptual (Validación)</h2>
 <p>Explica la diferencia entre la estrategia de validación <strong>Train/Test Split simple</strong> y la <strong>Validación Cruzada k-fold</strong>. ¿Cuál es la principal ventaja de la validación cruzada sobre la división simple? ¿En qué situación (tamaño del dataset) recomendarías usar cada una?</p>
 <details>
 <summary>
@@ -621,8 +731,8 @@ carb         .         </code></pre>
 </ul>
 </details>
 </section>
-<section id="ejercicio-10-práctico-validación-cruzada" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-10-práctico-validación-cruzada">Ejercicio 10: Práctico (Validación Cruzada)</h2>
+<section id="ejercicio-10-práctico-validación-cruzada" class="level2" data-number="4.10">
+<h2 data-number="4.10" class="anchored" data-anchor-id="ejercicio-10-práctico-validación-cruzada"><span class="header-section-number">4.10</span> Ejercicio 10: Práctico (Validación Cruzada)</h2>
 <p>Imagina que has ajustado dos modelos para predecir <code>mpg</code> en el dataset <code>mtcars</code>: 1. Un modelo simple: <code>mpg ~ wt + hp</code> 2. Un modelo complejo: <code>mpg ~ .</code> (todas las variables)</p>
 <p>Utilizando la librería <code>caret</code> y la función <code>train()</code>, como se muestra en el <code>callout-tip</code> “La maldición del sobreajuste”, configura y ejecuta una <strong>validación cruzada de 10 particiones</strong> para estimar el <strong>RMSE</strong> de ambos modelos. ¿Cuál de los dos modelos generaliza mejor a nuevos datos según esta estimación?</p>
 <details>
@@ -1097,12 +1207,12 @@ carb         .         </code></pre>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="pagination-link" aria-label="Ingeniería de Características">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Ingeniería de Características</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Ingeniería de Características</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./tema5_glm_soluciones.html" class="pagination-link" aria-label="Modelos de Regresión Generalizada">
-        <span class="nav-page-text"><span class="chapter-title">Modelos de Regresión Generalizada</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelos de Regresión Generalizada</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

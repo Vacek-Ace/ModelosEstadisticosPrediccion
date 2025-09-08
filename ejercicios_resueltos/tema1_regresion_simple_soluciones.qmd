@@ -91,11 +91,11 @@ La forma más eficiente de analizar el modelo es observar directamente la salida
 
 A partir de esta salida, interpretamos:
 
-- **c) Coeficiente de determinación R²**: El valor de `Multiple R-squared` es **0.5742**. Esto significa que la temperatura explica el **57.42%** de la variabilidad en la presión.
+ **c) Coeficiente de determinación R²**: El valor de `Multiple R-squared` es **0.5742**. Esto significa que la temperatura explica el **57.42%** de la variabilidad en la presión.
 
-- **d) p-valor del estadístico F**: En la última línea, el `p-value` del `F-statistic` es **0.000171**. Al ser un valor muy inferior a 0.05, rechazamos la hipótesis nula ($H_0$) de que el modelo no tiene capacidad predictiva. Concluimos que **el modelo es globalmente significativo**.
+ **d) p-valor del estadístico F**: En la última línea, el `p-value` del `F-statistic` es **0.000171**. Al ser un valor muy inferior a 0.05, rechazamos la hipótesis nula ($H_0$) de que el modelo no tiene capacidad predictiva. Concluimos que **el modelo es globalmente significativo**.
 
-- **e) Significancia del coeficiente**: En la tabla de coeficientes, el p-valor (`Pr(>|t|)`) para `temperature` es **0.000171**. Rechazamos la hipótesis nula ($H_0: \beta_1 = 0$) y concluimos que la temperatura tiene una **relación estadísticamente significativa** con la presión.
+ **e) Significancia del coeficiente**: En la tabla de coeficientes, el p-valor (`Pr(>|t|)`) para `temperature` es **0.000171**. Rechazamos la hipótesis nula ($H_0: \beta_1 = 0$) y concluimos que la temperatura tiene una **relación estadísticamente significativa** con la presión.
 
 
 </details>

@@ -6,8 +6,8 @@ book:
   title: "Problemas de Modelos Estadísticos para la Predicción"
   subtitle: "Ejercicios resueltos paso a paso"
   author: 
-    - name: "Víctor Aceña Gil"
-    - name: "Isaac Martín de Diego"
+    - "Víctor Aceña Gil"
+    - "Isaac Martín de Diego"
   date: last-modified
   search: true
   chapters:
@@ -18,13 +18,17 @@ book:
     - tema4_seleccion_validacion_soluciones.qmd
     - tema5_glm_soluciones.qmd
     - ejercicios_avanzados_soluciones.qmd
-  cover-image: ../../../images/DSLab_logo_2.png
+  cover-image: ../../images/DSLab_logo_2.png
 
 format:
   html:
     theme: cerulean
-    lang: es
+    lang: es-ES
     css: soluciones.css
+    include-before-body: portada.html
+  pdf:
+    documentclass: scrreprt
+    toc-title: "Índice de Soluciones"
     number-sections: false
 
 editor: source
