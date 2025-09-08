@@ -18,12 +18,13 @@ book:
     - tema4_seleccion_validacion_soluciones.qmd
     - tema5_glm_soluciones.qmd
     - ejercicios_avanzados_soluciones.qmd
-  cover-image: ../../images/DSLab_logo_2.png
+  cover-image: ../../../images/DSLab_logo_2.png
 
 format:
   html:
     theme: cerulean
     lang: es
     css: soluciones.css
+    number-sections: false
 
 editor: source

@@ -1,4 +1,4 @@
-# Soluciones: Regresión Lineal Simple
+# Regresión Lineal Simple
 
 En este capítulo encontrarás las soluciones detalladas a todos los ejercicios del Tema 1. Cada ejercicio incluye tanto el enunciado como la solución completa con código R y explicaciones teóricas.
 
@@ -13,23 +13,23 @@ Intenta resolver cada ejercicio por tu cuenta antes de consultar la solución. L
 Basándote en el texto, explica con tus propias palabras por qué un coeficiente de correlación de Pearson ($r$) alto no es suficiente para modelar una relación y por qué la regresión lineal es un paso más allá. Menciona al menos dos cosas que el modelo de regresión proporciona y que la correlación por sí sola no ofrece. 
 
 <details>
-<summary><strong>👁️ Ver Solución</strong></summary>
+<summary></summary>
 
 La correlación de Pearson ($r$) solo mide la **fuerza y dirección** de una relación lineal entre dos variables, pero no es suficiente para modelar porque:
 
-1. **No proporciona un modelo predictivo**: La correlación solo nos dice qué tan relacionadas están las variables, pero no nos permite hacer predicciones específicas sobre una variable a partir de la otra.
+  1. **No proporciona un modelo predictivo**: La correlación solo nos dice qué tan relacionadas están las variables, pero no nos permite hacer predicciones específicas sobre una variable a partir de la otra.
 
-2. **No cuantifica el cambio**: No nos dice cuánto cambia una variable cuando la otra cambia en una unidad específica.
+  2. **No cuantifica el cambio**: No nos dice cuánto cambia una variable cuando la otra cambia en una unidad específica.
 
 La regresión lineal va más allá porque proporciona:
 
-1. **Capacidad predictiva**: Permite predecir valores específicos de la variable dependiente para valores dados de la independiente.
+  1. **Capacidad predictiva**: Permite predecir valores específicos de la variable dependiente para valores dados de la independiente.
 
-2. **Cuantificación del cambio**: Los coeficientes nos dicen exactamente cuánto cambia Y por cada unidad de cambio en X.
+  2. **Cuantificación del cambio**: Los coeficientes nos dicen exactamente cuánto cambia Y por cada unidad de cambio en X.
 
-3. **Intervalos de confianza y predicción**: Permite cuantificar la incertidumbre de nuestras estimaciones.
+  3. **Intervalos de confianza y predicción**: Permite cuantificar la incertidumbre de nuestras estimaciones.
 
-4. **Marco para inferencia estadística**: Permite realizar pruebas de hipótesis sobre la significancia de la relación.
+  4. **Marco para inferencia estadística**: Permite realizar pruebas de hipótesis sobre la significancia de la relación.
 
 </details>
 
@@ -44,7 +44,7 @@ b) Interpreta el significado de la pendiente (12) en el contexto específico de 
 c) Interpreta el significado del intercepto (1500). ¿Crees que esta interpretación tiene sentido práctico en el mundo real? ¿Por qué? 
 
 <details>
-<summary><strong>👁️ Ver Solución</strong></summary>
+<summary></summary>
 
 **a) Gasto predicho para un cliente de 30 años:**
 ```{r}
@@ -62,7 +62,7 @@ Representa el gasto predicho para un cliente de 0 años, que sería 1500 euros. 
 - Estamos extrapolando fuera del rango de datos observados
 - El modelo probablemente no es válido para edades tan bajas
 
-:::
+</details>
 
 ### Ejercicio 3: Aplicación Práctica con R (Ajuste e Inferencia)
 
@@ -75,7 +75,7 @@ d) Interpreta el **p-valor del estadístico F**. ¿Es el modelo útil en su conj
 e) ¿Es el coeficiente de la temperatura estadísticamente significativo a un nivel de $\alpha = 0.05$? Justifica tu respuesta basándote en el p-valor del test t. 
 
 <details>
-<summary><strong>👁️ Ver Solución</strong></summary>
+<summary></summary>
 
 
 ```{r}
@@ -120,7 +120,7 @@ b) Calcula el **intervalo de predicción al 95%** para la presión de una *únic
 c) ¿Cuál de los dos intervalos es más ancho? Explica la razón teórica de esta diferencia.
 
 <details>
-<summary><strong>👁️ Ver Solución</strong></summary>
+<summary></summary>
 
 
 ```{r}
@@ -156,7 +156,7 @@ El **intervalo de predicción es más ancho** porque incluye dos fuentes de ince
 Enumera los cuatro supuestos del modelo de regresión lineal clásico (también conocidos como supuestos de Gauss-Markov) y explica brevemente la importancia de cada uno.
 
 <details>
-<summary><strong>👁️ Ver Solución</strong></summary>
+<summary></summary>
 
 
 Los **cuatro supuestos de Gauss-Markov** son:
@@ -180,7 +180,7 @@ a) Genera y muestra el gráfico de **Residuos vs. Valores Ajustados**. Basándot
 b) Genera y muestra el gráfico **Scale-Location**. Basándote en este gráfico, ¿se cumple el supuesto de **homocedasticidad**? Describe el patrón que indicaría un problema de heterocedasticidad.
 
 <details>
-<summary><strong>👁️ Ver Solución</strong></summary>
+<summary></summary>
 
 
 ```{r}
@@ -209,7 +209,7 @@ a) Genera un gráfico **Normal Q-Q** de los residuos. ¿Parecen seguir los resid
 b) Realiza un **test de Shapiro-Wilk** sobre los residuos del modelo. ¿Qué concluyes a partir del p-valor? 
 
 <details>
-<summary><strong>👁️ Ver Solución</strong></summary>
+<summary></summary>
 
 
 ```{r}
@@ -235,7 +235,7 @@ print(shapiro_test)
 Explica qué representan la **Suma de Cuadrados Total (SST)**, la **Suma de Cuadrados de la Regresión (SSR)** y la **Suma de Cuadrados del Error (SSE)**. ¿Cuál es la ecuación fundamental que las relaciona? 
 
 <details>
-<summary><strong>👁️ Ver Solución</strong></summary>
+<summary></summary>
 
 
 - **SST (Suma de Cuadrados Total)**: Mide la variabilidad total en Y alrededor de su media. $SST = \sum(y_i - \bar{y})^2$
@@ -259,7 +259,7 @@ a) Explica la diferencia entre un residuo simple ($e_i$), un residuo estandariza
 b) ¿Qué mide el **leverage** ($h_{ii}$)? ¿Y la **distancia de Cook** ($D_i$)? ¿Puede una observación tener un leverage alto y no ser influyente?
 
 <details>
-<summary><strong>👁️ Ver Solución</strong></summary>
+<summary></summary>
 
 
 **a) Tipos de residuos:**
@@ -288,7 +288,7 @@ Los **estudentizados se prefieren** porque tienen propiedades estadísticas más
 En el contexto **exclusivo** de la regresión lineal simple, ¿qué relación matemática existe entre el estadístico **F** del test ANOVA y el estadístico **t** del test para la pendiente $\beta_1$? ¿Qué implica esto para sus respectivos p-valores?
 
 <details>
-<summary><strong>👁️ Ver Solución</strong></summary>
+<summary></summary>
 
 
 En regresión lineal simple, existe una relación matemática exacta:

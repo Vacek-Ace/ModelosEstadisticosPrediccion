@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3&nbsp; Ingeniería de Características – Problemas de Modelos Estadísticos para la Predicción</title>
+<title>Ingeniería de Características – Problemas de Modelos Estadísticos para la Predicción</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -113,7 +113,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema3_ingenieria_caracteristicas_soluciones.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title"><strong>Ingeniería de Características</strong></span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema3_ingenieria_caracteristicas_soluciones.html"><span class="chapter-title"><strong>Ingeniería de Características</strong></span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -148,38 +148,32 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema1_regresion_simple_soluciones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Soluciones: Regresión Lineal Simple</span></span></a>
+  <a href="./tema1_regresion_simple_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Regresión Lineal Simple</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title"><strong>Regresión Lineal Múltiple</strong></span></span></a>
+  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Regresión Lineal Múltiple</strong></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title"><strong>Ingeniería de Características</strong></span></span></a>
+  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title"><strong>Ingeniería de Características</strong></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><strong>Selección de variables, Regularización y Validación</strong></span></span></a>
+  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Selección de variables, Regularización y Validación</strong></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></span></a>
+  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Ejercicios: Popurrí</span></span></a>
+  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ejercicios: Popurrí</span></a>
   </div>
 </li>
     </ul>
@@ -192,16 +186,16 @@ window.Quarto = {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#ejercicio-1-conceptual-diagnóstico-antes-de-transformar" id="toc-ejercicio-1-conceptual-diagnóstico-antes-de-transformar" class="nav-link active" data-scroll-target="#ejercicio-1-conceptual-diagnóstico-antes-de-transformar"><span class="header-section-number">3.1</span> Ejercicio 1: Conceptual (Diagnóstico antes de Transformar)</a></li>
-  <li><a href="#ejercicio-2-práctico-escalado-de-variables" id="toc-ejercicio-2-práctico-escalado-de-variables" class="nav-link" data-scroll-target="#ejercicio-2-práctico-escalado-de-variables"><span class="header-section-number">3.2</span> Ejercicio 2: Práctico (Escalado de Variables)</a></li>
-  <li><a href="#ejercicio-3-conceptual-elección-del-método-de-escalado" id="toc-ejercicio-3-conceptual-elección-del-método-de-escalado" class="nav-link" data-scroll-target="#ejercicio-3-conceptual-elección-del-método-de-escalado"><span class="header-section-number">3.3</span> Ejercicio 3: Conceptual (Elección del Método de Escalado)</a></li>
-  <li><a href="#ejercicio-4-práctico-transformación-para-linealizar" id="toc-ejercicio-4-práctico-transformación-para-linealizar" class="nav-link" data-scroll-target="#ejercicio-4-práctico-transformación-para-linealizar"><span class="header-section-number">3.4</span> Ejercicio 4: Práctico (Transformación para Linealizar)</a></li>
-  <li><a href="#ejercicio-5-práctico-transformación-de-box-cox" id="toc-ejercicio-5-práctico-transformación-de-box-cox" class="nav-link" data-scroll-target="#ejercicio-5-práctico-transformación-de-box-cox"><span class="header-section-number">3.5</span> Ejercicio 5: Práctico (Transformación de Box-Cox)</a></li>
-  <li><a href="#ejercicio-6-conceptual-codificación-de-variables-categóricas" id="toc-ejercicio-6-conceptual-codificación-de-variables-categóricas" class="nav-link" data-scroll-target="#ejercicio-6-conceptual-codificación-de-variables-categóricas"><span class="header-section-number">3.6</span> Ejercicio 6: Conceptual (Codificación de Variables Categóricas)</a></li>
-  <li><a href="#ejercicio-7-práctico-interacción-entre-variables-continuas" id="toc-ejercicio-7-práctico-interacción-entre-variables-continuas" class="nav-link" data-scroll-target="#ejercicio-7-práctico-interacción-entre-variables-continuas"><span class="header-section-number">3.7</span> Ejercicio 7: Práctico (Interacción entre Variables Continuas)</a></li>
-  <li><a href="#ejercicio-8-interpretación-de-una-interacción-continua-x-categórica" id="toc-ejercicio-8-interpretación-de-una-interacción-continua-x-categórica" class="nav-link" data-scroll-target="#ejercicio-8-interpretación-de-una-interacción-continua-x-categórica"><span class="header-section-number">3.8</span> Ejercicio 8: Interpretación de una Interacción (Continua x Categórica)</a></li>
-  <li><a href="#ejercicio-9-conceptual-principio-de-jerarquía" id="toc-ejercicio-9-conceptual-principio-de-jerarquía" class="nav-link" data-scroll-target="#ejercicio-9-conceptual-principio-de-jerarquía"><span class="header-section-number">3.9</span> Ejercicio 9: Conceptual (Principio de Jerarquía)</a></li>
-  <li><a href="#ejercicio-10-conceptual-ingeniería-de-características-avanzada" id="toc-ejercicio-10-conceptual-ingeniería-de-características-avanzada" class="nav-link" data-scroll-target="#ejercicio-10-conceptual-ingeniería-de-características-avanzada"><span class="header-section-number">3.10</span> Ejercicio 10: Conceptual (Ingeniería de Características Avanzada)</a></li>
+  <li><a href="#ejercicio-1-conceptual-diagnóstico-antes-de-transformar" id="toc-ejercicio-1-conceptual-diagnóstico-antes-de-transformar" class="nav-link active" data-scroll-target="#ejercicio-1-conceptual-diagnóstico-antes-de-transformar">Ejercicio 1: Conceptual (Diagnóstico antes de Transformar)</a></li>
+  <li><a href="#ejercicio-2-práctico-escalado-de-variables" id="toc-ejercicio-2-práctico-escalado-de-variables" class="nav-link" data-scroll-target="#ejercicio-2-práctico-escalado-de-variables">Ejercicio 2: Práctico (Escalado de Variables)</a></li>
+  <li><a href="#ejercicio-3-conceptual-elección-del-método-de-escalado" id="toc-ejercicio-3-conceptual-elección-del-método-de-escalado" class="nav-link" data-scroll-target="#ejercicio-3-conceptual-elección-del-método-de-escalado">Ejercicio 3: Conceptual (Elección del Método de Escalado)</a></li>
+  <li><a href="#ejercicio-4-práctico-transformación-para-linealizar" id="toc-ejercicio-4-práctico-transformación-para-linealizar" class="nav-link" data-scroll-target="#ejercicio-4-práctico-transformación-para-linealizar">Ejercicio 4: Práctico (Transformación para Linealizar)</a></li>
+  <li><a href="#ejercicio-5-práctico-transformación-de-box-cox" id="toc-ejercicio-5-práctico-transformación-de-box-cox" class="nav-link" data-scroll-target="#ejercicio-5-práctico-transformación-de-box-cox">Ejercicio 5: Práctico (Transformación de Box-Cox)</a></li>
+  <li><a href="#ejercicio-6-conceptual-codificación-de-variables-categóricas" id="toc-ejercicio-6-conceptual-codificación-de-variables-categóricas" class="nav-link" data-scroll-target="#ejercicio-6-conceptual-codificación-de-variables-categóricas">Ejercicio 6: Conceptual (Codificación de Variables Categóricas)</a></li>
+  <li><a href="#ejercicio-7-práctico-interacción-entre-variables-continuas" id="toc-ejercicio-7-práctico-interacción-entre-variables-continuas" class="nav-link" data-scroll-target="#ejercicio-7-práctico-interacción-entre-variables-continuas">Ejercicio 7: Práctico (Interacción entre Variables Continuas)</a></li>
+  <li><a href="#ejercicio-8-interpretación-de-una-interacción-continua-x-categórica" id="toc-ejercicio-8-interpretación-de-una-interacción-continua-x-categórica" class="nav-link" data-scroll-target="#ejercicio-8-interpretación-de-una-interacción-continua-x-categórica">Ejercicio 8: Interpretación de una Interacción (Continua x Categórica)</a></li>
+  <li><a href="#ejercicio-9-conceptual-principio-de-jerarquía" id="toc-ejercicio-9-conceptual-principio-de-jerarquía" class="nav-link" data-scroll-target="#ejercicio-9-conceptual-principio-de-jerarquía">Ejercicio 9: Conceptual (Principio de Jerarquía)</a></li>
+  <li><a href="#ejercicio-10-conceptual-ingeniería-de-características-avanzada" id="toc-ejercicio-10-conceptual-ingeniería-de-características-avanzada" class="nav-link" data-scroll-target="#ejercicio-10-conceptual-ingeniería-de-características-avanzada">Ejercicio 10: Conceptual (Ingeniería de Características Avanzada)</a></li>
   </ul>
 </nav>
     </div>
@@ -210,7 +204,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title"><strong>Ingeniería de Características</strong></span></h1>
+<h1 class="title"><span class="chapter-title"><strong>Ingeniería de Características</strong></span></h1>
 </div>
 
 
@@ -242,12 +236,12 @@ execute:
   warning: false
   message: false
 --- -->
-<section id="ejercicio-1-conceptual-diagnóstico-antes-de-transformar" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="ejercicio-1-conceptual-diagnóstico-antes-de-transformar"><span class="header-section-number">3.1</span> Ejercicio 1: Conceptual (Diagnóstico antes de Transformar)</h2>
+<section id="ejercicio-1-conceptual-diagnóstico-antes-de-transformar" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-1-conceptual-diagnóstico-antes-de-transformar">Ejercicio 1: Conceptual (Diagnóstico antes de Transformar)</h2>
 <p>El texto desaconseja fuertemente el enfoque de “ensayo y error” al aplicar transformaciones. Explica con tus propias palabras por qué la práctica de probar transformaciones hasta que mejore el R² es metodológicamente peligrosa. Menciona al menos tres de los riesgos específicos discutidos en los apuntes.</p>
 </section>
-<section id="ejercicio-2-práctico-escalado-de-variables" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="ejercicio-2-práctico-escalado-de-variables"><span class="header-section-number">3.2</span> Ejercicio 2: Práctico (Escalado de Variables)</h2>
+<section id="ejercicio-2-práctico-escalado-de-variables" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-2-práctico-escalado-de-variables">Ejercicio 2: Práctico (Escalado de Variables)</h2>
 <p>Utiliza el dataset <code>iris</code> de R y céntrate en las cuatro variables predictoras continuas (<code>Sepal.Length</code>, <code>Sepal.Width</code>, <code>Petal.Length</code>, <code>Petal.Width</code>).</p>
 <ol type="a">
 <li>Calcula la media y la desviación estándar de estas cuatro variables en su escala original. ¿Son sus escalas directamente comparables?</li>
@@ -255,8 +249,8 @@ execute:
 <li>¿Por qué este paso de escalado es crucial antes de aplicar métodos de regularización como Ridge o Lasso, tal y como se menciona en el texto?</li>
 </ol>
 </section>
-<section id="ejercicio-3-conceptual-elección-del-método-de-escalado" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="ejercicio-3-conceptual-elección-del-método-de-escalado"><span class="header-section-number">3.3</span> Ejercicio 3: Conceptual (Elección del Método de Escalado)</h2>
+<section id="ejercicio-3-conceptual-elección-del-método-de-escalado" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-3-conceptual-elección-del-método-de-escalado">Ejercicio 3: Conceptual (Elección del Método de Escalado)</h2>
 <p>Describe un escenario hipotético para cada uno de los siguientes casos, explicando por qué el método de escalado elegido sería el más apropiado:</p>
 <ol type="a">
 <li>Un escenario donde la <strong>estandarización Z-Score</strong> es preferible.</li>
@@ -264,8 +258,8 @@ execute:
 <li>Un escenario donde el <strong>escalado robusto</strong> (usando mediana y IQR) es necesario.</li>
 </ol>
 </section>
-<section id="ejercicio-4-práctico-transformación-para-linealizar" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="ejercicio-4-práctico-transformación-para-linealizar"><span class="header-section-number">3.4</span> Ejercicio 4: Práctico (Transformación para Linealizar)</h2>
+<section id="ejercicio-4-práctico-transformación-para-linealizar" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-4-práctico-transformación-para-linealizar">Ejercicio 4: Práctico (Transformación para Linealizar)</h2>
 <p>En el tema anterior vimos que la relación en el dataset <code>cars</code> (entre <code>speed</code> y <code>dist</code>) no era perfectamente lineal.</p>
 <ol type="a">
 <li>Ajusta el modelo <code>lm(dist ~ speed, data = cars)</code> y genera el gráfico de residuos vs.&nbsp;valores ajustados para confirmar visualmente la no linealidad (patrón curvo).</li>
@@ -273,8 +267,8 @@ execute:
 <li>Genera de nuevo el gráfico de residuos vs.&nbsp;valores ajustados para el nuevo modelo. Compara ambos diagnósticos. ¿Ha mejorado la linealidad?</li>
 </ol>
 </section>
-<section id="ejercicio-5-práctico-transformación-de-box-cox" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="ejercicio-5-práctico-transformación-de-box-cox"><span class="header-section-number">3.5</span> Ejercicio 5: Práctico (Transformación de Box-Cox)</h2>
+<section id="ejercicio-5-práctico-transformación-de-box-cox" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-5-práctico-transformación-de-box-cox">Ejercicio 5: Práctico (Transformación de Box-Cox)</h2>
 <p>Usa el dataset <code>Boston</code> de la librería <code>MASS</code>. La variable respuesta <code>medv</code> (valor mediano de la vivienda) es estrictamente positiva y tiene cierta asimetría.</p>
 <ol type="a">
 <li>Carga la librería <code>MASS</code> y utiliza la función <code>boxcox()</code> para encontrar el valor de <span class="math inline">\(\lambda\)</span> óptimo para la variable <code>medv</code> en un modelo simple frente a <code>lstat</code>. La fórmula sería <code>boxcox(medv ~ lstat, data = Boston)</code>.</li>
@@ -282,8 +276,8 @@ execute:
 <li>Basándote en este resultado, ¿cuál de las transformaciones clásicas (logarítmica, raíz cuadrada, inversa, etc.) sería la más recomendable para la variable <code>medv</code>?</li>
 </ol>
 </section>
-<section id="ejercicio-6-conceptual-codificación-de-variables-categóricas" class="level2" data-number="3.6">
-<h2 data-number="3.6" class="anchored" data-anchor-id="ejercicio-6-conceptual-codificación-de-variables-categóricas"><span class="header-section-number">3.6</span> Ejercicio 6: Conceptual (Codificación de Variables Categóricas)</h2>
+<section id="ejercicio-6-conceptual-codificación-de-variables-categóricas" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-6-conceptual-codificación-de-variables-categóricas">Ejercicio 6: Conceptual (Codificación de Variables Categóricas)</h2>
 <p>Explica la diferencia fundamental entre la <strong>Codificación Ordinal</strong> y la <strong>Codificación One-Hot</strong>. Para cada una de las siguientes variables, indica qué método de codificación usarías y justifica tu elección:</p>
 <ul>
 <li><code>mes</code>: (“Enero”, “Febrero”, “Marzo”, …)</li>
@@ -291,8 +285,8 @@ execute:
 <li><code>pais_origen</code>: (“España”, “Francia”, “Alemania”, “Italia”)</li>
 </ul>
 </section>
-<section id="ejercicio-7-práctico-interacción-entre-variables-continuas" class="level2" data-number="3.7">
-<h2 data-number="3.7" class="anchored" data-anchor-id="ejercicio-7-práctico-interacción-entre-variables-continuas"><span class="header-section-number">3.7</span> Ejercicio 7: Práctico (Interacción entre Variables Continuas)</h2>
+<section id="ejercicio-7-práctico-interacción-entre-variables-continuas" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-7-práctico-interacción-entre-variables-continuas">Ejercicio 7: Práctico (Interacción entre Variables Continuas)</h2>
 <p>Usa el dataset <code>mtcars</code> para investigar si el efecto del peso de un coche (<code>wt</code>) sobre su consumo (<code>mpg</code>) depende de su potencia (<code>hp</code>).</p>
 <ol type="a">
 <li>Ajusta un modelo que incluya un término de interacción entre <code>wt</code> y <code>hp</code>. Escribe la fórmula en R.</li>
@@ -300,8 +294,8 @@ execute:
 <li>Basándote en el signo del coeficiente de la interacción, ¿cómo cambia el efecto del peso sobre el consumo a medida que aumenta la potencia? (Es decir, ¿el efecto negativo del peso se hace más fuerte o más débil en los coches más potentes?).</li>
 </ol>
 </section>
-<section id="ejercicio-8-interpretación-de-una-interacción-continua-x-categórica" class="level2" data-number="3.8">
-<h2 data-number="3.8" class="anchored" data-anchor-id="ejercicio-8-interpretación-de-una-interacción-continua-x-categórica"><span class="header-section-number">3.8</span> Ejercicio 8: Interpretación de una Interacción (Continua x Categórica)</h2>
+<section id="ejercicio-8-interpretación-de-una-interacción-continua-x-categórica" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-8-interpretación-de-una-interacción-continua-x-categórica">Ejercicio 8: Interpretación de una Interacción (Continua x Categórica)</h2>
 <p>Un investigador modela el salario (<code>salario</code>, en euros) en función de los años de experiencia (<code>experiencia</code>) y si el empleado tiene o no un máster (<code>master</code>, con “No” como categoría de referencia). El modelo ajustado es:</p>
 <p><code>salario = 30000 + 1200*experiencia + 8000*masterSi + 300*experiencia:masterSi</code></p>
 <ol type="a">
@@ -310,12 +304,12 @@ execute:
 <li>Interpreta el coeficiente de la interacción (300). ¿Qué nos dice sobre el retorno económico de la experiencia para ambos grupos?</li>
 </ol>
 </section>
-<section id="ejercicio-9-conceptual-principio-de-jerarquía" class="level2" data-number="3.9">
-<h2 data-number="3.9" class="anchored" data-anchor-id="ejercicio-9-conceptual-principio-de-jerarquía"><span class="header-section-number">3.9</span> Ejercicio 9: Conceptual (Principio de Jerarquía)</h2>
+<section id="ejercicio-9-conceptual-principio-de-jerarquía" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-9-conceptual-principio-de-jerarquía">Ejercicio 9: Conceptual (Principio de Jerarquía)</h2>
 <p>Explica el <strong>principio de jerarquía</strong> en el contexto de los modelos de regresión con interacciones. Si un modelo incluye el término de interacción <code>A:B</code>, ¿por qué es una buena práctica incluir siempre los efectos principales <code>A</code> y <code>B</code>, incluso si sus tests t individuales no son significativos?</p>
 </section>
-<section id="ejercicio-10-conceptual-ingeniería-de-características-avanzada" class="level2" data-number="3.10">
-<h2 data-number="3.10" class="anchored" data-anchor-id="ejercicio-10-conceptual-ingeniería-de-características-avanzada"><span class="header-section-number">3.10</span> Ejercicio 10: Conceptual (Ingeniería de Características Avanzada)</h2>
+<section id="ejercicio-10-conceptual-ingeniería-de-características-avanzada" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-10-conceptual-ingeniería-de-características-avanzada">Ejercicio 10: Conceptual (Ingeniería de Características Avanzada)</h2>
 <p>Los apuntes discuten la creación de nuevas variables mediante <strong>ratios</strong> y <strong>combinaciones</strong>. Para cada uno de los siguientes escenarios, propón una nueva variable (feature) que podrías crear y explica qué relación podría capturar mejor que las variables originales por sí solas.</p>
 <ol type="a">
 <li>Para predecir la rentabilidad de una tienda, tienes las variables <code>ventas_totales</code> y <code>numero_de_empleados</code>.</li>
@@ -728,12 +722,12 @@ execute:
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./tema2_regresion_multiple_soluciones.html" class="pagination-link" aria-label="**Regresión Lineal Múltiple**">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title"><strong>Regresión Lineal Múltiple</strong></span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title"><strong>Regresión Lineal Múltiple</strong></span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./tema4_seleccion_validacion_soluciones.html" class="pagination-link" aria-label="**Selección de variables, Regularización y Validación**">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><strong>Selección de variables, Regularización y Validación</strong></span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-title"><strong>Selección de variables, Regularización y Validación</strong></span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

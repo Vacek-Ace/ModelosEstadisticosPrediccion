@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>5&nbsp; Modelos de Regresión Generalizada – Problemas de Modelos Estadísticos para la Predicción</title>
+<title>Modelos de Regresión Generalizada – Problemas de Modelos Estadísticos para la Predicción</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -113,7 +113,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema5_glm_soluciones.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema5_glm_soluciones.html"><span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -148,38 +148,32 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema1_regresion_simple_soluciones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Soluciones: Regresión Lineal Simple</span></span></a>
+  <a href="./tema1_regresion_simple_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Regresión Lineal Simple</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title"><strong>Regresión Lineal Múltiple</strong></span></span></a>
+  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Regresión Lineal Múltiple</strong></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title"><strong>Ingeniería de Características</strong></span></span></a>
+  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Ingeniería de Características</strong></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><strong>Selección de variables, Regularización y Validación</strong></span></span></a>
+  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Selección de variables, Regularización y Validación</strong></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></span></a>
+  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Ejercicios: Popurrí</span></span></a>
+  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ejercicios: Popurrí</span></a>
   </div>
 </li>
     </ul>
@@ -192,16 +186,16 @@ window.Quarto = {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#ejercicio-1-conceptual-fundamentos-de-glm" id="toc-ejercicio-1-conceptual-fundamentos-de-glm" class="nav-link active" data-scroll-target="#ejercicio-1-conceptual-fundamentos-de-glm"><span class="header-section-number">5.1</span> Ejercicio 1: Conceptual (Fundamentos de GLM)</a></li>
-  <li><a href="#ejercicio-2-conceptual-función-de-enlace" id="toc-ejercicio-2-conceptual-función-de-enlace" class="nav-link" data-scroll-target="#ejercicio-2-conceptual-función-de-enlace"><span class="header-section-number">5.2</span> Ejercicio 2: Conceptual (Función de Enlace)</a></li>
-  <li><a href="#ejercicio-3-práctico-ajuste-de-un-modelo-logístico" id="toc-ejercicio-3-práctico-ajuste-de-un-modelo-logístico" class="nav-link" data-scroll-target="#ejercicio-3-práctico-ajuste-de-un-modelo-logístico"><span class="header-section-number">5.3</span> Ejercicio 3: Práctico (Ajuste de un Modelo Logístico)</a></li>
-  <li><a href="#ejercicio-4-interpretación-odds-ratios" id="toc-ejercicio-4-interpretación-odds-ratios" class="nav-link" data-scroll-target="#ejercicio-4-interpretación-odds-ratios"><span class="header-section-number">5.4</span> Ejercicio 4: Interpretación (Odds Ratios)</a></li>
-  <li><a href="#ejercicio-5-práctico-validación-del-modelo-logístico" id="toc-ejercicio-5-práctico-validación-del-modelo-logístico" class="nav-link" data-scroll-target="#ejercicio-5-práctico-validación-del-modelo-logístico"><span class="header-section-number">5.5</span> Ejercicio 5: Práctico (Validación del Modelo Logístico)</a></li>
-  <li><a href="#ejercicio-6-conceptual-regresión-de-poisson" id="toc-ejercicio-6-conceptual-regresión-de-poisson" class="nav-link" data-scroll-target="#ejercicio-6-conceptual-regresión-de-poisson"><span class="header-section-number">5.6</span> Ejercicio 6: Conceptual (Regresión de Poisson)</a></li>
-  <li><a href="#ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson" id="toc-ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson" class="nav-link" data-scroll-target="#ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson"><span class="header-section-number">5.7</span> Ejercicio 7: Práctico (Ajuste de un Modelo de Poisson)</a></li>
-  <li><a href="#ejercicio-8-diagnóstico-sobredispersión" id="toc-ejercicio-8-diagnóstico-sobredispersión" class="nav-link" data-scroll-target="#ejercicio-8-diagnóstico-sobredispersión"><span class="header-section-number">5.8</span> Ejercicio 8: Diagnóstico (Sobredispersión)</a></li>
-  <li><a href="#ejercicio-9-conceptual-deviance" id="toc-ejercicio-9-conceptual-deviance" class="nav-link" data-scroll-target="#ejercicio-9-conceptual-deviance"><span class="header-section-number">5.9</span> Ejercicio 9: Conceptual (Deviance)</a></li>
-  <li><a href="#ejercicio-10-elección-del-modelo-adecuado" id="toc-ejercicio-10-elección-del-modelo-adecuado" class="nav-link" data-scroll-target="#ejercicio-10-elección-del-modelo-adecuado"><span class="header-section-number">5.10</span> Ejercicio 10: Elección del Modelo Adecuado</a></li>
+  <li><a href="#ejercicio-1-conceptual-fundamentos-de-glm" id="toc-ejercicio-1-conceptual-fundamentos-de-glm" class="nav-link active" data-scroll-target="#ejercicio-1-conceptual-fundamentos-de-glm">Ejercicio 1: Conceptual (Fundamentos de GLM)</a></li>
+  <li><a href="#ejercicio-2-conceptual-función-de-enlace" id="toc-ejercicio-2-conceptual-función-de-enlace" class="nav-link" data-scroll-target="#ejercicio-2-conceptual-función-de-enlace">Ejercicio 2: Conceptual (Función de Enlace)</a></li>
+  <li><a href="#ejercicio-3-práctico-ajuste-de-un-modelo-logístico" id="toc-ejercicio-3-práctico-ajuste-de-un-modelo-logístico" class="nav-link" data-scroll-target="#ejercicio-3-práctico-ajuste-de-un-modelo-logístico">Ejercicio 3: Práctico (Ajuste de un Modelo Logístico)</a></li>
+  <li><a href="#ejercicio-4-interpretación-odds-ratios" id="toc-ejercicio-4-interpretación-odds-ratios" class="nav-link" data-scroll-target="#ejercicio-4-interpretación-odds-ratios">Ejercicio 4: Interpretación (Odds Ratios)</a></li>
+  <li><a href="#ejercicio-5-práctico-validación-del-modelo-logístico" id="toc-ejercicio-5-práctico-validación-del-modelo-logístico" class="nav-link" data-scroll-target="#ejercicio-5-práctico-validación-del-modelo-logístico">Ejercicio 5: Práctico (Validación del Modelo Logístico)</a></li>
+  <li><a href="#ejercicio-6-conceptual-regresión-de-poisson" id="toc-ejercicio-6-conceptual-regresión-de-poisson" class="nav-link" data-scroll-target="#ejercicio-6-conceptual-regresión-de-poisson">Ejercicio 6: Conceptual (Regresión de Poisson)</a></li>
+  <li><a href="#ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson" id="toc-ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson" class="nav-link" data-scroll-target="#ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson">Ejercicio 7: Práctico (Ajuste de un Modelo de Poisson)</a></li>
+  <li><a href="#ejercicio-8-diagnóstico-sobredispersión" id="toc-ejercicio-8-diagnóstico-sobredispersión" class="nav-link" data-scroll-target="#ejercicio-8-diagnóstico-sobredispersión">Ejercicio 8: Diagnóstico (Sobredispersión)</a></li>
+  <li><a href="#ejercicio-9-conceptual-deviance" id="toc-ejercicio-9-conceptual-deviance" class="nav-link" data-scroll-target="#ejercicio-9-conceptual-deviance">Ejercicio 9: Conceptual (Deviance)</a></li>
+  <li><a href="#ejercicio-10-elección-del-modelo-adecuado" id="toc-ejercicio-10-elección-del-modelo-adecuado" class="nav-link" data-scroll-target="#ejercicio-10-elección-del-modelo-adecuado">Ejercicio 10: Elección del Modelo Adecuado</a></li>
   </ul>
 </nav>
     </div>
@@ -210,7 +204,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></h1>
+<h1 class="title"><span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></h1>
 </div>
 
 
@@ -242,16 +236,16 @@ execute:
   warning: false
   message: false
 --- -->
-<section id="ejercicio-1-conceptual-fundamentos-de-glm" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="ejercicio-1-conceptual-fundamentos-de-glm"><span class="header-section-number">5.1</span> Ejercicio 1: Conceptual (Fundamentos de GLM)</h2>
+<section id="ejercicio-1-conceptual-fundamentos-de-glm" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-1-conceptual-fundamentos-de-glm">Ejercicio 1: Conceptual (Fundamentos de GLM)</h2>
 <p>Explica los <strong>tres componentes clave</strong> que definen a cualquier Modelo Lineal Generalizado (GLM) y describe brevemente la función de cada uno.</p>
 </section>
-<section id="ejercicio-2-conceptual-función-de-enlace" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="ejercicio-2-conceptual-función-de-enlace"><span class="header-section-number">5.2</span> Ejercicio 2: Conceptual (Función de Enlace)</h2>
+<section id="ejercicio-2-conceptual-función-de-enlace" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-2-conceptual-función-de-enlace">Ejercicio 2: Conceptual (Función de Enlace)</h2>
 <p>¿Cuál es el propósito fundamental de la <strong>función de enlace</strong> en un GLM? ¿Por qué la regresión lineal clásica es considerada un caso particular de un GLM? (Pista: piensa en su función de enlace).</p>
 </section>
-<section id="ejercicio-3-práctico-ajuste-de-un-modelo-logístico" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="ejercicio-3-práctico-ajuste-de-un-modelo-logístico"><span class="header-section-number">5.3</span> Ejercicio 3: Práctico (Ajuste de un Modelo Logístico)</h2>
+<section id="ejercicio-3-práctico-ajuste-de-un-modelo-logístico" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-3-práctico-ajuste-de-un-modelo-logístico">Ejercicio 3: Práctico (Ajuste de un Modelo Logístico)</h2>
 <p>Usa el conjunto de datos <code>mtcars</code> de R. La variable <code>am</code> indica si la transmisión de un coche es automática (0) o manual (1).</p>
 <ol type="a">
 <li>Ajusta un modelo de regresión logística para predecir la probabilidad de que una transmisión sea manual (<code>am</code>) en función del peso del coche (<code>wt</code>) y los caballos de fuerza (<code>hp</code>).</li>
@@ -259,16 +253,16 @@ execute:
 <li>Obtén los coeficientes del modelo. ¿Cómo interpretarías el signo del coeficiente para la variable <code>wt</code>?</li>
 </ol>
 </section>
-<section id="ejercicio-4-interpretación-odds-ratios" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="ejercicio-4-interpretación-odds-ratios"><span class="header-section-number">5.4</span> Ejercicio 4: Interpretación (Odds Ratios)</h2>
+<section id="ejercicio-4-interpretación-odds-ratios" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-4-interpretación-odds-ratios">Ejercicio 4: Interpretación (Odds Ratios)</h2>
 <p>Basado en el modelo del ejercicio anterior:</p>
 <ol type="a">
 <li>Calcula el <strong>Odds Ratio (OR)</strong> para el coeficiente de la variable <code>hp</code>.</li>
 <li>Interpreta este Odds Ratio en el contexto del problema. Específicamente, ¿cómo cambian las “odds” (la razón de probabilidad) de tener una transmisión manual por cada caballo de fuerza adicional, manteniendo el peso constante?</li>
 </ol>
 </section>
-<section id="ejercicio-5-práctico-validación-del-modelo-logístico" class="level2" data-number="5.5">
-<h2 data-number="5.5" class="anchored" data-anchor-id="ejercicio-5-práctico-validación-del-modelo-logístico"><span class="header-section-number">5.5</span> Ejercicio 5: Práctico (Validación del Modelo Logístico)</h2>
+<section id="ejercicio-5-práctico-validación-del-modelo-logístico" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-5-práctico-validación-del-modelo-logístico">Ejercicio 5: Práctico (Validación del Modelo Logístico)</h2>
 <p>Continuando con el modelo logístico de <code>mtcars</code>:</p>
 <ol type="a">
 <li>Genera las predicciones de probabilidad del modelo para los datos.</li>
@@ -278,16 +272,16 @@ execute:
 <li>(Bonus) Utiliza el paquete <code>pROC</code> para calcular y visualizar la <strong>curva ROC</strong> y obtener el valor del <strong>AUC</strong>. ¿Qué tan buena es la capacidad discriminativa del modelo?</li>
 </ol>
 </section>
-<section id="ejercicio-6-conceptual-regresión-de-poisson" class="level2" data-number="5.6">
-<h2 data-number="5.6" class="anchored" data-anchor-id="ejercicio-6-conceptual-regresión-de-poisson"><span class="header-section-number">5.6</span> Ejercicio 6: Conceptual (Regresión de Poisson)</h2>
+<section id="ejercicio-6-conceptual-regresión-de-poisson" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-6-conceptual-regresión-de-poisson">Ejercicio 6: Conceptual (Regresión de Poisson)</h2>
 <ol type="a">
 <li>¿Qué tipo de variable respuesta está diseñada para modelar la regresión de Poisson?</li>
 <li>¿Cuál es el supuesto fundamental de la distribución de Poisson respecto a la relación entre la media y la varianza?</li>
 <li>¿Cómo se llama el problema que surge cuando este supuesto se viola y la varianza es mayor que la media?</li>
 </ol>
 </section>
-<section id="ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson" class="level2" data-number="5.7">
-<h2 data-number="5.7" class="anchored" data-anchor-id="ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson"><span class="header-section-number">5.7</span> Ejercicio 7: Práctico (Ajuste de un Modelo de Poisson)</h2>
+<section id="ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson">Ejercicio 7: Práctico (Ajuste de un Modelo de Poisson)</h2>
 <p>El dataset <code>discoveries</code> de R es una serie temporal que cuenta el número de “grandes inventos” por año.</p>
 <ol type="a">
 <li>Crea un gráfico de la serie temporal. ¿Parece la media del conteo constante a lo largo del tiempo?</li>
@@ -295,20 +289,20 @@ execute:
 <li>Interpreta el coeficiente del tiempo. (Pista: recuerda exponenciarlo para obtener el Incidence Rate Ratio - IRR).</li>
 </ol>
 </section>
-<section id="ejercicio-8-diagnóstico-sobredispersión" class="level2" data-number="5.8">
-<h2 data-number="5.8" class="anchored" data-anchor-id="ejercicio-8-diagnóstico-sobredispersión"><span class="header-section-number">5.8</span> Ejercicio 8: Diagnóstico (Sobredispersión)</h2>
+<section id="ejercicio-8-diagnóstico-sobredispersión" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-8-diagnóstico-sobredispersión">Ejercicio 8: Diagnóstico (Sobredispersión)</h2>
 <ol type="a">
 <li>Para el modelo de Poisson del ejercicio anterior, calcula el <strong>estadístico de dispersión (<span class="math inline">\(\hat{\phi}\)</span>)</strong>. (Pista: <span class="math inline">\(\hat{\phi} = \frac{\sum r_i^2}{n-p}\)</span>, donde los <span class="math inline">\(r_i\)</span> son los residuos Pearson).</li>
 <li>Basándote en el valor de <span class="math inline">\(\hat{\phi}\)</span>, ¿hay evidencia de sobredispersión?</li>
 <li>Si encuentras sobredispersión, ¿cuál es el modelo alternativo que proponen los apuntes? ¿Qué ventaja teórica ofrece este modelo alternativo?</li>
 </ol>
 </section>
-<section id="ejercicio-9-conceptual-deviance" class="level2" data-number="5.9">
-<h2 data-number="5.9" class="anchored" data-anchor-id="ejercicio-9-conceptual-deviance"><span class="header-section-number">5.9</span> Ejercicio 9: Conceptual (Deviance)</h2>
+<section id="ejercicio-9-conceptual-deviance" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-9-conceptual-deviance">Ejercicio 9: Conceptual (Deviance)</h2>
 <p>La <strong>deviance</strong> es la medida principal de bondad de ajuste en los GLM. Explica conceptualmente qué mide. ¿Cómo se utiliza la diferencia en deviance entre dos modelos anidados para decidir cuál es mejor?</p>
 </section>
-<section id="ejercicio-10-elección-del-modelo-adecuado" class="level2" data-number="5.10">
-<h2 data-number="5.10" class="anchored" data-anchor-id="ejercicio-10-elección-del-modelo-adecuado"><span class="header-section-number">5.10</span> Ejercicio 10: Elección del Modelo Adecuado</h2>
+<section id="ejercicio-10-elección-del-modelo-adecuado" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-10-elección-del-modelo-adecuado">Ejercicio 10: Elección del Modelo Adecuado</h2>
 <p>Para cada uno de los siguientes escenarios, indica qué tipo de GLM (Logístico, Poisson, Binomial Negativo, Gamma…) sería el más apropiado y por qué.</p>
 <ol type="a">
 <li>Quieres modelar el <strong>tiempo (en minutos)</strong> que tarda un cliente en resolver una consulta en un centro de atención telefónica. El tiempo es siempre positivo y muchos valores se agrupan en tiempos cortos, con una cola larga de tiempos muy largos.</li>
@@ -722,12 +716,12 @@ execute:
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./tema4_seleccion_validacion_soluciones.html" class="pagination-link" aria-label="**Selección de variables, Regularización y Validación**">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><strong>Selección de variables, Regularización y Validación</strong></span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title"><strong>Selección de variables, Regularización y Validación</strong></span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./ejercicios_avanzados_soluciones.html" class="pagination-link" aria-label="Ejercicios: Popurrí">
-        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Ejercicios: Popurrí</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-title">Ejercicios: Popurrí</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
