@@ -25,7 +25,6 @@ format:
     theme: cerulean
     lang: es-ES
     css: soluciones.css
-    include-before-body: portada.html
   pdf:
     documentclass: scrreprt
     toc-title: "Índice de Soluciones"
