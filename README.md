@@ -121,7 +121,47 @@ quarto render guia_estudio.qmd --to pdf
 - Archivo final (Método 1): `guia_estudio/GuiaEstudioModelosEstadisticosPrediccion.pdf`
 - Archivo final (Método 2): `guia_estudio/guia_estudio.pdf`
 
-### 5. 🔬 Laboratorios
+### 5. 🧮 Soluciones de Ejercicios
+
+#### Generar todas las soluciones en HTML (recomendado):
+```r
+# Ejecutar desde la raíz del proyecto
+Rscript -e "source('ejercicios/soluciones/generar_soluciones.R'); generar_todas_soluciones()"
+```
+
+#### Abrir las soluciones automáticamente en el navegador:
+```r
+# Ejecutar después de generar
+Rscript -e "source('ejercicios/soluciones/generar_soluciones.R'); abrir_soluciones()"
+```
+
+#### Generar solución específica:
+```r
+# Generar solo tema 1
+Rscript -e "source('ejercicios/soluciones/generar_soluciones.R'); generar_solucion(1)"
+
+# Generar ejercicios avanzados
+Rscript -e "source('ejercicios/soluciones/generar_soluciones.R'); generar_solucion('avanzados')"
+```
+
+**Características:**
+- ✅ **HTML únicamente** - Sin problemas de compilación LaTeX
+- ✅ Código R completo y comentado
+- ✅ Explicaciones matemáticas detalladas
+- ✅ Interpretaciones prácticas de resultados
+- ✅ Navegación web entre temas
+- ✅ Archivos auto-contenidos (embed-resources)
+- 📁 Salida en: `ejercicios/soluciones/soluciones_html/`
+
+**Soluciones disponibles:**
+- `tema1_regresion_simple_soluciones.qmd` - Regresión lineal simple
+- `tema2_regresion_multiple_soluciones.qmd` - Regresión múltiple
+- `tema3_ingenieria_caracteristicas_soluciones.qmd` - Transformación de variables
+- `tema4_seleccion_validacion_soluciones.qmd` - Selección y validación
+- `tema5_glm_soluciones.qmd` - Modelos lineales generalizados
+- `ejercicios_avanzados_soluciones.qmd` - Ejercicios avanzados con demostraciones
+
+### 6. 🔬 Laboratorios
 
 Los laboratorios se pueden ejecutar individualmente:
 
