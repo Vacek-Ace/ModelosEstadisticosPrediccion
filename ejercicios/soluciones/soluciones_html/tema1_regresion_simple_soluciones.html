@@ -188,27 +188,27 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Regresión Lineal Múltiple</strong></span></a>
+  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Regresión Lineal Múltiple</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Ingeniería de Características</strong></span></a>
+  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ingeniería de Características</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Selección de variables, Regularización y Validación</strong></span></a>
+  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Selección de variables, Regularización y Validación</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></a>
+  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Modelos de Regresión Generalizada</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ejercicios: Popurrí</span></a>
+  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ejercicios Avanzados</span></a>
   </div>
 </li>
     </ul>
@@ -259,19 +259,6 @@ window.Quarto = {
 
 
 <p>En este capítulo encontrarás las soluciones detalladas a todos los ejercicios del Tema 1. Cada ejercicio incluye tanto el enunciado como la solución completa con código R y explicaciones teóricas.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Instrucciones de Uso
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Intenta resolver cada ejercicio por tu cuenta antes de consultar la solución. Las soluciones están organizadas en secciones desplegables para facilitar este proceso.</p>
-</div>
-</div>
 <section id="ejercicio-1-fundamentos-conceptuales" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-1-fundamentos-conceptuales">Ejercicio 1: Fundamentos Conceptuales</h2>
 <p>Basándote en el texto, explica con tus propias palabras por qué un coeficiente de correlación de Pearson (<span class="math inline">\(r\)</span>) alto no es suficiente para modelar una relación y por qué la regresión lineal es un paso más allá. Menciona al menos dos cosas que el modelo de regresión proporciona y que la correlación por sí sola no ofrece.</p>
@@ -314,7 +301,12 @@ window.Quarto = {
 </div>
 </div>
 <p><strong>b) Interpretación de la pendiente (12):</strong> Por cada año adicional de edad del cliente, se espera que el gasto anual en compras online aumente en 12 euros, manteniendo todo lo demás constante.</p>
-<p><strong>c) Interpretación del intercepto (1500):</strong> Representa el gasto predicho para un cliente de 0 años, que sería 1500 euros. <strong>Esta interpretación NO tiene sentido práctico</strong> porque: - No existen clientes de 0 años - Estamos extrapolando fuera del rango de datos observados - El modelo probablemente no es válido para edades tan bajas</p>
+<p><strong>c) Interpretación del intercepto (1500):</strong> Representa el gasto predicho para un cliente de 0 años, que sería 1500 euros. <strong>Esta interpretación NO tiene sentido práctico</strong> porque:</p>
+<ul>
+<li>No existen clientes de 0 años</li>
+<li>Estamos extrapolando fuera del rango de datos observados</li>
+<li>El modelo probablemente no es válido para edades tan bajas</li>
+</ul>
 </details>
 <section id="ejercicio-3-aplicación-práctica-con-r-ajuste-e-inferencia" class="level3">
 <h3 class="anchored" data-anchor-id="ejercicio-3-aplicación-práctica-con-r-ajuste-e-inferencia">Ejercicio 3: Aplicación Práctica con R (Ajuste e Inferencia)</h3>
@@ -329,12 +321,13 @@ window.Quarto = {
 <details>
 <summary>
 </summary>
+<p><strong>a) Ajustar el modelo:</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a) Ajustar el modelo</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>modelo_pressure <span class="ot">&lt;-</span> <span class="fu">lm</span>(pressure <span class="sc">~</span> temperature, <span class="at">data =</span> pressure)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># b) Summary del modelo</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_pressure)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>modelo_pressure <span class="ot">&lt;-</span> <span class="fu">lm</span>(pressure <span class="sc">~</span> temperature, <span class="at">data =</span> pressure)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>b) Summary del modelo:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_pressure)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -356,37 +349,14 @@ Multiple R-squared:  0.5742,    Adjusted R-squared:  0.5492
 F-statistic: 22.93 on 1 and 17 DF,  p-value: 0.000171</code></pre>
 </div>
 </div>
-<p><strong>c) Interpretación del R²:</strong></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>r_squared <span class="ot">&lt;-</span> <span class="fu">summary</span>(modelo_pressure)<span class="sc">$</span>r.squared</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"R² ="</span>, <span class="fu">round</span>(r_squared, <span class="dv">4</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "R² = 0.5742"</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"La temperatura explica el"</span>, <span class="fu">round</span>(r_squared <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>), <span class="st">"% de la variabilidad en la presión"</span>))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "La temperatura explica el 57.42 % de la variabilidad en la presión"</code></pre>
-</div>
-</div>
-<p><strong>d) Interpretación del p-valor del estadístico F:</strong></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>f_pvalue <span class="ot">&lt;-</span> <span class="fu">summary</span>(modelo_pressure)<span class="sc">$</span>fstatistic</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>f_test_pvalue <span class="ot">&lt;-</span> <span class="fu">pf</span>(f_pvalue[<span class="dv">1</span>], f_pvalue[<span class="dv">2</span>], f_pvalue[<span class="dv">3</span>], <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"p-valor F-test:"</span>, <span class="fu">format</span>(f_test_pvalue, <span class="at">scientific =</span> <span class="cn">TRUE</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "p-valor F-test: 1.709745e-04"</code></pre>
-</div>
-</div>
-<p>Como p &lt; 0.05, <strong>el modelo es globalmente significativo</strong> - es decir, el modelo es útil para predecir la presión.</p>
-<p><strong>e) Significancia del coeficiente de temperatura:</strong></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>temp_pvalue <span class="ot">&lt;-</span> <span class="fu">summary</span>(modelo_pressure)<span class="sc">$</span>coefficients[<span class="st">"temperature"</span>, <span class="st">"Pr(&gt;|t|)"</span>]</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"p-valor temperatura:"</span>, <span class="fu">format</span>(temp_pvalue, <span class="at">scientific =</span> <span class="cn">TRUE</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "p-valor temperatura: 1.709745e-04"</code></pre>
-</div>
-</div>
-<p>Como p &lt; 0.05, <strong>el coeficiente de temperatura es estadísticamente significativo</strong>.</p>
+<p><strong>c), d) y e) Interpretación de la Salida del Modelo</strong></p>
+<p>La forma más eficiente de analizar el modelo es observar directamente la salida de la función <code>summary()</code>.</p>
+<p>A partir de esta salida, interpretamos:</p>
+<ul>
+<li><p><strong>c) Coeficiente de determinación R²</strong>: El valor de <code>Multiple R-squared</code> es <strong>0.5742</strong>. Esto significa que la temperatura explica el <strong>57.42%</strong> de la variabilidad en la presión.</p></li>
+<li><p><strong>d) p-valor del estadístico F</strong>: En la última línea, el <code>p-value</code> del <code>F-statistic</code> es <strong>0.000171</strong>. Al ser un valor muy inferior a 0.05, rechazamos la hipótesis nula (<span class="math inline">\(H_0\)</span>) de que el modelo no tiene capacidad predictiva. Concluimos que <strong>el modelo es globalmente significativo</strong>.</p></li>
+<li><p><strong>e) Significancia del coeficiente</strong>: En la tabla de coeficientes, el p-valor (<code>Pr(&gt;|t|)</code>) para <code>temperature</code> es <strong>0.000171</strong>. Rechazamos la hipótesis nula (<span class="math inline">\(H_0: \beta_1 = 0\)</span>) y concluimos que la temperatura tiene una <strong>relación estadísticamente significativa</strong> con la presión.</p></li>
+</ul>
 </details>
 </section>
 <section id="ejercicio-4-intervalos-de-confianza-y-predicción" class="level3">
@@ -400,44 +370,81 @@ F-statistic: 22.93 on 1 and 17 DF,  p-value: 0.000171</code></pre>
 <details>
 <summary>
 </summary>
+<p><strong>a) Intervalo de confianza para la media cuando temp = 250:</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a) Intervalo de confianza para la media cuando temp = 250</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>ic_mean <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelo_pressure, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">temperature =</span> <span class="dv">250</span>), </span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">interval =</span> <span class="st">"confidence"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Intervalo de confianza (95%) para la presión media:"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ic_mean <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelo_pressure, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">temperature =</span> <span class="dv">250</span>), </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">interval =</span> <span class="st">"confidence"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Intervalo de confianza (95%) para la presión media:"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Intervalo de confianza (95%) para la presión media:"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ic_mean)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ic_mean)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       fit      lwr      upr
 1 230.2061 143.5771 316.8351</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># b) Intervalo de predicción para una nueva observación</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>ic_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelo_pressure, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">temperature =</span> <span class="dv">250</span>), </span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">interval =</span> <span class="st">"prediction"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Intervalo de predicción (95%) para una nueva observación:"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>b) Intervalo de predicción para una nueva observación:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ic_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelo_pressure, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">temperature =</span> <span class="dv">250</span>), </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">interval =</span> <span class="st">"prediction"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Intervalo de predicción (95%) para una nueva observación:"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Intervalo de predicción (95%) para una nueva observación:"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ic_pred)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ic_pred)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       fit      lwr      upr
 1 230.2061 -99.5663 559.9785</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># c) Comparación de anchos</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>ancho_conf <span class="ot">&lt;-</span> ic_mean[<span class="dv">3</span>] <span class="sc">-</span> ic_mean[<span class="dv">2</span>]</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>ancho_pred <span class="ot">&lt;-</span> ic_pred[<span class="dv">3</span>] <span class="sc">-</span> ic_pred[<span class="dv">2</span>]</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Ancho intervalo confianza:"</span>, <span class="fu">round</span>(ancho_conf, <span class="dv">2</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>c) Comparación de anchos:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ancho_conf <span class="ot">&lt;-</span> ic_mean[<span class="dv">3</span>] <span class="sc">-</span> ic_mean[<span class="dv">2</span>]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>ancho_pred <span class="ot">&lt;-</span> ic_pred[<span class="dv">3</span>] <span class="sc">-</span> ic_pred[<span class="dv">2</span>]</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Ancho intervalo confianza:"</span>, <span class="fu">round</span>(ancho_conf, <span class="dv">2</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Ancho intervalo confianza: 173.26"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Ancho intervalo predicción:"</span>, <span class="fu">round</span>(ancho_pred, <span class="dv">2</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Ancho intervalo predicción:"</span>, <span class="fu">round</span>(ancho_pred, <span class="dv">2</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Ancho intervalo predicción: 659.54"</code></pre>
 </div>
 </div>
-<p><strong>c) ¿Cuál es más ancho?</strong> El <strong>intervalo de predicción es más ancho</strong> porque incluye dos fuentes de incertidumbre: 1. La incertidumbre sobre la media poblacional (como en el intervalo de confianza) 2. La variabilidad natural de las observaciones individuales alrededor de esa media</p>
+<p>Una visualización ayuda a entender la diferencia al instante:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear gráfico con bandas de confianza y predicción</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>temp_range <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(pressure<span class="sc">$</span>temperature), <span class="fu">max</span>(pressure<span class="sc">$</span>temperature), <span class="at">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>conf_bands <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelo_pressure, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">temperature =</span> temp_range), </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">interval =</span> <span class="st">"confidence"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>pred_bands <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelo_pressure, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">temperature =</span> temp_range), </span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">interval =</span> <span class="st">"prediction"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pressure<span class="sc">$</span>temperature, pressure<span class="sc">$</span>pressure, </span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Temperatura"</span>, <span class="at">ylab =</span> <span class="st">"Presión"</span>, </span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Intervalos de Confianza vs Predicción"</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(modelo_pressure, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(temp_range, conf_bands[,<span class="st">"lwr"</span>], <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(temp_range, conf_bands[,<span class="st">"upr"</span>], <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(temp_range, pred_bands[,<span class="st">"lwr"</span>], <span class="at">col =</span> <span class="st">"green"</span>, <span class="at">lty =</span> <span class="dv">3</span>)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(temp_range, pred_bands[,<span class="st">"upr"</span>], <span class="at">col =</span> <span class="st">"green"</span>, <span class="at">lty =</span> <span class="dv">3</span>)</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Regresión"</span>, <span class="st">"Confianza"</span>, <span class="st">"Predicción"</span>), </span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue"</span>, <span class="st">"green"</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema1_regresion_simple_soluciones_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>En el gráfico, las bandas de <strong>confianza</strong> (las más internas) definen el rango probable para la <em>media</em> de la presión a una temperatura dada. Las bandas de <strong>predicción</strong> (las más externas y anchas) definen el rango probable para una <em>única observación futura</em> de presión.</p>
+<p><strong>c) ¿Cuál es más ancho?</strong></p>
+<p>El <strong>intervalo de predicción es más ancho</strong> porque incluye dos fuentes de incertidumbre:</p>
+<ol type="1">
+<li>La incertidumbre sobre la media poblacional (como en el intervalo de confianza)</li>
+<li>La variabilidad natural de las observaciones individuales alrededor de esa media</li>
+</ol>
 </details>
 </section>
 <section id="ejercicio-5-supuestos-del-modelo" class="level3">
@@ -465,25 +472,57 @@ F-statistic: 22.93 on 1 and 17 DF,  p-value: 0.000171</code></pre>
 <details>
 <summary>
 </summary>
+<p><strong>a) Gráfico de Residuos vs.&nbsp;Valores Ajustados:</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a) Gráfico de Residuos vs. Valores Ajustados</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_pressure, <span class="at">which =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">"Residuos vs. Valores Ajustados"</span>)</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># b) Gráfico Scale-Location</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_pressure, <span class="at">which =</span> <span class="dv">3</span>, <span class="at">main =</span> <span class="st">"Scale-Location"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_pressure, <span class="at">which =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">"Residuos vs. Valores Ajustados"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="tema1_regresion_simple_soluciones_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="tema1_regresion_simple_soluciones_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>b) Gráfico Scale-Location:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_pressure, <span class="at">which =</span> <span class="dv">3</span>, <span class="at">main =</span> <span class="st">"Scale-Location"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema1_regresion_simple_soluciones_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p><strong>a) Linealidad</strong>: En el gráfico de residuos vs.&nbsp;valores ajustados, observamos un <strong>patrón curvado</strong> en lugar de una distribución aleatoria alrededor de cero. Esto indica que <strong>NO se cumple perfectamente el supuesto de linealidad</strong>.</p>
-<p><strong>a) Linealidad</strong>: En el gráfico de residuos vs.&nbsp;valores ajustados, observamos un <strong>patrón curvado</strong> en lugar de una distribución aleatoria alrededor de cero. Esto indica que <strong>NO se cumple perfectamente el supuesto de linealidad</strong>.</p>
 <p><strong>b) Homocedasticidad</strong>: En el gráfico Scale-Location, la línea roja muestra una tendencia creciente, lo que sugiere <strong>heterocedasticidad</strong> (varianza no constante). Un problema de heterocedasticidad se manifestaría como un patrón de embudo o una tendencia clara en este gráfico.</p>
-</details>
+<section id="y-ahora-qué-pasos-siguientes" class="level4">
+<h4 class="anchored" data-anchor-id="y-ahora-qué-pasos-siguientes"><strong>¿Y ahora qué? Pasos Siguientes</strong></h4>
+<p>Un buen análisis no termina al detectar un problema, sino al proponer una solución.</p>
+<ol type="1">
+<li><p><strong>Contexto</strong>: El mal ajuste del modelo tiene una razón física. La relación entre temperatura y presión de vapor no es lineal, sino <strong>exponencial</strong>.</p></li>
+<li><p><strong>Solución</strong>: Para corregirlo, aplicamos una <strong>transformación</strong> para linealizar la relación. La más común es el <strong>logaritmo natural</strong> sobre la variable respuesta.</p></li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Ajustamos un nuevo modelo con log(pressure)</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>modelo_log <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(pressure) <span class="sc">~</span> temperature, <span class="at">data =</span> pressure)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Generamos los nuevos gráficos de diagnóstico</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_log, <span class="at">which =</span> <span class="dv">1</span>) <span class="co"># Linealidad</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_log, <span class="at">which =</span> <span class="dv">3</span>) <span class="co"># Homocedasticidad</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema1_regresion_simple_soluciones_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Como se puede observar, en los nuevos gráficos el patrón curvado ha desaparecido y la varianza de los residuos es mucho más constante. Esto demuestra cómo el diagnóstico nos lleva a <strong>mejorar y validar nuestro modelo</strong>.</p>
+</section></details>
+</section>
 </section>
 <section id="ejercicio-7-diagnóstico-de-normalidad" class="level3">
 <h3 class="anchored" data-anchor-id="ejercicio-7-diagnóstico-de-normalidad">Ejercicio 7: Diagnóstico de Normalidad</h3>
@@ -495,24 +534,26 @@ F-statistic: 22.93 on 1 and 17 DF,  p-value: 0.000171</code></pre>
 <details>
 <summary>
 </summary>
+<p><strong>a) Gráfico Normal Q-Q:</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a) Gráfico Normal Q-Q</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_pressure, <span class="at">which =</span> <span class="dv">2</span>, <span class="at">main =</span> <span class="st">"Normal Q-Q Plot"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_pressure, <span class="at">which =</span> <span class="dv">2</span>, <span class="at">main =</span> <span class="st">"Normal Q-Q Plot"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="tema1_regresion_simple_soluciones_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="tema1_regresion_simple_soluciones_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># b) Test de Shapiro-Wilk</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>shapiro_test <span class="ot">&lt;-</span> <span class="fu">shapiro.test</span>(<span class="fu">residuals</span>(modelo_pressure))</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Test de Shapiro-Wilk para normalidad de residuos:"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>b) Test de Shapiro-Wilk:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>shapiro_test <span class="ot">&lt;-</span> <span class="fu">shapiro.test</span>(<span class="fu">residuals</span>(modelo_pressure))</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Test de Shapiro-Wilk para normalidad de residuos:"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Test de Shapiro-Wilk para normalidad de residuos:"</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(shapiro_test)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(shapiro_test)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Shapiro-Wilk normality test
@@ -523,6 +564,7 @@ W = 0.89337, p-value = 0.03697</code></pre>
 </div>
 <p><strong>a) Q-Q Plot</strong>: Los puntos se desvían considerablemente de la línea diagonal, especialmente en las colas, indicando que los residuos <strong>no siguen una distribución normal</strong>.</p>
 <p><strong>b) Test de Shapiro-Wilk</strong>: Con p-valor &lt; 0.05, <strong>rechazamos la hipótesis nula de normalidad</strong>. Los residuos no son normales.</p>
+<p><strong>Conexión con el Ejercicio 6</strong>: Es importante destacar que la <strong>falta de linealidad</strong> (detectada en el ejercicio anterior) es frecuentemente la <strong>causa raíz de la no normalidad</strong> en los residuos. Al corregir el problema estructural del modelo con la transformación logarítmica, el supuesto de normalidad también mejora de forma significativa.</p>
 </details>
 </section>
 <section id="ejercicio-8-descomposición-de-la-varianza-anova" class="level3">
@@ -573,14 +615,23 @@ W = 0.89337, p-value = 0.03697</code></pre>
 </summary>
 <p>En regresión lineal simple, existe una relación matemática exacta:</p>
 <p><span class="math display">\[F = t^2\]</span></p>
-<p>Donde: - <span class="math inline">\(F\)</span> es el estadístico F del test ANOVA global - <span class="math inline">\(t\)</span> es el estadístico t para la pendiente <span class="math inline">\(\beta_1\)</span></p>
-<p><strong>Implicaciones para los p-valores:</strong> - Los p-valores de ambos tests son <strong>idénticos</strong> - Si el coeficiente de la pendiente es significativo (test t), entonces el modelo global también lo es (test F) - Ambos tests evalúan la misma hipótesis nula: <span class="math inline">\(H_0: \beta_1 = 0\)</span></p>
+<p>Donde:</p>
+<ul>
+<li><span class="math inline">\(F\)</span> es el estadístico F del test ANOVA global</li>
+<li><span class="math inline">\(t\)</span> es el estadístico t para la pendiente <span class="math inline">\(\beta_1\)</span></li>
+</ul>
+<p><strong>Implicaciones para los p-valores:</strong></p>
+<ul>
+<li>Los p-valores de ambos tests son <strong>idénticos</strong></li>
+<li>Si el coeficiente de la pendiente es significativo (test t), entonces el modelo global también lo es (test F)</li>
+<li>Ambos tests evalúan la misma hipótesis nula: <span class="math inline">\(H_0: \beta_1 = 0\)</span></li>
+</ul>
 <p>Esta equivalencia solo se da en regresión simple. En regresión múltiple, el test F evalúa todos los coeficientes conjuntamente, mientras que cada test t evalúa coeficientes individuales.</p>
 </details>
 
 
 </section>
-</section>
+
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -989,8 +1040,8 @@ W = 0.89337, p-value = 0.03697</code></pre>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./tema2_regresion_multiple_soluciones.html" class="pagination-link" aria-label="**Regresión Lineal Múltiple**">
-        <span class="nav-page-text"><span class="chapter-title"><strong>Regresión Lineal Múltiple</strong></span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./tema2_regresion_multiple_soluciones.html" class="pagination-link" aria-label="Regresión Lineal Múltiple">
+        <span class="nav-page-text"><span class="chapter-title">Regresión Lineal Múltiple</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

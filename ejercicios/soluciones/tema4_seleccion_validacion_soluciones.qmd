@@ -1,32 +1,85 @@
-<!-- ---
-title: "Ejercicios: Selección de variables, Regularización y Validación"
-subtitle: "Modelos Estadísticos de Predicción"
-author: "Víctor Aceña Gil - Isaac Martín de Diego"
-date: today
-format: 
-  html:
-    toc: true
-    toc-depth: 3
-    code-fold: false
-    theme: cosmo
-execute:
-  warning: false
-  message: false
---- -->
-
-## **Selección de variables, Regularización y Validación**
+# Selección de variables, Regularización y Validación
 
 ## Ejercicio 1: Conceptual (Sobreajuste vs. Subajuste)
 
 Explica con tus propias palabras qué es el **sobreajuste (overfitting)** y el **subajuste (underfitting)**. Describe los síntomas de cada uno comparando el error de entrenamiento con el error de validación (o de test), y menciona la solución principal para cada problema.
 
+<details>
+<summary></summary>
 
+**Sobreajuste (Overfitting):**
+
+- **Definición**: El modelo aprende demasiado específicamente los datos de entrenamiento, incluyendo ruido y patrones espurios.
+- **Síntomas**: Error de entrenamiento muy bajo, pero error de validación/test alto. Gran diferencia entre ambos errores.
+- **Solución principal**: Reducir complejidad del modelo (menos variables, regularización, más datos).
+
+**Subajuste (Underfitting):**
+
+- **Definición**: El modelo es demasiado simple para capturar los patrones reales en los datos.
+- **Síntomas**: Tanto el error de entrenamiento como el de validación son altos y similares.
+- **Solución principal**: Aumentar complejidad del modelo (más variables, términos de interacción, modelos más flexibles).
+
+Una imagen clásica ayuda a visualizar esto:
+
+```{r}
+# Simulación del gráfico clásico de sobreajuste vs subajuste
+complejidad <- 1:20
+set.seed(123)
+
+# Error de entrenamiento (siempre decrece)
+error_entrenamiento <- 10 * exp(-0.3 * complejidad) + rnorm(20, 0, 0.2)
+error_entrenamiento <- pmax(error_entrenamiento, 0.5)  # Mínimo realista
+
+# Error de validación (forma de U)
+error_validacion <- 8 * exp(-0.2 * complejidad) + 0.15 * complejidad^1.5 + rnorm(20, 0, 0.3)
+error_validacion <- pmax(error_validacion, 1)  # Mínimo realista
+
+# Crear el gráfico
+plot(complejidad, error_entrenamiento, type = "l", col = "blue", lwd = 2,
+     ylim = c(0, max(c(error_entrenamiento, error_validacion)) + 1),
+     xlab = "Complejidad del Modelo", 
+     ylab = "Error",
+     main = "Sobreajuste vs. Subajuste: Error de Entrenamiento vs. Validación")
+
+lines(complejidad, error_validacion, col = "red", lwd = 2)
+
+# Marcar el punto óptimo
+punto_optimo <- which.min(error_validacion)
+points(complejidad[punto_optimo], error_validacion[punto_optimo], 
+       col = "darkgreen", pch = 19, cex = 1.5)
+
+# Añadir leyenda
+legend("topright", 
+       legend = c("Error Entrenamiento", "Error Validación", "Punto Óptimo"),
+       col = c("blue", "red", "darkgreen"),
+       lty = c(1, 1, NA),
+       pch = c(NA, NA, 19),
+       lwd = 2)
+
+# Añadir regiones
+text(5, max(error_validacion) * 0.9, "SUBAJUSTE", col = "orange", cex = 1.2, font = 2)
+text(15, max(error_validacion) * 0.7, "SOBREAJUSTE", col = "purple", cex = 1.2, font = 2)
+```
+
+> En el gráfico, a medida que aumenta la complejidad del modelo (hacia la derecha), el **error de entrenamiento** siempre baja. Sin embargo, el **error de validación** (el que realmente importa) baja hasta un punto óptimo y luego empieza a subir, indicando **sobreajuste**.
+
+</details>
 
 ## Ejercicio 2: Práctico (Filtrado Básico)
 
 Imagina que recibes un nuevo conjunto de datos con 50 predictores para un modelo de regresión. Antes de aplicar métodos computacionalmente costosos, decides hacer un filtrado inicial. Describe los **cuatro criterios básicos** que aplicarías para descartar variables de forma preliminar, según lo explicado en los apuntes.
 
+<details>
+<summary></summary>
 
+Los **cuatro criterios básicos** para filtrado inicial son:
+
+1. **Varianza casi cero**: Eliminar variables con varianza extremadamente baja o constantes.
+2. **Correlación muy alta entre predictores**: Eliminar variables redundantes (correlación > 0.95).
+3. **Muchos valores faltantes**: Eliminar variables con un porcentaje alto de datos perdidos.
+4. **Irrelevancia teórica**: Eliminar variables que no tienen sentido conceptual para el problema (ej: ID, timestamps irrelevantes).
+
+</details>
 
 ## Ejercicio 3: Conceptual (AIC vs. BIC)
 
@@ -36,7 +89,23 @@ a) Escribe la fórmula de la penalización por complejidad para el AIC y para el
 b) ¿Cuál de los dos criterios tenderá a seleccionar modelos más simples (más parsimoniosos)? ¿Por qué?
 c) Si tu objetivo principal es la **precisión predictiva**, ¿cuál de los dos criterios es generalmente preferido?
 
+<details>
+<summary></summary>
 
+**a) Fórmulas de penalización:**
+
+- **AIC**: $-2\log L + 2p$
+- **BIC**: $-2\log L + p\log(n)$
+
+Donde $p$ = número de parámetros, $n$ = número de observaciones.
+
+**b) ¿Cuál selecciona modelos más simples?**
+**BIC** tenderá a seleccionar modelos más parsimoniosos porque su penalización es más severa cuando $n > 8$ (ya que $\log(n) > 2$).
+
+**c) Para precisión predictiva:**
+**AIC** es generalmente preferido para precisión predictiva porque está más orientado a minimizar el error de predicción, mientras que BIC está más orientado a encontrar el "modelo verdadero".
+
+</details>
 
 ## Ejercicio 4: Práctico (Best Subset y Criterios de Información)
 
@@ -47,13 +116,73 @@ b) Obtén el `summary()` de los resultados. ¿Qué modelo (cuántas variables) e
 c) ¿Y cuál es el mejor modelo según el **R² ajustado**?
 d) ¿Coinciden ambos criterios en el número de variables del modelo óptimo?
 
+<details>
+<summary></summary>
 
+**a) Best subset selection:**
+
+```{r}
+library(leaps)
+regfit_full <- regsubsets(mpg ~ ., data = mtcars, nvmax = 10)
+```
+
+**b) Summary de resultados:**
+
+```{r}
+reg_summary <- summary(regfit_full)
+print("Cp de Mallows por número de variables:")
+print(reg_summary$cp)
+
+# Mejor modelo según Cp
+best_cp <- which.min(reg_summary$cp)
+print(paste("Mejor modelo según Cp:", best_cp, "variables"))
+```
+
+**c) Mejor según R² ajustado:**
+
+```{r}
+print("R² ajustado por número de variables:")
+print(reg_summary$adjr2)
+best_adjr2 <- which.max(reg_summary$adjr2)
+print(paste("Mejor modelo según R² ajustado:", best_adjr2, "variables"))
+```
+
+**d) ¿Coinciden?**
+
+```{r}
+print(paste("¿Coinciden Cp y R² adj?", best_cp == best_adjr2))
+```
+
+Para ver qué variables específicas selecciona cada modelo, podemos usar la función `coef()`:
+
+```{r}
+# Variables del mejor modelo según Cp (3 variables)
+print("Mejores 3 variables (Cp):")
+print(names(coef(regfit_full, id = 3)))
+
+# Variables del mejor modelo según R² ajustado (5 variables)
+print("Mejores 5 variables (R² adj):")
+print(names(coef(regfit_full, id = 5)))
+```
+
+</details>
 
 ## Ejercicio 5: Conceptual (Métodos Stepwise)
 
 Los métodos automáticos paso a paso (forward, backward, stepwise) son computacionalmente eficientes, pero el texto advierte sobre su uso. Menciona y explica brevemente **tres de las principales limitaciones o problemas** de estos métodos.
 
+<details>
+<summary></summary>
 
+**Tres principales limitaciones:**
+
+1. **Inestabilidad**: Pequeños cambios en los datos pueden llevar a modelos completamente diferentes. La selección puede ser muy sensible al orden de entrada/salida.
+
+2. **Múltiples comparaciones**: Se realizan muchos tests sin ajuste por multiplicidad, inflando la tasa de error tipo I. Los p-valores ya no tienen su interpretación usual.
+
+3. **Optimización local**: Los métodos stepwise pueden quedarse atrapados en óptimos locales y no encontrar el mejor conjunto global de variables.
+
+</details>
 
 ## Ejercicio 6: Práctico (Selección Backward Stepwise)
 
@@ -63,7 +192,30 @@ a) Ajusta el modelo completo: `modelo_completo <- lm(Fertility ~ ., data = swiss
 b) Utiliza la función `step()` para realizar una selección **regresiva (backward)** basada en el criterio AIC.
 c) Reporta la fórmula del modelo final que selecciona el algoritmo y su valor de AIC.
 
+<details>
+<summary></summary>
 
+**a) Modelo completo:**
+
+```{r}
+modelo_completo <- lm(Fertility ~ ., data = swiss)
+```
+
+**b) Selección backward:**
+
+```{r}
+modelo_step <- step(modelo_completo, direction = "backward", trace = FALSE)
+```
+
+**c) Reporte de resultados:**
+
+```{r}
+print("Fórmula del modelo final:")
+print(formula(modelo_step))
+print(paste("AIC del modelo final:", round(AIC(modelo_step), 2)))
+```
+
+</details>
 
 ## Ejercicio 7: Conceptual (Ridge vs. Lasso)
 
@@ -73,7 +225,23 @@ a) ¿Qué tipo de penalización utiliza cada método ($L_1$ o $L_2$)?
 b) ¿Cuál de los dos métodos puede realizar selección de variables (es decir, anular coeficientes por completo)?
 c) Describe un escenario en el que preferirías usar Ridge sobre Lasso. 
 
+<details>
+<summary></summary>
 
+**a) Tipo de penalización:**
+
+- **Ridge**: Penalización $L_2$ (suma de cuadrados de coeficientes): $\lambda\sum\beta_j^2$
+- **Lasso**: Penalización $L_1$ (suma de valores absolutos): $\lambda\sum|\beta_j|$
+
+**b) ¿Cuál puede hacer selección de variables?**
+**Lasso** puede anular coeficientes completamente (hacerlos exactamente cero), realizando selección automática de variables. Ridge solo los reduce hacia cero.
+
+La diferencia se debe a la forma geométrica de sus restricciones. La restricción de Lasso (un rombo) tiene "esquinas", lo que permite que la solución óptima caiga sobre un eje, anulando el coeficiente de la otra variable. La restricción de Ridge (un círculo) es suave y no tiene esquinas, por lo que los coeficientes se acercan a cero pero nunca lo alcanzan.
+
+**c) Escenario para preferir Ridge:**
+Cuando hay muchas variables con efectos pequeños pero reales, y queremos mantenerlas todas con coeficientes reducidos. Por ejemplo, en genómica donde miles de genes pueden tener efectos pequeños pero relevantes.
+
+</details>
 
 ## Ejercicio 8: Práctico (Regresión Lasso)
 
@@ -84,13 +252,74 @@ b) Utiliza la función `cv.glmnet()` para realizar una validación cruzada y enc
 c) Extrae y muestra los coeficientes del modelo Lasso ajustado con el `lambda.min`.
 d) ¿Qué variables ha eliminado el modelo (coeficientes iguales a cero)?
 
+<details>
+<summary></summary>
 
+**a) Preparar datos:**
+
+```{r}
+library(glmnet)
+x <- model.matrix(mpg ~ ., mtcars)[, -1]  # Remover intercepto
+y <- mtcars$mpg
+```
+
+**b) Validación cruzada para Lasso:**
+
+```{r}
+set.seed(123)
+cv_lasso <- cv.glmnet(x, y, alpha = 1)  # alpha = 1 para Lasso
+plot(cv_lasso)
+```
+
+**Interpretación del gráfico:** El gráfico muestra el Error Cuadrático Medio (MSE) de la validación cruzada en el eje Y para diferentes valores de penalización en el eje X (logaritmo de lambda). La primera línea de puntos vertical (`lambda.min`) indica el valor de lambda que minimiza el error. La segunda línea (`lambda.1se`) es una opción más parsimoniosa que se encuentra a un error estándar del mínimo. Los números en la parte superior indican cuántas variables se mantienen en el modelo para cada nivel de penalización.
+
+**c) Coeficientes con lambda óptimo:**
+
+```{r}
+lambda_min <- cv_lasso$lambda.min
+coef_lasso <- coef(cv_lasso, s = lambda_min)
+print("Coeficientes del modelo Lasso:")
+print(coef_lasso)
+```
+
+**d) Variables eliminadas:**
+
+```{r}
+variables_eliminadas <- rownames(coef_lasso)[coef_lasso[,1] == 0 & rownames(coef_lasso) != "(Intercept)"]
+print("Variables eliminadas (coeficientes = 0):")
+print(variables_eliminadas)
+```
+
+</details>
 
 ## Ejercicio 9: Conceptual (Validación)
 
 Explica la diferencia entre la estrategia de validación **Train/Test Split simple** y la **Validación Cruzada k-fold**. ¿Cuál es la principal ventaja de la validación cruzada sobre la división simple? ¿En qué situación (tamaño del dataset) recomendarías usar cada una?
 
+<details>
+<summary></summary>
 
+**Train/Test Split Simple:**
+
+- Se divide el dataset una sola vez en entrenamiento y test
+- Se entrena en train, se evalúa en test
+- **Ventaja**: Rápido y simple
+- **Desventaja**: La estimación del error puede ser inestable y depender de la división específica
+
+**Validación Cruzada k-fold:**
+
+- Se divide el dataset en k particiones
+- Se entrena k veces, usando k-1 particiones para entrenar y 1 para validar
+- Se promedia el error de las k evaluaciones
+- **Ventaja principal**: Estimación más estable y menos dependiente de una división particular
+
+**Cuándo usar cada una:**
+
+- **Train/Test simple**: Datasets grandes (>10,000 observaciones) donde la estabilidad no es crítica
+- **Validación cruzada**: Datasets pequeños o medianos donde necesitamos estimaciones estables del rendimiento
+
+
+</details>
 
 ## Ejercicio 10: Práctico (Validación Cruzada)
 
@@ -99,3 +328,52 @@ Imagina que has ajustado dos modelos para predecir `mpg` en el dataset `mtcars`:
 2.  Un modelo complejo: `mpg ~ .` (todas las variables)
 
 Utilizando la librería `caret` y la función `train()`, como se muestra en el `callout-tip` "La maldición del sobreajuste", configura y ejecuta una **validación cruzada de 10 particiones** para estimar el **RMSE** de ambos modelos. ¿Cuál de los dos modelos generaliza mejor a nuevos datos según esta estimación?
+
+<details>
+<summary></summary>
+
+```{r}
+# Configurar validación cruzada
+library(caret)
+set.seed(123)
+
+# Configuración de CV
+ctrl <- trainControl(
+  method = "cv",
+  number = 10,
+  verboseIter = FALSE
+)
+
+# Modelo simple
+modelo_simple <- train(
+  mpg ~ wt + hp,
+  data = mtcars,
+  method = "lm",
+  trControl = ctrl
+)
+
+# Modelo complejo
+modelo_complejo <- train(
+  mpg ~ .,
+  data = mtcars,
+  method = "lm",
+  trControl = ctrl
+)
+
+# Comparar resultados
+print("RMSE - Modelo Simple:")
+print(modelo_simple$results$RMSE)
+
+print("RMSE - Modelo Complejo:")
+print(modelo_complejo$results$RMSE)
+
+# Conclusión
+if(modelo_simple$results$RMSE < modelo_complejo$results$RMSE) {
+  print("El modelo simple generaliza mejor")
+} else {
+  print("El modelo complejo generaliza mejor")
+}
+```
+
+</details>
+

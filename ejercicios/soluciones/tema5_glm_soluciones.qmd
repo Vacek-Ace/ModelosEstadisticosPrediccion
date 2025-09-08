@@ -1,32 +1,41 @@
-<!-- ---
-title: "Ejercicios: Modelos de Regresión Generalizada"
-subtitle: "Modelos Estadísticos de Predicción"
-author: "Víctor Aceña Gil - Isaac Martín de Diego"
-date: today
-format: 
-  html:
-    toc: true
-    toc-depth: 3
-    code-fold: false
-    theme: cosmo
-execute:
-  warning: false
-  message: false
---- -->
-
-## **Modelos de Regresión Generalizada**
+# Modelos de Regresión Generalizada
 
 ## Ejercicio 1: Conceptual (Fundamentos de GLM)
 
 Explica los **tres componentes clave** que definen a cualquier Modelo Lineal Generalizado (GLM) y describe brevemente la función de cada uno.
 
+<details>
+<summary></summary>
 
+Los **tres componentes clave** de un GLM son:
+
+1. **Componente aleatorio**: Especifica la distribución de probabilidad de la variable respuesta (Normal, Binomial, Poisson, etc.). Define cómo se distribuyen los errores.
+
+2. **Componente sistemático**: Define el predictor lineal $\eta = \beta_0 + \beta_1 X_1 + ... + \beta_p X_p$. Es la parte lineal del modelo.
+
+3. **Función de enlace**: Conecta la media de la distribución ($\mu$) con el predictor lineal: $g(\mu) = \eta$. Permite que el predictor lineal tenga rango completo mientras la media respeta las restricciones de la distribución.
+
+</details>
 
 ## Ejercicio 2: Conceptual (Función de Enlace)
 
 ¿Cuál es el propósito fundamental de la **función de enlace** en un GLM? ¿Por qué la regresión lineal clásica es considerada un caso particular de un GLM? (Pista: piensa en su función de enlace). 
 
+<details>
+<summary></summary>
 
+**Propósito de la función de enlace:**
+
+Transformar la media de la variable respuesta para que pueda ser modelada como una combinación lineal de los predictores, respetando las restricciones del dominio de la variable respuesta.
+
+**Regresión lineal como caso particular:**
+
+La regresión lineal clásica es un GLM con:
+- **Distribución**: Normal
+- **Función de enlace**: Identidad ($g(\mu) = \mu$)
+- Por tanto: $\mu = \beta_0 + \beta_1 X_1 + ... + \beta_p X_p$
+
+</details>
 
 ## Ejercicio 3: Práctico (Ajuste de un Modelo Logístico)
 
@@ -36,7 +45,28 @@ a) Ajusta un modelo de regresión logística para predecir la probabilidad de qu
 b) Utiliza la función `summary()` para examinar el modelo. ¿Qué variables parecen ser significativas?
 c) Obtén los coeficientes del modelo. ¿Cómo interpretarías el signo del coeficiente para la variable `wt`?
 
+<details>
+<summary></summary>
 
+**a) Ajustar modelo logístico:**
+
+```{r}
+modelo_logistico <- glm(am ~ wt + hp, data = mtcars, family = binomial)
+```
+
+**b) Summary del modelo:**
+
+```{r}
+summary(modelo_logistico)
+```
+
+**b) Variables significativas:**
+Basándose en los p-valores, identificar qué variables tienen p < 0.05.
+
+**c) Interpretación del signo de wt:**
+Si el coeficiente de `wt` es **negativo**, significa que coches más pesados tienen menor probabilidad de tener transmisión manual (lo cual es intuitivo).
+
+</details>
 
 ## Ejercicio 4: Interpretación (Odds Ratios)
 
@@ -45,7 +75,26 @@ Basado en el modelo del ejercicio anterior:
 a) Calcula el **Odds Ratio (OR)** para el coeficiente de la variable `hp`.
 b) Interpreta este Odds Ratio en el contexto del problema. Específicamente, ¿cómo cambian las "odds" (la razón de probabilidad) de tener una transmisión manual por cada caballo de fuerza adicional, manteniendo el peso constante? 
 
+<details>
+<summary></summary>
 
+**a) Calcular Odds Ratio para hp:**
+
+```{r}
+coef_hp <- coef(modelo_logistico)["hp"]
+odds_ratio_hp <- exp(coef_hp)
+print(paste("Odds Ratio para hp:", round(odds_ratio_hp, 4)))
+
+# Para todos los coeficientes
+odds_ratios <- exp(coef(modelo_logistico))
+print("Todos los Odds Ratios:")
+print(odds_ratios)
+```
+
+**b) Interpretación:**
+El Odds Ratio para `hp` es **1.0369**. Esto significa que por cada caballo de fuerza adicional, las *odds* (la razón de probabilidad) de que un coche tenga transmisión manual se **multiplican por 1.0369** (es decir, aumentan aproximadamente un 3.7%), manteniendo constante el peso del coche.
+
+</details>
 
 ## Ejercicio 5: Práctico (Validación del Modelo Logístico)
 
@@ -57,7 +106,53 @@ c) Crea la **matriz de confusión** comparando las predicciones con los valores 
 d) Calcula la **precisión (accuracy)** global del modelo.
 e) (Bonus) Utiliza el paquete `pROC` para calcular y visualizar la **curva ROC** y obtener el valor del **AUC**. ¿Qué tan buena es la capacidad discriminativa del modelo? 
 
+<details>
+<summary></summary>
 
+**a) Predicciones de probabilidad:**
+
+```{r}
+probabilidades <- predict(modelo_logistico, type = "response")
+```
+
+**b) Conversión a clases con umbral 0.5:**
+
+```{r}
+predicciones_clase <- ifelse(probabilidades > 0.5, 1, 0)
+```
+
+**c) Matriz de confusión:**
+
+```{r}
+tabla_confusion <- table(Predicho = predicciones_clase, Real = mtcars$am)
+print("Matriz de Confusión:")
+print(tabla_confusion)
+```
+
+**d) Cálculo de precisión:**
+
+```{r}
+precision <- sum(diag(tabla_confusion)) / sum(tabla_confusion)
+print(paste("Precisión (Accuracy):", round(precision, 3)))
+```
+
+**e) Curva ROC y AUC:**
+
+```{r}
+library(pROC)
+roc_obj <- roc(mtcars$am, probabilidades)
+auc_value <- auc(roc_obj)
+plot(roc_obj, main = paste("Curva ROC (AUC =", round(auc_value, 3), ")"))
+print(paste("AUC:", round(auc_value, 3)))
+```
+
+**Interpretación AUC:**
+
+- AUC > 0.8: Buena capacidad discriminativa
+- AUC > 0.9: Excelente capacidad discriminativa
+- AUC = 0.5: Sin capacidad discriminativa (azar)
+
+</details>
 
 ## Ejercicio 6: Conceptual (Regresión de Poisson)
 
@@ -65,7 +160,19 @@ a) ¿Qué tipo de variable respuesta está diseñada para modelar la regresión 
 b) ¿Cuál es el supuesto fundamental de la distribución de Poisson respecto a la relación entre la media y la varianza?
 c) ¿Cómo se llama el problema que surge cuando este supuesto se viola y la varianza es mayor que la media?
 
+<details>
+<summary></summary>
 
+**a) Tipo de variable respuesta:**
+La regresión de Poisson está diseñada para **variables de conteo**: enteros no negativos que representan el número de ocurrencias de un evento en un período o espacio fijo.
+
+**b) Supuesto fundamental:**
+En la distribución de Poisson, la **media es igual a la varianza**: $E[Y] = Var[Y] = \mu$.
+
+**c) Problema cuando se viola:**
+Cuando $Var[Y] > E[Y]$, se llama **sobredispersión**. Esto puede llevar a errores estándar subestimados y conclusiones incorrectas sobre la significancia.
+
+</details>
 
 ## Ejercicio 7: Práctico (Ajuste de un Modelo de Poisson)
 
@@ -75,7 +182,45 @@ a) Crea un gráfico de la serie temporal. ¿Parece la media del conteo constante
 b) Ajusta un modelo de regresión de Poisson simple donde `discoveries` es la respuesta y el tiempo (`time(discoveries)`) es el predictor.
 c) Interpreta el coeficiente del tiempo. (Pista: recuerda exponenciarlo para obtener el Incidence Rate Ratio - IRR). 
 
+<details>
+<summary></summary>
 
+```{r}
+# Usar dataset discoveries
+data(discoveries)
+```
+
+**a) Gráfico de la serie temporal:**
+
+```{r}
+plot(discoveries, main = "Grandes Inventos por Año", 
+     ylab = "Número de Descubrimientos", xlab = "Año")
+```
+
+**b) Ajustar modelo de Poisson:**
+
+```{r}
+# Crear data frame con tiempo
+df_discoveries <- data.frame(
+  count = as.numeric(discoveries),
+  time = as.numeric(time(discoveries))
+)
+
+modelo_poisson <- glm(count ~ time, data = df_discoveries, family = poisson)
+summary(modelo_poisson)
+```
+
+**c) Interpretación del coeficiente de tiempo:**
+```{r}
+# IRR (Incidence Rate Ratio)
+coef_time <- coef(modelo_poisson)["time"]
+irr <- exp(coef_time)
+print(paste("IRR para tiempo:", round(irr, 6)))
+```
+
+El IRR para el tiempo es **0.994654**. Esto significa que por cada año que pasa, se espera que la tasa de grandes inventos se **multiplique por 0.994654**, lo que representa una **disminución anual de aproximadamente 0.53%** (calculado como 1 - 0.994654).
+
+</details>
 
 ## Ejercicio 8: Diagnóstico (Sobredispersión)
 
@@ -83,13 +228,54 @@ a) Para el modelo de Poisson del ejercicio anterior, calcula el **estadístico d
 b) Basándote en el valor de $\hat{\phi}$, ¿hay evidencia de sobredispersión?
 c) Si encuentras sobredispersión, ¿cuál es el modelo alternativo que proponen los apuntes? ¿Qué ventaja teórica ofrece este modelo alternativo?
 
+<details>
+<summary></summary>
 
+**a) Calcular estadístico de dispersión:**
+
+```{r}
+residuos_pearson <- residuals(modelo_poisson, type = "pearson")
+n <- nrow(df_discoveries)
+p <- length(coef(modelo_poisson))
+phi_hat <- sum(residuos_pearson^2) / (n - p)
+
+print(paste("Estadístico de dispersión (φ̂):", round(phi_hat, 3)))
+```
+
+**b) Evidencia de sobredispersión:**
+Si φ̂ > 1, hay evidencia de sobredispersión. Valores > 1.5 indican sobredispersión considerable.
+
+**c) Modelo alternativo:**
+Si hay sobredispersión, se puede usar **regresión Binomial Negativa**, que incluye un parámetro adicional que permite que la varianza sea mayor que la media: $Var[Y] = \mu + \alpha\mu^2$.
+
+```{r}
+# Ajuste con binomial negativa si hay sobredispersión
+if(phi_hat > 1.5) {
+  library(MASS)
+  modelo_nb <- glm.nb(count ~ time, data = df_discoveries)
+  print("Modelo Binomial Negativo ajustado:")
+  print(summary(modelo_nb))
+}
+```
+
+</details>
 
 ## Ejercicio 9: Conceptual (Deviance)
 
 La **deviance** es la medida principal de bondad de ajuste en los GLM. Explica conceptualmente qué mide. ¿Cómo se utiliza la diferencia en deviance entre dos modelos anidados para decidir cuál es mejor?
 
+<details>
+<summary></summary>
 
+**Deviance** mide qué tan bien el modelo ajustado se compara con el modelo saturado (perfecto). Es análogo a la suma de cuadrados residuales en regresión lineal.
+
+**Fórmula**: $D = 2[L(\text{modelo saturado}) - L(\text{modelo ajustado})]$
+
+**Uso para comparar modelos anidados:**
+La diferencia en deviance entre dos modelos anidados sigue una distribución χ² con grados de libertad igual a la diferencia en número de parámetros. Si esta diferencia es significativa, el modelo más complejo es preferible.
+
+
+</details>
 
 ## Ejercicio 10: Elección del Modelo Adecuado
 
@@ -98,3 +284,29 @@ Para cada uno de los siguientes escenarios, indica qué tipo de GLM (Logístico,
 a) Quieres modelar el **tiempo (en minutos)** que tarda un cliente en resolver una consulta en un centro de atención telefónica. El tiempo es siempre positivo y muchos valores se agrupan en tiempos cortos, con una cola larga de tiempos muy largos.
 b) Quieres predecir la **presencia o ausencia** de una especie de planta en diferentes parcelas de un bosque.
 c) Quieres modelar el **número de visitas** que cada usuario hace a una página web en un mes. Observas que la varianza del número de visitas es mucho mayor que la media.
+
+<details>
+<summary></summary>
+
+**a) Tiempo de resolución de consultas:**
+**Modelo Gamma** sería más apropiado porque:
+
+- La variable es continua y positiva
+- Típicamente tiene distribución asimétrica con cola derecha larga
+- La distribución Gamma es flexible para este tipo de datos
+
+**b) Presencia/ausencia de especies:**
+**Regresión Logística** es la elección obvia porque:
+
+- Variable respuesta binaria (presencia = 1, ausencia = 0)
+- Queremos modelar probabilidades que están restringidas al intervalo [0,1]
+
+**c) Número de visitas con varianza mayor que la media:**
+**Regresión Binomial Negativa** sería más apropiada porque:
+
+- Variable de conteo (número de visitas)
+- La sobredispersión (varianza > media) viola el supuesto de Poisson
+- La binomial negativa maneja naturalmente la sobredispersión
+
+
+</details>

@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -113,7 +148,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema3_ingenieria_caracteristicas_soluciones.html"><span class="chapter-title"><strong>Ingeniería de Características</strong></span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema3_ingenieria_caracteristicas_soluciones.html"><span class="chapter-title">Ingeniería de Características</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -153,27 +188,27 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Regresión Lineal Múltiple</strong></span></a>
+  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Regresión Lineal Múltiple</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title"><strong>Ingeniería de Características</strong></span></a>
+  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Ingeniería de Características</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Selección de variables, Regularización y Validación</strong></span></a>
+  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Selección de variables, Regularización y Validación</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></a>
+  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Modelos de Regresión Generalizada</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ejercicios: Popurrí</span></a>
+  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ejercicios Avanzados</span></a>
   </div>
 </li>
     </ul>
@@ -204,7 +239,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title"><strong>Ingeniería de Características</strong></span></h1>
+<h1 class="title"><span class="chapter-title">Ingeniería de Características</span></h1>
 </div>
 
 
@@ -221,24 +256,19 @@ window.Quarto = {
 </header>
 
 
-<!-- ---
-title: "Ejercicios: Ingeniería de Características"
-subtitle: "Modelos Estadísticos de Predicción"
-author: "Víctor Aceña Gil - Isaac Martín de Diego"
-date: today
-format: 
-  html:
-    toc: true
-    toc-depth: 3
-    code-fold: false
-    theme: cosmo
-execute:
-  warning: false
-  message: false
---- -->
 <section id="ejercicio-1-conceptual-diagnóstico-antes-de-transformar" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-1-conceptual-diagnóstico-antes-de-transformar">Ejercicio 1: Conceptual (Diagnóstico antes de Transformar)</h2>
 <p>El texto desaconseja fuertemente el enfoque de “ensayo y error” al aplicar transformaciones. Explica con tus propias palabras por qué la práctica de probar transformaciones hasta que mejore el R² es metodológicamente peligrosa. Menciona al menos tres de los riesgos específicos discutidos en los apuntes.</p>
+<details>
+<summary>
+</summary>
+<p>El enfoque de “ensayo y error” para transformaciones es metodológicamente peligroso por varios riesgos:</p>
+<p><strong>1. Data snooping/p-hacking</strong>: Probar múltiples transformaciones hasta encontrar una que mejore el R² aumenta artificialmente la probabilidad de encontrar patrones espurios.</p>
+<p><strong>2. Sobreajuste</strong>: El modelo resultante puede ajustarse específicamente a las peculiaridades de los datos de entrenamiento y no generalizar bien.</p>
+<p><strong>3. Pérdida de interpretabilidad</strong>: Las transformaciones complejas pueden hacer que el modelo sea difícil de interpretar y comunicar.</p>
+<p><strong>4. Invalidación de la inferencia estadística</strong>: Los p-valores y intervalos de confianza ya no son válidos cuando se ha hecho selección de modelos basada en los datos.</p>
+<p><strong>5. Falta de justificación teórica</strong>: Sin una base conceptual, la transformación puede no tener sentido en el contexto del problema.</p>
+</details>
 </section>
 <section id="ejercicio-2-práctico-escalado-de-variables" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-2-práctico-escalado-de-variables">Ejercicio 2: Práctico (Escalado de Variables)</h2>
@@ -248,6 +278,52 @@ execute:
 <li>Crea un nuevo data frame donde hayas aplicado la <strong>estandarización Z-Score</strong> a estas cuatro variables. Verifica que las nuevas variables tienen una media cercana a 0 y una desviación estándar de 1.</li>
 <li>¿Por qué este paso de escalado es crucial antes de aplicar métodos de regularización como Ridge o Lasso, tal y como se menciona en el texto?</li>
 </ol>
+<details>
+<summary>
+</summary>
+<p><strong>a) Estadísticas descriptivas originales:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>variables_iris <span class="ot">&lt;-</span> iris[, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>estadisticas_orig <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Media =</span> <span class="fu">sapply</span>(variables_iris, mean),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Desv_Est =</span> <span class="fu">sapply</span>(variables_iris, sd)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Estadísticas originales:"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Estadísticas originales:"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(estadisticas_orig, <span class="dv">3</span>))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             Media Desv_Est
+Sepal.Length 5.843    0.828
+Sepal.Width  3.057    0.436
+Petal.Length 3.758    1.765
+Petal.Width  1.199    0.762</code></pre>
+</div>
+</div>
+<p>Las escalas <strong>NO son directamente comparables</strong> porque tienen diferentes unidades y rangos de variación.</p>
+<p><strong>b) Estandarización Z-Score:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>iris_scaled <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">scale</span>(variables_iris))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>estadisticas_scaled <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Media =</span> <span class="fu">sapply</span>(iris_scaled, mean),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Desv_Est =</span> <span class="fu">sapply</span>(iris_scaled, sd)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Estadísticas después de estandarización:"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Estadísticas después de estandarización:"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(estadisticas_scaled, <span class="dv">10</span>))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             Media Desv_Est
+Sepal.Length     0        1
+Sepal.Width      0        1
+Petal.Length     0        1
+Petal.Width      0        1</code></pre>
+</div>
+</div>
+<p><strong>c) Importancia para regularización:</strong> El escalado es crucial para Ridge/Lasso porque estos métodos penalizan los coeficientes por su magnitud. Sin escalado, variables con escalas más grandes serían penalizadas más severamente, creando un sesgo artificial en la selección de variables.</p>
+</details>
 </section>
 <section id="ejercicio-3-conceptual-elección-del-método-de-escalado" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-3-conceptual-elección-del-método-de-escalado">Ejercicio 3: Conceptual (Elección del Método de Escalado)</h2>
@@ -257,6 +333,25 @@ execute:
 <li>Un escenario donde la <strong>normalización Min-Max</strong> es preferible.</li>
 <li>Un escenario donde el <strong>escalado robusto</strong> (usando mediana y IQR) es necesario.</li>
 </ol>
+<details>
+<summary>
+</summary>
+<p><strong>a) Estandarización Z-Score preferible:</strong></p>
+<ul>
+<li><strong>Escenario</strong>: Análisis de datos de rendimiento académico donde las variables son notas de diferentes materias con distribuciones aproximadamente normales.</li>
+<li><strong>Razón</strong>: Es el método estándar y funciona especialmente bien cuando las variables ya tienen una distribución aproximadamente simétrica o normal. Es la base de muchos procedimientos estadísticos que asumen este tipo de distribución.</li>
+</ul>
+<p><strong>b) Normalización Min-Max preferible:</strong></p>
+<ul>
+<li><strong>Escenario</strong>: Sistema de recomendación donde necesitas que todas las variables estén en el rango [0,1] para combinarlas en un score.</li>
+<li><strong>Razón</strong>: Garantiza un rango específico y preserva las relaciones exactas entre valores.</li>
+</ul>
+<p><strong>c) Escalado robusto necesario:</strong></p>
+<ul>
+<li><strong>Escenario</strong>: Datos financieros con outliers extremos (como ingresos con algunos multimillonarios).</li>
+<li><strong>Razón</strong>: La mediana y el IQR son menos sensibles a outliers que la media y desviación estándar.</li>
+</ul>
+</details>
 </section>
 <section id="ejercicio-4-práctico-transformación-para-linealizar" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-4-práctico-transformación-para-linealizar">Ejercicio 4: Práctico (Transformación para Linealizar)</h2>
@@ -266,6 +361,52 @@ execute:
 <li>Los apuntes sugieren que la transformación logarítmica es útil para relaciones con “rendimientos decrecientes”. Propón y aplica una transformación (ej. sobre el predictor, la respuesta, o ambos) para intentar linealizar la relación. Por ejemplo, ajusta <code>lm(log(dist) ~ speed, data = cars)</code>.</li>
 <li>Genera de nuevo el gráfico de residuos vs.&nbsp;valores ajustados para el nuevo modelo. Compara ambos diagnósticos. ¿Ha mejorado la linealidad?</li>
 </ol>
+<details>
+<summary>
+</summary>
+<p><strong>a) Modelo original y diagnóstico:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>modelo_cars_orig <span class="ot">&lt;-</span> <span class="fu">lm</span>(dist <span class="sc">~</span> speed, <span class="at">data =</span> cars)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_cars_orig, <span class="at">which =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">"Modelo Original"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema3_ingenieria_caracteristicas_soluciones_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>b) Transformación propuesta:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Probamos transformación cuadrática del predictor</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>modelo_cars_trans <span class="ot">&lt;-</span> <span class="fu">lm</span>(dist <span class="sc">~</span> <span class="fu">I</span>(speed<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> cars)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_cars_trans, <span class="at">which =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">"Modelo Transformado"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema3_ingenieria_caracteristicas_soluciones_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternativa: transformación logarítmica de la respuesta</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (eliminando dist = 0 si existe)</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>cars_filtered <span class="ot">&lt;-</span> cars[cars<span class="sc">$</span>dist <span class="sc">&gt;</span> <span class="dv">0</span>, ]</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>modelo_log <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(dist) <span class="sc">~</span> speed, <span class="at">data =</span> cars_filtered)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(modelo_log, <span class="at">which =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">"Modelo log(dist) ~ speed"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema3_ingenieria_caracteristicas_soluciones_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>c) Evaluación:</strong> Sí, la linealidad ha mejorado notablemente con ambas transformaciones. Comparando los gráficos, tanto la transformación cuadrática del predictor como la logarítmica en la respuesta consiguen eliminar el patrón curvo de los residuos. La transformación logarítmica (<code>log(dist)</code>) parece producir una dispersión de residuos ligeramente más aleatoria y homogénea.</p>
+</details>
 </section>
 <section id="ejercicio-5-práctico-transformación-de-box-cox" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-5-práctico-transformación-de-box-cox">Ejercicio 5: Práctico (Transformación de Box-Cox)</h2>
@@ -275,6 +416,25 @@ execute:
 <li>Observando el gráfico que se genera, ¿a qué valor “simple” (como -1, 0, 0.5, 1) se aproxima el <span class="math inline">\(\lambda\)</span> óptimo?</li>
 <li>Basándote en este resultado, ¿cuál de las transformaciones clásicas (logarítmica, raíz cuadrada, inversa, etc.) sería la más recomendable para la variable <code>medv</code>?</li>
 </ol>
+<details>
+<summary>
+</summary>
+<p><strong>a) Análisis Box-Cox:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>modelo_boston <span class="ot">&lt;-</span> <span class="fu">lm</span>(medv <span class="sc">~</span> lstat, <span class="at">data =</span> Boston)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">boxcox</span>(modelo_boston)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema3_ingenieria_caracteristicas_soluciones_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>b) Interpretación del gráfico:</strong> El λ óptimo parece estar cerca de <strong>λ = 0</strong>, lo que sugiere una <strong>transformación logarítmica</strong>.</p>
+<p><strong>c) Recomendación:</strong> Basándose en λ ≈ 0, la transformación más recomendable sería <strong>log(medv)</strong>, que es la transformación logarítmica estándar.</p>
+</details>
 </section>
 <section id="ejercicio-6-conceptual-codificación-de-variables-categóricas" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-6-conceptual-codificación-de-variables-categóricas">Ejercicio 6: Conceptual (Codificación de Variables Categóricas)</h2>
@@ -284,6 +444,21 @@ execute:
 <li><code>nivel_riesgo</code>: (“Bajo”, “Medio”, “Alto”, “Crítico”)</li>
 <li><code>pais_origen</code>: (“España”, “Francia”, “Alemania”, “Italia”)</li>
 </ul>
+<details>
+<summary>
+</summary>
+<p><strong>Diferencias fundamentales:</strong></p>
+<ul>
+<li><strong>Codificación Ordinal</strong>: Asigna números consecutivos preservando el orden (1, 2, 3, …)</li>
+<li><strong>Codificación One-Hot</strong>: Crea variables binarias (0/1) para cada categoría</li>
+</ul>
+<p><strong>Recomendaciones:</strong></p>
+<ul>
+<li><p><strong>mes</strong>: <strong>One-Hot</strong> - Aunque tiene orden natural, los meses son cíclicos y la distancia entre Enero y Diciembre no es 11.</p></li>
+<li><p><strong>nivel_riesgo</strong>: <strong>Ordinal</strong> - Hay una clara jerarquía natural (Bajo &lt; Medio &lt; Alto &lt; Crítico).</p></li>
+<li><p><strong>pais_origen</strong>: <strong>One-Hot</strong> - No hay orden natural entre países, son categorías nominales.</p></li>
+</ul>
+</details>
 </section>
 <section id="ejercicio-7-práctico-interacción-entre-variables-continuas" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-7-práctico-interacción-entre-variables-continuas">Ejercicio 7: Práctico (Interacción entre Variables Continuas)</h2>
@@ -293,6 +468,47 @@ execute:
 <li>Observa el <code>summary()</code> del modelo. ¿Es el término de interacción (<code>wt:hp</code>) estadísticamente significativo a un nivel de <span class="math inline">\(\alpha = 0.05\)</span>?</li>
 <li>Basándote en el signo del coeficiente de la interacción, ¿cómo cambia el efecto del peso sobre el consumo a medida que aumenta la potencia? (Es decir, ¿el efecto negativo del peso se hace más fuerte o más débil en los coches más potentes?).</li>
 </ol>
+<details>
+<summary>
+</summary>
+<p><strong>a) Modelo con interacción:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>modelo_interaccion <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt <span class="sc">+</span> hp <span class="sc">+</span> wt<span class="sc">:</span>hp, <span class="at">data =</span> mtcars)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># O equivalentemente: lm(mpg ~ wt * hp, data = mtcars)</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>b) Summary del modelo:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_interaccion)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = mpg ~ wt + hp + wt:hp, data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.0632 -1.6491 -0.7362  1.4211  4.5513 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 49.80842    3.60516  13.816 5.01e-14 ***
+wt          -8.21662    1.26971  -6.471 5.20e-07 ***
+hp          -0.12010    0.02470  -4.863 4.04e-05 ***
+wt:hp        0.02785    0.00742   3.753 0.000811 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2.153 on 28 degrees of freedom
+Multiple R-squared:  0.8848,    Adjusted R-squared:  0.8724 
+F-statistic: 71.66 on 3 and 28 DF,  p-value: 2.981e-13</code></pre>
+</div>
+</div>
+<p><strong>b) Significancia de la interacción:</strong> El p-valor del término de interacción <code>wt:hp</code> es aproximadamente <strong>0.000811</strong>, que es mucho menor que 0.05, confirmando que la interacción es <strong>estadísticamente significativa</strong>.</p>
+<p><strong>c) Interpretación del signo y la significancia:</strong></p>
+<ol type="1">
+<li><p><strong>Significancia:</strong> El p-valor del término de interacción <code>wt:hp</code> es <strong>0.000811</strong>, que es mucho menor que 0.05. Esto confirma que la interacción es <strong>estadísticamente significativa</strong>. El efecto del peso sobre el consumo realmente depende de la potencia del coche.</p></li>
+<li><p><strong>Interpretación del Coeficiente:</strong> El coeficiente de la interacción <code>wt:hp</code> es <strong>positivo (+0.02785)</strong>. Esto significa que a medida que <code>hp</code> (potencia) aumenta, el efecto negativo de <code>wt</code> (peso) sobre <code>mpg</code> (consumo) se vuelve <strong>menos negativo (más débil)</strong>. En términos prácticos: el “castigo” al consumo por cada kilo extra de peso es menor en los coches que ya son muy potentes.</p></li>
+</ol>
+</details>
 </section>
 <section id="ejercicio-8-interpretación-de-una-interacción-continua-x-categórica" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-8-interpretación-de-una-interacción-continua-x-categórica">Ejercicio 8: Interpretación de una Interacción (Continua x Categórica)</h2>
@@ -303,10 +519,33 @@ execute:
 <li>Escribe la ecuación de regresión específica para los empleados que <strong>sí tienen</strong> un máster.</li>
 <li>Interpreta el coeficiente de la interacción (300). ¿Qué nos dice sobre el retorno económico de la experiencia para ambos grupos?</li>
 </ol>
+<details>
+<summary>
+</summary>
+<p><strong>Modelo:</strong> <code>salario = 30000 + 1200*experiencia + 8000*masterSi + 300*experiencia:masterSi</code></p>
+<p><strong>a) Ecuación para empleados SIN máster:</strong></p>
+<pre><code>salario = 30000 + 1200*experiencia + 8000*(0) + 300*experiencia*(0)
+salario = 30000 + 1200*experiencia</code></pre>
+<p><strong>b) Ecuación para empleados CON máster:</strong></p>
+<pre><code>salario = 30000 + 1200*experiencia + 8000*(1) + 300*experiencia*(1)
+salario = 38000 + 1500*experiencia</code></pre>
+<p><strong>c) Interpretación del coeficiente de interacción (300):</strong> El coeficiente de interacción indica que <strong>el retorno económico de cada año de experiencia es 300 euros mayor</strong> para los empleados con máster que para los empleados sin máster. Es decir, la experiencia es más valiosa económicamente para quienes tienen un máster.</p>
+</details>
 </section>
 <section id="ejercicio-9-conceptual-principio-de-jerarquía" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-9-conceptual-principio-de-jerarquía">Ejercicio 9: Conceptual (Principio de Jerarquía)</h2>
 <p>Explica el <strong>principio de jerarquía</strong> en el contexto de los modelos de regresión con interacciones. Si un modelo incluye el término de interacción <code>A:B</code>, ¿por qué es una buena práctica incluir siempre los efectos principales <code>A</code> y <code>B</code>, incluso si sus tests t individuales no son significativos?</p>
+<details>
+<summary>
+</summary>
+<p>El <strong>principio de jerarquía</strong> establece que si incluimos un término de interacción <code>A:B</code>, debemos incluir siempre los efectos principales <code>A</code> y <code>B</code>, incluso si no son individualmente significativos.</p>
+<p><strong>Razones:</strong></p>
+<ol type="1">
+<li><p><strong>Interpretabilidad</strong>: Los términos de interacción representan desviaciones de los efectos principales. Sin los efectos principales, la interpretación se vuelve confusa.</p></li>
+<li><p><strong>Estabilidad numérica</strong>: Los algoritmos de ajuste pueden volverse inestables sin los términos principales.</p></li>
+<li><p><strong>Coherencia teórica</strong>: Desde una perspectiva conceptual, una interacción implica que existen efectos principales que se modifican mutuamente.</p></li>
+</ol>
+</details>
 </section>
 <section id="ejercicio-10-conceptual-ingeniería-de-características-avanzada" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-10-conceptual-ingeniería-de-características-avanzada">Ejercicio 10: Conceptual (Ingeniería de Características Avanzada)</h2>
@@ -315,6 +554,20 @@ execute:
 <li>Para predecir la rentabilidad de una tienda, tienes las variables <code>ventas_totales</code> y <code>numero_de_empleados</code>.</li>
 <li>Para predecir el riesgo de impago de un solicitante de préstamo, tienes las variables <code>ingresos_anuales</code> y <code>deuda_total</code>.</li>
 </ol>
+<details>
+<summary>
+</summary>
+<p><strong>a) Para predecir rentabilidad de tienda:</strong></p>
+<ul>
+<li><strong>Variable propuesta</strong>: <code>eficiencia_empleado = ventas_totales / numero_de_empleados</code></li>
+<li><strong>Relación capturada</strong>: Productividad por empleado, que puede ser mejor predictor de rentabilidad que las variables por separado, ya que considera tanto el volumen de negocio como la eficiencia operativa.</li>
+</ul>
+<p><strong>b) Para predecir riesgo de impago:</strong></p>
+<ul>
+<li><strong>Variable propuesta</strong>: <code>ratio_deuda_ingresos = deuda_total / ingresos_anuales</code></li>
+<li><strong>Relación capturada</strong>: Capacidad de pago relativa. Un ratio alto indica mayor riesgo independientemente de los valores absolutos. Por ejemplo, 50,000€ de deuda es muy diferente con ingresos de 30,000€ vs 100,000€.</li>
+</ul>
+</details>
 
 
 </section>
@@ -721,13 +974,13 @@ execute:
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./tema2_regresion_multiple_soluciones.html" class="pagination-link" aria-label="**Regresión Lineal Múltiple**">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title"><strong>Regresión Lineal Múltiple</strong></span></span>
+      <a href="./tema2_regresion_multiple_soluciones.html" class="pagination-link" aria-label="Regresión Lineal Múltiple">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Regresión Lineal Múltiple</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./tema4_seleccion_validacion_soluciones.html" class="pagination-link" aria-label="**Selección de variables, Regularización y Validación**">
-        <span class="nav-page-text"><span class="chapter-title"><strong>Selección de variables, Regularización y Validación</strong></span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./tema4_seleccion_validacion_soluciones.html" class="pagination-link" aria-label="Selección de variables, Regularización y Validación">
+        <span class="nav-page-text"><span class="chapter-title">Selección de variables, Regularización y Validación</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

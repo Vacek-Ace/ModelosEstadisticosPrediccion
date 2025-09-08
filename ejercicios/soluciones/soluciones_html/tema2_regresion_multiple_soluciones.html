@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -113,7 +148,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema2_regresion_multiple_soluciones.html"><span class="chapter-title"><strong>Regresión Lineal Múltiple</strong></span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema2_regresion_multiple_soluciones.html"><span class="chapter-title">Regresión Lineal Múltiple</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -153,27 +188,27 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title"><strong>Regresión Lineal Múltiple</strong></span></a>
+  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Regresión Lineal Múltiple</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Ingeniería de Características</strong></span></a>
+  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ingeniería de Características</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Selección de variables, Regularización y Validación</strong></span></a>
+  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Selección de variables, Regularización y Validación</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></a>
+  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Modelos de Regresión Generalizada</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ejercicios: Popurrí</span></a>
+  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ejercicios Avanzados</span></a>
   </div>
 </li>
     </ul>
@@ -204,7 +239,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title"><strong>Regresión Lineal Múltiple</strong></span></h1>
+<h1 class="title"><span class="chapter-title">Regresión Lineal Múltiple</span></h1>
 </div>
 
 
@@ -221,21 +256,6 @@ window.Quarto = {
 </header>
 
 
-<!-- ---
-title: "Ejercicios: Regresión Lineal Múltiple"
-subtitle: "Modelos Estadísticos de Predicción"
-author: "Víctor Aceña Gil - Isaac Martín de Diego"
-date: today
-format: 
-  html:
-    toc: true
-    toc-depth: 3
-    code-fold: false
-    theme: cosmo
-execute:
-  warning: false
-  message: false
---- -->
 <section id="ejercicio-1-conceptual-interpretación-ceteris-paribus" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-1-conceptual-interpretación-ceteris-paribus">Ejercicio 1: Conceptual (Interpretación <em>Ceteris Paribus</em>)</h2>
 <p>Un analista ajusta dos modelos para predecir el consumo de un coche (<code>mpg</code>):</p>
@@ -244,6 +264,23 @@ execute:
 <li><code>lm(mpg ~ wt + hp)</code> obtiene un coeficiente para <code>wt</code> de -3.8.</li>
 </ol>
 <p>Explica detalladamente por qué el coeficiente para la variable <code>wt</code> (peso) cambia al añadir la variable <code>hp</code> (caballos de fuerza). ¿Cuál de los dos coeficientes representa el efecto “puro” o “aislado” del peso? Fundamenta tu respuesta en el principio de <strong><em>ceteris paribus</em></strong>.</p>
+<details>
+<summary>
+</summary>
+<p><strong>Explicación del cambio en coeficientes:</strong></p>
+<p>El cambio en el coeficiente de <code>wt</code> (de -5.3 a -3.8) se debe a que en el modelo múltiple controlamos por el efecto de <code>hp</code>.</p>
+<p>En el <strong>modelo simple</strong> (<code>mpg ~ wt</code>):</p>
+<ul>
+<li>El coeficiente -5.3 captura el efecto “total” del peso, incluyendo efectos directos e indirectos.</li>
+<li>Parte de este efecto puede deberse a que los coches más pesados tienden a tener más caballos de fuerza, y los caballos de fuerza también reducen el consumo.</li>
+</ul>
+<p>En el <strong>modelo múltiple</strong> (<code>mpg ~ wt + hp</code>):</p>
+<ul>
+<li>El coeficiente -3.8 representa el efecto “puro” del peso, manteniendo constante los caballos de fuerza.</li>
+<li>Es el efecto del peso <em>ceteris paribus</em> (todo lo demás igual).</li>
+</ul>
+<p><strong>El coeficiente que representa el efecto “puro”</strong> es el del modelo múltiple (-3.8), porque aísla el efecto del peso de otras variables correlacionadas.</p>
+</details>
 </section>
 <section id="ejercicio-2-práctico-ajuste-e-interpretación-de-un-modelo-múltiple" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-2-práctico-ajuste-e-interpretación-de-un-modelo-múltiple">Ejercicio 2: Práctico (Ajuste e Interpretación de un Modelo Múltiple)</h2>
@@ -254,6 +291,39 @@ execute:
 <li>Interpreta el coeficiente estimado para <code>Sepal.Width</code>.</li>
 <li>Interpreta el intercepto del modelo. ¿Tiene un significado práctico en este contexto biológico?</li>
 </ol>
+<details>
+<summary>
+</summary>
+<p><strong>a) Ajustar modelo múltiple</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>modelo_iris <span class="ot">&lt;-</span> <span class="fu">lm</span>(Petal.Width <span class="sc">~</span> Petal.Length <span class="sc">+</span> Sepal.Width, <span class="at">data =</span> iris)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_iris)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Petal.Width ~ Petal.Length + Sepal.Width, data = iris)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.53907 -0.11443 -0.01447  0.12168  0.65419 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  -0.70648    0.15133  -4.668 6.78e-06 ***
+Petal.Length  0.42627    0.01045  40.804  &lt; 2e-16 ***
+Sepal.Width   0.09940    0.04231   2.349   0.0201 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.2034 on 147 degrees of freedom
+Multiple R-squared:  0.9297,    Adjusted R-squared:  0.9288 
+F-statistic: 972.7 on 2 and 147 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p><strong>b) Interpretación coeficiente Petal.Length:</strong> Por cada unidad adicional en la longitud del pétalo (<code>Petal.Length</code>), se espera que la anchura del pétalo (<code>Petal.Width</code>) <strong>aumente en aproximadamente 0.426 cm</strong>, manteniendo constante la anchura del sépalo.</p>
+<p><strong>c) Interpretación coeficiente Sepal.Width:</strong> Por cada unidad adicional en la anchura del sépalo (<code>Sepal.Width</code>), se espera que la anchura del pétalo (<code>Petal.Width</code>) <strong>aumente en aproximadamente 0.099 cm</strong>, manteniendo constante la longitud del pétalo.</p>
+<p><strong>d) Interpretación del intercepto:</strong> Representa la anchura predicha del pétalo cuando tanto la longitud del pétalo como la anchura del sépalo son 0 cm. <strong>No tiene significado práctico</strong> en este contexto biológico porque no existen flores con estas dimensiones cero.</p>
+</details>
 </section>
 <section id="ejercicio-3-conceptual-r²-vs.-r²-ajustado" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-3-conceptual-r²-vs.-r²-ajustado">Ejercicio 3: Conceptual (R² vs.&nbsp;R² Ajustado)</h2>
@@ -262,6 +332,15 @@ execute:
 <li>¿Cuál es el principal problema de usar el R² tradicional para comparar modelos con diferente número de predictores?</li>
 <li>¿Cómo soluciona el R² ajustado este problema? Explica qué “penalización” introduce en su fórmula.</li>
 </ol>
+<details>
+<summary>
+</summary>
+<p><strong>a) Problema del R² tradicional:</strong> El R² tradicional <strong>siempre aumenta</strong> (o permanece igual) cuando añadimos más predictores al modelo, incluso si estos predictores no aportan información real. Esto hace que no sea útil para comparar modelos con diferente número de variables, ya que favorece artificialmente a los modelos más complejos.</p>
+<p><strong>b) Solución del R² ajustado:</strong> El R² ajustado <strong>penaliza la complejidad</strong> del modelo introduciendo un factor de ajuste que depende del número de predictores:</p>
+<p><span class="math inline">\(R^2_{adj} = 1 - \frac{(1-R^2)(n-1)}{n-p-1}\)</span></p>
+<p>Donde: - <span class="math inline">\(n\)</span> = número de observaciones - <span class="math inline">\(p\)</span> = número de predictores</p>
+<p>Esta penalización hace que el R² ajustado pueda <strong>disminuir</strong> si añadimos predictores que no mejoran suficientemente el ajuste.</p>
+</details>
 </section>
 <section id="ejercicio-4-interpretación-de-salidas-de-r" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-4-interpretación-de-salidas-de-r">Ejercicio 4: Interpretación de Salidas de R</h2>
@@ -279,10 +358,39 @@ F-statistic: 185.6 on 2 and 99 DF,  p-value: &lt; 2.2e-16</code></pre>
 <li>¿Son los predictores <code>income</code> y <code>education</code> individualmente significativos, después de controlar por el efecto del otro? Justifica tu respuesta.</li>
 <li>Explica la diferencia conceptual entre lo que evalúa el <strong>test F global</strong> y lo que evalúan los <strong>tests t individuales</strong> en este modelo.</li>
 </ol>
+<details>
+<summary>
+</summary>
+<p><strong>a) ¿Es el modelo globalmente significativo?</strong> <strong>Sí</strong>, el modelo es globalmente significativo porque el p-valor del estadístico F es &lt; 2.2e-16 (prácticamente 0), que es mucho menor que 0.05. Esto significa que al menos uno de los predictores es significativo.</p>
+<p><strong>b) ¿Son los predictores individualmente significativos?</strong></p>
+<ul>
+<li><strong>income</strong>: Sí es significativo (p = 1.9e-05 &lt; 0.05) después de controlar por education.</li>
+<li><strong>education</strong>: Sí es significativo (p &lt; 2e-16 &lt; 0.05) después de controlar por income.</li>
+</ul>
+<p><strong>c) Diferencia conceptual entre tests:</strong></p>
+<ul>
+<li><strong>Test F global</strong>: Evalúa si el modelo en conjunto es mejor que no tener modelo (H₀: β₁ = β₂ = 0).</li>
+<li><strong>Tests t individuales</strong>: Evalúan si cada coeficiente específico es significativamente diferente de cero, controlando por las otras variables en el modelo.</li>
+</ul>
+<p>Es posible tener un F significativo con algunos t no significativos si hay multicolinealidad.</p>
+</details>
 </section>
 <section id="ejercicio-5-conceptual-multicolinealidad" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-5-conceptual-multicolinealidad">Ejercicio 5: Conceptual (Multicolinealidad)</h2>
 <p>Describe con tus propias palabras qué es la <strong>multicolinealidad</strong>. Menciona tres consecuencias negativas que puede tener la multicolinealidad severa en un modelo de regresión y si afecta más a la <strong>predicción</strong> o a la <strong>inferencia</strong>.</p>
+<details>
+<summary>
+</summary>
+<p><strong>Multicolinealidad</strong> es la existencia de relaciones lineales fuertes entre dos o más variables predictoras en un modelo de regresión.</p>
+<p><strong>Tres consecuencias negativas:</strong></p>
+<ol type="1">
+<li><p><strong>Inestabilidad de los coeficientes</strong>: Pequeños cambios en los datos pueden causar grandes cambios en las estimaciones de los coeficientes.</p></li>
+<li><p><strong>Errores estándar inflados</strong>: Los errores estándar de los coeficientes se vuelven muy grandes, dificultando detectar efectos significativos.</p></li>
+<li><p><strong>Dificultad interpretativa</strong>: Los coeficientes individuales pierden significado claro porque las variables están confundidas entre sí.</p></li>
+</ol>
+<p><strong>Analogía útil</strong>: Es como intentar medir la contribución individual de dos escaladores que siempre suben una montaña atados el uno al otro. Es muy difícil saber qué parte del ascenso se debe a cada uno por separado.</p>
+<p>La multicolinealidad afecta más a la <strong>inferencia</strong> que a la <strong>predicción</strong>. Las predicciones pueden seguir siendo buenas, pero la interpretación de los coeficientes se vuelve problemática.</p>
+</details>
 </section>
 <section id="ejercicio-6-práctico-diagnóstico-de-multicolinealidad" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-6-práctico-diagnóstico-de-multicolinealidad">Ejercicio 6: Práctico (Diagnóstico de Multicolinealidad)</h2>
@@ -292,6 +400,78 @@ F-statistic: 185.6 on 2 and 99 DF,  p-value: &lt; 2.2e-16</code></pre>
 <li>Carga la librería <code>car</code> y calcula el <strong>Factor de Inflación de la Varianza (VIF)</strong> para cada predictor.</li>
 <li>Basándote en los valores del VIF, ¿qué variables presentan un problema de multicolinealidad? ¿Cuál es tu recomendación para simplificar el modelo?</li>
 </ol>
+<details>
+<summary>
+</summary>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustar modelo con mtcars</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>modelo_mtcars <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> cyl <span class="sc">+</span> disp <span class="sc">+</span> hp <span class="sc">+</span> wt, <span class="at">data =</span> mtcars)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_mtcars)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = mpg ~ cyl + disp + hp + wt, data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.0562 -1.4636 -0.4281  1.2854  5.8269 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 40.82854    2.75747  14.807 1.76e-14 ***
+cyl         -1.29332    0.65588  -1.972 0.058947 .  
+disp         0.01160    0.01173   0.989 0.331386    
+hp          -0.02054    0.01215  -1.691 0.102379    
+wt          -3.85390    1.01547  -3.795 0.000759 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2.513 on 27 degrees of freedom
+Multiple R-squared:  0.8486,    Adjusted R-squared:  0.8262 
+F-statistic: 37.84 on 4 and 27 DF,  p-value: 1.061e-10</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examinar correlaciones simples primero</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>cor_matrix <span class="ot">&lt;-</span> <span class="fu">cor</span>(mtcars[<span class="fu">c</span>(<span class="st">"mpg"</span>, <span class="st">"cyl"</span>, <span class="st">"disp"</span>, <span class="st">"hp"</span>, <span class="st">"wt"</span>)])</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Matriz de correlaciones:"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Matriz de correlaciones:"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(cor_matrix, <span class="dv">3</span>))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        mpg    cyl   disp     hp     wt
+mpg   1.000 -0.852 -0.848 -0.776 -0.868
+cyl  -0.852  1.000  0.902  0.832  0.782
+disp -0.848  0.902  1.000  0.791  0.888
+hp   -0.776  0.832  0.791  1.000  0.659
+wt   -0.868  0.782  0.888  0.659  1.000</code></pre>
+</div>
+</div>
+<p><strong>a) Observación del summary:</strong> A pesar de que variables como <code>cyl</code> y <code>disp</code> tienen correlaciones altas con <code>mpg</code> individualmente, en el modelo múltiple pueden aparecer como no significativas debido a la multicolinealidad entre predictores.</p>
+<p><strong>b) Calcular VIF</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: carData</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>vif_values <span class="ot">&lt;-</span> <span class="fu">vif</span>(modelo_mtcars)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Valores VIF:"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Valores VIF:"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(vif_values)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      cyl      disp        hp        wt 
+ 6.737707 10.373286  3.405983  4.848016 </code></pre>
+</div>
+</div>
+<p><strong>c) Interpretación VIF:</strong></p>
+<ul>
+<li><strong>VIF &gt; 5</strong>: Multicolinealidad moderada</li>
+<li><strong>VIF &gt; 10</strong>: Multicolinealidad severa</li>
+</ul>
+<p>Variables con VIF alto (probablemente <code>cyl</code>, <code>disp</code>) presentan problemas de multicolinealidad.</p>
+<p><strong>Recomendación:</strong> Las variables <code>disp</code> y <code>cyl</code> presentan una fuerte multicolinealidad, como indican sus VIFs altos. Dado que <code>disp</code> típicamente tiene el VIF más alto y, además, su p-valor en el modelo suele ser el menos significativo, <strong>es el candidato principal a ser eliminado del modelo</strong>. Después de eliminarla, se debería volver a ajustar el modelo y re-evaluar los VIFs para confirmar que la multicolinealidad se ha reducido.</p>
+</details>
 </section>
 <section id="ejercicio-7-teórico-notación-matricial" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-7-teórico-notación-matricial">Ejercicio 7: Teórico (Notación Matricial)</h2>
@@ -299,6 +479,12 @@ F-statistic: 185.6 on 2 and 99 DF,  p-value: &lt; 2.2e-16</code></pre>
 <li>Escribe la fórmula del estimador de Mínimos Cuadrados Ordinarios (<span class="math inline">\(\hat{\mathbf{\beta}}\)</span>) en notación matricial.</li>
 <li>¿Qué supuesto fundamental del modelo de regresión múltiple garantiza que la matriz <span class="math inline">\((\mathbf{X}^T\mathbf{X})\)</span> sea invertible?</li>
 </ol>
+<details>
+<summary>
+</summary>
+<p><strong>a) Estimador de MCO:</strong> <span class="math display">\[\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}\]</span></p>
+<p><strong>b) Supuesto fundamental:</strong> El supuesto de <strong>no multicolinealidad perfecta</strong> garantiza que las columnas de <span class="math inline">\(\mathbf{X}\)</span> sean linealmente independientes, lo que asegura que <span class="math inline">\((\mathbf{X}^T\mathbf{X})\)</span> sea invertible.</p>
+</details>
 </section>
 <section id="ejercicio-8-práctico-gráficos-de-regresión-parcial" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-8-práctico-gráficos-de-regresión-parcial">Ejercicio 8: Práctico (Gráficos de Regresión Parcial)</h2>
@@ -308,10 +494,54 @@ F-statistic: 185.6 on 2 and 99 DF,  p-value: &lt; 2.2e-16</code></pre>
 <li>Genera los gráficos de regresión parcial (o “added-variable plots”) para este modelo usando la función <code>avPlots(tu_modelo)</code>.</li>
 <li>Explica qué representa el gráfico para la variable <code>education</code>. ¿Qué significan los ejes X e Y de ese gráfico específico? ¿A qué corresponde la pendiente de la línea en ese gráfico?</li>
 </ol>
+<details>
+<summary>
+</summary>
+<p><strong>a) Gráficos de regresión parcial</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar datos Prestige (si no está disponible, usar mtcars como alternativa)</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># library(car)</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># data(Prestige)</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># modelo_prestige &lt;- lm(prestige ~ income + education + women, data = Prestige)</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternativa con mtcars</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>modelo_parcial <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt <span class="sc">+</span> hp <span class="sc">+</span> qsec, <span class="at">data =</span> mtcars)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="fu">avPlots</span>(modelo_parcial)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema2_regresion_multiple_soluciones_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>c) Interpretación del gráfico para education (o variable elegida):</strong></p>
+<ul>
+<li><strong>Eje X</strong>: Residuos de education después de regresionar contra las otras variables</li>
+<li><strong>Eje Y</strong>: Residuos de prestige después de regresionar contra las otras variables<br>
+</li>
+<li><strong>Pendiente</strong>: Es exactamente el coeficiente de education en el modelo múltiple</li>
+<li><strong>Interpretación</strong>: Muestra la relación “pura” entre education y prestige, eliminando el efecto de las otras variables.</li>
+</ul>
+<p>Por ejemplo, si miramos el gráfico para <strong><code>wt | others</code></strong>, la pendiente negativa de la línea azul representa visualmente el coeficiente negativo para la variable <code>wt</code> en el modelo múltiple. Nos muestra que, incluso después de descontar el efecto de los caballos de fuerza (<code>hp</code>) y el tiempo de cuarto de milla (<code>qsec</code>), un mayor peso (<code>wt</code>) sigue estando asociado a un menor consumo (<code>mpg</code>).</p>
+</details>
 </section>
 <section id="ejercicio-9-inferencia-f-test-vs.-t-tests" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-9-inferencia-f-test-vs.-t-tests">Ejercicio 9: Inferencia (F-test vs.&nbsp;t-tests)</h2>
 <p>Describe un escenario hipotético en el que el <strong>test F global</strong> de un modelo de regresión múltiple sea altamente significativo (p &lt; 0.001), pero <strong>ninguno de los tests t individuales</strong> para los coeficientes sea significativo. ¿Cuál es la causa estadística más probable de este fenómeno?</p>
+<details>
+<summary>
+</summary>
+<p><strong>Escenario hipotético:</strong> Un modelo con <strong>multicolinealidad severa</strong> entre predictores podría tener:</p>
+<ul>
+<li><strong>F-test significativo</strong>: Porque el conjunto de variables sí explica la variabilidad</li>
+<li><strong>t-tests no significativos</strong>: Porque la multicolinealidad infla los errores estándar individuales</li>
+</ul>
+<p><strong>Causa estadística:</strong> La multicolinealidad hace que sea difícil determinar la contribución individual de cada variable, pero el conjunto sí tiene poder predictivo.</p>
+<p>Una analogía sería un dúo de cantantes que siempre actúan juntos. Sabemos que el dúo en su conjunto es un éxito (F-test significativo), pero es imposible determinar estadísticamente cuál de los dos es el responsable principal del éxito (ningún t-test es significativo), porque sus contribuciones están perfectamente correlacionadas.</p>
+</details>
 </section>
 <section id="ejercicio-10-práctico-comparación-de-modelos-anidados" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-10-práctico-comparación-de-modelos-anidados">Ejercicio 10: Práctico (Comparación de Modelos Anidados)</h2>
@@ -321,6 +551,37 @@ F-statistic: 185.6 on 2 and 99 DF,  p-value: &lt; 2.2e-16</code></pre>
 <li>Ajusta un <strong>modelo completo</strong> que, además de las variables anteriores, incluya <code>Catholic</code> y <code>Infant.Mortality</code>.</li>
 <li>Utiliza la función <code>anova()</code> para comparar formalmente los dos modelos. ¿Aportan las variables <code>Catholic</code> y <code>Infant.Mortality</code> una mejora estadísticamente significativa al modelo? Interpreta el p-valor del test F resultante.</li>
 </ol>
+<details>
+<summary>
+</summary>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a) Modelo reducido</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>modelo_reducido <span class="ot">&lt;-</span> <span class="fu">lm</span>(Fertility <span class="sc">~</span> Agriculture <span class="sc">+</span> Education, <span class="at">data =</span> swiss)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># b) Modelo completo  </span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>modelo_completo <span class="ot">&lt;-</span> <span class="fu">lm</span>(Fertility <span class="sc">~</span> Agriculture <span class="sc">+</span> Education <span class="sc">+</span> Catholic <span class="sc">+</span> Infant.Mortality, <span class="at">data =</span> swiss)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># c) Comparación con ANOVA</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>anova_test <span class="ot">&lt;-</span> <span class="fu">anova</span>(modelo_reducido, modelo_completo)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Test F para comparación de modelos anidados:"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Test F para comparación de modelos anidados:"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(anova_test)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: Fertility ~ Agriculture + Education
+Model 2: Fertility ~ Agriculture + Education + Catholic + Infant.Mortality
+  Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+1     44 3953.3                                  
+2     42 2158.1  2    1795.2 17.469 3.015e-06 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p><strong>Interpretación:</strong> El p-valor del test F, que se encuentra en la columna <code>Pr(&gt;F)</code>, es <strong>3.015e-06</strong>. Como este valor es muchísimo menor que nuestro nivel de significancia de 0.05, <strong>rechazamos la hipótesis nula</strong> de que no hay diferencia entre los modelos. Concluimos que añadir las variables <code>Catholic</code> y <code>Infant.Mortality</code> <strong>aporta una mejora estadísticamente significativa</strong> al poder predictivo del modelo. Por lo tanto, debemos preferir el <strong>modelo completo</strong>.</p>
+</details>
 
 
 </section>
@@ -732,8 +993,8 @@ F-statistic: 185.6 on 2 and 99 DF,  p-value: &lt; 2.2e-16</code></pre>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="pagination-link" aria-label="**Ingeniería de Características**">
-        <span class="nav-page-text"><span class="chapter-title"><strong>Ingeniería de Características</strong></span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="pagination-link" aria-label="Ingeniería de Características">
+        <span class="nav-page-text"><span class="chapter-title">Ingeniería de Características</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

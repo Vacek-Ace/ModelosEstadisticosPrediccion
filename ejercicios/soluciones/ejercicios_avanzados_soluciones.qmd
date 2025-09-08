@@ -1,24 +1,11 @@
----
-title: "Ejercicios: Popurrí"
-subtitle: "Modelos Estadísticos de Predicción"
-author: "Víctor Aceña Gil - Isaac Martín de Diego"
-date: today
-format: 
-  html:
-    toc: true
-    toc-depth: 3
-    code-fold: false
-    theme: cosmo
-execute:
-  warning: false
-  message: false
----
+# Ejercicios Avanzados 
 
-### **Ejercicio 1: Derivación de Estimadores**
+## Ejercicio 1: Derivación de Estimadores
 
-**Enunciado:** Considera el modelo de regresión lineal simple $Y_i = \beta_0 + \beta_1 X_i + \varepsilon_i$. Partiendo de la función objetivo de Mínimos Cuadrados Ordinarios (MCO), $S(\beta_0, \beta_1) = \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2$, realiza la derivación matemática completa para obtener las expresiones de los estimadores $\hat{\beta}_0$ y $\hat{\beta}_1$.
+Considera el modelo de regresión lineal simple $Y_i = \beta_0 + \beta_1 X_i + \varepsilon_i$. Partiendo de la función objetivo de Mínimos Cuadrados Ordinarios (MCO), $S(\beta_0, \beta_1) = \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2$, realiza la derivación matemática completa para obtener las expresiones de los estimadores $\hat{\beta}_0$ y $\hat{\beta}_1$. Muestra todos los pasos, desde el cálculo de las derivadas parciales hasta la resolución de las ecuaciones normales.
 
-**Solución:**
+<details>
+<summary></summary>
 
 El objetivo es encontrar los valores de $\beta_0$ y $\beta_1$ que minimizan la Suma de Cuadrados del Error (SSE). Para ello, calculamos las derivadas parciales de la función $S(\beta_0, \beta_1)$ con respecto a cada parámetro y las igualamos a cero.
 
@@ -79,14 +66,19 @@ El objetivo es encontrar los valores de $\beta_0$ y $\beta_1$ que minimizan la S
     $$
     Estas son las expresiones para los estimadores de MCO.
 
-***
-### **Ejercicio 2: El Impacto de la Multicolinealidad**
+</details>
 
-**Enunciado:** En un modelo de regresión múltiple con dos predictores estandarizados ($X_1, X_2$), la varianza del estimador $\hat{\beta}_1$ viene dada por $\text{Var}(\hat{\beta}_1) = \frac{\sigma^2}{n(1-r_{12}^2)}$, donde $r_{12}$ es la correlación entre $X_1$ y $X_2$. a) Explica matemáticamente qué le ocurre a la varianza de $\hat{\beta}_1$ cuando la correlación ($r_{12}$) se aproxima a 1. b) Relaciona esta fórmula con la del VIF.
+## Ejercicio 2: El Impacto de la Multicolinealidad
 
-**Solución:**
+En un modelo de regresión múltiple con dos predictores estandarizados ($X_1, X_2$), la varianza del estimador $\hat{\beta}_1$ viene dada por $\text{Var}(\hat{\beta}_1) = \frac{\sigma^2}{n(1-r_{12}^2)}$, donde $r_{12}$ es la correlación entre $X_1$ y $X_2$.
 
-- **a) Efecto de la correlación en la varianza:**
+a) Explica matemáticamente qué le ocurre a la varianza de $\hat{\beta}_1$ cuando la correlación entre los predictores ($r_{12}$) se aproxima a 1 (multicolinealidad perfecta).
+b) Relaciona esta fórmula con la del Factor de Inflación de la Varianza (VIF). ¿Cómo demuestra esta expresión que la multicolinealidad "infla" la varianza de los estimadores de los coeficientes?
+
+<details>
+<summary></summary>
+
+**a) Efecto de la correlación en la varianza:**
   La varianza del estimador, $\text{Var}(\hat{\beta}_1)$, es una medida de su imprecisión. La fórmula $\frac{\sigma^2}{n(1-r_{12}^2)}$ muestra que la varianza depende inversamente del término $(1-r_{12}^2)$.
   - Si $r_{12} = 0$ (no hay correlación), la varianza es mínima: $\text{Var}(\hat{\beta}_1) = \sigma^2/n$.
   - A medida que la correlación $|r_{12}|$ aumenta y se acerca a 1 (multicolinealidad perfecta), el término $r_{12}^2$ también se acerca a 1.
@@ -97,7 +89,7 @@ El objetivo es encontrar los valores de $\beta_0$ y $\beta_1$ que minimizan la S
     $$
   Esto significa que con multicolinealidad severa, la varianza de los estimadores de los coeficientes "explota", volviéndolos extremadamente inestables y poco fiables.
 
-- **b) Relación con el Factor de Inflación de la Varianza (VIF):**
+**b) Relación con el Factor de Inflación de la Varianza (VIF):**
   El VIF para un predictor $X_j$ se define como $VIF_j = \frac{1}{1 - R_j^2}$, donde $R_j^2$ es el R-cuadrado de la regresión de $X_j$ sobre todos los demás predictores.
   En el caso de solo dos predictores ($X_1, X_2$), el $R^2$ de la regresión de $X_1$ sobre $X_2$ es simplemente el cuadrado de su coeficiente de correlación, es decir, $R_1^2 = r_{12}^2$.
   Sustituyendo esto en la fórmula del VIF, tenemos:
@@ -110,12 +102,15 @@ El objetivo es encontrar los valores de $\beta_0$ y $\beta_1$ que minimizan la S
   $$
   Esta expresión demuestra que el VIF es, literalmente, el **factor multiplicativo** por el cual la varianza del estimador del coeficiente se "infla" en comparación con el caso base en el que no habría correlación (donde VIF = 1).
 
-***
-### **Ejercicio 3: Interpretación de Coeficientes en Modelos Transformados**
+</details>
 
-**Enunciado:** Considera un modelo de regresión **log-log**: $\log(Y_i) = \beta_0 + \beta_1 \log(X_i) + \varepsilon_i$. Demuestra matemáticamente que el coeficiente $\beta_1$ puede interpretarse como una **elasticidad**.
+## Ejercicio 3: Interpretación de Coeficientes en Modelos Transformados
 
-**Solución:**
+Considera un modelo de regresión **log-log**: $\log(Y_i) = \beta_0 + \beta_1 \log(X_i) + \varepsilon_i$.
+Demuestra matemáticamente que el coeficiente $\beta_1$ puede interpretarse como una **elasticidad**, es decir, el cambio porcentual en $Y$ ante un cambio del 1% en $X$. (Pista: utiliza la derivada de $\log(Y)$ con respecto a $\log(X)$).
+
+<details>
+<summary></summary>
 
 La elasticidad de Y con respecto a X se define como el cambio porcentual en Y para un cambio del 1% en X. Para cambios infinitesimales, esta se expresa como:
 $$\eta = \frac{\% \Delta Y}{\% \Delta X} = \frac{dY/Y}{dX/X}$$
@@ -129,29 +124,32 @@ El término $\beta_0$ es una constante, por lo que su derivada es 0. El término
 $$\frac{d(\log Y)}{d(\log X)} = \beta_1$$
 Hemos demostrado que el coeficiente $\beta_1$ es igual a la elasticidad de Y con respecto a X. Así, $\beta_1$ representa el cambio porcentual promedio en Y que se asocia con un aumento del 1% en X.
 
-***
-### **Ejercicio 4: Fundamentos de la Regularización**
+</details>
 
-**Enunciado:** Explica desde una perspectiva geométrica por qué la regularización **Lasso (L1)** puede anular coeficientes, mientras que **Ridge (L2)** solo los encoge.
+## Ejercicio 4: Fundamentos de la Regularización
 
-**Solución:**
+Explica desde una perspectiva geométrica por qué la regularización **Lasso (penalización L1)** es capaz de reducir los coeficientes exactamente a cero, realizando así selección de variables, mientras que la regularización **Ridge (penalización L2)** solo puede encoger los coeficientes hacia cero sin anularlos por completo. Apoya tu explicación con un dibujo o descripción de las "regiones de restricción" de ambos métodos en un espacio de dos coeficientes ($\beta_1, \beta_2$).
+
+<details>
+<summary></summary>
 
 La estimación en regresión regularizada puede entenderse como un problema de optimización restringida. El objetivo es encontrar el conjunto de coeficientes ($\beta_1, \beta_2, \dots$) que minimice la Suma de Cuadrados del Error (SSE), sujeto a una restricción en el tamaño de dichos coeficientes.
 
 - **Geometría del problema:** El conjunto de todos los posibles valores de los coeficientes para un mismo valor de SSE forma una elipse (en un espacio de dos coeficientes, $\beta_1, \beta_2$) centrada en la solución de Mínimos Cuadrados Ordinarios (MCO). El objetivo es encontrar la elipse más pequeña posible que toque la "región de restricción".
 
-
-
 - **Regresión Ridge (Penalización L2):** La restricción es $\sum \beta_j^2 \leq s$. En dos dimensiones, $\beta_1^2 + \beta_2^2 \leq s$ es la ecuación de un **círculo**. Esta región es convexa y no tiene "esquinas". Cuando las elipses del SSE se expanden desde el punto MCO, el primer punto de contacto con el círculo será un punto de tangencia. Debido a la forma suave y redondeada del círculo, es extremadamente improbable que este punto de tangencia ocurra exactamente sobre un eje (donde uno de los coeficientes sería cero). Por lo tanto, Ridge reduce la magnitud de ambos coeficientes, pero no los anula.
 
 - **Regresión Lasso (Penalización L1):** La restricción es $\sum |\beta_j| \leq s$. En dos dimensiones, $|\beta_1| + |\beta_2| \leq s$ es la ecuación de un **rombo (o diamante)**, rotado 45 grados. La característica clave de esta región son sus **vértices afilados, que se encuentran sobre los ejes**. Cuando las elipses del SSE se expanden, es mucho más probable que toquen la región de restricción en uno de estos vértices que en una de las aristas. Si el punto de contacto es un vértice sobre un eje (por ejemplo, el punto (0, $\beta_2$)), significa que el otro coeficiente ($\beta_1$) es **exactamente cero**. Es esta propiedad geométrica, las "esquinas" de la región de penalización L1, lo que induce la escasez (*sparsity*) y permite a Lasso realizar selección de variables.
 
-***
-### **Ejercicio 5: La Familia Exponencial y los GLM**
+</details>
 
-**Enunciado:** Explica cuál es la función de varianza $V(\mu)$ para un modelo de Poisson y para un modelo Binomial, y qué implicaciones tiene sobre los supuestos del modelo.
+## Ejercicio 5: La Familia Exponencial y los GLM
 
-**Solución:**
+La teoría de los Modelos Lineales Generalizados (GLM) se basa en que distribuciones como la Normal, Binomial o Poisson pertenecen a la **familia exponencial**. La forma canónica de esta familia establece una relación directa entre la media y la varianza a través de la **función de varianza** $V(\mu)$.
+Explica cuál es la función de varianza para un modelo de **Poisson** y para un modelo **Binomial**. ¿Qué implicaciones tiene la forma de $V(\mu)$ en cada caso sobre el comportamiento de los datos y los supuestos del modelo?
+
+<details>
+<summary></summary>
 
 La **función de varianza** $V(\mu)$ es la "firma" de cada distribución dentro de la familia exponencial, ya que define la relación teórica entre la media $\mu$ y la varianza de la variable respuesta.
 
@@ -163,12 +161,14 @@ La **función de varianza** $V(\mu)$ es la "firma" de cada distribución dentro 
   - **Función de Varianza:** $V(\mu) = \mu(1-\mu)$.
   - **Implicación:** En este caso, la varianza no es constante, sino que es una función cuadrática de la media (la probabilidad de éxito). La varianza es mínima cuando $\mu$ se acerca a 0 o 1, y es máxima cuando $\mu = 0.5$. Esta es la heterocedasticidad inherente a los datos de proporciones. El modelo GLM maneja esto de forma natural a través del algoritmo de estimación (IRLS), que da más peso a las observaciones con menor varianza (aquellas con probabilidades predichas cercanas a 0 o 1) y menos peso a las más inciertas (aquellas con probabilidades cercanas a 0.5).
 
-***
-### **Ejercicio 6: El Problema de la Inferencia en Métodos Stepwise**
+</details>
 
-**Enunciado:** Explica el razonamiento estadístico detrás de la advertencia de que los p-valores de un modelo final obtenido mediante selección por pasos (stepwise) están sesgados y son excesivamente optimistas.
+## Ejercicio 6: El Problema de la Inferencia en Métodos Stepwise
 
-**Solución:**
+Los apuntes advierten que los p-valores de un modelo final obtenido mediante selección por pasos (stepwise) están **sesgados y son excesivamente optimistas**. Explica el razonamiento estadístico detrás de esta advertencia. ¿Por qué el proceso iterativo de "buscar y seleccionar" la variable más significativa en cada paso invalida los supuestos teóricos del test t estándar?
+
+<details>
+<summary></summary>
 
 La advertencia se debe a que los métodos stepwise violan un principio fundamental de la prueba de hipótesis: el modelo y las hipótesis deben ser especificados **a priori**, antes de examinar las relaciones en los datos. Los métodos stepwise hacen exactamente lo contrario.
 
@@ -180,12 +180,14 @@ La advertencia se debe a que los métodos stepwise violan un principio fundament
 
 En resumen, los p-valores de un modelo stepwise están **sesgados a la baja (son demasiado pequeños)** porque no tienen en cuenta el proceso de búsqueda y selección que los ha producido. Esto lleva a una **inflación de la tasa de error de Tipo I**, haciendo que concluyamos que ciertas variables son significativas cuando en realidad no lo son.
 
-***
-### **Ejercicio 7: Propiedades de los Estimadores MCO**
+</details>
 
-**Enunciado:** Demuestra la propiedad de **insesgadez** para el estimador $\hat{\boldsymbol{\beta}}$ en notación matricial. Es decir, demuestra que $E[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta}$.
+## Ejercicio 7: Propiedades de los Estimadores MCO
 
-**Solución:**
+El **Teorema de Gauss-Markov** establece que, bajo ciertos supuestos, los estimadores de Mínimos Cuadrados Ordinarios (MCO) son **MELI (Mejores Estimadores Lineales Insesgados)**. Demuestra la propiedad de **insesgadez** para el estimador $\hat{\boldsymbol{\beta}}$ en notación matricial. Es decir, demuestra que $E[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta}$. Muestra todos los pasos y menciona qué supuestos del modelo estás utilizando en cada paso.
+
+<details>
+<summary></summary>
 
 1.  Comenzamos con la fórmula del estimador MCO en notación matricial:
     $$
@@ -223,12 +225,16 @@ En resumen, los p-valores de un modelo stepwise están **sesgados a la baja (son
     $$
     Esto demuestra que el estimador MCO $\hat{\boldsymbol{\beta}}$ es insesgado, ya que su valor esperado es el verdadero parámetro poblacional $\boldsymbol{\beta}$.
 
-***
-### **Ejercicio 8: Intervalos de Confianza vs. Predicción**
+</details>
 
-**Enunciado:** La fórmula para el intervalo de predicción en RLS es $\hat{y}_0 \pm t_{\alpha/2, n-2} \cdot \sqrt{\text{MSE} \left( 1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right)}$. Explica el origen y el significado de cada uno de los tres términos dentro del paréntesis.
+## Ejercicio 8: Intervalos de Confianza vs. Predicción
 
-**Solución:**
+La fórmula para el intervalo de predicción para una nueva observación en regresión lineal simple es:
+$$\hat{y}_0 \pm t_{\alpha/2, n-2} \cdot \sqrt{\text{MSE} \left( 1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right)}$$
+Explica el origen y el significado de cada uno de los **tres términos** que se encuentran dentro del paréntesis bajo la raíz cuadrada. ¿Qué fuente de incertidumbre representa cada término y por qué la suma de los tres es necesaria para un intervalo de predicción?
+
+<details>
+<summary></summary>
 
 La fórmula cuantifica la incertidumbre total de predecir una *única* nueva observación. Esta incertidumbre proviene de dos fuentes: la incertidumbre sobre la posición de la verdadera línea de regresión y la variabilidad inherente de un punto individual alrededor de esa línea. Los tres términos dentro del paréntesis representan estas fuentes de varianza (escaladas por MSE, que estima $\sigma^2$):
 
@@ -240,12 +246,17 @@ La fórmula cuantifica la incertidumbre total de predecir una *única* nueva obs
 
 En resumen, los términos `1/n` y `(x_0 - \bar{x})^2 / S_{xx}` juntos cuantifican la incertidumbre sobre dónde está la **línea de regresión verdadera** (lo que cubre el intervalo de confianza). El término `1` añade la incertidumbre de **un nuevo punto individual** alrededor de esa línea.
 
-***
-### **Ejercicio 9: Estimación por Máxima Verosimilitud**
+</details>
 
-**Enunciado:** Para un modelo de regresión logística, deriva la ecuación de puntuación para un coeficiente $\beta_j$ y demuestra que se iguala a cero cuando $\sum_{i=1}^{n} x_{ij}(y_i - p_i) = 0$.
+## Ejercicio 9: Estimación por Máxima Verosimilitud
 
-**Solución:**
+Para un modelo de regresión logística, la función de log-verosimilitud es:
+$$\ell(\boldsymbol{\beta}) = \sum_{i=1}^{n} \left[y_i \log(p_i) + (1-y_i) \log(1-p_i)\right]$$
+donde $p_i = \frac{1}{1 + e^{-\mathbf{x}_i^T\boldsymbol{\beta}}}$.
+Deriva la **ecuación de puntuación (score equation)** para un coeficiente $\beta_j$ (es decir, calcula $\frac{\partial \ell}{\partial \beta_j}$) y demuestra que se iguala a cero cuando $\sum_{i=1}^{n} x_{ij}(y_i - p_i) = 0$. Interpreta el significado de esta condición final.
+
+<details>
+<summary></summary>
 
 1.  La función de log-verosimilitud para la regresión logística es:
     $$
@@ -277,12 +288,14 @@ En resumen, los términos `1/n` y `(x_0 - \bar{x})^2 / S_{xx}` juntos cuantifica
     
 **Interpretación:** Esta condición final significa que los estimadores de máxima verosimilitud se encuentran cuando los residuos del modelo ($y_i - p_i$, la diferencia entre lo observado y la probabilidad predicha) son **ortogonales** (no están correlacionados) a los predictores $x_{ij}$. Esto es análogo a las ecuaciones normales de MCO y significa que el modelo ha extraído toda la información linealmente asociable a los predictores, no quedando ningún patrón relacionado con ellos en los errores.
 
-***
-### **Ejercicio 10: El Coeficiente de Regresión Parcial**
+</details>
 
-**Enunciado:** Explica el concepto de **regresión parcial** y su relación con el coeficiente de regresión múltiple $\hat{\beta}_j$.
+## Ejercicio 10: El Coeficiente de Regresión Parcial
 
-**Solución:**
+El texto afirma que el coeficiente $\hat{\beta}_j$ de una regresión múltiple puede entenderse como el coeficiente de una regresión simple entre dos conjuntos de residuos. Explica con detalle este concepto de **regresión parcial**. ¿Qué se está "parcializando" o "eliminando" de la variable respuesta $Y$ y del predictor $X_j$ antes de calcular su relación? ¿Por qué este concepto es fundamental para entender la interpretación *ceteris paribus*?
+
+<details>
+<summary></summary>
 
 El concepto de regresión parcial es fundamental para entender la interpretación *ceteris paribus* de un coeficiente en regresión múltiple. Afirma que el coeficiente $\hat{\beta}_j$ del predictor $X_j$ en un modelo múltiple es matemáticamente idéntico a la pendiente de una regresión simple entre dos conjuntos de residuos.
 

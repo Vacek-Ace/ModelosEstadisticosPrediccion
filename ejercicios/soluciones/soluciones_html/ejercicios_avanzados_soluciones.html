@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Víctor Aceña Gil - Isaac Martín de Diego">
 
-<title>Ejercicios: Popurrí – Problemas de Modelos Estadísticos para la Predicción</title>
+<title>Ejercicios Avanzados – Problemas de Modelos Estadísticos para la Predicción</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -42,7 +41,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-0687a6949ae11671cfb8b930681aab34.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -113,7 +112,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./ejercicios_avanzados_soluciones.html"><span class="chapter-title">Ejercicios: Popurrí</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./ejercicios_avanzados_soluciones.html"><span class="chapter-title">Ejercicios Avanzados</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -153,27 +152,27 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Regresión Lineal Múltiple</strong></span></a>
+  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Regresión Lineal Múltiple</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Ingeniería de Características</strong></span></a>
+  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ingeniería de Características</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Selección de variables, Regularización y Validación</strong></span></a>
+  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Selección de variables, Regularización y Validación</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></a>
+  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Modelos de Regresión Generalizada</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Ejercicios: Popurrí</span></a>
+  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Ejercicios Avanzados</span></a>
   </div>
 </li>
     </ul>
@@ -186,16 +185,16 @@ window.Quarto = {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#ejercicio-1-derivación-de-estimadores" id="toc-ejercicio-1-derivación-de-estimadores" class="nav-link active" data-scroll-target="#ejercicio-1-derivación-de-estimadores"><strong>Ejercicio 1: Derivación de Estimadores</strong></a></li>
-  <li><a href="#ejercicio-2-el-impacto-de-la-multicolinealidad" id="toc-ejercicio-2-el-impacto-de-la-multicolinealidad" class="nav-link" data-scroll-target="#ejercicio-2-el-impacto-de-la-multicolinealidad"><strong>Ejercicio 2: El Impacto de la Multicolinealidad</strong></a></li>
-  <li><a href="#ejercicio-3-interpretación-de-coeficientes-en-modelos-transformados" id="toc-ejercicio-3-interpretación-de-coeficientes-en-modelos-transformados" class="nav-link" data-scroll-target="#ejercicio-3-interpretación-de-coeficientes-en-modelos-transformados"><strong>Ejercicio 3: Interpretación de Coeficientes en Modelos Transformados</strong></a></li>
-  <li><a href="#ejercicio-4-fundamentos-de-la-regularización" id="toc-ejercicio-4-fundamentos-de-la-regularización" class="nav-link" data-scroll-target="#ejercicio-4-fundamentos-de-la-regularización"><strong>Ejercicio 4: Fundamentos de la Regularización</strong></a></li>
-  <li><a href="#ejercicio-5-la-familia-exponencial-y-los-glm" id="toc-ejercicio-5-la-familia-exponencial-y-los-glm" class="nav-link" data-scroll-target="#ejercicio-5-la-familia-exponencial-y-los-glm"><strong>Ejercicio 5: La Familia Exponencial y los GLM</strong></a></li>
-  <li><a href="#ejercicio-6-el-problema-de-la-inferencia-en-métodos-stepwise" id="toc-ejercicio-6-el-problema-de-la-inferencia-en-métodos-stepwise" class="nav-link" data-scroll-target="#ejercicio-6-el-problema-de-la-inferencia-en-métodos-stepwise"><strong>Ejercicio 6: El Problema de la Inferencia en Métodos Stepwise</strong></a></li>
-  <li><a href="#ejercicio-7-propiedades-de-los-estimadores-mco" id="toc-ejercicio-7-propiedades-de-los-estimadores-mco" class="nav-link" data-scroll-target="#ejercicio-7-propiedades-de-los-estimadores-mco"><strong>Ejercicio 7: Propiedades de los Estimadores MCO</strong></a></li>
-  <li><a href="#ejercicio-8-intervalos-de-confianza-vs.-predicción" id="toc-ejercicio-8-intervalos-de-confianza-vs.-predicción" class="nav-link" data-scroll-target="#ejercicio-8-intervalos-de-confianza-vs.-predicción"><strong>Ejercicio 8: Intervalos de Confianza vs.&nbsp;Predicción</strong></a></li>
-  <li><a href="#ejercicio-9-estimación-por-máxima-verosimilitud" id="toc-ejercicio-9-estimación-por-máxima-verosimilitud" class="nav-link" data-scroll-target="#ejercicio-9-estimación-por-máxima-verosimilitud"><strong>Ejercicio 9: Estimación por Máxima Verosimilitud</strong></a></li>
-  <li><a href="#ejercicio-10-el-coeficiente-de-regresión-parcial" id="toc-ejercicio-10-el-coeficiente-de-regresión-parcial" class="nav-link" data-scroll-target="#ejercicio-10-el-coeficiente-de-regresión-parcial"><strong>Ejercicio 10: El Coeficiente de Regresión Parcial</strong></a></li>
+  <li><a href="#ejercicio-1-derivación-de-estimadores" id="toc-ejercicio-1-derivación-de-estimadores" class="nav-link active" data-scroll-target="#ejercicio-1-derivación-de-estimadores">Ejercicio 1: Derivación de Estimadores</a></li>
+  <li><a href="#ejercicio-2-el-impacto-de-la-multicolinealidad" id="toc-ejercicio-2-el-impacto-de-la-multicolinealidad" class="nav-link" data-scroll-target="#ejercicio-2-el-impacto-de-la-multicolinealidad">Ejercicio 2: El Impacto de la Multicolinealidad</a></li>
+  <li><a href="#ejercicio-3-interpretación-de-coeficientes-en-modelos-transformados" id="toc-ejercicio-3-interpretación-de-coeficientes-en-modelos-transformados" class="nav-link" data-scroll-target="#ejercicio-3-interpretación-de-coeficientes-en-modelos-transformados">Ejercicio 3: Interpretación de Coeficientes en Modelos Transformados</a></li>
+  <li><a href="#ejercicio-4-fundamentos-de-la-regularización" id="toc-ejercicio-4-fundamentos-de-la-regularización" class="nav-link" data-scroll-target="#ejercicio-4-fundamentos-de-la-regularización">Ejercicio 4: Fundamentos de la Regularización</a></li>
+  <li><a href="#ejercicio-5-la-familia-exponencial-y-los-glm" id="toc-ejercicio-5-la-familia-exponencial-y-los-glm" class="nav-link" data-scroll-target="#ejercicio-5-la-familia-exponencial-y-los-glm">Ejercicio 5: La Familia Exponencial y los GLM</a></li>
+  <li><a href="#ejercicio-6-el-problema-de-la-inferencia-en-métodos-stepwise" id="toc-ejercicio-6-el-problema-de-la-inferencia-en-métodos-stepwise" class="nav-link" data-scroll-target="#ejercicio-6-el-problema-de-la-inferencia-en-métodos-stepwise">Ejercicio 6: El Problema de la Inferencia en Métodos Stepwise</a></li>
+  <li><a href="#ejercicio-7-propiedades-de-los-estimadores-mco" id="toc-ejercicio-7-propiedades-de-los-estimadores-mco" class="nav-link" data-scroll-target="#ejercicio-7-propiedades-de-los-estimadores-mco">Ejercicio 7: Propiedades de los Estimadores MCO</a></li>
+  <li><a href="#ejercicio-8-intervalos-de-confianza-vs.-predicción" id="toc-ejercicio-8-intervalos-de-confianza-vs.-predicción" class="nav-link" data-scroll-target="#ejercicio-8-intervalos-de-confianza-vs.-predicción">Ejercicio 8: Intervalos de Confianza vs.&nbsp;Predicción</a></li>
+  <li><a href="#ejercicio-9-estimación-por-máxima-verosimilitud" id="toc-ejercicio-9-estimación-por-máxima-verosimilitud" class="nav-link" data-scroll-target="#ejercicio-9-estimación-por-máxima-verosimilitud">Ejercicio 9: Estimación por Máxima Verosimilitud</a></li>
+  <li><a href="#ejercicio-10-el-coeficiente-de-regresión-parcial" id="toc-ejercicio-10-el-coeficiente-de-regresión-parcial" class="nav-link" data-scroll-target="#ejercicio-10-el-coeficiente-de-regresión-parcial">Ejercicio 10: El Coeficiente de Regresión Parcial</a></li>
   </ul>
 </nav>
     </div>
@@ -204,27 +203,14 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">Ejercicios: Popurrí</span></h1>
-<p class="subtitle lead">Modelos Estadísticos de Predicción</p>
+<h1 class="title"><span class="chapter-title">Ejercicios Avanzados</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Autor/a</div>
-    <div class="quarto-title-meta-contents">
-             <p>Víctor Aceña Gil - Isaac Martín de Diego </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Fecha de publicación</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">8 de septiembre de 2025</p>
-    </div>
-  </div>
   
     
   </div>
@@ -234,10 +220,12 @@ window.Quarto = {
 </header>
 
 
-<section id="ejercicio-1-derivación-de-estimadores" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-1-derivación-de-estimadores"><strong>Ejercicio 1: Derivación de Estimadores</strong></h3>
-<p><strong>Enunciado:</strong> Considera el modelo de regresión lineal simple <span class="math inline">\(Y_i = \beta_0 + \beta_1 X_i + \varepsilon_i\)</span>. Partiendo de la función objetivo de Mínimos Cuadrados Ordinarios (MCO), <span class="math inline">\(S(\beta_0, \beta_1) = \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2\)</span>, realiza la derivación matemática completa para obtener las expresiones de los estimadores <span class="math inline">\(\hat{\beta}_0\)</span> y <span class="math inline">\(\hat{\beta}_1\)</span>.</p>
-<p><strong>Solución:</strong></p>
+<section id="ejercicio-1-derivación-de-estimadores" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-1-derivación-de-estimadores">Ejercicio 1: Derivación de Estimadores</h2>
+<p>Considera el modelo de regresión lineal simple <span class="math inline">\(Y_i = \beta_0 + \beta_1 X_i + \varepsilon_i\)</span>. Partiendo de la función objetivo de Mínimos Cuadrados Ordinarios (MCO), <span class="math inline">\(S(\beta_0, \beta_1) = \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2\)</span>, realiza la derivación matemática completa para obtener las expresiones de los estimadores <span class="math inline">\(\hat{\beta}_0\)</span> y <span class="math inline">\(\hat{\beta}_1\)</span>. Muestra todos los pasos, desde el cálculo de las derivadas parciales hasta la resolución de las ecuaciones normales.</p>
+<details>
+<summary>
+</summary>
 <p>El objetivo es encontrar los valores de <span class="math inline">\(\beta_0\)</span> y <span class="math inline">\(\beta_1\)</span> que minimizan la Suma de Cuadrados del Error (SSE). Para ello, calculamos las derivadas parciales de la función <span class="math inline">\(S(\beta_0, \beta_1)\)</span> con respecto a cada parámetro y las igualamos a cero.</p>
 <ol type="1">
 <li><p><strong>Derivada parcial con respecto a <span class="math inline">\(\beta_0\)</span>:</strong> <span class="math display">\[
@@ -271,53 +259,57 @@ n\hat{\beta}_0 + \hat{\beta}_1 \sum x_i = \sum y_i \quad \text{(1)}
 \hat{\beta}_1 = \frac{S_{xy}}{S_{xx}} = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^{n}(x_i - \bar{x})^2}
 \]</span> Estas son las expresiones para los estimadores de MCO.</p></li>
 </ol>
-<hr>
+</details>
 </section>
-<section id="ejercicio-2-el-impacto-de-la-multicolinealidad" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-2-el-impacto-de-la-multicolinealidad"><strong>Ejercicio 2: El Impacto de la Multicolinealidad</strong></h3>
-<p><strong>Enunciado:</strong> En un modelo de regresión múltiple con dos predictores estandarizados (<span class="math inline">\(X_1, X_2\)</span>), la varianza del estimador <span class="math inline">\(\hat{\beta}_1\)</span> viene dada por <span class="math inline">\(\text{Var}(\hat{\beta}_1) = \frac{\sigma^2}{n(1-r_{12}^2)}\)</span>, donde <span class="math inline">\(r_{12}\)</span> es la correlación entre <span class="math inline">\(X_1\)</span> y <span class="math inline">\(X_2\)</span>. a) Explica matemáticamente qué le ocurre a la varianza de <span class="math inline">\(\hat{\beta}_1\)</span> cuando la correlación (<span class="math inline">\(r_{12}\)</span>) se aproxima a 1. b) Relaciona esta fórmula con la del VIF.</p>
-<p><strong>Solución:</strong></p>
-<ul>
-<li><strong>a) Efecto de la correlación en la varianza:</strong> La varianza del estimador, <span class="math inline">\(\text{Var}(\hat{\beta}_1)\)</span>, es una medida de su imprecisión. La fórmula <span class="math inline">\(\frac{\sigma^2}{n(1-r_{12}^2)}\)</span> muestra que la varianza depende inversamente del término <span class="math inline">\((1-r_{12}^2)\)</span>.
-<ul>
-<li>Si <span class="math inline">\(r_{12} = 0\)</span> (no hay correlación), la varianza es mínima: <span class="math inline">\(\text{Var}(\hat{\beta}_1) = \sigma^2/n\)</span>.</li>
-<li>A medida que la correlación <span class="math inline">\(|r_{12}|\)</span> aumenta y se acerca a 1 (multicolinealidad perfecta), el término <span class="math inline">\(r_{12}^2\)</span> también se acerca a 1.</li>
-<li>Consecuentemente, el denominador <span class="math inline">\((1-r_{12}^2)\)</span> se aproxima a 0.</li>
-<li>Matemáticamente, cuando el denominador de una fracción tiende a cero, el valor de la fracción tiende a infinito. Por lo tanto: <span class="math display">\[
-\lim_{|r_{12}| \to 1} \text{Var}(\hat{\beta}_1) = \lim_{|r_{12}| \to 1} \frac{\sigma^2}{n(1-r_{12}^2)} = \infty
-\]</span> Esto significa que con multicolinealidad severa, la varianza de los estimadores de los coeficientes “explota”, volviéndolos extremadamente inestables y poco fiables.</li>
-</ul></li>
-<li><strong>b) Relación con el Factor de Inflación de la Varianza (VIF):</strong> El VIF para un predictor <span class="math inline">\(X_j\)</span> se define como <span class="math inline">\(VIF_j = \frac{1}{1 - R_j^2}\)</span>, donde <span class="math inline">\(R_j^2\)</span> es el R-cuadrado de la regresión de <span class="math inline">\(X_j\)</span> sobre todos los demás predictores. En el caso de solo dos predictores (<span class="math inline">\(X_1, X_2\)</span>), el <span class="math inline">\(R^2\)</span> de la regresión de <span class="math inline">\(X_1\)</span> sobre <span class="math inline">\(X_2\)</span> es simplemente el cuadrado de su coeficiente de correlación, es decir, <span class="math inline">\(R_1^2 = r_{12}^2\)</span>. Sustituyendo esto en la fórmula del VIF, tenemos: <span class="math display">\[
-VIF_1 = \frac{1}{1 - r_{12}^2}
-\]</span> Ahora podemos reescribir la fórmula de la varianza de <span class="math inline">\(\hat{\beta}_1\)</span> usando el VIF: <span class="math display">\[
-\text{Var}(\hat{\beta}_1) = \frac{\sigma^2}{n} \cdot \frac{1}{1-r_{12}^2} = \frac{\sigma^2}{n} \cdot VIF_1
-\]</span> Esta expresión demuestra que el VIF es, literalmente, el <strong>factor multiplicativo</strong> por el cual la varianza del estimador del coeficiente se “infla” en comparación con el caso base en el que no habría correlación (donde VIF = 1).</li>
-</ul>
-<hr>
+<section id="ejercicio-2-el-impacto-de-la-multicolinealidad" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-2-el-impacto-de-la-multicolinealidad">Ejercicio 2: El Impacto de la Multicolinealidad</h2>
+<p>En un modelo de regresión múltiple con dos predictores estandarizados (<span class="math inline">\(X_1, X_2\)</span>), la varianza del estimador <span class="math inline">\(\hat{\beta}_1\)</span> viene dada por <span class="math inline">\(\text{Var}(\hat{\beta}_1) = \frac{\sigma^2}{n(1-r_{12}^2)}\)</span>, donde <span class="math inline">\(r_{12}\)</span> es la correlación entre <span class="math inline">\(X_1\)</span> y <span class="math inline">\(X_2\)</span>.</p>
+<ol type="a">
+<li>Explica matemáticamente qué le ocurre a la varianza de <span class="math inline">\(\hat{\beta}_1\)</span> cuando la correlación entre los predictores (<span class="math inline">\(r_{12}\)</span>) se aproxima a 1 (multicolinealidad perfecta).</li>
+<li>Relaciona esta fórmula con la del Factor de Inflación de la Varianza (VIF). ¿Cómo demuestra esta expresión que la multicolinealidad “infla” la varianza de los estimadores de los coeficientes?</li>
+</ol>
+<details>
+<summary>
+</summary>
+<p><strong>a) Efecto de la correlación en la varianza:</strong> La varianza del estimador, <span class="math inline">\(\text{Var}(\hat{\beta}_1)\)</span>, es una medida de su imprecisión. La fórmula <span class="math inline">\(\frac{\sigma^2}{n(1-r_{12}^2)}\)</span> muestra que la varianza depende inversamente del término <span class="math inline">\((1-r_{12}^2)\)</span>. - Si <span class="math inline">\(r_{12} = 0\)</span> (no hay correlación), la varianza es mínima: <span class="math inline">\(\text{Var}(\hat{\beta}_1) = \sigma^2/n\)</span>. - A medida que la correlación <span class="math inline">\(|r_{12}|\)</span> aumenta y se acerca a 1 (multicolinealidad perfecta), el término <span class="math inline">\(r_{12}^2\)</span> también se acerca a 1. - Consecuentemente, el denominador <span class="math inline">\((1-r_{12}^2)\)</span> se aproxima a 0. - Matemáticamente, cuando el denominador de una fracción tiende a cero, el valor de la fracción tiende a infinito. Por lo tanto: <span class="math display">\[
+    \lim_{|r_{12}| \to 1} \text{Var}(\hat{\beta}_1) = \lim_{|r_{12}| \to 1} \frac{\sigma^2}{n(1-r_{12}^2)} = \infty
+    \]</span> Esto significa que con multicolinealidad severa, la varianza de los estimadores de los coeficientes “explota”, volviéndolos extremadamente inestables y poco fiables.</p>
+<p><strong>b) Relación con el Factor de Inflación de la Varianza (VIF):</strong> El VIF para un predictor <span class="math inline">\(X_j\)</span> se define como <span class="math inline">\(VIF_j = \frac{1}{1 - R_j^2}\)</span>, donde <span class="math inline">\(R_j^2\)</span> es el R-cuadrado de la regresión de <span class="math inline">\(X_j\)</span> sobre todos los demás predictores. En el caso de solo dos predictores (<span class="math inline">\(X_1, X_2\)</span>), el <span class="math inline">\(R^2\)</span> de la regresión de <span class="math inline">\(X_1\)</span> sobre <span class="math inline">\(X_2\)</span> es simplemente el cuadrado de su coeficiente de correlación, es decir, <span class="math inline">\(R_1^2 = r_{12}^2\)</span>. Sustituyendo esto en la fórmula del VIF, tenemos: <span class="math display">\[
+  VIF_1 = \frac{1}{1 - r_{12}^2}
+  \]</span> Ahora podemos reescribir la fórmula de la varianza de <span class="math inline">\(\hat{\beta}_1\)</span> usando el VIF: <span class="math display">\[
+  \text{Var}(\hat{\beta}_1) = \frac{\sigma^2}{n} \cdot \frac{1}{1-r_{12}^2} = \frac{\sigma^2}{n} \cdot VIF_1
+  \]</span> Esta expresión demuestra que el VIF es, literalmente, el <strong>factor multiplicativo</strong> por el cual la varianza del estimador del coeficiente se “infla” en comparación con el caso base en el que no habría correlación (donde VIF = 1).</p>
+</details>
 </section>
-<section id="ejercicio-3-interpretación-de-coeficientes-en-modelos-transformados" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-3-interpretación-de-coeficientes-en-modelos-transformados"><strong>Ejercicio 3: Interpretación de Coeficientes en Modelos Transformados</strong></h3>
-<p><strong>Enunciado:</strong> Considera un modelo de regresión <strong>log-log</strong>: <span class="math inline">\(\log(Y_i) = \beta_0 + \beta_1 \log(X_i) + \varepsilon_i\)</span>. Demuestra matemáticamente que el coeficiente <span class="math inline">\(\beta_1\)</span> puede interpretarse como una <strong>elasticidad</strong>.</p>
-<p><strong>Solución:</strong></p>
+<section id="ejercicio-3-interpretación-de-coeficientes-en-modelos-transformados" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-3-interpretación-de-coeficientes-en-modelos-transformados">Ejercicio 3: Interpretación de Coeficientes en Modelos Transformados</h2>
+<p>Considera un modelo de regresión <strong>log-log</strong>: <span class="math inline">\(\log(Y_i) = \beta_0 + \beta_1 \log(X_i) + \varepsilon_i\)</span>. Demuestra matemáticamente que el coeficiente <span class="math inline">\(\beta_1\)</span> puede interpretarse como una <strong>elasticidad</strong>, es decir, el cambio porcentual en <span class="math inline">\(Y\)</span> ante un cambio del 1% en <span class="math inline">\(X\)</span>. (Pista: utiliza la derivada de <span class="math inline">\(\log(Y)\)</span> con respecto a <span class="math inline">\(\log(X)\)</span>).</p>
+<details>
+<summary>
+</summary>
 <p>La elasticidad de Y con respecto a X se define como el cambio porcentual en Y para un cambio del 1% en X. Para cambios infinitesimales, esta se expresa como: <span class="math display">\[\eta = \frac{\% \Delta Y}{\% \Delta X} = \frac{dY/Y}{dX/X}\]</span> Una propiedad matemática de los logaritmos es que para cambios pequeños, <span class="math inline">\(d(\log(z)) \approx \frac{dz}{z}\)</span>, que representa un cambio relativo o porcentual. Por lo tanto, la elasticidad puede expresarse como la derivada del logaritmo de Y con respecto al logaritmo de X: <span class="math display">\[\eta = \frac{d(\log Y)}{d(\log X)}\]</span> Partiendo de nuestro modelo poblacional (ignorando el término de error para analizar la relación sistemática): <span class="math display">\[\log(Y) = \beta_0 + \beta_1 \log(X)\]</span> Ahora, simplemente calculamos la derivada de la ecuación con respecto a <span class="math inline">\(\log(X)\)</span>: <span class="math display">\[\frac{d(\log Y)}{d(\log X)} = \frac{d}{d(\log X)} (\beta_0 + \beta_1 \log(X))\]</span> El término <span class="math inline">\(\beta_0\)</span> es una constante, por lo que su derivada es 0. El término <span class="math inline">\(\beta_1 \log(X)\)</span> tiene una derivada de <span class="math inline">\(\beta_1\)</span> con respecto a <span class="math inline">\(\log(X)\)</span>. Por lo tanto: <span class="math display">\[\frac{d(\log Y)}{d(\log X)} = \beta_1\]</span> Hemos demostrado que el coeficiente <span class="math inline">\(\beta_1\)</span> es igual a la elasticidad de Y con respecto a X. Así, <span class="math inline">\(\beta_1\)</span> representa el cambio porcentual promedio en Y que se asocia con un aumento del 1% en X.</p>
-<hr>
+</details>
 </section>
-<section id="ejercicio-4-fundamentos-de-la-regularización" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-4-fundamentos-de-la-regularización"><strong>Ejercicio 4: Fundamentos de la Regularización</strong></h3>
-<p><strong>Enunciado:</strong> Explica desde una perspectiva geométrica por qué la regularización <strong>Lasso (L1)</strong> puede anular coeficientes, mientras que <strong>Ridge (L2)</strong> solo los encoge.</p>
-<p><strong>Solución:</strong></p>
+<section id="ejercicio-4-fundamentos-de-la-regularización" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-4-fundamentos-de-la-regularización">Ejercicio 4: Fundamentos de la Regularización</h2>
+<p>Explica desde una perspectiva geométrica por qué la regularización <strong>Lasso (penalización L1)</strong> es capaz de reducir los coeficientes exactamente a cero, realizando así selección de variables, mientras que la regularización <strong>Ridge (penalización L2)</strong> solo puede encoger los coeficientes hacia cero sin anularlos por completo. Apoya tu explicación con un dibujo o descripción de las “regiones de restricción” de ambos métodos en un espacio de dos coeficientes (<span class="math inline">\(\beta_1, \beta_2\)</span>).</p>
+<details>
+<summary>
+</summary>
 <p>La estimación en regresión regularizada puede entenderse como un problema de optimización restringida. El objetivo es encontrar el conjunto de coeficientes (<span class="math inline">\(\beta_1, \beta_2, \dots\)</span>) que minimice la Suma de Cuadrados del Error (SSE), sujeto a una restricción en el tamaño de dichos coeficientes.</p>
 <ul>
 <li><p><strong>Geometría del problema:</strong> El conjunto de todos los posibles valores de los coeficientes para un mismo valor de SSE forma una elipse (en un espacio de dos coeficientes, <span class="math inline">\(\beta_1, \beta_2\)</span>) centrada en la solución de Mínimos Cuadrados Ordinarios (MCO). El objetivo es encontrar la elipse más pequeña posible que toque la “región de restricción”.</p></li>
 <li><p><strong>Regresión Ridge (Penalización L2):</strong> La restricción es <span class="math inline">\(\sum \beta_j^2 \leq s\)</span>. En dos dimensiones, <span class="math inline">\(\beta_1^2 + \beta_2^2 \leq s\)</span> es la ecuación de un <strong>círculo</strong>. Esta región es convexa y no tiene “esquinas”. Cuando las elipses del SSE se expanden desde el punto MCO, el primer punto de contacto con el círculo será un punto de tangencia. Debido a la forma suave y redondeada del círculo, es extremadamente improbable que este punto de tangencia ocurra exactamente sobre un eje (donde uno de los coeficientes sería cero). Por lo tanto, Ridge reduce la magnitud de ambos coeficientes, pero no los anula.</p></li>
 <li><p><strong>Regresión Lasso (Penalización L1):</strong> La restricción es <span class="math inline">\(\sum |\beta_j| \leq s\)</span>. En dos dimensiones, <span class="math inline">\(|\beta_1| + |\beta_2| \leq s\)</span> es la ecuación de un <strong>rombo (o diamante)</strong>, rotado 45 grados. La característica clave de esta región son sus <strong>vértices afilados, que se encuentran sobre los ejes</strong>. Cuando las elipses del SSE se expanden, es mucho más probable que toquen la región de restricción en uno de estos vértices que en una de las aristas. Si el punto de contacto es un vértice sobre un eje (por ejemplo, el punto (0, <span class="math inline">\(\beta_2\)</span>)), significa que el otro coeficiente (<span class="math inline">\(\beta_1\)</span>) es <strong>exactamente cero</strong>. Es esta propiedad geométrica, las “esquinas” de la región de penalización L1, lo que induce la escasez (<em>sparsity</em>) y permite a Lasso realizar selección de variables.</p></li>
 </ul>
-<hr>
+</details>
 </section>
-<section id="ejercicio-5-la-familia-exponencial-y-los-glm" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-5-la-familia-exponencial-y-los-glm"><strong>Ejercicio 5: La Familia Exponencial y los GLM</strong></h3>
-<p><strong>Enunciado:</strong> Explica cuál es la función de varianza <span class="math inline">\(V(\mu)\)</span> para un modelo de Poisson y para un modelo Binomial, y qué implicaciones tiene sobre los supuestos del modelo.</p>
-<p><strong>Solución:</strong></p>
+<section id="ejercicio-5-la-familia-exponencial-y-los-glm" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-5-la-familia-exponencial-y-los-glm">Ejercicio 5: La Familia Exponencial y los GLM</h2>
+<p>La teoría de los Modelos Lineales Generalizados (GLM) se basa en que distribuciones como la Normal, Binomial o Poisson pertenecen a la <strong>familia exponencial</strong>. La forma canónica de esta familia establece una relación directa entre la media y la varianza a través de la <strong>función de varianza</strong> <span class="math inline">\(V(\mu)\)</span>. Explica cuál es la función de varianza para un modelo de <strong>Poisson</strong> y para un modelo <strong>Binomial</strong>. ¿Qué implicaciones tiene la forma de <span class="math inline">\(V(\mu)\)</span> en cada caso sobre el comportamiento de los datos y los supuestos del modelo?</p>
+<details>
+<summary>
+</summary>
 <p>La <strong>función de varianza</strong> <span class="math inline">\(V(\mu)\)</span> es la “firma” de cada distribución dentro de la familia exponencial, ya que define la relación teórica entre la media <span class="math inline">\(\mu\)</span> y la varianza de la variable respuesta.</p>
 <ul>
 <li><strong>Modelo de Poisson:</strong>
@@ -331,12 +323,14 @@ VIF_1 = \frac{1}{1 - r_{12}^2}
 <li><strong>Implicación:</strong> En este caso, la varianza no es constante, sino que es una función cuadrática de la media (la probabilidad de éxito). La varianza es mínima cuando <span class="math inline">\(\mu\)</span> se acerca a 0 o 1, y es máxima cuando <span class="math inline">\(\mu = 0.5\)</span>. Esta es la heterocedasticidad inherente a los datos de proporciones. El modelo GLM maneja esto de forma natural a través del algoritmo de estimación (IRLS), que da más peso a las observaciones con menor varianza (aquellas con probabilidades predichas cercanas a 0 o 1) y menos peso a las más inciertas (aquellas con probabilidades cercanas a 0.5).</li>
 </ul></li>
 </ul>
-<hr>
+</details>
 </section>
-<section id="ejercicio-6-el-problema-de-la-inferencia-en-métodos-stepwise" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-6-el-problema-de-la-inferencia-en-métodos-stepwise"><strong>Ejercicio 6: El Problema de la Inferencia en Métodos Stepwise</strong></h3>
-<p><strong>Enunciado:</strong> Explica el razonamiento estadístico detrás de la advertencia de que los p-valores de un modelo final obtenido mediante selección por pasos (stepwise) están sesgados y son excesivamente optimistas.</p>
-<p><strong>Solución:</strong></p>
+<section id="ejercicio-6-el-problema-de-la-inferencia-en-métodos-stepwise" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-6-el-problema-de-la-inferencia-en-métodos-stepwise">Ejercicio 6: El Problema de la Inferencia en Métodos Stepwise</h2>
+<p>Los apuntes advierten que los p-valores de un modelo final obtenido mediante selección por pasos (stepwise) están <strong>sesgados y son excesivamente optimistas</strong>. Explica el razonamiento estadístico detrás de esta advertencia. ¿Por qué el proceso iterativo de “buscar y seleccionar” la variable más significativa en cada paso invalida los supuestos teóricos del test t estándar?</p>
+<details>
+<summary>
+</summary>
 <p>La advertencia se debe a que los métodos stepwise violan un principio fundamental de la prueba de hipótesis: el modelo y las hipótesis deben ser especificados <strong>a priori</strong>, antes de examinar las relaciones en los datos. Los métodos stepwise hacen exactamente lo contrario.</p>
 <ol type="1">
 <li><p><strong>Problema de Múltiples Comparaciones:</strong> En cada paso, un algoritmo como la selección <em>forward</em> realiza múltiples tests (un test t para cada variable candidata a entrar) y selecciona la variable “ganadora”, que es la que tiene el p-valor más pequeño. Al elegir el valor mínimo de un conjunto de pruebas, estamos seleccionando un valor extremo de la distribución de p-valores bajo la hipótesis nula. El p-valor reportado para esa variable (p.&nbsp;ej., 0.03) no refleja la probabilidad de observar un resultado tan extremo en un solo intento, sino la probabilidad de que <em>el mejor de varios intentos</em> sea tan extremo, lo cual es una probabilidad mucho mayor.</p></li>
@@ -344,12 +338,14 @@ VIF_1 = \frac{1}{1 - r_{12}^2}
 <li><p><strong>Sesgo de Selección:</strong> El proceso está diseñado para encontrar relaciones, incluso en datos puramente aleatorios. Si tenemos muchas variables de ruido, la probabilidad de que una de ellas parezca significativa por puro azar es alta. El método stepwise seleccionará esa variable y reportará un p-valor bajo y engañoso.</p></li>
 </ol>
 <p>En resumen, los p-valores de un modelo stepwise están <strong>sesgados a la baja (son demasiado pequeños)</strong> porque no tienen en cuenta el proceso de búsqueda y selección que los ha producido. Esto lleva a una <strong>inflación de la tasa de error de Tipo I</strong>, haciendo que concluyamos que ciertas variables son significativas cuando en realidad no lo son.</p>
-<hr>
+</details>
 </section>
-<section id="ejercicio-7-propiedades-de-los-estimadores-mco" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-7-propiedades-de-los-estimadores-mco"><strong>Ejercicio 7: Propiedades de los Estimadores MCO</strong></h3>
-<p><strong>Enunciado:</strong> Demuestra la propiedad de <strong>insesgadez</strong> para el estimador <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> en notación matricial. Es decir, demuestra que <span class="math inline">\(E[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta}\)</span>.</p>
-<p><strong>Solución:</strong></p>
+<section id="ejercicio-7-propiedades-de-los-estimadores-mco" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-7-propiedades-de-los-estimadores-mco">Ejercicio 7: Propiedades de los Estimadores MCO</h2>
+<p>El <strong>Teorema de Gauss-Markov</strong> establece que, bajo ciertos supuestos, los estimadores de Mínimos Cuadrados Ordinarios (MCO) son <strong>MELI (Mejores Estimadores Lineales Insesgados)</strong>. Demuestra la propiedad de <strong>insesgadez</strong> para el estimador <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> en notación matricial. Es decir, demuestra que <span class="math inline">\(E[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta}\)</span>. Muestra todos los pasos y menciona qué supuestos del modelo estás utilizando en cada paso.</p>
+<details>
+<summary>
+</summary>
 <ol type="1">
 <li><p>Comenzamos con la fórmula del estimador MCO en notación matricial: <span class="math display">\[
 \hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}
@@ -378,12 +374,14 @@ E[\hat{\boldsymbol{\beta}}] = E[(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf
 E[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta} + \mathbf{0} = \boldsymbol{\beta}
 \]</span> Esto demuestra que el estimador MCO <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> es insesgado, ya que su valor esperado es el verdadero parámetro poblacional <span class="math inline">\(\boldsymbol{\beta}\)</span>.</p></li>
 </ol>
-<hr>
+</details>
 </section>
-<section id="ejercicio-8-intervalos-de-confianza-vs.-predicción" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-8-intervalos-de-confianza-vs.-predicción"><strong>Ejercicio 8: Intervalos de Confianza vs.&nbsp;Predicción</strong></h3>
-<p><strong>Enunciado:</strong> La fórmula para el intervalo de predicción en RLS es <span class="math inline">\(\hat{y}_0 \pm t_{\alpha/2, n-2} \cdot \sqrt{\text{MSE} \left( 1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right)}\)</span>. Explica el origen y el significado de cada uno de los tres términos dentro del paréntesis.</p>
-<p><strong>Solución:</strong></p>
+<section id="ejercicio-8-intervalos-de-confianza-vs.-predicción" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-8-intervalos-de-confianza-vs.-predicción">Ejercicio 8: Intervalos de Confianza vs.&nbsp;Predicción</h2>
+<p>La fórmula para el intervalo de predicción para una nueva observación en regresión lineal simple es: <span class="math display">\[\hat{y}_0 \pm t_{\alpha/2, n-2} \cdot \sqrt{\text{MSE} \left( 1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right)}\]</span> Explica el origen y el significado de cada uno de los <strong>tres términos</strong> que se encuentran dentro del paréntesis bajo la raíz cuadrada. ¿Qué fuente de incertidumbre representa cada término y por qué la suma de los tres es necesaria para un intervalo de predicción?</p>
+<details>
+<summary>
+</summary>
 <p>La fórmula cuantifica la incertidumbre total de predecir una <em>única</em> nueva observación. Esta incertidumbre proviene de dos fuentes: la incertidumbre sobre la posición de la verdadera línea de regresión y la variabilidad inherente de un punto individual alrededor de esa línea. Los tres términos dentro del paréntesis representan estas fuentes de varianza (escaladas por MSE, que estima <span class="math inline">\(\sigma^2\)</span>):</p>
 <ol type="1">
 <li><p><strong>Término <code>1</code></strong>: Esta es la componente más importante y la que distingue al intervalo de predicción. Representa la <strong>varianza del error aleatorio de la nueva observación</strong>, <span class="math inline">\(\text{Var}(\varepsilon_0) = \sigma^2\)</span>. Es la incertidumbre irreducible o inherente de un solo punto, que siempre se desviará de la media. Esta es la razón principal por la que un intervalo de predicción es siempre más ancho que uno de confianza.</p></li>
@@ -391,12 +389,14 @@ E[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta} + \mathbf{0} = \boldsymbol{\bet
 <li><p><strong>Término <code>(x_0 - \bar{x})^2 / S_{xx}</code></strong>: Esta componente representa la <strong>incertidumbre debida a la estimación de la pendiente <span class="math inline">\(\hat{\beta}_1\)</span></strong>. La incertidumbre en la pendiente tiene un mayor impacto cuanto más nos alejamos del centro de los datos (<span class="math inline">\(\bar{x}\)</span>). Si predecimos en el punto medio de nuestros datos (<span class="math inline">\(x_0 = \bar{x}\)</span>), este término se anula. A medida que <span class="math inline">\(x_0\)</span> se aleja de <span class="math inline">\(\bar{x}\)</span>, el efecto de un pequeño error en la estimación de la pendiente se magnifica, ensanchando el intervalo.</p></li>
 </ol>
 <p>En resumen, los términos <code>1/n</code> y <code>(x_0 - \bar{x})^2 / S_{xx}</code> juntos cuantifican la incertidumbre sobre dónde está la <strong>línea de regresión verdadera</strong> (lo que cubre el intervalo de confianza). El término <code>1</code> añade la incertidumbre de <strong>un nuevo punto individual</strong> alrededor de esa línea.</p>
-<hr>
+</details>
 </section>
-<section id="ejercicio-9-estimación-por-máxima-verosimilitud" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-9-estimación-por-máxima-verosimilitud"><strong>Ejercicio 9: Estimación por Máxima Verosimilitud</strong></h3>
-<p><strong>Enunciado:</strong> Para un modelo de regresión logística, deriva la ecuación de puntuación para un coeficiente <span class="math inline">\(\beta_j\)</span> y demuestra que se iguala a cero cuando <span class="math inline">\(\sum_{i=1}^{n} x_{ij}(y_i - p_i) = 0\)</span>.</p>
-<p><strong>Solución:</strong></p>
+<section id="ejercicio-9-estimación-por-máxima-verosimilitud" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-9-estimación-por-máxima-verosimilitud">Ejercicio 9: Estimación por Máxima Verosimilitud</h2>
+<p>Para un modelo de regresión logística, la función de log-verosimilitud es: <span class="math display">\[\ell(\boldsymbol{\beta}) = \sum_{i=1}^{n} \left[y_i \log(p_i) + (1-y_i) \log(1-p_i)\right]\]</span> donde <span class="math inline">\(p_i = \frac{1}{1 + e^{-\mathbf{x}_i^T\boldsymbol{\beta}}}\)</span>. Deriva la <strong>ecuación de puntuación (score equation)</strong> para un coeficiente <span class="math inline">\(\beta_j\)</span> (es decir, calcula <span class="math inline">\(\frac{\partial \ell}{\partial \beta_j}\)</span>) y demuestra que se iguala a cero cuando <span class="math inline">\(\sum_{i=1}^{n} x_{ij}(y_i - p_i) = 0\)</span>. Interpreta el significado de esta condición final.</p>
+<details>
+<summary>
+</summary>
 <ol type="1">
 <li><p>La función de log-verosimilitud para la regresión logística es: <span class="math display">\[
 \ell(\boldsymbol{\beta}) = \sum_{i=1}^{n} \left[y_i \mathbf{x}_i^T\boldsymbol{\beta} - \log(1 + e^{\mathbf{x}_i^T\boldsymbol{\beta}})\right]
@@ -421,12 +421,14 @@ E[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta} + \mathbf{0} = \boldsymbol{\bet
 \]</span></p></li>
 </ol>
 <p><strong>Interpretación:</strong> Esta condición final significa que los estimadores de máxima verosimilitud se encuentran cuando los residuos del modelo (<span class="math inline">\(y_i - p_i\)</span>, la diferencia entre lo observado y la probabilidad predicha) son <strong>ortogonales</strong> (no están correlacionados) a los predictores <span class="math inline">\(x_{ij}\)</span>. Esto es análogo a las ecuaciones normales de MCO y significa que el modelo ha extraído toda la información linealmente asociable a los predictores, no quedando ningún patrón relacionado con ellos en los errores.</p>
-<hr>
+</details>
 </section>
-<section id="ejercicio-10-el-coeficiente-de-regresión-parcial" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-10-el-coeficiente-de-regresión-parcial"><strong>Ejercicio 10: El Coeficiente de Regresión Parcial</strong></h3>
-<p><strong>Enunciado:</strong> Explica el concepto de <strong>regresión parcial</strong> y su relación con el coeficiente de regresión múltiple <span class="math inline">\(\hat{\beta}_j\)</span>.</p>
-<p><strong>Solución:</strong></p>
+<section id="ejercicio-10-el-coeficiente-de-regresión-parcial" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-10-el-coeficiente-de-regresión-parcial">Ejercicio 10: El Coeficiente de Regresión Parcial</h2>
+<p>El texto afirma que el coeficiente <span class="math inline">\(\hat{\beta}_j\)</span> de una regresión múltiple puede entenderse como el coeficiente de una regresión simple entre dos conjuntos de residuos. Explica con detalle este concepto de <strong>regresión parcial</strong>. ¿Qué se está “parcializando” o “eliminando” de la variable respuesta <span class="math inline">\(Y\)</span> y del predictor <span class="math inline">\(X_j\)</span> antes de calcular su relación? ¿Por qué este concepto es fundamental para entender la interpretación <em>ceteris paribus</em>?</p>
+<details>
+<summary>
+</summary>
 <p>El concepto de regresión parcial es fundamental para entender la interpretación <em>ceteris paribus</em> de un coeficiente en regresión múltiple. Afirma que el coeficiente <span class="math inline">\(\hat{\beta}_j\)</span> del predictor <span class="math inline">\(X_j\)</span> en un modelo múltiple es matemáticamente idéntico a la pendiente de una regresión simple entre dos conjuntos de residuos.</p>
 <p>El proceso de “parcialización” consiste en eliminar la influencia de todos los demás predictores (denotados como <span class="math inline">\(X_{-j}\)</span>) tanto de la variable respuesta <span class="math inline">\(Y\)</span> como del predictor de interés <span class="math inline">\(X_j\)</span>.</p>
 <ol type="1">
@@ -439,7 +441,7 @@ e_{Y|X_{-j}} \sim e_{X_j|X_{-j}}
 <p><strong>Conclusión:</strong> Esto demuestra que <span class="math inline">\(\hat{\beta}_j\)</span> no mide la relación “bruta” entre Y y <span class="math inline">\(X_j\)</span>, sino la relación entre la parte de Y que no es explicada por los otros predictores y la parte de <span class="math inline">\(X_j\)</span> que es única. Es la asociación “limpia” entre Y y <span class="math inline">\(X_j\)</span> después de haber controlado estadísticamente por la influencia de todas las demás variables en el modelo. Esto es, precisamente, la formalización matemática del principio <em>ceteris paribus</em>.</p>
 
 
-</section>
+</details></section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -843,8 +845,8 @@ e_{Y|X_{-j}} \sim e_{X_j|X_{-j}}
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./tema5_glm_soluciones.html" class="pagination-link" aria-label="**Modelos de Regresión Generalizada**">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></span>
+      <a href="./tema5_glm_soluciones.html" class="pagination-link" aria-label="Modelos de Regresión Generalizada">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Modelos de Regresión Generalizada</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

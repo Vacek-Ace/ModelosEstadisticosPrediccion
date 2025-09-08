@@ -123,31 +123,41 @@ quarto render guia_estudio.qmd --to pdf
 
 ### 5. 🧮 Soluciones de Ejercicios
 
-#### Generar todas las soluciones en HTML (recomendado):
-```r
-# Ejecutar desde la raíz del proyecto
-Rscript -e "source('ejercicios/soluciones/generar_soluciones.R'); generar_todas_soluciones()"
-```
-
-#### Abrir las soluciones automáticamente en el navegador:
-```r
-# Ejecutar después de generar
-Rscript -e "source('ejercicios/soluciones/generar_soluciones.R'); abrir_soluciones()"
+#### Generar todas las soluciones en HTML:
+```bash
+# Desde el directorio ejercicios/soluciones/
+cd ejercicios/soluciones
+quarto render --to html
 ```
 
 #### Generar solución específica:
-```r
-# Generar solo tema 1
-Rscript -e "source('ejercicios/soluciones/generar_soluciones.R'); generar_solucion(1)"
+```bash
+# Ejemplo: solo tema 1
+cd ejercicios/soluciones
+quarto render tema1_regresion_simple_soluciones.qmd --to html
 
-# Generar ejercicios avanzados
-Rscript -e "source('ejercicios/soluciones/generar_soluciones.R'); generar_solucion('avanzados')"
+# Ejemplo: ejercicios avanzados
+quarto render ejercicios_avanzados_soluciones.qmd --to html
 ```
 
 **Características:**
 - ✅ **HTML únicamente** - Sin problemas de compilación LaTeX
-- ✅ Código R completo y comentado
-- ✅ Explicaciones matemáticas detalladas
+- ✅ Código R completo y comentado paso a paso
+- ✅ Explicaciones matemáticas detalladas con derivaciones
+- ✅ Interpretaciones prácticas de todos los resultados
+- ✅ Secciones colapsibles para mejor navegación
+- ✅ Styling profesional con tema cerulean
+- ✅ Archivos auto-contenidos (embed-resources)
+- ✅ Validación de código con ejemplos reales
+- 📁 Salida en: `ejercicios/soluciones/soluciones_html/`
+
+**Soluciones disponibles:**
+- `tema1_regresion_simple_soluciones.qmd` - Regresión lineal simple con análisis completo
+- `tema2_regresion_multiple_soluciones.qmd` - Regresión múltiple y diagnósticos
+- `tema3_ingenieria_caracteristicas_soluciones.qmd` - Transformación de variables
+- `tema4_seleccion_validacion_soluciones.qmd` - Selección de variables y validación cruzada
+- `tema5_glm_soluciones.qmd` - Modelos lineales generalizados (logística, Poisson)
+- `ejercicios_avanzados_soluciones.qmd` - Demostraciones matemáticas y derivaciones teóricas
 - ✅ Interpretaciones prácticas de resultados
 - ✅ Navegación web entre temas
 - ✅ Archivos auto-contenidos (embed-resources)
@@ -276,9 +286,23 @@ ModelosEstadisticosPrediccion/
 │   ├── index.qmd                # Índice de ejercicios
 │   ├── tema**.qmd               # Ejercicios por tema
 │   ├── ejercicios_avanzados.qmd # Ejercicios avanzados con matemáticas
-│   ├── ejercicios_avanzados_soluciones.qmd   # Soluciones avanzadas
-│   └── ejercicios_pdf/          # PDFs generados
-│       └── EjerciciosModelosEstadisticosPrediccion.pdf
+│   ├── ejercicios_pdf/          # PDFs generados
+│   │   └── EjerciciosModelosEstadisticosPrediccion.pdf
+│   └── soluciones/              # Soluciones detalladas
+│       ├── soluciones.css       # Estilos para soluciones
+│       ├── tema1_regresion_simple_soluciones.qmd
+│       ├── tema2_regresion_multiple_soluciones.qmd
+│       ├── tema3_ingenieria_caracteristicas_soluciones.qmd
+│       ├── tema4_seleccion_validacion_soluciones.qmd
+│       ├── tema5_glm_soluciones.qmd
+│       ├── ejercicios_avanzados_soluciones.qmd
+│       └── soluciones_html/     # HTMLs generados
+│           ├── tema1_regresion_simple_soluciones.html
+│           ├── tema2_regresion_multiple_soluciones.html
+│           ├── tema3_ingenieria_caracteristicas_soluciones.html
+│           ├── tema4_seleccion_validacion_soluciones.html
+│           ├── tema5_glm_soluciones.html
+│           └── ejercicios_avanzados_soluciones.html
 │
 ├── guia_estudio/                # Guía de estudio compacta
 │   ├── generar_guia.R           # Script para guía PDF profesional
@@ -308,10 +332,14 @@ Rscript -e "source('apuntes/generar_libro.R'); crear_libro_completo()"  # Libro 
 Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); crear()"  # Diapositivas
 Rscript -e "source('ejercicios/generar_ejercicios.R'); crear_ejercicios_completos()"  # Ejercicios
 Rscript -e "source('guia_estudio/generar_guia.R'); crear_guia_completa()"  # Guía de estudio
+cd ejercicios/soluciones && quarto render --to html  # Soluciones de ejercicios
 cd laboratorios && quarto render --to html  # Laboratorios
 
 # 2. Solo actualizar diapositivas para clase
 Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); crear()"
+
+# 3. Solo actualizar soluciones
+cd ejercicios/soluciones && quarto render --to html
 ```
 
 ### Para el Estudiante
@@ -329,9 +357,11 @@ Rscript -e "source('guia_estudio/generar_guia.R'); crear_guia_completa()"
 # 4. Generar ejercicios para imprimir  
 Rscript -e "source('ejercicios/generar_ejercicios.R'); crear_ejercicios_completos()"
 
-# 5. Generar laboratorios interactivos
-cd laboratorios
-quarto render --to html
+# 5. Consultar soluciones de ejercicios
+cd ejercicios/soluciones && quarto render --to html
+
+# 6. Generar laboratorios interactivos
+cd laboratorios && quarto render --to html
 ```
 
 ## 🐛 Solución de Problemas

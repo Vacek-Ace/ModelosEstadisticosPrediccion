@@ -5,8 +5,8 @@ project:
 book:
   title: "Modelos Estadísticos para la Predicción"
   author: 
-    - name: "Víctor Aceña Gil"
-    - name: "Isaac Martín de Diego"
+    - "Víctor Aceña Gil"
+    - "Isaac Martín de Diego"
   date: last-modified
   search: true
   chapters:
@@ -22,11 +22,12 @@ book:
   cover-image: images/DSLab_logo_2.png
 
 bibliography: references.bib
+lang: es-ES
 
 format:
   html:
     theme: cerulean
-    lang: es
+    lang: es-ES
     css: estilos_html.css
   pdf:
     documentclass: scrreprt

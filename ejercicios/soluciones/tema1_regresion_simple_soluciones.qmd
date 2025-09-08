@@ -2,11 +2,6 @@
 
 En este capítulo encontrarás las soluciones detalladas a todos los ejercicios del Tema 1. Cada ejercicio incluye tanto el enunciado como la solución completa con código R y explicaciones teóricas.
 
-::: {.callout-note}
-## Instrucciones de Uso
-
-Intenta resolver cada ejercicio por tu cuenta antes de consultar la solución. Las soluciones están organizadas en secciones desplegables para facilitar este proceso.
-:::
 
 ## Ejercicio 1: Fundamentos Conceptuales
 
@@ -58,6 +53,7 @@ Por cada año adicional de edad del cliente, se espera que el gasto anual en com
 
 **c) Interpretación del intercepto (1500):**
 Representa el gasto predicho para un cliente de 0 años, que sería 1500 euros. **Esta interpretación NO tiene sentido práctico** porque:
+
 - No existen clientes de 0 años
 - Estamos extrapolando fuera del rango de datos observados
 - El modelo probablemente no es válido para edades tan bajas
@@ -77,36 +73,29 @@ e) ¿Es el coeficiente de la temperatura estadísticamente significativo a un ni
 <details>
 <summary></summary>
 
+**a) Ajustar el modelo:**
 
 ```{r}
-# a) Ajustar el modelo
 modelo_pressure <- lm(pressure ~ temperature, data = pressure)
+```
 
-# b) Summary del modelo
+**b) Summary del modelo:**
+
+```{r}
 summary(modelo_pressure)
 ```
 
-**c) Interpretación del R²:**
-```{r}
-r_squared <- summary(modelo_pressure)$r.squared
-print(paste("R² =", round(r_squared, 4)))
-print(paste("La temperatura explica el", round(r_squared * 100, 2), "% de la variabilidad en la presión"))
-```
+**c), d) y e) Interpretación de la Salida del Modelo**
 
-**d) Interpretación del p-valor del estadístico F:**
-```{r}
-f_pvalue <- summary(modelo_pressure)$fstatistic
-f_test_pvalue <- pf(f_pvalue[1], f_pvalue[2], f_pvalue[3], lower.tail = FALSE)
-print(paste("p-valor F-test:", format(f_test_pvalue, scientific = TRUE)))
-```
-Como p < 0.05, **el modelo es globalmente significativo** - es decir, el modelo es útil para predecir la presión.
+La forma más eficiente de analizar el modelo es observar directamente la salida de la función `summary()`.
 
-**e) Significancia del coeficiente de temperatura:**
-```{r}
-temp_pvalue <- summary(modelo_pressure)$coefficients["temperature", "Pr(>|t|)"]
-print(paste("p-valor temperatura:", format(temp_pvalue, scientific = TRUE)))
-```
-Como p < 0.05, **el coeficiente de temperatura es estadísticamente significativo**.
+A partir de esta salida, interpretamos:
+
+- **c) Coeficiente de determinación R²**: El valor de `Multiple R-squared` es **0.5742**. Esto significa que la temperatura explica el **57.42%** de la variabilidad en la presión.
+
+- **d) p-valor del estadístico F**: En la última línea, el `p-value` del `F-statistic` es **0.000171**. Al ser un valor muy inferior a 0.05, rechazamos la hipótesis nula ($H_0$) de que el modelo no tiene capacidad predictiva. Concluimos que **el modelo es globalmente significativo**.
+
+- **e) Significancia del coeficiente**: En la tabla de coeficientes, el p-valor (`Pr(>|t|)`) para `temperature` es **0.000171**. Rechazamos la hipótesis nula ($H_0: \beta_1 = 0$) y concluimos que la temperatura tiene una **relación estadísticamente significativa** con la presión.
 
 
 </details>
@@ -122,29 +111,61 @@ c) ¿Cuál de los dos intervalos es más ancho? Explica la razón teórica de es
 <details>
 <summary></summary>
 
+**a) Intervalo de confianza para la media cuando temp = 250:**
 
 ```{r}
-# a) Intervalo de confianza para la media cuando temp = 250
 ic_mean <- predict(modelo_pressure, newdata = data.frame(temperature = 250), 
                    interval = "confidence", level = 0.95)
 print("Intervalo de confianza (95%) para la presión media:")
 print(ic_mean)
+```
 
-# b) Intervalo de predicción para una nueva observación
+**b) Intervalo de predicción para una nueva observación:**
+
+```{r}
 ic_pred <- predict(modelo_pressure, newdata = data.frame(temperature = 250), 
                    interval = "prediction", level = 0.95)
 print("Intervalo de predicción (95%) para una nueva observación:")
 print(ic_pred)
+```
 
-# c) Comparación de anchos
+**c) Comparación de anchos:**
+
+```{r}
 ancho_conf <- ic_mean[3] - ic_mean[2]
 ancho_pred <- ic_pred[3] - ic_pred[2]
 print(paste("Ancho intervalo confianza:", round(ancho_conf, 2)))
 print(paste("Ancho intervalo predicción:", round(ancho_pred, 2)))
 ```
 
+Una visualización ayuda a entender la diferencia al instante:
+
+```{r}
+# Crear gráfico con bandas de confianza y predicción
+temp_range <- seq(min(pressure$temperature), max(pressure$temperature), length.out = 100)
+conf_bands <- predict(modelo_pressure, newdata = data.frame(temperature = temp_range), 
+                     interval = "confidence", level = 0.95)
+pred_bands <- predict(modelo_pressure, newdata = data.frame(temperature = temp_range), 
+                     interval = "prediction", level = 0.95)
+
+plot(pressure$temperature, pressure$pressure, 
+     xlab = "Temperatura", ylab = "Presión", 
+     main = "Intervalos de Confianza vs Predicción")
+abline(modelo_pressure, col = "red", lwd = 2)
+lines(temp_range, conf_bands[,"lwr"], col = "blue", lty = 2)
+lines(temp_range, conf_bands[,"upr"], col = "blue", lty = 2)
+lines(temp_range, pred_bands[,"lwr"], col = "green", lty = 3)
+lines(temp_range, pred_bands[,"upr"], col = "green", lty = 3)
+legend("topleft", legend = c("Regresión", "Confianza", "Predicción"), 
+       col = c("red", "blue", "green"), lty = c(1, 2, 3))
+```
+
+En el gráfico, las bandas de **confianza** (las más internas) definen el rango probable para la *media* de la presión a una temperatura dada. Las bandas de **predicción** (las más externas y anchas) definen el rango probable para una *única observación futura* de presión.
+
 **c) ¿Cuál es más ancho?**
+
 El **intervalo de predicción es más ancho** porque incluye dos fuentes de incertidumbre:
+
 1. La incertidumbre sobre la media poblacional (como en el intervalo de confianza)
 2. La variabilidad natural de las observaciones individuales alrededor de esa media
 
@@ -182,21 +203,42 @@ b) Genera y muestra el gráfico **Scale-Location**. Basándote en este gráfico,
 <details>
 <summary></summary>
 
+**a) Gráfico de Residuos vs. Valores Ajustados:**
 
 ```{r}
-# a) Gráfico de Residuos vs. Valores Ajustados
 par(mfrow = c(1, 2))
 plot(modelo_pressure, which = 1, main = "Residuos vs. Valores Ajustados")
+```
 
-# b) Gráfico Scale-Location
+**b) Gráfico Scale-Location:**
+
+```{r}
 plot(modelo_pressure, which = 3, main = "Scale-Location")
 ```
 
 **a) Linealidad**: En el gráfico de residuos vs. valores ajustados, observamos un **patrón curvado** en lugar de una distribución aleatoria alrededor de cero. Esto indica que **NO se cumple perfectamente el supuesto de linealidad**.
 
-**a) Linealidad**: En el gráfico de residuos vs. valores ajustados, observamos un **patrón curvado** en lugar de una distribución aleatoria alrededor de cero. Esto indica que **NO se cumple perfectamente el supuesto de linealidad**.
-
 **b) Homocedasticidad**: En el gráfico Scale-Location, la línea roja muestra una tendencia creciente, lo que sugiere **heterocedasticidad** (varianza no constante). Un problema de heterocedasticidad se manifestaría como un patrón de embudo o una tendencia clara en este gráfico.
+
+#### **¿Y ahora qué? Pasos Siguientes**
+
+Un buen análisis no termina al detectar un problema, sino al proponer una solución.
+
+1. **Contexto**: El mal ajuste del modelo tiene una razón física. La relación entre temperatura y presión de vapor no es lineal, sino **exponencial**.
+
+2. **Solución**: Para corregirlo, aplicamos una **transformación** para linealizar la relación. La más común es el **logaritmo natural** sobre la variable respuesta.
+
+```{r}
+# 1. Ajustamos un nuevo modelo con log(pressure)
+modelo_log <- lm(log(pressure) ~ temperature, data = pressure)
+
+# 2. Generamos los nuevos gráficos de diagnóstico
+par(mfrow = c(1, 2))
+plot(modelo_log, which = 1) # Linealidad
+plot(modelo_log, which = 3) # Homocedasticidad
+```
+
+Como se puede observar, en los nuevos gráficos el patrón curvado ha desaparecido y la varianza de los residuos es mucho más constante. Esto demuestra cómo el diagnóstico nos lleva a **mejorar y validar nuestro modelo**.
 
 
 </details>
@@ -211,13 +253,16 @@ b) Realiza un **test de Shapiro-Wilk** sobre los residuos del modelo. ¿Qué con
 <details>
 <summary></summary>
 
+**a) Gráfico Normal Q-Q:**
 
 ```{r}
-# a) Gráfico Normal Q-Q
 par(mfrow = c(1, 1))
 plot(modelo_pressure, which = 2, main = "Normal Q-Q Plot")
+```
 
-# b) Test de Shapiro-Wilk
+**b) Test de Shapiro-Wilk:**
+
+```{r}
 shapiro_test <- shapiro.test(residuals(modelo_pressure))
 print("Test de Shapiro-Wilk para normalidad de residuos:")
 print(shapiro_test)
@@ -226,6 +271,8 @@ print(shapiro_test)
 **a) Q-Q Plot**: Los puntos se desvían considerablemente de la línea diagonal, especialmente en las colas, indicando que los residuos **no siguen una distribución normal**.
 
 **b) Test de Shapiro-Wilk**: Con p-valor < 0.05, **rechazamos la hipótesis nula de normalidad**. Los residuos no son normales.
+
+**Conexión con el Ejercicio 6**: Es importante destacar que la **falta de linealidad** (detectada en el ejercicio anterior) es frecuentemente la **causa raíz de la no normalidad** en los residuos. Al corregir el problema estructural del modelo con la transformación logarítmica, el supuesto de normalidad también mejora de forma significativa.
 
 
 </details>
@@ -296,10 +343,12 @@ En regresión lineal simple, existe una relación matemática exacta:
 $$F = t^2$$
 
 Donde:
+
 - $F$ es el estadístico F del test ANOVA global
 - $t$ es el estadístico t para la pendiente $\beta_1$
 
 **Implicaciones para los p-valores:**
+
 - Los p-valores de ambos tests son **idénticos**
 - Si el coeficiente de la pendiente es significativo (test t), entonces el modelo global también lo es (test F)
 - Ambos tests evalúan la misma hipótesis nula: $H_0: \beta_1 = 0$

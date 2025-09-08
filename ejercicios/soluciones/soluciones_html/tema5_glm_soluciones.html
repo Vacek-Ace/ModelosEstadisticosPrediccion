@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -113,7 +148,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema5_glm_soluciones.html"><span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema5_glm_soluciones.html"><span class="chapter-title">Modelos de Regresión Generalizada</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -153,27 +188,27 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Regresión Lineal Múltiple</strong></span></a>
+  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Regresión Lineal Múltiple</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Ingeniería de Características</strong></span></a>
+  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ingeniería de Características</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title"><strong>Selección de variables, Regularización y Validación</strong></span></a>
+  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Selección de variables, Regularización y Validación</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></a>
+  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Modelos de Regresión Generalizada</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ejercicios: Popurrí</span></a>
+  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Ejercicios Avanzados</span></a>
   </div>
 </li>
     </ul>
@@ -204,7 +239,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></h1>
+<h1 class="title"><span class="chapter-title">Modelos de Regresión Generalizada</span></h1>
 </div>
 
 
@@ -221,28 +256,31 @@ window.Quarto = {
 </header>
 
 
-<!-- ---
-title: "Ejercicios: Modelos de Regresión Generalizada"
-subtitle: "Modelos Estadísticos de Predicción"
-author: "Víctor Aceña Gil - Isaac Martín de Diego"
-date: today
-format: 
-  html:
-    toc: true
-    toc-depth: 3
-    code-fold: false
-    theme: cosmo
-execute:
-  warning: false
-  message: false
---- -->
 <section id="ejercicio-1-conceptual-fundamentos-de-glm" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-1-conceptual-fundamentos-de-glm">Ejercicio 1: Conceptual (Fundamentos de GLM)</h2>
 <p>Explica los <strong>tres componentes clave</strong> que definen a cualquier Modelo Lineal Generalizado (GLM) y describe brevemente la función de cada uno.</p>
+<details>
+<summary>
+</summary>
+<p>Los <strong>tres componentes clave</strong> de un GLM son:</p>
+<ol type="1">
+<li><p><strong>Componente aleatorio</strong>: Especifica la distribución de probabilidad de la variable respuesta (Normal, Binomial, Poisson, etc.). Define cómo se distribuyen los errores.</p></li>
+<li><p><strong>Componente sistemático</strong>: Define el predictor lineal <span class="math inline">\(\eta = \beta_0 + \beta_1 X_1 + ... + \beta_p X_p\)</span>. Es la parte lineal del modelo.</p></li>
+<li><p><strong>Función de enlace</strong>: Conecta la media de la distribución (<span class="math inline">\(\mu\)</span>) con el predictor lineal: <span class="math inline">\(g(\mu) = \eta\)</span>. Permite que el predictor lineal tenga rango completo mientras la media respeta las restricciones de la distribución.</p></li>
+</ol>
+</details>
 </section>
 <section id="ejercicio-2-conceptual-función-de-enlace" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-2-conceptual-función-de-enlace">Ejercicio 2: Conceptual (Función de Enlace)</h2>
 <p>¿Cuál es el propósito fundamental de la <strong>función de enlace</strong> en un GLM? ¿Por qué la regresión lineal clásica es considerada un caso particular de un GLM? (Pista: piensa en su función de enlace).</p>
+<details>
+<summary>
+</summary>
+<p><strong>Propósito de la función de enlace:</strong></p>
+<p>Transformar la media de la variable respuesta para que pueda ser modelada como una combinación lineal de los predictores, respetando las restricciones del dominio de la variable respuesta.</p>
+<p><strong>Regresión lineal como caso particular:</strong></p>
+<p>La regresión lineal clásica es un GLM con: - <strong>Distribución</strong>: Normal - <strong>Función de enlace</strong>: Identidad (<span class="math inline">\(g(\mu) = \mu\)</span>) - Por tanto: <span class="math inline">\(\mu = \beta_0 + \beta_1 X_1 + ... + \beta_p X_p\)</span></p>
+</details>
 </section>
 <section id="ejercicio-3-práctico-ajuste-de-un-modelo-logístico" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-3-práctico-ajuste-de-un-modelo-logístico">Ejercicio 3: Práctico (Ajuste de un Modelo Logístico)</h2>
@@ -252,6 +290,41 @@ execute:
 <li>Utiliza la función <code>summary()</code> para examinar el modelo. ¿Qué variables parecen ser significativas?</li>
 <li>Obtén los coeficientes del modelo. ¿Cómo interpretarías el signo del coeficiente para la variable <code>wt</code>?</li>
 </ol>
+<details>
+<summary>
+</summary>
+<p><strong>a) Ajustar modelo logístico:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>modelo_logistico <span class="ot">&lt;-</span> <span class="fu">glm</span>(am <span class="sc">~</span> wt <span class="sc">+</span> hp, <span class="at">data =</span> mtcars, <span class="at">family =</span> binomial)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>b) Summary del modelo:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_logistico)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = am ~ wt + hp, family = binomial, data = mtcars)
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)   
+(Intercept) 18.86630    7.44356   2.535  0.01126 * 
+wt          -8.08348    3.06868  -2.634  0.00843 **
+hp           0.03626    0.01773   2.044  0.04091 * 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 43.230  on 31  degrees of freedom
+Residual deviance: 10.059  on 29  degrees of freedom
+AIC: 16.059
+
+Number of Fisher Scoring iterations: 8</code></pre>
+</div>
+</div>
+<p><strong>b) Variables significativas:</strong> Basándose en los p-valores, identificar qué variables tienen p &lt; 0.05.</p>
+<p><strong>c) Interpretación del signo de wt:</strong> Si el coeficiente de <code>wt</code> es <strong>negativo</strong>, significa que coches más pesados tienen menor probabilidad de tener transmisión manual (lo cual es intuitivo).</p>
+</details>
 </section>
 <section id="ejercicio-4-interpretación-odds-ratios" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-4-interpretación-odds-ratios">Ejercicio 4: Interpretación (Odds Ratios)</h2>
@@ -260,6 +333,31 @@ execute:
 <li>Calcula el <strong>Odds Ratio (OR)</strong> para el coeficiente de la variable <code>hp</code>.</li>
 <li>Interpreta este Odds Ratio en el contexto del problema. Específicamente, ¿cómo cambian las “odds” (la razón de probabilidad) de tener una transmisión manual por cada caballo de fuerza adicional, manteniendo el peso constante?</li>
 </ol>
+<details>
+<summary>
+</summary>
+<p><strong>a) Calcular Odds Ratio para hp:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>coef_hp <span class="ot">&lt;-</span> <span class="fu">coef</span>(modelo_logistico)[<span class="st">"hp"</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>odds_ratio_hp <span class="ot">&lt;-</span> <span class="fu">exp</span>(coef_hp)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Odds Ratio para hp:"</span>, <span class="fu">round</span>(odds_ratio_hp, <span class="dv">4</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Odds Ratio para hp: 1.0369"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Para todos los coeficientes</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>odds_ratios <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">coef</span>(modelo_logistico))</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Todos los Odds Ratios:"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Todos los Odds Ratios:"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(odds_ratios)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> (Intercept)           wt           hp 
+1.561455e+08 3.085967e-04 1.036921e+00 </code></pre>
+</div>
+</div>
+<p><strong>b) Interpretación:</strong> El Odds Ratio para <code>hp</code> es <strong>1.0369</strong>. Esto significa que por cada caballo de fuerza adicional, las <em>odds</em> (la razón de probabilidad) de que un coche tenga transmisión manual se <strong>multiplican por 1.0369</strong> (es decir, aumentan aproximadamente un 3.7%), manteniendo constante el peso del coche.</p>
+</details>
 </section>
 <section id="ejercicio-5-práctico-validación-del-modelo-logístico" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-5-práctico-validación-del-modelo-logístico">Ejercicio 5: Práctico (Validación del Modelo Logístico)</h2>
@@ -271,6 +369,83 @@ execute:
 <li>Calcula la <strong>precisión (accuracy)</strong> global del modelo.</li>
 <li>(Bonus) Utiliza el paquete <code>pROC</code> para calcular y visualizar la <strong>curva ROC</strong> y obtener el valor del <strong>AUC</strong>. ¿Qué tan buena es la capacidad discriminativa del modelo?</li>
 </ol>
+<details>
+<summary>
+</summary>
+<p><strong>a) Predicciones de probabilidad:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>probabilidades <span class="ot">&lt;-</span> <span class="fu">predict</span>(modelo_logistico, <span class="at">type =</span> <span class="st">"response"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>b) Conversión a clases con umbral 0.5:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>predicciones_clase <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(probabilidades <span class="sc">&gt;</span> <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>c) Matriz de confusión:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>tabla_confusion <span class="ot">&lt;-</span> <span class="fu">table</span>(<span class="at">Predicho =</span> predicciones_clase, <span class="at">Real =</span> mtcars<span class="sc">$</span>am)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Matriz de Confusión:"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Matriz de Confusión:"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tabla_confusion)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        Real
+Predicho  0  1
+       0 18  1
+       1  1 12</code></pre>
+</div>
+</div>
+<p><strong>d) Cálculo de precisión:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>precision <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">diag</span>(tabla_confusion)) <span class="sc">/</span> <span class="fu">sum</span>(tabla_confusion)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Precisión (Accuracy):"</span>, <span class="fu">round</span>(precision, <span class="dv">3</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Precisión (Accuracy): 0.938"</code></pre>
+</div>
+</div>
+<p><strong>e) Curva ROC y AUC:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pROC)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Type 'citation("pROC")' for a citation.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'pROC'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    cov, smooth, var</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>roc_obj <span class="ot">&lt;-</span> <span class="fu">roc</span>(mtcars<span class="sc">$</span>am, probabilidades)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Setting levels: control = 0, case = 1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Setting direction: controls &lt; cases</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>auc_value <span class="ot">&lt;-</span> <span class="fu">auc</span>(roc_obj)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(roc_obj, <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"Curva ROC (AUC ="</span>, <span class="fu">round</span>(auc_value, <span class="dv">3</span>), <span class="st">")"</span>))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema5_glm_soluciones_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"AUC:"</span>, <span class="fu">round</span>(auc_value, <span class="dv">3</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "AUC: 0.984"</code></pre>
+</div>
+</div>
+<p><strong>Interpretación AUC:</strong></p>
+<ul>
+<li>AUC &gt; 0.8: Buena capacidad discriminativa</li>
+<li>AUC &gt; 0.9: Excelente capacidad discriminativa</li>
+<li>AUC = 0.5: Sin capacidad discriminativa (azar)</li>
+</ul>
+</details>
 </section>
 <section id="ejercicio-6-conceptual-regresión-de-poisson" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-6-conceptual-regresión-de-poisson">Ejercicio 6: Conceptual (Regresión de Poisson)</h2>
@@ -279,6 +454,13 @@ execute:
 <li>¿Cuál es el supuesto fundamental de la distribución de Poisson respecto a la relación entre la media y la varianza?</li>
 <li>¿Cómo se llama el problema que surge cuando este supuesto se viola y la varianza es mayor que la media?</li>
 </ol>
+<details>
+<summary>
+</summary>
+<p><strong>a) Tipo de variable respuesta:</strong> La regresión de Poisson está diseñada para <strong>variables de conteo</strong>: enteros no negativos que representan el número de ocurrencias de un evento en un período o espacio fijo.</p>
+<p><strong>b) Supuesto fundamental:</strong> En la distribución de Poisson, la <strong>media es igual a la varianza</strong>: <span class="math inline">\(E[Y] = Var[Y] = \mu\)</span>.</p>
+<p><strong>c) Problema cuando se viola:</strong> Cuando <span class="math inline">\(Var[Y] &gt; E[Y]\)</span>, se llama <strong>sobredispersión</strong>. Esto puede llevar a errores estándar subestimados y conclusiones incorrectas sobre la significancia.</p>
+</details>
 </section>
 <section id="ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson">Ejercicio 7: Práctico (Ajuste de un Modelo de Poisson)</h2>
@@ -288,6 +470,68 @@ execute:
 <li>Ajusta un modelo de regresión de Poisson simple donde <code>discoveries</code> es la respuesta y el tiempo (<code>time(discoveries)</code>) es el predictor.</li>
 <li>Interpreta el coeficiente del tiempo. (Pista: recuerda exponenciarlo para obtener el Incidence Rate Ratio - IRR).</li>
 </ol>
+<details>
+<summary>
+</summary>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Usar dataset discoveries</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(discoveries)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>a) Gráfico de la serie temporal:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(discoveries, <span class="at">main =</span> <span class="st">"Grandes Inventos por Año"</span>, </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Número de Descubrimientos"</span>, <span class="at">xlab =</span> <span class="st">"Año"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tema5_glm_soluciones_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>b) Ajustar modelo de Poisson:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear data frame con tiempo</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>df_discoveries <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">count =</span> <span class="fu">as.numeric</span>(discoveries),</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">time =</span> <span class="fu">as.numeric</span>(<span class="fu">time</span>(discoveries))</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>modelo_poisson <span class="ot">&lt;-</span> <span class="fu">glm</span>(count <span class="sc">~</span> time, <span class="at">data =</span> df_discoveries, <span class="at">family =</span> poisson)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_poisson)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = count ~ time, family = poisson, data = df_discoveries)
+
+Coefficients:
+             Estimate Std. Error z value Pr(&gt;|z|)   
+(Intercept) 11.354807   3.775677   3.007  0.00264 **
+time        -0.005360   0.001982  -2.705  0.00683 **
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for poisson family taken to be 1)
+
+    Null deviance: 164.68  on 99  degrees of freedom
+Residual deviance: 157.32  on 98  degrees of freedom
+AIC: 430.32
+
+Number of Fisher Scoring iterations: 5</code></pre>
+</div>
+</div>
+<p><strong>c) Interpretación del coeficiente de tiempo:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># IRR (Incidence Rate Ratio)</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>coef_time <span class="ot">&lt;-</span> <span class="fu">coef</span>(modelo_poisson)[<span class="st">"time"</span>]</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>irr <span class="ot">&lt;-</span> <span class="fu">exp</span>(coef_time)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"IRR para tiempo:"</span>, <span class="fu">round</span>(irr, <span class="dv">6</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "IRR para tiempo: 0.994654"</code></pre>
+</div>
+</div>
+<p>El IRR para el tiempo es <strong>0.994654</strong>. Esto significa que por cada año que pasa, se espera que la tasa de grandes inventos se <strong>multiplique por 0.994654</strong>, lo que representa una <strong>disminución anual de aproximadamente 0.53%</strong> (calculado como 1 - 0.994654).</p>
+</details>
 </section>
 <section id="ejercicio-8-diagnóstico-sobredispersión" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-8-diagnóstico-sobredispersión">Ejercicio 8: Diagnóstico (Sobredispersión)</h2>
@@ -296,10 +540,71 @@ execute:
 <li>Basándote en el valor de <span class="math inline">\(\hat{\phi}\)</span>, ¿hay evidencia de sobredispersión?</li>
 <li>Si encuentras sobredispersión, ¿cuál es el modelo alternativo que proponen los apuntes? ¿Qué ventaja teórica ofrece este modelo alternativo?</li>
 </ol>
+<details>
+<summary>
+</summary>
+<p><strong>a) Calcular estadístico de dispersión:</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>residuos_pearson <span class="ot">&lt;-</span> <span class="fu">residuals</span>(modelo_poisson, <span class="at">type =</span> <span class="st">"pearson"</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(df_discoveries)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">coef</span>(modelo_poisson))</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>phi_hat <span class="ot">&lt;-</span> <span class="fu">sum</span>(residuos_pearson<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> (n <span class="sc">-</span> p)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Estadístico de dispersión (φ̂):"</span>, <span class="fu">round</span>(phi_hat, <span class="dv">3</span>)))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Estadístico de dispersión (φ̂): 1.541"</code></pre>
+</div>
+</div>
+<p><strong>b) Evidencia de sobredispersión:</strong> Si φ̂ &gt; 1, hay evidencia de sobredispersión. Valores &gt; 1.5 indican sobredispersión considerable.</p>
+<p><strong>c) Modelo alternativo:</strong> Si hay sobredispersión, se puede usar <strong>regresión Binomial Negativa</strong>, que incluye un parámetro adicional que permite que la varianza sea mayor que la media: <span class="math inline">\(Var[Y] = \mu + \alpha\mu^2\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajuste con binomial negativa si hay sobredispersión</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(phi_hat <span class="sc">&gt;</span> <span class="fl">1.5</span>) {</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(MASS)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  modelo_nb <span class="ot">&lt;-</span> <span class="fu">glm.nb</span>(count <span class="sc">~</span> time, <span class="at">data =</span> df_discoveries)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"Modelo Binomial Negativo ajustado:"</span>)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">summary</span>(modelo_nb))</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Modelo Binomial Negativo ajustado:"
+
+Call:
+glm.nb(formula = count ~ time, data = df_discoveries, init.theta = 6.214857583, 
+    link = log)
+
+Coefficients:
+             Estimate Std. Error z value Pr(&gt;|z|)   
+(Intercept) 12.254546   4.628240   2.648   0.0081 **
+time        -0.005832   0.002428  -2.402   0.0163 * 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for Negative Binomial(6.2149) family taken to be 1)
+
+    Null deviance: 114.04  on 99  degrees of freedom
+Residual deviance: 108.69  on 98  degrees of freedom
+AIC: 422.34
+
+Number of Fisher Scoring iterations: 1
+
+              Theta:  6.21 
+          Std. Err.:  2.67 
+
+ 2 x log-likelihood:  -416.34 </code></pre>
+</div>
+</div>
+</details>
 </section>
 <section id="ejercicio-9-conceptual-deviance" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-9-conceptual-deviance">Ejercicio 9: Conceptual (Deviance)</h2>
 <p>La <strong>deviance</strong> es la medida principal de bondad de ajuste en los GLM. Explica conceptualmente qué mide. ¿Cómo se utiliza la diferencia en deviance entre dos modelos anidados para decidir cuál es mejor?</p>
+<details>
+<summary>
+</summary>
+<p><strong>Deviance</strong> mide qué tan bien el modelo ajustado se compara con el modelo saturado (perfecto). Es análogo a la suma de cuadrados residuales en regresión lineal.</p>
+<p><strong>Fórmula</strong>: <span class="math inline">\(D = 2[L(\text{modelo saturado}) - L(\text{modelo ajustado})]\)</span></p>
+<p><strong>Uso para comparar modelos anidados:</strong> La diferencia en deviance entre dos modelos anidados sigue una distribución χ² con grados de libertad igual a la diferencia en número de parámetros. Si esta diferencia es significativa, el modelo más complejo es preferible.</p>
+</details>
 </section>
 <section id="ejercicio-10-elección-del-modelo-adecuado" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-10-elección-del-modelo-adecuado">Ejercicio 10: Elección del Modelo Adecuado</h2>
@@ -309,6 +614,27 @@ execute:
 <li>Quieres predecir la <strong>presencia o ausencia</strong> de una especie de planta en diferentes parcelas de un bosque.</li>
 <li>Quieres modelar el <strong>número de visitas</strong> que cada usuario hace a una página web en un mes. Observas que la varianza del número de visitas es mucho mayor que la media.</li>
 </ol>
+<details>
+<summary>
+</summary>
+<p><strong>a) Tiempo de resolución de consultas:</strong> <strong>Modelo Gamma</strong> sería más apropiado porque:</p>
+<ul>
+<li>La variable es continua y positiva</li>
+<li>Típicamente tiene distribución asimétrica con cola derecha larga</li>
+<li>La distribución Gamma es flexible para este tipo de datos</li>
+</ul>
+<p><strong>b) Presencia/ausencia de especies:</strong> <strong>Regresión Logística</strong> es la elección obvia porque:</p>
+<ul>
+<li>Variable respuesta binaria (presencia = 1, ausencia = 0)</li>
+<li>Queremos modelar probabilidades que están restringidas al intervalo [0,1]</li>
+</ul>
+<p><strong>c) Número de visitas con varianza mayor que la media:</strong> <strong>Regresión Binomial Negativa</strong> sería más apropiada porque:</p>
+<ul>
+<li>Variable de conteo (número de visitas)</li>
+<li>La sobredispersión (varianza &gt; media) viola el supuesto de Poisson</li>
+<li>La binomial negativa maneja naturalmente la sobredispersión</li>
+</ul>
+</details>
 
 
 </section>
@@ -715,13 +1041,13 @@ execute:
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./tema4_seleccion_validacion_soluciones.html" class="pagination-link" aria-label="**Selección de variables, Regularización y Validación**">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title"><strong>Selección de variables, Regularización y Validación</strong></span></span>
+      <a href="./tema4_seleccion_validacion_soluciones.html" class="pagination-link" aria-label="Selección de variables, Regularización y Validación">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Selección de variables, Regularización y Validación</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./ejercicios_avanzados_soluciones.html" class="pagination-link" aria-label="Ejercicios: Popurrí">
-        <span class="nav-page-text"><span class="chapter-title">Ejercicios: Popurrí</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./ejercicios_avanzados_soluciones.html" class="pagination-link" aria-label="Ejercicios Avanzados">
+        <span class="nav-page-text"><span class="chapter-title">Ejercicios Avanzados</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
