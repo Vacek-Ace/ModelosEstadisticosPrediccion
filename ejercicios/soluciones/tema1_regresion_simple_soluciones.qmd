@@ -1,0 +1,310 @@
+# Soluciones: Regresión Lineal Simple
+
+En este capítulo encontrarás las soluciones detalladas a todos los ejercicios del Tema 1. Cada ejercicio incluye tanto el enunciado como la solución completa con código R y explicaciones teóricas.
+
+::: {.callout-note}
+## Instrucciones de Uso
+
+Intenta resolver cada ejercicio por tu cuenta antes de consultar la solución. Las soluciones están organizadas en secciones desplegables para facilitar este proceso.
+:::
+
+## Ejercicio 1: Fundamentos Conceptuales
+
+Basándote en el texto, explica con tus propias palabras por qué un coeficiente de correlación de Pearson ($r$) alto no es suficiente para modelar una relación y por qué la regresión lineal es un paso más allá. Menciona al menos dos cosas que el modelo de regresión proporciona y que la correlación por sí sola no ofrece. 
+
+<details>
+<summary><strong>👁️ Ver Solución</strong></summary>
+
+La correlación de Pearson ($r$) solo mide la **fuerza y dirección** de una relación lineal entre dos variables, pero no es suficiente para modelar porque:
+
+1. **No proporciona un modelo predictivo**: La correlación solo nos dice qué tan relacionadas están las variables, pero no nos permite hacer predicciones específicas sobre una variable a partir de la otra.
+
+2. **No cuantifica el cambio**: No nos dice cuánto cambia una variable cuando la otra cambia en una unidad específica.
+
+La regresión lineal va más allá porque proporciona:
+
+1. **Capacidad predictiva**: Permite predecir valores específicos de la variable dependiente para valores dados de la independiente.
+
+2. **Cuantificación del cambio**: Los coeficientes nos dicen exactamente cuánto cambia Y por cada unidad de cambio en X.
+
+3. **Intervalos de confianza y predicción**: Permite cuantificar la incertidumbre de nuestras estimaciones.
+
+4. **Marco para inferencia estadística**: Permite realizar pruebas de hipótesis sobre la significancia de la relación.
+
+</details>
+
+## Ejercicio 2: Interpretación de Coeficientes
+
+Un analista ajusta un modelo para predecir el gasto anual en compras online (`gasto`, en euros) basándose en la edad del cliente (`edad`). El modelo ajustado es:
+
+`gasto = 1500 + 12 * edad`
+
+a) ¿Cuál es el gasto predicho para un cliente de 30 años?
+b) Interpreta el significado de la pendiente (12) en el contexto específico de este problema. 
+c) Interpreta el significado del intercepto (1500). ¿Crees que esta interpretación tiene sentido práctico en el mundo real? ¿Por qué? 
+
+<details>
+<summary><strong>👁️ Ver Solución</strong></summary>
+
+**a) Gasto predicho para un cliente de 30 años:**
+```{r}
+# Cálculo directo
+gasto_30 = 1500 + 12 * 30
+print(paste("Gasto predicho:", gasto_30, "euros"))
+```
+
+**b) Interpretación de la pendiente (12):**
+Por cada año adicional de edad del cliente, se espera que el gasto anual en compras online aumente en 12 euros, manteniendo todo lo demás constante.
+
+**c) Interpretación del intercepto (1500):**
+Representa el gasto predicho para un cliente de 0 años, que sería 1500 euros. **Esta interpretación NO tiene sentido práctico** porque:
+- No existen clientes de 0 años
+- Estamos extrapolando fuera del rango de datos observados
+- El modelo probablemente no es válido para edades tan bajas
+
+:::
+
+### Ejercicio 3: Aplicación Práctica con R (Ajuste e Inferencia)
+
+Utiliza el conjunto de datos `pressure` de R, que contiene mediciones de temperatura y presión de vapor de mercurio.
+
+a) Ajusta un modelo de regresión lineal simple para predecir la presión (`pressure`) en función de la temperatura (`temperature`). Guarda el modelo en un objeto.
+b) Utiliza la función `summary()` sobre el objeto del modelo.
+c) Interpreta el valor del **coeficiente de determinación R²**. ¿Qué porcentaje de la variabilidad de la presión es explicado por la temperatura? 
+d) Interpreta el **p-valor del estadístico F**. ¿Es el modelo útil en su conjunto? 
+e) ¿Es el coeficiente de la temperatura estadísticamente significativo a un nivel de $\alpha = 0.05$? Justifica tu respuesta basándote en el p-valor del test t. 
+
+<details>
+<summary><strong>👁️ Ver Solución</strong></summary>
+
+
+```{r}
+# a) Ajustar el modelo
+modelo_pressure <- lm(pressure ~ temperature, data = pressure)
+
+# b) Summary del modelo
+summary(modelo_pressure)
+```
+
+**c) Interpretación del R²:**
+```{r}
+r_squared <- summary(modelo_pressure)$r.squared
+print(paste("R² =", round(r_squared, 4)))
+print(paste("La temperatura explica el", round(r_squared * 100, 2), "% de la variabilidad en la presión"))
+```
+
+**d) Interpretación del p-valor del estadístico F:**
+```{r}
+f_pvalue <- summary(modelo_pressure)$fstatistic
+f_test_pvalue <- pf(f_pvalue[1], f_pvalue[2], f_pvalue[3], lower.tail = FALSE)
+print(paste("p-valor F-test:", format(f_test_pvalue, scientific = TRUE)))
+```
+Como p < 0.05, **el modelo es globalmente significativo** - es decir, el modelo es útil para predecir la presión.
+
+**e) Significancia del coeficiente de temperatura:**
+```{r}
+temp_pvalue <- summary(modelo_pressure)$coefficients["temperature", "Pr(>|t|)"]
+print(paste("p-valor temperatura:", format(temp_pvalue, scientific = TRUE)))
+```
+Como p < 0.05, **el coeficiente de temperatura es estadísticamente significativo**.
+
+
+</details>
+
+### Ejercicio 4: Intervalos de Confianza y Predicción
+
+Usando el modelo del ejercicio anterior (`lm(pressure ~ temperature, data = pressure)`):
+
+a) Calcula el **intervalo de confianza al 95%** para la *presión media* esperada cuando la temperatura es de 250 grados. 
+b) Calcula el **intervalo de predicción al 95%** para la presión de una *única y nueva* medición realizada a 250 grados. 
+c) ¿Cuál de los dos intervalos es más ancho? Explica la razón teórica de esta diferencia.
+
+<details>
+<summary><strong>👁️ Ver Solución</strong></summary>
+
+
+```{r}
+# a) Intervalo de confianza para la media cuando temp = 250
+ic_mean <- predict(modelo_pressure, newdata = data.frame(temperature = 250), 
+                   interval = "confidence", level = 0.95)
+print("Intervalo de confianza (95%) para la presión media:")
+print(ic_mean)
+
+# b) Intervalo de predicción para una nueva observación
+ic_pred <- predict(modelo_pressure, newdata = data.frame(temperature = 250), 
+                   interval = "prediction", level = 0.95)
+print("Intervalo de predicción (95%) para una nueva observación:")
+print(ic_pred)
+
+# c) Comparación de anchos
+ancho_conf <- ic_mean[3] - ic_mean[2]
+ancho_pred <- ic_pred[3] - ic_pred[2]
+print(paste("Ancho intervalo confianza:", round(ancho_conf, 2)))
+print(paste("Ancho intervalo predicción:", round(ancho_pred, 2)))
+```
+
+**c) ¿Cuál es más ancho?**
+El **intervalo de predicción es más ancho** porque incluye dos fuentes de incertidumbre:
+1. La incertidumbre sobre la media poblacional (como en el intervalo de confianza)
+2. La variabilidad natural de las observaciones individuales alrededor de esa media
+
+
+</details>
+
+### Ejercicio 5: Supuestos del Modelo
+
+Enumera los cuatro supuestos del modelo de regresión lineal clásico (también conocidos como supuestos de Gauss-Markov) y explica brevemente la importancia de cada uno.
+
+<details>
+<summary><strong>👁️ Ver Solución</strong></summary>
+
+
+Los **cuatro supuestos de Gauss-Markov** son:
+
+1. **Linealidad**: La relación entre X e Y es lineal. Importante porque si no se cumple, las predicciones serán sistemáticamente erróneas.
+
+2. **Independencia**: Las observaciones son independientes entre sí. Crucial para que los errores estándar sean correctos.
+
+3. **Homocedasticidad**: La varianza de los errores es constante. Necesario para que los intervalos de confianza y las pruebas de hipótesis sean válidas.
+
+4. **Normalidad de los errores**: Los errores siguen una distribución normal. Importante para la validez de las pruebas de hipótesis y los intervalos de confianza.
+
+
+</details>
+
+### Ejercicio 6: Diagnóstico de Linealidad y Homocedasticidad
+
+Para el modelo del ejercicio 3:
+
+a) Genera y muestra el gráfico de **Residuos vs. Valores Ajustados**. Basándote en este gráfico, ¿se cumple el supuesto de **linealidad**? Explica en qué te basas.
+b) Genera y muestra el gráfico **Scale-Location**. Basándote en este gráfico, ¿se cumple el supuesto de **homocedasticidad**? Describe el patrón que indicaría un problema de heterocedasticidad.
+
+<details>
+<summary><strong>👁️ Ver Solución</strong></summary>
+
+
+```{r}
+# a) Gráfico de Residuos vs. Valores Ajustados
+par(mfrow = c(1, 2))
+plot(modelo_pressure, which = 1, main = "Residuos vs. Valores Ajustados")
+
+# b) Gráfico Scale-Location
+plot(modelo_pressure, which = 3, main = "Scale-Location")
+```
+
+**a) Linealidad**: En el gráfico de residuos vs. valores ajustados, observamos un **patrón curvado** en lugar de una distribución aleatoria alrededor de cero. Esto indica que **NO se cumple perfectamente el supuesto de linealidad**.
+
+**a) Linealidad**: En el gráfico de residuos vs. valores ajustados, observamos un **patrón curvado** en lugar de una distribución aleatoria alrededor de cero. Esto indica que **NO se cumple perfectamente el supuesto de linealidad**.
+
+**b) Homocedasticidad**: En el gráfico Scale-Location, la línea roja muestra una tendencia creciente, lo que sugiere **heterocedasticidad** (varianza no constante). Un problema de heterocedasticidad se manifestaría como un patrón de embudo o una tendencia clara en este gráfico.
+
+
+</details>
+
+### Ejercicio 7: Diagnóstico de Normalidad
+
+Para el modelo del ejercicio 3:
+
+a) Genera un gráfico **Normal Q-Q** de los residuos. ¿Parecen seguir los residuos una distribución normal?
+b) Realiza un **test de Shapiro-Wilk** sobre los residuos del modelo. ¿Qué concluyes a partir del p-valor? 
+
+<details>
+<summary><strong>👁️ Ver Solución</strong></summary>
+
+
+```{r}
+# a) Gráfico Normal Q-Q
+par(mfrow = c(1, 1))
+plot(modelo_pressure, which = 2, main = "Normal Q-Q Plot")
+
+# b) Test de Shapiro-Wilk
+shapiro_test <- shapiro.test(residuals(modelo_pressure))
+print("Test de Shapiro-Wilk para normalidad de residuos:")
+print(shapiro_test)
+```
+
+**a) Q-Q Plot**: Los puntos se desvían considerablemente de la línea diagonal, especialmente en las colas, indicando que los residuos **no siguen una distribución normal**.
+
+**b) Test de Shapiro-Wilk**: Con p-valor < 0.05, **rechazamos la hipótesis nula de normalidad**. Los residuos no son normales.
+
+
+</details>
+
+### Ejercicio 8: Descomposición de la Varianza (ANOVA)
+
+Explica qué representan la **Suma de Cuadrados Total (SST)**, la **Suma de Cuadrados de la Regresión (SSR)** y la **Suma de Cuadrados del Error (SSE)**. ¿Cuál es la ecuación fundamental que las relaciona? 
+
+<details>
+<summary><strong>👁️ Ver Solución</strong></summary>
+
+
+- **SST (Suma de Cuadrados Total)**: Mide la variabilidad total en Y alrededor de su media. $SST = \sum(y_i - \bar{y})^2$
+
+- **SSR (Suma de Cuadrados de la Regresión)**: Mide la variabilidad explicada por el modelo. $SSR = \sum(\hat{y}_i - \bar{y})^2$
+
+- **SSE (Suma de Cuadrados del Error)**: Mide la variabilidad no explicada (residual). $SSE = \sum(y_i - \hat{y}_i)^2$
+
+**Ecuación fundamental**: $SST = SSR + SSE$
+
+Esta descomposición permite calcular el coeficiente de determinación: $R^2 = \frac{SSR}{SST} = 1 - \frac{SSE}{SST}$
+
+
+</details>
+
+### Ejercicio 9: Observaciones Influyentes
+
+Basado en la teoría de los apuntes:
+
+a) Explica la diferencia entre un residuo simple ($e_i$), un residuo estandarizado y un residuo estudentizado. ¿Por qué se prefieren los estudentizados para el diagnóstico? 
+b) ¿Qué mide el **leverage** ($h_{ii}$)? ¿Y la **distancia de Cook** ($D_i$)? ¿Puede una observación tener un leverage alto y no ser influyente?
+
+<details>
+<summary><strong>👁️ Ver Solución</strong></summary>
+
+
+**a) Tipos de residuos:**
+
+- **Residuo simple ($e_i$)**: $e_i = y_i - \hat{y}_i$. Diferencia bruta entre observado y predicho.
+
+- **Residuo estandarizado**: $\frac{e_i}{\hat{\sigma}}$. Residuo dividido por la desviación estándar residual.
+
+- **Residuo estudentizado**: $\frac{e_i}{\hat{\sigma}_{(i)}\sqrt{1-h_{ii}}}$. Usa la desviación estándar calculada sin la observación i-ésima.
+
+Los **estudentizados se prefieren** porque tienen propiedades estadísticas más estables y siguen una distribución t conocida.
+
+**b) Medidas de influencia:**
+
+- **Leverage ($h_{ii}$)**: Mide qué tan extrema es una observación en el espacio de las X. Valores altos indican observaciones con valores de X inusuales.
+
+- **Distancia de Cook ($D_i$)**: Mide el cambio en las predicciones si se elimina la observación i. Combina residuo y leverage.
+
+**Sí, una observación puede tener leverage alto pero no ser influyente** si está cerca de la línea de regresión (residuo pequeño).
+
+
+</details>
+
+### Ejercicio 10: Relación entre Pruebas de Hipótesis
+
+En el contexto **exclusivo** de la regresión lineal simple, ¿qué relación matemática existe entre el estadístico **F** del test ANOVA y el estadístico **t** del test para la pendiente $\beta_1$? ¿Qué implica esto para sus respectivos p-valores?
+
+<details>
+<summary><strong>👁️ Ver Solución</strong></summary>
+
+
+En regresión lineal simple, existe una relación matemática exacta:
+
+$$F = t^2$$
+
+Donde:
+- $F$ es el estadístico F del test ANOVA global
+- $t$ es el estadístico t para la pendiente $\beta_1$
+
+**Implicaciones para los p-valores:**
+- Los p-valores de ambos tests son **idénticos**
+- Si el coeficiente de la pendiente es significativo (test t), entonces el modelo global también lo es (test F)
+- Ambos tests evalúan la misma hipótesis nula: $H_0: \beta_1 = 0$
+
+Esta equivalencia solo se da en regresión simple. En regresión múltiple, el test F evalúa todos los coeficientes conjuntamente, mientras que cada test t evalúa coeficientes individuales.
+
+
+</details>

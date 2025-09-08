@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Víctor Aceña Gil">
-<meta name="author" content="Isaac Martín de Diego">
 
-<title>Modelos Estadísticos para la Predicción</title>
+<title>5&nbsp; Modelos de Regresión Generalizada – Problemas de Modelos Estadísticos para la Predicción</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,27 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -52,7 +30,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./tema0.html" rel="next">
+<link href="./ejercicios_avanzados_soluciones.html" rel="next">
+<link href="./tema4_seleccion_validacion_soluciones.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -92,8 +71,37 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="estilos_html.css">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="soluciones.css">
 </head>
 
 <body class="nav-sidebar floating quarto-light">
@@ -105,7 +113,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Prefacio</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema5_glm_soluciones.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -122,7 +130,7 @@ div.csl-indent {
       <a href="./index.html" class="sidebar-logo-link">
       </a>
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Modelos Estadísticos para la Predicción</a> 
+      <a href="./">Problemas de Modelos Estadísticos para la Predicción</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -134,56 +142,44 @@ div.csl-indent {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Prefacio</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema0.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción a los modelos de regresión</span></span></a>
+  <a href="./tema1_regresion_simple_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Soluciones: Regresión Lineal Simple</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">El modelo de regresión lineal simple</span></span></a>
+  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title"><strong>Regresión Lineal Múltiple</strong></span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">El modelo de regresión lineal múltiple</span></span></a>
+  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title"><strong>Ingeniería de Características</strong></span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ingeniería de características: transformaciones de variables e interacciones</span></span></a>
+  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><strong>Selección de variables, Regularización y Validación</strong></span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Selección de variables, regularización y validación</span></span></a>
+  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./conclusiones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Bibliografía</span></a>
+  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Ejercicios: Popurrí</span></span></a>
   </div>
 </li>
     </ul>
@@ -196,13 +192,16 @@ div.csl-indent {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#prefacio" id="toc-prefacio" class="nav-link active" data-scroll-target="#prefacio">Prefacio</a>
-  <ul class="collapse">
-  <li><a href="#filosofía-pedagógica-del-volumen" id="toc-filosofía-pedagógica-del-volumen" class="nav-link" data-scroll-target="#filosofía-pedagógica-del-volumen">Filosofía pedagógica del volumen</a>
-  <ul class="collapse">
-  <li><a href="#qué-aprenderás-con-este-libro" id="toc-qué-aprenderás-con-este-libro" class="nav-link" data-scroll-target="#qué-aprenderás-con-este-libro">¿Qué aprenderás con este libro?</a></li>
-  </ul></li>
-  </ul></li>
+  <li><a href="#ejercicio-1-conceptual-fundamentos-de-glm" id="toc-ejercicio-1-conceptual-fundamentos-de-glm" class="nav-link active" data-scroll-target="#ejercicio-1-conceptual-fundamentos-de-glm"><span class="header-section-number">5.1</span> Ejercicio 1: Conceptual (Fundamentos de GLM)</a></li>
+  <li><a href="#ejercicio-2-conceptual-función-de-enlace" id="toc-ejercicio-2-conceptual-función-de-enlace" class="nav-link" data-scroll-target="#ejercicio-2-conceptual-función-de-enlace"><span class="header-section-number">5.2</span> Ejercicio 2: Conceptual (Función de Enlace)</a></li>
+  <li><a href="#ejercicio-3-práctico-ajuste-de-un-modelo-logístico" id="toc-ejercicio-3-práctico-ajuste-de-un-modelo-logístico" class="nav-link" data-scroll-target="#ejercicio-3-práctico-ajuste-de-un-modelo-logístico"><span class="header-section-number">5.3</span> Ejercicio 3: Práctico (Ajuste de un Modelo Logístico)</a></li>
+  <li><a href="#ejercicio-4-interpretación-odds-ratios" id="toc-ejercicio-4-interpretación-odds-ratios" class="nav-link" data-scroll-target="#ejercicio-4-interpretación-odds-ratios"><span class="header-section-number">5.4</span> Ejercicio 4: Interpretación (Odds Ratios)</a></li>
+  <li><a href="#ejercicio-5-práctico-validación-del-modelo-logístico" id="toc-ejercicio-5-práctico-validación-del-modelo-logístico" class="nav-link" data-scroll-target="#ejercicio-5-práctico-validación-del-modelo-logístico"><span class="header-section-number">5.5</span> Ejercicio 5: Práctico (Validación del Modelo Logístico)</a></li>
+  <li><a href="#ejercicio-6-conceptual-regresión-de-poisson" id="toc-ejercicio-6-conceptual-regresión-de-poisson" class="nav-link" data-scroll-target="#ejercicio-6-conceptual-regresión-de-poisson"><span class="header-section-number">5.6</span> Ejercicio 6: Conceptual (Regresión de Poisson)</a></li>
+  <li><a href="#ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson" id="toc-ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson" class="nav-link" data-scroll-target="#ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson"><span class="header-section-number">5.7</span> Ejercicio 7: Práctico (Ajuste de un Modelo de Poisson)</a></li>
+  <li><a href="#ejercicio-8-diagnóstico-sobredispersión" id="toc-ejercicio-8-diagnóstico-sobredispersión" class="nav-link" data-scroll-target="#ejercicio-8-diagnóstico-sobredispersión"><span class="header-section-number">5.8</span> Ejercicio 8: Diagnóstico (Sobredispersión)</a></li>
+  <li><a href="#ejercicio-9-conceptual-deviance" id="toc-ejercicio-9-conceptual-deviance" class="nav-link" data-scroll-target="#ejercicio-9-conceptual-deviance"><span class="header-section-number">5.9</span> Ejercicio 9: Conceptual (Deviance)</a></li>
+  <li><a href="#ejercicio-10-elección-del-modelo-adecuado" id="toc-ejercicio-10-elección-del-modelo-adecuado" class="nav-link" data-scroll-target="#ejercicio-10-elección-del-modelo-adecuado"><span class="header-section-number">5.10</span> Ejercicio 10: Elección del Modelo Adecuado</a></li>
   </ul>
 </nav>
     </div>
@@ -211,27 +210,14 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Modelos Estadísticos para la Predicción</h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Autores/as</div>
-    <div class="quarto-title-meta-contents">
-             <p>Víctor Aceña Gil </p>
-             <p>Isaac Martín de Diego </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Fecha de publicación</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">5 de septiembre de 2025</p>
-    </div>
-  </div>
   
     
   </div>
@@ -241,79 +227,96 @@ div.csl-indent {
 </header>
 
 
-
-<section id="prefacio" class="level1 unnumbered">
-<h1 class="unnumbered">Prefacio</h1><p><img src="images/DSLab_logo_2.png" title="Modelos Estadísticos para la Predicción" class="quarto-cover-image nolightbox img-fluid"></p>
-<p>Los modelos estadísticos han emergido como herramientas fundamentales en la era de la información, donde la capacidad de analizar y predecir comportamientos a partir de datos se ha convertido en una habilidad esencial. En este contexto, los modelos para la predicción juegan un papel crucial al permitirnos describir y cuantificar las relaciones entre variables, así como anticipar resultados futuros. Este libro está diseñado para proporcionar una comprensión profunda y práctica de estas técnicas, basándose en el contenido de la asignatura impartida en el <strong>Grado en Matemáticas</strong>.</p>
-<p>A lo largo de los capítulos, encontrarás una combinación de teoría rigurosa y aplicaciones prácticas. Se abordarán temas como la regresión lineal simple y múltiple, métodos de selección de variables y regularización, ingeniería de características y modelos generalizados, entre otros. Además, todos los conceptos se ilustrarán con ejemplos en <strong>R</strong>, permitiéndote aplicar lo aprendido a conjuntos de datos reales.</p>
-<p>El objetivo de este libro es doble: por un lado, proporcionar herramientas avanzadas para analizar relaciones sujetas a incertidumbre y, por otro, capacitarte para elegir el método más apropiado para resolver problemas de predicción o explicación, analizando la naturaleza de las variables y sus posibles interacciones. Al finalizar, habrás desarrollado una comprensión sólida de los modelos estadísticos y estarás preparado para enfrentar desafíos en el análisis predictivo con confianza y creatividad.</p>
-<section id="filosofía-pedagógica-del-volumen" class="level2">
-<h2 class="anchored" data-anchor-id="filosofía-pedagógica-del-volumen">Filosofía pedagógica del volumen</h2>
-<p>La filosofía que subyace a la obra es un enfoque <strong>“teórico-práctico”</strong> deliberado y sin concesiones. No nos conformamos con una mera aplicación de “recetas” o una guía de funciones de software. Buscamos fomentar una comprensión profunda del <em>modus operandi</em> de cada modelo y método. Perseguimos un equilibrio entre la técnica estadística y la estrategia de resolución de problemas, bajo la firme convicción de que la labor práctica se desarrolla con mayor fluidez, creatividad y éxito cuando se cimienta en una comprensión robusta de los principios matemáticos y estadísticos subyacentes, tal y como defiende <span class="citation" data-cites="harrell2015">(<a href="references.html#ref-harrell2015" role="doc-biblioref">Harrell 2015</a>)</span> en su influyente obra.</p>
-<section id="qué-aprenderás-con-este-libro" class="level3">
-<h3 class="anchored" data-anchor-id="qué-aprenderás-con-este-libro">¿Qué aprenderás con este libro?</h3>
-<p>Al completar este recorrido, habrás desarrollado habilidades clave para:</p>
-<ul>
-<li><strong>Modelar</strong> la dependencia entre una variable respuesta y múltiples predictores en conjuntos de datos complejos.</li>
-<li><strong>Resolver</strong> problemas con iniciativa y creatividad, eligiendo las técnicas estadísticas más adecuadas para cada caso.</li>
-<li><strong>Evaluar</strong> de forma crítica las ventajas e inconvenientes de diferentes alternativas metodológicas.</li>
-<li><strong>Implementar</strong> estos modelos utilizando software estadístico profesional como R.</li>
-<li><strong>Interpretar</strong> correctamente los resultados, proponer mejoras y tomar decisiones basadas en datos.</li>
-<li><strong>Adquirir</strong> las competencias y la autonomía necesarias para emprender con éxito estudios de posgrado o proyectos profesionales en ciencia de datos.</li>
-</ul>
-<p>Agradecemos a los profesores y colegas que han contribuido al desarrollo de esta asignatura y a la elaboración de este libro. Su dedicación y conocimiento han sido fundamentales para la creación de este recurso.</p>
-<p>Esperamos que esta guía te resulte útil y enriquecedora.</p>
-<p>¡Comenzamos!</p>
-<div class="callout callout-style-default callout-important callout-titled" title="Grado en Matemáticas">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Importante</span>Grado en Matemáticas
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Este libro presenta el material de la asignatura de Modelos Estadísticos para la Predicción del Grado en Matemáticas de la Universidad Rey Juan Carlos. Su contenido está fuertemente relacionado con las asignaturas de Estadística Matemática y Minería de Datos.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-important callout-titled" title="Conocimientos previos">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Importante</span>Conocimientos previos
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Es altamente recomendable que los alumnos que cursen esta materia manejen con soltura los conocimientos adquiridos en las asignaturas de Probabilidad y Estadística Matemática, así como herramientas de cálculo univariante, multivariante y álgebra lineal.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled" title="Sobre los autores">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Sobre los autores
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><strong>Víctor Aceña Gil</strong> es graduado en Matemáticas por la UNED, máster en Tratamiento Estadístico y Computacional de la Información por la UCM y la UPM, doctor en Tecnologías de la Información y las Comunicaciones por la URJC y profesor del departamento de Informática y Estadística de la URJC. Miembro del grupo de investigación de alto rendimiento en Fundamentos y Aplicaciones de la Ciencia de Datos, DSLAB, de la URJC. Pertenece al grupo de innovación docente, DSLAB-TI.</p>
-<p><strong>Isaac Martín de Diego</strong> es diplomado en Estadística por la Universidad de Valladolid (UVA), licenciado en Ciencias y Técnicas Estadísticas por la Universidad Carlos III de Madrid (UC3M), doctor en Ingeniería Matemática por la UC3M, catedrático de Ciencias de la Computación e Inteligencia Artificial del departamento de Informática y Estadística de la URJC. Es fundador y coordinador del DSLAB y del DSLAB-TI.</p>
-</div>
-</div>
-<p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" alt="Licencia de Creative Commons" style="border-width:0"></a><br>Esta obra está bajo una <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">licencia de Creative Commons Atribución-CompartirIgual 4.0 Internacional</a>.</p>
-
-
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
-<div id="ref-harrell2015" class="csl-entry" role="listitem">
-Harrell, Frank E., Jr. 2015. <em>Regression Modeling Strategies: With Applications to Linear Models, Logistic and Ordinal Regression, and Survival Analysis</em>. Second. Springer.
-</div>
-</div>
+<!-- ---
+title: "Ejercicios: Modelos de Regresión Generalizada"
+subtitle: "Modelos Estadísticos de Predicción"
+author: "Víctor Aceña Gil - Isaac Martín de Diego"
+date: today
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+execute:
+  warning: false
+  message: false
+--- -->
+<section id="ejercicio-1-conceptual-fundamentos-de-glm" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="ejercicio-1-conceptual-fundamentos-de-glm"><span class="header-section-number">5.1</span> Ejercicio 1: Conceptual (Fundamentos de GLM)</h2>
+<p>Explica los <strong>tres componentes clave</strong> que definen a cualquier Modelo Lineal Generalizado (GLM) y describe brevemente la función de cada uno.</p>
 </section>
+<section id="ejercicio-2-conceptual-función-de-enlace" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="ejercicio-2-conceptual-función-de-enlace"><span class="header-section-number">5.2</span> Ejercicio 2: Conceptual (Función de Enlace)</h2>
+<p>¿Cuál es el propósito fundamental de la <strong>función de enlace</strong> en un GLM? ¿Por qué la regresión lineal clásica es considerada un caso particular de un GLM? (Pista: piensa en su función de enlace).</p>
 </section>
+<section id="ejercicio-3-práctico-ajuste-de-un-modelo-logístico" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="ejercicio-3-práctico-ajuste-de-un-modelo-logístico"><span class="header-section-number">5.3</span> Ejercicio 3: Práctico (Ajuste de un Modelo Logístico)</h2>
+<p>Usa el conjunto de datos <code>mtcars</code> de R. La variable <code>am</code> indica si la transmisión de un coche es automática (0) o manual (1).</p>
+<ol type="a">
+<li>Ajusta un modelo de regresión logística para predecir la probabilidad de que una transmisión sea manual (<code>am</code>) en función del peso del coche (<code>wt</code>) y los caballos de fuerza (<code>hp</code>).</li>
+<li>Utiliza la función <code>summary()</code> para examinar el modelo. ¿Qué variables parecen ser significativas?</li>
+<li>Obtén los coeficientes del modelo. ¿Cómo interpretarías el signo del coeficiente para la variable <code>wt</code>?</li>
+</ol>
+</section>
+<section id="ejercicio-4-interpretación-odds-ratios" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="ejercicio-4-interpretación-odds-ratios"><span class="header-section-number">5.4</span> Ejercicio 4: Interpretación (Odds Ratios)</h2>
+<p>Basado en el modelo del ejercicio anterior:</p>
+<ol type="a">
+<li>Calcula el <strong>Odds Ratio (OR)</strong> para el coeficiente de la variable <code>hp</code>.</li>
+<li>Interpreta este Odds Ratio en el contexto del problema. Específicamente, ¿cómo cambian las “odds” (la razón de probabilidad) de tener una transmisión manual por cada caballo de fuerza adicional, manteniendo el peso constante?</li>
+</ol>
+</section>
+<section id="ejercicio-5-práctico-validación-del-modelo-logístico" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="ejercicio-5-práctico-validación-del-modelo-logístico"><span class="header-section-number">5.5</span> Ejercicio 5: Práctico (Validación del Modelo Logístico)</h2>
+<p>Continuando con el modelo logístico de <code>mtcars</code>:</p>
+<ol type="a">
+<li>Genera las predicciones de probabilidad del modelo para los datos.</li>
+<li>Convierte estas probabilidades en clases (“0” o “1”) usando un umbral de decisión de 0.5.</li>
+<li>Crea la <strong>matriz de confusión</strong> comparando las predicciones con los valores reales.</li>
+<li>Calcula la <strong>precisión (accuracy)</strong> global del modelo.</li>
+<li>(Bonus) Utiliza el paquete <code>pROC</code> para calcular y visualizar la <strong>curva ROC</strong> y obtener el valor del <strong>AUC</strong>. ¿Qué tan buena es la capacidad discriminativa del modelo?</li>
+</ol>
+</section>
+<section id="ejercicio-6-conceptual-regresión-de-poisson" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="ejercicio-6-conceptual-regresión-de-poisson"><span class="header-section-number">5.6</span> Ejercicio 6: Conceptual (Regresión de Poisson)</h2>
+<ol type="a">
+<li>¿Qué tipo de variable respuesta está diseñada para modelar la regresión de Poisson?</li>
+<li>¿Cuál es el supuesto fundamental de la distribución de Poisson respecto a la relación entre la media y la varianza?</li>
+<li>¿Cómo se llama el problema que surge cuando este supuesto se viola y la varianza es mayor que la media?</li>
+</ol>
+</section>
+<section id="ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson"><span class="header-section-number">5.7</span> Ejercicio 7: Práctico (Ajuste de un Modelo de Poisson)</h2>
+<p>El dataset <code>discoveries</code> de R es una serie temporal que cuenta el número de “grandes inventos” por año.</p>
+<ol type="a">
+<li>Crea un gráfico de la serie temporal. ¿Parece la media del conteo constante a lo largo del tiempo?</li>
+<li>Ajusta un modelo de regresión de Poisson simple donde <code>discoveries</code> es la respuesta y el tiempo (<code>time(discoveries)</code>) es el predictor.</li>
+<li>Interpreta el coeficiente del tiempo. (Pista: recuerda exponenciarlo para obtener el Incidence Rate Ratio - IRR).</li>
+</ol>
+</section>
+<section id="ejercicio-8-diagnóstico-sobredispersión" class="level2" data-number="5.8">
+<h2 data-number="5.8" class="anchored" data-anchor-id="ejercicio-8-diagnóstico-sobredispersión"><span class="header-section-number">5.8</span> Ejercicio 8: Diagnóstico (Sobredispersión)</h2>
+<ol type="a">
+<li>Para el modelo de Poisson del ejercicio anterior, calcula el <strong>estadístico de dispersión (<span class="math inline">\(\hat{\phi}\)</span>)</strong>. (Pista: <span class="math inline">\(\hat{\phi} = \frac{\sum r_i^2}{n-p}\)</span>, donde los <span class="math inline">\(r_i\)</span> son los residuos Pearson).</li>
+<li>Basándote en el valor de <span class="math inline">\(\hat{\phi}\)</span>, ¿hay evidencia de sobredispersión?</li>
+<li>Si encuentras sobredispersión, ¿cuál es el modelo alternativo que proponen los apuntes? ¿Qué ventaja teórica ofrece este modelo alternativo?</li>
+</ol>
+</section>
+<section id="ejercicio-9-conceptual-deviance" class="level2" data-number="5.9">
+<h2 data-number="5.9" class="anchored" data-anchor-id="ejercicio-9-conceptual-deviance"><span class="header-section-number">5.9</span> Ejercicio 9: Conceptual (Deviance)</h2>
+<p>La <strong>deviance</strong> es la medida principal de bondad de ajuste en los GLM. Explica conceptualmente qué mide. ¿Cómo se utiliza la diferencia en deviance entre dos modelos anidados para decidir cuál es mejor?</p>
+</section>
+<section id="ejercicio-10-elección-del-modelo-adecuado" class="level2" data-number="5.10">
+<h2 data-number="5.10" class="anchored" data-anchor-id="ejercicio-10-elección-del-modelo-adecuado"><span class="header-section-number">5.10</span> Ejercicio 10: Elección del Modelo Adecuado</h2>
+<p>Para cada uno de los siguientes escenarios, indica qué tipo de GLM (Logístico, Poisson, Binomial Negativo, Gamma…) sería el más apropiado y por qué.</p>
+<ol type="a">
+<li>Quieres modelar el <strong>tiempo (en minutos)</strong> que tarda un cliente en resolver una consulta en un centro de atención telefónica. El tiempo es siempre positivo y muchos valores se agrupan en tiempos cortos, con una cola larga de tiempos muy largos.</li>
+<li>Quieres predecir la <strong>presencia o ausencia</strong> de una especie de planta en diferentes parcelas de un bosque.</li>
+<li>Quieres modelar el <strong>número de visitas</strong> que cada usuario hace a una página web en un mes. Observas que la varianza del número de visitas es mucho mayor que la media.</li>
+</ol>
+
+
 </section>
 
 </main> <!-- /main -->
@@ -718,10 +721,13 @@ Harrell, Frank E., Jr. 2015. <em>Regression Modeling Strategies: With Applicatio
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./tema4_seleccion_validacion_soluciones.html" class="pagination-link" aria-label="**Selección de variables, Regularización y Validación**">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><strong>Selección de variables, Regularización y Validación</strong></span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./tema0.html" class="pagination-link" aria-label="Introducción a los modelos de regresión">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción a los modelos de regresión</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./ejercicios_avanzados_soluciones.html" class="pagination-link" aria-label="Ejercicios: Popurrí">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Ejercicios: Popurrí</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

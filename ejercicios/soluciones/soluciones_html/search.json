@@ -1,0 +1,502 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Problemas de Modelos Estadísticos para la Predicción",
+    "section": "",
+    "text": "Prefacio\nEste manual de soluciones complementa el libro Modelos Estadísticos para la Predicción y está diseñado para proporcionar un apoyo integral al proceso de aprendizaje. Cada solución ha sido desarrollada con el mismo rigor teórico-práctico que caracteriza al curso, ofreciendo no solo la respuesta correcta, sino también el razonamiento estadístico y la interpretación práctica necesarios para una comprensión profunda.",
+    "crumbs": [
+      "Prefacio"
+    ]
+  },
+  {
+    "objectID": "index.html#filosofía-pedagógica",
+    "href": "index.html#filosofía-pedagógica",
+    "title": "Problemas de Modelos Estadísticos para la Predicción",
+    "section": "Filosofía pedagógica",
+    "text": "Filosofía pedagógica\nAl igual que el libro principal, este manual sigue un enfoque “teórico-práctico” sin concesiones. Las soluciones están diseñadas para:\n\nReforzar la comprensión de los conceptos fundamentales mediante aplicaciones concretas\nDesarrollar la intuición estadística a través de interpretaciones razonadas\n\nConectar la teoría con la práctica mediante código R completamente funcional\nFomentar el pensamiento crítico sobre las limitaciones y supuestos de cada método",
+    "crumbs": [
+      "Prefacio"
+    ]
+  },
+  {
+    "objectID": "index.html#cómo-usar-este-manual",
+    "href": "index.html#cómo-usar-este-manual",
+    "title": "Problemas de Modelos Estadísticos para la Predicción",
+    "section": "¿Cómo usar este manual?",
+    "text": "¿Cómo usar este manual?\nPara maximizar el beneficio de este recurso:\n\nIntentar primero: Resuelve cada ejercicio por tu cuenta antes de consultar la solución\nEstudiar el proceso: No solo copies el código, entiende la lógica detrás de cada paso\n\nExperimentar: Modifica los parámetros y observa cómo cambian los resultados\nReflexionar: Considera las implicaciones prácticas de cada resultado obtenido",
+    "crumbs": [
+      "Prefacio"
+    ]
+  },
+  {
+    "objectID": "index.html#metodología-de-las-soluciones",
+    "href": "index.html#metodología-de-las-soluciones",
+    "title": "Problemas de Modelos Estadísticos para la Predicción",
+    "section": "Metodología de las soluciones",
+    "text": "Metodología de las soluciones\nCada solución incluye:\n\nCódigo R completo: Totalmente ejecutable y comentado\nExplicaciones paso a paso: Qué hace cada línea y por qué\nInterpretación de resultados: Qué significan los números obtenidos\nGráficos explicativos: Visualización de conceptos clave\nConsejos prácticos: Cuándo y cómo usar cada técnica\n\n\n\n\n\n\n\nImportanteUso responsable\n\n\n\nEste manual es una herramienta de aprendizaje, no un sustituto del pensamiento propio. Utilízalo para verificar tu comprensión y mejorar tu técnica, pero siempre tras haber hecho un esfuerzo genuino por resolver los problemas de forma independiente.",
+    "crumbs": [
+      "Prefacio"
+    ]
+  },
+  {
+    "objectID": "index.html#requisitos-de-software",
+    "href": "index.html#requisitos-de-software",
+    "title": "Problemas de Modelos Estadísticos para la Predicción",
+    "section": "Requisitos de software",
+    "text": "Requisitos de software\nPara ejecutar las soluciones necesitas tener instalados los siguientes paquetes de R:\n# Paquetes principales\ninstall.packages(c(\n  \"car\",           # Diagnósticos avanzados\n  \"MASS\",          # Datasets y funciones estadísticas  \n  \"glmnet\",        # Regularización\n  \"caret\",         # Machine learning\n  \"pROC\",          # Curvas ROC\n  \"fitdistrplus\",  # Ajuste de distribuciones\n  \"lmtest\"         # Tests estadísticos\n))\n\n\n\n\n\n\nNotaSobre los autores\n\n\n\nVíctor Aceña Gil es graduado en Matemáticas por la UNED, máster en Tratamiento Estadístico y Computacional de la Información por la UCM y la UPM, doctor en Tecnologías de la Información y las Comunicaciones por la URJC y profesor del departamento de Informática y Estadística de la URJC. Miembro del grupo de investigación de alto rendimiento en Fundamentos y Aplicaciones de la Ciencia de Datos, DSLAB, de la URJC. Pertenece al grupo de innovación docente, DSLAB-TI.\nIsaac Martín de Diego es diplomado en Estadística por la Universidad de Valladolid (UVA), licenciado en Ciencias y Técnicas Estadísticas por la Universidad Carlos III de Madrid (UC3M), doctor en Ingeniería Matemática por la UC3M, catedrático de Ciencias de la Computación e Inteligencia Artificial del departamento de Informática y Estadística de la URJC. Es fundador y coordinador del DSLAB y del DSLAB-TI.\n\n\nEsta obra está bajo una licencia de Creative Commons Atribución-CompartirIgual 4.0 Internacional.",
+    "crumbs": [
+      "Prefacio"
+    ]
+  },
+  {
+    "objectID": "tema1_regresion_simple_soluciones.html",
+    "href": "tema1_regresion_simple_soluciones.html",
+    "title": "1  Soluciones: Regresión Lineal Simple",
+    "section": "",
+    "text": "1.1 Ejercicio 1: Fundamentos Conceptuales\nEn este capítulo encontrarás las soluciones detalladas a todos los ejercicios del Tema 1. Cada ejercicio incluye tanto el enunciado como la solución completa con código R y explicaciones teóricas.\nBasándote en el texto, explica con tus propias palabras por qué un coeficiente de correlación de Pearson (\\(r\\)) alto no es suficiente para modelar una relación y por qué la regresión lineal es un paso más allá. Menciona al menos dos cosas que el modelo de regresión proporciona y que la correlación por sí sola no ofrece.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Soluciones: Regresión Lineal Simple</span>"
+    ]
+  },
+  {
+    "objectID": "tema1_regresion_simple_soluciones.html#ejercicio-1-fundamentos-conceptuales",
+    "href": "tema1_regresion_simple_soluciones.html#ejercicio-1-fundamentos-conceptuales",
+    "title": "1  Soluciones: Regresión Lineal Simple",
+    "section": "",
+    "text": "👁️ Ver Solución\n\nLa correlación de Pearson (\\(r\\)) solo mide la fuerza y dirección de una relación lineal entre dos variables, pero no es suficiente para modelar porque:\n\nNo proporciona un modelo predictivo: La correlación solo nos dice qué tan relacionadas están las variables, pero no nos permite hacer predicciones específicas sobre una variable a partir de la otra.\nNo cuantifica el cambio: No nos dice cuánto cambia una variable cuando la otra cambia en una unidad específica.\n\nLa regresión lineal va más allá porque proporciona:\n\nCapacidad predictiva: Permite predecir valores específicos de la variable dependiente para valores dados de la independiente.\nCuantificación del cambio: Los coeficientes nos dicen exactamente cuánto cambia Y por cada unidad de cambio en X.\nIntervalos de confianza y predicción: Permite cuantificar la incertidumbre de nuestras estimaciones.\nMarco para inferencia estadística: Permite realizar pruebas de hipótesis sobre la significancia de la relación.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Soluciones: Regresión Lineal Simple</span>"
+    ]
+  },
+  {
+    "objectID": "tema1_regresion_simple_soluciones.html#ejercicio-2-interpretación-de-coeficientes",
+    "href": "tema1_regresion_simple_soluciones.html#ejercicio-2-interpretación-de-coeficientes",
+    "title": "1  Soluciones: Regresión Lineal Simple",
+    "section": "1.2 Ejercicio 2: Interpretación de Coeficientes",
+    "text": "1.2 Ejercicio 2: Interpretación de Coeficientes\nUn analista ajusta un modelo para predecir el gasto anual en compras online (gasto, en euros) basándose en la edad del cliente (edad). El modelo ajustado es:\ngasto = 1500 + 12 * edad\n\n¿Cuál es el gasto predicho para un cliente de 30 años?\nInterpreta el significado de la pendiente (12) en el contexto específico de este problema.\nInterpreta el significado del intercepto (1500). ¿Crees que esta interpretación tiene sentido práctico en el mundo real? ¿Por qué?\n\n\n\n👁️ Ver Solución\n\na) Gasto predicho para un cliente de 30 años:\n\n# Cálculo directo\ngasto_30 = 1500 + 12 * 30\nprint(paste(\"Gasto predicho:\", gasto_30, \"euros\"))\n\n[1] \"Gasto predicho: 1860 euros\"\n\n\nb) Interpretación de la pendiente (12): Por cada año adicional de edad del cliente, se espera que el gasto anual en compras online aumente en 12 euros, manteniendo todo lo demás constante.\nc) Interpretación del intercepto (1500): Representa el gasto predicho para un cliente de 0 años, que sería 1500 euros. Esta interpretación NO tiene sentido práctico porque: - No existen clientes de 0 años - Estamos extrapolando fuera del rango de datos observados - El modelo probablemente no es válido para edades tan bajas\n:::\n\n1.2.1 Ejercicio 3: Aplicación Práctica con R (Ajuste e Inferencia)\nUtiliza el conjunto de datos pressure de R, que contiene mediciones de temperatura y presión de vapor de mercurio.\n\nAjusta un modelo de regresión lineal simple para predecir la presión (pressure) en función de la temperatura (temperature). Guarda el modelo en un objeto.\nUtiliza la función summary() sobre el objeto del modelo.\nInterpreta el valor del coeficiente de determinación R². ¿Qué porcentaje de la variabilidad de la presión es explicado por la temperatura?\nInterpreta el p-valor del estadístico F. ¿Es el modelo útil en su conjunto?\n¿Es el coeficiente de la temperatura estadísticamente significativo a un nivel de \\(\\alpha = 0.05\\)? Justifica tu respuesta basándote en el p-valor del test t.\n\n\n\n👁️ Ver Solución\n\n\n# a) Ajustar el modelo\nmodelo_pressure &lt;- lm(pressure ~ temperature, data = pressure)\n\n# b) Summary del modelo\nsummary(modelo_pressure)\n\n\nCall:\nlm(formula = pressure ~ temperature, data = pressure)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-158.08 -117.06  -32.84   72.30  409.43 \n\nCoefficients:\n             Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept) -147.8989    66.5529  -2.222 0.040124 *  \ntemperature    1.5124     0.3158   4.788 0.000171 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 150.8 on 17 degrees of freedom\nMultiple R-squared:  0.5742,    Adjusted R-squared:  0.5492 \nF-statistic: 22.93 on 1 and 17 DF,  p-value: 0.000171\n\n\nc) Interpretación del R²:\n\nr_squared &lt;- summary(modelo_pressure)$r.squared\nprint(paste(\"R² =\", round(r_squared, 4)))\n\n[1] \"R² = 0.5742\"\n\nprint(paste(\"La temperatura explica el\", round(r_squared * 100, 2), \"% de la variabilidad en la presión\"))\n\n[1] \"La temperatura explica el 57.42 % de la variabilidad en la presión\"\n\n\nd) Interpretación del p-valor del estadístico F:\n\nf_pvalue &lt;- summary(modelo_pressure)$fstatistic\nf_test_pvalue &lt;- pf(f_pvalue[1], f_pvalue[2], f_pvalue[3], lower.tail = FALSE)\nprint(paste(\"p-valor F-test:\", format(f_test_pvalue, scientific = TRUE)))\n\n[1] \"p-valor F-test: 1.709745e-04\"\n\n\nComo p &lt; 0.05, el modelo es globalmente significativo - es decir, el modelo es útil para predecir la presión.\ne) Significancia del coeficiente de temperatura:\n\ntemp_pvalue &lt;- summary(modelo_pressure)$coefficients[\"temperature\", \"Pr(&gt;|t|)\"]\nprint(paste(\"p-valor temperatura:\", format(temp_pvalue, scientific = TRUE)))\n\n[1] \"p-valor temperatura: 1.709745e-04\"\n\n\nComo p &lt; 0.05, el coeficiente de temperatura es estadísticamente significativo.\n\n\n\n1.2.2 Ejercicio 4: Intervalos de Confianza y Predicción\nUsando el modelo del ejercicio anterior (lm(pressure ~ temperature, data = pressure)):\n\nCalcula el intervalo de confianza al 95% para la presión media esperada cuando la temperatura es de 250 grados.\nCalcula el intervalo de predicción al 95% para la presión de una única y nueva medición realizada a 250 grados.\n¿Cuál de los dos intervalos es más ancho? Explica la razón teórica de esta diferencia.\n\n\n\n👁️ Ver Solución\n\n\n# a) Intervalo de confianza para la media cuando temp = 250\nic_mean &lt;- predict(modelo_pressure, newdata = data.frame(temperature = 250), \n                   interval = \"confidence\", level = 0.95)\nprint(\"Intervalo de confianza (95%) para la presión media:\")\n\n[1] \"Intervalo de confianza (95%) para la presión media:\"\n\nprint(ic_mean)\n\n       fit      lwr      upr\n1 230.2061 143.5771 316.8351\n\n# b) Intervalo de predicción para una nueva observación\nic_pred &lt;- predict(modelo_pressure, newdata = data.frame(temperature = 250), \n                   interval = \"prediction\", level = 0.95)\nprint(\"Intervalo de predicción (95%) para una nueva observación:\")\n\n[1] \"Intervalo de predicción (95%) para una nueva observación:\"\n\nprint(ic_pred)\n\n       fit      lwr      upr\n1 230.2061 -99.5663 559.9785\n\n# c) Comparación de anchos\nancho_conf &lt;- ic_mean[3] - ic_mean[2]\nancho_pred &lt;- ic_pred[3] - ic_pred[2]\nprint(paste(\"Ancho intervalo confianza:\", round(ancho_conf, 2)))\n\n[1] \"Ancho intervalo confianza: 173.26\"\n\nprint(paste(\"Ancho intervalo predicción:\", round(ancho_pred, 2)))\n\n[1] \"Ancho intervalo predicción: 659.54\"\n\n\nc) ¿Cuál es más ancho? El intervalo de predicción es más ancho porque incluye dos fuentes de incertidumbre: 1. La incertidumbre sobre la media poblacional (como en el intervalo de confianza) 2. La variabilidad natural de las observaciones individuales alrededor de esa media\n\n\n\n1.2.3 Ejercicio 5: Supuestos del Modelo\nEnumera los cuatro supuestos del modelo de regresión lineal clásico (también conocidos como supuestos de Gauss-Markov) y explica brevemente la importancia de cada uno.\n\n\n👁️ Ver Solución\n\nLos cuatro supuestos de Gauss-Markov son:\n\nLinealidad: La relación entre X e Y es lineal. Importante porque si no se cumple, las predicciones serán sistemáticamente erróneas.\nIndependencia: Las observaciones son independientes entre sí. Crucial para que los errores estándar sean correctos.\nHomocedasticidad: La varianza de los errores es constante. Necesario para que los intervalos de confianza y las pruebas de hipótesis sean válidas.\nNormalidad de los errores: Los errores siguen una distribución normal. Importante para la validez de las pruebas de hipótesis y los intervalos de confianza.\n\n\n\n\n1.2.4 Ejercicio 6: Diagnóstico de Linealidad y Homocedasticidad\nPara el modelo del ejercicio 3:\n\nGenera y muestra el gráfico de Residuos vs. Valores Ajustados. Basándote en este gráfico, ¿se cumple el supuesto de linealidad? Explica en qué te basas.\nGenera y muestra el gráfico Scale-Location. Basándote en este gráfico, ¿se cumple el supuesto de homocedasticidad? Describe el patrón que indicaría un problema de heterocedasticidad.\n\n\n\n👁️ Ver Solución\n\n\n# a) Gráfico de Residuos vs. Valores Ajustados\npar(mfrow = c(1, 2))\nplot(modelo_pressure, which = 1, main = \"Residuos vs. Valores Ajustados\")\n\n# b) Gráfico Scale-Location\nplot(modelo_pressure, which = 3, main = \"Scale-Location\")\n\n\n\n\n\n\n\n\na) Linealidad: En el gráfico de residuos vs. valores ajustados, observamos un patrón curvado en lugar de una distribución aleatoria alrededor de cero. Esto indica que NO se cumple perfectamente el supuesto de linealidad.\na) Linealidad: En el gráfico de residuos vs. valores ajustados, observamos un patrón curvado en lugar de una distribución aleatoria alrededor de cero. Esto indica que NO se cumple perfectamente el supuesto de linealidad.\nb) Homocedasticidad: En el gráfico Scale-Location, la línea roja muestra una tendencia creciente, lo que sugiere heterocedasticidad (varianza no constante). Un problema de heterocedasticidad se manifestaría como un patrón de embudo o una tendencia clara en este gráfico.\n\n\n\n1.2.5 Ejercicio 7: Diagnóstico de Normalidad\nPara el modelo del ejercicio 3:\n\nGenera un gráfico Normal Q-Q de los residuos. ¿Parecen seguir los residuos una distribución normal?\nRealiza un test de Shapiro-Wilk sobre los residuos del modelo. ¿Qué concluyes a partir del p-valor?\n\n\n\n👁️ Ver Solución\n\n\n# a) Gráfico Normal Q-Q\npar(mfrow = c(1, 1))\nplot(modelo_pressure, which = 2, main = \"Normal Q-Q Plot\")\n\n\n\n\n\n\n\n# b) Test de Shapiro-Wilk\nshapiro_test &lt;- shapiro.test(residuals(modelo_pressure))\nprint(\"Test de Shapiro-Wilk para normalidad de residuos:\")\n\n[1] \"Test de Shapiro-Wilk para normalidad de residuos:\"\n\nprint(shapiro_test)\n\n\n    Shapiro-Wilk normality test\n\ndata:  residuals(modelo_pressure)\nW = 0.89337, p-value = 0.03697\n\n\na) Q-Q Plot: Los puntos se desvían considerablemente de la línea diagonal, especialmente en las colas, indicando que los residuos no siguen una distribución normal.\nb) Test de Shapiro-Wilk: Con p-valor &lt; 0.05, rechazamos la hipótesis nula de normalidad. Los residuos no son normales.\n\n\n\n1.2.6 Ejercicio 8: Descomposición de la Varianza (ANOVA)\nExplica qué representan la Suma de Cuadrados Total (SST), la Suma de Cuadrados de la Regresión (SSR) y la Suma de Cuadrados del Error (SSE). ¿Cuál es la ecuación fundamental que las relaciona?\n\n\n👁️ Ver Solución\n\n\nSST (Suma de Cuadrados Total): Mide la variabilidad total en Y alrededor de su media. \\(SST = \\sum(y_i - \\bar{y})^2\\)\nSSR (Suma de Cuadrados de la Regresión): Mide la variabilidad explicada por el modelo. \\(SSR = \\sum(\\hat{y}_i - \\bar{y})^2\\)\nSSE (Suma de Cuadrados del Error): Mide la variabilidad no explicada (residual). \\(SSE = \\sum(y_i - \\hat{y}_i)^2\\)\n\nEcuación fundamental: \\(SST = SSR + SSE\\)\nEsta descomposición permite calcular el coeficiente de determinación: \\(R^2 = \\frac{SSR}{SST} = 1 - \\frac{SSE}{SST}\\)\n\n\n\n1.2.7 Ejercicio 9: Observaciones Influyentes\nBasado en la teoría de los apuntes:\n\nExplica la diferencia entre un residuo simple (\\(e_i\\)), un residuo estandarizado y un residuo estudentizado. ¿Por qué se prefieren los estudentizados para el diagnóstico?\n¿Qué mide el leverage (\\(h_{ii}\\))? ¿Y la distancia de Cook (\\(D_i\\))? ¿Puede una observación tener un leverage alto y no ser influyente?\n\n\n\n👁️ Ver Solución\n\na) Tipos de residuos:\n\nResiduo simple (\\(e_i\\)): \\(e_i = y_i - \\hat{y}_i\\). Diferencia bruta entre observado y predicho.\nResiduo estandarizado: \\(\\frac{e_i}{\\hat{\\sigma}}\\). Residuo dividido por la desviación estándar residual.\nResiduo estudentizado: \\(\\frac{e_i}{\\hat{\\sigma}_{(i)}\\sqrt{1-h_{ii}}}\\). Usa la desviación estándar calculada sin la observación i-ésima.\n\nLos estudentizados se prefieren porque tienen propiedades estadísticas más estables y siguen una distribución t conocida.\nb) Medidas de influencia:\n\nLeverage (\\(h_{ii}\\)): Mide qué tan extrema es una observación en el espacio de las X. Valores altos indican observaciones con valores de X inusuales.\nDistancia de Cook (\\(D_i\\)): Mide el cambio en las predicciones si se elimina la observación i. Combina residuo y leverage.\n\nSí, una observación puede tener leverage alto pero no ser influyente si está cerca de la línea de regresión (residuo pequeño).\n\n\n\n1.2.8 Ejercicio 10: Relación entre Pruebas de Hipótesis\nEn el contexto exclusivo de la regresión lineal simple, ¿qué relación matemática existe entre el estadístico F del test ANOVA y el estadístico t del test para la pendiente \\(\\beta_1\\)? ¿Qué implica esto para sus respectivos p-valores?\n\n\n👁️ Ver Solución\n\nEn regresión lineal simple, existe una relación matemática exacta:\n\\[F = t^2\\]\nDonde: - \\(F\\) es el estadístico F del test ANOVA global - \\(t\\) es el estadístico t para la pendiente \\(\\beta_1\\)\nImplicaciones para los p-valores: - Los p-valores de ambos tests son idénticos - Si el coeficiente de la pendiente es significativo (test t), entonces el modelo global también lo es (test F) - Ambos tests evalúan la misma hipótesis nula: \\(H_0: \\beta_1 = 0\\)\nEsta equivalencia solo se da en regresión simple. En regresión múltiple, el test F evalúa todos los coeficientes conjuntamente, mientras que cada test t evalúa coeficientes individuales.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Soluciones: Regresión Lineal Simple</span>"
+    ]
+  },
+  {
+    "objectID": "tema2_regresion_multiple_soluciones.html",
+    "href": "tema2_regresion_multiple_soluciones.html",
+    "title": "2  Regresión Lineal Múltiple",
+    "section": "",
+    "text": "2.1 Ejercicio 1: Conceptual (Interpretación Ceteris Paribus)\nUn analista ajusta dos modelos para predecir el consumo de un coche (mpg):\nExplica detalladamente por qué el coeficiente para la variable wt (peso) cambia al añadir la variable hp (caballos de fuerza). ¿Cuál de los dos coeficientes representa el efecto “puro” o “aislado” del peso? Fundamenta tu respuesta en el principio de ceteris paribus.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>**Regresión Lineal Múltiple**</span>"
+    ]
+  },
+  {
+    "objectID": "tema2_regresion_multiple_soluciones.html#ejercicio-1-conceptual-interpretación-ceteris-paribus",
+    "href": "tema2_regresion_multiple_soluciones.html#ejercicio-1-conceptual-interpretación-ceteris-paribus",
+    "title": "2  Regresión Lineal Múltiple",
+    "section": "",
+    "text": "lm(mpg ~ wt) obtiene un coeficiente para wt de -5.3.\nlm(mpg ~ wt + hp) obtiene un coeficiente para wt de -3.8.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>**Regresión Lineal Múltiple**</span>"
+    ]
+  },
+  {
+    "objectID": "tema2_regresion_multiple_soluciones.html#ejercicio-2-práctico-ajuste-e-interpretación-de-un-modelo-múltiple",
+    "href": "tema2_regresion_multiple_soluciones.html#ejercicio-2-práctico-ajuste-e-interpretación-de-un-modelo-múltiple",
+    "title": "2  Regresión Lineal Múltiple",
+    "section": "2.2 Ejercicio 2: Práctico (Ajuste e Interpretación de un Modelo Múltiple)",
+    "text": "2.2 Ejercicio 2: Práctico (Ajuste e Interpretación de un Modelo Múltiple)\nUsa el conjunto de datos iris de R. Queremos modelar la anchura del pétalo (Petal.Width) en función de la longitud del pétalo (Petal.Length) y la anchura del sépalo (Sepal.Width).\n\nAjusta un modelo de regresión lineal múltiple: lm(Petal.Width ~ Petal.Length + Sepal.Width, data = iris).\nInterpreta el coeficiente estimado para Petal.Length.\nInterpreta el coeficiente estimado para Sepal.Width.\nInterpreta el intercepto del modelo. ¿Tiene un significado práctico en este contexto biológico?",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>**Regresión Lineal Múltiple**</span>"
+    ]
+  },
+  {
+    "objectID": "tema2_regresion_multiple_soluciones.html#ejercicio-3-conceptual-r²-vs.-r²-ajustado",
+    "href": "tema2_regresion_multiple_soluciones.html#ejercicio-3-conceptual-r²-vs.-r²-ajustado",
+    "title": "2  Regresión Lineal Múltiple",
+    "section": "2.3 Ejercicio 3: Conceptual (R² vs. R² Ajustado)",
+    "text": "2.3 Ejercicio 3: Conceptual (R² vs. R² Ajustado)\nCuando pasamos de un modelo simple a uno múltiple, introducimos el R² ajustado como medida de bondad de ajuste.\n\n¿Cuál es el principal problema de usar el R² tradicional para comparar modelos con diferente número de predictores?\n¿Cómo soluciona el R² ajustado este problema? Explica qué “penalización” introduce en su fórmula.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>**Regresión Lineal Múltiple**</span>"
+    ]
+  },
+  {
+    "objectID": "tema2_regresion_multiple_soluciones.html#ejercicio-4-interpretación-de-salidas-de-r",
+    "href": "tema2_regresion_multiple_soluciones.html#ejercicio-4-interpretación-de-salidas-de-r",
+    "title": "2  Regresión Lineal Múltiple",
+    "section": "2.4 Ejercicio 4: Interpretación de Salidas de R",
+    "text": "2.4 Ejercicio 4: Interpretación de Salidas de R\nTe presentan el siguiente resumen de un modelo que predice el prestigio de una ocupación (prestige) en función de los ingresos (income) y el nivel educativo (education).\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept) -6.0647    4.2750   -1.419   0.1595    \nincome       0.0013    0.0003    4.524   1.9e-05 ***\neducation    4.1832    0.3887   10.762   &lt; 2e-16 ***\n\nMultiple R-squared:  0.79,  Adjusted R-squared:  0.785 \nF-statistic: 185.6 on 2 and 99 DF,  p-value: &lt; 2.2e-16\n\n¿Es el modelo globalmente significativo? ¿En qué te basas?\n¿Son los predictores income y education individualmente significativos, después de controlar por el efecto del otro? Justifica tu respuesta.\nExplica la diferencia conceptual entre lo que evalúa el test F global y lo que evalúan los tests t individuales en este modelo.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>**Regresión Lineal Múltiple**</span>"
+    ]
+  },
+  {
+    "objectID": "tema2_regresion_multiple_soluciones.html#ejercicio-5-conceptual-multicolinealidad",
+    "href": "tema2_regresion_multiple_soluciones.html#ejercicio-5-conceptual-multicolinealidad",
+    "title": "2  Regresión Lineal Múltiple",
+    "section": "2.5 Ejercicio 5: Conceptual (Multicolinealidad)",
+    "text": "2.5 Ejercicio 5: Conceptual (Multicolinealidad)\nDescribe con tus propias palabras qué es la multicolinealidad. Menciona tres consecuencias negativas que puede tener la multicolinealidad severa en un modelo de regresión y si afecta más a la predicción o a la inferencia.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>**Regresión Lineal Múltiple**</span>"
+    ]
+  },
+  {
+    "objectID": "tema2_regresion_multiple_soluciones.html#ejercicio-6-práctico-diagnóstico-de-multicolinealidad",
+    "href": "tema2_regresion_multiple_soluciones.html#ejercicio-6-práctico-diagnóstico-de-multicolinealidad",
+    "title": "2  Regresión Lineal Múltiple",
+    "section": "2.6 Ejercicio 6: Práctico (Diagnóstico de Multicolinealidad)",
+    "text": "2.6 Ejercicio 6: Práctico (Diagnóstico de Multicolinealidad)\nUsa el dataset mtcars. Ajusta un modelo para predecir el consumo (mpg) usando como predictores el número de cilindros (cyl), la cilindrada (disp), los caballos de fuerza (hp) y el peso (wt).\n\nObserva el summary() del modelo. ¿Hay alguna variable que, a pesar de tener una alta correlación simple con mpg, no resulte significativa en el modelo múltiple?\nCarga la librería car y calcula el Factor de Inflación de la Varianza (VIF) para cada predictor.\nBasándote en los valores del VIF, ¿qué variables presentan un problema de multicolinealidad? ¿Cuál es tu recomendación para simplificar el modelo?",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>**Regresión Lineal Múltiple**</span>"
+    ]
+  },
+  {
+    "objectID": "tema2_regresion_multiple_soluciones.html#ejercicio-7-teórico-notación-matricial",
+    "href": "tema2_regresion_multiple_soluciones.html#ejercicio-7-teórico-notación-matricial",
+    "title": "2  Regresión Lineal Múltiple",
+    "section": "2.7 Ejercicio 7: Teórico (Notación Matricial)",
+    "text": "2.7 Ejercicio 7: Teórico (Notación Matricial)\n\nEscribe la fórmula del estimador de Mínimos Cuadrados Ordinarios (\\(\\hat{\\mathbf{\\beta}}\\)) en notación matricial.\n¿Qué supuesto fundamental del modelo de regresión múltiple garantiza que la matriz \\((\\mathbf{X}^T\\mathbf{X})\\) sea invertible?",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>**Regresión Lineal Múltiple**</span>"
+    ]
+  },
+  {
+    "objectID": "tema2_regresion_multiple_soluciones.html#ejercicio-8-práctico-gráficos-de-regresión-parcial",
+    "href": "tema2_regresion_multiple_soluciones.html#ejercicio-8-práctico-gráficos-de-regresión-parcial",
+    "title": "2  Regresión Lineal Múltiple",
+    "section": "2.8 Ejercicio 8: Práctico (Gráficos de Regresión Parcial)",
+    "text": "2.8 Ejercicio 8: Práctico (Gráficos de Regresión Parcial)\nUsa el dataset Prestige de la librería car.\n\nAjusta el modelo lm(prestige ~ income + education + women, data = Prestige).\nGenera los gráficos de regresión parcial (o “added-variable plots”) para este modelo usando la función avPlots(tu_modelo).\nExplica qué representa el gráfico para la variable education. ¿Qué significan los ejes X e Y de ese gráfico específico? ¿A qué corresponde la pendiente de la línea en ese gráfico?",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>**Regresión Lineal Múltiple**</span>"
+    ]
+  },
+  {
+    "objectID": "tema2_regresion_multiple_soluciones.html#ejercicio-9-inferencia-f-test-vs.-t-tests",
+    "href": "tema2_regresion_multiple_soluciones.html#ejercicio-9-inferencia-f-test-vs.-t-tests",
+    "title": "2  Regresión Lineal Múltiple",
+    "section": "2.9 Ejercicio 9: Inferencia (F-test vs. t-tests)",
+    "text": "2.9 Ejercicio 9: Inferencia (F-test vs. t-tests)\nDescribe un escenario hipotético en el que el test F global de un modelo de regresión múltiple sea altamente significativo (p &lt; 0.001), pero ninguno de los tests t individuales para los coeficientes sea significativo. ¿Cuál es la causa estadística más probable de este fenómeno?",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>**Regresión Lineal Múltiple**</span>"
+    ]
+  },
+  {
+    "objectID": "tema2_regresion_multiple_soluciones.html#ejercicio-10-práctico-comparación-de-modelos-anidados",
+    "href": "tema2_regresion_multiple_soluciones.html#ejercicio-10-práctico-comparación-de-modelos-anidados",
+    "title": "2  Regresión Lineal Múltiple",
+    "section": "2.10 Ejercicio 10: Práctico (Comparación de Modelos Anidados)",
+    "text": "2.10 Ejercicio 10: Práctico (Comparación de Modelos Anidados)\nUsa el dataset swiss.\n\nAjusta un modelo reducido para predecir Fertility usando solo Agriculture y Education.\nAjusta un modelo completo que, además de las variables anteriores, incluya Catholic y Infant.Mortality.\nUtiliza la función anova() para comparar formalmente los dos modelos. ¿Aportan las variables Catholic y Infant.Mortality una mejora estadísticamente significativa al modelo? Interpreta el p-valor del test F resultante.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>**Regresión Lineal Múltiple**</span>"
+    ]
+  },
+  {
+    "objectID": "tema3_ingenieria_caracteristicas_soluciones.html",
+    "href": "tema3_ingenieria_caracteristicas_soluciones.html",
+    "title": "3  Ingeniería de Características",
+    "section": "",
+    "text": "3.1 Ejercicio 1: Conceptual (Diagnóstico antes de Transformar)\nEl texto desaconseja fuertemente el enfoque de “ensayo y error” al aplicar transformaciones. Explica con tus propias palabras por qué la práctica de probar transformaciones hasta que mejore el R² es metodológicamente peligrosa. Menciona al menos tres de los riesgos específicos discutidos en los apuntes.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>**Ingeniería de Características**</span>"
+    ]
+  },
+  {
+    "objectID": "tema3_ingenieria_caracteristicas_soluciones.html#ejercicio-2-práctico-escalado-de-variables",
+    "href": "tema3_ingenieria_caracteristicas_soluciones.html#ejercicio-2-práctico-escalado-de-variables",
+    "title": "3  Ingeniería de Características",
+    "section": "3.2 Ejercicio 2: Práctico (Escalado de Variables)",
+    "text": "3.2 Ejercicio 2: Práctico (Escalado de Variables)\nUtiliza el dataset iris de R y céntrate en las cuatro variables predictoras continuas (Sepal.Length, Sepal.Width, Petal.Length, Petal.Width).\n\nCalcula la media y la desviación estándar de estas cuatro variables en su escala original. ¿Son sus escalas directamente comparables?\nCrea un nuevo data frame donde hayas aplicado la estandarización Z-Score a estas cuatro variables. Verifica que las nuevas variables tienen una media cercana a 0 y una desviación estándar de 1.\n¿Por qué este paso de escalado es crucial antes de aplicar métodos de regularización como Ridge o Lasso, tal y como se menciona en el texto?",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>**Ingeniería de Características**</span>"
+    ]
+  },
+  {
+    "objectID": "tema3_ingenieria_caracteristicas_soluciones.html#ejercicio-3-conceptual-elección-del-método-de-escalado",
+    "href": "tema3_ingenieria_caracteristicas_soluciones.html#ejercicio-3-conceptual-elección-del-método-de-escalado",
+    "title": "3  Ingeniería de Características",
+    "section": "3.3 Ejercicio 3: Conceptual (Elección del Método de Escalado)",
+    "text": "3.3 Ejercicio 3: Conceptual (Elección del Método de Escalado)\nDescribe un escenario hipotético para cada uno de los siguientes casos, explicando por qué el método de escalado elegido sería el más apropiado:\n\nUn escenario donde la estandarización Z-Score es preferible.\nUn escenario donde la normalización Min-Max es preferible.\nUn escenario donde el escalado robusto (usando mediana y IQR) es necesario.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>**Ingeniería de Características**</span>"
+    ]
+  },
+  {
+    "objectID": "tema3_ingenieria_caracteristicas_soluciones.html#ejercicio-4-práctico-transformación-para-linealizar",
+    "href": "tema3_ingenieria_caracteristicas_soluciones.html#ejercicio-4-práctico-transformación-para-linealizar",
+    "title": "3  Ingeniería de Características",
+    "section": "3.4 Ejercicio 4: Práctico (Transformación para Linealizar)",
+    "text": "3.4 Ejercicio 4: Práctico (Transformación para Linealizar)\nEn el tema anterior vimos que la relación en el dataset cars (entre speed y dist) no era perfectamente lineal.\n\nAjusta el modelo lm(dist ~ speed, data = cars) y genera el gráfico de residuos vs. valores ajustados para confirmar visualmente la no linealidad (patrón curvo).\nLos apuntes sugieren que la transformación logarítmica es útil para relaciones con “rendimientos decrecientes”. Propón y aplica una transformación (ej. sobre el predictor, la respuesta, o ambos) para intentar linealizar la relación. Por ejemplo, ajusta lm(log(dist) ~ speed, data = cars).\nGenera de nuevo el gráfico de residuos vs. valores ajustados para el nuevo modelo. Compara ambos diagnósticos. ¿Ha mejorado la linealidad?",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>**Ingeniería de Características**</span>"
+    ]
+  },
+  {
+    "objectID": "tema3_ingenieria_caracteristicas_soluciones.html#ejercicio-5-práctico-transformación-de-box-cox",
+    "href": "tema3_ingenieria_caracteristicas_soluciones.html#ejercicio-5-práctico-transformación-de-box-cox",
+    "title": "3  Ingeniería de Características",
+    "section": "3.5 Ejercicio 5: Práctico (Transformación de Box-Cox)",
+    "text": "3.5 Ejercicio 5: Práctico (Transformación de Box-Cox)\nUsa el dataset Boston de la librería MASS. La variable respuesta medv (valor mediano de la vivienda) es estrictamente positiva y tiene cierta asimetría.\n\nCarga la librería MASS y utiliza la función boxcox() para encontrar el valor de \\(\\lambda\\) óptimo para la variable medv en un modelo simple frente a lstat. La fórmula sería boxcox(medv ~ lstat, data = Boston).\nObservando el gráfico que se genera, ¿a qué valor “simple” (como -1, 0, 0.5, 1) se aproxima el \\(\\lambda\\) óptimo?\nBasándote en este resultado, ¿cuál de las transformaciones clásicas (logarítmica, raíz cuadrada, inversa, etc.) sería la más recomendable para la variable medv?",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>**Ingeniería de Características**</span>"
+    ]
+  },
+  {
+    "objectID": "tema3_ingenieria_caracteristicas_soluciones.html#ejercicio-6-conceptual-codificación-de-variables-categóricas",
+    "href": "tema3_ingenieria_caracteristicas_soluciones.html#ejercicio-6-conceptual-codificación-de-variables-categóricas",
+    "title": "3  Ingeniería de Características",
+    "section": "3.6 Ejercicio 6: Conceptual (Codificación de Variables Categóricas)",
+    "text": "3.6 Ejercicio 6: Conceptual (Codificación de Variables Categóricas)\nExplica la diferencia fundamental entre la Codificación Ordinal y la Codificación One-Hot. Para cada una de las siguientes variables, indica qué método de codificación usarías y justifica tu elección:\n\nmes: (“Enero”, “Febrero”, “Marzo”, …)\nnivel_riesgo: (“Bajo”, “Medio”, “Alto”, “Crítico”)\npais_origen: (“España”, “Francia”, “Alemania”, “Italia”)",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>**Ingeniería de Características**</span>"
+    ]
+  },
+  {
+    "objectID": "tema3_ingenieria_caracteristicas_soluciones.html#ejercicio-7-práctico-interacción-entre-variables-continuas",
+    "href": "tema3_ingenieria_caracteristicas_soluciones.html#ejercicio-7-práctico-interacción-entre-variables-continuas",
+    "title": "3  Ingeniería de Características",
+    "section": "3.7 Ejercicio 7: Práctico (Interacción entre Variables Continuas)",
+    "text": "3.7 Ejercicio 7: Práctico (Interacción entre Variables Continuas)\nUsa el dataset mtcars para investigar si el efecto del peso de un coche (wt) sobre su consumo (mpg) depende de su potencia (hp).\n\nAjusta un modelo que incluya un término de interacción entre wt y hp. Escribe la fórmula en R.\nObserva el summary() del modelo. ¿Es el término de interacción (wt:hp) estadísticamente significativo a un nivel de \\(\\alpha = 0.05\\)?\nBasándote en el signo del coeficiente de la interacción, ¿cómo cambia el efecto del peso sobre el consumo a medida que aumenta la potencia? (Es decir, ¿el efecto negativo del peso se hace más fuerte o más débil en los coches más potentes?).",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>**Ingeniería de Características**</span>"
+    ]
+  },
+  {
+    "objectID": "tema3_ingenieria_caracteristicas_soluciones.html#ejercicio-8-interpretación-de-una-interacción-continua-x-categórica",
+    "href": "tema3_ingenieria_caracteristicas_soluciones.html#ejercicio-8-interpretación-de-una-interacción-continua-x-categórica",
+    "title": "3  Ingeniería de Características",
+    "section": "3.8 Ejercicio 8: Interpretación de una Interacción (Continua x Categórica)",
+    "text": "3.8 Ejercicio 8: Interpretación de una Interacción (Continua x Categórica)\nUn investigador modela el salario (salario, en euros) en función de los años de experiencia (experiencia) y si el empleado tiene o no un máster (master, con “No” como categoría de referencia). El modelo ajustado es:\nsalario = 30000 + 1200*experiencia + 8000*masterSi + 300*experiencia:masterSi\n\nEscribe la ecuación de regresión específica para los empleados que no tienen un máster.\nEscribe la ecuación de regresión específica para los empleados que sí tienen un máster.\nInterpreta el coeficiente de la interacción (300). ¿Qué nos dice sobre el retorno económico de la experiencia para ambos grupos?",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>**Ingeniería de Características**</span>"
+    ]
+  },
+  {
+    "objectID": "tema3_ingenieria_caracteristicas_soluciones.html#ejercicio-9-conceptual-principio-de-jerarquía",
+    "href": "tema3_ingenieria_caracteristicas_soluciones.html#ejercicio-9-conceptual-principio-de-jerarquía",
+    "title": "3  Ingeniería de Características",
+    "section": "3.9 Ejercicio 9: Conceptual (Principio de Jerarquía)",
+    "text": "3.9 Ejercicio 9: Conceptual (Principio de Jerarquía)\nExplica el principio de jerarquía en el contexto de los modelos de regresión con interacciones. Si un modelo incluye el término de interacción A:B, ¿por qué es una buena práctica incluir siempre los efectos principales A y B, incluso si sus tests t individuales no son significativos?",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>**Ingeniería de Características**</span>"
+    ]
+  },
+  {
+    "objectID": "tema3_ingenieria_caracteristicas_soluciones.html#ejercicio-10-conceptual-ingeniería-de-características-avanzada",
+    "href": "tema3_ingenieria_caracteristicas_soluciones.html#ejercicio-10-conceptual-ingeniería-de-características-avanzada",
+    "title": "3  Ingeniería de Características",
+    "section": "3.10 Ejercicio 10: Conceptual (Ingeniería de Características Avanzada)",
+    "text": "3.10 Ejercicio 10: Conceptual (Ingeniería de Características Avanzada)\nLos apuntes discuten la creación de nuevas variables mediante ratios y combinaciones. Para cada uno de los siguientes escenarios, propón una nueva variable (feature) que podrías crear y explica qué relación podría capturar mejor que las variables originales por sí solas.\n\nPara predecir la rentabilidad de una tienda, tienes las variables ventas_totales y numero_de_empleados.\nPara predecir el riesgo de impago de un solicitante de préstamo, tienes las variables ingresos_anuales y deuda_total.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>**Ingeniería de Características**</span>"
+    ]
+  },
+  {
+    "objectID": "tema4_seleccion_validacion_soluciones.html",
+    "href": "tema4_seleccion_validacion_soluciones.html",
+    "title": "4  Selección de variables, Regularización y Validación",
+    "section": "",
+    "text": "4.1 Ejercicio 1: Conceptual (Sobreajuste vs. Subajuste)\nExplica con tus propias palabras qué es el sobreajuste (overfitting) y el subajuste (underfitting). Describe los síntomas de cada uno comparando el error de entrenamiento con el error de validación (o de test), y menciona la solución principal para cada problema.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>**Selección de variables, Regularización y Validación**</span>"
+    ]
+  },
+  {
+    "objectID": "tema4_seleccion_validacion_soluciones.html#ejercicio-2-práctico-filtrado-básico",
+    "href": "tema4_seleccion_validacion_soluciones.html#ejercicio-2-práctico-filtrado-básico",
+    "title": "4  Selección de variables, Regularización y Validación",
+    "section": "4.2 Ejercicio 2: Práctico (Filtrado Básico)",
+    "text": "4.2 Ejercicio 2: Práctico (Filtrado Básico)\nImagina que recibes un nuevo conjunto de datos con 50 predictores para un modelo de regresión. Antes de aplicar métodos computacionalmente costosos, decides hacer un filtrado inicial. Describe los cuatro criterios básicos que aplicarías para descartar variables de forma preliminar, según lo explicado en los apuntes.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>**Selección de variables, Regularización y Validación**</span>"
+    ]
+  },
+  {
+    "objectID": "tema4_seleccion_validacion_soluciones.html#ejercicio-3-conceptual-aic-vs.-bic",
+    "href": "tema4_seleccion_validacion_soluciones.html#ejercicio-3-conceptual-aic-vs.-bic",
+    "title": "4  Selección de variables, Regularización y Validación",
+    "section": "4.3 Ejercicio 3: Conceptual (AIC vs. BIC)",
+    "text": "4.3 Ejercicio 3: Conceptual (AIC vs. BIC)\nTanto el AIC como el BIC son criterios para comparar modelos, pero se basan en filosofías distintas y tienen penalizaciones diferentes.\n\nEscribe la fórmula de la penalización por complejidad para el AIC y para el BIC.\n¿Cuál de los dos criterios tenderá a seleccionar modelos más simples (más parsimoniosos)? ¿Por qué?\nSi tu objetivo principal es la precisión predictiva, ¿cuál de los dos criterios es generalmente preferido?",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>**Selección de variables, Regularización y Validación**</span>"
+    ]
+  },
+  {
+    "objectID": "tema4_seleccion_validacion_soluciones.html#ejercicio-4-práctico-best-subset-y-criterios-de-información",
+    "href": "tema4_seleccion_validacion_soluciones.html#ejercicio-4-práctico-best-subset-y-criterios-de-información",
+    "title": "4  Selección de variables, Regularización y Validación",
+    "section": "4.4 Ejercicio 4: Práctico (Best Subset y Criterios de Información)",
+    "text": "4.4 Ejercicio 4: Práctico (Best Subset y Criterios de Información)\nUsa el conjunto de datos mtcars y la librería leaps.\n\nUtiliza la función regsubsets() para realizar una selección del mejor subconjunto (best subset selection) para predecir mpg usando el resto de variables.\nObtén el summary() de los resultados. ¿Qué modelo (cuántas variables) es el mejor según el criterio Cp de Mallows?\n¿Y cuál es el mejor modelo según el R² ajustado?\n¿Coinciden ambos criterios en el número de variables del modelo óptimo?",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>**Selección de variables, Regularización y Validación**</span>"
+    ]
+  },
+  {
+    "objectID": "tema4_seleccion_validacion_soluciones.html#ejercicio-5-conceptual-métodos-stepwise",
+    "href": "tema4_seleccion_validacion_soluciones.html#ejercicio-5-conceptual-métodos-stepwise",
+    "title": "4  Selección de variables, Regularización y Validación",
+    "section": "4.5 Ejercicio 5: Conceptual (Métodos Stepwise)",
+    "text": "4.5 Ejercicio 5: Conceptual (Métodos Stepwise)\nLos métodos automáticos paso a paso (forward, backward, stepwise) son computacionalmente eficientes, pero el texto advierte sobre su uso. Menciona y explica brevemente tres de las principales limitaciones o problemas de estos métodos.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>**Selección de variables, Regularización y Validación**</span>"
+    ]
+  },
+  {
+    "objectID": "tema4_seleccion_validacion_soluciones.html#ejercicio-6-práctico-selección-backward-stepwise",
+    "href": "tema4_seleccion_validacion_soluciones.html#ejercicio-6-práctico-selección-backward-stepwise",
+    "title": "4  Selección de variables, Regularización y Validación",
+    "section": "4.6 Ejercicio 6: Práctico (Selección Backward Stepwise)",
+    "text": "4.6 Ejercicio 6: Práctico (Selección Backward Stepwise)\nUtiliza el conjunto de datos swiss para predecir Fertility.\n\nAjusta el modelo completo: modelo_completo &lt;- lm(Fertility ~ ., data = swiss).\nUtiliza la función step() para realizar una selección regresiva (backward) basada en el criterio AIC.\nReporta la fórmula del modelo final que selecciona el algoritmo y su valor de AIC.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>**Selección de variables, Regularización y Validación**</span>"
+    ]
+  },
+  {
+    "objectID": "tema4_seleccion_validacion_soluciones.html#ejercicio-7-conceptual-ridge-vs.-lasso",
+    "href": "tema4_seleccion_validacion_soluciones.html#ejercicio-7-conceptual-ridge-vs.-lasso",
+    "title": "4  Selección de variables, Regularización y Validación",
+    "section": "4.7 Ejercicio 7: Conceptual (Ridge vs. Lasso)",
+    "text": "4.7 Ejercicio 7: Conceptual (Ridge vs. Lasso)\nLa regresión Ridge y Lasso son dos métodos de regularización muy populares, pero tienen un efecto fundamentalmente diferente sobre los coeficientes del modelo.\n\n¿Qué tipo de penalización utiliza cada método (\\(L_1\\) o \\(L_2\\))?\n¿Cuál de los dos métodos puede realizar selección de variables (es decir, anular coeficientes por completo)?\nDescribe un escenario en el que preferirías usar Ridge sobre Lasso.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>**Selección de variables, Regularización y Validación**</span>"
+    ]
+  },
+  {
+    "objectID": "tema4_seleccion_validacion_soluciones.html#ejercicio-8-práctico-regresión-lasso",
+    "href": "tema4_seleccion_validacion_soluciones.html#ejercicio-8-práctico-regresión-lasso",
+    "title": "4  Selección de variables, Regularización y Validación",
+    "section": "4.8 Ejercicio 8: Práctico (Regresión Lasso)",
+    "text": "4.8 Ejercicio 8: Práctico (Regresión Lasso)\nUtiliza el paquete glmnet y el conjunto de datos mtcars para predecir mpg.\n\nPrepara los datos: crea una matriz x para los predictores y un vector y para la respuesta.\nUtiliza la función cv.glmnet() para realizar una validación cruzada y encontrar el valor de lambda óptimo para una regresión Lasso (alpha = 1).\nExtrae y muestra los coeficientes del modelo Lasso ajustado con el lambda.min.\n¿Qué variables ha eliminado el modelo (coeficientes iguales a cero)?",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>**Selección de variables, Regularización y Validación**</span>"
+    ]
+  },
+  {
+    "objectID": "tema4_seleccion_validacion_soluciones.html#ejercicio-9-conceptual-validación",
+    "href": "tema4_seleccion_validacion_soluciones.html#ejercicio-9-conceptual-validación",
+    "title": "4  Selección de variables, Regularización y Validación",
+    "section": "4.9 Ejercicio 9: Conceptual (Validación)",
+    "text": "4.9 Ejercicio 9: Conceptual (Validación)\nExplica la diferencia entre la estrategia de validación Train/Test Split simple y la Validación Cruzada k-fold. ¿Cuál es la principal ventaja de la validación cruzada sobre la división simple? ¿En qué situación (tamaño del dataset) recomendarías usar cada una?",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>**Selección de variables, Regularización y Validación**</span>"
+    ]
+  },
+  {
+    "objectID": "tema4_seleccion_validacion_soluciones.html#ejercicio-10-práctico-validación-cruzada",
+    "href": "tema4_seleccion_validacion_soluciones.html#ejercicio-10-práctico-validación-cruzada",
+    "title": "4  Selección de variables, Regularización y Validación",
+    "section": "4.10 Ejercicio 10: Práctico (Validación Cruzada)",
+    "text": "4.10 Ejercicio 10: Práctico (Validación Cruzada)\nImagina que has ajustado dos modelos para predecir mpg en el dataset mtcars: 1. Un modelo simple: mpg ~ wt + hp 2. Un modelo complejo: mpg ~ . (todas las variables)\nUtilizando la librería caret y la función train(), como se muestra en el callout-tip “La maldición del sobreajuste”, configura y ejecuta una validación cruzada de 10 particiones para estimar el RMSE de ambos modelos. ¿Cuál de los dos modelos generaliza mejor a nuevos datos según esta estimación?",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>**Selección de variables, Regularización y Validación**</span>"
+    ]
+  },
+  {
+    "objectID": "tema5_glm_soluciones.html",
+    "href": "tema5_glm_soluciones.html",
+    "title": "5  Modelos de Regresión Generalizada",
+    "section": "",
+    "text": "5.1 Ejercicio 1: Conceptual (Fundamentos de GLM)\nExplica los tres componentes clave que definen a cualquier Modelo Lineal Generalizado (GLM) y describe brevemente la función de cada uno.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>**Modelos de Regresión Generalizada**</span>"
+    ]
+  },
+  {
+    "objectID": "tema5_glm_soluciones.html#ejercicio-2-conceptual-función-de-enlace",
+    "href": "tema5_glm_soluciones.html#ejercicio-2-conceptual-función-de-enlace",
+    "title": "5  Modelos de Regresión Generalizada",
+    "section": "5.2 Ejercicio 2: Conceptual (Función de Enlace)",
+    "text": "5.2 Ejercicio 2: Conceptual (Función de Enlace)\n¿Cuál es el propósito fundamental de la función de enlace en un GLM? ¿Por qué la regresión lineal clásica es considerada un caso particular de un GLM? (Pista: piensa en su función de enlace).",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>**Modelos de Regresión Generalizada**</span>"
+    ]
+  },
+  {
+    "objectID": "tema5_glm_soluciones.html#ejercicio-3-práctico-ajuste-de-un-modelo-logístico",
+    "href": "tema5_glm_soluciones.html#ejercicio-3-práctico-ajuste-de-un-modelo-logístico",
+    "title": "5  Modelos de Regresión Generalizada",
+    "section": "5.3 Ejercicio 3: Práctico (Ajuste de un Modelo Logístico)",
+    "text": "5.3 Ejercicio 3: Práctico (Ajuste de un Modelo Logístico)\nUsa el conjunto de datos mtcars de R. La variable am indica si la transmisión de un coche es automática (0) o manual (1).\n\nAjusta un modelo de regresión logística para predecir la probabilidad de que una transmisión sea manual (am) en función del peso del coche (wt) y los caballos de fuerza (hp).\nUtiliza la función summary() para examinar el modelo. ¿Qué variables parecen ser significativas?\nObtén los coeficientes del modelo. ¿Cómo interpretarías el signo del coeficiente para la variable wt?",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>**Modelos de Regresión Generalizada**</span>"
+    ]
+  },
+  {
+    "objectID": "tema5_glm_soluciones.html#ejercicio-4-interpretación-odds-ratios",
+    "href": "tema5_glm_soluciones.html#ejercicio-4-interpretación-odds-ratios",
+    "title": "5  Modelos de Regresión Generalizada",
+    "section": "5.4 Ejercicio 4: Interpretación (Odds Ratios)",
+    "text": "5.4 Ejercicio 4: Interpretación (Odds Ratios)\nBasado en el modelo del ejercicio anterior:\n\nCalcula el Odds Ratio (OR) para el coeficiente de la variable hp.\nInterpreta este Odds Ratio en el contexto del problema. Específicamente, ¿cómo cambian las “odds” (la razón de probabilidad) de tener una transmisión manual por cada caballo de fuerza adicional, manteniendo el peso constante?",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>**Modelos de Regresión Generalizada**</span>"
+    ]
+  },
+  {
+    "objectID": "tema5_glm_soluciones.html#ejercicio-5-práctico-validación-del-modelo-logístico",
+    "href": "tema5_glm_soluciones.html#ejercicio-5-práctico-validación-del-modelo-logístico",
+    "title": "5  Modelos de Regresión Generalizada",
+    "section": "5.5 Ejercicio 5: Práctico (Validación del Modelo Logístico)",
+    "text": "5.5 Ejercicio 5: Práctico (Validación del Modelo Logístico)\nContinuando con el modelo logístico de mtcars:\n\nGenera las predicciones de probabilidad del modelo para los datos.\nConvierte estas probabilidades en clases (“0” o “1”) usando un umbral de decisión de 0.5.\nCrea la matriz de confusión comparando las predicciones con los valores reales.\nCalcula la precisión (accuracy) global del modelo.\n(Bonus) Utiliza el paquete pROC para calcular y visualizar la curva ROC y obtener el valor del AUC. ¿Qué tan buena es la capacidad discriminativa del modelo?",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>**Modelos de Regresión Generalizada**</span>"
+    ]
+  },
+  {
+    "objectID": "tema5_glm_soluciones.html#ejercicio-6-conceptual-regresión-de-poisson",
+    "href": "tema5_glm_soluciones.html#ejercicio-6-conceptual-regresión-de-poisson",
+    "title": "5  Modelos de Regresión Generalizada",
+    "section": "5.6 Ejercicio 6: Conceptual (Regresión de Poisson)",
+    "text": "5.6 Ejercicio 6: Conceptual (Regresión de Poisson)\n\n¿Qué tipo de variable respuesta está diseñada para modelar la regresión de Poisson?\n¿Cuál es el supuesto fundamental de la distribución de Poisson respecto a la relación entre la media y la varianza?\n¿Cómo se llama el problema que surge cuando este supuesto se viola y la varianza es mayor que la media?",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>**Modelos de Regresión Generalizada**</span>"
+    ]
+  },
+  {
+    "objectID": "tema5_glm_soluciones.html#ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson",
+    "href": "tema5_glm_soluciones.html#ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson",
+    "title": "5  Modelos de Regresión Generalizada",
+    "section": "5.7 Ejercicio 7: Práctico (Ajuste de un Modelo de Poisson)",
+    "text": "5.7 Ejercicio 7: Práctico (Ajuste de un Modelo de Poisson)\nEl dataset discoveries de R es una serie temporal que cuenta el número de “grandes inventos” por año.\n\nCrea un gráfico de la serie temporal. ¿Parece la media del conteo constante a lo largo del tiempo?\nAjusta un modelo de regresión de Poisson simple donde discoveries es la respuesta y el tiempo (time(discoveries)) es el predictor.\nInterpreta el coeficiente del tiempo. (Pista: recuerda exponenciarlo para obtener el Incidence Rate Ratio - IRR).",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>**Modelos de Regresión Generalizada**</span>"
+    ]
+  },
+  {
+    "objectID": "tema5_glm_soluciones.html#ejercicio-8-diagnóstico-sobredispersión",
+    "href": "tema5_glm_soluciones.html#ejercicio-8-diagnóstico-sobredispersión",
+    "title": "5  Modelos de Regresión Generalizada",
+    "section": "5.8 Ejercicio 8: Diagnóstico (Sobredispersión)",
+    "text": "5.8 Ejercicio 8: Diagnóstico (Sobredispersión)\n\nPara el modelo de Poisson del ejercicio anterior, calcula el estadístico de dispersión (\\(\\hat{\\phi}\\)). (Pista: \\(\\hat{\\phi} = \\frac{\\sum r_i^2}{n-p}\\), donde los \\(r_i\\) son los residuos Pearson).\nBasándote en el valor de \\(\\hat{\\phi}\\), ¿hay evidencia de sobredispersión?\nSi encuentras sobredispersión, ¿cuál es el modelo alternativo que proponen los apuntes? ¿Qué ventaja teórica ofrece este modelo alternativo?",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>**Modelos de Regresión Generalizada**</span>"
+    ]
+  },
+  {
+    "objectID": "tema5_glm_soluciones.html#ejercicio-9-conceptual-deviance",
+    "href": "tema5_glm_soluciones.html#ejercicio-9-conceptual-deviance",
+    "title": "5  Modelos de Regresión Generalizada",
+    "section": "5.9 Ejercicio 9: Conceptual (Deviance)",
+    "text": "5.9 Ejercicio 9: Conceptual (Deviance)\nLa deviance es la medida principal de bondad de ajuste en los GLM. Explica conceptualmente qué mide. ¿Cómo se utiliza la diferencia en deviance entre dos modelos anidados para decidir cuál es mejor?",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>**Modelos de Regresión Generalizada**</span>"
+    ]
+  },
+  {
+    "objectID": "tema5_glm_soluciones.html#ejercicio-10-elección-del-modelo-adecuado",
+    "href": "tema5_glm_soluciones.html#ejercicio-10-elección-del-modelo-adecuado",
+    "title": "5  Modelos de Regresión Generalizada",
+    "section": "5.10 Ejercicio 10: Elección del Modelo Adecuado",
+    "text": "5.10 Ejercicio 10: Elección del Modelo Adecuado\nPara cada uno de los siguientes escenarios, indica qué tipo de GLM (Logístico, Poisson, Binomial Negativo, Gamma…) sería el más apropiado y por qué.\n\nQuieres modelar el tiempo (en minutos) que tarda un cliente en resolver una consulta en un centro de atención telefónica. El tiempo es siempre positivo y muchos valores se agrupan en tiempos cortos, con una cola larga de tiempos muy largos.\nQuieres predecir la presencia o ausencia de una especie de planta en diferentes parcelas de un bosque.\nQuieres modelar el número de visitas que cada usuario hace a una página web en un mes. Observas que la varianza del número de visitas es mucho mayor que la media.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>**Modelos de Regresión Generalizada**</span>"
+    ]
+  },
+  {
+    "objectID": "ejercicios_avanzados_soluciones.html",
+    "href": "ejercicios_avanzados_soluciones.html",
+    "title": "6  Ejercicios: Popurrí",
+    "section": "",
+    "text": "6.0.1 Ejercicio 1: Derivación de Estimadores\nEnunciado: Considera el modelo de regresión lineal simple \\(Y_i = \\beta_0 + \\beta_1 X_i + \\varepsilon_i\\). Partiendo de la función objetivo de Mínimos Cuadrados Ordinarios (MCO), \\(S(\\beta_0, \\beta_1) = \\sum_{i=1}^{n} (y_i - \\beta_0 - \\beta_1 x_i)^2\\), realiza la derivación matemática completa para obtener las expresiones de los estimadores \\(\\hat{\\beta}_0\\) y \\(\\hat{\\beta}_1\\).\nSolución:\nEl objetivo es encontrar los valores de \\(\\beta_0\\) y \\(\\beta_1\\) que minimizan la Suma de Cuadrados del Error (SSE). Para ello, calculamos las derivadas parciales de la función \\(S(\\beta_0, \\beta_1)\\) con respecto a cada parámetro y las igualamos a cero.\n\nDerivada parcial con respecto a \\(\\beta_0\\): \\[\n\\frac{\\partial S}{\\partial \\beta_0} = \\sum_{i=1}^{n} 2(y_i - \\beta_0 - \\beta_1 x_i)(-1) = -2 \\sum_{i=1}^{n} (y_i - \\beta_0 - \\beta_1 x_i)\n\\] Igualando a cero y dividiendo por -2: \\[\n\\sum_{i=1}^{n} (y_i - \\hat{\\beta}_0 - \\hat{\\beta}_1 x_i) = 0 \\implies \\sum y_i - n\\hat{\\beta}_0 - \\hat{\\beta}_1 \\sum x_i = 0\n\\] Reordenando, obtenemos la primera ecuación normal: \\[\nn\\hat{\\beta}_0 + \\hat{\\beta}_1 \\sum x_i = \\sum y_i \\quad \\text{(1)}\n\\]\nDerivada parcial con respecto a \\(\\beta_1\\): \\[\n\\frac{\\partial S}{\\partial \\beta_1} = \\sum_{i=1}^{n} 2(y_i - \\beta_0 - \\beta_1 x_i)(-x_i) = -2 \\sum_{i=1}^{n} x_i(y_i - \\beta_0 - \\beta_1 x_i)\n\\] Igualando a cero y dividiendo por -2: \\[\n\\sum_{i=1}^{n} x_i(y_i - \\hat{\\beta}_0 - \\hat{\\beta}_1 x_i) = 0 \\implies \\sum x_iy_i - \\hat{\\beta}_0 \\sum x_i - \\hat{\\beta}_1 \\sum x_i^2 = 0\n\\] Reordenando, obtenemos la segunda ecuación normal: \\[\n\\hat{\\beta}_0 \\sum x_i + \\hat{\\beta}_1 \\sum x_i^2 = \\sum x_iy_i \\quad \\text{(2)}\n\\]\nResolución del sistema: De la ecuación (1), dividiendo por \\(n\\), podemos despejar \\(\\hat{\\beta}_0\\): \\[\n\\hat{\\beta}_0 + \\hat{\\beta}_1 \\bar{x} = \\bar{y} \\implies \\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1 \\bar{x}\n\\] Esta es la fórmula para el intercepto, que depende de la pendiente.\nSustituimos esta expresión de \\(\\hat{\\beta}_0\\) en la ecuación (2): \\[\n(\\bar{y} - \\hat{\\beta}_1 \\bar{x})\\sum x_i + \\hat{\\beta}_1 \\sum x_i^2 = \\sum x_iy_i\n\\] \\[\n\\bar{y}\\sum x_i - \\hat{\\beta}_1 \\bar{x}\\sum x_i + \\hat{\\beta}_1 \\sum x_i^2 = \\sum x_iy_i\n\\] Agrupamos los términos con \\(\\hat{\\beta}_1\\): \\[\n\\hat{\\beta}_1 (\\sum x_i^2 - \\bar{x}\\sum x_i) = \\sum x_iy_i - \\bar{y}\\sum x_i\n\\] Sabiendo que \\(\\sum x_i = n\\bar{x}\\) y \\(\\sum y_i = n\\bar{y}\\): \\[\n\\hat{\\beta}_1 (\\sum x_i^2 - n\\bar{x}^2) = \\sum x_iy_i - n\\bar{x}\\bar{y}\n\\] Las expresiones entre paréntesis son las fórmulas de la suma de cuadrados de X (\\(S_{xx}\\)) y la suma de productos cruzados de X e Y (\\(S_{xy}\\)): \\[\n\\hat{\\beta}_1 S_{xx} = S_{xy}\n\\] Finalmente, despejamos el estimador de la pendiente: \\[\n\\hat{\\beta}_1 = \\frac{S_{xy}}{S_{xx}} = \\frac{\\sum_{i=1}^{n}(x_i - \\bar{x})(y_i - \\bar{y})}{\\sum_{i=1}^{n}(x_i - \\bar{x})^2}\n\\] Estas son las expresiones para los estimadores de MCO.\n\n\n\n\n6.0.2 Ejercicio 2: El Impacto de la Multicolinealidad\nEnunciado: En un modelo de regresión múltiple con dos predictores estandarizados (\\(X_1, X_2\\)), la varianza del estimador \\(\\hat{\\beta}_1\\) viene dada por \\(\\text{Var}(\\hat{\\beta}_1) = \\frac{\\sigma^2}{n(1-r_{12}^2)}\\), donde \\(r_{12}\\) es la correlación entre \\(X_1\\) y \\(X_2\\). a) Explica matemáticamente qué le ocurre a la varianza de \\(\\hat{\\beta}_1\\) cuando la correlación (\\(r_{12}\\)) se aproxima a 1. b) Relaciona esta fórmula con la del VIF.\nSolución:\n\na) Efecto de la correlación en la varianza: La varianza del estimador, \\(\\text{Var}(\\hat{\\beta}_1)\\), es una medida de su imprecisión. La fórmula \\(\\frac{\\sigma^2}{n(1-r_{12}^2)}\\) muestra que la varianza depende inversamente del término \\((1-r_{12}^2)\\).\n\nSi \\(r_{12} = 0\\) (no hay correlación), la varianza es mínima: \\(\\text{Var}(\\hat{\\beta}_1) = \\sigma^2/n\\).\nA medida que la correlación \\(|r_{12}|\\) aumenta y se acerca a 1 (multicolinealidad perfecta), el término \\(r_{12}^2\\) también se acerca a 1.\nConsecuentemente, el denominador \\((1-r_{12}^2)\\) se aproxima a 0.\nMatemáticamente, cuando el denominador de una fracción tiende a cero, el valor de la fracción tiende a infinito. Por lo tanto: \\[\n\\lim_{|r_{12}| \\to 1} \\text{Var}(\\hat{\\beta}_1) = \\lim_{|r_{12}| \\to 1} \\frac{\\sigma^2}{n(1-r_{12}^2)} = \\infty\n\\] Esto significa que con multicolinealidad severa, la varianza de los estimadores de los coeficientes “explota”, volviéndolos extremadamente inestables y poco fiables.\n\nb) Relación con el Factor de Inflación de la Varianza (VIF): El VIF para un predictor \\(X_j\\) se define como \\(VIF_j = \\frac{1}{1 - R_j^2}\\), donde \\(R_j^2\\) es el R-cuadrado de la regresión de \\(X_j\\) sobre todos los demás predictores. En el caso de solo dos predictores (\\(X_1, X_2\\)), el \\(R^2\\) de la regresión de \\(X_1\\) sobre \\(X_2\\) es simplemente el cuadrado de su coeficiente de correlación, es decir, \\(R_1^2 = r_{12}^2\\). Sustituyendo esto en la fórmula del VIF, tenemos: \\[\nVIF_1 = \\frac{1}{1 - r_{12}^2}\n\\] Ahora podemos reescribir la fórmula de la varianza de \\(\\hat{\\beta}_1\\) usando el VIF: \\[\n\\text{Var}(\\hat{\\beta}_1) = \\frac{\\sigma^2}{n} \\cdot \\frac{1}{1-r_{12}^2} = \\frac{\\sigma^2}{n} \\cdot VIF_1\n\\] Esta expresión demuestra que el VIF es, literalmente, el factor multiplicativo por el cual la varianza del estimador del coeficiente se “infla” en comparación con el caso base en el que no habría correlación (donde VIF = 1).\n\n\n\n\n6.0.3 Ejercicio 3: Interpretación de Coeficientes en Modelos Transformados\nEnunciado: Considera un modelo de regresión log-log: \\(\\log(Y_i) = \\beta_0 + \\beta_1 \\log(X_i) + \\varepsilon_i\\). Demuestra matemáticamente que el coeficiente \\(\\beta_1\\) puede interpretarse como una elasticidad.\nSolución:\nLa elasticidad de Y con respecto a X se define como el cambio porcentual en Y para un cambio del 1% en X. Para cambios infinitesimales, esta se expresa como: \\[\\eta = \\frac{\\% \\Delta Y}{\\% \\Delta X} = \\frac{dY/Y}{dX/X}\\] Una propiedad matemática de los logaritmos es que para cambios pequeños, \\(d(\\log(z)) \\approx \\frac{dz}{z}\\), que representa un cambio relativo o porcentual. Por lo tanto, la elasticidad puede expresarse como la derivada del logaritmo de Y con respecto al logaritmo de X: \\[\\eta = \\frac{d(\\log Y)}{d(\\log X)}\\] Partiendo de nuestro modelo poblacional (ignorando el término de error para analizar la relación sistemática): \\[\\log(Y) = \\beta_0 + \\beta_1 \\log(X)\\] Ahora, simplemente calculamos la derivada de la ecuación con respecto a \\(\\log(X)\\): \\[\\frac{d(\\log Y)}{d(\\log X)} = \\frac{d}{d(\\log X)} (\\beta_0 + \\beta_1 \\log(X))\\] El término \\(\\beta_0\\) es una constante, por lo que su derivada es 0. El término \\(\\beta_1 \\log(X)\\) tiene una derivada de \\(\\beta_1\\) con respecto a \\(\\log(X)\\). Por lo tanto: \\[\\frac{d(\\log Y)}{d(\\log X)} = \\beta_1\\] Hemos demostrado que el coeficiente \\(\\beta_1\\) es igual a la elasticidad de Y con respecto a X. Así, \\(\\beta_1\\) representa el cambio porcentual promedio en Y que se asocia con un aumento del 1% en X.\n\n\n\n6.0.4 Ejercicio 4: Fundamentos de la Regularización\nEnunciado: Explica desde una perspectiva geométrica por qué la regularización Lasso (L1) puede anular coeficientes, mientras que Ridge (L2) solo los encoge.\nSolución:\nLa estimación en regresión regularizada puede entenderse como un problema de optimización restringida. El objetivo es encontrar el conjunto de coeficientes (\\(\\beta_1, \\beta_2, \\dots\\)) que minimice la Suma de Cuadrados del Error (SSE), sujeto a una restricción en el tamaño de dichos coeficientes.\n\nGeometría del problema: El conjunto de todos los posibles valores de los coeficientes para un mismo valor de SSE forma una elipse (en un espacio de dos coeficientes, \\(\\beta_1, \\beta_2\\)) centrada en la solución de Mínimos Cuadrados Ordinarios (MCO). El objetivo es encontrar la elipse más pequeña posible que toque la “región de restricción”.\nRegresión Ridge (Penalización L2): La restricción es \\(\\sum \\beta_j^2 \\leq s\\). En dos dimensiones, \\(\\beta_1^2 + \\beta_2^2 \\leq s\\) es la ecuación de un círculo. Esta región es convexa y no tiene “esquinas”. Cuando las elipses del SSE se expanden desde el punto MCO, el primer punto de contacto con el círculo será un punto de tangencia. Debido a la forma suave y redondeada del círculo, es extremadamente improbable que este punto de tangencia ocurra exactamente sobre un eje (donde uno de los coeficientes sería cero). Por lo tanto, Ridge reduce la magnitud de ambos coeficientes, pero no los anula.\nRegresión Lasso (Penalización L1): La restricción es \\(\\sum |\\beta_j| \\leq s\\). En dos dimensiones, \\(|\\beta_1| + |\\beta_2| \\leq s\\) es la ecuación de un rombo (o diamante), rotado 45 grados. La característica clave de esta región son sus vértices afilados, que se encuentran sobre los ejes. Cuando las elipses del SSE se expanden, es mucho más probable que toquen la región de restricción en uno de estos vértices que en una de las aristas. Si el punto de contacto es un vértice sobre un eje (por ejemplo, el punto (0, \\(\\beta_2\\))), significa que el otro coeficiente (\\(\\beta_1\\)) es exactamente cero. Es esta propiedad geométrica, las “esquinas” de la región de penalización L1, lo que induce la escasez (sparsity) y permite a Lasso realizar selección de variables.\n\n\n\n\n6.0.5 Ejercicio 5: La Familia Exponencial y los GLM\nEnunciado: Explica cuál es la función de varianza \\(V(\\mu)\\) para un modelo de Poisson y para un modelo Binomial, y qué implicaciones tiene sobre los supuestos del modelo.\nSolución:\nLa función de varianza \\(V(\\mu)\\) es la “firma” de cada distribución dentro de la familia exponencial, ya que define la relación teórica entre la media \\(\\mu\\) y la varianza de la variable respuesta.\n\nModelo de Poisson:\n\nFunción de Varianza: \\(V(\\mu) = \\mu\\).\nImplicación: Esto implica que la varianza de la variable respuesta es teóricamente igual a su media: \\(\\text{Var}(Y) = \\mu\\). Este supuesto se conoce como equidispersión. La implicación más importante para el modelado es que, si los datos reales muestran una varianza significativamente mayor que la media (un fenómeno muy común llamado sobredispersión), el modelo de Poisson será inadecuado. Los errores estándar de los coeficientes estarán subestimados, llevando a p-valores incorrectamente bajos y a una inferencia errónea.\n\nModelo Binomial:\n\nFunción de Varianza: \\(V(\\mu) = \\mu(1-\\mu)\\).\nImplicación: En este caso, la varianza no es constante, sino que es una función cuadrática de la media (la probabilidad de éxito). La varianza es mínima cuando \\(\\mu\\) se acerca a 0 o 1, y es máxima cuando \\(\\mu = 0.5\\). Esta es la heterocedasticidad inherente a los datos de proporciones. El modelo GLM maneja esto de forma natural a través del algoritmo de estimación (IRLS), que da más peso a las observaciones con menor varianza (aquellas con probabilidades predichas cercanas a 0 o 1) y menos peso a las más inciertas (aquellas con probabilidades cercanas a 0.5).\n\n\n\n\n\n6.0.6 Ejercicio 6: El Problema de la Inferencia en Métodos Stepwise\nEnunciado: Explica el razonamiento estadístico detrás de la advertencia de que los p-valores de un modelo final obtenido mediante selección por pasos (stepwise) están sesgados y son excesivamente optimistas.\nSolución:\nLa advertencia se debe a que los métodos stepwise violan un principio fundamental de la prueba de hipótesis: el modelo y las hipótesis deben ser especificados a priori, antes de examinar las relaciones en los datos. Los métodos stepwise hacen exactamente lo contrario.\n\nProblema de Múltiples Comparaciones: En cada paso, un algoritmo como la selección forward realiza múltiples tests (un test t para cada variable candidata a entrar) y selecciona la variable “ganadora”, que es la que tiene el p-valor más pequeño. Al elegir el valor mínimo de un conjunto de pruebas, estamos seleccionando un valor extremo de la distribución de p-valores bajo la hipótesis nula. El p-valor reportado para esa variable (p. ej., 0.03) no refleja la probabilidad de observar un resultado tan extremo en un solo intento, sino la probabilidad de que el mejor de varios intentos sea tan extremo, lo cual es una probabilidad mucho mayor.\nInvalidez de la Distribución Teórica: El p-valor de un test t se calcula asumiendo que el coeficiente sigue una distribución t de Student. Sin embargo, el coeficiente de una variable seleccionada por un algoritmo stepwise no sigue esta distribución. Sigue una distribución más compleja (una “distribución de un estadístico de orden”), porque ha sido seleccionado condicionalmente por ser el mejor.\nSesgo de Selección: El proceso está diseñado para encontrar relaciones, incluso en datos puramente aleatorios. Si tenemos muchas variables de ruido, la probabilidad de que una de ellas parezca significativa por puro azar es alta. El método stepwise seleccionará esa variable y reportará un p-valor bajo y engañoso.\n\nEn resumen, los p-valores de un modelo stepwise están sesgados a la baja (son demasiado pequeños) porque no tienen en cuenta el proceso de búsqueda y selección que los ha producido. Esto lleva a una inflación de la tasa de error de Tipo I, haciendo que concluyamos que ciertas variables son significativas cuando en realidad no lo son.\n\n\n\n6.0.7 Ejercicio 7: Propiedades de los Estimadores MCO\nEnunciado: Demuestra la propiedad de insesgadez para el estimador \\(\\hat{\\boldsymbol{\\beta}}\\) en notación matricial. Es decir, demuestra que \\(E[\\hat{\\boldsymbol{\\beta}}] = \\boldsymbol{\\beta}\\).\nSolución:\n\nComenzamos con la fórmula del estimador MCO en notación matricial: \\[\n\\hat{\\boldsymbol{\\beta}} = (\\mathbf{X}^T\\mathbf{X})^{-1}\\mathbf{X}^T\\mathbf{y}\n\\]\nSustituimos el modelo poblacional verdadero para el vector \\(\\mathbf{y}\\), que es \\(\\mathbf{y} = \\mathbf{X}\\boldsymbol{\\beta} + \\boldsymbol{\\varepsilon}\\): \\[\n\\hat{\\boldsymbol{\\beta}} = (\\mathbf{X}^T\\mathbf{X})^{-1}\\mathbf{X}^T(\\mathbf{X}\\boldsymbol{\\beta} + \\boldsymbol{\\varepsilon})\n\\]\nAplicamos el operador de valor esperado \\(E[\\cdot]\\) a ambos lados. Tratamos la matriz de diseño \\(\\mathbf{X}\\) como fija (no aleatoria): \\[\nE[\\hat{\\boldsymbol{\\beta}}] = E[(\\mathbf{X}^T\\mathbf{X})^{-1}\\mathbf{X}^T(\\mathbf{X}\\boldsymbol{\\beta} + \\boldsymbol{\\varepsilon})]\n\\]\nDistribuimos el término \\((\\mathbf{X}^T\\mathbf{X})^{-1}\\mathbf{X}^T\\) dentro del paréntesis: \\[\nE[\\hat{\\boldsymbol{\\beta}}] = E[(\\mathbf{X}^T\\mathbf{X})^{-1}\\mathbf{X}^T\\mathbf{X}\\boldsymbol{\\beta} + (\\mathbf{X}^T\\mathbf{X})^{-1}\\mathbf{X}^T\\boldsymbol{\\varepsilon}]\n\\]\nUsamos la propiedad de linealidad del valor esperado (\\(E[A+B] = E[A] + E[B]\\)): \\[\nE[\\hat{\\boldsymbol{\\beta}}] = E[(\\mathbf{X}^T\\mathbf{X})^{-1}\\mathbf{X}^T\\mathbf{X}\\boldsymbol{\\beta}] + E[(\\mathbf{X}^T\\mathbf{X})^{-1}\\mathbf{X}^T\\boldsymbol{\\varepsilon}]\n\\]\nAnalizamos cada término por separado:\n\nEn el primer término, todo es constante excepto el operador de valor esperado, y \\((\\mathbf{X}^T\\mathbf{X})^{-1}\\mathbf{X}^T\\mathbf{X}\\) es la matriz identidad \\(\\mathbf{I}\\). Por lo tanto, \\(E[\\mathbf{I}\\boldsymbol{\\beta}] = \\boldsymbol{\\beta}\\).\nEn el segundo término, podemos sacar las constantes del valor esperado: \\((\\mathbf{X}^T\\mathbf{X})^{-1}\\mathbf{X}^T E[\\boldsymbol{\\varepsilon}]\\).\n\nAplicamos el supuesto de exogeneidad (o media del error nula), que establece que el valor esperado del término de error es cero: \\(E[\\boldsymbol{\\varepsilon}] = \\mathbf{0}\\). \\[\n(\\mathbf{X}^T\\mathbf{X})^{-1}\\mathbf{X}^T E[\\boldsymbol{\\varepsilon}] = (\\mathbf{X}^T\\mathbf{X})^{-1}\\mathbf{X}^T \\mathbf{0} = \\mathbf{0}\n\\]\nUniendo los resultados, concluimos: \\[\nE[\\hat{\\boldsymbol{\\beta}}] = \\boldsymbol{\\beta} + \\mathbf{0} = \\boldsymbol{\\beta}\n\\] Esto demuestra que el estimador MCO \\(\\hat{\\boldsymbol{\\beta}}\\) es insesgado, ya que su valor esperado es el verdadero parámetro poblacional \\(\\boldsymbol{\\beta}\\).\n\n\n\n\n6.0.8 Ejercicio 8: Intervalos de Confianza vs. Predicción\nEnunciado: La fórmula para el intervalo de predicción en RLS es \\(\\hat{y}_0 \\pm t_{\\alpha/2, n-2} \\cdot \\sqrt{\\text{MSE} \\left( 1 + \\frac{1}{n} + \\frac{(x_0 - \\bar{x})^2}{S_{xx}} \\right)}\\). Explica el origen y el significado de cada uno de los tres términos dentro del paréntesis.\nSolución:\nLa fórmula cuantifica la incertidumbre total de predecir una única nueva observación. Esta incertidumbre proviene de dos fuentes: la incertidumbre sobre la posición de la verdadera línea de regresión y la variabilidad inherente de un punto individual alrededor de esa línea. Los tres términos dentro del paréntesis representan estas fuentes de varianza (escaladas por MSE, que estima \\(\\sigma^2\\)):\n\nTérmino 1: Esta es la componente más importante y la que distingue al intervalo de predicción. Representa la varianza del error aleatorio de la nueva observación, \\(\\text{Var}(\\varepsilon_0) = \\sigma^2\\). Es la incertidumbre irreducible o inherente de un solo punto, que siempre se desviará de la media. Esta es la razón principal por la que un intervalo de predicción es siempre más ancho que uno de confianza.\nTérmino 1/n: Esta componente está relacionada con la incertidumbre en la estimación del intercepto \\(\\hat{\\beta}_0\\). Representa la incertidumbre sobre la “altura” general de la línea de regresión. A medida que el tamaño de la muestra (\\(n\\)) aumenta, nuestra confianza en la posición de la línea mejora, y este término de incertidumbre se hace más pequeño.\nTérmino (x_0 - \\bar{x})^2 / S_{xx}: Esta componente representa la incertidumbre debida a la estimación de la pendiente \\(\\hat{\\beta}_1\\). La incertidumbre en la pendiente tiene un mayor impacto cuanto más nos alejamos del centro de los datos (\\(\\bar{x}\\)). Si predecimos en el punto medio de nuestros datos (\\(x_0 = \\bar{x}\\)), este término se anula. A medida que \\(x_0\\) se aleja de \\(\\bar{x}\\), el efecto de un pequeño error en la estimación de la pendiente se magnifica, ensanchando el intervalo.\n\nEn resumen, los términos 1/n y (x_0 - \\bar{x})^2 / S_{xx} juntos cuantifican la incertidumbre sobre dónde está la línea de regresión verdadera (lo que cubre el intervalo de confianza). El término 1 añade la incertidumbre de un nuevo punto individual alrededor de esa línea.\n\n\n\n6.0.9 Ejercicio 9: Estimación por Máxima Verosimilitud\nEnunciado: Para un modelo de regresión logística, deriva la ecuación de puntuación para un coeficiente \\(\\beta_j\\) y demuestra que se iguala a cero cuando \\(\\sum_{i=1}^{n} x_{ij}(y_i - p_i) = 0\\).\nSolución:\n\nLa función de log-verosimilitud para la regresión logística es: \\[\n\\ell(\\boldsymbol{\\beta}) = \\sum_{i=1}^{n} \\left[y_i \\mathbf{x}_i^T\\boldsymbol{\\beta} - \\log(1 + e^{\\mathbf{x}_i^T\\boldsymbol{\\beta}})\\right]\n\\]\nLa ecuación de puntuación (score equation) se obtiene al calcular la primera derivada de la log-verosimilitud con respecto a un parámetro, en este caso \\(\\beta_j\\). Debemos calcular \\(\\frac{\\partial \\ell}{\\partial \\beta_j}\\) y igualarla a cero.\nLa derivada de una suma es la suma de las derivadas, por lo que podemos analizar el término dentro del sumatorio para una observación \\(i\\): \\[\n\\frac{\\partial}{\\partial \\beta_j} \\left[y_i \\mathbf{x}_i^T\\boldsymbol{\\beta} - \\log(1 + e^{\\mathbf{x}_i^T\\boldsymbol{\\beta}})\\right]\n\\]\nLa derivada del primer término, \\(y_i \\mathbf{x}_i^T\\boldsymbol{\\beta} = y_i(\\beta_0 + \\beta_1x_{i1} + \\dots + \\beta_jx_{ij} + \\dots)\\), con respecto a \\(\\beta_j\\) es simplemente \\(y_i x_{ij}\\).\nLa derivada del segundo término, \\(\\log(1 + e^{\\mathbf{x}_i^T\\boldsymbol{\\beta}})\\), requiere la regla de la cadena. Sea \\(u = 1 + e^{\\mathbf{x}_i^T\\boldsymbol{\\beta}}\\). \\[\n\\frac{\\partial}{\\partial \\beta_j} \\log(u) = \\frac{1}{u} \\cdot \\frac{\\partial u}{\\partial \\beta_j} = \\frac{1}{1 + e^{\\mathbf{x}_i^T\\boldsymbol{\\beta}}} \\cdot \\frac{\\partial}{\\partial \\beta_j} (1 + e^{\\mathbf{x}_i^T\\boldsymbol{\\beta}})\n\\] \\[\n= \\frac{1}{1 + e^{\\mathbf{x}_i^T\\boldsymbol{\\beta}}} \\cdot (e^{\\mathbf{x}_i^T\\boldsymbol{\\beta}} \\cdot x_{ij}) = \\left(\\frac{e^{\\mathbf{x}_i^T\\boldsymbol{\\beta}}}{1 + e^{\\mathbf{x}_i^T\\boldsymbol{\\beta}}}\\right) x_{ij}\n\\]\nReconocemos que el término entre paréntesis es la definición de la probabilidad \\(p_i\\) en el modelo logístico (\\(p_i = \\frac{1}{1+e^{-\\mathbf{x}_i^T\\boldsymbol{\\beta}}}\\)). Por lo tanto, la derivada del segundo término es \\(p_i x_{ij}\\).\nUniendo ambos resultados, la derivada para la observación \\(i\\) es \\(y_i x_{ij} - p_i x_{ij}\\).\nLa ecuación de puntuación completa es la suma sobre todas las observaciones: \\[\n\\frac{\\partial \\ell}{\\partial \\beta_j} = \\sum_{i=1}^{n} (y_i x_{ij} - p_i x_{ij}) = \\sum_{i=1}^{n} x_{ij}(y_i - p_i)\n\\]\nLos estimadores de máxima verosimilitud se encuentran al igualar esta ecuación a cero: \\[\n\\sum_{i=1}^{n} x_{ij}(y_i - p_i) = 0\n\\]\n\nInterpretación: Esta condición final significa que los estimadores de máxima verosimilitud se encuentran cuando los residuos del modelo (\\(y_i - p_i\\), la diferencia entre lo observado y la probabilidad predicha) son ortogonales (no están correlacionados) a los predictores \\(x_{ij}\\). Esto es análogo a las ecuaciones normales de MCO y significa que el modelo ha extraído toda la información linealmente asociable a los predictores, no quedando ningún patrón relacionado con ellos en los errores.\n\n\n\n6.0.10 Ejercicio 10: El Coeficiente de Regresión Parcial\nEnunciado: Explica el concepto de regresión parcial y su relación con el coeficiente de regresión múltiple \\(\\hat{\\beta}_j\\).\nSolución:\nEl concepto de regresión parcial es fundamental para entender la interpretación ceteris paribus de un coeficiente en regresión múltiple. Afirma que el coeficiente \\(\\hat{\\beta}_j\\) del predictor \\(X_j\\) en un modelo múltiple es matemáticamente idéntico a la pendiente de una regresión simple entre dos conjuntos de residuos.\nEl proceso de “parcialización” consiste en eliminar la influencia de todos los demás predictores (denotados como \\(X_{-j}\\)) tanto de la variable respuesta \\(Y\\) como del predictor de interés \\(X_j\\).\n\nParcialización de Y: Se ajusta un modelo de regresión de \\(Y\\) en función de todos los demás predictores: \\(Y \\sim X_{-j}\\). Los residuos de este modelo, \\(e_{Y|X_{-j}}\\), representan la parte de la variabilidad de \\(Y\\) que no puede ser explicada por el resto de variables del modelo. Es la “información única” de Y.\nParcialización de \\(X_j\\): Se ajusta un modelo de regresión de \\(X_j\\) en función de todos los demás predictores: \\(X_j \\sim X_{-j}\\). Los residuos de este modelo, \\(e_{X_j|X_{-j}}\\), representan la parte de la variabilidad de \\(X_j\\) que es única y no está correlacionada con el resto de variables. Es la “información única” que \\(X_j\\) aporta.\nRelación entre los residuos: Si ahora ajustamos una regresión lineal simple entre estos dos conjuntos de residuos: \\[\ne_{Y|X_{-j}} \\sim e_{X_j|X_{-j}}\n\\] La pendiente de esta regresión simple es exactamente igual al coeficiente de regresión múltiple \\(\\hat{\\beta}_j\\) del modelo original completo.\n\nConclusión: Esto demuestra que \\(\\hat{\\beta}_j\\) no mide la relación “bruta” entre Y y \\(X_j\\), sino la relación entre la parte de Y que no es explicada por los otros predictores y la parte de \\(X_j\\) que es única. Es la asociación “limpia” entre Y y \\(X_j\\) después de haber controlado estadísticamente por la influencia de todas las demás variables en el modelo. Esto es, precisamente, la formalización matemática del principio ceteris paribus.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Ejercicios: Popurrí</span>"
+    ]
+  }
+]

@@ -1,0 +1,961 @@
+---
+title: "Soluciones - Ejercicios de Regresión"
+author: "Tu Nombre"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: show
+    theme: cosmo
+  pdf:
+    toc: true
+    number-sections: true
+execute:
+  warning: false
+  message: false
+---
+
+```{r setup, include=FALSE}
+# Librerías necesarias
+library(tidyverse)
+library(car)
+library(MASS)
+library(leaps)
+library(glmnet)
+library(caret)
+library(pROC)
+
+# Configuración global
+knitr::opts_chunk$set(
+  echo = TRUE,
+  fig.width = 8,
+  fig.height = 6,
+  fig.align = "center"
+)
+```
+
+# Regresión Lineal Simple
+
+## Ejercicio 1: Fundamentos Conceptuales
+
+**Respuesta:**
+
+La correlación de Pearson ($r$) solo mide la **fuerza y dirección** de una relación lineal entre dos variables, pero no es suficiente para modelar porque:
+
+1. **No proporciona un modelo predictivo**: La correlación solo nos dice qué tan relacionadas están las variables, pero no nos permite hacer predicciones específicas sobre una variable a partir de la otra.
+
+2. **No cuantifica el cambio**: No nos dice cuánto cambia una variable cuando la otra cambia en una unidad específica.
+
+La regresión lineal va más allá porque proporciona:
+
+1. **Capacidad predictiva**: Permite predecir valores específicos de la variable dependiente para valores dados de la independiente.
+
+2. **Cuantificación del cambio**: Los coeficientes nos dicen exactamente cuánto cambia Y por cada unidad de cambio en X.
+
+3. **Intervalos de confianza y predicción**: Permite cuantificar la incertidumbre de nuestras estimaciones.
+
+4. **Marco para inferencia estadística**: Permite realizar pruebas de hipótesis sobre la significancia de la relación.
+
+## Ejercicio 2: Interpretación de Coeficientes
+
+**Modelo:** `gasto = 1500 + 12 * edad`
+
+a) **Gasto predicho para un cliente de 30 años:**
+```{r}
+# Cálculo directo
+gasto_30 = 1500 + 12 * 30
+print(paste("Gasto predicho:", gasto_30, "euros"))
+```
+
+b) **Interpretación de la pendiente (12):**
+Por cada año adicional de edad del cliente, se espera que el gasto anual en compras online aumente en 12 euros, manteniendo todo lo demás constante.
+
+c) **Interpretación del intercepto (1500):**
+Representa el gasto predicho para un cliente de 0 años, que sería 1500 euros. **Esta interpretación NO tiene sentido práctico** porque:
+- No existen clientes de 0 años
+- Estamos extrapolando fuera del rango de datos observados
+- El modelo probablemente no es válido para edades tan bajas
+
+## Ejercicio 3: Aplicación Práctica con R
+
+```{r}
+# a) Ajustar el modelo
+modelo_pressure <- lm(pressure ~ temperature, data = pressure)
+
+# b) Summary del modelo
+summary(modelo_pressure)
+```
+
+c) **Interpretación del R²:**
+```{r}
+r_squared <- summary(modelo_pressure)$r.squared
+print(paste("R² =", round(r_squared, 4)))
+print(paste("La temperatura explica el", round(r_squared * 100, 2), "% de la variabilidad en la presión"))
+```
+
+d) **Interpretación del p-valor del estadístico F:**
+```{r}
+f_pvalue <- summary(modelo_pressure)$fstatistic
+f_test_pvalue <- pf(f_pvalue[1], f_pvalue[2], f_pvalue[3], lower.tail = FALSE)
+print(paste("p-valor F-test:", format(f_test_pvalue, scientific = TRUE)))
+```
+Como p < 0.05, **el modelo es globalmente significativo** - es decir, el modelo es útil para predecir la presión.
+
+e) **Significancia del coeficiente de temperatura:**
+```{r}
+temp_pvalue <- summary(modelo_pressure)$coefficients["temperature", "Pr(>|t|)"]
+print(paste("p-valor temperatura:", format(temp_pvalue, scientific = TRUE)))
+```
+Como p < 0.05, **el coeficiente de temperatura es estadísticamente significativo**.
+
+## Ejercicio 4: Intervalos de Confianza y Predicción
+
+```{r}
+# a) Intervalo de confianza para la media cuando temp = 250
+ic_mean <- predict(modelo_pressure, newdata = data.frame(temperature = 250), 
+                   interval = "confidence", level = 0.95)
+print("Intervalo de confianza (95%) para la presión media:")
+print(ic_mean)
+
+# b) Intervalo de predicción para una nueva observación
+ic_pred <- predict(modelo_pressure, newdata = data.frame(temperature = 250), 
+                   interval = "prediction", level = 0.95)
+print("Intervalo de predicción (95%) para una nueva observación:")
+print(ic_pred)
+
+# c) Comparación de anchos
+ancho_conf <- ic_mean[3] - ic_mean[2]
+ancho_pred <- ic_pred[3] - ic_pred[2]
+print(paste("Ancho intervalo confianza:", round(ancho_conf, 2)))
+print(paste("Ancho intervalo predicción:", round(ancho_pred, 2)))
+```
+
+**c) ¿Cuál es más ancho?**
+El **intervalo de predicción es más ancho** porque incluye dos fuentes de incertidumbre:
+1. La incertidumbre sobre la media poblacional (como en el intervalo de confianza)
+2. La variabilidad natural de las observaciones individuales alrededor de esa media
+
+## Ejercicio 5: Supuestos del Modelo
+
+Los **cuatro supuestos de Gauss-Markov** son:
+
+1. **Linealidad**: La relación entre X e Y es lineal. Importante porque si no se cumple, las predicciones serán sistemáticamente erróneas.
+
+2. **Independencia**: Las observaciones son independientes entre sí. Crucial para que los errores estándar sean correctos.
+
+3. **Homocedasticidad**: La varianza de los errores es constante. Necesario para que los intervalos de confianza y las pruebas de hipótesis sean válidas.
+
+4. **Normalidad de los errores**: Los errores siguen una distribución normal. Importante para la validez de las pruebas de hipótesis y los intervalos de confianza.
+
+## Ejercicio 6: Diagnóstico de Linealidad y Homocedasticidad
+
+```{r}
+# a) Gráfico de Residuos vs. Valores Ajustados
+par(mfrow = c(1, 2))
+plot(modelo_pressure, which = 1, main = "Residuos vs. Valores Ajustados")
+
+# b) Gráfico Scale-Location
+plot(modelo_pressure, which = 3, main = "Scale-Location")
+```
+
+**a) Linealidad**: En el gráfico de residuos vs. valores ajustados, observamos un **patrón curvado** en lugar de una distribución aleatoria alrededor de cero. Esto indica que **NO se cumple perfectamente el supuesto de linealidad**.
+
+**b) Homocedasticidad**: En el gráfico Scale-Location, la línea roja muestra una tendencia creciente, lo que sugiere **heterocedasticidad** (varianza no constante). Un problema de heterocedasticidad se manifestaría como un patrón de embudo o una tendencia clara en este gráfico.
+
+## Ejercicio 7: Diagnóstico de Normalidad
+
+```{r}
+# a) Gráfico Normal Q-Q
+par(mfrow = c(1, 1))
+plot(modelo_pressure, which = 2, main = "Normal Q-Q Plot")
+
+# b) Test de Shapiro-Wilk
+shapiro_test <- shapiro.test(residuals(modelo_pressure))
+print("Test de Shapiro-Wilk para normalidad de residuos:")
+print(shapiro_test)
+```
+
+**a) Q-Q Plot**: Los puntos se desvían considerablemente de la línea diagonal, especialmente en las colas, indicando que los residuos **no siguen una distribución normal**.
+
+**b) Test de Shapiro-Wilk**: Con p-valor < 0.05, **rechazamos la hipótesis nula de normalidad**. Los residuos no son normales.
+
+## Ejercicio 8: Descomposición de la Varianza (ANOVA)
+
+**Definiciones:**
+
+- **SST (Suma de Cuadrados Total)**: Mide la variabilidad total en Y alrededor de su media. $SST = \sum(y_i - \bar{y})^2$
+
+- **SSR (Suma de Cuadrados de la Regresión)**: Mide la variabilidad explicada por el modelo. $SSR = \sum(\hat{y}_i - \bar{y})^2$
+
+- **SSE (Suma de Cuadrados del Error)**: Mide la variabilidad no explicada (residual). $SSE = \sum(y_i - \hat{y}_i)^2$
+
+**Ecuación fundamental:** $SST = SSR + SSE$
+
+Esto significa que la variabilidad total se descompone en la parte explicada por el modelo más la parte no explicada.
+
+## Ejercicio 9: Observaciones Influyentes
+
+**a) Tipos de residuos:**
+
+- **Residuo simple ($e_i$)**: $e_i = y_i - \hat{y}_i$. Diferencia bruta entre observado y predicho.
+
+- **Residuo estandarizado**: $\frac{e_i}{\hat{\sigma}}$. Residuo dividido por la desviación estándar residual.
+
+- **Residuo estudentizado**: $\frac{e_i}{\hat{\sigma}_{(i)}\sqrt{1-h_{ii}}}$. Usa la desviación estándar calculada sin la observación i-ésima.
+
+Los **estudentizados se prefieren** porque tienen propiedades estadísticas más estables y siguen una distribución t conocida.
+
+**b) Medidas de influencia:**
+
+- **Leverage ($h_{ii}$)**: Mide qué tan extrema es una observación en el espacio de las X. Valores altos indican observaciones con valores de X inusuales.
+
+- **Distancia de Cook ($D_i$)**: Mide el cambio en las predicciones si se elimina la observación i. Combina residuo y leverage.
+
+**Sí, una observación puede tener leverage alto pero no ser influyente** si está cerca de la línea de regresión (residuo pequeño).
+
+## Ejercicio 10: Relación entre Pruebas de Hipótesis
+
+En regresión lineal simple, existe la relación: $F = t^2$
+
+Donde:
+- $F$ es el estadístico del test ANOVA global
+- $t$ es el estadístico del test para $\beta_1$
+
+**Implicación**: Los p-valores de ambos tests son **idénticos** en regresión simple. Si la pendiente es significativa, el modelo global es significativo, y viceversa.
+
+# Regresión Lineal Múltiple
+
+## Ejercicio 1: Conceptual (Interpretación Ceteris Paribus)
+
+**Explicación del cambio en coeficientes:**
+
+El cambio en el coeficiente de `wt` (de -5.3 a -3.8) se debe a que en el modelo múltiple controlamos por el efecto de `hp`. 
+
+En el **modelo simple** (`mpg ~ wt`):
+- El coeficiente -5.3 captura el efecto "total" del peso, incluyendo efectos directos e indirectos.
+- Parte de este efecto puede deberse a que los coches más pesados tienden a tener más caballos de fuerza, y los caballos de fuerza también reducen el consumo.
+
+En el **modelo múltiple** (`mpg ~ wt + hp`):
+- El coeficiente -3.8 representa el efecto "puro" del peso, manteniendo constante los caballos de fuerza.
+- Es el efecto del peso *ceteris paribus* (todo lo demás igual).
+
+**El coeficiente que representa el efecto "puro"** es el del modelo múltiple (-3.8), porque aísla el efecto del peso de otras variables correlacionadas.
+
+## Ejercicio 2: Práctico (Ajuste e Interpretación de un Modelo Múltiple)
+
+```{r}
+# a) Ajustar modelo múltiple
+modelo_iris <- lm(Petal.Width ~ Petal.Length + Sepal.Width, data = iris)
+summary(modelo_iris)
+```
+
+**b) Interpretación coeficiente Petal.Length:**
+Por cada centímetro adicional en la longitud del pétalo, se espera que la anchura del pétalo aumente en aproximadamente 0.331 cm, manteniendo constante la anchura del sépalo.
+
+**c) Interpretación coeficiente Sepal.Width:**
+Por cada centímetro adicional en la anchura del sépalo, se espera que la anchura del pétalo disminuya en aproximadamente 0.247 cm, manteniendo constante la longitud del pétalo.
+
+**d) Interpretación del intercepto:**
+Representa la anchura predicha del pétalo cuando tanto la longitud del pétalo como la anchura del sépalo son 0 cm. **No tiene significado práctico** en este contexto biológico porque no existen flores con estas dimensiones cero.
+
+## Ejercicio 3: Conceptual (R² vs. R² Ajustado)
+
+**a) Problema del R² tradicional:**
+El R² tradicional **siempre aumenta** (o permanece igual) cuando añadimos más predictores al modelo, incluso si estos predictores no aportan información real. Esto hace que no sea útil para comparar modelos con diferente número de variables, ya que favorece artificialmente a los modelos más complejos.
+
+**b) Solución del R² ajustado:**
+El R² ajustado **penaliza la complejidad** del modelo introduciendo un factor de ajuste que depende del número de predictores:
+
+$R^2_{adj} = 1 - \frac{(1-R^2)(n-1)}{n-p-1}$
+
+Donde:
+- $n$ = número de observaciones
+- $p$ = número de predictores
+
+Esta penalización hace que el R² ajustado pueda **disminuir** si añadimos predictores que no mejoran suficientemente el ajuste.
+
+## Ejercicio 4: Interpretación de Salidas de R
+
+**a) ¿Es el modelo globalmente significativo?**
+**Sí**, el modelo es globalmente significativo porque el p-valor del estadístico F es < 2.2e-16 (prácticamente 0), que es mucho menor que 0.05. Esto significa que al menos uno de los predictores es significativo.
+
+**b) ¿Son los predictores individualmente significativos?**
+- **income**: Sí es significativo (p = 1.9e-05 < 0.05) después de controlar por education.
+- **education**: Sí es significativo (p < 2e-16 < 0.05) después de controlar por income.
+
+**c) Diferencia conceptual entre tests:**
+- **Test F global**: Evalúa si el modelo en conjunto es mejor que no tener modelo (H₀: β₁ = β₂ = 0).
+- **Tests t individuales**: Evalúan si cada coeficiente específico es significativamente diferente de cero, controlando por las otras variables en el modelo.
+
+Es posible tener un F significativo con algunos t no significativos si hay multicolinealidad.
+
+## Ejercicio 5: Conceptual (Multicolinealidad)
+
+**Multicolinealidad** es la existencia de relaciones lineales fuertes entre dos o más variables predictoras en un modelo de regresión.
+
+**Tres consecuencias negativas:**
+
+1. **Inestabilidad de los coeficientes**: Pequeños cambios en los datos pueden causar grandes cambios en las estimaciones de los coeficientes.
+
+2. **Errores estándar inflados**: Los errores estándar de los coeficientes se vuelven muy grandes, dificultando detectar efectos significativos.
+
+3. **Dificultad interpretativa**: Los coeficientes individuales pierden significado claro porque las variables están confundidas entre sí.
+
+La multicolinealidad afecta más a la **inferencia** que a la **predicción**. Las predicciones pueden seguir siendo buenas, pero la interpretación de los coeficientes se vuelve problemática.
+
+## Ejercicio 6: Práctico (Diagnóstico de Multicolinealidad)
+
+```{r}
+# Ajustar modelo con mtcars
+modelo_mtcars <- lm(mpg ~ cyl + disp + hp + wt, data = mtcars)
+summary(modelo_mtcars)
+
+# Examinar correlaciones simples primero
+cor_matrix <- cor(mtcars[c("mpg", "cyl", "disp", "hp", "wt")])
+print("Matriz de correlaciones:")
+print(round(cor_matrix, 3))
+```
+
+**a) Observación del summary:**
+A pesar de que variables como `cyl` y `disp` tienen correlaciones altas con `mpg` individualmente, en el modelo múltiple pueden aparecer como no significativas debido a la multicolinealidad entre predictores.
+
+```{r}
+# b) Calcular VIF
+library(car)
+vif_values <- vif(modelo_mtcars)
+print("Valores VIF:")
+print(vif_values)
+```
+
+**c) Interpretación VIF:**
+- **VIF > 5**: Multicolinealidad moderada
+- **VIF > 10**: Multicolinealidad severa
+
+Variables con VIF alto (probablemente `cyl`, `disp`) presentan problemas de multicolinealidad.
+
+**Recomendación:** Eliminar las variables con VIF más alto, comenzando por la menos significativa teóricamente o estadísticamente.
+
+## Ejercicio 7: Teórico (Notación Matricial)
+
+**a) Estimador de MCO:**
+$$\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$$
+
+**b) Supuesto fundamental:**
+El supuesto de **no multicolinealidad perfecta** garantiza que las columnas de $\mathbf{X}$ sean linealmente independientes, lo que asegura que $(\mathbf{X}^T\mathbf{X})$ sea invertible.
+
+## Ejercicio 8: Práctico (Gráficos de Regresión Parcial)
+
+```{r}
+# Cargar datos Prestige (si no está disponible, usar mtcars como alternativa)
+# library(car)
+# data(Prestige)
+# modelo_prestige <- lm(prestige ~ income + education + women, data = Prestige)
+
+# Alternativa con mtcars
+modelo_parcial <- lm(mpg ~ wt + hp + qsec, data = mtcars)
+
+# a) Gráficos de regresión parcial
+library(car)
+avPlots(modelo_parcial)
+```
+
+**c) Interpretación del gráfico para education (o variable elegida):**
+- **Eje X**: Residuos de education después de regresionar contra las otras variables
+- **Eje Y**: Residuos de prestige después de regresionar contra las otras variables  
+- **Pendiente**: Es exactamente el coeficiente de education en el modelo múltiple
+- **Interpretación**: Muestra la relación "pura" entre education y prestige, eliminando el efecto de las otras variables.
+
+## Ejercicio 9: Inferencia (F-test vs. t-tests)
+
+**Escenario hipotético:**
+Un modelo con **multicolinealidad severa** entre predictores podría tener:
+- **F-test significativo**: Porque el conjunto de variables sí explica la variabilidad
+- **t-tests no significativos**: Porque la multicolinealidad infla los errores estándar individuales
+
+**Causa estadística:** La multicolinealidad hace que sea difícil determinar la contribución individual de cada variable, pero el conjunto sí tiene poder predictivo.
+
+## Ejercicio 10: Práctico (Comparación de Modelos Anidados)
+
+```{r}
+# a) Modelo reducido
+modelo_reducido <- lm(Fertility ~ Agriculture + Education, data = swiss)
+
+# b) Modelo completo  
+modelo_completo <- lm(Fertility ~ Agriculture + Education + Catholic + Infant.Mortality, data = swiss)
+
+# c) Comparación con ANOVA
+anova_test <- anova(modelo_reducido, modelo_completo)
+print("Test F para comparación de modelos anidados:")
+print(anova_test)
+```
+
+**Interpretación:**
+Si p-valor < 0.05, entonces **las variables Catholic e Infant.Mortality aportan una mejora estadísticamente significativa** al modelo. El test F compara si la reducción en SSE justifica la complejidad adicional.
+
+# Ingeniería de Características
+
+## Ejercicio 1: Conceptual (Diagnóstico antes de Transformar)
+
+El enfoque de "ensayo y error" para transformaciones es metodológicamente peligroso por varios riesgos:
+
+**1. Data snooping/p-hacking**: Probar múltiples transformaciones hasta encontrar una que mejore el R² aumenta artificialmente la probabilidad de encontrar patrones espurios.
+
+**2. Sobreajuste**: El modelo resultante puede ajustarse específicamente a las peculiaridades de los datos de entrenamiento y no generalizar bien.
+
+**3. Pérdida de interpretabilidad**: Las transformaciones complejas pueden hacer que el modelo sea difícil de interpretar y comunicar.
+
+**4. Invalidación de la inferencia estadística**: Los p-valores y intervalos de confianza ya no son válidos cuando se ha hecho selección de modelos basada en los datos.
+
+**5. Falta de justificación teórica**: Sin una base conceptual, la transformación puede no tener sentido en el contexto del problema.
+
+## Ejercicio 2: Práctico (Escalado de Variables)
+
+```{r}
+# a) Estadísticas descriptivas originales
+variables_iris <- iris[, 1:4]
+estadisticas_orig <- data.frame(
+  Media = sapply(variables_iris, mean),
+  Desv_Est = sapply(variables_iris, sd)
+)
+print("Estadísticas originales:")
+print(round(estadisticas_orig, 3))
+```
+
+Las escalas **NO son directamente comparables** porque tienen diferentes unidades y rangos de variación.
+
+```{r}
+# b) Estandarización Z-Score
+iris_scaled <- as.data.frame(scale(variables_iris))
+estadisticas_scaled <- data.frame(
+  Media = sapply(iris_scaled, mean),
+  Desv_Est = sapply(iris_scaled, sd)
+)
+print("Estadísticas después de estandarización:")
+print(round(estadisticas_scaled, 10))
+```
+
+**c) Importancia para regularización:**
+El escalado es crucial para Ridge/Lasso porque estos métodos penalizan los coeficientes por su magnitud. Sin escalado, variables con escalas más grandes serían penalizadas más severamente, creando un sesgo artificial en la selección de variables.
+
+## Ejercicio 3: Conceptual (Elección del Método de Escalado)
+
+**a) Estandarización Z-Score preferible:**
+- **Escenario**: Análisis de datos de rendimiento académico donde las variables son notas de diferentes materias con distribuciones aproximadamente normales.
+- **Razón**: Preserva la distribución normal y es robusto cuando los datos siguen distribuciones conocidas.
+
+**b) Normalización Min-Max preferible:**
+- **Escenario**: Sistema de recomendación donde necesitas que todas las variables estén en el rango [0,1] para combinarlas en un score.
+- **Razón**: Garantiza un rango específico y preserva las relaciones exactas entre valores.
+
+**c) Escalado robusto necesario:**
+- **Escenario**: Datos financieros con outliers extremos (como ingresos con algunos multimillonarios).
+- **Razón**: La mediana y el IQR son menos sensibles a outliers que la media y desviación estándar.
+
+## Ejercicio 4: Práctico (Transformación para Linealizar)
+
+```{r}
+# a) Modelo original y diagnóstico
+modelo_cars_orig <- lm(dist ~ speed, data = cars)
+par(mfrow = c(1, 2))
+plot(modelo_cars_orig, which = 1, main = "Modelo Original")
+
+# b) Transformación propuesta
+# Probamos transformación cuadrática del predictor
+modelo_cars_trans <- lm(dist ~ I(speed^2), data = cars)
+plot(modelo_cars_trans, which = 1, main = "Modelo Transformado")
+```
+
+```{r}
+# Alternativa: transformación logarítmica de la respuesta
+# (eliminando dist = 0 si existe)
+cars_filtered <- cars[cars$dist > 0, ]
+modelo_log <- lm(log(dist) ~ speed, data = cars_filtered)
+par(mfrow = c(1, 1))
+plot(modelo_log, which = 1, main = "Modelo log(dist) ~ speed")
+```
+
+**c) Evaluación:**
+La transformación debe mostrar residuos más aleatorios alrededor de cero, sin el patrón curvado del modelo original.
+
+## Ejercicio 5: Práctico (Transformación de Box-Cox)
+
+```{r}
+# a) Análisis Box-Cox
+library(MASS)
+modelo_boston <- lm(medv ~ lstat, data = Boston)
+boxcox(modelo_boston)
+```
+
+**b) Interpretación del gráfico:**
+El λ óptimo parece estar cerca de **λ = 0**, lo que sugiere una **transformación logarítmica**.
+
+**c) Recomendación:**
+Basándose en λ ≈ 0, la transformación más recomendable sería **log(medv)**, que es la transformación logarítmica estándar.
+
+## Ejercicio 6: Conceptual (Codificación de Variables Categóricas)
+
+**Diferencias fundamentales:**
+- **Codificación Ordinal**: Asigna números consecutivos preservando el orden (1, 2, 3, ...)
+- **Codificación One-Hot**: Crea variables binarias (0/1) para cada categoría
+
+**Recomendaciones:**
+
+- **mes**: **One-Hot** - Aunque tiene orden natural, los meses son cíclicos y la distancia entre Enero y Diciembre no es 11.
+
+- **nivel_riesgo**: **Ordinal** - Hay una clara jerarquía natural (Bajo < Medio < Alto < Crítico).
+
+- **pais_origen**: **One-Hot** - No hay orden natural entre países, son categorías nominales.
+
+## Ejercicio 7: Práctico (Interacción entre Variables Continuas)
+
+```{r}
+# a) Modelo con interacción
+modelo_interaccion <- lm(mpg ~ wt + hp + wt:hp, data = mtcars)
+# O equivalentemente: lm(mpg ~ wt * hp, data = mtcars)
+
+# b) Summary del modelo
+summary(modelo_interaccion)
+```
+
+```{r}
+# Verificar significancia de la interacción
+coef_summary <- summary(modelo_interaccion)$coefficients
+interaccion_pvalue <- coef_summary["wt:hp", "Pr(>|t|)"]
+print(paste("P-valor de la interacción wt:hp:", round(interaccion_pvalue, 4)))
+```
+
+**c) Interpretación del signo:**
+Si el coeficiente de `wt:hp` es **positivo**, significa que el efecto negativo del peso sobre el consumo se hace **menos fuerte** (menos negativo) en coches más potentes. Si es **negativo**, el efecto del peso se hace **más fuerte** en coches más potentes.
+
+## Ejercicio 8: Interpretación de una Interacción (Continua x Categórica)
+
+**Modelo:** `salario = 30000 + 1200*experiencia + 8000*masterSi + 300*experiencia:masterSi`
+
+**a) Ecuación para empleados SIN máster:**
+```
+salario = 30000 + 1200*experiencia + 8000*(0) + 300*experiencia*(0)
+salario = 30000 + 1200*experiencia
+```
+
+**b) Ecuación para empleados CON máster:**
+```
+salario = 30000 + 1200*experiencia + 8000*(1) + 300*experiencia*(1)
+salario = 38000 + 1500*experiencia
+```
+
+**c) Interpretación del coeficiente de interacción (300):**
+El coeficiente de interacción indica que **el retorno económico de cada año de experiencia es 300 euros mayor** para los empleados con máster que para los empleados sin máster. Es decir, la experiencia es más valiosa económicamente para quienes tienen un máster.
+
+## Ejercicio 9: Conceptual (Principio de Jerarquía)
+
+El **principio de jerarquía** establece que si incluimos un término de interacción `A:B`, debemos incluir siempre los efectos principales `A` y `B`, incluso si no son individualmente significativos.
+
+**Razones:**
+
+1. **Interpretabilidad**: Los términos de interacción representan desviaciones de los efectos principales. Sin los efectos principales, la interpretación se vuelve confusa.
+
+2. **Estabilidad numérica**: Los algoritmos de ajuste pueden volverse inestables sin los términos principales.
+
+3. **Coherencia teórica**: Desde una perspectiva conceptual, una interacción implica que existen efectos principales que se modifican mutuamente.
+
+## Ejercicio 10: Conceptual (Ingeniería de Características Avanzada)
+
+**a) Para predecir rentabilidad de tienda:**
+- **Variable propuesta**: `eficiencia_empleado = ventas_totales / numero_de_empleados`
+- **Relación capturada**: Productividad por empleado, que puede ser mejor predictor de rentabilidad que las variables por separado, ya que considera tanto el volumen de negocio como la eficiencia operativa.
+
+**b) Para predecir riesgo de impago:**
+- **Variable propuesta**: `ratio_deuda_ingresos = deuda_total / ingresos_anuales`
+- **Relación capturada**: Capacidad de pago relativa. Un ratio alto indica mayor riesgo independientemente de los valores absolutos. Por ejemplo, 50,000€ de deuda es muy diferente con ingresos de 30,000€ vs 100,000€.
+
+# Selección de variables, Regularización y Validación
+
+## Ejercicio 1: Conceptual (Sobreajuste vs. Subajuste)
+
+**Sobreajuste (Overfitting):**
+- **Definición**: El modelo aprende demasiado específicamente los datos de entrenamiento, incluyendo ruido y patrones espurios.
+- **Síntomas**: Error de entrenamiento muy bajo, pero error de validación/test alto. Gran diferencia entre ambos errores.
+- **Solución principal**: Reducir complejidad del modelo (menos variables, regularización, más datos).
+
+**Subajuste (Underfitting):**
+- **Definición**: El modelo es demasiado simple para capturar los patrones reales en los datos.
+- **Síntomas**: Tanto el error de entrenamiento como el de validación son altos y similares.
+- **Solución principal**: Aumentar complejidad del modelo (más variables, términos de interacción, modelos más flexibles).
+
+## Ejercicio 2: Práctico (Filtrado Básico)
+
+Los **cuatro criterios básicos** para filtrado inicial son:
+
+1. **Varianza casi cero**: Eliminar variables con varianza extremadamente baja o constantes.
+2. **Correlación muy alta entre predictores**: Eliminar variables redundantes (correlación > 0.95).
+3. **Muchos valores faltantes**: Eliminar variables con un porcentaje alto de datos perdidos.
+4. **Irrelevancia teórica**: Eliminar variables que no tienen sentido conceptual para el problema (ej: ID, timestamps irrelevantes).
+
+## Ejercicio 3: Conceptual (AIC vs. BIC)
+
+**a) Fórmulas de penalización:**
+- **AIC**: $-2\log L + 2p$
+- **BIC**: $-2\log L + p\log(n)$
+
+Donde $p$ = número de parámetros, $n$ = número de observaciones.
+
+**b) ¿Cuál selecciona modelos más simples?**
+**BIC** tenderá a seleccionar modelos más parsimoniosos porque su penalización es más severa cuando $n > 8$ (ya que $\log(n) > 2$).
+
+**c) Para precisión predictiva:**
+**AIC** es generalmente preferido para precisión predictiva porque está más orientado a minimizar el error de predicción, mientras que BIC está más orientado a encontrar el "modelo verdadero".
+
+## Ejercicio 4: Práctico (Best Subset y Criterios de Información)
+
+```{r}
+# a) Best subset selection
+library(leaps)
+regfit_full <- regsubsets(mpg ~ ., data = mtcars, nvmax = 10)
+
+# b) Summary de resultados
+reg_summary <- summary(regfit_full)
+print("Cp de Mallows por número de variables:")
+print(reg_summary$cp)
+
+# Mejor modelo según Cp
+best_cp <- which.min(reg_summary$cp)
+print(paste("Mejor modelo según Cp:", best_cp, "variables"))
+
+# c) Mejor según R² ajustado
+print("R² ajustado por número de variables:")
+print(reg_summary$adjr2)
+best_adjr2 <- which.max(reg_summary$adjr2)
+print(paste("Mejor modelo según R² ajustado:", best_adjr2, "variables"))
+
+# d) ¿Coinciden?
+print(paste("¿Coinciden Cp y R² adj?", best_cp == best_adjr2))
+```
+
+## Ejercicio 5: Conceptual (Métodos Stepwise)
+
+**Tres principales limitaciones:**
+
+1. **Inestabilidad**: Pequeños cambios en los datos pueden llevar a modelos completamente diferentes. La selección puede ser muy sensible al orden de entrada/salida.
+
+2. **Múltiples comparaciones**: Se realizan muchos tests sin ajuste por multiplicidad, inflando la tasa de error tipo I. Los p-valores ya no tienen su interpretación usual.
+
+3. **Optimización local**: Los métodos stepwise pueden quedarse atrapados en óptimos locales y no encontrar el mejor conjunto global de variables.
+
+## Ejercicio 6: Práctico (Selección Backward Stepwise)
+
+```{r}
+# a) Modelo completo
+modelo_completo <- lm(Fertility ~ ., data = swiss)
+
+# b) Selección backward
+modelo_step <- step(modelo_completo, direction = "backward", trace = FALSE)
+
+# c) Reporte de resultados
+print("Fórmula del modelo final:")
+print(formula(modelo_step))
+print(paste("AIC del modelo final:", round(AIC(modelo_step), 2)))
+```
+
+## Ejercicio 7: Conceptual (Ridge vs. Lasso)
+
+**a) Tipo de penalización:**
+- **Ridge**: Penalización $L_2$ (suma de cuadrados de coeficientes): $\lambda\sum\beta_j^2$
+- **Lasso**: Penalización $L_1$ (suma de valores absolutos): $\lambda\sum|\beta_j|$
+
+**b) ¿Cuál puede hacer selección de variables?**
+**Lasso** puede anular coeficientes completamente (hacerlos exactamente cero), realizando selección automática de variables. Ridge solo los reduce hacia cero.
+
+**c) Escenario para preferir Ridge:**
+Cuando hay muchas variables con efectos pequeños pero reales, y queremos mantenerlas todas con coeficientes reducidos. Por ejemplo, en genómica donde miles de genes pueden tener efectos pequeños pero relevantes.
+
+## Ejercicio 8: Práctico (Regresión Lasso)
+
+```{r}
+# a) Preparar datos
+library(glmnet)
+x <- model.matrix(mpg ~ ., mtcars)[, -1]  # Remover intercepto
+y <- mtcars$mpg
+
+# b) Validación cruzada para Lasso
+set.seed(123)
+cv_lasso <- cv.glmnet(x, y, alpha = 1)  # alpha = 1 para Lasso
+plot(cv_lasso)
+
+# c) Coeficientes con lambda óptimo
+lambda_min <- cv_lasso$lambda.min
+coef_lasso <- coef(cv_lasso, s = lambda_min)
+print("Coeficientes del modelo Lasso:")
+print(coef_lasso)
+
+# d) Variables eliminadas
+variables_eliminadas <- rownames(coef_lasso)[coef_lasso[,1] == 0 & rownames(coef_lasso) != "(Intercept)"]
+print("Variables eliminadas (coeficientes = 0):")
+print(variables_eliminadas)
+```
+
+## Ejercicio 9: Conceptual (Validación)
+
+**Train/Test Split Simple:**
+- Se divide el dataset una sola vez en entrenamiento y test
+- Se entrena en train, se evalúa en test
+- **Ventaja**: Rápido y simple
+- **Desventaja**: La estimación del error puede ser inestable y depender de la división específica
+
+**Validación Cruzada k-fold:**
+- Se divide el dataset en k particiones
+- Se entrena k veces, usando k-1 particiones para entrenar y 1 para validar
+- Se promedia el error de las k evaluaciones
+- **Ventaja principal**: Estimación más estable y menos dependiente de una división particular
+
+**Cuándo usar cada una:**
+- **Train/Test simple**: Datasets grandes (>10,000 observaciones) donde la estabilidad no es crítica
+- **Validación cruzada**: Datasets pequeños o medianos donde necesitamos estimaciones estables del rendimiento
+
+## Ejercicio 10: Práctico (Validación Cruzada)
+
+```{r}
+# Configurar validación cruzada
+library(caret)
+set.seed(123)
+
+# Configuración de CV
+ctrl <- trainControl(
+  method = "cv",
+  number = 10,
+  verboseIter = FALSE
+)
+
+# Modelo simple
+modelo_simple <- train(
+  mpg ~ wt + hp,
+  data = mtcars,
+  method = "lm",
+  trControl = ctrl
+)
+
+# Modelo complejo
+modelo_complejo <- train(
+  mpg ~ .,
+  data = mtcars,
+  method = "lm",
+  trControl = ctrl
+)
+
+# Comparar resultados
+print("RMSE - Modelo Simple:")
+print(modelo_simple$results$RMSE)
+
+print("RMSE - Modelo Complejo:")
+print(modelo_complejo$results$RMSE)
+
+# Conclusión
+if(modelo_simple$results$RMSE < modelo_complejo$results$RMSE) {
+  print("El modelo simple generaliza mejor")
+} else {
+  print("El modelo complejo generaliza mejor")
+}
+```
+
+# Modelos de Regresión Generalizada
+
+## Ejercicio 1: Conceptual (Fundamentos de GLM)
+
+Los **tres componentes clave** de un GLM son:
+
+1. **Componente aleatorio**: Especifica la distribución de probabilidad de la variable respuesta (Normal, Binomial, Poisson, etc.). Define cómo se distribuyen los errores.
+
+2. **Componente sistemático**: Define el predictor lineal $\eta = \beta_0 + \beta_1 X_1 + ... + \beta_p X_p$. Es la parte lineal del modelo.
+
+3. **Función de enlace**: Conecta la media de la distribución ($\mu$) con el predictor lineal: $g(\mu) = \eta$. Permite que el predictor lineal tenga rango completo mientras la media respeta las restricciones de la distribución.
+
+## Ejercicio 2: Conceptual (Función de Enlace)
+
+**Propósito de la función de enlace:**
+Transformar la media de la variable respuesta para que pueda ser modelada como una combinación lineal de los predictores, respetando las restricciones del dominio de la variable respuesta.
+
+**Regresión lineal como caso particular:**
+La regresión lineal clásica es un GLM con:
+- **Distribución**: Normal
+- **Función de enlace**: Identidad ($g(\mu) = \mu$)
+- Por tanto: $\mu = \beta_0 + \beta_1 X_1 + ... + \beta_p X_p$
+
+## Ejercicio 3: Práctico (Ajuste de un Modelo Logístico)
+
+```{r}
+# a) Ajustar modelo logístico
+modelo_logistico <- glm(am ~ wt + hp, data = mtcars, family = binomial)
+
+# b) Summary del modelo
+summary(modelo_logistico)
+```
+
+**b) Variables significativas:**
+Basándose en los p-valores, identificar qué variables tienen p < 0.05.
+
+**c) Interpretación del signo de wt:**
+Si el coeficiente de `wt` es **negativo**, significa que coches más pesados tienen menor probabilidad de tener transmisión manual (lo cual es intuitivo).
+
+## Ejercicio 4: Interpretación (Odds Ratios)
+
+```{r}
+# a) Calcular Odds Ratio para hp
+coef_hp <- coef(modelo_logistico)["hp"]
+odds_ratio_hp <- exp(coef_hp)
+print(paste("Odds Ratio para hp:", round(odds_ratio_hp, 4)))
+
+# Para todos los coeficientes
+odds_ratios <- exp(coef(modelo_logistico))
+print("Todos los Odds Ratios:")
+print(odds_ratios)
+```
+
+**b) Interpretación:**
+Si OR_hp = 0.95 (ejemplo), significa que por cada caballo de fuerza adicional, las odds de tener transmisión manual se **multiplican por 0.95** (disminuyen en 5%), manteniendo el peso constante.
+
+## Ejercicio 5: Práctico (Validación del Modelo Logístico)
+
+```{r}
+# a) Predicciones de probabilidad
+probabilidades <- predict(modelo_logistico, type = "response")
+
+# b) Conversión a clases con umbral 0.5
+predicciones_clase <- ifelse(probabilidades > 0.5, 1, 0)
+
+# c) Matriz de confusión
+tabla_confusion <- table(Predicho = predicciones_clase, Real = mtcars$am)
+print("Matriz de Confusión:")
+print(tabla_confusion)
+
+# d) Cálculo de precisión
+precision <- sum(diag(tabla_confusion)) / sum(tabla_confusion)
+print(paste("Precisión (Accuracy):", round(precision, 3)))
+```
+
+```{r}
+# e) Curva ROC y AUC
+library(pROC)
+roc_obj <- roc(mtcars$am, probabilidades)
+auc_value <- auc(roc_obj)
+plot(roc_obj, main = paste("Curva ROC (AUC =", round(auc_value, 3), ")"))
+print(paste("AUC:", round(auc_value, 3)))
+```
+
+**Interpretación AUC:**
+- AUC > 0.8: Buena capacidad discriminativa
+- AUC > 0.9: Excelente capacidad discriminativa
+- AUC = 0.5: Sin capacidad discriminativa (azar)
+
+## Ejercicio 6: Conceptual (Regresión de Poisson)
+
+**a) Tipo de variable respuesta:**
+La regresión de Poisson está diseñada para **variables de conteo**: enteros no negativos que representan el número de ocurrencias de un evento en un período o espacio fijo.
+
+**b) Supuesto fundamental:**
+En la distribución de Poisson, la **media es igual a la varianza**: $E[Y] = Var[Y] = \mu$.
+
+**c) Problema cuando se viola:**
+Cuando $Var[Y] > E[Y]$, se llama **sobredispersión**. Esto puede llevar a errores estándar subestimados y conclusiones incorrectas sobre la significancia.
+
+## Ejercicio 7: Práctico (Ajuste de un Modelo de Poisson)
+
+```{r}
+# Usar dataset discoveries
+data(discoveries)
+
+# a) Gráfico de la serie temporal
+plot(discoveries, main = "Grandes Inventos por Año", 
+     ylab = "Número de Descubrimientos", xlab = "Año")
+
+# b) Ajustar modelo de Poisson
+# Crear data frame con tiempo
+df_discoveries <- data.frame(
+  count = as.numeric(discoveries),
+  time = as.numeric(time(discoveries))
+)
+
+modelo_poisson <- glm(count ~ time, data = df_discoveries, family = poisson)
+summary(modelo_poisson)
+```
+
+**c) Interpretación del coeficiente de tiempo:**
+```{r}
+# IRR (Incidence Rate Ratio)
+coef_time <- coef(modelo_poisson)["time"]
+irr <- exp(coef_time)
+print(paste("IRR para tiempo:", round(irr, 6)))
+```
+
+Si IRR = 0.99, significa que la tasa de descubrimientos **disminuye** en un 1% por año.
+
+## Ejercicio 8: Diagnóstico (Sobredispersión)
+
+```{r}
+# a) Calcular estadístico de dispersión
+residuos_pearson <- residuals(modelo_poisson, type = "pearson")
+n <- nrow(df_discoveries)
+p <- length(coef(modelo_poisson))
+phi_hat <- sum(residuos_pearson^2) / (n - p)
+
+print(paste("Estadístico de dispersión (φ̂):", round(phi_hat, 3)))
+```
+
+**b) Evidencia de sobredispersión:**
+Si φ̂ > 1, hay evidencia de sobredispersión. Valores > 1.5 indican sobredispersión considerable.
+
+**c) Modelo alternativo:**
+Si hay sobredispersión, se puede usar **regresión Binomial Negativa**, que incluye un parámetro adicional que permite que la varianza sea mayor que la media: $Var[Y] = \mu + \alpha\mu^2$.
+
+```{r}
+# Ajuste con binomial negativa si hay sobredispersión
+if(phi_hat > 1.5) {
+  library(MASS)
+  modelo_nb <- glm.nb(count ~ time, data = df_discoveries)
+  print("Modelo Binomial Negativo ajustado:")
+  print(summary(modelo_nb))
+}
+```
+
+## Ejercicio 9: Conceptual (Deviance)
+
+**Deviance** mide qué tan bien el modelo ajustado se compara con el modelo saturado (perfecto). Es análogo a la suma de cuadrados residuales en regresión lineal.
+
+**Fórmula**: $D = 2[L(\text{modelo saturado}) - L(\text{modelo ajustado})]$
+
+**Uso para comparar modelos anidados:**
+La diferencia en deviance entre dos modelos anidados sigue una distribución χ² con grados de libertad igual a la diferencia en número de parámetros. Si esta diferencia es significativa, el modelo más complejo es preferible.
+
+## Ejercicio 10: Elección del Modelo Adecuado
+
+**a) Tiempo de resolución de consultas:**
+**Modelo Gamma** sería más apropiado porque:
+- La variable es continua y positiva
+- Típicamente tiene distribución asimétrica con cola derecha larga
+- La distribución Gamma es flexible para este tipo de datos
+
+**b) Presencia/ausencia de especies:**
+**Regresión Logística** es la elección obvia porque:
+- Variable respuesta binaria (presencia = 1, ausencia = 0)
+- Queremos modelar probabilidades que están restringidas al intervalo [0,1]
+
+**c) Número de visitas con varianza mayor que la media:**
+**Regresión Binomial Negativa** sería más apropiada porque:
+- Variable de conteo (número de visitas)
+- La sobredispersión (varianza > media) viola el supuesto de Poisson
+- La binomial negativa maneja naturalmente la sobredispersión
+
+---
+
+# Notas para la Compilación
+
+Para compilar este documento con Quarto:
+
+1. Guarda el contenido como un archivo `.qmd`
+2. Asegúrate de tener instaladas todas las librerías mencionadas
+3. Ejecuta: `quarto render archivo.qmd`
+
+Las librerías necesarias son:
+```r
+install.packages(c("tidyverse", "car", "MASS", "leaps", 
+                   "glmnet", "caret", "pROC"))
+```

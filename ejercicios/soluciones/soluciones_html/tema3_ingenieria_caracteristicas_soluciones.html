@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Víctor Aceña Gil">
-<meta name="author" content="Isaac Martín de Diego">
 
-<title>Modelos Estadísticos para la Predicción</title>
+<title>3&nbsp; Ingeniería de Características – Problemas de Modelos Estadísticos para la Predicción</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,27 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -52,7 +30,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./tema0.html" rel="next">
+<link href="./tema4_seleccion_validacion_soluciones.html" rel="next">
+<link href="./tema2_regresion_multiple_soluciones.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -92,8 +71,37 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="estilos_html.css">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="soluciones.css">
 </head>
 
 <body class="nav-sidebar floating quarto-light">
@@ -105,7 +113,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Prefacio</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema3_ingenieria_caracteristicas_soluciones.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title"><strong>Ingeniería de Características</strong></span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -122,7 +130,7 @@ div.csl-indent {
       <a href="./index.html" class="sidebar-logo-link">
       </a>
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Modelos Estadísticos para la Predicción</a> 
+      <a href="./">Problemas de Modelos Estadísticos para la Predicción</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -134,56 +142,44 @@ div.csl-indent {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Prefacio</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema0.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción a los modelos de regresión</span></span></a>
+  <a href="./tema1_regresion_simple_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Soluciones: Regresión Lineal Simple</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">El modelo de regresión lineal simple</span></span></a>
+  <a href="./tema2_regresion_multiple_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title"><strong>Regresión Lineal Múltiple</strong></span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">El modelo de regresión lineal múltiple</span></span></a>
+  <a href="./tema3_ingenieria_caracteristicas_soluciones.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title"><strong>Ingeniería de Características</strong></span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ingeniería de características: transformaciones de variables e interacciones</span></span></a>
+  <a href="./tema4_seleccion_validacion_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><strong>Selección de variables, Regularización y Validación</strong></span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Selección de variables, regularización y validación</span></span></a>
+  <a href="./tema5_glm_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><strong>Modelos de Regresión Generalizada</strong></span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Modelos de regresión generalizada</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./conclusiones.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Conclusiones</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Bibliografía</span></a>
+  <a href="./ejercicios_avanzados_soluciones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Ejercicios: Popurrí</span></span></a>
   </div>
 </li>
     </ul>
@@ -196,13 +192,16 @@ div.csl-indent {
     <h2 id="toc-title">Tabla de contenidos</h2>
    
   <ul>
-  <li><a href="#prefacio" id="toc-prefacio" class="nav-link active" data-scroll-target="#prefacio">Prefacio</a>
-  <ul class="collapse">
-  <li><a href="#filosofía-pedagógica-del-volumen" id="toc-filosofía-pedagógica-del-volumen" class="nav-link" data-scroll-target="#filosofía-pedagógica-del-volumen">Filosofía pedagógica del volumen</a>
-  <ul class="collapse">
-  <li><a href="#qué-aprenderás-con-este-libro" id="toc-qué-aprenderás-con-este-libro" class="nav-link" data-scroll-target="#qué-aprenderás-con-este-libro">¿Qué aprenderás con este libro?</a></li>
-  </ul></li>
-  </ul></li>
+  <li><a href="#ejercicio-1-conceptual-diagnóstico-antes-de-transformar" id="toc-ejercicio-1-conceptual-diagnóstico-antes-de-transformar" class="nav-link active" data-scroll-target="#ejercicio-1-conceptual-diagnóstico-antes-de-transformar"><span class="header-section-number">3.1</span> Ejercicio 1: Conceptual (Diagnóstico antes de Transformar)</a></li>
+  <li><a href="#ejercicio-2-práctico-escalado-de-variables" id="toc-ejercicio-2-práctico-escalado-de-variables" class="nav-link" data-scroll-target="#ejercicio-2-práctico-escalado-de-variables"><span class="header-section-number">3.2</span> Ejercicio 2: Práctico (Escalado de Variables)</a></li>
+  <li><a href="#ejercicio-3-conceptual-elección-del-método-de-escalado" id="toc-ejercicio-3-conceptual-elección-del-método-de-escalado" class="nav-link" data-scroll-target="#ejercicio-3-conceptual-elección-del-método-de-escalado"><span class="header-section-number">3.3</span> Ejercicio 3: Conceptual (Elección del Método de Escalado)</a></li>
+  <li><a href="#ejercicio-4-práctico-transformación-para-linealizar" id="toc-ejercicio-4-práctico-transformación-para-linealizar" class="nav-link" data-scroll-target="#ejercicio-4-práctico-transformación-para-linealizar"><span class="header-section-number">3.4</span> Ejercicio 4: Práctico (Transformación para Linealizar)</a></li>
+  <li><a href="#ejercicio-5-práctico-transformación-de-box-cox" id="toc-ejercicio-5-práctico-transformación-de-box-cox" class="nav-link" data-scroll-target="#ejercicio-5-práctico-transformación-de-box-cox"><span class="header-section-number">3.5</span> Ejercicio 5: Práctico (Transformación de Box-Cox)</a></li>
+  <li><a href="#ejercicio-6-conceptual-codificación-de-variables-categóricas" id="toc-ejercicio-6-conceptual-codificación-de-variables-categóricas" class="nav-link" data-scroll-target="#ejercicio-6-conceptual-codificación-de-variables-categóricas"><span class="header-section-number">3.6</span> Ejercicio 6: Conceptual (Codificación de Variables Categóricas)</a></li>
+  <li><a href="#ejercicio-7-práctico-interacción-entre-variables-continuas" id="toc-ejercicio-7-práctico-interacción-entre-variables-continuas" class="nav-link" data-scroll-target="#ejercicio-7-práctico-interacción-entre-variables-continuas"><span class="header-section-number">3.7</span> Ejercicio 7: Práctico (Interacción entre Variables Continuas)</a></li>
+  <li><a href="#ejercicio-8-interpretación-de-una-interacción-continua-x-categórica" id="toc-ejercicio-8-interpretación-de-una-interacción-continua-x-categórica" class="nav-link" data-scroll-target="#ejercicio-8-interpretación-de-una-interacción-continua-x-categórica"><span class="header-section-number">3.8</span> Ejercicio 8: Interpretación de una Interacción (Continua x Categórica)</a></li>
+  <li><a href="#ejercicio-9-conceptual-principio-de-jerarquía" id="toc-ejercicio-9-conceptual-principio-de-jerarquía" class="nav-link" data-scroll-target="#ejercicio-9-conceptual-principio-de-jerarquía"><span class="header-section-number">3.9</span> Ejercicio 9: Conceptual (Principio de Jerarquía)</a></li>
+  <li><a href="#ejercicio-10-conceptual-ingeniería-de-características-avanzada" id="toc-ejercicio-10-conceptual-ingeniería-de-características-avanzada" class="nav-link" data-scroll-target="#ejercicio-10-conceptual-ingeniería-de-características-avanzada"><span class="header-section-number">3.10</span> Ejercicio 10: Conceptual (Ingeniería de Características Avanzada)</a></li>
   </ul>
 </nav>
     </div>
@@ -211,27 +210,14 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Modelos Estadísticos para la Predicción</h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title"><strong>Ingeniería de Características</strong></span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Autores/as</div>
-    <div class="quarto-title-meta-contents">
-             <p>Víctor Aceña Gil </p>
-             <p>Isaac Martín de Diego </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Fecha de publicación</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">5 de septiembre de 2025</p>
-    </div>
-  </div>
   
     
   </div>
@@ -241,79 +227,102 @@ div.csl-indent {
 </header>
 
 
-
-<section id="prefacio" class="level1 unnumbered">
-<h1 class="unnumbered">Prefacio</h1><p><img src="images/DSLab_logo_2.png" title="Modelos Estadísticos para la Predicción" class="quarto-cover-image nolightbox img-fluid"></p>
-<p>Los modelos estadísticos han emergido como herramientas fundamentales en la era de la información, donde la capacidad de analizar y predecir comportamientos a partir de datos se ha convertido en una habilidad esencial. En este contexto, los modelos para la predicción juegan un papel crucial al permitirnos describir y cuantificar las relaciones entre variables, así como anticipar resultados futuros. Este libro está diseñado para proporcionar una comprensión profunda y práctica de estas técnicas, basándose en el contenido de la asignatura impartida en el <strong>Grado en Matemáticas</strong>.</p>
-<p>A lo largo de los capítulos, encontrarás una combinación de teoría rigurosa y aplicaciones prácticas. Se abordarán temas como la regresión lineal simple y múltiple, métodos de selección de variables y regularización, ingeniería de características y modelos generalizados, entre otros. Además, todos los conceptos se ilustrarán con ejemplos en <strong>R</strong>, permitiéndote aplicar lo aprendido a conjuntos de datos reales.</p>
-<p>El objetivo de este libro es doble: por un lado, proporcionar herramientas avanzadas para analizar relaciones sujetas a incertidumbre y, por otro, capacitarte para elegir el método más apropiado para resolver problemas de predicción o explicación, analizando la naturaleza de las variables y sus posibles interacciones. Al finalizar, habrás desarrollado una comprensión sólida de los modelos estadísticos y estarás preparado para enfrentar desafíos en el análisis predictivo con confianza y creatividad.</p>
-<section id="filosofía-pedagógica-del-volumen" class="level2">
-<h2 class="anchored" data-anchor-id="filosofía-pedagógica-del-volumen">Filosofía pedagógica del volumen</h2>
-<p>La filosofía que subyace a la obra es un enfoque <strong>“teórico-práctico”</strong> deliberado y sin concesiones. No nos conformamos con una mera aplicación de “recetas” o una guía de funciones de software. Buscamos fomentar una comprensión profunda del <em>modus operandi</em> de cada modelo y método. Perseguimos un equilibrio entre la técnica estadística y la estrategia de resolución de problemas, bajo la firme convicción de que la labor práctica se desarrolla con mayor fluidez, creatividad y éxito cuando se cimienta en una comprensión robusta de los principios matemáticos y estadísticos subyacentes, tal y como defiende <span class="citation" data-cites="harrell2015">(<a href="references.html#ref-harrell2015" role="doc-biblioref">Harrell 2015</a>)</span> en su influyente obra.</p>
-<section id="qué-aprenderás-con-este-libro" class="level3">
-<h3 class="anchored" data-anchor-id="qué-aprenderás-con-este-libro">¿Qué aprenderás con este libro?</h3>
-<p>Al completar este recorrido, habrás desarrollado habilidades clave para:</p>
+<!-- ---
+title: "Ejercicios: Ingeniería de Características"
+subtitle: "Modelos Estadísticos de Predicción"
+author: "Víctor Aceña Gil - Isaac Martín de Diego"
+date: today
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+execute:
+  warning: false
+  message: false
+--- -->
+<section id="ejercicio-1-conceptual-diagnóstico-antes-de-transformar" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="ejercicio-1-conceptual-diagnóstico-antes-de-transformar"><span class="header-section-number">3.1</span> Ejercicio 1: Conceptual (Diagnóstico antes de Transformar)</h2>
+<p>El texto desaconseja fuertemente el enfoque de “ensayo y error” al aplicar transformaciones. Explica con tus propias palabras por qué la práctica de probar transformaciones hasta que mejore el R² es metodológicamente peligrosa. Menciona al menos tres de los riesgos específicos discutidos en los apuntes.</p>
+</section>
+<section id="ejercicio-2-práctico-escalado-de-variables" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="ejercicio-2-práctico-escalado-de-variables"><span class="header-section-number">3.2</span> Ejercicio 2: Práctico (Escalado de Variables)</h2>
+<p>Utiliza el dataset <code>iris</code> de R y céntrate en las cuatro variables predictoras continuas (<code>Sepal.Length</code>, <code>Sepal.Width</code>, <code>Petal.Length</code>, <code>Petal.Width</code>).</p>
+<ol type="a">
+<li>Calcula la media y la desviación estándar de estas cuatro variables en su escala original. ¿Son sus escalas directamente comparables?</li>
+<li>Crea un nuevo data frame donde hayas aplicado la <strong>estandarización Z-Score</strong> a estas cuatro variables. Verifica que las nuevas variables tienen una media cercana a 0 y una desviación estándar de 1.</li>
+<li>¿Por qué este paso de escalado es crucial antes de aplicar métodos de regularización como Ridge o Lasso, tal y como se menciona en el texto?</li>
+</ol>
+</section>
+<section id="ejercicio-3-conceptual-elección-del-método-de-escalado" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="ejercicio-3-conceptual-elección-del-método-de-escalado"><span class="header-section-number">3.3</span> Ejercicio 3: Conceptual (Elección del Método de Escalado)</h2>
+<p>Describe un escenario hipotético para cada uno de los siguientes casos, explicando por qué el método de escalado elegido sería el más apropiado:</p>
+<ol type="a">
+<li>Un escenario donde la <strong>estandarización Z-Score</strong> es preferible.</li>
+<li>Un escenario donde la <strong>normalización Min-Max</strong> es preferible.</li>
+<li>Un escenario donde el <strong>escalado robusto</strong> (usando mediana y IQR) es necesario.</li>
+</ol>
+</section>
+<section id="ejercicio-4-práctico-transformación-para-linealizar" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="ejercicio-4-práctico-transformación-para-linealizar"><span class="header-section-number">3.4</span> Ejercicio 4: Práctico (Transformación para Linealizar)</h2>
+<p>En el tema anterior vimos que la relación en el dataset <code>cars</code> (entre <code>speed</code> y <code>dist</code>) no era perfectamente lineal.</p>
+<ol type="a">
+<li>Ajusta el modelo <code>lm(dist ~ speed, data = cars)</code> y genera el gráfico de residuos vs.&nbsp;valores ajustados para confirmar visualmente la no linealidad (patrón curvo).</li>
+<li>Los apuntes sugieren que la transformación logarítmica es útil para relaciones con “rendimientos decrecientes”. Propón y aplica una transformación (ej. sobre el predictor, la respuesta, o ambos) para intentar linealizar la relación. Por ejemplo, ajusta <code>lm(log(dist) ~ speed, data = cars)</code>.</li>
+<li>Genera de nuevo el gráfico de residuos vs.&nbsp;valores ajustados para el nuevo modelo. Compara ambos diagnósticos. ¿Ha mejorado la linealidad?</li>
+</ol>
+</section>
+<section id="ejercicio-5-práctico-transformación-de-box-cox" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="ejercicio-5-práctico-transformación-de-box-cox"><span class="header-section-number">3.5</span> Ejercicio 5: Práctico (Transformación de Box-Cox)</h2>
+<p>Usa el dataset <code>Boston</code> de la librería <code>MASS</code>. La variable respuesta <code>medv</code> (valor mediano de la vivienda) es estrictamente positiva y tiene cierta asimetría.</p>
+<ol type="a">
+<li>Carga la librería <code>MASS</code> y utiliza la función <code>boxcox()</code> para encontrar el valor de <span class="math inline">\(\lambda\)</span> óptimo para la variable <code>medv</code> en un modelo simple frente a <code>lstat</code>. La fórmula sería <code>boxcox(medv ~ lstat, data = Boston)</code>.</li>
+<li>Observando el gráfico que se genera, ¿a qué valor “simple” (como -1, 0, 0.5, 1) se aproxima el <span class="math inline">\(\lambda\)</span> óptimo?</li>
+<li>Basándote en este resultado, ¿cuál de las transformaciones clásicas (logarítmica, raíz cuadrada, inversa, etc.) sería la más recomendable para la variable <code>medv</code>?</li>
+</ol>
+</section>
+<section id="ejercicio-6-conceptual-codificación-de-variables-categóricas" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="ejercicio-6-conceptual-codificación-de-variables-categóricas"><span class="header-section-number">3.6</span> Ejercicio 6: Conceptual (Codificación de Variables Categóricas)</h2>
+<p>Explica la diferencia fundamental entre la <strong>Codificación Ordinal</strong> y la <strong>Codificación One-Hot</strong>. Para cada una de las siguientes variables, indica qué método de codificación usarías y justifica tu elección:</p>
 <ul>
-<li><strong>Modelar</strong> la dependencia entre una variable respuesta y múltiples predictores en conjuntos de datos complejos.</li>
-<li><strong>Resolver</strong> problemas con iniciativa y creatividad, eligiendo las técnicas estadísticas más adecuadas para cada caso.</li>
-<li><strong>Evaluar</strong> de forma crítica las ventajas e inconvenientes de diferentes alternativas metodológicas.</li>
-<li><strong>Implementar</strong> estos modelos utilizando software estadístico profesional como R.</li>
-<li><strong>Interpretar</strong> correctamente los resultados, proponer mejoras y tomar decisiones basadas en datos.</li>
-<li><strong>Adquirir</strong> las competencias y la autonomía necesarias para emprender con éxito estudios de posgrado o proyectos profesionales en ciencia de datos.</li>
+<li><code>mes</code>: (“Enero”, “Febrero”, “Marzo”, …)</li>
+<li><code>nivel_riesgo</code>: (“Bajo”, “Medio”, “Alto”, “Crítico”)</li>
+<li><code>pais_origen</code>: (“España”, “Francia”, “Alemania”, “Italia”)</li>
 </ul>
-<p>Agradecemos a los profesores y colegas que han contribuido al desarrollo de esta asignatura y a la elaboración de este libro. Su dedicación y conocimiento han sido fundamentales para la creación de este recurso.</p>
-<p>Esperamos que esta guía te resulte útil y enriquecedora.</p>
-<p>¡Comenzamos!</p>
-<div class="callout callout-style-default callout-important callout-titled" title="Grado en Matemáticas">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Importante</span>Grado en Matemáticas
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Este libro presenta el material de la asignatura de Modelos Estadísticos para la Predicción del Grado en Matemáticas de la Universidad Rey Juan Carlos. Su contenido está fuertemente relacionado con las asignaturas de Estadística Matemática y Minería de Datos.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-important callout-titled" title="Conocimientos previos">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Importante</span>Conocimientos previos
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Es altamente recomendable que los alumnos que cursen esta materia manejen con soltura los conocimientos adquiridos en las asignaturas de Probabilidad y Estadística Matemática, así como herramientas de cálculo univariante, multivariante y álgebra lineal.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled" title="Sobre los autores">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Sobre los autores
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><strong>Víctor Aceña Gil</strong> es graduado en Matemáticas por la UNED, máster en Tratamiento Estadístico y Computacional de la Información por la UCM y la UPM, doctor en Tecnologías de la Información y las Comunicaciones por la URJC y profesor del departamento de Informática y Estadística de la URJC. Miembro del grupo de investigación de alto rendimiento en Fundamentos y Aplicaciones de la Ciencia de Datos, DSLAB, de la URJC. Pertenece al grupo de innovación docente, DSLAB-TI.</p>
-<p><strong>Isaac Martín de Diego</strong> es diplomado en Estadística por la Universidad de Valladolid (UVA), licenciado en Ciencias y Técnicas Estadísticas por la Universidad Carlos III de Madrid (UC3M), doctor en Ingeniería Matemática por la UC3M, catedrático de Ciencias de la Computación e Inteligencia Artificial del departamento de Informática y Estadística de la URJC. Es fundador y coordinador del DSLAB y del DSLAB-TI.</p>
-</div>
-</div>
-<p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" alt="Licencia de Creative Commons" style="border-width:0"></a><br>Esta obra está bajo una <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">licencia de Creative Commons Atribución-CompartirIgual 4.0 Internacional</a>.</p>
+</section>
+<section id="ejercicio-7-práctico-interacción-entre-variables-continuas" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="ejercicio-7-práctico-interacción-entre-variables-continuas"><span class="header-section-number">3.7</span> Ejercicio 7: Práctico (Interacción entre Variables Continuas)</h2>
+<p>Usa el dataset <code>mtcars</code> para investigar si el efecto del peso de un coche (<code>wt</code>) sobre su consumo (<code>mpg</code>) depende de su potencia (<code>hp</code>).</p>
+<ol type="a">
+<li>Ajusta un modelo que incluya un término de interacción entre <code>wt</code> y <code>hp</code>. Escribe la fórmula en R.</li>
+<li>Observa el <code>summary()</code> del modelo. ¿Es el término de interacción (<code>wt:hp</code>) estadísticamente significativo a un nivel de <span class="math inline">\(\alpha = 0.05\)</span>?</li>
+<li>Basándote en el signo del coeficiente de la interacción, ¿cómo cambia el efecto del peso sobre el consumo a medida que aumenta la potencia? (Es decir, ¿el efecto negativo del peso se hace más fuerte o más débil en los coches más potentes?).</li>
+</ol>
+</section>
+<section id="ejercicio-8-interpretación-de-una-interacción-continua-x-categórica" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="ejercicio-8-interpretación-de-una-interacción-continua-x-categórica"><span class="header-section-number">3.8</span> Ejercicio 8: Interpretación de una Interacción (Continua x Categórica)</h2>
+<p>Un investigador modela el salario (<code>salario</code>, en euros) en función de los años de experiencia (<code>experiencia</code>) y si el empleado tiene o no un máster (<code>master</code>, con “No” como categoría de referencia). El modelo ajustado es:</p>
+<p><code>salario = 30000 + 1200*experiencia + 8000*masterSi + 300*experiencia:masterSi</code></p>
+<ol type="a">
+<li>Escribe la ecuación de regresión específica para los empleados que <strong>no tienen</strong> un máster.</li>
+<li>Escribe la ecuación de regresión específica para los empleados que <strong>sí tienen</strong> un máster.</li>
+<li>Interpreta el coeficiente de la interacción (300). ¿Qué nos dice sobre el retorno económico de la experiencia para ambos grupos?</li>
+</ol>
+</section>
+<section id="ejercicio-9-conceptual-principio-de-jerarquía" class="level2" data-number="3.9">
+<h2 data-number="3.9" class="anchored" data-anchor-id="ejercicio-9-conceptual-principio-de-jerarquía"><span class="header-section-number">3.9</span> Ejercicio 9: Conceptual (Principio de Jerarquía)</h2>
+<p>Explica el <strong>principio de jerarquía</strong> en el contexto de los modelos de regresión con interacciones. Si un modelo incluye el término de interacción <code>A:B</code>, ¿por qué es una buena práctica incluir siempre los efectos principales <code>A</code> y <code>B</code>, incluso si sus tests t individuales no son significativos?</p>
+</section>
+<section id="ejercicio-10-conceptual-ingeniería-de-características-avanzada" class="level2" data-number="3.10">
+<h2 data-number="3.10" class="anchored" data-anchor-id="ejercicio-10-conceptual-ingeniería-de-características-avanzada"><span class="header-section-number">3.10</span> Ejercicio 10: Conceptual (Ingeniería de Características Avanzada)</h2>
+<p>Los apuntes discuten la creación de nuevas variables mediante <strong>ratios</strong> y <strong>combinaciones</strong>. Para cada uno de los siguientes escenarios, propón una nueva variable (feature) que podrías crear y explica qué relación podría capturar mejor que las variables originales por sí solas.</p>
+<ol type="a">
+<li>Para predecir la rentabilidad de una tienda, tienes las variables <code>ventas_totales</code> y <code>numero_de_empleados</code>.</li>
+<li>Para predecir el riesgo de impago de un solicitante de préstamo, tienes las variables <code>ingresos_anuales</code> y <code>deuda_total</code>.</li>
+</ol>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
-<div id="ref-harrell2015" class="csl-entry" role="listitem">
-Harrell, Frank E., Jr. 2015. <em>Regression Modeling Strategies: With Applications to Linear Models, Logistic and Ordinal Regression, and Survival Analysis</em>. Second. Springer.
-</div>
-</div>
-</section>
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -718,10 +727,13 @@ Harrell, Frank E., Jr. 2015. <em>Regression Modeling Strategies: With Applicatio
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./tema2_regresion_multiple_soluciones.html" class="pagination-link" aria-label="**Regresión Lineal Múltiple**">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title"><strong>Regresión Lineal Múltiple</strong></span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./tema0.html" class="pagination-link" aria-label="Introducción a los modelos de regresión">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introducción a los modelos de regresión</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./tema4_seleccion_validacion_soluciones.html" class="pagination-link" aria-label="**Selección de variables, Regularización y Validación**">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><strong>Selección de variables, Regularización y Validación</strong></span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

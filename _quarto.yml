@@ -4,7 +4,9 @@ project:
 
 book:
   title: "Modelos Estadísticos para la Predicción"
-  author: "Víctor Aceña - Isaac Martín"
+  author: 
+    - name: "Víctor Aceña Gil"
+    - name: "Isaac Martín de Diego"
   date: last-modified
   search: true
   chapters:
