@@ -1,3 +1,20 @@
+---
+title: "Ejercicios: Ingeniería de Características"
+subtitle: "Modelos Estadísticos de Predicción"
+author: "Víctor Aceña Gil - Isaac Martín de Diego"
+date: today
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+    embed-resources: true
+execute:
+  warning: false
+  message: false
+---
+
 ## **Ingeniería de Características**
 
 ### Ejercicio 1: Conceptual (Diagnóstico antes de Transformar)
