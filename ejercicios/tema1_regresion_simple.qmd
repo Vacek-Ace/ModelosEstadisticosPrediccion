@@ -9,6 +9,7 @@ format:
     toc-depth: 3
     code-fold: false
     theme: cosmo
+    embed-resources: true
 execute:
   warning: false
   message: false
@@ -19,7 +20,6 @@ execute:
 ### Ejercicio 1: Fundamentos Conceptuales
 
 Basándote en el texto, explica con tus propias palabras por qué un coeficiente de correlación de Pearson ($r$) alto no es suficiente para modelar una relación y por qué la regresión lineal es un paso más allá. Menciona al menos dos cosas que el modelo de regresión proporciona y que la correlación por sí sola no ofrece. 
-
 
 
 ### Ejercicio 2: Interpretación de Coeficientes
