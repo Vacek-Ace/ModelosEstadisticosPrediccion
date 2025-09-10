@@ -7,6 +7,7 @@
 % Definir colores personalizados similares al DSLAB
 \definecolor{dslab-blue}{RGB}{0, 180, 216}
 \definecolor{dslab-darkblue}{RGB}{0, 139, 159}
+\definecolor{dslab-darkerdblue}{RGB}{0, 115, 135}
 \definecolor{dslab-white}{RGB}{255, 255, 255}
 
 % Personalizar colores del tema
@@ -16,6 +17,11 @@
 \setbeamercolor{palette primary}{bg=dslab-blue, fg=dslab-white}
 \setbeamercolor{palette secondary}{bg=dslab-darkblue, fg=dslab-white}
 \setbeamercolor{palette tertiary}{bg=dslab-blue, fg=dslab-white}
+
+% Colores específicos para el footer
+\setbeamercolor{author in head/foot}{bg=dslab-darkerdblue, fg=dslab-white}
+\setbeamercolor{title in head/foot}{bg=dslab-darkblue, fg=dslab-white}
+\setbeamercolor{date in head/foot}{bg=dslab-blue, fg=dslab-white}
 
 % Configurar fuentes
 \setbeamerfont{frametitle}{size=\Large, series=\bfseries}
@@ -45,15 +51,18 @@
   \setbeamertemplate{footline}{
     \leavevmode%
     \hbox{%
-      \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,left]{author in head/foot}%
-        \usebeamerfont{author in head/foot}\hspace{1em}#1
+      \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+        \usebeamerfont{author in head/foot}#1
       \end{beamercolorbox}%
       \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
         \usebeamerfont{title in head/foot}#2
       \end{beamercolorbox}%
-      \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+      \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex]{date in head/foot}%
+        \hfill
         \usebeamerfont{date in head/foot}#3
-        \insertframenumber{} / \inserttotalframenumber\hspace{1em}
+        \hfill
+        \insertframenumber{} / \inserttotalframenumber
+        \hspace{1em}
       \end{beamercolorbox}%
     }%
     \vskip0pt%
@@ -62,7 +71,7 @@
 
 % Comando específico para Modelos Estadísticos
 \newcommand{\modelosfootline}{
-  \dslabfootline{Modelos Estadísticos}{Predicción}{Curso 2025-2026}
+  \dslabfootline{Víctor Aceña - Isaac Martín (DSLAB)}{Modelos Estadísticos para la Predicción}{Curso 2025-2026}
 }
 
 % Configuración adicional para mejorar la apariencia

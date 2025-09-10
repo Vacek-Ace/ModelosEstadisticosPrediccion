@@ -58,17 +58,27 @@ Seguiremos el **ciclo completo** de un proyecto de modelado: exploración → fo
 
 # Ejemplo Motivador: Los Datos
 
+::::: columns
+:::: {.column width="50%"}
 **Pregunta de investigación:** ¿Influye el tiempo de estudio semanal en las calificaciones finales?
 
+\vspace{0.3cm}
+
 **Simulación de datos realista:**
+
 - 100 estudiantes universitarios
 - Tiempo de estudio: entre 5 y 40 horas/semana
 - Calificaciones: escala de 0 a 10 puntos
 
+\vspace{0.3cm}
+
+**Pregunta:** ¿Qué patrón observas en los datos?
+::::
+:::: {.column width="50%"}
 ```{r datos-estudio}
-#| fig-width: 4.5
-#| fig-height: 3.2
-#| out-width: "65%"
+#| fig-width: 5
+#| fig-height: 4
+#| out-width: "100%"
 #| fig-align: center
 # Cargar librerías
 library(ggplot2)
@@ -84,23 +94,24 @@ datos$Calificaciones <- round(5 + 0.1 * datos$Tiempo_Estudio + rnorm(100, mean =
 ggplot(datos, aes(x = Tiempo_Estudio, y = Calificaciones)) +
   geom_point(color = "#0072B2", alpha = 0.7, size = 2) +
   labs(
-    title = "Datos: Tiempo de Estudio vs. Calificaciones",
+    title = "Tiempo de Estudio vs. Calificaciones",
     x = "Tiempo de Estudio (horas/semana)",
     y = "Calificaciones (promedio)"
   ) +
-  theme_classic(base_size = 12)
+  theme_classic(base_size = 11) +
+  theme(plot.title = element_text(size = 12))
 ```
-
-**Pregunta:** ¿Qué patrón observas en los datos?
+::::
+:::::
 
 # Ejemplo Motivador: Primera Observación
 
-**Lo que vemos en el gráfico anterior:**
-
+::::: columns
+:::: {.column width="65%"}
 ```{r datos-con-tendencia}
-#| fig-width: 4.5
-#| fig-height: 3.2
-#| out-width: "70%"
+#| fig-width: 5.5
+#| fig-height: 4
+#| out-width: "100%"
 #| fig-align: center
 # Cargar librerías
 library(ggplot2)
@@ -110,15 +121,34 @@ ggplot(datos, aes(x = Tiempo_Estudio, y = Calificaciones)) +
   geom_point(color = "#0072B2", alpha = 0.7, size = 2) +
   geom_smooth(method = "lm", se = FALSE, color = "red", linewidth = 1.2) +
   labs(
-    title = "Relación entre Tiempo de Estudio y Calificaciones",
+    title = "Tiempo de Estudio vs. Calificaciones",
     x = "Tiempo de Estudio (horas/semana)",
     y = "Calificaciones (promedio)",
     caption = "Línea roja: tendencia lineal"
   ) +
-  theme_classic(base_size = 12)
+  theme_classic(base_size = 11) +
+  theme(plot.title = element_text(size = 12))
 ```
+::::
+:::: {.column width="35%"}
 
-**Observación clave:** Clara tendencia lineal positiva → Justifica un modelo de regresión lineal
+\vspace{1cm}
+
+- **Tendencia clara:** A más tiempo de estudio, mejores calificaciones
+
+\vspace{0.5cm}
+
+- **Relación lineal:** Los puntos siguen aproximadamente una línea recta
+
+\vspace{0.5cm}
+
+- **Dirección positiva:** Pendiente ascendente
+
+\vspace{0.5cm}
+
+**Conclusión:** La tendencia lineal positiva justifica un modelo de regresión lineal.
+::::
+:::::
 
 # Paso 1: Exploración Visual - El Gráfico de Dispersión
 
@@ -163,10 +193,12 @@ $$r = r_{xy} = \frac{s_{xy}}{s_x s_y}$$
 
 # Cuantificación en Nuestro Ejemplo
 
+::::: columns
+:::: {.column width="60%"}
 ```{r cuantificacion}
-#| fig-width: 4.5
-#| fig-height: 3.2
-#| out-width: "70%"
+#| fig-width: 5.5
+#| fig-height: 4
+#| out-width: "100%"
 #| fig-align: center
 # Cargar librerías
 library(ggplot2)
@@ -184,11 +216,33 @@ ggplot(datos, aes(x = Tiempo_Estudio, y = Calificaciones)) +
     x = "Tiempo de Estudio (horas/semana)",
     y = "Calificaciones (promedio)"
   ) +
-  theme_classic(base_size = 12)
+  theme_classic(base_size = 11) +
+  theme(plot.title = element_text(size = 12))
 ```
+::::
+:::: {.column width="40%"}
 
-- **Covarianza**: `r round(covarianza, 2)` (difícil de interpretar por las unidades)
-- **Correlación**: **`r round(correlacion, 3)`** (asociación lineal muy fuerte y positiva)
+\vspace{1cm}
+
+**Resultados del análisis:**
+
+\vspace{0.5cm}
+
+- **Covarianza**: `r round(covarianza, 2)` 
+  
+  (difícil de interpretar por las unidades)
+
+\vspace{0.5cm}
+
+- **Correlación**: **`r round(correlacion, 3)`** 
+  
+  (asociación lineal muy fuerte y positiva)
+
+\vspace{0.5cm}
+
+La línea roja muestra la **tendencia lineal** de los datos.
+::::
+:::::
 
 # Correlación NO Implica Causalidad
 
@@ -310,15 +364,44 @@ $$\frac{\partial \text{SSE}}{\partial \beta_1} = -2 \sum_{i=1}^{n} x_i (y_i - \b
 
 **Resolviendo el sistema (ecuaciones normales):**
 
+Al resolver estas ecuaciones simultáneamente, obtenemos las fórmulas de MCO.
+
+# Fórmulas Finales de MCO
+
+::::: columns
+:::: {.column width="50%"}
 **Fórmula para la pendiente:**
-$$\hat{\beta}_1 = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^{n}(x_i - \bar{x})^2} = \frac{s_{xy}}{s_{xx}} = \frac{\text{Covarianza muestral}}{\text{Varianza muestral de } X}$$
+$$\hat{\beta}_1 = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^{n}(x_i - \bar{x})^2}$$
+
+$$= \frac{s_{xy}}{s_{xx}} = \frac{\text{Covarianza muestral}}{\text{Varianza muestral de } X}$$
+
+\vspace{0.5cm}
 
 **Fórmula para el intercepto:**
 $$\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}$$
-
+::::
+:::: {.column width="50%"}
 **Notación:**
-- $s_{xy} = \sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})$ (suma de productos cruzados)
-- $s_{xx} = \sum_{i=1}^{n}(x_i - \bar{x})^2$ (suma de cuadrados de $X$)
+
+\vspace{0.3cm}
+
+- $s_{xy} = \sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})$ 
+  
+  (suma de productos cruzados)
+
+\vspace{0.3cm}
+
+- $s_{xx} = \sum_{i=1}^{n}(x_i - \bar{x})^2$ 
+  
+  (suma de cuadrados de $X$)
+
+\vspace{0.3cm}
+
+**Interpretación intuitiva:**
+
+La pendiente es la razón entre la covariación de $X$ e $Y$ y la variación de $X$.
+::::
+:::::
 
 # Propiedades de las Predicciones
 
@@ -370,10 +453,12 @@ Una vez estimados, los coeficientes tienen interpretación concreta y práctica:
 
 # Aplicación: Ajuste del Modelo en Nuestro Ejemplo
 
+::::: columns
+:::: {.column width="55%"}
 ```{r ajuste-modelo}
 #| fig-width: 4.5
-#| fig-height: 3.2
-#| out-width: "70%"
+#| fig-height: 3.5
+#| out-width: "100%"
 #| fig-align: center
 # Cargar librerías
 library(ggplot2)
@@ -387,18 +472,39 @@ coef_pendiente <- coef(modelo_estudio)[2]
 
 # Visualización del modelo ajustado
 ggplot(datos, aes(x = Tiempo_Estudio, y = Calificaciones)) +
-  geom_point(color = "#0072B2", alpha = 0.7, size = 2) +
+  geom_point(color = "#0072B2", alpha = 0.7, size = 1.5) +
   geom_smooth(method = "lm", se = FALSE, color = "red", linewidth = 1.2) +
   labs(
-    title = paste("Calificaciones =", 
-                  round(coef_intercepto, 3), "+", round(coef_pendiente, 3), "× Tiempo_Estudio"),
+    title = "Modelo Ajustado",
     x = "Tiempo de Estudio (horas/semana)",
     y = "Calificaciones (promedio)"
   ) +
-  theme_classic(base_size = 12)
+  theme_classic(base_size = 10) +
+  theme(plot.title = element_text(size = 11))
 ```
+::::
+:::: {.column width="45%"}
 
-**Interpretación:** Por cada hora adicional de estudio, la calificación aumenta en promedio `r round(coef_pendiente, 3)` puntos.
+
+
+**Ecuación del modelo:**
+$$\text{Calificaciones} = `r round(coef_intercepto, 3)` + `r round(coef_pendiente, 3)` \times \text{Tiempo\_Estudio}$$
+
+**Interpretación de coeficientes:**
+
+\vspace{0.3cm}
+
+- **Intercepto** ($\hat{\beta}_0 = `r round(coef_intercepto, 3)`$): Calificación esperada con 0 horas de estudio
+
+\vspace{0.3cm}
+
+- **Pendiente** ($\hat{\beta}_1 = `r round(coef_pendiente, 3)`$): Por cada hora adicional de estudio, la calificación aumenta en promedio `r round(coef_pendiente, 3)` puntos
+
+\vspace{0.3cm}
+
+**Conclusión:** Relación positiva y significativa entre tiempo de estudio y calificaciones.
+::::
+:::::
 
 # Propiedades de los Estimadores de MCO
 
@@ -407,23 +513,45 @@ Bajo los supuestos de Gauss-Markov, los estimadores MCO son **MELI** (Mejores Es
 **1. Insesgadez:**
 $$E[\hat{\beta}_0] = \beta_0 \quad \text{y} \quad E[\hat{\beta}_1] = \beta_1$$
 
-**2. Varianza mínima:** Entre todos los estimadores lineales insesgados
+Los estimadores MCO son **correctos en promedio** - no tienen sesgo sistemático.
 
-**3. Varianzas conocidas:**
+**2. Varianza mínima:** 
 
+Entre todos los estimadores lineales insesgados, los MCO tienen la menor varianza posible.
+
+**3. Varianzas conocidas:** 
+
+Las varianzas de los estimadores tienen formas matemáticas específicas y conocidas.
+
+# Varianzas de los Estimadores de MCO
+
+::::: columns
+:::: {.column width="50%"}
 **Para la pendiente:**
 $$Var(\hat{\beta}_1) = \frac{\sigma^2}{\sum_{i=1}^{n}(x_i - \bar{x})^2} = \frac{\sigma^2}{S_{xx}}$$
 
-donde $S_{xx} = \sum_{i=1}^{n}(x_i - \bar{x})^2$ es la suma de cuadrados de $X$
+donde $S_{xx} = \sum_{i=1}^{n}(x_i - \bar{x})^2$
 
-**Para el intercepto:**
-$$Var(\hat{\beta}_0) = \sigma^2 \left[ \frac{1}{n} + \frac{\bar{x}^2}{S_{xx}} \right] = \sigma^2 \left[ \frac{1}{n} + \frac{\bar{x}^2}{\sum_{i=1}^{n}(x_i - \bar{x})^2} \right]$$
+\vspace{0.5cm}
 
 **Interpretación:**
-- $Var(\hat{\beta}_1)$ disminuye con mayor dispersión en $X$ (mayor $S_{xx}$)
-- $Var(\hat{\beta}_0)$ aumenta cuando $\bar{x}$ está lejos de cero
 
-**4. Teorema de Gauss-Markov:** Los estimadores MCO son **óptimos** (menor varianza posible)
+- $Var(\hat{\beta}_1)$ disminuye con mayor dispersión en $X$ (mayor $S_{xx}$)
+- Más datos esparcidos → mejor estimación de la pendiente
+::::
+:::: {.column width="50%"}
+**Para el intercepto:**
+$$Var(\hat{\beta}_0) = \sigma^2 \left[ \frac{1}{n} + \frac{\bar{x}^2}{S_{xx}} \right]$$
+
+\vspace{0.5cm}
+
+**Interpretación:**
+
+- $Var(\hat{\beta}_0)$ aumenta cuando $\bar{x}$ está lejos de cero
+- El intercepto se estima mejor cuando $\bar{x}$ está cerca de cero
+- Mayor tamaño de muestra ($n$) reduce la varianza
+::::
+:::::
 
 # Estimación de la Varianza del Error
 
@@ -433,6 +561,7 @@ Las fórmulas de varianza dependen de $\sigma^2$ (desconocida). La estimamos con
 $$\hat{\sigma}^2 = \text{MSE} = \frac{\text{SSE}}{n-2} = \frac{\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}{n-2}$$
 
 **¿Por qué $n-2$?**
+
 - Son los **grados de libertad del error**
 - Hemos "gastado" 2 grados de libertad estimando $\beta_0$ y $\beta_1$
 
@@ -583,7 +712,7 @@ $$F = \frac{\text{SSR \text{ grande}}}{\text{MSE}} >> 1$$
 **El estadístico F resume todo:** 
 $$F = \frac{\text{Variabilidad explicada por df}}{\text{Variabilidad no explicada por df}} = \frac{MSR}{MSE}$$
 
-**Equivalencia importante:** En regresión simple, $F = t^2$ donde $t$ es el estadístico para contrastar $\beta_1 = 0$
+En regresión simple, $F = t^2$ donde $t$ es el estadístico para contrastar $\beta_1 = 0$
 
 # Bondad del Ajuste: Coeficiente de Determinación ($R^2$)
 
@@ -687,11 +816,12 @@ $$\hat{y}_0 \pm t_{\alpha/2, n-2} \cdot \sqrt{\text{MSE} \left( 1 + \frac{1}{n} 
 
 # Visualización de los Intervalos de Predicción
 
+::::: columns
+::: {.column width="62%"}
 ```{r prediccion-visual}
-#| fig-width: 4.5
-#| fig-height: 3.2
-#| out-width: "75%"
-#| fig-align: center
+#| fig-width: 4.8
+#| fig-height: 3.6
+#| out-width: "100%"
 # Cargar librerías
 library(ggplot2)
 
@@ -720,8 +850,26 @@ ggplot() +
     y = "Calificaciones (promedio)",
     caption = "IC 95% para la media (azul) vs IP 95% para nueva observación (rojo)"
   ) +
-  theme_classic(base_size = 12)
+  theme_classic(base_size = 14)
 ```
+:::
+
+\vspace{0.5cm}
+
+::: {.column width="36%"}
+**Interpretación gráfica:**
+
+- **Banda azul (IC)**: Incertidumbre sobre la **media poblacional**
+
+- **Banda roja (IP)**: Incertidumbre para **nueva observación**
+
+- **Diferencia clave**: IP incluye variabilidad individual ($\sigma^2$)
+
+- **Patrón**: Ambos intervalos se estrechan cerca de $\bar{x}$
+
+- **Aplicación**: Usar IC para estimar tendencia, IP para predicciones individuales
+:::
+:::::
 
 # El Diagnóstico del Modelo: Fundamento Teórico
 
@@ -773,12 +921,12 @@ El diagnóstico **NO es opcional**. Las inferencias estadísticas (p-valores, in
 
 # Violación del supuesto: NO Linealidad
 
-**Problema:** Ajustar un modelo lineal a datos con relación cuadrática
-
+::::: columns
+:::: {.column width="65%"}
 ```{r ejemplo-no-linealidad}
-#| fig-width: 4.5
-#| fig-height: 3.2
-#| out-width: "70%"
+#| fig-width: 5.5
+#| fig-height: 4
+#| out-width: "100%"
 #| fig-align: center
 # Crear datos con relación cuadrática
 set.seed(456)
@@ -801,19 +949,48 @@ ggplot(data.frame(ajustados = ajustados_malos, residuos = residuos_malos),
   labs(
     title = "PROBLEMA: Residuos con Patrón Curvo",
     x = "Valores Ajustados", y = "Residuos",
-    caption = "La línea roja curvada indica violación de linealidad"
+    caption = "Línea roja curvada = violación de linealidad"
   ) +
-  theme_classic(base_size = 12)
+  theme_classic(base_size = 11) +
+  theme(plot.title = element_text(size = 12))
 ```
+::::
+:::: {.column width="35%"}
 
-**Diagnóstico:** Patrón curvo en residuos → **NO linealidad**
+\vspace{0.5cm}
+
+**Problema detectado:**
+
+Ajustar un modelo **lineal** a datos con relación **cuadrática**
+
+\vspace{0.5cm}
+
+**¿Qué observamos?**
+
+- **Patrón curvo** en los residuos
+- Los residuos no están aleatoriamente dispersos
+- La línea suavizada (roja) no es horizontal
+
+\vspace{0.5cm}
+
+**Diagnóstico:** 
+
+Patrón sistemático en residuos → **Violación de linealidad**
+
+\vspace{0.5cm}
+
+**Solución:** Considerar términos cuadráticos o transformaciones
+::::
+:::::
 
 # Verificación de linealidad
 
+::::: columns
+:::: {.column width="65%"}
 ```{r diagnostico-linealidad}
-#| fig-width: 4.5
-#| fig-height: 3.2
-#| out-width: "70%"
+#| fig-width: 5.5
+#| fig-height: 4
+#| out-width: "100%"
 #| fig-align: center
 # Cargar librerías
 library(ggplot2)
@@ -829,20 +1006,34 @@ ggplot(datos_diag, aes(x = valores_ajustados, y = residuos)) +
   geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
   geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.8) +
   labs(
-    title = "Diagnóstico de Linealidad: Residuos vs Valores Ajustados",
+    title = "Diagnóstico de Linealidad",
     x = "Valores Ajustados", y = "Residuos"
   ) +
-  theme_classic(base_size = 12)
+  theme_classic(base_size = 11) +
+  theme(plot.title = element_text(size = 12))
 
 # Test de Ramsey RESET
 library(lmtest)
 reset_test <- resettest(modelo_estudio, power = 2:3, type = "fitted")
 ```
+::::
+:::: {.column width="35%"}
+
+\vspace{0.5cm}
+
+**¿Qué evaluar?**
+
+Si la relación es verdaderamente lineal
+
+\vspace{0.5cm}
+
 
 **Resultados:** 
 
-- **Gráfico:** Línea roja prácticamente plana → Linealidad
+- **Gráfico:** Línea roja prácticamente plana → Linealidad ✓
 - **Test RESET:** F = `r round(reset_test$statistic, 3)`, p = `r round(reset_test$p.value, 3)` → Forma funcional correcta
+::::
+:::::
 
 
 # Diagnóstico: Homocedasticidad
@@ -866,13 +1057,12 @@ reset_test <- resettest(modelo_estudio, power = 2:3, type = "fitted")
 
 # Violación del Supuesto: NO Homocedasticidad
 
-**Problema:** Varianza de los errores que aumenta con los valores predichos (heterocedasticidad)
-
+::::: columns
+::: {.column width="63%"}
 ```{r ejemplo-heterocedasticidad}
-#| fig-width: 4.5
-#| fig-height: 3.2
-#| out-width: "70%"
-#| fig-align: center
+#| fig-width: 4.8
+#| fig-height: 3.6
+#| out-width: "100%"
 # Crear datos con heterocedasticidad (varianza creciente)
 set.seed(789)
 x_hetero <- seq(1, 10, length.out = 100)
@@ -898,18 +1088,35 @@ ggplot(data.frame(ajustados = valores_ajustados_hetero, residuos_sqrt = residuos
     y = expression(sqrt("|Residuos Estandarizados|")),
     caption = "La línea roja ascendente indica heterocedasticidad"
   ) +
-  theme_classic(base_size = 12)
+  theme_classic(base_size = 14)
 ```
+:::
 
-**Diagnóstico:** Tendencia creciente → **Heterocedasticidad** (violación de varianza constante)
+\vspace{0.5cm}
+
+::: {.column width="35%"}
+**Problema:** Varianza de los errores que aumenta con los valores predichos (heterocedasticidad)
+
+**¿Qué observamos?**
+
+- **Línea roja ascendente**: Claro patrón de aumento de varianza
+
+- **Dispersión creciente**: Los residuos se dispersan más para valores altos
+
+- **Violación**: Supuesto de varianza constante **NO** se cumple
+
+**Diagnóstico:** Tendencia creciente → **Heterocedasticidad**
+:::
+:::::
 
 # Verficación de homocedasticidad
 
+::::: columns
+::: {.column width="60%"}
 ```{r diagnostico-homocedasticidad}
-#| fig-width: 4.5
-#| fig-height: 3.2
-#| out-width: "70%"
-#| fig-align: center
+#| fig-width: 4.6
+#| fig-height: 3.5
+#| out-width: "100%"
 # Cargar librerías
 library(ggplot2)
 library(lmtest)
@@ -928,50 +1135,93 @@ ggplot(datos_scale, aes(x = valores_ajustados, y = residuos_std_sqrt)) +
     x = "Valores Ajustados", 
     y = expression(sqrt("|Residuos Estandarizados|"))
   ) +
-  theme_classic(base_size = 12)
+  theme_classic(base_size = 14)
 
 # Prueba de Breusch-Pagan
 bp_test <- bptest(modelo_estudio)
 white_test <- bptest(modelo_estudio, ~ fitted(modelo_estudio) + I(fitted(modelo_estudio)^2))
 ```
+:::
 
-**Resultados:**
+\vspace{0.5cm}
 
-- **Gráfico:** Línea roja horizontal → Varianza constante
-- **Breusch-Pagan:** LM = `r round(bp_test$statistic, 3)`, p = `r round(bp_test$p.value, 3)` → Homocedasticidad  
-- **White:** LM = `r round(white_test$statistic, 3)`, p = `r round(white_test$p.value, 3)` → Varianza constante
+::: {.column width="38%"}
+**Tests estadísticos:**
+
+**Breusch-Pagan:** 
+
+- LM = `r round(bp_test$statistic, 3)`
+- p = `r round(bp_test$p.value, 3)` 
+- **Conclusión**: Homocedasticidad ✓
+
+**White:** 
+
+- LM = `r round(white_test$statistic, 3)`
+- p = `r round(white_test$p.value, 3)` 
+- **Conclusión**: Varianza constante ✓
+
+**Interpretación gráfica:**
+
+- Línea roja horizontal → Varianza constante
+- Sin patrones sistemáticos → Supuesto cumplido
+:::
+:::::
 
 # Diagnóstico: Normalidad
 
+::::: columns
+::: {.column width="50%"}
 **Supuesto:** $\varepsilon_i \sim N(0, \sigma^2)$ (errores normalmente distribuidos)
 
 **Métodos de Diagnóstico:**
-- **Gráficos:** Normal Q-Q Plot, Histograma de residuos
-- **Tests estadísticos:** Test de Shapiro-Wilk, Test de Jarque-Bera, Test de Anderson-Darling
 
-**¿Qué buscamos?**
-- **Q-Q Plot ideal:** Puntos sobre la línea diagonal
-- **Violación:** Desviaciones sistemáticas de la línea (colas pesadas, asimetría)
+**Gráficos:** 
 
-**Tests de Normalidad:**
-- **Shapiro-Wilk:** H$_0$: Los residuos siguen distribución normal
-- **Jarque-Bera:** Basado en asimetría y curtosis
-- **Anderson-Darling:** Más sensible en las colas de la distribución
+- Normal Q-Q Plot
+- Histograma de residuos
 
-**¿Qué buscamos?**
+**Tests estadísticos:** 
 
-- **Patrón ideal:** Puntos siguen la línea diagonal
-- **Violación:** Desviaciones sistemáticas de la línea (colas pesadas, asimetría)
+- Test de Shapiro-Wilk
+- Test de Jarque-Bera 
+- Test de Anderson-Darling
+
+**¿Qué buscamos en Q-Q Plot?**
+
+- **Ideal:** Puntos sobre la línea diagonal
+- **Problema:** Desviaciones sistemáticas
+:::
+
+\vspace{0.5cm}
+
+::: {.column width="48%"}
+**Detalles de los Tests:**
+
+**Shapiro-Wilk:**
+
+- H$_0$: Los residuos siguen distribución normal
+- Más potente para muestras pequeñas (n < 50)
+
+**Jarque-Bera:**
+
+- Basado en asimetría y curtosis
+- Asintóticamente válido para muestras grandes
+
+**Anderson-Darling:**
+
+- Más sensible en las colas de la distribución
+- Mejor detección de desviaciones extremas
+:::
+:::::
 
 # Violación del Supuesto: NO Normalidad
 
-**Problema:** Errores con distribución asimétrica o con colas pesadas
-
+::::: columns
+::: {.column width="62%"}
 ```{r ejemplo-no-normalidad}
-#| fig-width: 4.5
-#| fig-height: 3.2
-#| out-width: "70%"
-#| fig-align: center
+#| fig-width: 4.8
+#| fig-height: 3.6
+#| out-width: "100%"
 # Crear datos con errores no normales (distribución sesgada)
 set.seed(321)
 x_normal <- seq(1, 10, length.out = 50)
@@ -994,20 +1244,35 @@ ggplot(data.frame(residuos = residuos_sesgados), aes(sample = residuos)) +
     y = "Cuantiles de la Muestra",
     caption = "Puntos se desvían de la línea → No normalidad"
   ) +
-  theme_classic(base_size = 12)
+  theme_classic(base_size = 14)
 ```
+:::
+
+\vspace{0.5cm}
+
+::: {.column width="36%"}
+**Problema:** Errores con distribución asimétrica o con colas pesadas
+
+**¿Qué observamos?**
+
+- **Desviación sistemática**: Los puntos no siguen la línea diagonal
+
+- **Curvatura**: Patrón curvo indica distribución sesgada
+
+- **Violación**: Supuesto de normalidad **NO** se cumple
 
 **Diagnóstico:** Puntos se alejan sistemáticamente de la línea → **NO normalidad**
+:::
+:::::
 
 # Violación del Supuesto: Histograma NO Normal
 
-**Problema:** Distribución asimétrica de los residuos (histograma sesgado)
-
+::::: columns
+::: {.column width="62%"}
 ```{r ejemplo-histograma-no-normal}
-#| fig-width: 4.5
-#| fig-height: 3.2
-#| out-width: "70%"
-#| fig-align: center
+#| fig-width: 4.8
+#| fig-height: 3.6
+#| out-width: "100%"
 # Histograma de residuos no normales con curva normal superpuesta
 ggplot(data.frame(residuos = residuos_sesgados), aes(x = residuos)) +
   geom_histogram(aes(y = after_stat(density)), bins = 12, fill = "#D55E00", 
@@ -1021,21 +1286,38 @@ ggplot(data.frame(residuos = residuos_sesgados), aes(x = residuos)) +
     y = "Densidad",
     caption = "Azul: normal teórica vs Naranja: datos reales sesgados"
   ) +
-  theme_classic(base_size = 12)
+  theme_classic(base_size = 14)
 
 # Test de normalidad fallando
 shapiro_malo <- shapiro.test(residuos_sesgados)
 ```
+:::
 
-**Diagnóstico:** Distribución sesgada $\neq$ curva normal (p = `r round(shapiro_malo$p.value, 3)`) → **NO normalidad**
+\vspace{0.5cm}
+
+::: {.column width="36%"}
+**Problema:** Distribución asimétrica de los residuos (histograma sesgado)
+
+**¿Qué observamos?**
+
+- **Asimetría**: Distribución sesgada hacia la derecha
+
+- **Desajuste**: Curva normal (azul) no coincide con histograma
+
+- **Test Shapiro-Wilk**: p = `r round(shapiro_malo$p.value, 3)` < 0.05
+
+**Diagnóstico:** Distribución sesgada ≠ curva normal → **NO normalidad**
+:::
+:::::
 
 # Verificación de normalidad
 
+::::: columns
+::: {.column width="60%"}
 ```{r diagnostico-normalidad-qq}
-#| fig-width: 4.5
-#| fig-height: 3.2
-#| out-width: "70%"
-#| fig-align: center
+#| fig-width: 4.6
+#| fig-height: 3.5
+#| out-width: "100%"
 # Cargar librerías
 library(ggplot2)
 
@@ -1050,7 +1332,7 @@ ggplot(data.frame(residuos = residuos), aes(sample = residuos)) +
     x = "Cuantiles Teóricos", 
     y = "Cuantiles de la Muestra"
   ) +
-  theme_classic(base_size = 12)
+  theme_classic(base_size = 14)
 
 # Prueba de Shapiro-Wilk
 sw_test <- shapiro.test(residuals(modelo_estudio))
@@ -1058,28 +1340,39 @@ sw_test <- shapiro.test(residuals(modelo_estudio))
 library(tseries)
 jb_test <- jarque.bera.test(residuals(modelo_estudio))
 ```
+:::
 
-**Resultados:**
-- **Gráfico:** Puntos siguen la línea diagonal → Normalidad
-- **Shapiro-Wilk:** W = `r round(sw_test$statistic, 3)`, p = `r round(sw_test$p.value, 3)` → Normalidad
-- **Jarque-Bera:** JB = `r round(jb_test$statistic, 3)`, p = `r round(jb_test$p.value, 3)` → Normalidad
+\vspace{0.5cm}
+
+::: {.column width="38%"}
+**Tests estadísticos:**
+
+**Shapiro-Wilk:** 
+
+- W = `r round(sw_test$statistic, 3)`
+- p = `r round(sw_test$p.value, 3)`
+- **Conclusión**: Normalidad ✓
+
+**Jarque-Bera:** 
+
+- JB = `r round(jb_test$statistic, 3)`
+- p = `r round(jb_test$p.value, 3)`
+- **Conclusión**: Normalidad ✓
+
+**Interpretación gráfica:**
+
+- Puntos siguen la línea diagonal → Normalidad cumplida
+:::
+:::::
 
 # Diagnóstico: Normalidad (Histograma)
 
-**Complemento visual:** Histograma de residuos con curva normal superpuesta
-
-**¿Qué buscamos?**
-
-- **Patrón ideal:** Distribución simétrica y campaniforme
-- **Violación:** Asimetría marcada o múltiples modas
-
-# Verificación de normalidad
-
+::::: columns
+::: {.column width="62%"}
 ```{r diagnostico-normalidad-hist}
-#| fig-width: 4.5
-#| fig-height: 3.2
-#| out-width: "70%"
-#| fig-align: center
+#| fig-width: 4.8
+#| fig-height: 3.6
+#| out-width: "100%"
 # Cargar librerías
 library(ggplot2)
 
@@ -1098,10 +1391,24 @@ ggplot(data.frame(residuos = residuos), aes(x = residuos)) +
     y = "Densidad",
     caption = "Línea roja: distribución normal teórica"
   ) +
-  theme_classic(base_size = 12)
+  theme_classic(base_size = 14)
 ```
+:::
+
+\vspace{0.5cm}
+
+::: {.column width="36%"}
+**Complemento visual:** Histograma de residuos con curva normal superpuesta
+
+**¿Qué buscamos?**
+
+- **Patrón ideal:** Distribución simétrica y campaniforme
+
+- **Violación:** Asimetría marcada o múltiples modas
 
 **Resultado:** Distribución simétrica y campaniforme → Normalidad confirmada
+:::
+:::::
 
 # Diagnóstico: Independencia
 
@@ -1125,13 +1432,12 @@ ggplot(data.frame(residuos = residuos), aes(x = residuos)) +
 
 # Violación del Supuesto: NO Independencia
 
-**Problema:** Residuos con autocorrelación (típico en series temporales)
-
+::::: columns
+::: {.column width="62%"}
 ```{r ejemplo-no-independencia}
-#| fig-width: 4.5
-#| fig-height: 3.2
-#| out-width: "70%"
-#| fig-align: center
+#| fig-width: 4.8
+#| fig-height: 3.6
+#| out-width: "100%"
 # Crear datos con autocorrelación en los errores
 set.seed(654)
 n_tiempo <- 100
@@ -1162,18 +1468,33 @@ ggplot(data.frame(orden = 1:n_tiempo, residuos = residuos_tiempo),
     x = "Orden de Observación", y = "Residuos",
     caption = "Patrones y tendencias indican falta de independencia"
   ) +
-  theme_classic(base_size = 12)
+  theme_classic(base_size = 14)
 ```
+:::
+
+\vspace{0.5cm}
+
+::: {.column width="36%"}
+**Problema:** Residuos con autocorrelación (típico en series temporales)
+
+**¿Qué observamos?**
+
+- **Patrones sistemáticos**: Los residuos muestran tendencias claras
+- **Conexiones**: Residuos consecutivos están correlacionados
+- **Violación**: Supuesto de independencia **NO** se cumple
 
 **Diagnóstico:** Patrones sistemáticos y tendencias → **NO independencia**
+:::
+:::::
 
 # Verificación de Independencia
 
+::::: columns
+::: {.column width="60%"}
 ```{r diagnostico-independencia}
-#| fig-width: 4.5
-#| fig-height: 3.2
-#| out-width: "70%"
-#| fig-align: center
+#| fig-width: 4.6
+#| fig-height: 3.5
+#| out-width: "100%"
 # Cargar librerías
 library(ggplot2)
 library(lmtest)
@@ -1192,18 +1513,37 @@ ggplot(datos_orden, aes(x = orden, y = residuos)) +
     title = "Diagnóstico de Independencia: Residuos vs Orden",
     x = "Orden de observación", y = "Residuos"
   ) +
-  theme_classic(base_size = 12)
+  theme_classic(base_size = 14)
 
 # Prueba de Durbin-Watson
 dw_test <- dwtest(modelo_estudio)
 # Test de Breusch-Godfrey
 bg_test <- bgtest(modelo_estudio, order = 2)
 ```
+:::
 
-**Resultados:**
-- **Gráfico:** Sin patrones temporales → Independencia
-- **Durbin-Watson:** DW = `r round(dw_test$statistic, 3)`, p = `r round(dw_test$p.value, 3)` → Sin autocorrelación orden 1
-- **Breusch-Godfrey:** LM = `r round(bg_test$statistic, 3)`, p = `r round(bg_test$p.value, 3)` → Sin autocorrelación orden 2
+\vspace{0.5cm}
+
+::: {.column width="38%"}
+**Tests estadísticos:**
+
+**Durbin-Watson:** 
+
+- DW = `r round(dw_test$statistic, 3)`
+- p = `r round(dw_test$p.value, 3)`
+- **Conclusión**: Sin autocorrelación orden 1 ✓
+
+**Breusch-Godfrey:** 
+
+- LM = `r round(bg_test$statistic, 3)`
+- p = `r round(bg_test$p.value, 3)`
+- **Conclusión**: Sin autocorrelación orden 2 ✓
+
+**Interpretación gráfica:**
+
+- Sin patrones temporales → Independencia cumplida
+:::
+:::::
 
 # Diagnóstico 5: Observaciones Influyentes
 
@@ -1229,11 +1569,12 @@ bg_test <- bgtest(modelo_estudio, order = 2)
 
 # Diagnóstico: Observaciones Influyentes
 
+::::: columns
+::: {.column width="64%"}
 ```{r diagnostico-influencia}
-#| fig-width: 4.5
-#| fig-height: 3.2
-#| out-width: "70%"
-#| fig-align: center
+#| fig-width: 4.9
+#| fig-height: 3.7
+#| out-width: "100%"
 # Cargar librerías
 library(ggplot2)
 
@@ -1297,7 +1638,7 @@ ggplot(datos_leverage, aes(x = leverage, y = residuos_stud)) +
     y = "Residuos Estudentizados",
     caption = "Curvas rojas: Cook 0.5 (discontinua) y 1.0 (continua)"
   ) +
-  theme_classic(base_size = 12)
+  theme_classic(base_size = 14)
 
 # Identificar observaciones problemáticas
 high_leverage <- which(leverage_vals > leverage_threshold)
@@ -1309,12 +1650,25 @@ max_leverage <- max(leverage_vals)
 max_cook <- max(cook_dist)
 num_outliers <- length(outliers_stud)
 ```
+:::
 
+\vspace{0.2cm}
+
+::: {.column width="34%"}
 **Resultados:**
+
 - **Leverage máximo:** `r round(max_leverage, 3)` (umbral: `r round(leverage_threshold, 3)`)
 - **Cook máximo:** `r round(max_cook, 3)` (umbral: `r round(cook_threshold, 3)`) 
 - **Outliers (|t| > 2):** `r num_outliers` observaciones
 - **Conclusión:** `r if(length(c(high_leverage, high_cook)) == 0) "Sin observaciones influyentes" else paste("Revisar observaciones:", paste(unique(c(high_leverage, high_cook)), collapse = ", "))`
+
+**Interpretación por zonas:**
+
+- **Derecha:** Alto leverage → Potencial influencia
+- **Arriba/Abajo:** Outliers → Residuos grandes
+- **Esquinas:** `r if(length(intersect(high_leverage, outliers_stud)) == 0) "¡Vacías! ✓" else "¡Ocupadas! ⚠️"`
+:::
+:::::
 
 # Análisis de Puntos Influyentes
 
@@ -1334,11 +1688,12 @@ num_outliers <- length(outliers_stud)
 
 # Diagnóstico DFFITS
 
+::::: columns
+::: {.column width="62%"}
 ```{r diagnostico-dffits}
-#| fig-width: 4.5
-#| fig-height: 3.2
-#| out-width: "70%"
-#| fig-align: center
+#| fig-width: 4.8
+#| fig-height: 3.6
+#| out-width: "100%"
 # Calcular DFFITS y sus componentes
 dffits_vals <- dffits(modelo_estudio)
 residuos_stud <- rstudent(modelo_estudio)  # Residuos estudentizados
@@ -1369,12 +1724,31 @@ ggplot(datos_dffits, aes(x = observacion, y = dffits)) +
     y = "DFFITS",
     caption = paste("Líneas rojas: umbrales ±", round(dffits_threshold, 3))
   ) +
-  theme_classic(base_size = 12)
+  theme_classic(base_size = 14)
 
 # Análisis cuantitativo
 influential_dffits <- which(abs(dffits_vals) > dffits_threshold)
 top_indices <- order(abs(dffits_vals), decreasing = TRUE)[1:5]
 ```
+:::
+
+\vspace{0.5cm}
+
+::: {.column width="36%"}
+**DFFITS:** Evalúa cómo cada observación afecta a su propia predicción
+
+**Resultados cuantitativos:**
+
+- **Umbral:** `r round(dffits_threshold, 3)`
+- **Influyentes:** `r length(influential_dffits)` observaciones (`r paste(influential_dffits, collapse = ", ")`)
+- **Top 5 |DFFITS|:** obs. `r paste(top_indices, collapse = ", ")` 
+- **Valores:** `r paste(round(dffits_vals[top_indices], 3), collapse = ", ")`
+**Interpretación:**
+- **Obs. `r top_indices[1]`:** DFFITS = `r round(dffits_vals[top_indices[1]], 3)` (más influyente)
+
+- **Conclusión:** `r length(influential_dffits)` observaciones cambían significativamente sus propias predicciones
+:::
+:::::
 
 # Análisis de Resultados DFFITS
 
