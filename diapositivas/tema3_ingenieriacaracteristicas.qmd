@@ -5,9 +5,17 @@ institute: "DSLAB"
 date: last-modified
 format: 
   beamer: 
-    template: dslab_fixed.beamer.tex
-    slide-level: 1
+    theme: "Madrid"
+    colortheme: "dolphin"
+    fonttheme: "structurebold"
+    navigation: horizontal
     section-titles: false
+    toc: false
+    slide-level: 1
+    aspectratio: 169
+    header-includes: |
+      \usepackage{dslab-new}
+      \usedslabmodelos
 knitr:
   opts_chunk:
     fig.width: 6

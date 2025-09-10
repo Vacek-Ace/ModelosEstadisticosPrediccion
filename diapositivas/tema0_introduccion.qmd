@@ -5,9 +5,17 @@ institute: "DSLAB"
 date: last-modified
 format: 
   beamer: 
-    template: dslab_fixed.beamer.tex
-    slide-level: 1
+    theme: "Madrid"
+    colortheme: "dolphin"
+    fonttheme: "structurebold"
+    navigation: horizontal
     section-titles: false
+    toc: false
+    slide-level: 1
+    aspectratio: 169
+    header-includes: |
+      \usepackage{dslab-new}
+      \usedslabmodelos
 knitr:
   opts_chunk:
     fig.width: 6
@@ -47,6 +55,11 @@ El objetivo es prepararte, **con solidez y sin prisas**, para las inmersiones t�
 El modelado de regresión ofrece un marco para investigar y cuantificar las relaciones entre variables.
 
 Conceptualmente, el modelado estadístico se orienta hacia uno de dos polos (Shmueli, 2010):
+
+- **Predicción**: Enfoque orientado a la **precisión** en la estimación de valores futuros o no observados.
+- **Explicación/Inferencia**: Enfoque orientado a la **comprensión** de las relaciones entre las variables.
+
+Ambos paradigmas tienen objetivos, métodos y criterios de evaluación distintos.
 
 # Predicción: El Paradigma de la Precisión
 
@@ -236,12 +249,20 @@ ggplot(datos, aes(x = x, y = y)) +
 :::: {.column width="45%"}
 $$Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \epsilon$$
 
+\vspace{0.3cm}
+
 **¿Es "lineal" este modelo?**
+
+\vspace{0.2cm}
 
 - **SÍ**: Lineal en los parámetros $\beta_0, \beta_1, \beta_2$
 - **NO**: No lineal en la variable $X$
 
+\vspace{0.3cm}
+
 La "linealidad" se refiere a los coeficientes, no a la forma de la curva.
+
+\vspace{0.2cm}
 
 Una parábola que encaja perfectamente en el marco de regresión lineal clásica.
 ::::
@@ -317,6 +338,7 @@ Los GLMs funcionan con distribuciones que pertenecen a la **familia exponencial*
 **La Relación Fundamental**: $g(E[Y]) = g(\mu) = \boldsymbol{X\beta}$
 
 **Ejemplos Clave**:
+
 -   **Enlace Logarítmico** (Poisson): $g(\mu) = \log(\mu)$ → $\mu = \exp(\boldsymbol{X\beta})$ (siempre positivo)
 -   **Enlace Logit** (Binomial): $g(\mu) = \log(\frac{\mu}{1-\mu})$ (proyecta probabilidades al rango completo)
 
@@ -362,11 +384,13 @@ Este curso fusiona la teoría con la aplicación computacional directa a través
 # Paquetes Especializados para el Modelado
 
 **Funciones Base** (paquete `stats`):
+
 -   `lm()` para regresión lineal
 -   `glm()` para modelos lineales generalizados
 -   Se cargan automáticamente (no requieren instalación)
 
 **Paquetes Especializados**:
+
 -   **`mgcv`**: Implementación de referencia para GAMs (Simon Wood)
 -   **`lme4` y `nlme`**: Modelos de efectos mixtos
 -   **`rms`**: Estrategias robustas de modelado
@@ -383,9 +407,9 @@ Acuñó el término **"regresión a la mediocridad"** (hoy "regresión a la medi
 # Los Estudios de Galton: Los Datos Históricos
 
 ```{r galtonn}
-#| fig-width: 6
+#| fig-width: 7
 #| fig-height: 4.5
-#| out-width: "90%"
+#| out-width: "75%"
 #| fig-align: center
 
 # Cargar los paquetes necesarios
@@ -403,15 +427,20 @@ eq_label <- sprintf("y = %.2f + %.2fx", coef(modelo)[1], coef(modelo)[2])
 
 # Gráfico
 ggplot(GaltonFamilies, aes(x = midparentHeight, y = childHeight)) +
-  geom_jitter(alpha = 0.4, color = "gray50", width = 0.1, height = 0.1) +
-  geom_smooth(method = "lm", se = FALSE, color = "#0072B2", size = 1.5) +
+  geom_jitter(alpha = 0.5, color = "gray45", width = 0.15, height = 0.15, size = 1.0) +
+  geom_smooth(method = "lm", se = FALSE, color = "#0072B2", size = 1.8) +
   annotate("text", x = 66, y = 74, label = eq_label, 
-           color = "#0072B2", size = 4, fontface = "bold") +
+           color = "#0072B2", size = 5.5, fontface = "bold") +
   labs(title = "Regresión de la Estatura: Hijos vs. Promedio Parental",
        x = "Estatura Media Parental (pulgadas)", 
        y = "Estatura del Hijo/a (pulgadas)") +
-  theme_classic(base_size = 12) +
-  theme(plot.title = element_text(size = 14, hjust = 0.5))
+  scale_x_continuous(expand = expansion(mult = c(0.05, 0.05))) +
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.05))) +
+  theme_classic(base_size = 14) +
+  theme(plot.title = element_text(size = 16, hjust = 0.5, face = "bold"),
+        axis.title = element_text(size = 14, face = "bold"),
+        axis.text = element_text(size = 12),
+        plot.margin = margin(t = 10, r = 10, b = 25, l = 10, unit = "pt"))
 ```
 
 **928 familias • Datos del siglo XIX • El origen de la regresión lineal**
