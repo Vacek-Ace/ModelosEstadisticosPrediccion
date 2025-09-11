@@ -130,7 +130,7 @@ execute:
 #| fig-width: 8
 #| fig-height: 6
 #| echo: false
-#| out-width: "80%"
+#| out-width: "60%"
 
 # Cargar la librería necesaria (si no está, instalar con install.packages("corrplot"))
 library(corrplot)
@@ -271,6 +271,8 @@ donde $MSE_{full}$ es el error cuadrático medio del modelo completo
 
 # ¿Cuándo Usar Cada Criterio?
 
+::::: columns
+:::: {.column width="50%"}
 **Si el objetivo principal es la predicción:**
 
 - **AIC** es la opción preferida
@@ -284,12 +286,23 @@ donde $MSE_{full}$ es el error cuadrático medio del modelo completo
 - Identifica el modelo más parsimonioso
 - Penalización más fuerte contra sobreajuste
 - Propiedad de consistencia en muestras grandes
-
+::::
+:::: {.column width="50%"}
 **Para análisis exploratorio:**
 
 - **Cp de Mallows** es especialmente valioso
 - Compromiso explícito entre sesgo y varianza
 - Visualización clara del "codo" de complejidad óptima
+
+**Resumen práctico:**
+
+- **Predicción** → AIC (menos restrictivo)
+- **Explicación** → BIC (más parsimonioso)  
+- **Exploración** → Cp de Mallows (balance visual)
+- **Muestras grandes** → BIC preferible
+- **Muestras pequeñas** → AIC o Cp
+::::
+:::::
 
 # Visualización: Criterios de Información (AIC vs BIC)
 
@@ -456,7 +469,7 @@ ggplot(cp_data, aes(x = n_vars + 1, y = cp)) +
 
 - **Ridge Regression:** Penalización $L_2 = \lambda \sum \beta_j^2$
 - **Lasso:** Penalización $L_1 = \lambda \sum |\beta_j|$
-- **Elastic Net:** Combina $L_1 + $L_2$
+- **Elastic Net:** Combina $L_1 + L_2$
 
 **Ventaja clave:** Control automático del balance sesgo-varianza
 
@@ -470,17 +483,29 @@ $$SSE_{ridge} = \| \mathbf{y} - \mathbf{X} \, \boldsymbol{\beta} \|^2 + \lambda 
 **Estimación:**
 $$\hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^T \mathbf{X} + \lambda \, \mathbf{I})^{-1} \mathbf{X}^T \mathbf{y}$$
 
+::: {.columns}
+
+::: {.column width="50%"}
+
 **Interpretación del parámetro $\lambda$:**
 
 - $\lambda = 0$: equivalente a regresión lineal tradicional (OLS)
 - $\lambda$ aumenta: coeficientes se reducen en magnitud
 - $\lambda$ muy grande: coeficientes se acercan a cero
 
+:::
+
+::: {.column width="50%"}
+
 **Propiedades:**
 
 - Manejo de multicolinealidad
 - Menor varianza en predicciones
 - **No realiza selección de variables** (no anula coeficientes)
+
+:::
+
+:::
 
 # Regresión Lasso
 
@@ -610,17 +635,29 @@ Antes de cualquier análisis, dividir datos originales en:
 - **Conjunto de entrenamiento (70-80%):** Ajustar el modelo
 - **Conjunto de test (20-30%):** Evaluar rendimiento
 
+::: {.columns}
+
+::: {.column width="50%"}
+
 **Ventajas:**
 
 - Computacionalmente muy eficiente
 - Fácil de implementar y entender
 - Apropiado para datasets grandes
 
+:::
+
+::: {.column width="50%"}
+
 **Desventajas:**
 
 - **Alta variabilidad:** Resultados dependen de la división específica
 - Puede ser optimista o pesimista según qué observaciones caigan en test
 - Menos datos disponibles para entrenamiento
+
+:::
+
+:::
 
 **Cuándo usar:** Datasets grandes (n > 1000), recursos limitados, evaluación rápida
 
@@ -645,7 +682,7 @@ Antes de cualquier análisis, dividir datos originales en:
 - Todos los datos se usan para entrenamiento y test
 - Reduce variabilidad de la estimación
 
-#Esquema del Proceso de Validación Cruzada (k=5)
+# Esquema del Proceso de Validación Cruzada (k=5)
 ```{r}
 #| fig-width: 10
 #| fig-height: 5
@@ -706,19 +743,33 @@ ggplot(plot_data, aes(x = id, y = iteration, fill = type)) +
   - Calcular error de predicción
 - **Error LOOCV:** $CV_{(n)} = \frac{1}{n}\sum_{i=1}^{n}(\frac{y_i - \hat{y}_i}{1-h_{ii}})^2$
 
+::: {.columns}
+
+::: {.column width="50%"}
+
 **Ventajas:**
 
 - Estimación prácticamente insesgada
 - Determinística (no depende de divisiones aleatorias)
 - Máximo uso de datos para entrenamiento
 
+:::
+
+::: {.column width="50%"}
+
 **Desventajas:**
 
 - Computacionalmente costoso
 - Alta varianza en la estimación
 
+:::
+
+:::
+
 # Cuándo Usar Cada Estrategia de Validación
 
+::::: columns
+:::: {.column width="50%"}
 **Train/Test Split:**
 
 - Dataset grande ($n > 1000$)
@@ -732,13 +783,24 @@ ggplot(plot_data, aes(x = id, y = iteration, fill = type)) +
 - Balance entre eficiencia y precisión
 - Estimación robusta del rendimiento
 - **Más recomendado en general**
-
+::::
+:::: {.column width="50%"}
 **LOOCV:**
 
 - Dataset pequeño ($n < 100$)
 - Necesidad de estimación menos sesgada
 - Recursos computacionales abundantes
 - Regresión lineal (fórmula rápida disponible)
+
+**Guía de decisión rápida:**
+
+- **n > 1000** → Train/Test Split
+- **100 < n < 1000** → k-fold CV
+- **n < 100** → LOOCV
+- **Tiempo limitado** → Train/Test Split
+- **Máxima precisión** → k-fold CV
+::::
+:::::
 
 # Métricas de Rendimiento en Validación
 
@@ -775,17 +837,29 @@ $$MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|$$
 
 **La comparación clave:** Error en entrenamiento vs Error en validación
 
+::: {.columns}
+
+::: {.column width="50%"}
+
 **Sobreajuste (Overfitting):**
 
 - **Síntoma:** Error entrenamiento bajo + Error validación mucho más alto
 - **Causa:** Modelo memoriza ruido específico de los datos de entrenamiento
 - **Solución:** Simplificar modelo, usar regularización, más datos
 
+:::
+
+::: {.column width="50%"}
+
 **Subajuste (Underfitting):**
 
 - **Síntoma:** Error entrenamiento alto + Error validación alto y similar
 - **Causa:** Modelo demasiado simple, no captura estructura subyacente
 - **Solución:** Aumentar complejidad, añadir variables, términos de interacción
+
+:::
+
+:::
 
 **Modelo bien calibrado:**
 
@@ -911,6 +985,8 @@ print(p3)
 
 # Consideraciones Prácticas
 
+::::: columns
+:::: {.column width="50%"}
 **Antes del modelado:**
 
 - EDA completo para entender los datos
@@ -924,13 +1000,23 @@ print(p3)
 - Comparar múltiples métodos de selección
 - No guiarse solo por métricas: considerar interpretabilidad
 - Documentar todas las decisiones tomadas
-
+::::
+:::: {.column width="50%"}
 **Después de la selección:**
 
 - Diagnóstico completo de residuos del modelo final
 - Análisis de sensibilidad a observaciones influyentes
 - Intervalos de confianza para coeficientes importantes
 - Validación en el conjunto de prueba final
+
+**Checklist de buenas prácticas:**
+
+- ✓ **Datos** → EDA + conocimiento del dominio
+- ✓ **Método** → Múltiples enfoques + validación cruzada
+- ✓ **Selección** → Criterios objetivos + interpretabilidad  
+- ✓ **Validación** → Diagnóstico + evaluación
+::::
+:::::
 
 # Conclusiones 
 

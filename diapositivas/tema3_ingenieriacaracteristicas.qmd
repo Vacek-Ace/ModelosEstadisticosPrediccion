@@ -34,6 +34,8 @@ execute:
 
 La **ingeniería de características** es el proceso fundamental que transforma y crea variables para maximizar la capacidad predictiva y la interpretabilidad de los modelos.
 
+\vspace{0.5cm}
+
 ::::: columns
 :::: {.column width="50%"}
 **El problema:**
@@ -58,6 +60,8 @@ La **ingeniería de características** es el proceso fundamental que transforma 
 - Combinaciones y ratios informativos
 ::::
 :::::
+
+\vspace{0.5cm}
 
 **Principio clave:** "Los datos y la preparación de características determinan el límite superior del rendimiento; los modelos solo se aproximan a ese límite" - *Andrew Ng*
 
@@ -104,6 +108,8 @@ La **ingeniería de características** es el proceso fundamental que transforma 
 
 # Escalado y Normalización
 
+::::: columns
+:::: {.column width="40%"}
 **¿Por qué escalar?**
 
 - **Comparabilidad:** Coeficientes en misma escala
@@ -111,10 +117,15 @@ La **ingeniería de características** es el proceso fundamental que transforma 
 - **Convergencia:** Optimización más eficiente
 - **Interpretación:** Efectos estandarizados
 
+**Problema común:**
+
+Variables con escalas muy diferentes pueden dominar el modelo y hacer que los coeficientes no sean comparables entre sí.
+::::
+:::: {.column width="60%"}
 ```{r}
-#| fig-width: 5
-#| fig-height: 3
-#| out-width: "60%"
+#| fig-width: 6
+#| fig-height: 4
+#| out-width: "95%"
 # Ejemplo de escalado
 library(ggplot2)
 library(gridExtra)
@@ -150,6 +161,8 @@ p2 <- ggplot(datos_escala[datos_escala$Variable == "Edad (años)",],
 # Organizar los dos gráficos con un título centrado
 grid.arrange(p1, p2, ncol = 2, top = "Escalas Originales Dispares")
 ```
+::::
+:::::
 
 # Estandarización (Z-Score)
 
@@ -212,7 +225,7 @@ Diseñado específicamente para datos con *outliers*. Utiliza la **mediana** y e
 ```{r}
 #| fig-width: 5
 #| fig-height: 3
-#| out-width: "80%"
+#| out-width: "65%"
 # Comparación visual de escalados
 set.seed(789)
 x_outliers <- c(rnorm(95, 10, 2), 25, 30, 35, 40, 45)  # Con outliers
@@ -254,6 +267,8 @@ Una vez realizado el diagnóstico, debemos seleccionar la transformación más a
 
 Es la transformación más versátil, ideal para linearizar relaciones de crecimiento exponencial o donde los efectos son multiplicativos.
 
+\vspace{0.5cm}
+
 ::::: columns
 ::: {.column width="50%"}
 **Cuándo Usarla**
@@ -285,6 +300,8 @@ Fundamental para relaciones curvilíneas que siguen una **ley de potencia** del 
 
 Especialmente útil para **datos de conteo** (típicamente de una distribución de Poisson), donde la varianza es proporcional a la media.
 
+\vspace{0.5cm}
+
 ::::: columns
 ::: {.column width="50%"}
 **Cuándo Aplicarla**
@@ -314,6 +331,8 @@ Es la solución natural cuando la **varianza es proporcional al cuadrado de la m
 # Transformación Inversa (Controlar Outliers)
 
 Útil para relaciones **hiperbólicas** (del tipo `Y = 1/X`) y para distribuciones con colas muy pesadas a la derecha.
+
+\vspace{0.5cm}
 
 ::::: columns
 ::: {.column width="50%"}
@@ -380,7 +399,7 @@ A continuación, se visualiza cómo la transformación Box-Cox corrige la asimet
 ```{r}
 #| fig-width: 5
 #| fig-height: 3
-#| out-width: "75%"
+#| out-width: "70%"
 # Visualización de Box-Cox
 library(forecast)
 set.seed(222)
@@ -403,6 +422,8 @@ hist(y_boxcox, breaks = 20, main = paste("Box-Cox (", round(bc, 2), ")"),
 # La Extensión: Transformación de Yeo-Johnson
 
 Fue desarrollada para superar la principal limitación de Box-Cox: **acepta cualquier valor real (positivo, negativo o cero)**.
+
+\vspace{0.5cm}
 
 ::::: columns
 ::: {.column width="50%"}
@@ -428,7 +449,7 @@ Este ejemplo muestra cómo Yeo-Johnson maneja un conjunto de datos que incluye v
 ```{r}
 #| fig-width: 5
 #| fig-height: 3
-#| out-width: "80%"
+#| out-width: "70%"
 # Comparación Box-Cox vs Yeo-Johnson
 set.seed(333)
 y_mixed <- c(rnorm(100, -2, 1), rnorm(100, 3, 2))  # Datos con negativos
@@ -499,11 +520,25 @@ Transforma una variable con **k categorías sin orden** (ej. color, región) en 
 
 Imaginemos una variable `Region` con 4 categorías. Al codificarla, elegimos "Norte" como categoría de referencia.
 
+::::: columns
+:::: {.column width="40%"}
+
+**Resultado:**
+
+- Se crean 3 variables binarias (k-1)
+- Cada observación tiene un 1 en su región correspondiente
+- "Norte" no aparece (categoría de referencia)
+
+**Interpretación:**
+
+El coeficiente de `Region_Sur` se interpretaría como la diferencia promedio en la variable respuesta al estar en la región "Sur" **en comparación con la región "Norte"**.
+
+::::
+:::: {.column width="60%"}
 ```{r}
-#| fig-width: 5
-#| fig-height: 3
-#| out-width: "60%"
-#| fig-align: center
+#| fig-width: 6
+#| fig-height: 4
+#| out-width: "95%"
 library(ggplot2)
 library(fastDummies)
 library(reshape2)
@@ -536,8 +571,8 @@ ggplot(datos_para_grafico, aes(x = variable, y = factor(ID), fill = factor(value
   theme_minimal(base_size = 12) +
   theme(panel.grid = element_blank(), legend.position = "none")
 ```
-
-En un modelo de regresión, el coeficiente de `Region_Sur` se interpretaría como la diferencia promedio en la variable respuesta al estar en la región "Sur" **en comparación con la región "Norte"**.
+::::
+:::::
 
 # Codificación Ordinal (Variables Ordinales)
 
@@ -547,6 +582,8 @@ Asigna números enteros consecutivos a las categorías, **respetando su orden o 
 
   * **Variable:** `Nivel_Satisfaccion` con categorías ["Bajo", "Medio", "Alto"].
   * **Codificación:** Se asignan los valores [1, 2, 3].
+
+\vspace{0.5cm}
 
 ::::: columns
 ::: {.column width="50%"}
@@ -567,6 +604,8 @@ Asigna números enteros consecutivos a las categorías, **respetando su orden o 
 # Comparación: Ordinal vs. One-Hot Encoding
 
 La elección incorrecta del método puede llevar a modelos con menor rendimiento e interpretaciones erróneas.
+
+\vspace{0.5cm}
 
 ::::: columns
 ::: {.column width="50%"}
@@ -604,13 +643,25 @@ $$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_1 \times X_2 + \varepsilon
 
 # Ejemplo Visual: Interacción Experiencia × Género
 
-Un ejemplo clásico es cómo la relación entre experiencia y salario no es la misma para todos los grupos. La interacción permite que la pendiente de la experiencia sea diferente para cada género, como se ve en el gráfico.
+Un ejemplo clásico es cómo la relación entre experiencia y salario no es la misma para todos los grupos.
 
+::::: columns
+:::: {.column width="40%"}
+
+**¿Qué observamos?**
+
+- **Pendientes diferentes**: Cada género tiene una relación distinta entre experiencia y salario
+- **Interacción presente**: El efecto de la experiencia depende del género
+
+**Interpretación:**
+
+La interacción permite que la pendiente de la experiencia sea diferente para cada género, revelando patrones que el análisis por separado no detectaría.
+::::
+:::: {.column width="60%"}
 ```{r}
-#| fig-width: 5
-#| fig-height: 3
-#| out-width: "75%"
-#| fig-align: center
+#| fig-width: 6
+#| fig-height: 4
+#| out-width: "95%"
 # Visualización de interacción mixta (Continua x Categórica)
 set.seed(555)
 n <- 150
@@ -629,6 +680,8 @@ ggplot(datos_inter, aes(x = experiencia, y = salario/1000, color = genero)) +
        color = "Género") +
   theme_minimal(base_size = 11)
 ```
+::::
+:::::
 
 
 # Tipos de Interacciones: Continua × Continua
@@ -689,14 +742,26 @@ modelo <- lm(rendimiento ~ horas_estudio * metodo, data = datos)
 
 
 # Caso Práctico: Visualizando una Interacción Categórica
-
 Los *interaction plots* son la mejor herramienta para entender interacciones entre variables categóricas. **Las líneas no paralelas son una señal visual clara de una posible interacción**.
 
+::::: columns
+:::: {.column width="40%"}
+
+**¿Qué buscamos?**
+
+- **Líneas paralelas**: Sin interacción
+- **Líneas no paralelas**: Interacción presente
+- **Líneas que se cruzan**: Interacción fuerte
+
+**Interpretación:**
+
+La Droga B es especialmente efectiva en el grupo de "Mayor", un efecto que no se podría ver analizando las variables por separado.
+::::
+:::: {.column width="60%"}
 ```{r}
-#| fig-width: 5
-#| fig-height: 3.5
-#| out-width: "60%"
-#| fig-align: center
+#| fig-width: 6
+#| fig-height: 4
+#| out-width: "95%"
 # Ejemplo completo de interacción categórica × categórica
 set.seed(666)
 n <- 200
@@ -723,8 +788,8 @@ ggplot(medias, aes(x = edad_grupo, y = efecto, color = tratamiento, group = trat
        color = "Tratamiento") +
   theme_minimal(base_size = 11)
 ```
-
-La Droga B es especialmente efectiva en el grupo de "Mayor", un efecto que no se podría ver analizando las variables por separado.
+::::
+:::::
 
 
 # Detección y Estrategia de Modelado
@@ -827,7 +892,7 @@ Un ratio clásico en negocio es el ROI, que mide la eficiencia de una inversión
 #| echo: false
 #| fig-width: 6
 #| fig-height: 4
-#| out-width: "75%"
+#| out-width: "65%"
 #| fig-align: center
 library(ggplot2)
 # Ejemplo de ratio informativo

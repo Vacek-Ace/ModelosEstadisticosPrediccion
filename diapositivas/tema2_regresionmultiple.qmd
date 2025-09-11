@@ -546,8 +546,9 @@ $$\text{Residuo Parcial} = e_i + \hat{\beta}_j x_{ij} \quad \text{vs.} \quad x_{
 
 ```{r}
 #| echo: false
-#| fig-height: 12
-#| fig-width: 15
+#| fig-height: 6
+#| fig-width: 10
+#| out.width: "90%"
 # Gráficos de Componente más Residuo (CPR)
 crPlots(modelo, main = "Gráficos de Componente + Residuo")
 ```
@@ -719,8 +720,9 @@ $$\text{DFBETA}_{j,i} = \frac{\hat{\beta}_j - \hat{\beta}_{j(-i)}}{\text{se}(\ha
 
 ```{r}
 #| echo: false
-#| fig-height: 4
-#| fig-width: 4
+#| fig-height: 5
+#| fig-width: 8
+#| out.width: "75%"
 # Gráficos de regresión parcial para todas las variables
 avPlots(modelo, main = "Gráficos de regresión parcial")
 ```

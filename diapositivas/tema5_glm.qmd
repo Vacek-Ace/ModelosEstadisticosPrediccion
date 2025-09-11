@@ -103,12 +103,13 @@ La función de enlace ($g$) conecta el predictor lineal ($\eta$) con la media de
 $$g(\mu) = \eta$$
 Esta función transforma la media de Y para que la relación con los predictores se vuelva lineal.
 
-**Ejemplos Matemáticos:**
-* **Logística (Logit):** Para Regresión Logística.
+**Logística (Logit):** Para Regresión Logística.
     $$g(\mu) = \log\left(\frac{\mu}{1 - \mu}\right)$$
-* **Logarítmica:** Para Regresión de Poisson.
+
+**Logarítmica:** Para Regresión de Poisson.
     $$g(\mu) = \log(\mu)$$
-* **Identidad:** Para Regresión Lineal estándar (el GLM más simple).
+
+**Identidad:** Para Regresión Lineal estándar (el GLM más simple).
     $$g(\mu) = \mu$$
 
 
@@ -153,7 +154,7 @@ El enfoque para los GLM se basa en un principio unificador:
 * **El Algoritmo:** **IRLS** (*Iteratively Reweighted Least Squares*), el método computacional para encontrar la solución de máxima verosimilitud.
 
 
-# El Método de Máxima Verosimilitud (MLE)**
+# El Método de Máxima Verosimilitud (MLE)
 
 
 A diferencia de Mínimos Cuadrados, el método de **Máxima Verosimilitud** se emplea para estimar los parámetros en un GLM.
@@ -163,12 +164,10 @@ A diferencia de Mínimos Cuadrados, el método de **Máxima Verosimilitud** se e
 * Las distribuciones de la familia exponencial no siempre tienen una relación lineal directa con los predictores.
 * La varianza de la respuesta a menudo depende de su media ($Var(Y) = V(\mu)$), violando el supuesto de homocedasticidad que requiere MCO.
 
-**Principio Fundamental de MLE:**
+**Principio Fundamental de MLE**
+
 Consiste en encontrar los valores de los parámetros $\boldsymbol{\beta}$ que hacen **más probable** observar los datos que tenemos.
 
-De acuerdo, tienes razón. Es mejor separar las dos funciones para explicarlas con más claridad.
-
-Aquí tienes el contenido dividido en dos diapositivas.
 
 # La Función de Verosimilitud ($L(\boldsymbol{\beta})$)
 
@@ -311,9 +310,7 @@ La **matriz de información** ($\mathbf{I}(\boldsymbol{\beta})$) es un concepto 
 * Una función muy "puntiaguda" (alta curvatura) significa **mucha información** y, por tanto, estimaciones más precisas y fiables.
 * Una función más plana (baja curvatura) significa **poca información** y mayor incertidumbre.
 
-**Cálculo en la Práctica (GLM):**
-
-Aunque existen definiciones teóricas basadas en las segundas derivadas de la log-verosimilitud, el algoritmo IRLS nos proporciona una aproximación computacionalmente eficiente y directa:
+**Cálculo en la Práctica (GLM):** Aunque existen definiciones teóricas basadas en las segundas derivadas de la log-verosimilitud, el algoritmo IRLS nos proporciona una aproximación computacionalmente eficiente y directa:
 
 $$\mathbf{I}(\hat{\boldsymbol{\beta}}) \approx \mathbf{X}^T \mathbf{W} \mathbf{X}$$
 
@@ -557,8 +554,6 @@ $$\log\left(\frac{p}{1 - p}\right) = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p
 
 
 # Estimación por Máxima Verosimilitud (MLE)
-
-La estimación de los coeficientes $\boldsymbol{\beta}$ se basa en MLE para la distribución Binomial.
 
 **Función de Verosimilitud ($L(\boldsymbol{\beta})$):** Para un resultado binario $y_i \in \{0,1\}$, la verosimilitud se define como:
 $$L(\boldsymbol{\beta}) = \prod_{i=1}^{n} p_i^{y_i}(1-p_i)^{1-y_i}$$
@@ -825,8 +820,6 @@ La estimación se adapta a la distribución de Poisson con enlace logarítmico.
 # Ejemplo Práctico: Salida del Modelo Poisson
 
 **Objetivo:** Ajustamos un modelo para predecir el `número de accidentes` en función del `tráfico` y la `visibilidad`.
-
------
 
 **Salida de Coeficientes (`summary`)**
 
