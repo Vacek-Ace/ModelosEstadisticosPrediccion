@@ -1,0 +1,75 @@
+---
+title: "Ejercicios Avanzados"
+subtitle: "Modelos Estadísticos de Predicción"
+author: "Víctor Aceña Gil - Isaac Martín de Diego"
+date: today
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    theme: cosmo
+    embed-resources: true
+execute:
+  warning: false
+  message: false
+---
+
+### Ejercicio 1: Derivación de Estimadores
+
+Considera el modelo de regresión lineal simple $Y_i = \beta_0 + \beta_1 X_i + \varepsilon_i$. Partiendo de la función objetivo de Mínimos Cuadrados Ordinarios (MCO), $S(\beta_0, \beta_1) = \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2$, realiza la derivación matemática completa para obtener las expresiones de los estimadores $\hat{\beta}_0$ y $\hat{\beta}_1$. Muestra todos los pasos, desde el cálculo de las derivadas parciales hasta la resolución de las ecuaciones normales.
+
+
+### Ejercicio 2: El Impacto de la Multicolinealidad
+
+En un modelo de regresión múltiple con dos predictores estandarizados ($X_1, X_2$), la varianza del estimador $\hat{\beta}_1$ viene dada por $\text{Var}(\hat{\beta}_1) = \frac{\sigma^2}{n(1-r_{12}^2)}$, donde $r_{12}$ es la correlación entre $X_1$ y $X_2$.
+
+a) Explica matemáticamente qué le ocurre a la varianza de $\hat{\beta}_1$ cuando la correlación entre los predictores ($r_{12}$) se aproxima a 1 (multicolinealidad perfecta).
+b) Relaciona esta fórmula con la del Factor de Inflación de la Varianza (VIF). ¿Cómo demuestra esta expresión que la multicolinealidad "infla" la varianza de los estimadores de los coeficientes?
+
+
+### Ejercicio 3: Interpretación de Coeficientes en Modelos Transformados
+
+Considera un modelo de regresión **log-log**: $\log(Y_i) = \beta_0 + \beta_1 \log(X_i) + \varepsilon_i$.
+Demuestra matemáticamente que el coeficiente $\beta_1$ puede interpretarse como una **elasticidad**, es decir, el cambio porcentual en $Y$ ante un cambio del 1% en $X$. (Pista: utiliza la derivada de $\log(Y)$ con respecto a $\log(X)$).
+
+
+### Ejercicio 4: Fundamentos de la Regularización
+
+Explica desde una perspectiva geométrica por qué la regularización **Lasso (penalización L1)** es capaz de reducir los coeficientes exactamente a cero, realizando así selección de variables, mientras que la regularización **Ridge (penalización L2)** solo puede encoger los coeficientes hacia cero sin anularlos por completo. Apoya tu explicación con un dibujo o descripción de las "regiones de restricción" de ambos métodos en un espacio de dos coeficientes ($\beta_1, \beta_2$).
+
+
+### Ejercicio 5: La Familia Exponencial y los GLM
+
+La teoría de los Modelos Lineales Generalizados (GLM) se basa en que distribuciones como la Normal, Binomial o Poisson pertenecen a la **familia exponencial**. La forma canónica de esta familia establece una relación directa entre la media y la varianza a través de la **función de varianza** $V(\mu)$.
+Explica cuál es la función de varianza para un modelo de **Poisson** y para un modelo **Binomial**. ¿Qué implicaciones tiene la forma de $V(\mu)$ en cada caso sobre el comportamiento de los datos y los supuestos del modelo?
+
+
+### Ejercicio 6: El Problema de la Inferencia en Métodos Stepwise
+
+Los apuntes advierten que los p-valores de un modelo final obtenido mediante selección por pasos (stepwise) están **sesgados y son excesivamente optimistas**. Explica el razonamiento estadístico detrás de esta advertencia. ¿Por qué el proceso iterativo de "buscar y seleccionar" la variable más significativa en cada paso invalida los supuestos teóricos del test t estándar?
+
+
+### Ejercicio 7: Propiedades de los Estimadores MCO
+
+El **Teorema de Gauss-Markov** establece que, bajo ciertos supuestos, los estimadores de Mínimos Cuadrados Ordinarios (MCO) son **MELI (Mejores Estimadores Lineales Insesgados)**. Demuestra la propiedad de **insesgadez** para el estimador $\hat{\boldsymbol{\beta}}$ en notación matricial. Es decir, demuestra que $E[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta}$. Muestra todos los pasos y menciona qué supuestos del modelo estás utilizando en cada paso.
+
+
+### Ejercicio 8: Intervalos de Confianza vs. Predicción
+
+La fórmula para el intervalo de predicción para una nueva observación en regresión lineal simple es:
+$$\hat{y}_0 \pm t_{\alpha/2, n-2} \cdot \sqrt{\text{MSE} \left( 1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right)}$$
+Explica el origen y el significado de cada uno de los **tres términos** que se encuentran dentro del paréntesis bajo la raíz cuadrada. ¿Qué fuente de incertidumbre representa cada término y por qué la suma de los tres es necesaria para un intervalo de predicción?
+
+
+### Ejercicio 9: Estimación por Máxima Verosimilitud
+
+Para un modelo de regresión logística, la función de log-verosimilitud es:
+$$\ell(\boldsymbol{\beta}) = \sum_{i=1}^{n} \left[y_i \log(p_i) + (1-y_i) \log(1-p_i)\right]$$
+donde $p_i = \frac{1}{1 + e^{-\mathbf{x}_i^T\boldsymbol{\beta}}}$.
+Deriva la **ecuación de puntuación (score equation)** para un coeficiente $\beta_j$ (es decir, calcula $\frac{\partial \ell}{\partial \beta_j}$) y demuestra que se iguala a cero cuando $\sum_{i=1}^{n} x_{ij}(y_i - p_i) = 0$. Interpreta el significado de esta condición final.
+
+
+### Ejercicio 10: El Coeficiente de Regresión Parcial
+
+El texto afirma que el coeficiente $\hat{\beta}_j$ de una regresión múltiple puede entenderse como el coeficiente de una regresión simple entre dos conjuntos de residuos. Explica con detalle este concepto de **regresión parcial**. ¿Qué se está "parcializando" o "eliminando" de la variable respuesta $Y$ y del predictor $X_j$ antes de calcular su relación? ¿Por qué este concepto es fundamental para entender la interpretación *ceteris paribus*?

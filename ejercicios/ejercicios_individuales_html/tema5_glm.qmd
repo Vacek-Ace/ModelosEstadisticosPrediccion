@@ -15,8 +15,6 @@ execute:
   message: false
 ---
 
-## **Modelos de Regresión Generalizada**
-
 ### Ejercicio 1: Conceptual (Fundamentos de GLM)
 
 Explica los **tres componentes clave** que definen a cualquier Modelo Lineal Generalizado (GLM) y describe brevemente la función de cada uno.

@@ -15,8 +15,6 @@ execute:
   message: false
 ---
 
-## **Ingeniería de Características**
-
 ### Ejercicio 1: Conceptual (Diagnóstico antes de Transformar)
 
 El texto desaconseja fuertemente el enfoque de "ensayo y error" al aplicar transformaciones. Explica con tus propias palabras por qué la práctica de probar transformaciones hasta que mejore el R² es metodológicamente peligrosa. Menciona al menos tres de los riesgos específicos discutidos en los apuntes.

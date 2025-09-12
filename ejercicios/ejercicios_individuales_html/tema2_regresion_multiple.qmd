@@ -15,8 +15,6 @@ execute:
   message: false
 ---
 
-## **Regresión Lineal Múltiple**
-
 ### Ejercicio 1: Conceptual (Interpretación *Ceteris Paribus*)
 
 Un analista ajusta dos modelos para predecir el consumo de un coche (`mpg`):

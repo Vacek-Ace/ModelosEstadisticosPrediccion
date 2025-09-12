@@ -15,8 +15,6 @@ execute:
   message: false
 ---
 
-## **Selección de variables, Regularización y Validación**
-
 ### Ejercicio 1: Conceptual (Sobreajuste vs. Subajuste)
 
 Explica con tus propias palabras qué es el **sobreajuste (overfitting)** y el **subajuste (underfitting)**. Describe los síntomas de cada uno comparando el error de entrenamiento con el error de validación (o de test), y menciona la solución principal para cada problema.

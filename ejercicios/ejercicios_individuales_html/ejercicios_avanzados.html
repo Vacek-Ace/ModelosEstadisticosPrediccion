@@ -9,7 +9,7 @@
 <meta name="author" content="Víctor Aceña Gil - Isaac Martín de Diego">
 <meta name="dcterms.date" content="2025-09-12">
 
-<title>Ejercicios: Modelos de Regresión Generalizada</title>
+<title>Ejercicios Avanzados</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -2313,16 +2313,16 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#ejercicio-1-conceptual-fundamentos-de-glm" id="toc-ejercicio-1-conceptual-fundamentos-de-glm" class="nav-link active" data-scroll-target="#ejercicio-1-conceptual-fundamentos-de-glm">Ejercicio 1: Conceptual (Fundamentos de GLM)</a></li>
-  <li><a href="#ejercicio-2-conceptual-función-de-enlace" id="toc-ejercicio-2-conceptual-función-de-enlace" class="nav-link" data-scroll-target="#ejercicio-2-conceptual-función-de-enlace">Ejercicio 2: Conceptual (Función de Enlace)</a></li>
-  <li><a href="#ejercicio-3-práctico-ajuste-de-un-modelo-logístico" id="toc-ejercicio-3-práctico-ajuste-de-un-modelo-logístico" class="nav-link" data-scroll-target="#ejercicio-3-práctico-ajuste-de-un-modelo-logístico">Ejercicio 3: Práctico (Ajuste de un Modelo Logístico)</a></li>
-  <li><a href="#ejercicio-4-interpretación-odds-ratios" id="toc-ejercicio-4-interpretación-odds-ratios" class="nav-link" data-scroll-target="#ejercicio-4-interpretación-odds-ratios">Ejercicio 4: Interpretación (Odds Ratios)</a></li>
-  <li><a href="#ejercicio-5-práctico-validación-del-modelo-logístico" id="toc-ejercicio-5-práctico-validación-del-modelo-logístico" class="nav-link" data-scroll-target="#ejercicio-5-práctico-validación-del-modelo-logístico">Ejercicio 5: Práctico (Validación del Modelo Logístico)</a></li>
-  <li><a href="#ejercicio-6-conceptual-regresión-de-poisson" id="toc-ejercicio-6-conceptual-regresión-de-poisson" class="nav-link" data-scroll-target="#ejercicio-6-conceptual-regresión-de-poisson">Ejercicio 6: Conceptual (Regresión de Poisson)</a></li>
-  <li><a href="#ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson" id="toc-ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson" class="nav-link" data-scroll-target="#ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson">Ejercicio 7: Práctico (Ajuste de un Modelo de Poisson)</a></li>
-  <li><a href="#ejercicio-8-diagnóstico-sobredispersión" id="toc-ejercicio-8-diagnóstico-sobredispersión" class="nav-link" data-scroll-target="#ejercicio-8-diagnóstico-sobredispersión">Ejercicio 8: Diagnóstico (Sobredispersión)</a></li>
-  <li><a href="#ejercicio-9-conceptual-deviance" id="toc-ejercicio-9-conceptual-deviance" class="nav-link" data-scroll-target="#ejercicio-9-conceptual-deviance">Ejercicio 9: Conceptual (Deviance)</a></li>
-  <li><a href="#ejercicio-10-elección-del-modelo-adecuado" id="toc-ejercicio-10-elección-del-modelo-adecuado" class="nav-link" data-scroll-target="#ejercicio-10-elección-del-modelo-adecuado">Ejercicio 10: Elección del Modelo Adecuado</a></li>
+  <li><a href="#ejercicio-1-derivación-de-estimadores" id="toc-ejercicio-1-derivación-de-estimadores" class="nav-link active" data-scroll-target="#ejercicio-1-derivación-de-estimadores">Ejercicio 1: Derivación de Estimadores</a></li>
+  <li><a href="#ejercicio-2-el-impacto-de-la-multicolinealidad" id="toc-ejercicio-2-el-impacto-de-la-multicolinealidad" class="nav-link" data-scroll-target="#ejercicio-2-el-impacto-de-la-multicolinealidad">Ejercicio 2: El Impacto de la Multicolinealidad</a></li>
+  <li><a href="#ejercicio-3-interpretación-de-coeficientes-en-modelos-transformados" id="toc-ejercicio-3-interpretación-de-coeficientes-en-modelos-transformados" class="nav-link" data-scroll-target="#ejercicio-3-interpretación-de-coeficientes-en-modelos-transformados">Ejercicio 3: Interpretación de Coeficientes en Modelos Transformados</a></li>
+  <li><a href="#ejercicio-4-fundamentos-de-la-regularización" id="toc-ejercicio-4-fundamentos-de-la-regularización" class="nav-link" data-scroll-target="#ejercicio-4-fundamentos-de-la-regularización">Ejercicio 4: Fundamentos de la Regularización</a></li>
+  <li><a href="#ejercicio-5-la-familia-exponencial-y-los-glm" id="toc-ejercicio-5-la-familia-exponencial-y-los-glm" class="nav-link" data-scroll-target="#ejercicio-5-la-familia-exponencial-y-los-glm">Ejercicio 5: La Familia Exponencial y los GLM</a></li>
+  <li><a href="#ejercicio-6-el-problema-de-la-inferencia-en-métodos-stepwise" id="toc-ejercicio-6-el-problema-de-la-inferencia-en-métodos-stepwise" class="nav-link" data-scroll-target="#ejercicio-6-el-problema-de-la-inferencia-en-métodos-stepwise">Ejercicio 6: El Problema de la Inferencia en Métodos Stepwise</a></li>
+  <li><a href="#ejercicio-7-propiedades-de-los-estimadores-mco" id="toc-ejercicio-7-propiedades-de-los-estimadores-mco" class="nav-link" data-scroll-target="#ejercicio-7-propiedades-de-los-estimadores-mco">Ejercicio 7: Propiedades de los Estimadores MCO</a></li>
+  <li><a href="#ejercicio-8-intervalos-de-confianza-vs.-predicción" id="toc-ejercicio-8-intervalos-de-confianza-vs.-predicción" class="nav-link" data-scroll-target="#ejercicio-8-intervalos-de-confianza-vs.-predicción">Ejercicio 8: Intervalos de Confianza vs. Predicción</a></li>
+  <li><a href="#ejercicio-9-estimación-por-máxima-verosimilitud" id="toc-ejercicio-9-estimación-por-máxima-verosimilitud" class="nav-link" data-scroll-target="#ejercicio-9-estimación-por-máxima-verosimilitud">Ejercicio 9: Estimación por Máxima Verosimilitud</a></li>
+  <li><a href="#ejercicio-10-el-coeficiente-de-regresión-parcial" id="toc-ejercicio-10-el-coeficiente-de-regresión-parcial" class="nav-link" data-scroll-target="#ejercicio-10-el-coeficiente-de-regresión-parcial">Ejercicio 10: El Coeficiente de Regresión Parcial</a></li>
   </ul>
 </nav>
 </div>
@@ -2330,7 +2330,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Ejercicios: Modelos de Regresión Generalizada</h1>
+<h1 class="title">Ejercicios Avanzados</h1>
 <p class="subtitle lead">Modelos Estadísticos de Predicción</p>
 </div>
 
@@ -2360,79 +2360,49 @@ window.Quarto = {
 </header>
 
 
-<section id="ejercicio-1-conceptual-fundamentos-de-glm" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-1-conceptual-fundamentos-de-glm">Ejercicio 1: Conceptual (Fundamentos de GLM)</h3>
-<p>Explica los <strong>tres componentes clave</strong> que definen a cualquier Modelo Lineal Generalizado (GLM) y describe brevemente la función de cada uno.</p>
+<section id="ejercicio-1-derivación-de-estimadores" class="level3">
+<h3 class="anchored" data-anchor-id="ejercicio-1-derivación-de-estimadores">Ejercicio 1: Derivación de Estimadores</h3>
+<p>Considera el modelo de regresión lineal simple <span class="math inline">\(Y_i = \beta_0 + \beta_1 X_i + \varepsilon_i\)</span>. Partiendo de la función objetivo de Mínimos Cuadrados Ordinarios (MCO), <span class="math inline">\(S(\beta_0, \beta_1) = \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2\)</span>, realiza la derivación matemática completa para obtener las expresiones de los estimadores <span class="math inline">\(\hat{\beta}_0\)</span> y <span class="math inline">\(\hat{\beta}_1\)</span>. Muestra todos los pasos, desde el cálculo de las derivadas parciales hasta la resolución de las ecuaciones normales.</p>
 </section>
-<section id="ejercicio-2-conceptual-función-de-enlace" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-2-conceptual-función-de-enlace">Ejercicio 2: Conceptual (Función de Enlace)</h3>
-<p>¿Cuál es el propósito fundamental de la <strong>función de enlace</strong> en un GLM? ¿Por qué la regresión lineal clásica es considerada un caso particular de un GLM? (Pista: piensa en su función de enlace).</p>
-</section>
-<section id="ejercicio-3-práctico-ajuste-de-un-modelo-logístico" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-3-práctico-ajuste-de-un-modelo-logístico">Ejercicio 3: Práctico (Ajuste de un Modelo Logístico)</h3>
-<p>Usa el conjunto de datos <code>mtcars</code> de R. La variable <code>am</code> indica si la transmisión de un coche es automática (0) o manual (1).</p>
+<section id="ejercicio-2-el-impacto-de-la-multicolinealidad" class="level3">
+<h3 class="anchored" data-anchor-id="ejercicio-2-el-impacto-de-la-multicolinealidad">Ejercicio 2: El Impacto de la Multicolinealidad</h3>
+<p>En un modelo de regresión múltiple con dos predictores estandarizados (<span class="math inline">\(X_1, X_2\)</span>), la varianza del estimador <span class="math inline">\(\hat{\beta}_1\)</span> viene dada por <span class="math inline">\(\text{Var}(\hat{\beta}_1) = \frac{\sigma^2}{n(1-r_{12}^2)}\)</span>, donde <span class="math inline">\(r_{12}\)</span> es la correlación entre <span class="math inline">\(X_1\)</span> y <span class="math inline">\(X_2\)</span>.</p>
 <ol type="a">
-<li>Ajusta un modelo de regresión logística para predecir la probabilidad de que una transmisión sea manual (<code>am</code>) en función del peso del coche (<code>wt</code>) y los caballos de fuerza (<code>hp</code>).</li>
-<li>Utiliza la función <code>summary()</code> para examinar el modelo. ¿Qué variables parecen ser significativas?</li>
-<li>Obtén los coeficientes del modelo. ¿Cómo interpretarías el signo del coeficiente para la variable <code>wt</code>?</li>
+<li>Explica matemáticamente qué le ocurre a la varianza de <span class="math inline">\(\hat{\beta}_1\)</span> cuando la correlación entre los predictores (<span class="math inline">\(r_{12}\)</span>) se aproxima a 1 (multicolinealidad perfecta).</li>
+<li>Relaciona esta fórmula con la del Factor de Inflación de la Varianza (VIF). ¿Cómo demuestra esta expresión que la multicolinealidad “infla” la varianza de los estimadores de los coeficientes?</li>
 </ol>
 </section>
-<section id="ejercicio-4-interpretación-odds-ratios" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-4-interpretación-odds-ratios">Ejercicio 4: Interpretación (Odds Ratios)</h3>
-<p>Basado en el modelo del ejercicio anterior:</p>
-<ol type="a">
-<li>Calcula el <strong>Odds Ratio (OR)</strong> para el coeficiente de la variable <code>hp</code>.</li>
-<li>Interpreta este Odds Ratio en el contexto del problema. Específicamente, ¿cómo cambian las “odds” (la razón de probabilidad) de tener una transmisión manual por cada caballo de fuerza adicional, manteniendo el peso constante?</li>
-</ol>
+<section id="ejercicio-3-interpretación-de-coeficientes-en-modelos-transformados" class="level3">
+<h3 class="anchored" data-anchor-id="ejercicio-3-interpretación-de-coeficientes-en-modelos-transformados">Ejercicio 3: Interpretación de Coeficientes en Modelos Transformados</h3>
+<p>Considera un modelo de regresión <strong>log-log</strong>: <span class="math inline">\(\log(Y_i) = \beta_0 + \beta_1 \log(X_i) + \varepsilon_i\)</span>. Demuestra matemáticamente que el coeficiente <span class="math inline">\(\beta_1\)</span> puede interpretarse como una <strong>elasticidad</strong>, es decir, el cambio porcentual en <span class="math inline">\(Y\)</span> ante un cambio del 1% en <span class="math inline">\(X\)</span>. (Pista: utiliza la derivada de <span class="math inline">\(\log(Y)\)</span> con respecto a <span class="math inline">\(\log(X)\)</span>).</p>
 </section>
-<section id="ejercicio-5-práctico-validación-del-modelo-logístico" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-5-práctico-validación-del-modelo-logístico">Ejercicio 5: Práctico (Validación del Modelo Logístico)</h3>
-<p>Continuando con el modelo logístico de <code>mtcars</code>:</p>
-<ol type="a">
-<li>Genera las predicciones de probabilidad del modelo para los datos.</li>
-<li>Convierte estas probabilidades en clases (“0” o “1”) usando un umbral de decisión de 0.5.</li>
-<li>Crea la <strong>matriz de confusión</strong> comparando las predicciones con los valores reales.</li>
-<li>Calcula la <strong>precisión (accuracy)</strong> global del modelo.</li>
-<li>(Bonus) Utiliza el paquete <code>pROC</code> para calcular y visualizar la <strong>curva ROC</strong> y obtener el valor del <strong>AUC</strong>. ¿Qué tan buena es la capacidad discriminativa del modelo?</li>
-</ol>
+<section id="ejercicio-4-fundamentos-de-la-regularización" class="level3">
+<h3 class="anchored" data-anchor-id="ejercicio-4-fundamentos-de-la-regularización">Ejercicio 4: Fundamentos de la Regularización</h3>
+<p>Explica desde una perspectiva geométrica por qué la regularización <strong>Lasso (penalización L1)</strong> es capaz de reducir los coeficientes exactamente a cero, realizando así selección de variables, mientras que la regularización <strong>Ridge (penalización L2)</strong> solo puede encoger los coeficientes hacia cero sin anularlos por completo. Apoya tu explicación con un dibujo o descripción de las “regiones de restricción” de ambos métodos en un espacio de dos coeficientes (<span class="math inline">\(\beta_1, \beta_2\)</span>).</p>
 </section>
-<section id="ejercicio-6-conceptual-regresión-de-poisson" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-6-conceptual-regresión-de-poisson">Ejercicio 6: Conceptual (Regresión de Poisson)</h3>
-<ol type="a">
-<li>¿Qué tipo de variable respuesta está diseñada para modelar la regresión de Poisson?</li>
-<li>¿Cuál es el supuesto fundamental de la distribución de Poisson respecto a la relación entre la media y la varianza?</li>
-<li>¿Cómo se llama el problema que surge cuando este supuesto se viola y la varianza es mayor que la media?</li>
-</ol>
+<section id="ejercicio-5-la-familia-exponencial-y-los-glm" class="level3">
+<h3 class="anchored" data-anchor-id="ejercicio-5-la-familia-exponencial-y-los-glm">Ejercicio 5: La Familia Exponencial y los GLM</h3>
+<p>La teoría de los Modelos Lineales Generalizados (GLM) se basa en que distribuciones como la Normal, Binomial o Poisson pertenecen a la <strong>familia exponencial</strong>. La forma canónica de esta familia establece una relación directa entre la media y la varianza a través de la <strong>función de varianza</strong> <span class="math inline">\(V(\mu)\)</span>. Explica cuál es la función de varianza para un modelo de <strong>Poisson</strong> y para un modelo <strong>Binomial</strong>. ¿Qué implicaciones tiene la forma de <span class="math inline">\(V(\mu)\)</span> en cada caso sobre el comportamiento de los datos y los supuestos del modelo?</p>
 </section>
-<section id="ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-7-práctico-ajuste-de-un-modelo-de-poisson">Ejercicio 7: Práctico (Ajuste de un Modelo de Poisson)</h3>
-<p>El dataset <code>discoveries</code> de R es una serie temporal que cuenta el número de “grandes inventos” por año.</p>
-<ol type="a">
-<li>Crea un gráfico de la serie temporal. ¿Parece la media del conteo constante a lo largo del tiempo?</li>
-<li>Ajusta un modelo de regresión de Poisson simple donde <code>discoveries</code> es la respuesta y el tiempo (<code>time(discoveries)</code>) es el predictor.</li>
-<li>Interpreta el coeficiente del tiempo. (Pista: recuerda exponenciarlo para obtener el Incidence Rate Ratio - IRR).</li>
-</ol>
+<section id="ejercicio-6-el-problema-de-la-inferencia-en-métodos-stepwise" class="level3">
+<h3 class="anchored" data-anchor-id="ejercicio-6-el-problema-de-la-inferencia-en-métodos-stepwise">Ejercicio 6: El Problema de la Inferencia en Métodos Stepwise</h3>
+<p>Los apuntes advierten que los p-valores de un modelo final obtenido mediante selección por pasos (stepwise) están <strong>sesgados y son excesivamente optimistas</strong>. Explica el razonamiento estadístico detrás de esta advertencia. ¿Por qué el proceso iterativo de “buscar y seleccionar” la variable más significativa en cada paso invalida los supuestos teóricos del test t estándar?</p>
 </section>
-<section id="ejercicio-8-diagnóstico-sobredispersión" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-8-diagnóstico-sobredispersión">Ejercicio 8: Diagnóstico (Sobredispersión)</h3>
-<ol type="a">
-<li>Para el modelo de Poisson del ejercicio anterior, calcula el <strong>estadístico de dispersión (<span class="math inline">\(\hat{\phi}\)</span>)</strong>. (Pista: <span class="math inline">\(\hat{\phi} = \frac{\sum r_i^2}{n-p}\)</span>, donde los <span class="math inline">\(r_i\)</span> son los residuos Pearson).</li>
-<li>Basándote en el valor de <span class="math inline">\(\hat{\phi}\)</span>, ¿hay evidencia de sobredispersión?</li>
-<li>Si encuentras sobredispersión, ¿cuál es el modelo alternativo que proponen los apuntes? ¿Qué ventaja teórica ofrece este modelo alternativo?</li>
-</ol>
+<section id="ejercicio-7-propiedades-de-los-estimadores-mco" class="level3">
+<h3 class="anchored" data-anchor-id="ejercicio-7-propiedades-de-los-estimadores-mco">Ejercicio 7: Propiedades de los Estimadores MCO</h3>
+<p>El <strong>Teorema de Gauss-Markov</strong> establece que, bajo ciertos supuestos, los estimadores de Mínimos Cuadrados Ordinarios (MCO) son <strong>MELI (Mejores Estimadores Lineales Insesgados)</strong>. Demuestra la propiedad de <strong>insesgadez</strong> para el estimador <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> en notación matricial. Es decir, demuestra que <span class="math inline">\(E[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta}\)</span>. Muestra todos los pasos y menciona qué supuestos del modelo estás utilizando en cada paso.</p>
 </section>
-<section id="ejercicio-9-conceptual-deviance" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-9-conceptual-deviance">Ejercicio 9: Conceptual (Deviance)</h3>
-<p>La <strong>deviance</strong> es la medida principal de bondad de ajuste en los GLM. Explica conceptualmente qué mide. ¿Cómo se utiliza la diferencia en deviance entre dos modelos anidados para decidir cuál es mejor?</p>
+<section id="ejercicio-8-intervalos-de-confianza-vs.-predicción" class="level3">
+<h3 class="anchored" data-anchor-id="ejercicio-8-intervalos-de-confianza-vs.-predicción">Ejercicio 8: Intervalos de Confianza vs. Predicción</h3>
+<p>La fórmula para el intervalo de predicción para una nueva observación en regresión lineal simple es: <span class="math display">\[\hat{y}_0 \pm t_{\alpha/2, n-2} \cdot \sqrt{\text{MSE} \left( 1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right)}\]</span> Explica el origen y el significado de cada uno de los <strong>tres términos</strong> que se encuentran dentro del paréntesis bajo la raíz cuadrada. ¿Qué fuente de incertidumbre representa cada término y por qué la suma de los tres es necesaria para un intervalo de predicción?</p>
 </section>
-<section id="ejercicio-10-elección-del-modelo-adecuado" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-10-elección-del-modelo-adecuado">Ejercicio 10: Elección del Modelo Adecuado</h3>
-<p>Para cada uno de los siguientes escenarios, indica qué tipo de GLM (Logístico, Poisson, Binomial Negativo, Gamma…) sería el más apropiado y por qué.</p>
-<ol type="a">
-<li>Quieres modelar el <strong>tiempo (en minutos)</strong> que tarda un cliente en resolver una consulta en un centro de atención telefónica. El tiempo es siempre positivo y muchos valores se agrupan en tiempos cortos, con una cola larga de tiempos muy largos.</li>
-<li>Quieres predecir la <strong>presencia o ausencia</strong> de una especie de planta en diferentes parcelas de un bosque.</li>
-<li>Quieres modelar el <strong>número de visitas</strong> que cada usuario hace a una página web en un mes. Observas que la varianza del número de visitas es mucho mayor que la media.</li>
-</ol>
+<section id="ejercicio-9-estimación-por-máxima-verosimilitud" class="level3">
+<h3 class="anchored" data-anchor-id="ejercicio-9-estimación-por-máxima-verosimilitud">Ejercicio 9: Estimación por Máxima Verosimilitud</h3>
+<p>Para un modelo de regresión logística, la función de log-verosimilitud es: <span class="math display">\[\ell(\boldsymbol{\beta}) = \sum_{i=1}^{n} \left[y_i \log(p_i) + (1-y_i) \log(1-p_i)\right]\]</span> donde <span class="math inline">\(p_i = \frac{1}{1 + e^{-\mathbf{x}_i^T\boldsymbol{\beta}}}\)</span>. Deriva la <strong>ecuación de puntuación (score equation)</strong> para un coeficiente <span class="math inline">\(\beta_j\)</span> (es decir, calcula <span class="math inline">\(\frac{\partial \ell}{\partial \beta_j}\)</span>) y demuestra que se iguala a cero cuando <span class="math inline">\(\sum_{i=1}^{n} x_{ij}(y_i - p_i) = 0\)</span>. Interpreta el significado de esta condición final.</p>
+</section>
+<section id="ejercicio-10-el-coeficiente-de-regresión-parcial" class="level3">
+<h3 class="anchored" data-anchor-id="ejercicio-10-el-coeficiente-de-regresión-parcial">Ejercicio 10: El Coeficiente de Regresión Parcial</h3>
+<p>El texto afirma que el coeficiente <span class="math inline">\(\hat{\beta}_j\)</span> de una regresión múltiple puede entenderse como el coeficiente de una regresión simple entre dos conjuntos de residuos. Explica con detalle este concepto de <strong>regresión parcial</strong>. ¿Qué se está “parcializando” o “eliminando” de la variable respuesta <span class="math inline">\(Y\)</span> y del predictor <span class="math inline">\(X_j\)</span> antes de calcular su relación? ¿Por qué este concepto es fundamental para entender la interpretación <em>ceteris paribus</em>?</p>
 </section>
 
 </main>
