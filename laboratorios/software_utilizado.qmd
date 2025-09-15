@@ -14,9 +14,9 @@ format:
 
 Los materiales prácticos de esta asignatura consisten en una serie de laboratorios desarrollados en R y presentados en formato de cuaderno interactivo (`.qmd` de Quarto). Estos laboratorios son fundamentales para aplicar los conceptos teóricos vistos en clase, permitiendo al estudiante no solo ejecutar el código, sino también entender el razonamiento detrás de cada paso del análisis.
 
-Para garantizar su preservación y su consulta en acceso abierto, el código fuente íntegro de los laboratorios se ha depositado en el archivo de Software Heritage. El identificador único y permanente que certifica dicho depósito es el siguiente:
+Para garantizar su preservación y consulta en acceso abierto, el código fuente completo de los laboratorios se ha depositado en el archivo Software Heritage. El depósito puede consultarse mediante el siguiente SWHID:
 
-SWHID: `swh:1:dir:e347e182ad5c23fdf7f3cacff0ec657dc3231478`
+`swh:1:dir:e347e182ad5c23fdf7f3cacff0ec657dc3231478`
 
 A continuación, se detalla el contenido de cada uno de los laboratorios incluidos en este depósito.
 

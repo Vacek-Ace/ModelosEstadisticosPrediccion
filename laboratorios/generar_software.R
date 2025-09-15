@@ -73,10 +73,10 @@ unir_pdfs_software <- function() {
     rc1 <- system(cmd1)
     if (rc1 != 0 || !file.exists(tmp_no_first)) {
       # si no se pudo quitar la primera página, unir todo
-      cmd2 <- paste("pdftk", shQuote("portada.pdf"), shQuote(content_pdf), "cat output", shQuote("SoftwareUtilizado.pdf"))
+      cmd2 <- paste("pdftk", shQuote("portada.pdf"), shQuote(content_pdf), "cat output", shQuote("SoftwareUtilizadoModelosEstadisticosPrediccion.pdf.pdf"))
       system(cmd2)
     } else {
-      cmd3 <- paste("pdftk", shQuote("portada.pdf"), shQuote(tmp_no_first), "cat output", shQuote("SoftwareUtilizado.pdf"))
+      cmd3 <- paste("pdftk", shQuote("portada.pdf"), shQuote(tmp_no_first), "cat output", shQuote("SoftwareUtilizadoModelosEstadisticosPrediccion.pdf"))
       system(cmd3)
       file.remove(tmp_no_first)
     }
@@ -87,7 +87,7 @@ unir_pdfs_software <- function() {
       stop("Necesitas 'pdftools' o 'pdftk' para unir PDFs")
     }
     # Intentar combinar portada + contenido (sin eliminar páginas)
-    pdftools::pdf_combine(c("portada.pdf", content_pdf), output = "SoftwareUtilizado.pdf")
+    pdftools::pdf_combine(c("portada.pdf", content_pdf), output = "SoftwareUtilizadoModelosEstadisticosPrediccion.pdf.pdf")
   }
   # Borrar el PDF de contenido intermedio si existía
   if (file.exists("software_temp.pdf")) file.remove("software_temp.pdf")
@@ -96,7 +96,7 @@ unir_pdfs_software <- function() {
   if (file.exists("portada.pdf")) file.remove("portada.pdf")
   
   setwd("..")
-  cat("Archivo final creado: laboratorios/SoftwareUtilizado.pdf\n")
+  cat("Archivo final creado: laboratorios/SoftwareUtilizadoModelosEstadisticosPrediccion.pdf.pdf\n")
 }
 
 crear_software_completa <- function() {
