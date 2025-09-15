@@ -31,7 +31,7 @@ format:
     css: estilos_html.css
   pdf:
     documentclass: scrreprt
-    toc-title: "Índice"
+    toc-title: "Índice apuntes"
 
 editor: source
 

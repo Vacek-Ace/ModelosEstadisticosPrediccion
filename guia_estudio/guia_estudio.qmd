@@ -3,11 +3,11 @@ lang: es
 format:
   pdf:
     pdf-engine: weasyprint
-    title-block-banner: false # <-- ¡Esta línea es la clave!
+    title-block-banner: false 
     toc: true
-    toc-title: "Índice de Contenidos"
+    toc-title: "Índice guía de estudio"
     include-before-body: portada.html
-    css: ../estilos.css
+    css:../estilos.css
 ---
 
 # Introducción a la asignatura
@@ -35,55 +35,243 @@ Comenzaremos sentando las bases de la regresión lineal, desde su formulación m
 - **Tema 6:** Modelos de Regresión Generalizada (GLM)
 - **Tema 7:** Tópicos Avanzados en Modelado Predictivo
 
-
 # Desarrollo de la asignatura
 
-El curso se desarrolla a lo largo de 15 semanas, con dos sesiones semanales. La metodología busca integrar la teoría y la práctica de forma fluida: los conceptos teóricos se presentarán junto con su implementación en R, fomentando un aprendizaje aplicado en cada clase. Los apuntes de la asignatura incluyen todo el código necesario para que el alumno pueda seguir las explicaciones y desarrollar las prácticas correspondientes.
+El curso se desarrolla a lo largo de 15 semanas, con dos sesiones semanales. La metodología busca integrar la teoría y la práctica de forma fluida: los conceptos teóricos se presentarán junto con su implementación en R, fomentando un aprendizaje aplicado en cada clase.
 
-- **Semana 1: Presentación e Introducción a los Modelos de Regresión (Tema 1)**
-  - Presentación de la asignatura, guía docente y sistema de evaluación. Se abordarán los conceptos fundamentales del modelado estadístico: el propósito dual de predecir vs. explicar y la anatomía de un modelo de regresión.
 
-- **Semana 2: Regresión Lineal Simple (RLS) - Fundamentos y Estimación (Tema 2)**
-  - Se cubrirá la formulación del modelo, los supuestos teóricos y la estimación de parámetros mediante Mínimos Cuadrados Ordinarios (MCO), junto con la interpretación de coeficientes y R².
+## Semana 1: Presentación e Introducción a los Modelos de Regresión
+- **Contenidos:** Presentación de la asignatura, guía docente y sistema de evaluación. Se abordarán los conceptos fundamentales del modelado estadístico: el propósito dual de **predecir vs. explicar** y la anatomía de un modelo de regresión.
+- **🎯 Objetivos de Aprendizaje:**
+    - Diferenciar entre un objetivo de predicción y uno de inferencia.
+    - Identificar los componentes clave de un modelo de regresión (respuesta, predictores, error).
+    - Comprender el ecosistema de modelos de regresión y el rol de R en el curso.
+- **📚 Materiales Utilizados:**
+    - Apuntes (Tema 1), Diapositivas ("Introducción a los Modelos Estadísticos"), `lab0_introduccion.html`.
+- **💻 Actividades Planificadas:**
+    - Discusión sobre los objetivos de la asignatura.
+    - Sesión práctica introductoria con `lab0_introduccion.html` para configurar el entorno de R y RStudio.
+- **🏠 Trabajo Personal Recomendado:**
+    - Lectura del Tema 1 de los apuntes.
+    - Asegurar que el entorno de R/RStudio está correctamente instalado y funcionando.
 
-- **Semana 3: RLS - Inferencia y Diagnóstico (Tema 2)**
-  - Se profundizará en la evaluación del modelo mediante la inferencia sobre los coeficientes (test t), ANOVA (test F) y el diagnóstico completo de los supuestos a través del análisis de residuos.
 
-- **Semana 4: Regresión Lineal Múltiple (RLM) - Formulación e Interpretación (Tema 3)**
-  - Extensión al caso multivariante, con especial énfasis en la interpretación de coeficientes bajo el principio *ceteris paribus* y la introducción al problema de la multicolinealidad.
+## Semana 2: Regresión Lineal Simple (RLS) - Fundamentos y Estimación
+- **Contenidos:** Formulación del modelo RLS, supuestos teóricos y estimación de parámetros mediante **Mínimos Cuadrados Ordinarios (MCO)**. Interpretación de coeficientes y coeficiente de determinación $R^2$.
+- **🎯 Objetivos de Aprendizaje:**
+    - Formular matemáticamente el modelo de RLS.
+    - Estimar los coeficientes $\beta_0$ y $\beta_1$ usando MCO.
+    - Interpretar el significado práctico de la pendiente, el intercepto y $R^2$.
+- **📚 Materiales Utilizados:**
+    - Apuntes (Secciones 2.1 a 2.3), Diapositivas ("Regresión Lineal Simple"), `lab1_regresion_simple.html`.
+    - Ejercicios: Boletín de RLS (Ejercicios 1, 2, 3).
+- **💻 Actividades Planificadas:**
+    - Ajuste de un primer modelo `lm()` en R.
+    - Análisis e interpretación de la salida de la función `summary()`.
+- **🏠 Trabajo Personal Recomendado:**
+    - Lectura de las secciones 2.1, 2.2 y 2.3 de los apuntes.
+    - Realización de los **ejercicios 1, 2 y 3** de RLS.
 
-- **Semana 5: Ingeniería de Características I - Transformaciones (Tema 4)**
-  - Se explorarán técnicas para mejorar el modelo, como las transformaciones de variables (logarítmica, Box-Cox) y la codificación de variables categóricas.
 
-- **Semana 6: Ingeniería de Características II - Interacciones (Tema 4)**
-  - Se estudiará cómo modelar relaciones más complejas mediante la inclusión, visualización e interpretación de términos de interacción entre variables.
+## Semana 3: RLS - Inferencia y Diagnóstico
+- **Contenidos:** Inferencia sobre los coeficientes (test-t), ANOVA para la significancia global (test F) y diagnóstico completo de los supuestos a través del análisis de residuos.
+- **🎯 Objetivos de Aprendizaje:**
+    - Realizar e interpretar contrastes de hipótesis para los coeficientes.
+    - Evaluar la bondad de ajuste de un modelo mediante ANOVA y $R^2$.
+    - Diagnosticar la validez de los supuestos del modelo analizando los residuos.
+- **📚 Materiales Utilizados:**
+    - Apuntes (Secciones 2.4 a 2.6), Diapositivas ("Regresión Lineal Simple"), `lab1_regresion_simple.html`.
+    - Ejercicios: Boletín de RLS (Ejercicios 4 al 10).
+- **💻 Actividades Planificadas:**
+    - Taller práctico de diagnóstico de modelos, analizando gráficamente los residuos (linealidad, homocedasticidad, normalidad).
+    - Uso de tests estadísticos (Shapiro-Wilk, Breusch-Pagan) para confirmar el diagnóstico visual.
+- **🏠 Trabajo Personal Recomendado:**
+    - Completar el laboratorio `lab1_regresion_simple.html`.
+    - Resolver los **ejercicios 4 al 10** de RLS.
 
-- **Semana 7: Consolidación y Práctica de Regresión Lineal**
-  - Semana dedicada a ejercicios prácticos completos para afianzar los conceptos de RLS, RLM y la ingeniería de características, sirviendo como preparación para el Trabajo 1.
 
-- **Semana 8: Evaluación Parcial e Introducción a la Selección de Variables**
-  - Defensa oral del Trabajo 1. Se comenzará el siguiente bloque temático con la introducción a los criterios de información (AIC, BIC, Cp de Mallows).
+## Semana 4: Regresión Lineal Múltiple (RLM) - Formulación e Interpretación
+- **Contenidos:** Extensión al caso multivariante. Interpretación de coeficientes bajo el principio *ceteris paribus*. Coeficiente de determinación ajustado ($R^2_{adj}$). Diagnóstico e identificación de la **multicolinealidad**.
+- **🎯 Objetivos de Aprendizaje:**
+    - Interpretar correctamente los coeficientes de una RLM como efectos parciales.
+    - Diagnosticar la presencia de multicolinealidad utilizando el Factor de Inflación de la Varianza (VIF).
+- **📚 Materiales Utilizados:**
+    - Apuntes (Tema 3), Diapositivas ("Regresión Lineal Múltiple"), `lab2_regresion_multiple.html`.
+    - Ejercicios: Boletín de RLM (Ejercicios 1 al 6).
+- **💻 Actividades Planificadas:**
+    - Ajuste de un modelo de RLM en R.
+    - Taller práctico de diagnóstico de multicolinealidad, calculando e interpretando los valores VIF.
+- **🏠 Trabajo Personal Recomendado:**
+    - Lectura completa del Tema 3 de los apuntes.
+    - Resolver los **ejercicios 1 al 6** de RLM.
 
-- **Semana 9: Métodos de Selección de Variables (Tema 5)**
-  - Estudio de los métodos automáticos (stepwise) y exhaustivos (best subset), analizando en profundidad sus ventajas y, sobre todo, sus limitaciones prácticas.
 
-- **Semana 10: Regularización y Validación de Modelos (Tema 5)**
-  - Se introducirán las técnicas de regularización (Ridge, Lasso, Elastic Net) y los fundamentos de la validación de modelos, con especial foco en la validación cruzada (Cross-Validation).
+## Semana 5: Ingeniería de Características I - Transformaciones
+- **Contenidos:** Técnicas para mejorar el modelo: transformaciones de variables para linealizar relaciones y estabilizar la varianza (logarítmica, Box-Cox). Codificación de variables categóricas (One-Hot vs. Ordinal).
+- **🎯 Objetivos de Aprendizaje:**
+    - Saber cuándo y cómo aplicar transformaciones para corregir violaciones de supuestos.
+    - Codificar correctamente variables categóricas según su naturaleza.
+- **📚 Materiales Utilizados:**
+    - Apuntes (Secciones 4.1 a 4.5), Diapositivas ("Ingeniería de Características"), `lab3_ingenieria_caracteristicas.html`.
+    - Ejercicios: Boletín de Ing. de Características (Ejercicios 1 al 6).
+- **💻 Actividades Planificadas:**
+    - Práctica en R sobre diagnóstico de no-linealidad y aplicación de transformaciones.
+    - Creación de variables *dummy- para predictores categóricos.
+- **🏠 Trabajo Personal Recomendado:**
+    - Lectura de las secciones sobre transformaciones en los apuntes (4.1-4.5).
+    - Resolver los **ejercicios 1 al 6** (Tema 4).
 
-- **Semana 11: Modelos Lineales Generalizados (GLM) - Fundamentos (Tema 6)**
-  - Introducción a los componentes clave que extienden el modelo lineal: la familia exponencial, la función de enlace y la estimación por Máxima Verosimilitud (MLE).
 
-- **Semana 12: GLM - Regresión Logística (Tema 6)**
-  - Estudio en profundidad del modelo para respuestas binarias, incluyendo la interpretación de Odds Ratios y las métricas de validación específicas como la curva ROC y el AUC.
+## Semana 6: Ingeniería de Características II - Interacciones
+- **Contenidos:** Modelado de relaciones complejas mediante la inclusión, visualización e interpretación de **términos de interacción** entre variables continuas y categóricas.
+- **🎯 Objetivos de Aprendizaje:**
+    - Identificar la necesidad de incluir un término de interacción.
+    - Ajustar, visualizar e interpretar un modelo con interacciones.
+- **📚 Materiales Utilizados:**
+    - Apuntes (Sección 4.6), Diapositivas ("Ingeniería de Características"), `lab3_ingenieria_caracteristicas.html`.
+    - Ejercicios: Boletín de Ing. de Características (Ejercicios 7 al 10).
+- **💻 Actividades Planificadas:**
+    - Ajuste de modelos con interacciones en R.
+    - Visualización de interacciones mediante gráficos de efectos para interpretar cómo cambia la pendiente.
+- **🏠 Trabajo Personal Recomendado:**
+    - Completar el laboratorio `lab3_ingenieria_caracteristicas.html`.
+    - Resolver los **ejercicios 7 al 10** (Tema 4).
 
-- **Semana 13: GLM - Regresión de Poisson (Tema 6)**
-  - Se abordará el modelado de datos de conteo, la interpretación de Incidence Rate Ratios (IRR), y el diagnóstico y solución del problema de la sobredispersión mediante la Regresión Binomial Negativa.
 
-- **Semana 14: Tópicos Avanzados y Repaso**
-  - Breve introducción a extensiones de los modelos vistos, como los Modelos Aditivos Generalizados (GAMs). Repaso general de toda la materia y sesión de consultas para el examen y el trabajo final.
+## Semana 7: Consolidación y Práctica de Regresión Lineal
+- **Contenidos:** Repaso y aplicación conjunta de RLS, RLM e ingeniería de características.
+- **🎯 Objetivos de Aprendizaje:**
+    - Integrar todos los conceptos de modelado lineal en un único flujo de trabajo.
+    - Afrontar un problema de modelado de principio a fin: desde el análisis exploratorio hasta el diagnóstico final.
+- **📚 Materiales Utilizados:**
+    - Todos los materiales de los Temas 2, 3 y 4. Ejercicios de repaso de los boletines correspondientes.
+- **💻 Actividades Planificadas:**
+    - Resolución de un caso de estudio completo en clase.
+    - Sesión de tutoría y resolución de dudas para el Trabajo 1.
+- **🏠 Trabajo Personal Recomendado:**
+    - Finalizar la preparación y entrega del Trabajo 1.
 
-- **Semana 15: Presentación de Proyectos Finales**
-  - Exposición y defensa del Trabajo Colectivo 2 por parte de los alumnos, donde aplicarán las técnicas de la asignatura a un problema de modelado real.
+
+## Semana 8: Evaluación Parcial e Introducción a la Selección de Variables
+- **Contenidos:** Defensa oral del Trabajo 1. Introducción a los criterios de información (AIC, BIC, $C_p$ de Mallows) para la comparación de modelos.
+- **🎯 Objetivos de Aprendizaje:**
+    - Defender y justificar las decisiones tomadas en un proyecto de modelado.
+    - Comprender la base teórica del compromiso sesgo-varianza y cómo los criterios de información lo cuantifican.
+- **📚 Materiales Utilizados:**
+    - Apuntes (Sección 5.3), Diapositivas ("Selección de Variables, Regularización y Validación").
+    - Ejercicios: Boletín de Selección de Variables (Ejercicio 3).
+- **💻 Actividades Planificadas:**
+    - Presentaciones orales del Trabajo 1.
+    - Clase teórica sobre criterios de bondad de ajuste.
+- **🏠 Trabajo Personal Recomendado:**
+    - Comenzar la lectura del Tema 5 y reflexionar sobre el **ejercicio conceptual 3**.
+
+
+## Semana 9: Métodos de Selección de Variables
+- **Contenidos:** Estudio de los métodos automáticos (*stepwise*) y exhaustivos (*best subset*), analizando sus ventajas y, sobre todo, sus limitaciones prácticas.
+- **🎯 Objetivos de Aprendizaje:**
+    - Aplicar algoritmos de selección de variables en R.
+    - Analizar críticamente los resultados de los métodos automáticos, entendiendo su inestabilidad.
+- **📚 Materiales Utilizados:**
+    - Apuntes (Secciones 5.4, 5.5), Diapositivas ("Selección de Variables, Regularización y Validación"), `lab4_seleccion_variables.html`.
+    - Ejercicios: Boletín de Selección de Variables (Ejercicios 4, 5, 6).
+- **💻 Actividades Planificadas:**
+    - Práctica en R con las funciones `regsubsets()` y `step()`.
+    - Discusión sobre la invalidez de los p-valores en modelos seleccionados por métodos *stepwise*.
+- **🏠 Trabajo Personal Recomendado:**
+    - Lectura de las secciones 5.4 y 5.5 de los apuntes.
+    - Resolver los **ejercicios 4, 5 y 6**.
+
+
+## Semana 10: Regularización y Validación de Modelos
+- **Contenidos:** Técnicas de regularización (Ridge, Lasso, Elastic Net) y fundamentos de la validación de modelos, con especial foco en la **validación cruzada** (Cross-Validation).
+- **🎯 Objetivos de Aprendizaje:**
+    - Comprender la diferencia fundamental entre la penalización L1 (Lasso) y L2 (Ridge).
+    - Aplicar la validación cruzada para seleccionar hiperparámetros y evaluar el rendimiento predictivo del modelo.
+- **📚 Materiales Utilizados:**
+    - Apuntes (Secciones 5.6, 5.7), Diapositivas ("Selección de Variables, Regularización y Validación"), `lab4_seleccion_variables.html`.
+    - Ejercicios: Boletín de Selección de Variables (Ejercicios 7 al 10).
+- **💻 Actividades Planificadas:**
+    - Ajuste de modelos Lasso y Ridge con `glmnet` en R.
+    - Uso de `cv.glmnet` para encontrar el valor óptimo de lambda.
+- **🏠 Trabajo Personal Recomendado:**
+    - Completar el laboratorio `lab4_seleccion_variables.html`.
+    - Resolver los **ejercicios 7 al 10**.
+
+
+## Semana 11: Modelos Lineales Generalizados (GLM) - Fundamentos
+- **Contenidos:** Introducción a los componentes clave que extienden el modelo lineal: la **familia exponencial**, la **función de enlace** y la estimación por Máxima Verosimilitud (MLE).
+- **🎯 Objetivos de Aprendizaje:**
+    - Identificar los tres componentes que definen cualquier GLM.
+    - Entender por qué se necesita MLE en lugar de MCO para estimar los GLM.
+- **📚 Materiales Utilizados:**
+    - Apuntes (Sección 6.1, 6.2), Diapositivas ("Modelos Lineales Generalizados"), `lab5_modelos_generalizados.html`.
+    - Ejercicios: Boletín de GLM (Ejercicios 1, 2, 9).
+- **💻 Actividades Planificadas:**
+    - Clase teórica vinculando la regresión lineal como un caso particular de los GLM.
+    - Análisis de diferentes tipos de variables respuesta para identificar el GLM apropiado.
+- **🏠 Trabajo Personal Recomendado:**
+    - Lectura de las secciones 6.1 a 6.4 de los apuntes y resolución de los **ejercicios conceptuales 1, 2 y 9**.
+
+
+## Semana 12: GLM - Regresión Logística
+- **Contenidos:** Estudio del modelo para respuestas binarias, incluyendo la interpretación de **Odds Ratios (OR)** y las métricas de validación específicas como la **curva ROC** y el **AUC**.
+- **🎯 Objetivos de Aprendizaje:**
+    - Ajustar e interpretar un modelo de regresión logística.
+    - Calcular e interpretar los Odds Ratios.
+    - Validar un clasificador binario mediante la matriz de confusión y la curva ROC.
+- **📚 Materiales Utilizados:**
+    - Apuntes (Sección 6.5), Diapositivas ("Modelos Lineales Generalizados"), `lab5_modelos_generalizados.html`.
+    - Ejercicios: Boletín de GLM (Ejercicios 3, 4, 5).
+- **💻 Actividades Planificadas:**
+    - Ajuste de un modelo `glm()` con `family = binomial`.
+    - Taller práctico de cálculo de métricas de clasificación y visualización de la curva ROC.
+- **🏠 Trabajo Personal Recomendado:**
+    - Resolver los **ejercicios 3, 4 y 5** sobre regresión logística.
+
+
+## Semana 13: GLM - Regresión de Poisson
+- **Contenidos:** Modelado de datos de conteo, interpretación de **Incidence Rate Ratios (IRR)**, y diagnóstico y solución del problema de la **sobredispersión** mediante la Regresión Binomial Negativa.
+- **🎯 Objetivos de Aprendizaje:**
+    - Ajustar e interpretar un modelo de regresión de Poisson.
+    - Diagnosticar la sobredispersión y saber cuándo usar un modelo Binomial Negativo.
+- **📚 Materiales Utilizados:**
+    - Apuntes (Sección 6.6), Diapositivas ("Modelos Lineales Generalizados"), `lab5_modelos_generalizados.html`.
+    - Ejercicios: Boletín de GLM (Ejercicios 6, 7, 8, 10).
+- **💻 Actividades Planificadas:**
+    - Ajuste de un modelo `glm()` con `family = poisson`.
+    - Cálculo del estadístico de dispersión y comparación con un modelo `glm.nb()`.
+- **🏠 Trabajo Personal Recomendado:**
+    - Completar el laboratorio `lab5_modelos_generalizados.html`.
+    - Resolver los **ejercicios 6, 7, 8 y 10**.
+
+
+## Semana 14: Tópicos Avanzados y Repaso
+- **Contenidos:** Breve introducción a extensiones de los modelos vistos, como los **Modelos Aditivos Generalizados (GAMs)**. Repaso general de toda la materia.
+- **🎯 Objetivos de Aprendizaje:**
+    - Reconocer las situaciones en las que un GAM puede ser una alternativa útil.
+    - Consolidar el conocimiento global de la asignatura y resolver dudas.
+- **📚 Materiales Utilizados:**
+    - Todos los materiales del curso, incluyendo los Ejercicios Avanzados.
+- **💻 Actividades Planificadas:**
+    - Sesión de repaso general y consultas para el examen final.
+    - Tutorías para el Trabajo Colectivo 2.
+- **🏠 Trabajo Personal Recomendado:**
+    - Estudio para el examen final y desarrollo del trabajo.
+    - Intentar resolver los **Ejercicios Avanzados**.
+
+
+## Semana 15: Presentación de Proyectos Finales
+- **Contenidos:** Exposición y defensa del Trabajo Colectivo 2.
+- **🎯 Objetivos de Aprendizaje:**
+    - Aplicar las técnicas de la asignatura a un problema de modelado real.
+    - Comunicar de forma efectiva los resultados de un análisis estadístico.
+- **📚 Materiales Utilizados:**
+    - Proyectos desarrollados por los estudiantes.
+- **💻 Actividades Planificadas:**
+    - Presentaciones orales de los trabajos finales por parte de los grupos.
+- **🏠 Trabajo Personal Recomendado:**
+    - N/A.
 
 
 # Bibliografía

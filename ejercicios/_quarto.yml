@@ -26,7 +26,7 @@ format:
     # Opciones para la Tabla de Contenidos
     toc: true
     toc-depth: 3
-    toc-title: "Índice de Ejercicios"
+    toc-title: "Índice ejercicios"
     number-sections: false
     # Portada y estilo personalizado para HTML (ignorado en PDF)
     include-before-body: portada.html

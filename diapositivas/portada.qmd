@@ -6,7 +6,7 @@ format:
     css: ../estilos.css
 ---
 
-# Índice de Diapositivas
+# Índice de diapositivas
 
 - Tema 0: Introducción a los Modelos Estadísticos para la Predicción
 - Tema 1: Regresión Lineal Simple  

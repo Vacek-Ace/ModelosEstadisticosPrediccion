@@ -1,0 +1,170 @@
+# Script para generar el libro completo de Modelos Estadísticos de Predicción
+# Versión corregida con portada original + índice LaTeX separado
+
+# Cargar librerías necesarias
+library(pdftools)
+library(quarto)
+
+# Función para mostrar progreso
+mostrar_progreso <- function(mensaje) {
+  cat(paste0("[", Sys.time(), "] ", mensaje, "\n"))
+}
+
+mostrar_progreso("Iniciando generación del libro completo...")
+
+#---------------------------
+# 1. GENERAR PORTADA E ÍNDICE
+#---------------------------
+mostrar_progreso("Generando portada original...")
+
+# Cambiar al directorio libro para generar la portada
+setwd("libro")
+quarto_render("portada.qmd", output_file = "portada.pdf", quiet = TRUE)
+
+mostrar_progreso("Generando índice separado...")
+quarto_render("indice.qmd", output_file = "indice.pdf", quiet = TRUE)
+setwd("..")
+
+mostrar_progreso("Portada e índice generados correctamente")
+
+#---------------------------
+# 2. VERIFICAR ARCHIVOS PDF
+#---------------------------
+pdfs_necesarios <- c(
+  "libro/portada.pdf",
+  "libro/indice.pdf",
+  "guia_estudio/GuiaEstudioModelosEstadisticosPrediccion.pdf",
+  "apuntes/apuntes_pdf/ApuntesModelosEstadisticosPrediccion.pdf",
+  "diapositivas/diapositivas_pdf/DiapositivasModelosEstadisticosPrediccion.pdf",
+  "ejercicios/ejercicios_pdf/EjerciciosModelosEstadisticosPrediccion.pdf"
+)
+
+# Verificar que todos los archivos existen
+for (pdf in pdfs_necesarios) {
+  if (!file.exists(pdf)) {
+    stop(paste("Error: No se encuentra el archivo", pdf))
+  }
+}
+
+mostrar_progreso("Todos los archivos PDF verificados")
+
+#---------------------------
+# 3. CALCULAR PÁGINAS DINÁMICAMENTE
+#---------------------------
+mostrar_progreso("Calculando páginas de cada documento...")
+
+# Obtener número de páginas de cada documento
+paginas_portada <- pdf_length("libro/portada.pdf")
+paginas_indice <- pdf_length("libro/indice.pdf")
+paginas_guia <- pdf_length("guia_estudio/GuiaEstudioModelosEstadisticosPrediccion.pdf")
+paginas_apuntes <- pdf_length("apuntes/apuntes_pdf/ApuntesModelosEstadisticosPrediccion.pdf")
+paginas_diapositivas <- pdf_length("diapositivas/diapositivas_pdf/DiapositivasModelosEstadisticosPrediccion.pdf")
+paginas_ejercicios <- pdf_length("ejercicios/ejercicios_pdf/EjerciciosModelosEstadisticosPrediccion.pdf")
+
+mostrar_progreso(sprintf("Páginas: Portada=%d, Índice=%d, Guía=%d, Apuntes=%d, Diapositivas=%d, Ejercicios=%d", 
+                paginas_portada, paginas_indice, paginas_guia, paginas_apuntes, paginas_diapositivas, paginas_ejercicios))
+
+# Calcular páginas de inicio para bookmarks
+pagina_inicio_indice <- paginas_portada + 1
+pagina_inicio_guia <- pagina_inicio_indice + paginas_indice
+pagina_inicio_apuntes <- pagina_inicio_guia + paginas_guia
+pagina_inicio_diapositivas <- pagina_inicio_apuntes + paginas_apuntes  
+pagina_inicio_ejercicios <- pagina_inicio_diapositivas + paginas_diapositivas
+
+mostrar_progreso(sprintf("Páginas de inicio: Índice=%d, Guía=%d, Apuntes=%d, Diapositivas=%d, Ejercicios=%d",
+                pagina_inicio_indice, pagina_inicio_guia, pagina_inicio_apuntes, pagina_inicio_diapositivas, pagina_inicio_ejercicios))
+
+#---------------------------
+# 4. COMBINAR TODOS LOS PDFs
+#---------------------------
+mostrar_progreso("Combinando todos los documentos PDF...")
+
+pdf_combine(input = pdfs_necesarios, 
+           output = "libro/LibroCompletoModelosEstadisticos.pdf")
+
+#---------------------------
+# 5. AGREGAR BOOKMARKS
+#---------------------------
+mostrar_progreso("Agregando bookmarks al documento...")
+
+# Verificar si pdftk está disponible
+if (system("pdftk --version", ignore.stdout = TRUE, ignore.stderr = TRUE) == 0) {
+  
+  # Crear archivo de bookmarks con páginas calculadas dinámicamente
+  bookmarks_contenido <- c(
+    "BookmarkBegin",
+    "BookmarkTitle: Portada",
+    "BookmarkLevel: 1",
+    "BookmarkPageNumber: 1",
+    "BookmarkBegin",
+    "BookmarkTitle: Indice General",
+    "BookmarkLevel: 1",
+    paste0("BookmarkPageNumber: ", pagina_inicio_indice),
+    "BookmarkBegin",
+    "BookmarkTitle: Guia de Estudio",
+    "BookmarkLevel: 1", 
+    paste0("BookmarkPageNumber: ", pagina_inicio_guia),
+    "BookmarkBegin",
+    "BookmarkTitle: Apuntes Teoricos",
+    "BookmarkLevel: 1",
+    paste0("BookmarkPageNumber: ", pagina_inicio_apuntes),
+    "BookmarkBegin",
+    "BookmarkTitle: Diapositivas de Clase",
+    "BookmarkLevel: 1",
+    paste0("BookmarkPageNumber: ", pagina_inicio_diapositivas),
+    "BookmarkBegin", 
+    "BookmarkTitle: Ejercicios Practicos",
+    "BookmarkLevel: 1",
+    paste0("BookmarkPageNumber: ", pagina_inicio_ejercicios)
+  )
+  
+  # Escribir archivo temporal de bookmarks con codificación Latin-1 para pdftk
+  con <- file("libro/bookmarks_temp.txt", "w", encoding = "latin1")
+  writeLines(bookmarks_contenido, con)
+  close(con)
+  
+  # Aplicar bookmarks usando pdftk
+  comando_pdftk <- paste("pdftk", 
+                        shQuote("libro/LibroCompletoModelosEstadisticos.pdf"),
+                        "update_info libro/bookmarks_temp.txt output",
+                        shQuote("libro/temp_con_bookmarks.pdf"))
+  
+  resultado_pdftk <- system(comando_pdftk, ignore.stdout = TRUE)
+  
+  if (resultado_pdftk == 0) {
+    file.rename("libro/temp_con_bookmarks.pdf", "libro/LibroCompletoModelosEstadisticos.pdf")
+    file.remove("libro/bookmarks_temp.txt")
+    mostrar_progreso("Bookmarks agregados exitosamente")
+  } else {
+    mostrar_progreso("Advertencia: No se pudieron agregar los bookmarks")
+  }
+  
+} else {
+  mostrar_progreso("Advertencia: pdftk no está disponible, se omitieron los bookmarks")
+}
+
+#---------------------------
+# 6. MOSTRAR RESUMEN FINAL
+#---------------------------
+archivo_final <- "libro/LibroCompletoModelosEstadisticos.pdf"
+paginas_totales <- pdf_length(archivo_final)
+tamaño_mb <- round(file.size(archivo_final) / 1024 / 1024, 2)
+
+cat("\n")
+cat("===============================================\n")
+cat("    LIBRO GENERADO EXITOSAMENTE\n")
+cat("===============================================\n")
+cat("Archivo:", archivo_final, "\n")
+cat("Páginas totales:", paginas_totales, "\n")
+cat("Tamaño del archivo:", tamaño_mb, "MB\n")
+cat("\n")
+cat("ESTRUCTURA DEL LIBRO:\n")
+cat("- Portada: página 1\n")
+cat("- Índice General: páginas", pagina_inicio_indice, "-", (pagina_inicio_guia - 1), "\n")
+cat("- Guía de Estudio: páginas", pagina_inicio_guia, "-", (pagina_inicio_apuntes - 1), "\n")
+cat("- Apuntes Teóricos: páginas", pagina_inicio_apuntes, "-", (pagina_inicio_diapositivas - 1), "\n") 
+cat("- Diapositivas: páginas", pagina_inicio_diapositivas, "-", (pagina_inicio_ejercicios - 1), "\n")
+cat("- Ejercicios: páginas", pagina_inicio_ejercicios, "-", paginas_totales, "\n")
+cat("===============================================\n")
+
+mostrar_progreso("Proceso completado exitosamente")

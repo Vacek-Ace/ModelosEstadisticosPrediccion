@@ -341,7 +341,7 @@ ModelosEstadisticosPrediccion/
 | **Propósito** | **Comando de Generación** | **Archivo Final** |
 |---------------|----------------------------|-------------------|
 | **Libro Web** | `quarto render --to html` | `docs/index.html` |
-| **Apuntes PDF** | `Rscript -e "source('apuntes/generar_apuntes.R'); crear_libro_completo()"` | `apuntes/apuntes_pdf/ApuntesModelosEstadisticosPrediccion.pdf` |
+| **Apuntes PDF** | `Rscript -e "source('apuntes/generar_apuntes.R'); crear_apuntes_completo()"` | `apuntes/apuntes_pdf/ApuntesModelosEstadisticosPrediccion.pdf` |
 | **Diapositivas** | `Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); crear()"` | `diapositivas/diapositivas_pdf/DiapositivasModelosEstadisticosPrediccion.pdf` |
 | **Ejercicios** | `Rscript -e "source('ejercicios/generar_ejercicios.R'); crear_ejercicios_completos()"` | `ejercicios/ejercicios_pdf/EjerciciosModelosEstadisticosPrediccion.pdf` |
 | **Soluciones HTML** | `Rscript -e "source('ejercicios_resueltos/generar_soluciones.R'); generar_todas_soluciones()"` | `ejercicios_resueltos/soluciones_html/index.html` |

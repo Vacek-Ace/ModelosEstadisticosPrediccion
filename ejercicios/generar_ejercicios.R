@@ -49,7 +49,7 @@ format:
     title-block-banner: false 
     toc: true
     toc-depth: 3
-    toc-title: "Índice de Ejercicios"
+    toc-title: "Índice ejercicios"
     number-sections: false
 '
   
