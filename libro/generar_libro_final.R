@@ -1,5 +1,5 @@
 # Script para generar el libro completo de Modelos Estadísticos de Predicción
-# Versión corregida con portada original + índice LaTeX separado
+# Versión corregida con portada original + índice LaTeX separado + Software
 
 # Cargar librerías necesarias
 library(pdftools)
@@ -70,6 +70,9 @@ obtener_paginas_reales <- function() {
     avanzados = ejercicios_inicio + 22
   )
   
+  # Para software (nuevo)
+  software_inicio <- ejercicios_inicio + pdf_length("ejercicios/ejercicios_pdf/EjerciciosModelosEstadisticosPrediccion.pdf")
+  
   return(list(
     portada = 1,
     indice = paginas_portada + 1,
@@ -80,7 +83,8 @@ obtener_paginas_reales <- function() {
     diapositivas_inicio = diapositivas_inicio,
     diapositivas_sub = diapositivas_subsecciones,
     ejercicios_inicio = ejercicios_inicio,
-    ejercicios_sub = ejercicios_subsecciones
+    ejercicios_sub = ejercicios_subsecciones,
+    software_inicio = software_inicio
   ))
 }
 
@@ -113,7 +117,8 @@ pdfs_necesarios <- c(
   "guia_estudio/GuiaEstudioModelosEstadisticosPrediccion.pdf",
   "apuntes/apuntes_pdf/ApuntesModelosEstadisticosPrediccion.pdf",
   "diapositivas/diapositivas_pdf/DiapositivasModelosEstadisticosPrediccion.pdf",
-  "ejercicios/ejercicios_pdf/EjerciciosModelosEstadisticosPrediccion.pdf"
+  "ejercicios/ejercicios_pdf/EjerciciosModelosEstadisticosPrediccion.pdf",
+  "laboratorios/SoftwareUtilizadoModelosEstadisticosPrediccion.pdf"
 )
 
 # Verificar que todos los archivos existen
@@ -137,9 +142,10 @@ paginas_guia <- pdf_length("guia_estudio/GuiaEstudioModelosEstadisticosPrediccio
 paginas_apuntes <- pdf_length("apuntes/apuntes_pdf/ApuntesModelosEstadisticosPrediccion.pdf")
 paginas_diapositivas <- pdf_length("diapositivas/diapositivas_pdf/DiapositivasModelosEstadisticosPrediccion.pdf")
 paginas_ejercicios <- pdf_length("ejercicios/ejercicios_pdf/EjerciciosModelosEstadisticosPrediccion.pdf")
+paginas_software <- pdf_length("laboratorios/SoftwareUtilizadoModelosEstadisticosPrediccion.pdf")
 
-mostrar_progreso(sprintf("Páginas: Portada=%d, Índice=%d, Guía=%d, Apuntes=%d, Diapositivas=%d, Ejercicios=%d", 
-                paginas_portada, paginas_indice, paginas_guia, paginas_apuntes, paginas_diapositivas, paginas_ejercicios))
+mostrar_progreso(sprintf("Páginas: Portada=%d, Índice=%d, Guía=%d, Apuntes=%d, Diapositivas=%d, Ejercicios=%d, Software=%d", 
+                paginas_portada, paginas_indice, paginas_guia, paginas_apuntes, paginas_diapositivas, paginas_ejercicios, paginas_software))
 
 # Calcular páginas de inicio para bookmarks
 pagina_inicio_indice <- paginas_portada + 1
@@ -147,9 +153,10 @@ pagina_inicio_guia <- pagina_inicio_indice + paginas_indice
 pagina_inicio_apuntes <- pagina_inicio_guia + paginas_guia
 pagina_inicio_diapositivas <- pagina_inicio_apuntes + paginas_apuntes  
 pagina_inicio_ejercicios <- pagina_inicio_diapositivas + paginas_diapositivas
+pagina_inicio_software <- pagina_inicio_ejercicios + paginas_ejercicios
 
-mostrar_progreso(sprintf("Páginas de inicio: Índice=%d, Guía=%d, Apuntes=%d, Diapositivas=%d, Ejercicios=%d",
-                pagina_inicio_indice, pagina_inicio_guia, pagina_inicio_apuntes, pagina_inicio_diapositivas, pagina_inicio_ejercicios))
+mostrar_progreso(sprintf("Páginas de inicio: Índice=%d, Guía=%d, Apuntes=%d, Diapositivas=%d, Ejercicios=%d, Software=%d",
+                pagina_inicio_indice, pagina_inicio_guia, pagina_inicio_apuntes, pagina_inicio_diapositivas, pagina_inicio_ejercicios, pagina_inicio_software))
 
 #---------------------------
 # 4. COMBINAR TODOS LOS PDFs
@@ -192,7 +199,11 @@ if (system("pdftk --version", ignore.stdout = TRUE, ignore.stderr = TRUE) == 0) 
     "BookmarkBegin",
     "BookmarkTitle: Ejercicios Practicos",
     "BookmarkLevel: 1",
-    paste0("BookmarkPageNumber: ", paginas_reales$ejercicios_inicio)
+    paste0("BookmarkPageNumber: ", paginas_reales$ejercicios_inicio),
+    "BookmarkBegin",
+    "BookmarkTitle: Software Utilizado",
+    "BookmarkLevel: 1",
+    paste0("BookmarkPageNumber: ", paginas_reales$software_inicio)
   )
   
   # Escribir archivo temporal de bookmarks con codificación Latin-1 para pdftk
@@ -241,7 +252,8 @@ cat("- Índice General: páginas", pagina_inicio_indice, "-", (pagina_inicio_gui
 cat("- Guía de Estudio: páginas", pagina_inicio_guia, "-", (pagina_inicio_apuntes - 1), "\n")
 cat("- Apuntes Teóricos: páginas", pagina_inicio_apuntes, "-", (pagina_inicio_diapositivas - 1), "\n") 
 cat("- Diapositivas: páginas", pagina_inicio_diapositivas, "-", (pagina_inicio_ejercicios - 1), "\n")
-cat("- Ejercicios: páginas", pagina_inicio_ejercicios, "-", paginas_totales, "\n")
+cat("- Ejercicios: páginas", pagina_inicio_ejercicios, "-", (pagina_inicio_software - 1), "\n")
+cat("- Software Utilizado: páginas", pagina_inicio_software, "-", paginas_totales, "\n")
 cat("===============================================\n")
 
 mostrar_progreso("Proceso completado exitosamente")

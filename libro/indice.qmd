@@ -74,5 +74,14 @@ format:
 <li> Ejercicios de GLM<span class="page-num"></span></li>
 <li> Ejercicios avanzados<span class="page-num"></span></li>
 </ul>
+<li><a href="#software"> Software Utilizado</a><span class="page-num">566</span></li>
+<ul>
+<li> Laboratorio 0: Introducción al Entorno de Trabajo<span class="page-num"></span></li>
+<li> Laboratorio 1: Regresión Lineal Simple<span class="page-num"></span></li>
+<li> Laboratorio 2: Regresión Lineal Múltiple<span class="page-num"></span></li>
+<li> Laboratorio 3: Ingeniería de Características<span class="page-num"></span></li>
+<li> Laboratorio 4: Selección de Variables y Regularización<span class="page-num"></span></li>
+<li> Laboratorio 5: Modelos Lineales Generalizados (GLM)<span class="page-num"></span></li>
+</ul>
 </ul>
 </nav>
