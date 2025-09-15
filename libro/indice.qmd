@@ -41,38 +41,38 @@ format:
 <ul>
 <li><a href="#guia-estudio"> Guía de Estudio</a><span class="page-num">4</span></li>
 <ul>
-<li> Planificación del curso<span class="page-num">5</span></li>
-<li> Objetivos de aprendizaje<span class="page-num">6</span></li>
-<li> Metodología<span class="page-num">7</span></li>
-<li> Evaluación<span class="page-num">8</span></li>
-<li> Recursos recomendados<span class="page-num">9</span></li>
+<li> Planificación del curso<span class="page-num"></span></li>
+<li> Objetivos de aprendizaje<span class="page-num"></span></li>
+<li> Metodología<span class="page-num"></span></li>
+<li> Evaluación<span class="page-num"></span></li>
+<li> Recursos recomendados<span class="page-num"></span></li>
 </ul>
 <li><a href="#apuntes-teoricos"> Apuntes Teóricos</a><span class="page-num">20</span></li>
 <ul>
-<li> Introducción a los modelos predictivos<span class="page-num">21</span></li>
-<li> Regresión lineal simple<span class="page-num">37</span></li>
-<li> Regresión múltiple<span class="page-num">80</span></li>
-<li> Ingeniería de características<span class="page-num">147</span></li>
-<li> Selección de variables<span class="page-num">191</span></li>
-<li> Modelos lineales generalizados<span class="page-num">217</span></li>
+<li> Introducción a los modelos predictivos<span class="page-num"></span></li>
+<li> Regresión lineal simple<span class="page-num"></span></li>
+<li> Regresión múltiple<span class="page-num"></span></li>
+<li> Ingeniería de características<span class="page-num"></span></li>
+<li> Selección de variables<span class="page-num"></span></li>
+<li> Modelos lineales generalizados<span class="page-num"></span></li>
 </ul>
 <li><a href="#diapositivas"> Diapositivas de Clase</a><span class="page-num">252</span></li>
 <ul>
-<li> Tema 0: Introducción<span class="page-num">253</span></li>
-<li> Tema 1: Regresión lineal<span class="page-num">300</span></li>
-<li> Tema 2: Regresión múltiple<span class="page-num">358</span></li>
-<li> Tema 3: Ingeniería de características<span class="page-num">414</span></li>
-<li> Tema 4: Selección de variables<span class="page-num">469</span></li>
-<li> Tema 5: GLM<span class="page-num">503</span></li>
+<li> Introducción<span class="page-num"></span></li>
+<li> Regresión lineal<span class="page-num"></span></li>
+<li> Regresión múltiple<span class="page-num"></span></li>
+<li> Ingeniería de características<span class="page-num"></span></li>
+<li> Selección de variables<span class="page-num"></span></li>
+<li> GLM<span class="page-num"></span></li>
 </ul>
 <li><a href="#ejercicios"> Ejercicios Prácticos</a><span class="page-num">544</span></li>
 <ul>
-<li> Ejercicios de regresión simple<span class="page-num">545</span></li>
-<li> Ejercicios de regresión múltiple<span class="page-num">550</span></li>
-<li> Ejercicios de ingeniería de características<span class="page-num">555</span></li>
-<li> Ejercicios de selección y validación<span class="page-num">560</span></li>
-<li> Ejercicios de GLM<span class="page-num">564</span></li>
-<li> Ejercicios avanzados<span class="page-num">566</span></li>
+<li> Ejercicios de regresión simple<span class="page-num"></span></li>
+<li> Ejercicios de regresión múltiple<span class="page-num"></span></li>
+<li> Ejercicios de ingeniería de características<span class="page-num"></span></li>
+<li> Ejercicios de selección y validación<span class="page-num"></span></li>
+<li> Ejercicios de GLM<span class="page-num"></span></li>
+<li> Ejercicios avanzados<span class="page-num"></span></li>
 </ul>
 </ul>
 </nav>

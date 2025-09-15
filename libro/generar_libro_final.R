@@ -10,7 +10,84 @@ mostrar_progreso <- function(mensaje) {
   cat(paste0("[", Sys.time(), "] ", mensaje, "\n"))
 }
 
+# Función para obtener páginas de inicio reales de cada sección
+obtener_paginas_reales <- function() {
+  mostrar_progreso("Calculando páginas reales de cada documento...")
+  
+  # Páginas base
+  paginas_portada <- pdf_length("libro/portada.pdf")
+  paginas_indice <- pdf_length("libro/indice.pdf")
+  
+  # Para la guía de estudio, vamos a estimar las páginas de cada subsección
+  # basándonos en la estructura típica del documento
+  guia_inicio <- paginas_portada + paginas_indice + 1
+  
+  # Páginas aproximadas para subsecciones de guía (estimación basada en contenido típico)
+  guia_subsecciones <- list(
+    planificacion = guia_inicio + 1,
+    objetivos = guia_inicio + 2, 
+    metodologia = guia_inicio + 3,
+    evaluacion = guia_inicio + 4,
+    recursos = guia_inicio + 5
+  )
+  
+  # Para apuntes, necesitamos leer el PDF y estimar las secciones
+  apuntes_inicio <- guia_inicio + pdf_length("guia_estudio/GuiaEstudioModelosEstadisticosPrediccion.pdf")
+  
+  # Estimación basada en el tamaño típico de cada tema en apuntes
+  apuntes_subsecciones <- list(
+    introduccion = apuntes_inicio + 1,
+    regresion_simple = apuntes_inicio + 18,   # Estimado
+    regresion_multiple = apuntes_inicio + 61, # Estimado  
+    ingenieria = apuntes_inicio + 128,        # Estimado
+    seleccion = apuntes_inicio + 172,         # Estimado
+    glm = apuntes_inicio + 198                # Estimado
+  )
+  
+  # Para diapositivas
+  diapositivas_inicio <- apuntes_inicio + pdf_length("apuntes/apuntes_pdf/ApuntesModelosEstadisticosPrediccion.pdf")
+  
+  # Estimación basada en las diapositivas típicas (47 páginas por tema aprox)
+  diapositivas_subsecciones <- list(
+    tema0 = diapositivas_inicio + 1,
+    tema1 = diapositivas_inicio + 48,
+    tema2 = diapositivas_inicio + 106, 
+    tema3 = diapositivas_inicio + 162,
+    tema4 = diapositivas_inicio + 217,
+    tema5 = diapositivas_inicio + 251
+  )
+  
+  # Para ejercicios
+  ejercicios_inicio <- diapositivas_inicio + pdf_length("diapositivas/diapositivas_pdf/DiapositivasModelosEstadisticosPrediccion.pdf")
+  
+  # Estimación basada en ejercicios (5 páginas por sección aprox)
+  ejercicios_subsecciones <- list(
+    regresion_simple = ejercicios_inicio + 1,
+    regresion_multiple = ejercicios_inicio + 6,
+    ingenieria = ejercicios_inicio + 11,
+    seleccion = ejercicios_inicio + 16,
+    glm = ejercicios_inicio + 20,
+    avanzados = ejercicios_inicio + 22
+  )
+  
+  return(list(
+    portada = 1,
+    indice = paginas_portada + 1,
+    guia_inicio = guia_inicio,
+    guia_sub = guia_subsecciones,
+    apuntes_inicio = apuntes_inicio,
+    apuntes_sub = apuntes_subsecciones,
+    diapositivas_inicio = diapositivas_inicio,
+    diapositivas_sub = diapositivas_subsecciones,
+    ejercicios_inicio = ejercicios_inicio,
+    ejercicios_sub = ejercicios_subsecciones
+  ))
+}
+
 mostrar_progreso("Iniciando generación del libro completo...")
+
+# Obtener páginas reales calculadas
+paginas_reales <- obtener_paginas_reales()
 
 #---------------------------
 # 1. GENERAR PORTADA E ÍNDICE
@@ -90,32 +167,32 @@ mostrar_progreso("Agregando bookmarks al documento...")
 # Verificar si pdftk está disponible
 if (system("pdftk --version", ignore.stdout = TRUE, ignore.stderr = TRUE) == 0) {
   
-  # Crear archivo de bookmarks con páginas calculadas dinámicamente
+  # Crear archivo de bookmarks SOLO con los principales
   bookmarks_contenido <- c(
     "BookmarkBegin",
     "BookmarkTitle: Portada",
     "BookmarkLevel: 1",
-    "BookmarkPageNumber: 1",
+    paste0("BookmarkPageNumber: ", paginas_reales$portada),
     "BookmarkBegin",
     "BookmarkTitle: Indice General",
     "BookmarkLevel: 1",
-    paste0("BookmarkPageNumber: ", pagina_inicio_indice),
+    paste0("BookmarkPageNumber: ", paginas_reales$indice),
     "BookmarkBegin",
     "BookmarkTitle: Guia de Estudio",
     "BookmarkLevel: 1", 
-    paste0("BookmarkPageNumber: ", pagina_inicio_guia),
+    paste0("BookmarkPageNumber: ", paginas_reales$guia_inicio),
     "BookmarkBegin",
     "BookmarkTitle: Apuntes Teoricos",
     "BookmarkLevel: 1",
-    paste0("BookmarkPageNumber: ", pagina_inicio_apuntes),
+    paste0("BookmarkPageNumber: ", paginas_reales$apuntes_inicio),
     "BookmarkBegin",
     "BookmarkTitle: Diapositivas de Clase",
     "BookmarkLevel: 1",
-    paste0("BookmarkPageNumber: ", pagina_inicio_diapositivas),
-    "BookmarkBegin", 
+    paste0("BookmarkPageNumber: ", paginas_reales$diapositivas_inicio),
+    "BookmarkBegin",
     "BookmarkTitle: Ejercicios Practicos",
     "BookmarkLevel: 1",
-    paste0("BookmarkPageNumber: ", pagina_inicio_ejercicios)
+    paste0("BookmarkPageNumber: ", paginas_reales$ejercicios_inicio)
   )
   
   # Escribir archivo temporal de bookmarks con codificación Latin-1 para pdftk

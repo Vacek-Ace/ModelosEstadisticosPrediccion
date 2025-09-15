@@ -312,7 +312,7 @@ ModelosEstadisticosPrediccion/
 │   ├── generar_soluciones.R              # Script completo de generación
 │   ├── portada.qmd                        # Portada para PDF (weasyprint)
 │   ├── portada.html                       # Portada HTML para inclusión
-│   ├── collapse-handler.js               # JavaScript para secciones colapsibles
+│   ├── collapse-handler.js               # JavaScript para secciones colapsables
 │   ├── soluciones.css                     # Estilos específicos para soluciones
 │   ├── soluciones_html/                   # 📋 Salida HTML navegable
 │   │   ├── index.html                     # Índice principal de soluciones
@@ -329,6 +329,10 @@ ModelosEstadisticosPrediccion/
 ├── laboratorios/                          # 🔬 LABORATORIOS PRÁCTICOS
 │   ├── lab*_*.qmd                         # Laboratorios por tema
 │   └── (salida HTML individual por laboratorio)
+│
+├── libro/                                 # 📘 LIBRO COMPLETO (PDF)
+│   ├── generar_libro_final.R              # Script principal que combina todos los PDFs en un 
+│   └── LibroCompletoModelosEstadisticosPrediccion.pdf  # Archivo PDF resultante
 │
 └── images/                                # 🖼️ RECURSOS GRÁFICOS
     ├── DSLab_logo_*.png                   # Logos institucionales
@@ -359,29 +363,62 @@ El proyecto incluye **6 scripts principales** que automatizan completamente la g
 5. **`guia_estudio/generar_guia.R`** - Guía de estudio con portada
 6. **Quarto nativo** - Libro web y laboratorios individuales
 
-## 🚀 Flujo de Trabajo Típico
+## 📕 Libro Completo del Curso
 
-### Para estudiantes:
+Genera el libro PDF profesional con portada, índice, apuntes, diapositivas, ejercicios y guía de estudio, todo unificado y con bookmarks principales:
+
 ```bash
-# 1. Libro web para consulta diaria
-quarto render --to html
-
-# 2. Soluciones HTML para práctica
-Rscript -e "source('ejercicios_resueltos/generar_soluciones.R'); generar_todas_soluciones()"
-
-# 3. Abrir soluciones en navegador
-Rscript -e "source('ejercicios_resueltos/generar_soluciones.R'); abrir_soluciones()"
+# Ejecutar desde la raíz del proyecto
+Rscript libro/generar_libro_final.R
 ```
+- Salida: `libro/LibroCompletoModelosEstadisticosPrediccion.pdf`
+- Incluye portada, índice, guía, apuntes, diapositivas y ejercicios
+- Bookmarks principales para cada sección
+- Requiere R, Quarto, LaTeX y PDFtk instalados
 
-### Para profesores/distribución:
+### Requisitos previos y orden de generación
+
+Antes de ejecutar `Rscript libro/generar_libro_final.R` asegúrate de que todos los PDFs parciales (apuntes, diapositivas, ejercicios, guía) ya estén generados. El script asume que existen los archivos finales y los combinará en el PDF maestro; si faltan, la ejecución fallará.
+
+Archivos que deben existir (rutas relativas al repositorio):
+
+- `apuntes/apuntes_pdf/ApuntesModelosEstadisticosPrediccion.pdf`
+- `diapositivas/diapositivas_pdf/DiapositivasModelosEstadisticosPrediccion.pdf`
+- `ejercicios/ejercicios_pdf/EjerciciosModelosEstadisticosPrediccion.pdf`
+- `guia_estudio/GuiaEstudioModelosEstadisticosPrediccion.pdf`
+
+Comando recomendado (orden de generación):
+
 ```bash
-# Generar todos los PDFs profesionales
-Rscript -e "source('apuntes/generar_apuntes.R'); crear_libro_completo()"
+# 1. Generar apuntes PDF
+Rscript -e "source('apuntes/generar_apuntes.R'); crear_apuntes_completo()"
+
+# 2. Generar diapositivas unificadas
 Rscript -e "source('diapositivas/crear_diapositivas_completas.R'); crear()"
+
+# 3. Generar ejercicios
 Rscript -e "source('ejercicios/generar_ejercicios.R'); crear_ejercicios_completos()"
-Rscript -e "source('ejercicios_resueltos/generar_soluciones.R'); crear_soluciones_completas()"
+
+# 4. Generar guía de estudio
 Rscript -e "source('guia_estudio/generar_guia.R'); crear_guia_completa()"
+
+# 5. Finalmente, combinar todo en el libro completo
+Rscript libro/generar_libro_final.R
 ```
+
+Comprobación rápida (PowerShell):
+
+```powershell
+# Desde la raíz del proyecto
+Test-Path .\apuntes\apuntes_pdf\ApuntesModelosEstadisticosPrediccion.pdf; \
+Test-Path .\diapositivas\diapositivas_pdf\DiapositivasModelosEstadisticosPrediccion.pdf; \
+Test-Path .\ejercicios\ejercicios_pdf\EjerciciosModelosEstadisticosPrediccion.pdf; \
+Test-Path .\guia_estudio\GuiaEstudioModelosEstadisticosPrediccion.pdf
+```
+
+Notas:
+- Si usas Windows y no tienes `pdftk`, la generación del archivo maestro seguirá funcionando (se combina con `pdftools::pdf_combine`) pero no se agregarán bookmarks personalizados; instala `pdftk` para añadir bookmarks.
+- Si alguno de los scripts individuales usa Quarto/LaTeX, asegúrate de tener LaTeX (MiKTeX/TinyTeX) configurado previamente.
 
 ## 🎨 Características Técnicas
 
@@ -394,7 +431,7 @@ Rscript -e "source('guia_estudio/generar_guia.R'); crear_guia_completa()"
 ### Funcionalidades Avanzadas
 - **Búsqueda integrada** en el libro web
 - **Navegación por bookmarks** en PDFs
-- **Secciones colapsibles** en soluciones HTML
+- **Secciones colapsables** en soluciones HTML
 - **Fórmulas LaTeX** renderizadas correctamente
 - **Código R ejecutable** con salidas incluidas
 - **Enlaces cruzados** entre secciones
