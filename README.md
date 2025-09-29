@@ -29,13 +29,13 @@ cd ModelosEstadisticosPrediccion
 
 ## 📖 Generación de Documentos
 
-### 1. 📚 Libro de Apuntes
+### 1. 📚 Apuntes
 
 #### HTML (recomendado):
 ```bash
 quarto render --to html
 ```
-- Genera el libro completo en HTML navegable
+- Genera los apuntes completos en HTML navegable
 - Salida en el directorio `docs/` 
 - Incluye navegación interactiva y buscador
 - Perfecto para consulta online
