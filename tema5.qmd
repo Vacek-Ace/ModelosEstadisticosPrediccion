@@ -1049,6 +1049,7 @@ cat("AIC Binomial Negativa:", round(AIC(modelo_binom_neg), 2), "\n")
 - **Regla práctica**: Si $\theta$ es pequeño, confirma que había sobredispersión y que el modelo binomial negativa es más apropiado que Poisson
 
 **Comparación de modelos:**
+
 - Si AIC de binomial negativa < AIC de Poisson → preferir binomial negativa
 - El modelo binomial negativa corrige la subestimación de errores estándar que ocurre en Poisson con sobredispersión
 

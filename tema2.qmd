@@ -1108,8 +1108,12 @@ avPlots(modelo, main = "Gráficos de regresión parcial")
 -   **Puntos alejados**: Observaciones influyentes para ese coeficiente
     específico
 
-**Interpretación práctica:** - Una relación lineal clara confirma la
-validez del modelo - Puntos muy alejados de la línea pueden ser
-observaciones influyentes - Patrones curvos sugieren no-linealidad en
+**Interpretación práctica:** 
+
+- Una relación lineal clara confirma la
+validez del modelo 
+- Puntos muy alejados de la línea pueden ser
+observaciones influyentes 
+- Patrones curvos sugieren no-linealidad en
 esa variable específica
 :::
