@@ -694,7 +694,7 @@ cat("\nCorrelación superficie-metros_cuadrados:",
 **DFBETAS**: Influencia sobre coeficientes individuales
 $$\text{DFBETA}_{j,i} = \frac{\hat{\beta}_j - \hat{\beta}_{j(-i)}}{\text{se}(\hat{\beta}_{j(-i)})}$$
 
-**Criterio:** $|ext{DFBETA}_{j,i}| > \frac{2}{\sqrt{n}}$ es problemático
+**Criterio:** $|\text{DFBETA}_{j,i}| > \frac{2}{\sqrt{n}}$ es problemático
 
 **Ventaja:** Permite identificar qué observaciones afectan a qué coeficientes específicos
 
