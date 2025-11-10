@@ -2,7 +2,7 @@
 
 Este repositorio contiene el material completo del curso de **Modelos Estadísticos para la Predicción**, incluyendo apuntes, diapositivas, ejercicios, soluciones y laboratorios prácticos.
 
-Depositado en burjcdigital: https://hdl.handle.net/10115/103057
+Depositado en burjcdigital: https://hdl.handle.net/10115/103057 (2025-09-24)
 
 ## 📚 Contenido del Curso
 
