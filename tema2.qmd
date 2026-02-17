@@ -203,9 +203,6 @@ $$\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}
 Esta compacta y poderosa ecuación es la base de la estimación en
 regresión lineal y es implementada por todo el software estadístico.
 
-Claro, aquí tienes el texto completo en formato Markdown y con las
-fórmulas clave sin los recuadros.
-
 ### Propiedades de los estimadores de MCO
 
 Una vez que hemos obtenido la fórmula para calcular nuestros
@@ -576,21 +573,6 @@ Donde $s_Y^2$ es la varianza muestral de $Y$. El $R^2_{ajustado}$ solo
 aumentará si la nueva variable mejora el modelo más de lo que se
 esperaría por puro azar. Es, por tanto, la métrica preferida para
 comparar la calidad de ajuste de modelos anidados.
-
-¡Excelente observación! Tienes toda la razón. En la sección de
-"Inferencia" me centré en los contrastes de hipótesis (el test t y el
-test F) pero omití una parte igualmente importante que sí estaba en tu
-Tema 1: la **construcción de intervalos de confianza para los
-parámetros**.
-
-Un contraste de hipótesis te da una respuesta de "sí/no" sobre la
-significancia, pero un intervalo de confianza te ofrece un rango de
-valores plausibles para el efecto, lo cual es mucho más informativo.
-
-Aquí tienes una versión revisada y ampliada de la sección **"Inferencia
-estadística en el modelo múltiple"** que incluye explícitamente los
-intervalos de confianza, manteniendo el flujo que hemos construido.
-Puedes reemplazar la sección anterior por esta.
 
 ## Inferencia Estadística en el Modelo Múltiple
 

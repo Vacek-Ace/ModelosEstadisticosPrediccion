@@ -10,6 +10,7 @@ format:
     code-fold: false
     theme: cosmo
     embed-resources: true
+    self-contained: true
 execute:
   warning: false
   message: false
