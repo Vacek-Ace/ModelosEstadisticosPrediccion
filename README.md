@@ -189,6 +189,10 @@ Rscript -e "source('ejercicios_resueltos/generar_soluciones.R'); abrir_solucione
 
 ### 6. 🔬 Laboratorios
 
+Esta sección constituye el núcleo aplicativo del proyecto. Se compone de 6 programas independientes desarrollados en Quarto (.qmd), que cubren el flujo completo de análisis estadístico, desde la configuración inicial hasta el despliegue de modelos complejos.
+
+🚀 **Ejecución**
+
 Los laboratorios se pueden ejecutar individualmente:
 
 ```bash
@@ -199,13 +203,16 @@ quarto render laboratorios/lab1_regresion_simple.qmd
 quarto render laboratorios/
 ```
 
-**Laboratorios disponibles:**
-- `lab0_introduccion.qmd` - Introducción a R y herramientas
-- `lab1_regresion_simple.qmd` - Implementación de modelos de regresión lineal simple y diagnóstico básico.
-- `lab2_regresion_multiple.qmd` - Modelado lineal múltiple, análisis de residuos y cálculo del Factor de Inflación de la Varianza (VIF).  
-- `lab3_ingenieria_caracteristicas.qmd` - Transformación de variables (Box-Cox, log, etc.) y gestión de variables categóricas.
-- `lab4_seleccion_variables.qmd` - Algoritmos de selección de predictores y técnicas de regularización (Lasso/Ridge).
-- `lab5_modelos_generalizados.qmd` - Implementación de modelos para variables no normales (Regresión Logística y Poisson).
+📚 **Contenido Detallado**
+
+| Laboratorio | Enfoque Técnico | Conceptos Clave |
+| :--- | :--- | :--- |
+| **Lab 0** | Introducción | Configuración de entorno en R y flujo de trabajo con Quarto. |
+| **Lab 1** | Regresión Simple | Estimación de parámetros y diagnóstico fundamental del modelo. |
+| **Lab 2** | Regresión Múltiple | Inferencia multivariante, análisis de residuos y detección de colinealidad (**VIF**). |
+| **Lab 3** | Feature Engineering | Transformaciones no lineales (**Box-Cox**, log) y tratamiento de predictores categóricos. |
+| **Lab 4** | Selección de Modelos | Selección de predictores y regularización avanzada (**Lasso** y **Ridge**). |
+| **Lab 5** | Modelos GLM | Modelado de respuestas no normales: Regresión **Logística** y de **Poisson**. |
 
 ## 🔧 Requisitos del Sistema
 
