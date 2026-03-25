@@ -3,6 +3,9 @@
 Este repositorio contiene el material completo del curso de **Modelos Estadísticos para la Predicción**, incluyendo apuntes, diapositivas, ejercicios, soluciones y laboratorios prácticos.
 
 Depositado en burjcdigital: https://hdl.handle.net/10115/103057 (2025-09-24)
+Código fuente preservado en Software Heritage: <a href="https://archive.softwareheritage.org/swh:1:dir:e347e182ad5c23fdf7f3cacff0ec657dc3231478;origin=https://github.com/URJCDSLab/ModelosEstadisticosPrediccion;visit=swh:1:snp:f41a70a106d5f90b6ddd40440bc7d51fdd5d44b7;anchor=swh:1:rev:cc85115fd6a3487169464d1b7e7d815ed0e270cf"><img src="https://archive.softwareheritage.org/badge/swh:1:dir:e347e182ad5c23fdf7f3cacff0ec657dc3231478/" alt="Archived | swh:1:dir:e347e182ad5c23fdf7f3cacff0ec657dc3231478"/></a>
+
+
 
 ## 📚 Contenido del Curso
 
@@ -194,11 +197,11 @@ quarto render laboratorios/
 
 **Laboratorios disponibles:**
 - `lab0_introduccion.qmd` - Introducción a R y herramientas
-- `lab1_regresion_simple.qmd` - Regresión lineal simple
-- `lab2_regresion_multiple.qmd` - Regresión múltiple  
-- `lab3_ingenieria_caracteristicas.qmd` - Transformación de variables
-- `lab4_seleccion_variables.qmd` - Selección y validación
-- `lab5_modelos_generalizados.qmd` - GLM
+- `lab1_regresion_simple.qmd` - Implementación de modelos de regresión lineal simple y diagnóstico básico.
+- `lab2_regresion_multiple.qmd` - Modelado lineal múltiple, análisis de residuos y cálculo del Factor de Inflación de la Varianza (VIF).  
+- `lab3_ingenieria_caracteristicas.qmd` - Transformación de variables (Box-Cox, log, etc.) y gestión de variables categóricas.
+- `lab4_seleccion_variables.qmd` - Algoritmos de selección de predictores y técnicas de regularización (Lasso/Ridge).
+- `lab5_modelos_generalizados.qmd` - Implementación de modelos para variables no normales (Regresión Logística y Poisson).
 
 ## 🔧 Requisitos del Sistema
 
