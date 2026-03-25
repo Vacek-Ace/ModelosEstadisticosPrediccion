@@ -4,7 +4,7 @@ Este repositorio contiene el material completo del curso de **Modelos Estadísti
 
 Depositado en burjcdigital: https://hdl.handle.net/10115/103057 (2025-09-24)
 
-Código fuentepreservado en Software Heritage para garantizar el acceso abierto y la
+Código fuente preservado en Software Heritage para garantizar el acceso abierto y la
 reproducibilidad.
 
 <a href="https://archive.softwareheritage.org/swh:1:dir:e347e182ad5c23fdf7f3cacff0ec657dc3231478;origin=https://github.com/URJCDSLab/ModelosEstadisticosPrediccion;visit=swh:1:snp:f41a70a106d5f90b6ddd40440bc7d51fdd5d44b7;anchor=swh:1:rev:cc85115fd6a3487169464d1b7e7d815ed0e270cf"><img src="https://archive.softwareheritage.org/badge/swh:1:dir:e347e182ad5c23fdf7f3cacff0ec657dc3231478/" alt="Archived | swh:1:dir:e347e182ad5c23fdf7f3cacff0ec657dc3231478"/></a>
