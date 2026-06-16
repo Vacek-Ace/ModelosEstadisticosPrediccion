@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es-ES" xml:lang="es-ES"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.21">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -94,7 +94,7 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-0687a6949ae11671cfb8b930681aab34.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -181,9 +181,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="./index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Modelos Estadísticos para la Predicción</a> 
     </div>
@@ -437,7 +435,6 @@ window.Quarto = {
 <p>La solución única para el vector de estimadores MCO es:</p>
 <p><span class="math display">\[\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}\]</span></p>
 <p>Esta compacta y poderosa ecuación es la base de la estimación en regresión lineal y es implementada por todo el software estadístico.</p>
-<p>Claro, aquí tienes el texto completo en formato Markdown y con las fórmulas clave sin los recuadros.</p>
 </section>
 <section id="propiedades-de-los-estimadores-de-mco" class="level3" data-number="3.2.4">
 <h3 data-number="3.2.4" class="anchored" data-anchor-id="propiedades-de-los-estimadores-de-mco"><span class="header-section-number">3.2.4</span> Propiedades de los estimadores de MCO</h3>
@@ -616,9 +613,6 @@ F-statistic: 389.4 on 5 and 194 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Para solucionar el problema de <span class="math inline">\(R^2\)</span>, utilizamos el <span class="math inline">\(R^2\)</span> ajustado, que introduce una penalización por cada variable añadida. Lo hace comparando las varianzas (sumas de cuadrados divididas por sus grados de libertad) en lugar de solo las sumas de cuadrados:</p>
 <p><span class="math display">\[R^2_{adj} = 1 - \frac{SSE/(n-p-1)}{SST/(n-1)} = 1 - \frac{\hat{\sigma}^2}{s_Y^2}\]</span></p>
 <p>Donde <span class="math inline">\(s_Y^2\)</span> es la varianza muestral de <span class="math inline">\(Y\)</span>. El <span class="math inline">\(R^2_{ajustado}\)</span> solo aumentará si la nueva variable mejora el modelo más de lo que se esperaría por puro azar. Es, por tanto, la métrica preferida para comparar la calidad de ajuste de modelos anidados.</p>
-<p>¡Excelente observación! Tienes toda la razón. En la sección de “Inferencia” me centré en los contrastes de hipótesis (el test t y el test F) pero omití una parte igualmente importante que sí estaba en tu Tema 1: la <strong>construcción de intervalos de confianza para los parámetros</strong>.</p>
-<p>Un contraste de hipótesis te da una respuesta de “sí/no” sobre la significancia, pero un intervalo de confianza te ofrece un rango de valores plausibles para el efecto, lo cual es mucho más informativo.</p>
-<p>Aquí tienes una versión revisada y ampliada de la sección <strong>“Inferencia estadística en el modelo múltiple”</strong> que incluye explícitamente los intervalos de confianza, manteniendo el flujo que hemos construido. Puedes reemplazar la sección anterior por esta.</p>
 </section>
 </section>
 <section id="inferencia-estadística-en-el-modelo-múltiple" class="level2" data-number="3.5">
@@ -1064,13 +1058,14 @@ Weisberg, S. 2005. <span>«Applied linear regression»</span>. Wiley.
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
