@@ -319,15 +319,15 @@ $$\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i$$
 
 # Los Supuestos del Modelo 
 
-Para que nuestras estimaciones e inferencias sean válidas, asumimos que los errores $\varepsilon_i$ se comportan ordenadamente:
+Para que nuestras estimaciones e inferencias sean válidas, exigimos que el modelo y sus errores $\varepsilon_i$ cumplan:
 
-**1. Linealidad**: $E[Y_i | X_i] = \beta_0 + \beta_1 X_i$
+1. **Linealidad en los parámetros:** $\mathbb{E}[Y_i \mid X_i] = \beta_0 + \beta_1 X_i \quad (\mathbb{E}[\varepsilon_i \mid X_i] = 0)$
 
-**2. Independencia**: $\text{Cov}(\varepsilon_i, \varepsilon_j) = 0$ para $i \neq j$
+2. **Incorrelación / Independencia:** $\operatorname{Cov}(\varepsilon_i, \varepsilon_j) = 0 \quad \text{para } i \neq j$
 
-**3. Homocedasticidad**: $Var(\varepsilon_i | X_i) = \sigma^2$ (varianza constante)
+3. **Homocedasticidad:** $\operatorname{Var}(\varepsilon_i \mid X_i) = \sigma^2 \quad \text{(varianza constante)}$
 
-**4. Normalidad** (para inferencia): $\varepsilon_i \sim N(0, \sigma^2)$
+4. **Normalidad (para inferencia):** $\varepsilon_i \sim \mathcal{N}(0, \sigma^2)$
 
 **Importancia:** Estos supuestos garantizan las **propiedades óptimas** de los estimadores de mínimos cuadrados y la **validez** de la inferencia estadística.
 
@@ -403,36 +403,31 @@ La pendiente es la razón entre la covariación de $X$ e $Y$ y la variación de 
 ::::
 :::::
 
-# Propiedades de las Predicciones
+# Propiedades de las Predicciones (con intercepto)
 
-Las estimaciones MCO generan predicciones ($\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i$) con **propiedades matemáticas específicas**:
+Las estimaciones MCO generan predicciones ($\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i$) con propiedades geométricas directas:
 
-1. **La recta pasa por el centro de los datos**: $(\bar{x}, \bar{y})$
+1. **La recta pasa siempre por el centro de gravedad muestral:** $(\bar{x}, \bar{y})$
    $$\hat{\beta}_0 + \hat{\beta}_1 \bar{x} = \bar{y}$$
+   *(Se deduce directamente de la primera ecuación normal: $\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}$)*
 
-**Demostración:**
-Sumando la ecuación de predicción para todas las observaciones:
-$$\frac{1}{n}\sum_{i=1}^{n} \hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 \frac{1}{n}\sum_{i=1}^{n} x_i = \hat{\beta}_0 + \hat{\beta}_1 \bar{x}$$
+2. **El promedio de las predicciones coincide con la media observada:**
+   $$\bar{\hat{y}} = \frac{1}{n}\sum_{i=1}^n \hat{y}_i = \bar{y}$$
 
-2. **Promedio de predicciones = Promedio observado**:
-   $$\frac{1}{n}\sum_{i=1}^{n} \hat{y}_i = \bar{y}$$
+# Propiedades Algebraicas de los Residuos
 
-**Importancia:** La recta de regresión siempre pasa por el **punto central** de los datos
+Como consecuencia directa de las ecuaciones normales (condiciones de primer orden), los residuos $e_i = y_i - \hat{y}_i$ cumplen:
 
-# Propiedades de los Residuos
+1. **Suma nula de residuos:**
+   $$\sum_{i=1}^n e_i = 0 \quad (\bar{e} = 0)$$
 
-Los residuos MCO ($e_i = y_i - \hat{y}_i$) tienen **propiedades fundamentales**:
+2. **Ortogonalidad e incorrelación con $X$:**
+   $$\sum_{i=1}^n x_i e_i = 0 \implies \widehat{\operatorname{Cov}}(x, e) = 0$$
 
-3. **Suma de residuos = 0**:
-   $$\sum_{i=1}^{n} e_i = 0$$
+3. **Ortogonalidad e incorrelación con los valores ajustados $\hat{y}$:**
+   $$\sum_{i=1}^n \hat{y}_i e_i = 0 \implies \widehat{\operatorname{Cov}}(\hat{y}, e) = 0$$
 
-4. **Residuos no correlacionados con $X$**:
-   $$\sum_{i=1}^{n} x_i e_i = 0$$
-
-5. **Residuos no correlacionados con predicciones**:
-   $$\sum_{i=1}^{n} \hat{y}_i e_i = 0$$
-
-**Implicación:** Estas propiedades garantizan que MCO es **insesgado** y **óptimo**
+**Nota:** Son propiedades de la optimización, no deben confundirse con los supuestos del modelo.
 
 # Interpretación de los Coeficientes
 

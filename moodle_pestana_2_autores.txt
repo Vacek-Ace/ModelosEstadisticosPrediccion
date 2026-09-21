@@ -1,0 +1,10 @@
+<div class="alert alert-info" style="background-color: #f8f9fa; border-left: 4px solid #cc0000; padding: 15px; margin-bottom: 20px;">
+  <p><strong>¡IMPORTANTE!</strong> Esta es una asignatura en acceso abierto, organizada para mostrar los materiales que sus profesores han preparado para que cualquiera pueda consultarlos, trabajar con ellos y reutilizarlos si lo considera apropiado. La URJC promueve la publicación de materiales docentes de asignaturas mediante la <em>Convocatoria para el Reconocimiento de publicación de asignaturas en acceso abierto</em>.</p>
+  <p style="margin-bottom: 0;">Si quieres reutilizar estos materiales, recuerda que debes respetar la mención a sus autores y a la obra original, y respetar su licencia de publicación en abierto (<a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>).</p>
+</div>
+
+<p>Los autores de los materiales disponibles en esta asignatura son:</p>
+<ul>
+  <li>Prof. <a href="https://gestion2.urjc.es/pdi/ver/victor.acena" target="_blank" rel="noopener"><strong>Víctor Aceña Gil</strong></a></li>
+  <li>Prof. <a href="https://gestion2.urjc.es/pdi/ver/isaac.martin" target="_blank" rel="noopener"><strong>Isaac Martín de Diego</strong></a></li>
+</ul>

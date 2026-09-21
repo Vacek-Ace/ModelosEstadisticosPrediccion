@@ -1,0 +1,12 @@
+<div class="alert alert-info" style="background-color: #f8f9fa; border-left: 4px solid #cc0000; padding: 15px; margin-bottom: 20px;">
+  <p><strong>¡IMPORTANTE!</strong> Esta es una asignatura en acceso abierto, organizada para mostrar los materiales que sus profesores han preparado para que cualquiera pueda consultarlos, trabajar con ellos y reutilizarlos si lo considera apropiado. La URJC promueve la publicación de materiales docentes de asignaturas mediante la <em>Convocatoria para el Reconocimiento de publicación de asignaturas en acceso abierto</em>.</p>
+  <p style="margin-bottom: 0;">Si quieres reutilizar estos materiales, recuerda que debes respetar la mención a sus autores y a la obra original, y respetar su licencia de publicación en abierto (<a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>).</p>
+</div>
+
+<h3>Materiales</h3>
+<ul>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download" target="_blank" rel="noopener">Libro de la asignatura (descarga directa del PDF)</a></li>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/d3cb5684-f8ac-473a-ac2c-970ea610554a/download" target="_blank" rel="noopener">Libro de la asignatura (descarga directa del ZIP)</a></li>
+  <li><a href="https://archive.softwareheritage.org/swh:1:dir:e347e182ad5c23fdf7f3cacff0ec657dc3231478;origin=https://github.com/URJCDSLab/ModelosEstadisticosPrediccion;visit=swh:1:snp:f41a70a106d5f90b6ddd40440bc7d51fdd5d44b7;anchor=swh:1:rev:cc85115fd6a3487169464d1b7e7d815ed0e270cf" target="_blank" rel="noopener">Software de la asignatura (preservado en Software Heritage)</a></li>
+  <li><a href="https://hdl.handle.net/10115/103057" target="_blank" rel="noopener">Registro institucional en BURJC Digital (Handle permanente)</a></li>
+</ul>

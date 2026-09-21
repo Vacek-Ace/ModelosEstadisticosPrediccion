@@ -1,0 +1,136 @@
+================================================================================
+PESTAÑA 1: Información general
+================================================================================
+
+<div class="alert alert-info" style="background-color: #f8f9fa; border-left: 4px solid #cc0000; padding: 15px; margin-bottom: 20px;">
+  <p><strong>¡IMPORTANTE!</strong> Esta es una asignatura en acceso abierto, organizada para mostrar los materiales que sus profesores han preparado para que cualquiera pueda consultarlos, trabajar con ellos y reutilizarlos si lo considera apropiado. La URJC promueve la publicación de materiales docentes de asignaturas mediante la <em>Convocatoria para el Reconocimiento de publicación de asignaturas en acceso abierto</em>.</p>
+  <p style="margin-bottom: 0;">Si quieres reutilizar estos materiales, recuerda que debes respetar la mención a sus autores y a la obra original, y respetar su licencia de publicación en abierto (<a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>).</p>
+</div>
+
+<h3>Presentación de la asignatura</h3>
+<p>Queremos darte la bienvenida a la asignatura <strong>Modelos Estadísticos para la Predicción</strong>, perteneciente a la titulación de <strong>Grado en Matemáticas</strong>, publicada como recurso educativo abierto (REA) de la <strong>Universidad Rey Juan Carlos</strong>.</p>
+
+<p>Esta asignatura introduce al estudiantado en los fundamentos teóricos y metodológicos del modelado estadístico para la toma de decisiones y el análisis predictivo. A lo largo del curso se estudian en profundidad desde la formulación clásica de la regresión lineal simple y múltiple, hasta técnicas de ingeniería de características, selección de variables y regularización, culminando con la extensión a los Modelos Lineales Generalizados (GLM) para variables binarias y de conteo.</p>
+
+<p>El objetivo principal es que el estudiantado adquiera un equilibrio sólido entre el rigor matemático-estadístico y la aplicación práctica mediante el uso de <strong>R</strong>, comprendiendo el propósito dual de predecir con alta precisión e inferir/explicar relaciones subyacentes.</p>
+
+<p>Finalmente, en la pestaña de <strong>"Materiales consolidados"</strong> podrás encontrar la colección completa de materiales en abierto, y en la pestaña de <strong>"Temario"</strong> podrás verlos organizados por los temas de la asignatura.</p>
+
+<hr style="margin: 20px 0;">
+
+<p>Acceso a la <a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=4" target="_blank" rel="noopener"><strong>Guía de la asignatura (páginas 4-19)</strong></a></p>
+
+
+================================================================================
+PESTAÑA 2: Autores
+================================================================================
+
+<div class="alert alert-info" style="background-color: #f8f9fa; border-left: 4px solid #cc0000; padding: 15px; margin-bottom: 20px;">
+  <p><strong>¡IMPORTANTE!</strong> Esta es una asignatura en acceso abierto, organizada para mostrar los materiales que sus profesores han preparado para que cualquiera pueda consultarlos, trabajar con ellos y reutilizarlos si lo considera apropiado. La URJC promueve la publicación de materiales docentes de asignaturas mediante la <em>Convocatoria para el Reconocimiento de publicación de asignaturas en acceso abierto</em>.</p>
+  <p style="margin-bottom: 0;">Si quieres reutilizar estos materiales, recuerda que debes respetar la mención a sus autores y a la obra original, y respetar su licencia de publicación en abierto (<a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>).</p>
+</div>
+
+<p>Los autores de los materiales disponibles en esta asignatura son:</p>
+<ul>
+  <li>Prof. <a href="https://gestion2.urjc.es/pdi/ver/victor.acena" target="_blank" rel="noopener"><strong>Víctor Aceña Gil</strong></a></li>
+  <li>Prof. <a href="https://gestion2.urjc.es/pdi/ver/isaac.martin" target="_blank" rel="noopener"><strong>Isaac Martín de Diego</strong></a></li>
+</ul>
+
+
+================================================================================
+PESTAÑA 3: Temario
+================================================================================
+
+<div class="alert alert-info" style="background-color: #f8f9fa; border-left: 4px solid #cc0000; padding: 15px; margin-bottom: 20px;">
+  <p><strong>¡IMPORTANTE!</strong> Esta es una asignatura en acceso abierto, organizada para mostrar los materiales que sus profesores han preparado para que cualquiera pueda consultarlos, trabajar con ellos y reutilizarlos si lo considera apropiado. La URJC promueve la publicación de materiales docentes de asignaturas mediante la <em>Convocatoria para el Reconocimiento de publicación de asignaturas en acceso abierto</em>.</p>
+  <p style="margin-bottom: 0;">Si quieres reutilizar estos materiales, recuerda que debes respetar la mención a sus autores y a la obra original, y respetar su licencia de publicación en abierto (<a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>).</p>
+</div>
+
+<h3>Tema 0. Introducción a los Modelos de Regresión</h3>
+<p>El modelado estadístico: predecir vs. explicar. Anatomía de un modelo de regresión. Ecosistema de herramientas en R y RStudio.</p>
+<ul>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=30" target="_blank" rel="noopener">Apuntes - Tema 0: Introducción (páginas 30-43)</a></li>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=254" target="_blank" rel="noopener">Diapositivas - Tema 0: Introducción (páginas 254-291)</a></li>
+  <li><a href="https://github.com/URJCDSLab/ModelosEstadisticosPrediccion/blob/main/laboratorios/lab0_introduccion.qmd" target="_blank" rel="noopener">Software - Laboratorio 0: Entorno de trabajo</a></li>
+</ul>
+
+<br>
+
+<h3>Tema 1. El Modelo de Regresión Lineal Simple</h3>
+<p>Formulación del modelo, supuestos teóricos, estimación por MCO, inferencia sobre coeficientes, análisis de varianza (ANOVA) y diagnóstico de residuos.</p>
+<ul>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=44" target="_blank" rel="noopener">Apuntes - Tema 1: Regresión lineal simple (páginas 44-97)</a></li>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=292" target="_blank" rel="noopener">Diapositivas - Tema 1: Regresión lineal simple (páginas 292-357)</a></li>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=548" target="_blank" rel="noopener">Ejercicios - Tema 1: Boletín RLS (páginas 548-550)</a></li>
+  <li><a href="https://github.com/URJCDSLab/ModelosEstadisticosPrediccion/blob/main/laboratorios/lab1_regresion_simple.qmd" target="_blank" rel="noopener">Software - Laboratorio 1: Regresión lineal simple</a></li>
+</ul>
+
+<br>
+
+<h3>Tema 2. El Modelo de Regresión Lineal Múltiple</h3>
+<p>Extensión matricial al caso multivariante, interpretación bajo <em>ceteris paribus</em>, R² ajustado, diagnóstico y detección de multicolinealidad (VIF).</p>
+<ul>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=98" target="_blank" rel="noopener">Apuntes - Tema 2: Regresión lineal múltiple (páginas 98-122)</a></li>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=358" target="_blank" rel="noopener">Diapositivas - Tema 2: Regresión lineal múltiple (páginas 358-395)</a></li>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=551" target="_blank" rel="noopener">Ejercicios - Tema 2: Boletín RLM (páginas 551-553)</a></li>
+  <li><a href="https://github.com/URJCDSLab/ModelosEstadisticosPrediccion/blob/main/laboratorios/lab2_regresion_multiple.qmd" target="_blank" rel="noopener">Software - Laboratorio 2: Regresión lineal múltiple</a></li>
+</ul>
+
+<br>
+
+<h3>Tema 3. Ingeniería de Características</h3>
+<p>Transformaciones para linealizar y estabilizar varianza (Box-Cox), codificación de variables categóricas e interpretación de interacciones.</p>
+<ul>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=123" target="_blank" rel="noopener">Apuntes - Tema 3: Ingeniería de características (páginas 123-166)</a></li>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=396" target="_blank" rel="noopener">Diapositivas - Tema 3: Ingeniería de características (páginas 396-439)</a></li>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=554" target="_blank" rel="noopener">Ejercicios - Tema 3: Transformaciones e interacciones (páginas 554-556)</a></li>
+  <li><a href="https://github.com/URJCDSLab/ModelosEstadisticosPrediccion/blob/main/laboratorios/lab3_ingenieria_caracteristicas.qmd" target="_blank" rel="noopener">Software - Laboratorio 3: Ingeniería de características</a></li>
+</ul>
+
+<br>
+
+<h3>Tema 4. Selección de Variables, Regularización y Validación</h3>
+<p>Compromiso sesgo-varianza, criterios AIC/BIC, métodos stepwise, regularización Ridge / Lasso / Elastic Net y validación cruzada.</p>
+<ul>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=167" target="_blank" rel="noopener">Apuntes - Tema 4: Selección y regularización (páginas 167-202)</a></li>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=440" target="_blank" rel="noopener">Diapositivas - Tema 4: Selección y regularización (páginas 440-479)</a></li>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=557" target="_blank" rel="noopener">Ejercicios - Tema 4: Regularización y validación (páginas 557-559)</a></li>
+  <li><a href="https://github.com/URJCDSLab/ModelosEstadisticosPrediccion/blob/main/laboratorios/lab4_seleccion_variables.qmd" target="_blank" rel="noopener">Software - Laboratorio 4: Selección de variables</a></li>
+</ul>
+
+<br>
+
+<h3>Tema 5. Modelos Lineales Generalizados (GLM)</h3>
+<p>Familia exponencial y función de enlace, máxima verosimilitud, regresión logística (Odds Ratios, curvas ROC) y regresión de Poisson (sobredispersión).</p>
+<ul>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=203" target="_blank" rel="noopener">Apuntes - Tema 5: Modelos GLM (páginas 203-246)</a></li>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=480" target="_blank" rel="noopener">Diapositivas - Tema 5: Modelos GLM (páginas 480-543)</a></li>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=560" target="_blank" rel="noopener">Ejercicios - Tema 5: Boletín GLM (páginas 560-562)</a></li>
+  <li><a href="https://github.com/URJCDSLab/ModelosEstadisticosPrediccion/blob/main/laboratorios/lab5_modelos_generalizados.qmd" target="_blank" rel="noopener">Software - Laboratorio 5: Modelos generalizados</a></li>
+</ul>
+
+<br>
+
+<h3>Materiales Adicionales</h3>
+<ul>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=563" target="_blank" rel="noopener">Ejercicios Avanzados (páginas 563-565)</a></li>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download#page=566" target="_blank" rel="noopener">Software Utilizado en la asignatura (páginas 566-570)</a></li>
+</ul>
+
+
+================================================================================
+PESTAÑA 4: Materiales consolidados
+================================================================================
+
+<div class="alert alert-info" style="background-color: #f8f9fa; border-left: 4px solid #cc0000; padding: 15px; margin-bottom: 20px;">
+  <p><strong>¡IMPORTANTE!</strong> Esta es una asignatura en acceso abierto, organizada para mostrar los materiales que sus profesores han preparado para que cualquiera pueda consultarlos, trabajar con ellos y reutilizarlos si lo considera apropiado. La URJC promueve la publicación de materiales docentes de asignaturas mediante la <em>Convocatoria para el Reconocimiento de publicación de asignaturas en acceso abierto</em>.</p>
+  <p style="margin-bottom: 0;">Si quieres reutilizar estos materiales, recuerda que debes respetar la mención a sus autores y a la obra original, y respetar su licencia de publicación en abierto (<a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>).</p>
+</div>
+
+<h3>Materiales</h3>
+<ul>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/661a8d55-8d6c-4a4c-b38f-ce60babd8699/download" target="_blank" rel="noopener">Libro de la asignatura (descarga directa del PDF)</a></li>
+  <li><a href="https://burjcdigital.urjc.es/bitstreams/d3cb5684-f8ac-473a-ac2c-970ea610554a/download" target="_blank" rel="noopener">Libro de la asignatura (descarga directa del ZIP)</a></li>
+  <li><a href="https://archive.softwareheritage.org/swh:1:dir:e347e182ad5c23fdf7f3cacff0ec657dc3231478;origin=https://github.com/URJCDSLab/ModelosEstadisticosPrediccion;visit=swh:1:snp:f41a70a106d5f90b6ddd40440bc7d51fdd5d44b7;anchor=swh:1:rev:cc85115fd6a3487169464d1b7e7d815ed0e270cf" target="_blank" rel="noopener">Software de la asignatura (preservado en Software Heritage)</a></li>
+  <li><a href="https://hdl.handle.net/10115/103057" target="_blank" rel="noopener">Registro institucional en BURJC Digital (Handle permanente)</a></li>
+</ul>
