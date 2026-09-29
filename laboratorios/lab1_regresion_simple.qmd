@@ -48,6 +48,7 @@ La regresión lineal simple modela la relación entre una variable dependiente $
 $$Y = \beta_0 + \beta_1 X + \epsilon$$
 
 Donde:
+
 - $\beta_0$ = intercepto (valor de Y cuando X = 0)
 - $\beta_1$ = pendiente (cambio en Y por unidad de cambio en X)
 - $\epsilon$ = error aleatorio
