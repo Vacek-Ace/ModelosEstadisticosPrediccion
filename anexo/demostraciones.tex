@@ -1,0 +1,947 @@
+%!TEX program = lualatex
+\documentclass[11pt,a4paper]{article}
+
+%  PAQUETES Y MOTOR LUALATEX 
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{spanish}
+
+% Tipografía contemporánea de alta legibilidad
+% \setmainfont{TeX Gyre Heros}[Scale=0.92]
+% \setsansfont{TeX Gyre Heros}
+% \setmonofont{Inconsolata}[Scale=MatchLowercase]
+
+
+%  MATEMÁTICAS, FORMATO Y CANCELACIÓN 
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[makeroom]{cancel}
+\usepackage{geometry}
+\geometry{
+    a4paper,
+    left=22mm,
+    right=22mm,
+    top=26mm,
+    bottom=26mm,
+    footskip=12mm
+}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\setlist{itemsep=0.25em, topsep=0.35em}
+
+% Permitir saltos de página fluidos dentro de alineaciones matemáticas
+\allowdisplaybreaks
+
+%  PALETA CROMÁTICA EDITORIAL (DSLAB STYLE) 
+\usepackage[x11names,dvipsnames]{xcolor}
+\definecolor{brandblue}{HTML}{0072B2}    % Azul corporativo
+\definecolor{branddark}{HTML}{0F172A}    % Pizarra oscuro
+\definecolor{brandteal}{HTML}{028090}    % Teal / Predictor
+\definecolor{brandorange}{HTML}{D55E00}  % Naranja / Cancelaciones y alertas
+\definecolor{brandpurple}{HTML}{6B21A8}  % Púrpura / Sustituciones
+\definecolor{bgsoft}{HTML}{F8FAFC}       % Fondo tenue
+\definecolor{borderline}{HTML}{CBD5E1}   % Líneas de borde sutiles
+
+% Configuración del color de cancelación matemática
+\renewcommand{\CancelColor}{\color{brandorange}}
+
+%  COMANDOS PARA SEGUIMIENTO VISUAL SEMÁNTICO 
+\newcommand{\termSub}[1]{\textcolor{brandpurple}{#1}}   % Sustituciones
+\newcommand{\termX}[1]{\textcolor{brandteal}{#1}}        % Componentes en X
+\newcommand{\termY}[1]{\textcolor{brandblue}{#1}}       % Componentes en Y
+\newcommand{\termZero}[1]{\textcolor{brandorange}{#1}}   % Términos nulos / cancelados
+\newcommand{\termTeal}[1]{\textcolor{brandteal}{#1}}
+\newcommand{\termOrange}[1]{\textcolor{brandorange}{#1}}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=brandblue,
+    citecolor=brandteal,
+    urlcolor=brandblue
+}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{borderline}\leaders\hrule height \headrulewidth\hfill}}
+\fancyhead[L]{\small\color{brandblue}\textbf{Regresión lineal: manual de demostraciones detalladas}}
+\fancyhead[R]{\small\color{gray}Víctor Aceña (DSLAB)}
+\fancyfoot[C]{\small\thepage}
+
+%  CAJAS MODULARES DOCENTES CON 'BREAKABLE' 
+\usepackage[most]{tcolorbox}
+
+\newtcolorbox{demobox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=brandblue,
+    fonttitle=\bfseries\color{white},
+    title={#1},
+    attach boxed title to top left={yshift=-2.5mm, xshift=5mm},
+    boxed title style={colback=brandblue, sharp corners, boxrule=0pt},
+    boxrule=0.8pt,
+    arc=2mm,
+    top=4mm, bottom=3mm, left=4mm, right=4mm,
+    before skip=12pt, after skip=12pt
+}
+
+\newtcolorbox{intuicionbox}[1][]{
+    enhanced,
+    breakable,
+    colback=bgsoft,
+    colframe=brandteal,
+    colbacktitle=bgsoft,
+    coltitle=brandteal,
+    titlerule=0pt,
+    fonttitle=\bfseries\color{brandteal},
+    title={�� Fundamento Conceptual \& Geometría: #1},
+    boxrule=0pt,
+    borderline west={3.5pt}{0pt}{brandteal},
+    arc=0mm,
+    top=3mm, bottom=3mm, left=4mm, right=4mm,
+    before skip=10pt, after skip=10pt
+}
+
+\newtcolorbox{alertabox}[1][]{
+    enhanced,
+    breakable,
+    colback=brandorange!6!white,
+    colframe=brandorange,
+    colbacktitle=brandorange!6!white,
+    coltitle=brandorange,
+    titlerule=0pt,
+    fonttitle=\bfseries\color{brandorange},
+    title={⚠️ Advertencia Metodológica: #1},
+    boxrule=0pt,
+    borderline west={3.5pt}{0pt}{brandorange},
+    arc=0mm,
+    top=3mm, bottom=3mm, left=4mm, right=4mm,
+    before skip=10pt, after skip=10pt
+}
+
+\newtcolorbox{legendbox}{
+    enhanced,
+    breakable,
+    colback=bgsoft,
+    colframe=borderline,
+    boxrule=0.6pt,
+    arc=2mm,
+    top=3mm, bottom=3mm, left=4mm, right=4mm,
+    before skip=6pt, after skip=12pt
+}
+
+\usepackage{titlesec}
+\titleformat{\section}{\Large\bfseries\color{brandblue}}{\thesection.}{0.7em}{}
+\titleformat{\subsection}{\large\bfseries\color{branddark}}{\thesubsection}{0.7em}{}
+
+\begin{document}
+
+%  CABECERA PRINCIPAL 
+\begin{center}
+    {\Huge\textbf{\color{brandblue}Modelos Estadísticos para la Predicción}}\\[0.4em]
+    {\LARGE\textbf{Derivaciones Analíticas y Demostraciones Paso a Paso}}\\[0.8em]
+    {\large Víctor Aceña (DSLAB)}\\[0.3em]
+    {\small Documento complementario exhaustivo para las transparencias de clase}
+\end{center}
+\vspace{0.3cm}
+\hrule height 1.2pt
+\vspace{0.4cm}
+
+\begin{legendbox}
+\textbf{\small Código Cromático de Seguimiento en las Ecuaciones:}
+\begin{itemize}[leftmargin=1.5em, itemsep=0.1em]
+    \item \textbf{\color{brandpurple}Púrpura}: Términos objeto de sustitución algebraica directa desde una ecuación previa.
+    \item \textbf{\color{brandteal}Verde/Teal}: Factores fijos del predictor $X$, pesos muestrales o sumas centradas ($S_{xx}$).
+    \item \textbf{\color{brandblue}Azul}: Términos vinculados a la variable dependiente $Y$ o componentes explicados sistemáticos.
+    \item \textbf{\color{brandorange}Naranja}: Componentes del error estocástico $\varepsilon$, residuos o sumas que se cancelan ($\cancelto{0}{\dots}$).
+\end{itemize}
+\end{legendbox}
+
+\tableofcontents
+
+
+
+
+\newpage
+\section{Tema 1: El modelo de regresión lineal simple}
+
+\subsection{Notación, definiciones y álgebra de sumatorios}
+
+Sea $\{(x_i, y_i)\}_{i=1}^n$ una muestra observada de tamaño $n$. Definimos las medias muestrales como:
+\begin{equation}
+\bar{x} = \frac{1}{n}\sum_{i=1}^n x_i, \qquad \bar{y} = \frac{1}{n}\sum_{i=1}^n y_i
+\end{equation}
+y las cantidades asociadas a la dispersión muestral:
+\begin{align}
+S_{xx} &= \sum_{i=1}^n (x_i - \bar{x})^2 = \sum_{i=1}^n x_i^2 - n\bar{x}^2 \\
+S_{yy} &= \sum_{i=1}^n (y_i - \bar{y})^2 = \sum_{i=1}^n y_i^2 - n\bar{y}^2 \\
+S_{xy} &= \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) = \sum_{i=1}^n x_i y_i - n\bar{x}\bar{y}
+\end{align}
+
+\begin{demobox}[Lema 1: propiedades fundamentales de centrado]
+Sean $\{a_i\}_{i=1}^n$ y $\{b_i\}_{i=1}^n$ constantes reales arbitrarias con medias aritméticas $\bar{a} = \frac{1}{n}\sum a_i$ y $\bar{b} = \frac{1}{n}\sum b_i$.
+
+\textbf{1. Demostración de $\sum_{i=1}^n (a_i - \bar{a}) = 0$:}
+\begin{align}
+\sum_{i=1}^n (a_i - \bar{a}) &= (a_1 - \bar{a}) + (a_2 - \bar{a}) + \dots + (a_n - \bar{a}) \\
+&= \sum_{i=1}^n a_i - \sum_{i=1}^n \bar{a} \\
+&= \sum_{i=1}^n a_i - n\bar{a} \\
+&= n\left(\frac{1}{n}\sum_{i=1}^n a_i\right) - n\bar{a} \\
+&= n\bar{a} - n\bar{a} = 0.
+\end{align}
+
+\textbf{2. Demostración de $\sum_{i=1}^n (a_i - \bar{a})b_i = \sum_{i=1}^n (a_i - \bar{a})(b_i - \bar{b})$:}  
+Desarrollamos el término derecho de la igualdad distribuyendo el producto:
+\begin{align}
+\sum_{i=1}^n (a_i - \bar{a})(b_i - \bar{b}) &= \sum_{i=1}^n \Big( (a_i - \bar{a})b_i - (a_i - \bar{a})\bar{b} \Big) \\
+&= \sum_{i=1}^n (a_i - \bar{a})b_i - \sum_{i=1}^n (a_i - \bar{a})\bar{b} \\
+&= \sum_{i=1}^n (a_i - \bar{a})b_i - \bar{b} \underbrace{\sum_{i=1}^n (a_i - \bar{a})}_{= 0 \text{ por el Paso 1}} \\
+&= \sum_{i=1}^n (a_i - \bar{a})b_i - \bar{b} \cdot 0 \\
+&= \sum_{i=1}^n (a_i - \bar{a})b_i.
+\end{align}
+Por simetría, intercambiando los roles de las variables $a$ y $b$:
+\begin{equation}
+\sum_{i=1}^n a_i (b_i - \bar{b}) = \sum_{i=1}^n (a_i - \bar{a})(b_i - \bar{b}).
+\end{equation}
+\end{demobox}
+
+
+
+\subsection{Derivación analítica de los estimadores de MCO}
+
+La función objetivo que buscamos minimizar respecto a $\beta_0$ y $\beta_1$ es la suma de los residuos al cuadrado:
+\begin{equation}
+\operatorname{SSE}(\beta_0, \beta_1) = \sum_{i=1}^n \big( y_i - (\beta_0 + \beta_1 x_i) \big)^2 = \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2
+\end{equation}
+
+\begin{demobox}[Condiciones de primer orden y despeje analítico de $\hat{\beta}_0$ y $\hat{\beta}_1$]
+\textbf{Paso 1: Cálculo de las derivadas parciales mediante la regla de la cadena:}
+\begin{align}
+\frac{\partial \operatorname{SSE}}{\partial \beta_0} &= \frac{\partial}{\partial \beta_0} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2 \\
+&= \sum_{i=1}^n \frac{\partial}{\partial \beta_0} (y_i - \beta_0 - \beta_1 x_i)^2 \\
+&= \sum_{i=1}^n 2(y_i - \beta_0 - \beta_1 x_i) \cdot \frac{\partial}{\partial \beta_0}(y_i - \beta_0 - \beta_1 x_i) \\
+&= \sum_{i=1}^n 2(y_i - \beta_0 - \beta_1 x_i) \cdot (-1) \\
+&= -2 \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i) = 0. \label{eq:foc_beta0}
+\end{align}
+
+\begin{align}
+\frac{\partial \operatorname{SSE}}{\partial \beta_1} &= \frac{\partial}{\partial \beta_1} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2 \\
+&= \sum_{i=1}^n 2(y_i - \beta_0 - \beta_1 x_i) \cdot \frac{\partial}{\partial \beta_1}(y_i - \beta_0 - \beta_1 x_i) \\
+&= \sum_{i=1}^n 2(y_i - \beta_0 - \beta_1 x_i) \cdot (-x_i) \\
+&= -2 \sum_{i=1}^n x_i (y_i - \beta_0 - \beta_1 x_i) = 0. \label{eq:foc_beta1}
+\end{align}
+
+\textbf{Paso 2: Despeje riguroso del estimador $\hat{\beta}_0$:}  
+Dividimos ambos miembros de la ecuación \eqref{eq:foc_beta0} entre $-2$:
+\begin{equation}
+\sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i) = 0.
+\end{equation}
+Distribuimos el sumatorio a cada uno de los sumandos:
+\begin{equation}
+\sum_{i=1}^n y_i - \sum_{i=1}^n \beta_0 - \beta_1 \sum_{i=1}^n x_i = 0.
+\end{equation}
+Dado que $\sum_{i=1}^n \beta_0 = n\beta_0$:
+\begin{equation}
+\sum_{i=1}^n y_i - n\beta_0 - \beta_1 \sum_{i=1}^n x_i = 0.
+\end{equation}
+Dividimos todos los términos entre el tamaño muestral $n$:
+\begin{equation}
+\frac{1}{n}\sum_{i=1}^n y_i - \frac{n\beta_0}{n} - \beta_1 \left(\frac{1}{n}\sum_{i=1}^n x_i\right) = 0.
+\end{equation}
+Reconociendo las medias muestrales $\bar{y}$ y $\bar{x}$:
+\begin{equation}
+\bar{y} - \beta_0 - \beta_1 \bar{x} = 0 \implies \termSub{\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}}. \label{eq:beta0_resuelto}
+\end{equation}
+
+\textbf{Paso 3: Sustitución de $\hat{\beta}_0$ en la segunda ecuación \eqref{eq:foc_beta1} para despejar $\hat{\beta}_1$:}  
+Dividimos la ecuación \eqref{eq:foc_beta1} entre $-2$:
+\begin{equation}
+\sum_{i=1}^n x_i \Big( y_i - \termSub{\beta_0} - \beta_1 x_i \Big) = 0.
+\end{equation}
+Reemplazamos $\beta_0$ por la expresión obtenida en \eqref{eq:beta0_resuelto}:
+\begin{equation}
+\sum_{i=1}^n x_i \Big( y_i - \termSub{(\bar{y} - \beta_1 \bar{x})} - \beta_1 x_i \Big) = 0.
+\end{equation}
+Distribuimos el signo negativo interior:
+\begin{equation}
+\sum_{i=1}^n x_i \Big( y_i - \bar{y} + \beta_1 \bar{x} - \beta_1 x_i \Big) = 0.
+\end{equation}
+Agrupamos factorizando $\beta_1$ en los términos que contienen el regresor:
+\begin{equation}
+\sum_{i=1}^n x_i \Big[ \termY{(y_i - \bar{y})} - \beta_1 \termX{(x_i - \bar{x})} \Big] = 0.
+\end{equation}
+Distribuimos el producto por $x_i$ y separamos los sumatorios:
+\begin{equation}
+\sum_{i=1}^n x_i \termY{(y_i - \bar{y})} - \beta_1 \sum_{i=1}^n x_i \termX{(x_i - \bar{x})} = 0.
+\end{equation}
+Aplicamos el Lema 1 a ambos términos:
+\begin{align}
+\sum_{i=1}^n x_i (y_i - \bar{y}) &= \sum_{i=1}^n \termX{(x_i - \bar{x})}\termY{(y_i - \bar{y})} = S_{xy} \\
+\sum_{i=1}^n x_i (x_i - \bar{x}) &= \sum_{i=1}^n \termX{(x_i - \bar{x})}\termX{(x_i - \bar{x})} = \sum_{i=1}^n (x_i - \bar{x})^2 = S_{xx}
+\end{align}
+Sustituyendo estas sumas centradas:
+\begin{equation}
+S_{xy} - \beta_1 S_{xx} = 0 \implies \hat{\beta}_1 S_{xx} = S_{xy} \implies \hat{\beta}_1 = \frac{S_{xy}}{S_{xx}} = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n (x_i - \bar{x})^2}.
+\end{equation}
+
+\textbf{Paso 4: Condición de Segundo Orden (Verificación de Mínimo Global):}  
+Calculamos la matriz de derivadas segundas (Hessiana):
+\begin{align}
+\frac{\partial^2 \operatorname{SSE}}{\partial \beta_0^2} &= \frac{\partial}{\partial \beta_0}\left[ -2\sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i) \right] = 2\sum_{i=1}^n 1 = 2n \\
+\frac{\partial^2 \operatorname{SSE}}{\partial \beta_1^2} &= \frac{\partial}{\partial \beta_1}\left[ -2\sum_{i=1}^n x_i(y_i - \beta_0 - \beta_1 x_i) \right] = 2\sum_{i=1}^n x_i^2 \\
+\frac{\partial^2 \operatorname{SSE}}{\partial \beta_0 \partial \beta_1} &= \frac{\partial}{\partial \beta_1}\left[ -2\sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i) \right] = 2\sum_{i=1}^n x_i = 2n\bar{x}
+\end{align}
+La matriz Hessiana resulta:
+\begin{equation}
+\mathbf{H} = \begin{pmatrix} 2n & 2n\bar{x} \\ 2n\bar{x} & 2\sum_{i=1}^n x_i^2 \end{pmatrix}.
+\end{equation}
+Evaluamos los menores principales:
+\begin{enumerate}
+    \item $D_1 = 2n > 0$ (puesto que $n \ge 2$).
+    \item $D_2 = \det(\mathbf{H}) = (2n)\left(2\sum_{i=1}^n x_i^2\right) - (2n\bar{x})^2 = 4n \left( \sum_{i=1}^n x_i^2 - n\bar{x}^2 \right) = 4n S_{xx}$.
+\end{enumerate}
+Dado que los puntos en $X$ no son todos idénticos, $S_{xx} = \sum (x_i - \bar{x})^2 > 0$, lo que implica $D_2 > 0$. Al ser ambos menores principales estrictamente positivos, $\mathbf{H}$ es estrictamente definida positiva en todo $\mathbb{R}^2$, confirmando que la solución hallada es el \textbf{mínimo global único}.
+\end{demobox}
+
+
+
+\subsection{Propiedades de predicciones y residuos muestrales}
+
+Definimos el valor predicho para el punto $i$ como $\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i$ y el residuo como $e_i = y_i - \hat{y}_i$.
+
+\begin{demobox}[Demostración de las cuatro propiedades algebraicas]
+\textbf{Propiedad 1: La recta pasa necesariamente por el centro $(\bar{x}, \bar{y})$}  
+Evaluamos la recta ajustada en el punto medio $x = \bar{x}$:
+\begin{align}
+\hat{y}(\bar{x}) &= \hat{\beta}_0 + \hat{\beta}_1 \bar{x} \\
+&= (\bar{y} - \hat{\beta}_1 \bar{x}) + \hat{\beta}_1 \bar{x} \quad (\text{sustituyendo } \hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}) \\
+&= \bar{y} + \cancelto{0}{(-\hat{\beta}_1 \bar{x} + \hat{\beta}_1 \bar{x})} = \bar{y}.
+\end{align}
+
+\textbf{Propiedad 2: Suma nula de residuos y coincidencia de medias muestrales}  
+De la primera condición de primer orden \eqref{eq:foc_beta0}:
+\begin{align}
+-2 \sum_{i=1}^n (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i) = 0 &\implies \sum_{i=1}^n (y_i - \hat{y}_i) = 0 \implies \sum_{i=1}^n e_i = 0.
+\end{align}
+Por tanto, la media aritmética de los residuos es idénticamente nula:
+\begin{equation}
+\bar{e} = \frac{1}{n}\sum_{i=1}^n e_i = \frac{1}{n} \cdot 0 = 0.
+\end{equation}
+Como cada observación verifica $y_i = \hat{y}_i + e_i$, sumamos sobre toda la muestra:
+\begin{align}
+\sum_{i=1}^n y_i &= \sum_{i=1}^n (\hat{y}_i + e_i) = \sum_{i=1}^n \hat{y}_i + \sum_{i=1}^n e_i = \sum_{i=1}^n \hat{y}_i + 0 = \sum_{i=1}^n \hat{y}_i.
+\end{align}
+Dividiendo entre $n$:
+\begin{equation}
+\frac{1}{n}\sum_{i=1}^n y_i = \frac{1}{n}\sum_{i=1}^n \hat{y}_i \implies \bar{y} = \bar{\hat{y}}.
+\end{equation}
+
+\textbf{Propiedad 3: Ortogonalidad e incorrelación muestral entre $X$ y $e$}  
+De la segunda condición de primer orden \eqref{eq:foc_beta1}:
+\begin{equation}
+-2 \sum_{i=1}^n x_i (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i) = 0 \implies \sum_{i=1}^n x_i (y_i - \hat{y}_i) = 0 \implies \sum_{i=1}^n x_i e_i = 0.
+\end{equation}
+Esto demuestra la ortogonalidad vectorial. Calculamos la covarianza muestral:
+\begin{align}
+\widehat{\operatorname{Cov}}(x, e) &= \frac{1}{n-1}\sum_{i=1}^n (x_i - \bar{x})(e_i - \bar{e}) \\
+&= \frac{1}{n-1}\sum_{i=1}^n (x_i - \bar{x})e_i \quad (\text{dado que } \bar{e} = 0) \\
+&= \frac{1}{n-1}\left( \sum_{i=1}^n x_i e_i - \bar{x}\sum_{i=1}^n e_i \right) \\
+&= \frac{1}{n-1}\Big( \cancelto{0}{\sum_{i=1}^n x_i e_i} - \bar{x}\cancelto{0}{\sum_{i=1}^n e_i} \Big) = \frac{0}{n-1} = 0.
+\end{align}
+
+\textbf{Propiedad 4: Ortogonalidad e incorrelación entre $\hat{Y}$ y $e$}  
+Multiplicamos el valor predicho por el residuo y sumamos:
+\begin{align}
+\sum_{i=1}^n \hat{y}_i e_i &= \sum_{i=1}^n (\hat{\beta}_0 + \hat{\beta}_1 x_i) e_i = \sum_{i=1}^n (\hat{\beta}_0 e_i + \hat{\beta}_1 x_i e_i) \\
+&= \hat{\beta}_0 \sum_{i=1}^n e_i + \hat{\beta}_1 \sum_{i=1}^n x_i e_i = \hat{\beta}_0 (0) + \hat{\beta}_1 (0) = 0.
+\end{align}
+Calculamos la covarianza muestral:
+\begin{align}
+\widehat{\operatorname{Cov}}(\hat{y}, e) &= \frac{1}{n-1}\sum_{i=1}^n (\hat{y}_i - \bar{\hat{y}})(e_i - \bar{e}) = \frac{1}{n-1}\sum_{i=1}^n (\hat{y}_i - \bar{y})e_i \\
+&= \frac{1}{n-1}\left( \sum_{i=1}^n \hat{y}_i e_i - \bar{y}\sum_{i=1}^n e_i \right) = \frac{1}{n-1}(0 - 0) = 0.
+\end{align}
+\end{demobox}
+
+\begin{alertabox}[Propiedades del álgebra de ajuste vs. supuestos estadísticos]
+Es un error muy extendido entre los alumnos pensar que $\sum e_i = 0$ o que $\widehat{\operatorname{Cov}}(x, e) = 0$ demuestran que los supuestos del modelo se cumplen.
+\begin{itemize}
+    \item Estas cuatro identidades son consecuencias puramente algebraicas de haber igualado las derivadas a cero. Se cumplen en \textbf{cualquier conjunto numérico}, incluso si la verdadera relación es no lineal o heterocedástica.
+    \item Si se ajusta un modelo sin intercepto ($Y_i = \beta_1 X_i + \varepsilon_i$), en general $\sum e_i \neq 0$ y $\bar{\hat{y}} \neq \bar{y}$.
+\end{itemize}
+\end{alertabox}
+
+
+
+\subsection{Propiedades de Gauss-Márkov y demostración de varianza mínima (BLUE)}
+
+Escribimos la pendiente como combinación lineal de las observaciones:
+\begin{equation}
+\hat{\beta}_1 = \frac{\sum_{i=1}^n (x_i - \bar{x})(Y_i - \bar{Y})}{S_{xx}} = \frac{\sum_{i=1}^n (x_i - \bar{x})Y_i}{S_{xx}} = \sum_{i=1}^n \left(\frac{x_i - \bar{x}}{S_{xx}}\right) Y_i = \sum_{i=1}^n k_i Y_i
+\end{equation}
+definiendo los coeficientes escalares fijos $k_i \equiv \frac{x_i - \bar{x}}{S_{xx}}$.
+
+\begin{demobox}[Propiedades de los pesos $k_i$, insesgadez, varianzas y optimalidad BLUE]
+\textbf{Paso 1: Demostración formal de las propiedades algebraicas de $k_i$:}
+\begin{align}
+\sum_{i=1}^n k_i &= \sum_{i=1}^n \frac{x_i - \bar{x}}{S_{xx}} = \frac{1}{S_{xx}}\sum_{i=1}^n (x_i - \bar{x}) = \frac{1}{S_{xx}} \cdot 0 = 0, \label{eq:prop_k1} \\[0.5em]
+\sum_{i=1}^n k_i x_i &= \sum_{i=1}^n \left(\frac{x_i - \bar{x}}{S_{xx}}\right)x_i \overset{\text{Lema 1}}{=} \frac{1}{S_{xx}}\sum_{i=1}^n (x_i - \bar{x})^2 = \frac{S_{xx}}{S_{xx}} = 1, \label{eq:prop_k2} \\[0.5em]
+\sum_{i=1}^n k_i^2 &= \sum_{i=1}^n \left(\frac{x_i - \bar{x}}{S_{xx}}\right)^2 = \frac{1}{S_{xx}^2}\sum_{i=1}^n (x_i - \bar{x})^2 = \frac{S_{xx}}{S_{xx}^2} = \frac{1}{S_{xx}}. \label{eq:prop_k3}
+\end{align}
+
+\textbf{Paso 2: Demostración de insesgadez de $\hat{\beta}_1$ ($\mathbb{E}[\hat{\beta}_1] = \beta_1$):}
+\begin{align}
+\mathbb{E}[\hat{\beta}_1] &= \mathbb{E}\left[ \sum_{i=1}^n k_i Y_i \right] = \sum_{i=1}^n k_i \mathbb{E}[Y_i] = \sum_{i=1}^n k_i (\beta_0 + \beta_1 x_i) \\
+&= \beta_0 \sum_{i=1}^n k_i + \beta_1 \sum_{i=1}^n k_i x_i \\
+&= \beta_0 \cdot \cancelto{0}{\sum_{i=1}^n k_i} + \beta_1 \cdot \underbrace{\sum_{i=1}^n k_i x_i}_{= 1} = \beta_0(0) + \beta_1(1) = \beta_1.
+\end{align}
+
+\textbf{Paso 3: Demostración de insesgadez de $\hat{\beta}_0$ ($\mathbb{E}[\hat{\beta}_0] = \beta_0$):}  
+Calculamos primero $\mathbb{E}[\bar{Y}]$:
+\begin{align}
+\mathbb{E}[\bar{Y}] &= \mathbb{E}\left[ \frac{1}{n}\sum_{i=1}^n Y_i \right] = \frac{1}{n}\sum_{i=1}^n \mathbb{E}[Y_i] = \frac{1}{n}\sum_{i=1}^n (\beta_0 + \beta_1 x_i) \\
+&= \frac{1}{n}\left( n\beta_0 + \beta_1 \sum_{i=1}^n x_i \right) = \beta_0 + \beta_1 \bar{x}.
+\end{align}
+Por tanto:
+\begin{equation}
+\mathbb{E}[\hat{\beta}_0] = \mathbb{E}[\bar{Y} - \hat{\beta}_1 \bar{x}] = \mathbb{E}[\bar{Y}] - \bar{x}\mathbb{E}[\hat{\beta}_1] = (\beta_0 + \beta_1 \bar{x}) - \bar{x}\beta_1 = \beta_0.
+\end{equation}
+
+\textbf{Paso 4: Varianza de la pendiente $\hat{\beta}_1$:}  
+Por ser las observaciones condicionalmente independientes con varianza $\sigma^2$:
+\begin{align}
+\operatorname{Var}(\hat{\beta}_1) &= \operatorname{Var}\left(\sum_{i=1}^n k_i Y_i\right) = \sum_{i=1}^n k_i^2 \operatorname{Var}(Y_i) = \sigma^2 \sum_{i=1}^n k_i^2 \overset{\eqref{eq:prop_k3}}{=} \frac{\sigma^2}{S_{xx}}.
+\end{align}
+
+\textbf{Paso 5: Varianza del intercepto $\hat{\beta}_0$ y Covarianza Cruzada:}  
+Escribimos $\hat{\beta}_0 = \sum_{i=1}^n \left(\frac{1}{n} - \bar{x}k_i\right)Y_i = \sum_{i=1}^n c_i Y_i$:
+\begin{align}
+\operatorname{Var}(\hat{\beta}_0) &= \sigma^2 \sum_{i=1}^n \left(\frac{1}{n} - \bar{x}k_i\right)^2 = \sigma^2 \sum_{i=1}^n \left( \frac{1}{n^2} - 2\frac{\bar{x}}{n}k_i + \bar{x}^2 k_i^2 \right) \\
+&= \sigma^2 \left( \sum_{i=1}^n \frac{1}{n^2} - \frac{2\bar{x}}{n}\cancelto{0}{\sum_{i=1}^n k_i} + \bar{x}^2 \sum_{i=1}^n k_i^2 \right) \\
+&= \sigma^2 \left( \frac{n}{n^2} - 0 + \bar{x}^2 \cdot \frac{1}{S_{xx}} \right) = \sigma^2 \left(\frac{1}{n} + \frac{\bar{x}^2}{S_{xx}}\right).
+\end{align}
+Calculamos la covarianza:
+\begin{align}
+\operatorname{Cov}(\hat{\beta}_0, \hat{\beta}_1) &= \operatorname{Cov}\left( \sum_{i=1}^n c_i Y_i, \sum_{j=1}^n k_j Y_j \right) = \sigma^2 \sum_{i=1}^n c_i k_i = \sigma^2 \sum_{i=1}^n \left(\frac{1}{n} - \bar{x}k_i\right)k_i \\
+&= \sigma^2 \left( \frac{1}{n}\cancelto{0}{\sum_{i=1}^n k_i} - \bar{x}\sum_{i=1}^n k_i^2 \right) = \sigma^2 \left( 0 - \frac{\bar{x}}{S_{xx}} \right) = -\frac{\bar{x}\sigma^2}{S_{xx}}.
+\end{align}
+
+\textbf{Paso 6: Demostración de Varianza Mínima (Teorema de Gauss-Márkov):}  
+Sea $\tilde{\beta}_1 = \sum_{i=1}^n c_i Y_i$ cualquier otro estimador lineal insesgado.  
+Definimos los desvíos $d_i \equiv c_i - k_i$, de modo que $c_i = k_i + \termZero{d_i}$.  
+La condición de insesgadez universal $\mathbb{E}[\tilde{\beta}_1] = \beta_1$ exige:
+\begin{align}
+\mathbb{E}[\tilde{\beta}_1] &= \sum_{i=1}^n (k_i + \termZero{d_i})(\beta_0 + \beta_1 x_i) \\
+&= \beta_0 \left(\cancelto{0}{\sum k_i} + \sum \termZero{d_i}\right) + \beta_1 \left(\underbrace{\sum k_i x_i}_{= 1} + \sum \termZero{d_i} x_i\right) \\
+&= \beta_0 \sum_{i=1}^n \termZero{d_i} + \beta_1 \left(1 + \sum_{i=1}^n \termZero{d_i} x_i\right) \equiv \beta_1.
+\end{align}
+Para que esto se cumpla para cualquier valor poblacional de $\beta_0$ y $\beta_1$, es obligatorio que:
+\begin{equation}
+\sum_{i=1}^n \termZero{d_i} = 0 \qquad \text{y} \qquad \sum_{i=1}^n \termZero{d_i} x_i = 0. \label{eq:cond_d}
+\end{equation}
+Calculamos ahora la varianza de $\tilde{\beta}_1$:
+\begin{align}
+\operatorname{Var}(\tilde{\beta}_1) &= \sigma^2 \sum_{i=1}^n c_i^2 = \sigma^2 \sum_{i=1}^n (k_i + \termZero{d_i})^2 \\
+&= \sigma^2 \sum_{i=1}^n k_i^2 + \sigma^2 \sum_{i=1}^n \termZero{d_i}^2 + 2\sigma^2 \sum_{i=1}^n k_i \termZero{d_i}.
+\end{align}
+Evaluamos el sumatorio del producto cruzado:
+\begin{align}
+\sum_{i=1}^n k_i \termZero{d_i} &= \sum_{i=1}^n \left(\frac{x_i - \bar{x}}{S_{xx}}\right)\termZero{d_i} = \frac{1}{S_{xx}} \left( \sum_{i=1}^n x_i \termZero{d_i} - \bar{x}\sum_{i=1}^n \termZero{d_i} \right) \\
+&= \frac{1}{S_{xx}} \Big( \cancelto{0}{\sum_{i=1}^n x_i \termZero{d_i}} - \bar{x}\cancelto{0}{\sum_{i=1}^n \termZero{d_i}} \Big) = \frac{1}{S_{xx}}(0 - 0) = 0.
+\end{align}
+Al anularse el término cruzado, obtenemos:
+\begin{equation}
+\operatorname{Var}(\tilde{\beta}_1) = \operatorname{Var}(\hat{\beta}_1) + \underbrace{\sigma^2 \sum_{i=1}^n \termZero{d_i}^2}_{\ge 0} \;\ge\; \operatorname{Var}(\hat{\beta}_1).
+\end{equation}
+La igualdad se alcanza si y solo si $d_i = 0 \; \forall i \iff c_i = k_i$.  
+Por tanto, $\hat{\beta}_1$ es el **Mejor Estimador Lineal Insesgado (MELI / BLUE)**.
+\end{demobox}
+
+
+
+\subsection{Insesgadez de la varianza residual: demostración de $\mathbb{E}[\operatorname{SSE}] = (n-2)\sigma^2$}
+
+\begin{demobox}[Deducción exhaustiva término a término del denominador $n-2$]
+Partimos de la relación muestral: $\operatorname{SSE} = S_{yy} - \hat{\beta}_1^2 S_{xx}$. Tomamos esperanzas:
+\begin{equation}
+\mathbb{E}[\operatorname{SSE}] = \mathbb{E}[S_{yy}] - S_{xx} \mathbb{E}[\hat{\beta}_1^2]. \label{eq:esperanza_sse_inicio}
+\end{equation}
+
+\textbf{Paso 1: Cálculo exacto de $S_{xx} \mathbb{E}[\hat{\beta}_1^2]$:}  
+Por la definición fundamental de varianza: $\mathbb{E}[\hat{\beta}_1^2] = \operatorname{Var}(\hat{\beta}_1) + (\mathbb{E}[\hat{\beta}_1])^2 = \frac{\sigma^2}{S_{xx}} + \beta_1^2$.  
+Multiplicando por $S_{xx}$:
+\begin{equation}
+S_{xx} \mathbb{E}[\hat{\beta}_1^2] = S_{xx} \left( \frac{\sigma^2}{S_{xx}} + \beta_1^2 \right) = \termOrange{\sigma^2} + \termTeal{\beta_1^2 S_{xx}}. \label{eq:esperanza_part1}
+\end{equation}
+
+\textbf{Paso 2: Cálculo exhaustivo término a término de $\mathbb{E}[S_{yy}]$:}  
+Como $Y_i - \bar{Y} = \beta_1(x_i - \bar{x}) + (\varepsilon_i - \bar{\varepsilon})$:
+\begin{align}
+(Y_i - \bar{Y})^2 &= \Big( \beta_1(x_i - \bar{x}) + (\varepsilon_i - \bar{\varepsilon}) \Big)^2 \\
+&= \beta_1^2 (x_i - \bar{x})^2 + (\varepsilon_i - \bar{\varepsilon})^2 + 2\beta_1(x_i - \bar{x})(\varepsilon_i - \bar{\varepsilon}).
+\end{align}
+Sumando sobre todas las observaciones $i=1, \dots, n$:
+\begin{equation}
+S_{yy} = \termTeal{\beta_1^2 S_{xx}} + \sum_{i=1}^n (\varepsilon_i - \bar{\varepsilon})^2 + 2\beta_1 \sum_{i=1}^n (x_i - \bar{x})\termOrange{\varepsilon_i}.
+\end{equation}
+Desarrollamos el sumatorio de los errores cuadráticos centrados:
+\begin{align}
+\sum_{i=1}^n (\varepsilon_i - \bar{\varepsilon})^2 &= \sum_{i=1}^n (\varepsilon_i^2 - 2\varepsilon_i \bar{\varepsilon} + \bar{\varepsilon})^2 \\
+&= \sum_{i=1}^n \varepsilon_i^2 - 2\bar{\varepsilon}\sum_{i=1}^n \varepsilon_i + \sum_{i=1}^n \bar{\varepsilon}^2 \\
+&= \sum_{i=1}^n \varepsilon_i^2 - 2\bar{\varepsilon}(n\bar{\varepsilon}) + n\bar{\varepsilon}^2 \\
+&= \sum_{i=1}^n \varepsilon_i^2 - 2n\bar{\varepsilon}^2 + n\bar{\varepsilon}^2 \\
+&= \sum_{i=1}^n \varepsilon_i^2 - n\bar{\varepsilon}^2.
+\end{align}
+Tomamos ahora la esperanza matemática de cada uno de sus términos:
+\begin{enumerate}
+    \item Como $\mathbb{E}[\varepsilon_i] = 0$ y $\operatorname{Var}(\varepsilon_i) = \sigma^2$, tenemos $\mathbb{E}[\varepsilon_i^2] = \sigma^2$. Por consiguiente:
+    \begin{equation}
+    \mathbb{E}\left[ \sum_{i=1}^n \varepsilon_i^2 \right] = \sum_{i=1}^n \mathbb{E}[\varepsilon_i^2] = \sum_{i=1}^n \sigma^2 = n\sigma^2.
+    \end{equation}
+    \item Para la media de los errores $\bar{\varepsilon} = \frac{1}{n}\sum \varepsilon_i$, sabemos que $\mathbb{E}[\bar{\varepsilon}] = 0$ y $\operatorname{Var}(\bar{\varepsilon}) = \frac{\sigma^2}{n}$. Por consiguiente:
+    \begin{equation}
+    \mathbb{E}[\bar{\varepsilon}^2] = \operatorname{Var}(\bar{\varepsilon}) + (\mathbb{E}[\bar{\varepsilon}])^2 = \frac{\sigma^2}{n} + 0 = \frac{\sigma^2}{n}.
+    \end{equation}
+    Multiplicando por $n$:
+    \begin{equation}
+    \mathbb{E}[n\bar{\varepsilon}^2] = n \left(\frac{\sigma^2}{n}\right) = \sigma^2.
+    \end{equation}
+\end{enumerate}
+Restando ambas esperanzas obtenemos formalmente:
+\begin{equation}
+\mathbb{E}\left[ \sum_{i=1}^n (\varepsilon_i - \bar{\varepsilon})^2 \right] = n\sigma^2 - \sigma^2 = \termOrange{(n-1)\sigma^2}.
+\end{equation}
+Finalmente, como $\mathbb{E}[\varepsilon_i] = 0$:
+\begin{equation}
+\mathbb{E}\left[ 2\beta_1 \sum_{i=1}^n (x_i - \bar{x})\varepsilon_i \right] = 2\beta_1 \sum_{i=1}^n (x_i - \bar{x})\cancelto{0}{\mathbb{E}[\varepsilon_i]} = 0.
+\end{equation}
+Uniendo los tres términos:
+\begin{equation}
+\mathbb{E}[S_{yy}] = \termTeal{\beta_1^2 S_{xx}} + \termOrange{(n-1)\sigma^2}. \label{eq:esperanza_part2}
+\end{equation}
+
+\textbf{Paso 3: Resta algebraica final en \eqref{eq:esperanza_sse_inicio}:}
+\begin{align}
+\mathbb{E}[\operatorname{SSE}] &= \Big[ \termTeal{\beta_1^2 S_{xx}} + \termOrange{(n-1)\sigma^2} \Big] - \Big[ \termOrange{\sigma^2} + \termTeal{\beta_1^2 S_{xx}} \Big] \\
+&= \cancel{\termTeal{\beta_1^2 S_{xx}}} + \termOrange{(n-1)\sigma^2} - \termOrange{\sigma^2} - \cancel{\termTeal{\beta_1^2 S_{xx}}} \\
+&= (n-1)\sigma^2 - \sigma^2 = (n-2)\sigma^2.
+\end{align}
+Dividiendo entre $n-2$:
+\begin{equation}
+\mathbb{E}[\operatorname{MSE}] = \mathbb{E}\left[ \frac{\operatorname{SSE}}{n-2} \right] = \frac{(n-2)\sigma^2}{n-2} = \sigma^2.
+\end{equation}
+\end{demobox}
+
+
+
+\subsection{Descomposición de la variabilidad (ANOVA) y demostración de $R^2 = r^2$}
+
+\begin{demobox}[Demostración de $\operatorname{SST} = \operatorname{SSR} + \operatorname{SSE}$ y $R^2 = r^2$]
+\textbf{Paso 1: Descomposición ortogonal de la suma total:}
+\begin{align}
+\sum_{i=1}^n (y_i - \bar{y})^2 &= \sum_{i=1}^n \big[ (\hat{y}_i - \bar{y}) + e_i \big]^2 \\
+&= \sum_{i=1}^n (\hat{y}_i - \bar{y})^2 + \sum_{i=1}^n e_i^2 + 2\sum_{i=1}^n (\hat{y}_i - \bar{y})e_i.
+\end{align}
+El producto cruzado se anula idénticamente por las propiedades muestrales demostradas:
+\begin{equation}
+\sum_{i=1}^n (\hat{y}_i - \bar{y})e_i = \cancelto{0}{\sum_{i=1}^n \hat{y}_i e_i} - \bar{y}\cancelto{0}{\sum_{i=1}^n e_i} = 0 - 0 = 0.
+\end{equation}
+Por tanto, se cumple exactamente el Teorema de Pitágoras muestral:
+\begin{equation}
+\operatorname{SST} = \operatorname{SSR} + \operatorname{SSE}.
+\end{equation}
+
+\textbf{Paso 2: Deducción de $R^2 = r^2$:}  
+Puesto que $\hat{y}_i - \bar{y} = \hat{\beta}_1(x_i - \bar{x})$, tenemos:
+\begin{equation}
+\operatorname{SSR} = \sum_{i=1}^n \hat{\beta}_1^2 (x_i - \bar{x})^2 = \hat{\beta}_1^2 S_{xx} = \left(\frac{S_{xy}}{S_{xx}}\right)^2 S_{xx} = \frac{S_{xy}^2}{S_{xx}}.
+\end{equation}
+Sustituyendo en la definición del coeficiente de determinación:
+\begin{equation}
+R^2 = \frac{\operatorname{SSR}}{\operatorname{SST}} = \frac{S_{xy}^2 / S_{xx}}{S_{yy}} = \frac{S_{xy}^2}{S_{xx}S_{yy}} = \left(\frac{S_{xy}}{\sqrt{S_{xx}S_{yy}}}\right)^2.
+\end{equation}
+Como la correlación lineal muestral de Pearson es $r = \frac{S_{xy}}{\sqrt{S_{xx}S_{yy}}}$, concluimos:
+\begin{equation}
+R^2 = r^2.
+\end{equation}
+\end{demobox}
+
+
+
+\subsection{Inferencia bajo normalidad y equivalencia exacta: test $t$ vs. test $F$}
+
+\begin{demobox}[Derivación del estadístico $t$ y prueba de que $t^2 = F$]
+\textbf{Paso 1: Distribución del estimador $\hat{\beta}_1$ y tipificación:}  
+Bajo el supuesto de normalidad $\varepsilon_i \overset{\text{iid}}{\sim} \mathcal{N}(0, \sigma^2)$, al ser $\hat{\beta}_1$ una combinación lineal de variables gaussianas:
+\begin{equation}
+\hat{\beta}_1 \sim \mathcal{N}\left( \beta_1, \frac{\sigma^2}{S_{xx}} \right) \implies Z = \frac{\hat{\beta}_1 - \beta_1}{\sigma / \sqrt{S_{xx}}} \sim \mathcal{N}(0, 1).
+\end{equation}
+
+\textbf{Paso 2: Distribución de $\operatorname{SSE}$ e Independencia Estocástica:}  
+Por el Teorema de Cochran aplicado a la matriz de proyección simétrica e idempotente $(\mathbf{I} - \mathbf{H})$ de rango $n-2$:
+\begin{equation}
+U = \frac{\operatorname{SSE}}{\sigma^2} \sim \chi^2_{n-2}.
+\end{equation}
+Además, como $\operatorname{Cov}(\hat{\beta}_1, e) = \mathbf{0}$, $\hat{\beta}_1$ y $\operatorname{SSE}$ son variables aleatorias gaussianas incorreladas y, por tanto, **estocásticamente independientes**.
+
+\textbf{Paso 3: Construcción del estadístico $t$ de Student:}  
+Por definición matemática, el cociente entre una Normal(0,1) y la raíz cuadrada de una Chi-cuadrado independiente dividida por sus grados de libertad sigue una $t$ de Student:
+\begin{equation}
+T = \frac{Z}{\sqrt{U / (n-2)}} = \frac{\frac{\hat{\beta}_1 - \beta_1}{\sigma / \sqrt{S_{xx}}}}{\sqrt{\frac{\operatorname{SSE}/\sigma^2}{n-2}}} = \frac{\hat{\beta}_1 - \beta_1}{\sqrt{\frac{\operatorname{MSE}}{S_{xx}}}} = \frac{\hat{\beta}_1 - \beta_1}{\operatorname{SE}(\hat{\beta}_1)} \sim t_{n-2}.
+\end{equation}
+
+\textbf{Paso 4: Demostración de $t^2 = F$ para contrastar $H_0: \beta_1 = 0$:}  
+Bajo $H_0$, el estadístico $t$ es $t = \frac{\hat{\beta}_1}{\sqrt{\operatorname{MSE}/S_{xx}}}$. Elevamos al cuadrado:
+\begin{equation}
+t^2 = \frac{\hat{\beta}_1^2}{\operatorname{MSE}/S_{xx}} = \frac{\hat{\beta}_1^2 S_{xx}}{\operatorname{MSE}}.
+\end{equation}
+Como $\operatorname{SSR} = \hat{\beta}_1^2 S_{xx}$ y los grados de libertad de la regresión en regresión simple son $1$ ($\operatorname{MSR} = \operatorname{SSR}/1$):
+\begin{equation}
+t^2 = \frac{\operatorname{SSR}}{\operatorname{MSE}} = \frac{\operatorname{MSR}}{\operatorname{MSE}} = F.
+\end{equation}
+Puesto que $t_{n-2}^2 \equiv F_{1, n-2}$, ambos contrastes proporcionan **el mismo $p$-valor**.
+\end{demobox}
+
+
+
+\subsection{Inferencia predictiva: respuesta media vs. nueva observación}
+
+Fijamos un punto predictivo $x_0$. La estimación puntual sobre la recta es:
+\begin{equation}
+\hat{y}_0 = \hat{\beta}_0 + \hat{\beta}_1 x_0 = (\bar{Y} - \hat{\beta}_1 \bar{x}) + \hat{\beta}_1 x_0 = \bar{Y} + \hat{\beta}_1(x_0 - \bar{x}).
+\end{equation}
+
+\begin{demobox}[Deducción rigurosa de los intervalos de confianza y predicción]
+\textbf{Paso 1: Demostración de $\operatorname{Cov}(\bar{Y}, \hat{\beta}_1) = 0$:}
+\begin{align}
+\operatorname{Cov}(\bar{Y}, \hat{\beta}_1) &= \operatorname{Cov}\left( \sum_{i=1}^n \frac{1}{n} Y_i, \sum_{j=1}^n k_j Y_j \right) = \sum_{i=1}^n \frac{k_i}{n} \operatorname{Var}(Y_i) \\
+&= \frac{\sigma^2}{n}\sum_{i=1}^n k_i = \frac{\sigma^2}{n} \cdot \cancelto{0}{\sum_{i=1}^n k_i} = 0.
+\end{align}
+
+\textbf{Paso 2: Varianza de la respuesta media $\mathbb{E}[Y \mid x_0]$:}  
+Como $\operatorname{Cov}(\bar{Y}, \hat{\beta}_1) = 0$, la varianza de la suma es la suma de las varianzas:
+\begin{align}
+\operatorname{Var}(\hat{y}_0) &= \operatorname{Var}(\bar{Y}) + (x_0 - \bar{x})^2 \operatorname{Var}(\hat{\beta}_1) \\
+&= \frac{\sigma^2}{n} + (x_0 - \bar{x})^2 \frac{\sigma^2}{S_{xx}} = \sigma^2 \left[ \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right].
+\end{align}
+El intervalo de confianza al $(1-\alpha)100\%$ para la media poblacional es:
+\begin{equation}
+\operatorname{IC}_{1-\alpha}\big(\mathbb{E}[Y \mid x_0]\big) = \hat{y}_0 \pm t_{\alpha/2, n-2} \sqrt{\operatorname{MSE}\left[\frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}}\right]}.
+\end{equation}
+
+\textbf{Paso 3: Varianza del error de predicción individual ($e_{\text{pred}} = Y_0 - \hat{y}_0$):}  
+Para un nuevo individuo independiente $Y_0 = \beta_0 + \beta_1 x_0 + \varepsilon_0$ con $\varepsilon_0 \sim \mathcal{N}(0, \sigma^2)$:
+\begin{align}
+\operatorname{Var}(e_{\text{pred}}) &= \operatorname{Var}(Y_0 - \hat{y}_0) = \operatorname{Var}(Y_0) + \operatorname{Var}(\hat{y}_0) \quad (\text{por independencia}) \\
+&= \sigma^2 + \sigma^2 \left[\frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}}\right] = \sigma^2 \left[ 1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right].
+\end{align}
+El intervalo de predicción individual al $(1-\alpha)100\%$ resulta:
+\begin{equation}
+\operatorname{IP}_{1-\alpha}(Y_0) = \hat{y}_0 \pm t_{\alpha/2, n-2} \sqrt{\operatorname{MSE}\left[ 1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{S_{xx}} \right]}.
+\end{equation}
+\end{demobox}
+
+\begin{intuicionbox}[Geometría de las bandas hiperbólicas]
+\begin{itemize}
+    \item Ambos intervalos adoptan una silueta hiperbólica con su cuello de máxima precisión exactamente en la media muestral $x_0 = \bar{x}$.
+    \item Al alejarnos de $\bar{x}$, el término cuadrático $(x_0 - \bar{x})^2$ se incrementa con rapidez, ensanchando la incertidumbre e ilustrando analíticamente el \textbf{riesgo de extrapolación}.
+    \item Aunque el tamaño muestral tienda a infinito ($n \to \infty$), el intervalo de predicción individual \textbf{nunca se reduce a cero} debido a la presencia ineludible del término $+1$, asociado a la variabilidad aleatoria inherente de la propia naturaleza del individuo ($\sigma^2$).
+\end{itemize}
+\end{intuicionbox}
+
+
+
+\subsection{Diagnóstico e influencia: matriz $H$, Sherman-Morrison, Cook y DFFITS}
+
+\begin{demobox}[Derivación completa del apalancamiento, Sherman-Morrison, Cook y DFFITS]
+\textbf{Paso 1: Elementos diagonales de la matriz de proyección ($h_{ii}$):}  
+Escribimos la predicción $\hat{y}_i$ como combinación lineal de las observaciones:
+\begin{align}
+\hat{y}_i &= \bar{y} + \hat{\beta}_1(x_i - \bar{x}) = \frac{1}{n}\sum_{j=1}^n y_j + (x_i - \bar{x})\sum_{j=1}^n \left(\frac{x_j - \bar{x}}{S_{xx}}\right)y_j \\
+&= \sum_{j=1}^n \left[ \frac{1}{n} + \frac{(x_i - \bar{x})(x_j - \bar{x})}{S_{xx}} \right] y_j = \sum_{j=1}^n h_{ij} y_j.
+\end{align}
+Por tanto, el apalancamiento (\emph{leverage}) es el término diagonal:
+\begin{equation}
+h_{ii} = \frac{1}{n} + \frac{(x_i - \bar{x})^2}{S_{xx}}.
+\end{equation}
+La traza de la matriz sombrerete suma exactamente los grados de libertad del modelo:
+\begin{equation}
+\sum_{i=1}^n h_{ii} = \sum_{i=1}^n \left[ \frac{1}{n} + \frac{(x_i - \bar{x})^2}{S_{xx}} \right] = n \cdot \frac{1}{n} + \frac{S_{xx}}{S_{xx}} = 1 + 1 = 2.
+\end{equation}
+
+\textbf{Paso 2: Deducción analítica de la varianza del residuo $e_i$:}  
+Como $e_i = (1 - h_{ii})y_i - \sum_{j \neq i} h_{ij} y_j$, y por la idempotencia de $\mathbf{H}$ se cumple $\sum_{j=1}^n h_{ij}^2 = h_{ii}$:
+\begin{align}
+\operatorname{Var}(e_i) &= (1 - h_{ii})^2 \operatorname{Var}(y_i) + \sum_{j \neq i} h_{ij}^2 \operatorname{Var}(y_j) = \sigma^2 \left[ (1 - h_{ii})^2 + \sum_{j \neq i} h_{ij}^2 \right] \\
+&= \sigma^2 \big[ 1 - 2h_{ii} + h_{ii}^2 + (h_{ii} - h_{ii}^2) \big] = \sigma^2 (1 - h_{ii}).
+\end{align}
+Esto fundamenta la necesidad de definir los residuos estandarizados internamente:
+\begin{equation}
+r_i = \frac{e_i}{\sqrt{\operatorname{MSE}(1 - h_{ii})}}.
+\end{equation}
+
+\textbf{Paso 3: Deducción analítica completa mediante el Lema de Sherman-Morrison:}  
+Al retirar la observación $(x_i, y_i)$, la matriz del sistema sin la fila $i$ es:
+\begin{equation}
+\mathbf{X}_{(i)}^T \mathbf{X}_{(i)} = \mathbf{X}^T \mathbf{X} - x_i x_i^T.
+\end{equation}
+Por el Lema de Sherman-Morrison para inversión de matrices perturbadas por rango uno:
+\begin{equation}
+(\mathbf{A} - u v^T)^{-1} = \mathbf{A}^{-1} + \frac{\mathbf{A}^{-1} u v^T \mathbf{A}^{-1}}{1 - v^T \mathbf{A}^{-1} u}.
+\end{equation}
+Haciendo $\mathbf{A} = \mathbf{X}^T \mathbf{X}$ y $u = v = x_i$, recordando que el leverage es el escalar $h_{ii} = x_i^T (\mathbf{X}^T \mathbf{X})^{-1} x_i$:
+\begin{equation}
+(\mathbf{X}_{(i)}^T \mathbf{X}_{(i)})^{-1} = (\mathbf{X}^T \mathbf{X})^{-1} + \frac{(\mathbf{X}^T \mathbf{X})^{-1} x_i x_i^T (\mathbf{X}^T \mathbf{X})^{-1}}{1 - h_{ii}}. \label{eq:sm_inversa}
+\end{equation}
+El vector de regresión omitiendo la observación $i$ se define como:
+\begin{equation}
+\hat{\beta}_{(i)} = (\mathbf{X}_{(i)}^T \mathbf{X}_{(i)})^{-1} \mathbf{X}_{(i)}^T y_{(i)}.
+\end{equation}
+Dado que $\mathbf{X}_{(i)}^T y_{(i)} = \mathbf{X}^T y - x_i y_i$, sustituimos la inversa \eqref{eq:sm_inversa}:
+\begin{align}
+\hat{\beta}_{(i)} &= \left[ (\mathbf{X}^T \mathbf{X})^{-1} + \frac{(\mathbf{X}^T \mathbf{X})^{-1} x_i x_i^T (\mathbf{X}^T \mathbf{X})^{-1}}{1 - h_{ii}} \right] (\mathbf{X}^T y - x_i y_i).
+\end{align}
+Distribuimos el producto de los dos corchetes término a término:
+\begin{align}
+\hat{\beta}_{(i)} &= \underbrace{(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T y}_{= \hat{\beta}} \;-\; (\mathbf{X}^T \mathbf{X})^{-1} x_i y_i \\
+&\quad + \frac{(\mathbf{X}^T \mathbf{X})^{-1} x_i x_i^T \overbrace{(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T y}^{= \hat{\beta}}}{1 - h_{ii}} \;-\; \frac{(\mathbf{X}^T \mathbf{X})^{-1} x_i \overbrace{x_i^T (\mathbf{X}^T \mathbf{X})^{-1} x_i}^{= h_{ii}} y_i}{1 - h_{ii}} \\[0.6em]
+&= \hat{\beta} - (\mathbf{X}^T \mathbf{X})^{-1} x_i y_i + \frac{(\mathbf{X}^T \mathbf{X})^{-1} x_i (x_i^T \hat{\beta})}{1 - h_{ii}} - \frac{(\mathbf{X}^T \mathbf{X})^{-1} x_i h_{ii} y_i}{1 - h_{ii}}.
+\end{align}
+Como la predicción para el punto $i$ es el escalar $\hat{y}_i = x_i^T \hat{\beta}$, sacamos factor común del vector $(\mathbf{X}^T \mathbf{X})^{-1} x_i$ sobre el denominador común $(1 - h_{ii})$:
+\begin{align}
+\hat{\beta}_{(i)} &= \hat{\beta} - \frac{(\mathbf{X}^T \mathbf{X})^{-1} x_i}{1 - h_{ii}} \Big[ y_i(1 - h_{ii}) - \hat{y}_i + h_{ii} y_i \Big] \\
+&= \hat{\beta} - \frac{(\mathbf{X}^T \mathbf{X})^{-1} x_i}{1 - h_{ii}} \Big[ y_i - \cancel{y_i h_{ii}} - \hat{y}_i + \cancel{h_{ii} y_i} \Big] \\
+&= \hat{\beta} - \frac{(\mathbf{X}^T \mathbf{X})^{-1} x_i (y_i - \hat{y}_i)}{1 - h_{ii}}.
+\end{align}
+Como el residuo ordinario es $e_i = y_i - \hat{y}_i$, restando $\hat{\beta}$ en ambos miembros:
+\begin{equation}
+\hat{\beta} - \hat{\beta}_{(i)} = \frac{(\mathbf{X}^T \mathbf{X})^{-1} x_i e_i}{1 - h_{ii}}.
+\end{equation}
+Para obtener el cambio en la predicción de cualquier otra observación $j$, multiplicamos por su vector fila $x_j^T$:
+\begin{align}
+\hat{y}_j - \hat{y}_{j(i)} &= x_j^T (\hat{\beta} - \hat{\beta}_{(i)}) \\
+&= \frac{x_j^T (\mathbf{X}^T \mathbf{X})^{-1} x_i e_i}{1 - h_{ii}}.
+\end{align}
+Reconociendo que $h_{ji} = x_j^T (\mathbf{X}^T \mathbf{X})^{-1} x_i$ es exactamente el elemento $(j, i)$ de la matriz sombrerete $\mathbf{H}$:
+\begin{equation}
+\hat{y}_j - \hat{y}_{j(i)} = \frac{h_{ji} e_i}{1 - h_{ii}}.
+\end{equation}
+
+\textbf{Paso 4: Descomposición Analítica de la Distancia de Cook ($D_i$):}  
+La distancia de Cook evalúa el impacto en todas las predicciones:
+\begin{equation}
+D_i = \frac{\sum_{j=1}^n (\hat{y}_j - \hat{y}_{j(i)})^2}{2 \cdot \operatorname{MSE}}.
+\end{equation}
+Sustituyendo el desplazamiento deducido en el Paso 3:
+\begin{align}
+D_i &= \frac{1}{2 \cdot \operatorname{MSE}} \sum_{j=1}^n \left( \frac{h_{ji} e_i}{1 - h_{ii}} \right)^2 = \frac{e_i^2}{2 \cdot \operatorname{MSE}(1 - h_{ii})^2} \underbrace{\sum_{j=1}^n h_{ji}^2}_{= h_{ii}} \\
+&= \frac{1}{2} \cdot \left[ \frac{e_i^2}{\operatorname{MSE}(1 - h_{ii})} \right] \cdot \left( \frac{h_{ii}}{1 - h_{ii}} \right) = \frac{1}{2} r_i^2 \left( \frac{h_{ii}}{1 - h_{ii}} \right).
+\end{align}
+
+\textbf{Paso 5: Deducción Analítica de DFFITS:}  
+DFFITS mide el cambio estandarizado en la propia predicción del punto $i$ usando la varianza residual estimada sin dicha observación ($\operatorname{MSE}_{(i)}$):
+\begin{equation}
+\operatorname{DFFITS}_i \equiv \frac{\hat{y}_i - \hat{y}_{i(i)}}{\operatorname{SE}(\hat{y}_i)_{(i)}} = \frac{\frac{h_{ii} e_i}{1 - h_{ii}}}{\sqrt{\operatorname{MSE}_{(i)} h_{ii}}}.
+\end{equation}
+Reorganizando los términos algebraicos:
+\begin{align}
+\operatorname{DFFITS}_i &= \frac{h_{ii} e_i}{(1 - h_{ii}) \sqrt{\operatorname{MSE}_{(i)}} \sqrt{h_{ii}}} = \frac{\sqrt{h_{ii}} \sqrt{h_{ii}} e_i}{(1 - h_{ii}) \sqrt{\operatorname{MSE}_{(i)}} \sqrt{h_{ii}}} \\
+&= \left[ \frac{e_i}{\sqrt{\operatorname{MSE}_{(i)}(1 - h_{ii})}} \right] \sqrt{\frac{h_{ii}}{1 - h_{ii}}} = t_i^* \sqrt{\frac{h_{ii}}{1 - h_{ii}}}
+\end{align}
+donde $t_i^*$ es el **residuo estudentizado externamente** (o jackknife).
+\end{demobox}
+
+\begin{intuicionbox}[Interpretación docente del diagnóstico]
+Tanto Cook como DFFITS descomponen la influencia de una observación en el producto de dos dimensiones ortogonales e independientes:
+\begin{equation}
+\text{Influencia} \propto \underbrace{\text{Outlier en } Y}_{\text{Residuo Estudentizado}} \times \underbrace{\text{Apalancamiento en } X}_{\text{Leverage Relativo}}.
+\end{equation}
+\begin{itemize}
+    \item Un dato con un residuo inmenso en el centro de la nube ($h_{ii} \approx 1/n$) no alterará la pendiente.
+    \item Un dato extremo en $X$ que caiga sobre la recta ($e_i \approx 0$) reforzará el ajuste sin cambiar las predicciones.
+    \item Únicamente aquellos puntos que combinen \textbf{gran residuo} con \textbf{alto apalancamiento} alterarán sustancialmente los parámetros estimados.
+\end{itemize}
+\end{intuicionbox}
+
+
+
+\newpage
+\section{Tema 2: El modelo de regresión lineal múltiple}
+
+En el contexto de la regresión lineal múltiple, el modelo con $k$ variables explicativas y $n$ observaciones se expresa en notación matricial como:
+\begin{equation}
+\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}
+\end{equation}
+donde $\mathbf{y}$ es el vector de dimensión $n \times 1$ de la variable dependiente, $\mathbf{X}$ es la matriz de diseño de dimensión $n \times (k+1)$, $\boldsymbol{\beta}$ es el vector $(k+1) \times 1$ de coeficientes poblacionales y $\boldsymbol{\varepsilon}$ es el vector $n \times 1$ de perturbaciones aleatorias. Asumimos los supuestos estándar: $\mathbb{E}[\boldsymbol{\varepsilon}] = \mathbf{0}$ y $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2 \mathbf{I}_n$.
+
+\begin{demobox}[Derivación del estimador de mínimos cuadrados ordinarios (MCO) en forma matricial]
+\textbf{Paso 1: Planteamiento de la Función Objetivo}  
+La suma de los residuos al cuadrado se expresa de forma matricial como el producto escalar del vector de errores consigo mismo:
+\begin{align}
+\operatorname{SSE}(\boldsymbol{\beta}) &= \boldsymbol{\varepsilon}^T \boldsymbol{\varepsilon} = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^T (\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) \\
+&= \mathbf{y}^T \mathbf{y} - \mathbf{y}^T \mathbf{X} \boldsymbol{\beta} - (\mathbf{X}\boldsymbol{\beta})^T \mathbf{y} + (\mathbf{X}\boldsymbol{\beta})^T \mathbf{X}\boldsymbol{\beta}
+\end{align}
+Dado que el producto $\mathbf{y}^T \mathbf{X} \boldsymbol{\beta}$ es un escalar (dimensión $1 \times 1$), su valor es idéntico al de su traspuesta:
+\begin{equation}
+(\mathbf{y}^T \mathbf{X} \boldsymbol{\beta})^T = \boldsymbol{\beta}^T \mathbf{X}^T \mathbf{y}.
+\end{equation}
+Agrupando ambos términos idénticos, la función de pérdida queda:
+\begin{equation}
+\operatorname{SSE}(\boldsymbol{\beta}) = \mathbf{y}^T \mathbf{y} - 2\boldsymbol{\beta}^T \mathbf{X}^T \mathbf{y} + \boldsymbol{\beta}^T \mathbf{X}^T \mathbf{X} \boldsymbol{\beta}.
+\end{equation}
+
+\textbf{Paso 2: Condición de Primer Orden}  
+Derivamos la función escalar $\operatorname{SSE}(\boldsymbol{\beta})$ con respecto al vector de parámetros $\boldsymbol{\beta}$, empleando cálculo matricial elemental:
+\begin{equation}
+\frac{\partial \operatorname{SSE}(\boldsymbol{\beta})}{\partial \boldsymbol{\beta}} = -2\mathbf{X}^T \mathbf{y} + 2\mathbf{X}^T \mathbf{X} \boldsymbol{\beta} = \mathbf{0}.
+\end{equation}
+
+\textbf{Paso 3: Despeje Algebraico del Estimador $\hat{\boldsymbol{\beta}}$}  
+Dividiendo ambos lados por 2 y aislando el término con $\boldsymbol{\beta}$ obtenemos las denominadas \textbf{ecuaciones normales}:
+\begin{equation}
+\mathbf{X}^T \mathbf{X} \hat{\boldsymbol{\beta}} = \mathbf{X}^T \mathbf{y}.
+\end{equation}
+Bajo la condición de que la matriz de diseño $\mathbf{X}$ posea rango completo por columnas (ausencia de multicolinealidad perfecta), la matriz cuadrada y simétrica $\mathbf{X}^T \mathbf{X}$ resulta invertible. Premultiplicando por su inversa $(\mathbf{X}^T \mathbf{X})^{-1}$:
+\begin{equation}
+\termSub{\hat{\boldsymbol{\beta}} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}}.
+\end{equation}
+
+\textbf{Paso 4: Condición de Segundo Orden (Hessiano)}  
+Calculamos la matriz de segundas derivadas parciales (Hessiana):
+\begin{equation}
+\frac{\partial^2 \operatorname{SSE}(\boldsymbol{\beta})}{\partial \boldsymbol{\beta} \partial \boldsymbol{\beta}^T} = 2\mathbf{X}^T \mathbf{X}.
+\end{equation}
+Como $\mathbf{X}$ tiene rango completo, $\mathbf{X}^T \mathbf{X}$ es una matriz \textbf{estrictamente definida positiva}, garantizando que la solución $\hat{\boldsymbol{\beta}}$ corresponde a un \textbf{mínimo global} de la suma de cuadrados residual.
+\end{demobox}
+
+
+
+\subsection{Propiedades estadísticas de MCO en regresión múltiple}
+
+\begin{demobox}[Demostración de insesgadez y matriz de varianzas-covarianzas]
+\textbf{Paso 1: Demostración de Insesgadez ($\mathbb{E}[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta}$)}  
+Sustituimos la estructura real de los datos $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$ en la fórmula del estimador:
+\begin{align}
+\hat{\boldsymbol{\beta}} &= (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T (\termSub{\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}}) \\
+&= (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{X} \boldsymbol{\beta} + (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \boldsymbol{\varepsilon} \\
+&= \mathbf{I}\boldsymbol{\beta} + (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \boldsymbol{\varepsilon} = \boldsymbol{\beta} + (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \boldsymbol{\varepsilon}.
+\end{align}
+Asumiendo que los regresores $\mathbf{X}$ son fijos, aplicamos el operador esperanza matemática:
+\begin{equation}
+\mathbb{E}[\hat{\boldsymbol{\beta}}] = \mathbb{E}[\boldsymbol{\beta}] + (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \cancelto{\mathbf{0}}{\mathbb{E}[\boldsymbol{\varepsilon}]} = \boldsymbol{\beta}.
+\end{equation}
+
+\textbf{Paso 2: Derivación de la Matriz de Varianzas-Covarianzas}  
+La matriz de covarianza de un vector aleatorio $\hat{\boldsymbol{\beta}}$ se define como $\operatorname{Var}(\hat{\boldsymbol{\beta}}) = \mathbb{E}[(\hat{\boldsymbol{\beta}} - \boldsymbol{\beta})(\hat{\boldsymbol{\beta}} - \boldsymbol{\beta})^T]$. Del paso anterior sabemos que $\hat{\boldsymbol{\beta}} - \boldsymbol{\beta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \boldsymbol{\varepsilon}$.
+Sustituimos esto en la definición:
+\begin{align}
+\operatorname{Var}(\hat{\boldsymbol{\beta}}) &= \mathbb{E} \Big[ \big( (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \boldsymbol{\varepsilon} \big) \big( (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \boldsymbol{\varepsilon} \big)^T \Big] \\
+&= \mathbb{E} \Big[ (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \boldsymbol{\varepsilon} \boldsymbol{\varepsilon}^T \big(\mathbf{X}^T\big)^T \big((\mathbf{X}^T \mathbf{X})^{-1}\big)^T \Big].
+\end{align}
+Como $(\mathbf{X}^T \mathbf{X})$ es una matriz simétrica, su inversa también lo es. Por lo tanto, $\big((\mathbf{X}^T \mathbf{X})^{-1}\big)^T = (\mathbf{X}^T \mathbf{X})^{-1}$. Al ser $\mathbf{X}$ fija, podemos extraerla de la esperanza:
+\begin{align}
+\operatorname{Var}(\hat{\boldsymbol{\beta}}) &= (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \underbrace{\mathbb{E}[\boldsymbol{\varepsilon} \boldsymbol{\varepsilon}^T]}_{= \operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2 \mathbf{I}_n} \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \\
+&= (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T (\sigma^2 \mathbf{I}_n) \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \\
+&= \sigma^2 (\mathbf{X}^T \mathbf{X})^{-1} \underbrace{\mathbf{X}^T \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1}}_{= \mathbf{I}} = \termTeal{\sigma^2 (\mathbf{X}^T \mathbf{X})^{-1}}.
+\end{align}
+\end{demobox}
+
+\begin{alertabox}[Estructura de las predicciones y ortogonalidad matricial]
+El ajuste del modelo conduce al vector de valores predichos:
+\begin{equation}
+\hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y} = \mathbf{H}\mathbf{y}.
+\end{equation}
+La \textbf{Matriz de Proyección} (o matriz Sombrerete) $\mathbf{H} = \mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T$ posee dos propiedades vitales: es \textbf{simétrica} ($\mathbf{H}^T = \mathbf{H}$) e \textbf{idempotente} ($\mathbf{H}^2 = \mathbf{H}$).
+El vector de residuos estimados $\mathbf{e} = \mathbf{y} - \hat{\mathbf{y}} = (\mathbf{I} - \mathbf{H})\mathbf{y}$ representa la proyección ortogonal de $\mathbf{y}$ sobre el complemento ortogonal del espacio generado por $\mathbf{X}$.
+Geométricamente, esto implica la ortogonalidad estricta entre predictores y residuos:
+\begin{equation}
+\mathbf{X}^T \mathbf{e} = \mathbf{X}^T (\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}) = \mathbf{X}^T \mathbf{y} - \mathbf{X}^T \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y} = \mathbf{X}^T \mathbf{y} - \mathbf{X}^T \mathbf{y} = \mathbf{0}.
+\end{equation}
+\end{alertabox}
+
+\subsection{Teorema de Gauss-Márkov y varianza mínima (BLUE)}
+
+\begin{demobox}[Demostración de varianza mínima \\ para regresión múltiple (Gauss-Márkov)]
+\textbf{Paso 1: Construcción de un estimador lineal genérico}  
+Sea $\tilde{\boldsymbol{\beta}} = \mathbf{C}\mathbf{y}$ un estimador alternativo de $\boldsymbol{\beta}$ que sea \textbf{lineal} en $\mathbf{y}$. Podemos expresar su matriz de pesos $\mathbf{C}$ como una desviación respecto a la matriz de MCO:
+\begin{equation}
+\mathbf{C} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T + \mathbf{D}
+\end{equation}
+donde $\mathbf{D}$ es una matriz arbitraria de dimensión $(k+1) \times n$.
+
+\textbf{Paso 2: Imposición de la condición de insesgadez}  
+Para que $\tilde{\boldsymbol{\beta}}$ sea insesgado, debe cumplirse que $\mathbb{E}[\tilde{\boldsymbol{\beta}}] = \boldsymbol{\beta}$ para cualquier $\boldsymbol{\beta}$:
+\begin{align}
+\mathbb{E}[\tilde{\boldsymbol{\beta}}] &= \mathbb{E}[\mathbf{C}\mathbf{y}] = \mathbf{C}\mathbb{E}[\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}] = \mathbf{C}\mathbf{X}\boldsymbol{\beta}.
+\end{align}
+Esto exige que $\mathbf{C}\mathbf{X} = \mathbf{I}$. Sustituyendo nuestra definición de $\mathbf{C}$:
+\begin{equation}
+\Big( (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T + \mathbf{D} \Big) \mathbf{X} = \mathbf{I} \implies \underbrace{(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{X}}_{= \mathbf{I}} + \mathbf{D}\mathbf{X} = \mathbf{I} \implies \termZero{\mathbf{D}\mathbf{X} = \mathbf{0}}.
+\end{equation}
+
+\textbf{Paso 3: Cálculo y comparación de varianzas}  
+La matriz de varianzas-covarianzas del nuevo estimador es:
+\begin{equation}
+\operatorname{Var}(\tilde{\boldsymbol{\beta}}) = \operatorname{Var}(\mathbf{C}\mathbf{y}) = \mathbf{C}\operatorname{Var}(\mathbf{y})\mathbf{C}^T = \sigma^2 \mathbf{C}\mathbf{C}^T.
+\end{equation}
+Desarrollamos el producto $\mathbf{C}\mathbf{C}^T$:
+\begin{align}
+\mathbf{C}\mathbf{C}^T &= \Big( (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T + \mathbf{D} \Big) \Big( \mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1} + \mathbf{D}^T \Big) \\
+&= (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} + (\mathbf{X}^T \mathbf{X})^{-1} \cancelto{\mathbf{0}}{\mathbf{X}^T \mathbf{D}^T} + \cancelto{\mathbf{0}}{\mathbf{D}\mathbf{X}}(\mathbf{X}^T \mathbf{X})^{-1} + \mathbf{D}\mathbf{D}^T \\
+&= (\mathbf{X}^T \mathbf{X})^{-1} + \mathbf{D}\mathbf{D}^T.
+\end{align}
+Multiplicando por $\sigma^2$:
+\begin{equation}
+\operatorname{Var}(\tilde{\boldsymbol{\beta}}) = \underbrace{\sigma^2 (\mathbf{X}^T \mathbf{X})^{-1}}_{= \operatorname{Var}(\hat{\boldsymbol{\beta}})} + \sigma^2 \mathbf{D}\mathbf{D}^T.
+\end{equation}
+Dado que cualquier matriz de la forma $\mathbf{D}\mathbf{D}^T$ es \textbf{semidefinida positiva}, las varianzas en la diagonal principal de $\operatorname{Var}(\tilde{\boldsymbol{\beta}})$ son mayores o iguales a las de $\operatorname{Var}(\hat{\boldsymbol{\beta}})$. La igualdad solo se da si $\mathbf{D} = \mathbf{0}$, probando que MCO es el Mejor Estimador Lineal Insesgado (BLUE).
+\end{demobox}
+
+\subsection{Insesgadez de la varianza residual matricial}
+
+\begin{demobox}[{Demostración de $\mathbb{E}[\operatorname{SSE}] = (n-k-1)\sigma^2$ \\ mediante operador traza}]
+\textbf{Paso 1: Expresión matricial de los residuos y la matriz Hat}  
+Recordamos que $\mathbf{e} = (\mathbf{I} - \mathbf{H})\mathbf{y}$. Sabiendo que $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$ y que $\mathbf{H}\mathbf{X} = \mathbf{X}$:
+\begin{equation}
+\mathbf{e} = (\mathbf{I} - \mathbf{H})(\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}) = \mathbf{X}\boldsymbol{\beta} - \cancelto{\mathbf{X}\boldsymbol{\beta}}{\mathbf{H}\mathbf{X}\boldsymbol{\beta}} + (\mathbf{I} - \mathbf{H})\boldsymbol{\varepsilon} = (\mathbf{I} - \mathbf{H})\boldsymbol{\varepsilon}.
+\end{equation}
+La suma de residuos al cuadrado es un escalar, que es igual a su propia traza ($\operatorname{tr}$):
+\begin{equation}
+\operatorname{SSE} = \mathbf{e}^T \mathbf{e} = \operatorname{tr}(\mathbf{e}^T \mathbf{e}).
+\end{equation}
+
+\textbf{Paso 2: Permutación cíclica de la traza}  
+Por la propiedad cíclica de la traza $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$:
+\begin{align}
+\operatorname{SSE} &= \operatorname{tr}\big( \boldsymbol{\varepsilon}^T (\mathbf{I} - \mathbf{H})^T (\mathbf{I} - \mathbf{H}) \boldsymbol{\varepsilon} \big) \\
+&= \operatorname{tr}\big( \boldsymbol{\varepsilon}^T (\mathbf{I} - \mathbf{H}) \boldsymbol{\varepsilon} \big) \quad \text{(ya que $\mathbf{I}-\mathbf{H}$ es simétrica e idempotente)} \\
+&= \operatorname{tr}\big( (\mathbf{I} - \mathbf{H}) \boldsymbol{\varepsilon} \boldsymbol{\varepsilon}^T \big).
+\end{align}
+
+\textbf{Paso 3: Esperanza matemática y dimensión del espacio}  
+Aplicamos el operador esperanza matemática. Como la traza es un operador lineal:
+\begin{align}
+\mathbb{E}[\operatorname{SSE}] &= \mathbb{E}\big[ \operatorname{tr}\big( (\mathbf{I} - \mathbf{H}) \boldsymbol{\varepsilon} \boldsymbol{\varepsilon}^T \big) \big] = \operatorname{tr}\big( (\mathbf{I} - \mathbf{H}) \mathbb{E}[\boldsymbol{\varepsilon} \boldsymbol{\varepsilon}^T] \big).
+\end{align}
+Sustituyendo $\mathbb{E}[\boldsymbol{\varepsilon} \boldsymbol{\varepsilon}^T] = \sigma^2 \mathbf{I}_n$:
+\begin{equation}
+\mathbb{E}[\operatorname{SSE}] = \operatorname{tr}\big( (\mathbf{I} - \mathbf{H}) \sigma^2 \mathbf{I}_n \big) = \sigma^2 \operatorname{tr}(\mathbf{I} - \mathbf{H}) = \sigma^2 \big( \operatorname{tr}(\mathbf{I}_n) - \operatorname{tr}(\mathbf{H}) \big).
+\end{equation}
+La traza de la identidad $\mathbf{I}_n$ es $n$. La traza de $\mathbf{H}$ es:
+\begin{equation}
+\operatorname{tr}(\mathbf{H}) = \operatorname{tr}\big( \mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \big) = \operatorname{tr}\big( (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{X} \big) = \operatorname{tr}(\mathbf{I}_{k+1}) = k+1.
+\end{equation}
+Por tanto, concluimos:
+\begin{equation}
+\mathbb{E}[\operatorname{SSE}] = \sigma^2 \big( n - (k+1) \big) = \termOrange{(n-k-1)\sigma^2}.
+\end{equation}
+De aquí se deduce el estimador insesgado de la varianza residual:
+\begin{equation}
+\mathbb{E}\left[ \frac{\operatorname{SSE}}{n-k-1} \right] = \sigma^2 \implies \widehat{\sigma}^2 = \operatorname{MSE} = \frac{\mathbf{e}^T \mathbf{e}}{n-k-1}.
+\end{equation}
+\end{demobox}
+
+\end{document}
