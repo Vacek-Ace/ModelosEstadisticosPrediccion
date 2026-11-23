@@ -162,7 +162,7 @@ A diferencia de Mínimos Cuadrados, el método de **Máxima Verosimilitud** se e
 **¿Por qué es necesario?**
 
 * Las distribuciones de la familia exponencial no siempre tienen una relación lineal directa con los predictores.
-* La varianza de la respuesta a menudo depende de su media ($Var(Y) = V(\mu)$), violando el supuesto de homocedasticidad que requiere MCO.
+* La varianza de la respuesta a menudo depende de su media ($\text{Var}(Y) = a(\phi)V(\mu)$), violando el supuesto de homocedasticidad que requiere MCO.
 
 **Principio Fundamental de MLE**
 
@@ -234,7 +234,7 @@ Para datos continuos que son estrictamente positivos y tienen sesgo a la derecha
 
     * **Uso Típico:** Tiempos, costos, o cualquier dato continuo positivo y asimétrico.
     * **Función de Varianza:** $V(\mu) = \mu^2$.
-    * **Enlace Canónico:** Inverso ($g(\mu) = 1/\mu$).
+    * **Enlace Canónico:** Recíproco negativo ($g(\mu) = -1/\mu$, en la práctica $1/\mu$ o $\log(\mu)$).
 
 * **Inversa Gaussiana**
 
@@ -266,7 +266,7 @@ La relación entre media y varianza es fundamental en los GLM. La función de va
 * **Distribución Gamma:** $V(\mu) = \mu^2$. La varianza aumenta cuadráticamente con la media.
 
 **Implicación Práctica:**
-Esta función influye directamente en los pesos del algoritmo IRLS. En regresión logística, por ejemplo, las observaciones con probabilidades cercanas a 0.5 tienen mayor varianza y, por tanto, reciben **menor peso** en la estimación.
+Esta función, junto con la derivada de la función de enlace ($g'(\mu)$), determina los pesos del algoritmo IRLS: $w_i = \frac{1}{V(\mu_i)[g'(\mu_i)]^2}$. Por ejemplo, en regresión logística (enlace canónico logit), ambos efectos se combinan dando $w_i = \mu_i(1-\mu_i)$, por lo que las observaciones con probabilidades cercanas a 0.5 reciben **mayor peso** en la estimación.
 
 
 # El Algoritmo de Estimación: IRLS 
@@ -292,9 +292,9 @@ $\hat{\boldsymbol{\beta}} \xrightarrow{p} \boldsymbol{\beta} \text{ cuando } n \
 
 **2. Normalidad Asintótica:** Para muestras grandes, la distribución de los estimadores se aproxima a una Normal multivariada.
 
-$\sqrt{n}(\hat{\boldsymbol{\beta}} - \boldsymbol{\beta}) \xrightarrow{d} N(\mathbf{0}, \mathbf{I}^{-1}(\boldsymbol{\beta}))$
+$\hat{\boldsymbol{\beta}} \stackrel{a}{\sim} N(\boldsymbol{\beta}, \mathbf{I}^{-1}(\boldsymbol{\beta}))$
 
-Permite construir **intervalos de confianza** y realizar **tests de hipótesis**.
+donde $\mathbf{I}(\boldsymbol{\beta})$ es la matriz de información de Fisher de la muestra. Permite construir **intervalos de confianza** y realizar **tests de hipótesis**.
 
 **3. Eficiencia:** Los estimadores MLE alcanzan la cota de Cramér-Rao, lo que significa que tienen la **menor varianza asintótica posible** entre todos los estimadores insesgados.
 
@@ -306,15 +306,15 @@ La **matriz de información** ($\mathbf{I}(\boldsymbol{\beta})$) es un concepto 
 
 **Interpretación Intuitiva:**
 
-* Mide la **"curvatura"** de la función de verosimilitud en su punto máximo.
+* Mide la **"curvatura"** de la función de log-verosimilitud en su punto máximo.
 * Una función muy "puntiaguda" (alta curvatura) significa **mucha información** y, por tanto, estimaciones más precisas y fiables.
 * Una función más plana (baja curvatura) significa **poca información** y mayor incertidumbre.
 
-**Cálculo en la Práctica (GLM):** Aunque existen definiciones teóricas basadas en las segundas derivadas de la log-verosimilitud, el algoritmo IRLS nos proporciona una aproximación computacionalmente eficiente y directa:
+**Cálculo en la Práctica (GLM):** A partir del algoritmo IRLS obtenemos una aproximación directa de la matriz de información:
 
-$$\mathbf{I}(\hat{\boldsymbol{\beta}}) \approx \mathbf{X}^T \mathbf{W} \mathbf{X}$$
+$$\mathbf{I}(\hat{\boldsymbol{\beta}}) \approx \frac{1}{a(\hat{\phi})}\,\mathbf{X}^T \mathbf{W} \mathbf{X}$$
 
-donde $\mathbf{W}$ es la matriz diagonal de pesos calculada en la última iteración del algoritmo.
+donde $\mathbf{W}$ es la matriz diagonal de pesos final (en Binomial y Poisson, $a(\phi) = 1$).
 
 # Cálculo de los Errores Estándar
 
@@ -352,7 +352,7 @@ La **deviance** es la medida principal de ajuste en GLM; es una generalización 
 **Idea Fundamental:**
 Mide la discrepancia entre la verosimilitud de nuestro **modelo propuesto** y la de un **modelo saturado** (un modelo teóricamente perfecto que ajusta cada dato).
 
-$$D = 2 \sum_{i=1}^{n} \left[ \ell(\text{modelo saturado}) - \ell(\text{modelo propuesto}) \right]$$
+$$D = 2 \left[ \ell(\text{modelo saturado}) - \ell(\text{modelo propuesto}) \right] = 2 \sum_{i=1}^{n} \left[ \ell_i(y_i) - \ell_i(\hat{\mu}_i) \right]$$
 
 
 **Interpretación práctica:**
@@ -410,11 +410,9 @@ Model 2: am ~ wt + disp
 2        29     17.785  1   1.3913   0.2382
 ```
 
-# LRT en la Práctica: Ejemplo con R
+# LRT en la Práctica: Interpretación del Resultado
 
-**Interpretación del Resultado**
-
-El test compara la **Deviance** de ambos modelos. La hipótesis nula ($H\_0$) es que el modelo reducido es suficiente.
+El test compara la **Deviance** de ambos modelos. La hipótesis nula ($H_0$) es que el modelo reducido es suficiente.
 
   * La diferencia en deviance es de **1.391** con **1** grado de libertad.
   * El p-valor asociado es **0.238**.
@@ -448,7 +446,7 @@ Los residuos "crudos" ($y_i - \hat{\mu}_i$) no son homocedásticos, por lo que s
 
     * Son los **más recomendados** para la inspección visual en gráficos diagnósticos.
     * Su distribución se aproxima mejor a la normalidad y su varianza es más estable que la de otros residuos.
-    $$d_i = \text{sign}(y_i - \hat{\mu}_i) \sqrt{2[l_i(y_i) - l_i(\hat{\mu}_i)]}$$
+    $$d_i = \text{sign}(y_i - \hat{\mu}_i) \sqrt{2[\ell_i(y_i) - \ell_i(\hat{\mu}_i)]}$$
 
 # ¿La Forma del Modelo es Correcta? 
 
@@ -469,16 +467,16 @@ Se evalúa si la estructura básica del modelo, $g(\mu) = X\beta$, es adecuada p
 
 Se evalúa si la elección de la familia de distribución (Poisson, Binomial, etc.) fue acertada, empezando por la relación entre la media y la varianza.
 
-**Sobredispersión:** Ocurre cuando la varianza real de los datos es **mayor** que la media, violando el supuesto de modelos como el de Poisson ($Var(Y) = \mu$).
+**Sobredispersión:** Ocurre cuando la varianza real de los datos es **mayor** que la media, violando el supuesto de modelos como el de Poisson ($\text{Var}(Y) = \mu$).
 
 * **Consecuencia:** Invalida las inferencias (errores estándar demasiado pequeños, p-valores incorrectos).
 
 * **Detección:** Se calcula el **Estadístico de dispersión ($\hat{\phi}$)**. Si **$\hat{\phi}$ es significativamente mayor que 1**, hay sobredispersión.
     $$\hat{\phi} = \frac{\sum r_i^2}{n-p}$$
-* **Solución:** Cambiar a un modelo más flexible. El caso clásico es pasar de **Poisson** a **Binomial Negativo**, ya que este último incluye un parámetro ($\alpha$) para modelar la variabilidad extra: $Var(Y) = \mu + \alpha\mu^2$.
+* **Solución:** Cambiar a un modelo más flexible. El caso clásico es pasar de **Poisson** a **Binomial Negativo**, ya que este último incluye un parámetro ($\alpha$) para modelar la variabilidad extra: $\text{Var}(Y) = \mu + \alpha\mu^2$.
 
 
-# ¿La Distribución es Correcta?
+# ¿La Distribución es Correcta? (Gráfico Q-Q)
 
 Un segundo aspecto para verificar la distribución es la forma general de los errores.
 
@@ -498,15 +496,15 @@ Finalmente, buscamos identificar puntos individuales que tienen una influencia d
 
 **Herramientas Matemáticas Clave:**
 
-* **Leverage Generalizado ($h_i$):** Mide el potencial de una observación para ser influyente debido a su posición en el espacio de los predictores.
-* **Distancia de Cook para GLMs ($D_i$):** Mide la influencia global de una observación en *todos* los coeficientes.
-    $$D_i = \frac{r_i^2 h_i}{p(1-h_i)^2}$$
-* **DFBETAS:** Mide la influencia de una observación en *cada coeficiente individual*.
+* **Leverage Generalizado ($h_i$):** Potencial de influencia según su posición en los predictores.
+* **Distancia de Cook para GLMs ($D_i$):** Influencia global en *todos* los coeficientes:
+    $$D_i = \frac{r_i^2 h_i}{p \hat{\phi} (1-h_i)^2} = \frac{r_{P,i}^2 h_i}{p(1-h_i)}, \quad \text{con } r_{P,i} = \frac{r_i}{\sqrt{\hat{\phi}(1-h_i)}}$$
+* **DFBETAS:** Influencia de una observación en *cada coeficiente individual*.
 
 **Estrategia:**
 
 * La herramienta visual principal es el **gráfico de residuos vs. leverage**.
-* La estrategia ante estas observaciones no es eliminarlas automáticamente, sino **investigarlas** para entender su naturaleza.
+* No eliminarlas automáticamente, sino **investigarlas** para entender su naturaleza.
 
 # Regresión Logística: Modelando Eventos Binarios
 
@@ -542,7 +540,7 @@ La curva en forma de "S" asegura que las predicciones se aplanen hacia 0 y 1 en 
 
 # Fundamentos: La Función de Enlace Logit
 
-Para poder usar un modelo lineal ($X\beta$), necesitamos transformar la probabilidad (que está en la escala [0,1]) a una escala que vaya de $-\infty$ a $+\infty$.
+Para poder usar un modelo lineal ($X\beta$), necesitamos transformar la probabilidad (que está en el intervalo $(0,1)$) a una escala que vaya de $-\infty$ a $+\infty$.
 
 **La Herramienta:** Esto se logra con la **función de enlace logit**.
 
@@ -582,23 +580,29 @@ Estos componentes se utilizan en cada paso de la actualización de los coeficien
 
 # Ejemplo: Verificación de la Estimación MLE en R
 
-Podemos verificar que los coeficientes encontrados por `glm()` son, en efecto, los que maximizan la función de log-verosimilitud. A continuación se muestra la salida del código R:
+Ajustando `type ~ glu + bmi` sobre `Pima.tr`, podemos verificar que los coeficientes encontrados por `glm()` maximizan la log-verosimilitud:
 
 **Salida del Análisis:**
 
+```{r}
+#| echo: false
+#| comment: ""
+library(MASS)
+data(Pima.tr)
+m_mle <- glm(type ~ glu + bmi, data = Pima.tr, family = binomial)
+salida_mle <- c(
+  "Coeficientes estimados por glm():",
+  capture.output(print(coef(m_mle))),
+  "",
+  paste("Log-verosimilitud en el óptimo:", round(as.numeric(logLik(m_mle)), 4)),
+  "-------------------------------------",
+  paste("Iteraciones necesarias:", m_mle$iter),
+  paste("¿Convergió?", m_mle$converged)
+)
+cat(salida_mle, sep = "\n")
 ```
-Coeficientes estimados por glm():
-(Intercept)         glu         bmi 
--8.16560411  0.03433555  0.08585474 
 
-Log-verosimilitud en el óptimo: -101.4057 
-
--------------------------------------
-Iteraciones necesarias: 4 
-¿Convergió? TRUE 
-```
-
-**Conclusión:** La salida confirma que el algoritmo convergió en 4 iteraciones para encontrar los coeficientes que maximizan la verosimilitud del modelo.
+**Conclusión:** La salida confirma que el algoritmo convergió en `r m_mle$iter` iteraciones para encontrar los coeficientes que maximizan la verosimilitud del modelo.
 
 # Interpretación: Probabilidad vs. Odds
 
@@ -683,7 +687,7 @@ Esto genera cuatro posibles resultados:
 
 A partir de la matriz de confusión, se calculan las métricas de rendimiento clave:
 
-* **Precisión (Accuracy):**
+* **Exactitud (Accuracy):**
 
     * $\frac{VP + VN}{\text{Total}}$
     * Proporción total de predicciones correctas. Cuidado: puede ser engañosa en datasets desbalanceados.
@@ -715,29 +719,40 @@ A partir de la matriz de confusión, se calculan las métricas de rendimiento cl
     * **AUC = 0.5:** Clasificador inútil (equivalente al azar).
     * **Típicamente, AUC > 0.8** se considera una buena discriminación.
 
-    Sí, es una idea excelente. Integrar los ejemplos prácticos es fundamental para conectar la teoría con la aplicación en R.
-
 # Caso Práctico: Resultados del Modelo Logístico
 
-Ajustamos un modelo para predecir la diabetes en el dataset `Pima.tr`. Los resultados clave de la validación del modelo son los siguientes:
+```{r}
+#| echo: false
+library(MASS)
+data(Pima.tr); data(Pima.te)
+modelo_logistico <- glm(type ~ npreg + glu + bmi, data = Pima.tr, family = binomial)
+predicciones_prob <- predict(modelo_logistico, newdata = Pima.te, type = "response")
+pred_clase <- ifelse(predicciones_prob > 0.5, "Yes", "No")
+tab_conf <- table(Predicted = pred_clase, Actual = Pima.te$type)
+exactitud_te <- sum(diag(tab_conf)) / sum(tab_conf)
+y_te <- as.numeric(Pima.te$type == "Yes")
+n1_te <- sum(y_te == 1); n0_te <- sum(y_te == 0)
+auc_te <- (sum(rank(predicciones_prob)[y_te == 1]) - n1_te * (n1_te + 1) / 2) / (n1_te * n0_te)
+```
+
+Ajustamos un modelo en `Pima.tr` (`type ~ npreg + glu + bmi`) y evaluamos su rendimiento sobre el conjunto de validación `Pima.te`:
 
 ::::: columns
 ::: {.column width="45%"}
-**Resultados Numéricos**
+**Resultados en Test (`Pima.te`)**
 
 **Matriz de Confusión:**
 
-```
-       Actual
-Predicted No Yes
-      No  114  29
-      Yes  18  39
+```{r}
+#| echo: false
+#| comment: ""
+print(tab_conf)
 ```
 
 **Métricas Clave:**
 
-  * **Exactitud:** 0.785
-  * **AUC:** 0.831
+  * **Exactitud:** `r round(exactitud_te, 3)`
+  * **AUC:** `r round(auc_te, 3)`
 :::
 ::: {.column width="55%"}
 **Evaluación Visual: Curva ROC**
@@ -746,12 +761,21 @@ Predicted No Yes
 #| echo: false
 #| fig-align: center
 #| out-width: "100%"
-# Este código se ejecuta pero no se muestra
-library(MASS); library(pROC); data(Pima.tr)
-modelo_logistico <- glm(type ~ npreg + glu + bmi, data = Pima.tr, family = binomial)
-predicciones_prob <- predict(modelo_logistico, type = "response")
-roc_obj <- roc(Pima.tr$type, predicciones_prob)
-plot(roc_obj, main = "Curva ROC (AUC = 0.831)")
+titulo_roc <- sprintf("Curva ROC en Test (AUC = %.3f)", auc_te)
+if (requireNamespace("pROC", quietly = TRUE)) {
+  roc_obj <- pROC::roc(Pima.te$type, predicciones_prob, quiet = TRUE)
+  plot(roc_obj, legacy.axes = TRUE, xlab = "1 - Especificidad", ylab = "Sensibilidad",
+       main = titulo_roc)
+} else {
+  y_real <- Pima.te$type == "Yes"
+  umbrales <- c(Inf, sort(unique(predicciones_prob), decreasing = TRUE), -Inf)
+  sens <- sapply(umbrales, function(u) mean(predicciones_prob[y_real] >= u))
+  fpr  <- sapply(umbrales, function(u) mean(predicciones_prob[!y_real] >= u))
+  plot(fpr, sens, type = "s", xlim = c(0, 1), ylim = c(0, 1),
+       xlab = "1 - Especificidad", ylab = "Sensibilidad",
+       main = titulo_roc, lwd = 2)
+  abline(a = 0, b = 1, col = "gray")
+}
 ```
 
 :::
@@ -784,11 +808,11 @@ Para que el modelo sea adecuado, se deben cumplir ciertos supuestos:
 
 * **Independencia de los eventos**.
 * **Equidispersión:** El supuesto fundamental de la distribución de Poisson es que la **media es igual a la varianza**:
-    $$E(Y) = Var(Y) = \lambda$$
+    $$E(Y) = \text{Var}(Y) = \lambda$$
 
 **Limitaciones Comunes (Violación de Supuestos):**
 
-* **Sobredispersión:** Ocurre cuando la varianza es mayor que la media ($Var(Y) > E(Y)$). La solución es usar una **Regresión Binomial Negativa**.
+* **Sobredispersión:** Ocurre cuando la varianza es mayor que la media ($\text{Var}(Y) > E(Y)$). La solución es usar una **Regresión Binomial Negativa**.
 * **Exceso de Ceros:** Si hay más ceros en los datos de los que predice el modelo. La solución es usar modelos **ZIP** (*Zero-Inflated Poisson*).
 
 
@@ -819,23 +843,39 @@ La estimación se adapta a la distribución de Poisson con enlace logarítmico.
 
 # Ejemplo Práctico: Salida del Modelo Poisson
 
+```{r}
+#| echo: false
+set.seed(15)
+n_p <- 100
+trafico <- round(runif(n_p, 50, 200))
+visibilidad <- round(runif(n_p, 1, 10), 1)
+lambda_sim <- exp(0.8 + 0.01 * trafico - 0.20 * visibilidad)
+accidentes <- rpois(n_p, lambda = lambda_sim)
+m_pois <- glm(accidentes ~ trafico + visibilidad, family = poisson)
+sum_pois <- summary(m_pois)
+b_traf <- coef(m_pois)["trafico"]
+b_vis  <- coef(m_pois)["visibilidad"]
+irr_traf <- exp(b_traf)
+irr_vis  <- exp(b_vis)
+X2_pois <- sum(residuals(m_pois, type = "pearson")^2)
+phi_pois <- X2_pois / m_pois$df.residual
+```
+
 **Objetivo:** Ajustamos un modelo para predecir el `número de accidentes` en función del `tráfico` y la `visibilidad`.
 
 **Salida de Coeficientes (`summary`)**
 
-```
-Coefficients:
-              Estimate Std. Error z value Pr(>|z|)    
-(Intercept)  9.607e-04  2.316e-03   0.415  0.678    
-trafico      9.999e-03  1.360e-06 < 2e-16 ***
-visibilidad -2.000e-01  1.012e-04 < 2e-16 ***
+```{r}
+#| echo: false
+#| comment: ""
+printCoefmat(sum_pois$coefficients, P.values = TRUE, has.Pvalue = TRUE, signif.legend = FALSE)
 ```
 
 **Métricas Globales del Modelo**
 
-  * **Null deviance:** 1.68e+08 (con 99 g.l.)
-  * **Residual deviance:** 89.3 (con 97 g.l.)
-  * **AIC:** 1220.4
+  * **Null deviance:** `r round(m_pois$null.deviance, 2)` (con `r m_pois$df.null` g.l.)
+  * **Residual deviance:** `r round(m_pois$deviance, 2)` (con `r m_pois$df.residual` g.l.)
+  * **AIC:** `r round(AIC(m_pois), 2)`
 
 
 # Ejemplo Práctico: Interpretación de Resultados
@@ -851,10 +891,10 @@ Basado en los p-valores (`Pr(>|z|)`) de la diapositiva anterior:
 
 Para interpretar el efecto práctico, exponenciamos los coeficientes ($\text{IRR} = e^\beta$):
 
-  * **IRR (tráfico):** $e^{0.01} \approx 1.01$.
-      * Un aumento de 1 unidad en `trafico` **incrementa** la tasa de accidentes esperada en un **1%**.
-  * **IRR (visibilidad):** $e^{-0.20} \approx 0.82$.
-      * Un aumento de 1 km en `visibilidad` **reduce** la tasa de accidentes esperada en un **18%**.
+  * **IRR (tráfico):** $e^{`r round(b_traf, 4)`} \approx `r sprintf("%.3f", irr_traf)`$.
+      * Un aumento de 1 unidad en `trafico` **incrementa** la tasa de accidentes esperada en un **`r sprintf("%.1f", (irr_traf - 1) * 100)`%**.
+  * **IRR (visibilidad):** $e^{`r round(b_vis, 4)`} \approx `r sprintf("%.3f", irr_vis)`$.
+      * Un aumento de 1 km en `visibilidad` **reduce** la tasa de accidentes esperada en un **`r sprintf("%.1f", (1 - irr_vis) * 100)`%**.
 
 # Implementación del Algoritmo IRLS para Poisson
 
@@ -903,19 +943,20 @@ La validación se enfoca en la **capacidad de predicción**: ¿qué tan cerca es
 
 # Ejemplo Práctico: Diagnóstico del Modelo Poisson
 
-Este segundo ejemplo se centra en verificar dos aspectos clave de la estimación: la **convergencia del algoritmo** y el supuesto de **equidispersión**.
+Este ejemplo verifica dos aspectos clave tras el ajuste: la **convergencia del algoritmo IRLS** y el supuesto de **equidispersión condicional** ($\text{Var}(Y_i|\mathbf{x}_i) = \mu_i$), mediante $\hat{\phi} = X^2_{\text{Pearson}} / (n - p)$:
 
-Comprobamos si se cumple el supuesto clave de Poisson ($media \approx varianza$).
-
+```{r}
+#| echo: false
+#| comment: ""
+cat("Convergencia IRLS:\n")
+cat("  Iteraciones necesarias:", m_pois$iter, " |  ¿Convergió?:", m_pois$converged, "\n\n")
+cat("Verificación de Equidispersión Condicional:\n")
+cat("  Estadístico Chi-cuadrado de Pearson:", round(X2_pois, 2), "\n")
+cat("  Grados de libertad residuales (n-p):", m_pois$df.residual, "\n")
+cat("  Estadístico de dispersión (phi_hat):", round(phi_pois, 3), "\n")
 ```
-Verificación de Equidispersión:
 
-Media observada:     0.15 
-Varianza observada:  0.149 
-Razón varianza/media: 0.993
-```
-
-* **Conclusión:** La razón es **muy cercana a 1**, por lo que **se cumple el supuesto**. No hay evidencia de sobredispersión y el modelo de Poisson es adecuado.
+* **Conclusión:** El algoritmo convergió en `r m_pois$iter` iteraciones y $\hat{\phi} = `r round(phi_pois, 3)` \approx 1$, por lo que **no hay evidencia de sobredispersión** y el modelo de Poisson es adecuado.
 
 
 # Otros GLMs: Adaptándose a la Realidad de los Datos
@@ -939,14 +980,14 @@ Exploraremos los tres modelos más importantes para estos casos:
 
 **El Problema: Sobredispersión**
 
-* Ocurre en datos de conteo cuando la **varianza es mayor que la media**, violando el supuesto clave de la regresión de Poisson ($Var(Y) = \mu$).
+* Ocurre en datos de conteo cuando la **varianza es mayor que la media**, violando el supuesto clave de la regresión de Poisson ($\text{Var}(Y) = \mu$).
 * **Causas comunes:** Heterogeneidad no modelada, dependencia entre eventos o exceso de ceros.
 * **Consecuencia:** La regresión de Poisson subestima los errores estándar, llevando a conclusiones incorrectas sobre la significancia de los predictores.
 
 **La Solución: El Modelo Binomial Negativo**
 
 * Es una extensión del modelo de Poisson que introduce un **parámetro de dispersión ($\alpha$)** para permitir que la varianza sea mayor que la media:
-    $$Var(Y) = \mu + \alpha \mu^2$$
+    $$\text{Var}(Y) = \mu + \alpha \mu^2$$
 * Si $\alpha = 0$, el modelo se reduce a la regresión de Poisson.
 
 
@@ -1003,10 +1044,8 @@ La elección del modelo depende casi exclusivamente de la naturaleza de tu varia
 Usa **Regresión Logística**.
 
 * **¿Es Y un conteo de eventos (nº de accidentes, nº de clientes)?**
-
-Empieza con una **Regresión de Poisson**.
-
-* **Importante:** Después, comprueba si hay **sobredispersión**. Si la hay ($\hat{\phi} > 1.5$), cambia a una **Regresión Binomial Negativa**.
+  Empieza con una **Regresión de Poisson**.
+    * **Importante:** Después, comprueba si hay **sobredispersión**. Si la hay ($\hat{\phi} > 1.5$), cambia a una **Regresión Binomial Negativa**.
 
 * **¿Es Y continua, positiva y con sesgo a la derecha (tiempos, costos)?**
 Usa **Regresión Gamma**. Es una excelente alternativa a transformar la variable con logaritmos y usar un modelo lineal.

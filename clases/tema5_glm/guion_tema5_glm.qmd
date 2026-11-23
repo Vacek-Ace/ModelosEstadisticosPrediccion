@@ -1,0 +1,776 @@
+---
+title: "Guion de Diapositivas Paso a Paso: Tema 5 (Modelos Lineales Generalizados)"
+subtitle: "Guion docente completo por diapositiva (64 diapositivas) · Modelos Estadísticos para la Predicción"
+author: "Víctor Aceña · Isaac Martín (DSLAB)"
+lang: es
+format:
+  pdf:
+    pdf-engine: lualatex
+    documentclass: article
+    fontsize: 10pt
+    geometry:
+      - top=1.85cm
+      - bottom=1.85cm
+      - left=2cm
+      - right=2cm
+    colorlinks: true
+    toc: false
+    number-sections: false
+    include-in-header:
+      text: |
+        \usepackage{amsmath, amssymb}
+        \usepackage{booktabs}
+        \usepackage{microtype}
+        \usepackage{enumitem}
+        \setlist{itemsep=2pt, topsep=3pt, parsep=1pt}
+        \setlist[itemize,2]{beginpenalty=10000}
+        \setlist[enumerate,2]{beginpenalty=10000}
+        \usepackage{titlesec}
+        \titlespacing*{\section}{0pt}{14pt}{5pt}
+        \titlespacing*{\subsection}{0pt}{9pt}{2pt}
+        \usepackage{needspace}
+        \usepackage{etoolbox}
+        \preto\section{\needspace{7\baselineskip}}
+        \preto\subsection{\needspace{5\baselineskip}}
+        \widowpenalty=10000
+        \clubpenalty=10000
+---
+
+::: {.callout-important title="Cómo usar este guion diapositiva a diapositiva"}
+Este documento recorre **una por una las 64 diapositivas** de la presentación `tema5_glm.pdf` (fuente `tema5_glm.qmd`), sin ceñirse a la duración de una única sesión de aula para que pueda repartirse libremente en las clases que se necesiten (por ejemplo, dividiendo por bloques temáticos). Para cada diapositiva encontrarás dos niveles claramente diferenciados:
+
+1. **Nivel conceptual (qué decir en voz alta)**: el discurso oral sugerido, las intuiciones y ejemplos de aula, las transiciones desde la diapositiva anterior y preguntas estratégicas para activar a los estudiantes.
+2. **Nivel técnico (qué señalar en pantalla)**: la lectura precisa de fórmulas y notación, la verificación exacta de las salidas numéricas de R proyectadas, los matices teóricos importantes y posibles preguntas de profundización.
+:::
+
+---
+
+## Mapa Global de Bloques (64 Diapositivas)
+
+| Bloque | Diapositivas | Hilo Conductor |
+| :--- | :---: | :--- |
+| **1. Introducción y arquitectura GLM** | **1 - 7** | Límites de la regresión lineal, definición de GLM, los 3 componentes (aleatorio, sistemático, enlace) y comparativa MCO vs. GLM. |
+| **2. Familia exponencial, MLE/IRLS e inferencia** | **8 - 21** | Verosimilitud y log-verosimilitud, familia exponencial, $V(\mu)$ y enlace canónico, IRLS, propiedades asintóticas, matriz de información y errores estándar. |
+| **3. Bondad de ajuste, LRT y diagnóstico** | **22 - 32** | Deviance (nula vs. residual), test LRT con ejemplo en R (`mtcars`), residuos Pearson/deviance, forma funcional, sobredispersión, Q-Q e influencia. |
+| **4. Regresión logística (respuesta binaria)** | **33 - 46** | Sigmoide y enlace logit, MLE e IRLS, verificación en R (`Pima.tr`), odds y Odds Ratios, deviance y Pseudo $R^2$, matriz de confusión, ROC/AUC y caso `Pima.te`. |
+| **5. Regresión de Poisson (datos de conteo)** | **47 - 58** | Distribución de Poisson, enlace log, equidispersión, IRR, MLE e IRLS, caso práctico (accidentes), diagnóstico de dispersión ($\hat{\phi}$) y validación (RMSE/MAE). |
+| **6. Otros GLMs y guía de decisión** | **59 - 64** | Binomial Negativa ante sobredispersión ($\theta = 1/\alpha$), modelos continuos positivos asimétricos (Gamma e Inversa Gaussiana) y guía práctica de elección. |
+
+: {tbl-colwidths="[27,13,60]"}
+
+---
+
+## Bloque 1: Introducción y Arquitectura de un GLM (Diapositivas 1 - 7)
+
+### Diapositiva 1: Portada (*Modelos Lineales Generalizados (GLM)*)
+
+* **Nivel conceptual (qué decir)**:
+  * *"Hasta ahora en la asignatura hemos dominado la regresión lineal múltiple, la ingeniería de características y la selección de variables, pero siempre bajo una misma premisa: nuestra variable objetivo $Y$ era continua y podía tomar cualquier valor real con errores normales y varianza constante."*
+  * *"En el Tema 5 damos el gran salto que convierte la regresión en una herramienta verdaderamente universal: los **Modelos Lineales Generalizados (GLM)**. Vamos a ver que la regresión lineal no desaparece, sino que se convierte en un caso particular dentro de un marco mucho más amplio."*
+* **Nivel técnico (qué señalar)**:
+  * Sitúa la correspondencia con el material de apoyo: el desarrollo completo está en el capítulo **Tema 5** del libro (`tema5.qmd`) y toda la parte aplicada en R se trabajará en el laboratorio `lab5_modelos_generalizados`.
+  * Anticipa la estructura en seis grandes piezas: arquitectura general, teoría de estimación (familia exponencial + MLE/IRLS), diagnóstico, regresión logística, regresión de Poisson y extensiones (Binomial Negativa, Gamma e Inversa Gaussiana).
+
+### Diapositiva 2: *Modelos de Regresión Generalizada*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Empecemos por el problema real. Imaginad que trabajáis en un hospital y queréis predecir si un paciente desarrollará una enfermedad (sí o no), o en un ayuntamiento y queréis predecir cuántos accidentes ocurrirán en un cruce esta semana."*
+  * **Pregunta a la clase**: *"Si metéis un $0$ y un $1$ directamente en una regresión lineal `lm()`, ¿qué cosas raras nos pueden pasar?"* (Deja que salgan respuestas: predicciones negativas o mayores que $1$, errores que solo pueden tomar dos valores y jamás son normales, varianza que cambia según la probabilidad).
+  * *"Los GLM nacen precisamente para resolver esto sin tirar a la basura lo mejor de la regresión lineal: la capacidad de combinar predictores de forma interpretable."*
+* **Nivel técnico (qué señalar)**:
+  * Subraya los dos supuestos clave de la regresión lineal que se rompen en estos escenarios: **normalidad** de los errores y **homocedasticidad** (varianza constante).
+  * Señala las dos piezas nuevas que menciona el bloque final: usar distribuciones adecuadas (**Binomial**, **Poisson**, etc.) junto con **funciones de enlace** que respeten el dominio natural de la respuesta.
+
+### Diapositiva 3: *Definición de GLM*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Aquí tenéis el catálogo de los tres grandes tipos de variable respuesta $Y$ que desbloquean los GLM: respuestas **binarias** (éxito/fracaso), respuestas de **conteo** (números enteros no negativos) y respuestas **continuas estrictamente positivas y sesgadas** (como el importe de un siniestro de seguros o el tiempo de espera hasta una avería)."*
+  * *"Lo extraordinario de la propuesta clásica de Nelder y Wedderburn (1972) no fue inventar tres modelos sueltos, sino descubrir que todos ellos comparten exactamente la misma maquinaria matemática bajo el paraguas de la **familia exponencial**."*
+* **Nivel técnico (qué señalar)**:
+  * Recalca que el requisito teórico unificador del marco GLM clásico es que la distribución condicional de $Y \mid \mathbf{X}$ pertenezca a la **familia exponencial** (lo formalizaremos en la Diapositiva 12).
+  * Aclara que decir que $Y$ es "normal" o "Poisson" en regresión siempre se refiere a la distribución **condicional** dado el vector de predictores $\mathbf{X}$, no a la distribución marginal de $Y$ sin condicionar.
+
+### Diapositiva 4: *Los 3 Componentes de un GLM*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Si os tuvierais que tatuar una única diapositiva de teoría del Tema 5, sería esta. Todo GLM —absolutamente cualquiera— se especifica eligiendo exactamente **tres ingredientes**: (1) qué distribución sigue $Y$, (2) cómo combinamos linealmente las $X$, y (3) qué puente matemático conecta ambos mundos."*
+  * *"Pensad en la función de enlace como un traductor: los predictores viven en el mundo libre de toda la recta real $(-\infty, +\infty)$, mientras que la media de $Y$ vive encerrada en un rango restringido (por ejemplo $(0,1)$ para una probabilidad o $(0, +\infty)$ para una tasa). El enlace traduce un mundo al otro."*
+* **Nivel técnico (qué señalar)**:
+  * Enfatiza los tres nombres exactos y sus símbolos estándar:
+    1. **Componente Aleatorio**: distribución de $Y$ en la familia exponencial (media $\mu = E(Y \mid \mathbf{X})$).
+    2. **Componente Sistemático**: predictor lineal $\eta$.
+    3. **Función de Enlace (*Link Function*)**: función monótona y diferenciable $g$ que conecta $\mu$ con $\eta$.
+  * Matiz clave que suele confundir a los alumnos: la función de enlace se aplica a la **media** $\mu = E(Y)$, **no** a los valores observados $Y$ (por ejemplo, en Poisson modelamos $\log(E[Y]) = \eta$, no $E[\log(Y)] = \eta$, lo que además fallaría en cuanto $Y = 0$).
+
+### Diapositiva 5: *Componentes en Detalle: Aleatorio y Sistemático*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Vamos al detalle de los dos primeros ingredientes. En el componente aleatorio elegimos la distribución acorde a la física de los datos: Binomial si es $0/1$, Poisson si son conteos, Gamma si son costes o tiempos positivos."*
+  * *"En el componente sistemático, buena noticia: **no cambia absolutamente nada** respecto a los temas anteriores. Sigue siendo una combinación lineal $\eta = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p$. Todas las técnicas del Tema 3 —variables dummy, interacciones, términos polinómicos— siguen funcionando exactamente igual dentro de $\eta$."*
+* **Nivel técnico (qué señalar)**:
+  * Señala la ecuación $\eta = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p = \mathbf{x}^T \boldsymbol{\beta}$ y aclara por qué el modelo se llama *Lineal* Generalizado: la linealidad está en los **parámetros** $\boldsymbol{\beta}$ dentro de $\eta$, aunque la relación final entre $\mu$ y $X$ sea fuertemente no lineal.
+  * Nota sobre notación para evitar confusiones posteriores: aquí $p$ denota el número de predictores (es decir, $p + 1$ parámetros contando $\beta_0$), mientras que en fórmulas de grados de libertad como $n - p$ (Diapositivas 30, 32, 56 y 58) la literatura estándar usa $p$ para el **número total de parámetros estimados** (incluyendo el intercepto). Conviene recordárselo al llegar a esas diapositivas.
+
+### Diapositiva 6: *Componentes en Detalle: La Función de Enlace*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Aquí tenemos el tercer ingrediente y la ecuación reina del tema: $g(\mu) = \eta$. Fijaos en los tres ejemplos clásicos que conectan todo lo que veremos:"*
+  * *"Si queremos predecir una probabilidad $\mu \in (0,1)$, aplicamos el **logit** $\log(\mu/(1-\mu))$, que estira el intervalo $(0,1)$ hasta toda la recta real. Si queremos predecir un conteo medio $\mu > 0$, aplicamos el **logaritmo** $\log(\mu)$. Y si no transformamos nada, $g(\mu) = \mu$, recuperamos exactamente la regresión lineal de siempre."*
+* **Nivel técnico (qué señalar)**:
+  * Aclara que en todo el tema $\log(\cdot)$ denota siempre el **logaritmo natural** ($\ln$, base $e$), nunca en base $10$.
+  * Haz explícita la lectura inversa para predecir: como $g$ es invertible, la media predicha siempre se recupera como $\mu = g^{-1}(\eta)$. Así, en logística $\mu = \frac{1}{1 + e^{-\eta}}$, en Poisson $\mu = e^{\eta}$ y en lineal $\mu = \eta$.
+
+### Diapositiva 7: *Diferencias Clave: Regresión Lineal vs. GLM*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Esta tabla cierra el primer bloque poniendo frente a frente el modelo clásico y su generalización. La idea esencial que quiero que retengáis es que la regresión lineal clásica no es un 'rival' de los GLM: es simplemente el GLM con familia Normal y enlace Identidad."*
+  * *"Y fijaos en las ventajas prácticas: ganamos enorme flexibilidad para atacar datos reales sin perder el rigor interpretativo de los coeficientes ni las herramientas de comparación de modelos que ya conocemos, como AIC y BIC."*
+* **Nivel técnico (qué señalar)**:
+  * Recorre fila a fila las cuatro dimensiones de la comparativa (Distribución, Tipo de Respuesta, Relación, Función de Enlace).
+  * Enlaza con R: en `glm(y ~ x1 + x2, family = gaussian(link = "identity"))` obtenemos exactamente las mismas estimaciones puntuales de $\hat{\boldsymbol{\beta}}$ que con `lm(y ~ x1 + x2)`. Esa continuidad prepara la transición natural al Bloque 2: cómo estimar $\boldsymbol{\beta}$ cuando ya no estamos en el caso Normal-Identidad.
+
+---
+
+## Bloque 2: Familia Exponencial, Estimación MLE/IRLS e Inferencia (Diapositivas 8 - 21)
+
+### Diapositiva 8: *Estimación de Parámetros en GLM*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Ya sabemos definir un GLM sobre el papel. Ahora viene la pregunta del millón: dados unos datos reales, ¿cómo calculamos los valores óptimos de $\hat{\beta}_0, \hat{\beta}_1, \dots$?"*
+  * *"En regresión lineal teníamos la fórmula cerrada de Mínimos Cuadrados Ordinarios (MCO), $\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$. En un GLM esa fórmula directa ya no sirve porque ni los errores son normales ni la relación es lineal ni la varianza es constante. Necesitamos un principio teórico más general (**Máxima Verosimilitud, MLE**) y un motor numérico que encuentre el óptimo (**IRLS**)."*
+* **Nivel técnico (qué señalar)**:
+  * Matiz técnico útil si surge la pregunta: en regresión lineal clásica, MCO es el mejor estimador lineal insesgado (BLUE, teorema de Gauss-Markov) bajo linealidad y homocedasticidad incluso sin normalidad; la normalidad hace que MCO coincida **exactamente** con MLE y garantiza la inferencia exacta con distribuciones $t$ y $F$.
+  * Deja clara la separación conceptual entre **qué** optimizamos (el principio estadístico MLE) y **cómo** lo calculamos numéricamente (el algoritmo iterativo IRLS).
+
+### Diapositiva 9: *El Método de Máxima Verosimilitud (MLE)*
+
+* **Nivel conceptual (qué decir)**:
+  * *"El principio de Máxima Verosimilitud es extraordinariamente intuitivo: tenemos una muestra real delante y nos preguntamos qué valores de los parámetros $\boldsymbol{\beta}$ hacen que los datos que hemos observado resulten **lo más plausibles posible**."*
+  * *"Pensad en lanzar una moneda 10 veces y sacar 8 caras: ¿qué probabilidad $p$ de cara explica mejor esa muestra? Instintivamente decís $p = 0.8$. Eso exactamente —pero generalizado a decenas de predictores y a cualquier distribución— es MLE."*
+* **Nivel técnico (qué señalar)**:
+  * Señala la fórmula $\text{Var}(Y) = a(\phi)V(\mu)$ que aparece en el segundo punto: en casi todos los GLM la varianza depende explícitamente de la media $\mu$, por lo que la heterocedasticidad no es un "defecto" que haya que arreglar, sino una propiedad estructural que MLE incorpora automáticamente al estimar.
+
+### Diapositiva 10: *La Función de Verosimilitud ($L(\boldsymbol{\beta})$)*
+
+* **Nivel conceptual (qué decir)**:
+  * *"¿Cómo traducimos 'hacer lo más probable posible observar toda la muestra' a una fórmula? Si las $n$ observaciones son independientes, la probabilidad conjunta de observarlas todas a la vez es simplemente el **producto** de las probabilidades (o densidades) individuales."*
+  * *"Ahora bien, imaginad multiplicar 10.000 números entre $0$ y $1$ en un ordenador: el resultado se vuelve tan minúsculo que el ordenador lo redondea a cero exacto (*underflow*). Además, derivar un producto gigante de $n$ factores es una pesadilla algebraica."*
+* **Nivel técnico (qué señalar)**:
+  * Señala $L(\boldsymbol{\beta}) = \prod_{i=1}^{n} f(y_i; \theta_i, \phi)$ y aclara la dependencia implícita: $\boldsymbol{\beta}$ entra dentro de cada $\theta_i$ a través de la cadena $\mathbf{x}_i^T \boldsymbol{\beta} = \eta_i = g(\mu_i)$ y la relación $\mu_i = b'(\theta_i)$.
+  * Recalca el supuesto clave detrás del productorio $\prod_{i=1}^n$: **independencia** entre las observaciones $i = 1, \dots, n$. Si hay observaciones correlacionadas (datos longitudinales o agrupados), este productorio deja de ser válido y se necesitarían GLMM o GEE.
+
+### Diapositiva 11: *La Función de Log-Verosimilitud ($\ell(\boldsymbol{\beta})$)*
+
+* **Nivel conceptual (qué decir)**:
+  * *"El truco matemático que salva tanto el álgebra como la aritmética del ordenador es aplicar el logaritmo natural. Como el logaritmo es una función estrictamente creciente, el valor de $\boldsymbol{\beta}$ que maximiza $L(\boldsymbol{\beta})$ es **exactamente el mismo** que maximiza $\ell(\boldsymbol{\beta}) = \log L(\boldsymbol{\beta})$."*
+  * *"Y de golpe, aquel producto inmanejable se transforma en una **suma** limpia, estable numéricamente y fácil de derivar término a término."*
+* **Nivel técnico (qué señalar)**:
+  * Señala $\ell(\boldsymbol{\beta}) = \log(L(\boldsymbol{\beta})) = \sum_{i=1}^{n} \log f(y_i; \theta_i, \phi)$.
+  * Recuerda un detalle que los estudiantes verán enseguida en las salidas de R (por ejemplo, Diapositiva 38, donde `logLik = -99.2352`): en distribuciones discretas como Binomial o Poisson, como $0 < f(y_i) \le 1$, su logaritmo es siempre $\le 0$, por lo que $\ell(\boldsymbol{\beta})$ es un número **negativo**; cuanto **menos negativo** (más cercano a $0$), mayor es la verosimilitud.
+
+### Diapositiva 12: *La Teoría Unificadora: La Familia Exponencial*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Esta diapositiva contiene el corazón matemático de los GLM. A primera vista las fórmulas de la Normal, la Binomial, la Poisson y la Gamma parecen no tener nada que ver entre sí. Sin embargo, si aplicamos el truco de reescribir cualquier densidad como $\exp\{\log f(y)\}$, todas ellas encajan en este **molde único**."*
+  * *"¿Por qué es tan potente este molde? Porque basta demostrar **una sola vez** cómo derivar la media, la varianza y el algoritmo de estimación para esta expresión genérica, y automáticamente queda demostrado para todas las distribuciones del tema."*
+* **Nivel técnico (qué señalar)**:
+  * Desglosa los cuatro bloques de $f(y; \theta, \phi) = \exp\left\{\frac{y\theta - b(\theta)}{a(\phi)} + c(y, \phi)\right\}$:
+    * $\theta$: **parámetro natural** (o canónico), ligado a la media.
+    * $\phi$: **parámetro de dispersión** (o escala), mediante $a(\phi)$ (por ejemplo $a(\phi) = \sigma^2$ en Normal; $a(\phi) = 1$ en Bernoulli y Poisson).
+    * $b(\theta)$: función acumulante que genera los momentos.
+    * $c(y, \phi)$: término normalizador que no depende de $\theta$ (y por tanto desaparece al derivar respecto a $\theta$ o $\boldsymbol{\beta}$).
+  * Destaca las dos identidades derivadas de las identidades de Bartlett ($E[\partial\ell/\partial\theta] = 0$ y $\text{Var}[\partial\ell/\partial\theta] = -E[\partial^2\ell/\partial\theta^2]$):
+    * $E(Y) = \mu = b'(\theta)$.
+    * $\text{Var}(Y) = a(\phi)\,b''(\theta) = a(\phi)\,V(\mu)$, donde $V(\mu)$ expresa $b''(\theta)$ en función de $\mu$.
+
+### Diapositiva 13: *Distribuciones Comunes*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Aterricemos el molde abstracto de la familia exponencial en las tres distribuciones que usaréis el 90% de las veces en la práctica: Normal, Binomial y Poisson."*
+  * *"Fijaos en cómo cada una tiene su propia 'huella dactilar' en la función de varianza $V(\mu)$: en la Normal la varianza no depende de la media ($V(\mu)=1$); en la Binomial es una parábola invertida $\mu(1-\mu)$; y en la Poisson crece exactamente en línea recta con la media ($V(\mu)=\mu$)."*
+* **Nivel técnico (qué señalar)**:
+  * Comprueba rápidamente en pizarra (si hay tiempo) el caso Poisson para fijar la idea: $f(y;\lambda) = \exp\{y\log\lambda - \lambda - \log(y!)\}$, luego $\theta = \log\lambda$ (enlace canónico **log**), $b(\theta) = e^\theta$, $a(\phi) = 1$, $b'(\theta) = e^\theta = \lambda$ y $b''(\theta) = e^\theta = \lambda \implies V(\mu) = \mu$.
+  * Matiz sobre la **Binomial**: para una observación binaria Bernoulli ($m = 1$), $\mu = p$, $a(\phi) = 1$ y $V(\mu) = \mu(1-\mu)$. Si modelamos proporciones $Y/m$ basadas en $m$ ensayos, $V(\mu) = \mu(1-\mu)$ y $a(\phi) = 1/m$.
+
+### Diapositiva 14: *Distribuciones para Datos Asimétricos*
+
+* **Nivel conceptual (qué decir)**:
+  * *"¿Qué pasa cuando nuestra respuesta es continua —como el coste de una hospitalización o el tiempo de reparación de una máquina—, pero no puede ser negativa y tiene una cola larga hacia la derecha?"*
+  * *"Aquí entran la **Gamma** y la **Inversa Gaussiana**. Fijaos en la progresión geométrica de las funciones de varianza a medida que aumenta la asimetría de los datos: Normal ($V(\mu) = \mu^0 = 1$), Poisson ($V(\mu) = \mu^1$), Gamma ($V(\mu) = \mu^2$) e Inversa Gaussiana ($V(\mu) = \mu^3$)."*
+* **Nivel técnico (qué señalar)**:
+  * En **Gamma**, subraya el paréntesis de la diapositiva: estrictamente el parámetro natural es $\theta = -1/\mu$ (enlace canónico recíproco negativo), pero en la práctica el signo negativo resulta incómodo (o $1/\mu$ puede predecir valores negativos fuera del dominio), por lo que en aplicaciones reales casi siempre se usa el enlace **logarítmico** $\log(\mu)$ (que garantiza $\mu > 0$ y da interpretación multiplicativa) o el inverso positivo $1/\mu$ (por defecto en `Gamma()` en R).
+  * En **Inversa Gaussiana**, aclara un matiz riguroso por si alguien hace el álgebra: en la familia exponencial estricta $\theta = -1/(2\mu^2)$, que es proporcional al enlace $g(\mu) = 1/\mu^2$ salvo el factor constante $-1/2$ (absorbido en $\boldsymbol{\beta}$), motivo por el cual el enlace canónico en R (`inverse.gaussian()`) se escribe `1/mu^2`.
+
+### Diapositiva 15: *Conceptos Clave de la Familia Exponencial*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Esta diapositiva resume los dos conceptos que acabamos de extraer de la familia exponencial y nos dice por qué nos importan de verdad en la práctica."*
+  * *"La función de varianza $V(\mu)$ le dice al algoritmo qué observaciones son más ruidosas y cuáles son más informativas; el enlace canónico $g(\mu)$ es el que encaja como llave en cerradura con esa distribución."*
+* **Nivel técnico (qué señalar)**:
+  * Explica qué significa matemáticamente que un enlace sea **canónico**: es aquel que hace coincidir el predictor lineal con el parámetro natural, $\eta = g(\mu) = \theta$.
+  * Menciona las tres ventajas teóricas del enlace canónico: (1) existen estadísticos suficientes minimales para $\boldsymbol{\beta}$ dados por $\mathbf{X}^T \mathbf{y}$; (2) las ecuaciones de verosimilitud se simplifican a $\sum_i x_{ij}(y_i - \mu_i) = 0$; y (3) la matriz de información observada coincide con la esperada, lo que hace coincidir Newton-Raphson con Fisher Scoring y favorece la concavidad global de $\ell(\boldsymbol{\beta})$.
+  * Recuerda también que **no es obligatorio** usar el enlace canónico (ej.: probit en Binomial o log en Gamma) cuando otro enlace tiene mejor interpretación o mejor ajuste.
+
+### Diapositiva 16: *La Función de Varianza*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Detengámonos un segundo en una consecuencia muy intuitiva —y a veces contraintuitiva— de los pesos en un GLM."*
+  * **Pregunta a la clase**: *"En regresión logística, imagina dos pacientes: uno tiene una probabilidad estimada de enfermar de $0.99$ (casi seguro) y otro está justo en la frontera de decisión con $0.50$. ¿Cuál de los dos aporta **más peso** al algoritmo IRLS para ajustar los coeficientes?"*
+  * *"Sorprendentemente, el de $0.50$. Aunque su varianza $\mu(1-\mu) = 0.25$ es máxima, la pendiente de la sigmoide también es máxima en $0.50$ (mientras que en $0.99$ la curva ya está casi plana), y al combinarse ambos factores el peso resulta $w_i = \mu_i(1-\mu_i)$: las observaciones en la zona intermedia son las que más informan sobre dónde colocar la frontera."*
+* **Nivel técnico (qué señalar)**:
+  * Verifica explícitamente en voz alta la fórmula general del peso de IRLS proyectada en pantalla:
+    $$w_i = \frac{1}{V(\mu_i)\,[g'(\mu_i)]^2}$$
+  * Haz la comprobación inmediata para el enlace logit: $V(\mu) = \mu(1-\mu)$ y $g(\mu) = \log(\frac{\mu}{1-\mu}) \implies g'(\mu) = \frac{1}{\mu(1-\mu)}$. Sustituyendo:
+    $$w_i = \frac{1}{\mu(1-\mu) \cdot \left[\frac{1}{\mu(1-\mu)}\right]^2} = \mu(1-\mu)$$
+  * Aprovecha para dejar plantada la semilla de Poisson (Diapositiva 54): con $V(\mu)=\mu$ y $g'(\mu)=1/\mu$, la misma fórmula dará $w_i = \frac{1}{\mu \cdot (1/\mu)^2} = \mu$. Todo sale de una única ecuación.
+
+### Diapositiva 17: *El Algoritmo de Estimación: IRLS*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Si las ecuaciones de máxima verosimilitud de un GLM no se pueden despejar a mano, ¿cómo las resuelve R en milisegundos cada vez que ejecutamos `glm()`? Mediante **IRLS** (*Iteratively Reweighted Least Squares*)."*
+  * *"La idea es brillante: en lugar de atacar un problema curvo y difícil de golpe, lo aproximamos por una secuencia de **regresiones lineales ponderadas** muy fáciles de resolver. Empezamos con un borrador de $\boldsymbol{\beta}$, calculamos pesos para cada dato, ajustamos una regresión lineal ponderada para obtener un mejor $\boldsymbol{\beta}$, y repetimos el bucle hasta que los coeficientes ya casi no se mueven."*
+* **Nivel técnico (qué señalar)**:
+  * Recorre los 4 pasos numerados de la diapositiva y anuncia que veremos la ecuación cerrada de actualización $\boldsymbol{\beta}^{(t+1)} = (\mathbf{X}^T\mathbf{W}^{(t)}\mathbf{X})^{-1}\mathbf{X}^T\mathbf{W}^{(t)}\mathbf{z}^{(t)}$ con fórmulas explícitas en las Diapositivas 37 (logística) y 54 (Poisson).
+  * **Matiz técnico importante**: la diapositiva indica que IRLS es una aplicación de Newton-Raphson. Conviene puntualizar oralmente que, en general, IRLS equivale al método de **Fisher Scoring** (que usa la matriz de información *esperada* de Fisher), y que coincide **exactamente** con Newton-Raphson (información *observada*) siempre que el enlace sea **canónico** (como logit en Binomial o log en Poisson).
+  * Comenta que en la práctica suele converger en muy pocas iteraciones (típicamente entre 4 y 8, como comprobaremos en los ejemplos de R).
+
+### Diapositiva 18: *Propiedades de los Estimadores*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Una vez que IRLS converge y nos entrega $\hat{\boldsymbol{\beta}}$, ¿podemos fiarnos de esas estimaciones? La teoría de Máxima Verosimilitud nos regala tres grandes garantías cuando el tamaño muestral $n$ es suficientemente grande."*
+  * *"Primero, **consistencia**: con más datos nos acercamos cada vez más a la verdad. Segundo, **normalidad asintótica**: aunque $Y$ sea binaria o de conteo, la distribución del estimador $\hat{\boldsymbol{\beta}}$ acaba pareciéndose a una campana de Gauss, lo que nos permite calcular intervalos de confianza y p-valores. Y tercero, **eficiencia**: nadie puede estimar $\boldsymbol{\beta}$ con menor varianza asintótica."*
+* **Nivel técnico (qué señalar)**:
+  * Lee cuidadosamente la notación de las dos expresiones:
+    * Consistencia en probabilidad: $\hat{\boldsymbol{\beta}} \xrightarrow{p} \boldsymbol{\beta}$ cuando $n \to \infty$.
+    * Normalidad asintótica: $\hat{\boldsymbol{\beta}} \stackrel{a}{\sim} N(\boldsymbol{\beta}, \mathbf{I}^{-1}(\boldsymbol{\beta}))$, donde $\mathbf{I}(\boldsymbol{\beta})$ es la **matriz de información de Fisher de la muestra** (de ahí que su inversa ya lleve incorporado el factor $1/n$ y dé directamente la covarianza asintótica de $\hat{\boldsymbol{\beta}}$).
+  * Aclara el alcance del término **asintótico**: a diferencia de la regresión lineal normal (donde $\hat{\boldsymbol{\beta}}$ es exactamente insesgado y normal para cualquier $n$), en GLM los estimadores MLE pueden tener cierto sesgo en muestras muy pequeñas (o incluso divergir si hay separación perfecta en regresión logística).
+
+### Diapositiva 19: *La Matriz de Información: ¿Cuánta Certeza Tenemos?*
+
+* **Nivel conceptual (qué decir)**:
+  * *"En la diapositiva anterior apareció $\mathbf{I}(\boldsymbol{\beta})$, la matriz de información de Fisher. ¿Qué mide realmente? Imaginad la gráfica de la log-verosimilitud como una montaña cuya cima es $\hat{\boldsymbol{\beta}}$."*
+  * *"Si la montaña es un pico muy afilado (alta curvatura), moverse un milímetro del máximo hace caer en picado la verosimilitud: estamos muy seguros de dónde está la cima. Si la montaña es una meseta plana (baja curvatura), muchos valores de $\boldsymbol{\beta}$ explican casi igual de bien los datos: tenemos mucha incertidumbre."*
+* **Nivel técnico (qué señalar)**:
+  * Señala la expresión práctica al final de la diapositiva:
+    $$\mathbf{I}(\hat{\boldsymbol{\beta}}) \approx \frac{1}{a(\hat{\phi})}\,\mathbf{X}^T \mathbf{W} \mathbf{X}$$
+  * Haz la conexión directa con los Temas 1 y 2: en regresión lineal normal, $\mathbf{W} = \mathbf{I}_n$ y $a(\hat{\phi}) = \hat{\sigma}^2$, de modo que $\mathbf{I}(\hat{\boldsymbol{\beta}}) = \frac{1}{\hat{\sigma}^2}\mathbf{X}^T\mathbf{X}$ y su inversa es $\hat{\sigma}^2(\mathbf{X}^T\mathbf{X})^{-1}$, ¡exactamente la matriz de covarianzas de MCO que ya conocían!
+  * Subraya el paréntesis final: en Binomial (sin sobredispersión) y Poisson el parámetro de escala es conocido y vale $a(\phi) = 1$, mientras que en Normal, Gamma o modelos cuasi-verosimilitud hay que estimar $\hat{\phi}$.
+
+### Diapositiva 20: *Cálculo de los Errores Estándar*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Pasar de la matriz de información a la columna `Std. Error` que nos imprime R es un proceso mecánico de dos pasos: invertimos la matriz de información —porque a más información, menor varianza— y sacamos la raíz cuadrada de su diagonal."*
+* **Nivel técnico (qué señalar)**:
+  * Señala la fórmula $\text{SE}(\hat{\beta}_j) = \sqrt{[\mathbf{I}^{-1}(\hat{\boldsymbol{\beta}})]_{jj}}$ aclarando que el subíndice $jj$ indica el elemento $j$-ésimo de la diagonal principal de $\widehat{\text{Cov}}(\hat{\boldsymbol{\beta}}) = \mathbf{I}^{-1}(\hat{\boldsymbol{\beta}})$.
+  * Nota práctica en R: la matriz completa $\mathbf{I}^{-1}(\hat{\boldsymbol{\beta}})$ se extrae directamente con `vcov(modelo)`, y `sqrt(diag(vcov(modelo)))` coincide exactamente con los errores estándar de `summary(modelo)`.
+
+### Diapositiva 21: *Uso de los Errores Estándar en Inferencia*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Con los errores estándar ya tenemos todo lo que necesitamos para hacer inferencia individual sobre cada predictor: intervalos de confianza y contrastes de hipótesis (test de Wald) para responder si un coeficiente es significativamente distinto de cero."*
+  * *"Pero prestad máxima atención a la **advertencia final**: toda esta inferencia descansa en que las suposiciones de nuestra familia sean correctas. Si usamos Poisson cuando en realidad hay sobredispersión, los errores estándar saldrán artificialmente pequeños y creeremos que variables irrelevantes son significativas."*
+* **Nivel técnico (qué señalar)**:
+  * Lee las dos fórmulas:
+    * Intervalo de confianza de Wald al $(1-\alpha)\cdot 100\%$: $\hat{\beta}_j \pm z_{\alpha/2}\cdot \text{SE}(\hat{\beta}_j)$.
+    * Estadístico de Wald para $H_0: \beta_j = 0$: $z_j = \hat{\beta}_j / \text{SE}(\hat{\beta}_j) \stackrel{a}{\sim} N(0,1)$ bajo $H_0$.
+  * Añade dos matices de rigor:
+    1. Cuando el parámetro de dispersión $\phi$ se estima a partir de los datos (Normal, Gamma, cuasi-Poisson), R sustituye el estadístico $z$ por un estadístico $t$ (`t value` y `Pr(>|t|)`).
+    2. En muestras moderadas o con efectos muy grandes en logística (efecto Hauck-Donner), los intervalos basados en perfil de verosimilitud (`confint(modelo)` en R) y el test LRT suelen ser más fiables que el test de Wald.
+
+---
+
+## Bloque 3: Bondad de Ajuste, LRT y Diagnóstico de GLMs (Diapositivas 22 - 32)
+
+### Diapositiva 22: *La Deviance: Definición y Cálculo*
+
+* **Nivel conceptual (qué decir)**:
+  * *"En regresión lineal medíamos el error global con la Suma de Cuadrados Residuales (RSS). En GLM esa medida se generaliza en un concepto estrella que veréis en todas las salidas de R: la **deviance**."*
+  * *"La idea es comparar qué tan lejos está nuestro modelo de un **modelo saturado** idealizado, un modelo con tantos parámetros como observaciones que pasa exactamente por cada dato. Cuanto menor sea la distancia (deviance), mejor se ajusta nuestro modelo."*
+* **Nivel técnico (qué señalar)**:
+  * Señala la fórmula $D = 2\left[\ell(\text{modelo saturado}) - \ell(\text{modelo propuesto})\right] = 2\sum_{i=1}^n \left[\ell_i(y_i) - \ell_i(\hat{\mu}_i)\right]$.
+  * Explica por qué aparece el factor $2$: por el teorema de Wilks, $2\Delta\ell$ converge asintóticamente a una distribución $\chi^2$.
+  * **Matiz técnico (deviance escalada vs. no escalada)**: la expresión $2[\ell(\text{sat}) - \ell(\text{prop})]$ es estrictamente la **deviance escalada** $D^* = D / a(\phi)$. En Binomial y Poisson, donde $a(\phi) = 1$, ambas coinciden exactamente. En la familia Normal, la deviance no escalada es $D = \sum (y_i - \hat{\mu}_i)^2 = \text{RSS}$ y la escalada es $\text{RSS}/\sigma^2$, lo que hace visible la generalización directa de RSS.
+
+### Diapositiva 23: *Interpretando la Deviance: Una Comparación Clave*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Si R os dice que la deviance de vuestro modelo es `110.63`, ¿es mucho o es poco? Por sí solo, ese número no nos dice casi nada: depende del tamaño muestral y de la escala del problema."*
+  * *"Por eso R siempre nos muestra **dos** deviances seguidas: la **Deviance Nula** (el punto de partida sin predictores, solo con el intercepto) y la **Deviance Residual** (el error que queda tras meter nuestras variables). Lo que mide cuánto han ayudado realmente nuestros predictores es la **caída** entre una y otra."*
+* **Nivel técnico (qué señalar)**:
+  * Asocia las dos métricas con las líneas exactas de `summary(glm)` en R:
+    * `Null deviance` (con $n - 1$ grados de libertad): análogo a la Suma de Cuadrados Total (SST) en regresión lineal.
+    * `Residual deviance` (con $n - p$ grados de libertad, donde $p$ es el número total de parámetros): análogo a la Suma de Cuadrados Residual (RSS).
+  * La diferencia `Deviance Nula - Deviance Residual` es el análogo a la variabilidad explicada por el modelo y se contrasta formalmente mediante el test de la diapositiva siguiente.
+
+### Diapositiva 24: *El Test de la Razón de Verosimilitudes (LRT)*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Supongamos que ya tenemos un modelo con ciertas variables y nos preguntamos si merece la pena añadir una o varias variables nuevas. Al añadir predictores la deviance siempre baja (o se queda igual), pero ¿baja lo suficiente como para justificar un modelo más complejo?"*
+  * *"El **Test de la Razón de Verosimilitudes (LRT)** nos da el criterio formal bajo el principio de parsimonia: comparamos la caída de deviance contra una distribución $\chi^2$ cuyos grados de libertad son exactamente el número de parámetros añadidos."*
+* **Nivel técnico (qué señalar)**:
+  * Lee el estadístico $LRT = D_{\text{reducido}} - D_{\text{completo}} \sim \chi^2_{df}$ bajo $H_0$, donde $df = p_{\text{completo}} - p_{\text{reducido}}$.
+  * **Dos condiciones imprescindibles** que hay que recalcar para no cometer errores en la práctica:
+    1. Los modelos deben estar **anidados** (el reducido es un caso particular del completo fijando ciertos $\beta_j = 0$) y ajustados sobre **exactamente las mismas observaciones** (cuidado cuando una variable nueva tiene valores `NA` y recorta silenciosamente la muestra).
+    2. Esta distribución $\chi^2$ aplica cuando el parámetro de dispersión es conocido ($a(\phi)=1$, Binomial/Poisson). Cuando $\phi$ se estima (Normal, Gamma, cuasi-verosimilitud), el contraste adecuado en `anova()` es el test $F$ (`test = "F"`).
+
+### Diapositiva 25: *LRT en la Práctica: Ejemplo con R*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Veámoslo en vivo con un conjunto de datos clásico de R, `mtcars` (32 modelos de coches). Queremos predecir si un coche tiene transmisión manual o automática (`am`, variable binaria $0/1$). Ya tenemos el peso (`wt`) en el Modelo 1, y nos preguntamos si añadir la cilindrada (`disp`) aporta una mejora real."*
+  * *"En R esto se obtiene en una sola línea: `anova(m1, m2, test = "Chisq")`."*
+* **Nivel técnico (qué señalar)**:
+  * Lee columna a columna la tabla `Analysis of Deviance Table` proyectada en pantalla:
+    * `Model 1: am ~ wt` tiene `Resid. Df = 30` ($n = 32$ coches menos $2$ parámetros: intercepto y `wt`) y `Resid. Dev = 19.176`.
+    * `Model 2: am ~ wt + disp` tiene `Resid. Df = 29` ($32 - 3$) y `Resid. Dev = 17.785`.
+    * Diferencia de grados de libertad: `Df = 1` ($30 - 29$).
+    * Estadístico LRT (`Deviance`): $19.176 - 17.785 = 1.3913$.
+    * P-valor (`Pr(>Chi)`): $P(\chi^2_1 \ge 1.3913) = 0.2382$.
+
+### Diapositiva 26: *LRT en la Práctica: Interpretación del Resultado*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Al añadir la cilindrada, la deviance bajó de `19.176` a `17.785`, apenas `1.391` puntos. Con un grado de libertad, esa mejora tiene un p-valor de `0.238`, muy por encima de `0.05`. No rechazamos $H_0$: por principio de parsimonia nos quedamos con el modelo más sencillo `am ~ wt`."*
+  * **Pregunta a la clase**: *"¿Significa eso que la cilindrada no tiene nada que ver con que un coche sea manual o automático?"* (Guía la respuesta: no necesariamente; en `mtcars`, `wt` y `disp` tienen una correlación altísima, $r = 0.888$, porque los coches más pesados llevan motores más grandes. Una vez que ya sabemos el peso, la cilindrada aporta información redundante).
+* **Nivel técnico (qué señalar)**:
+  * Recalca el lenguaje estadístico riguroso: **"no rechazamos $H_0$"** (nunca "aceptamos que el efecto sea cero exacto").
+  * Conecta esta idea con la colinealidad del Tema 2 y la selección de variables del Tema 4: el LRT evalúa la contribución *marginal condicional* de `disp` **dado que `wt` ya está en el modelo**.
+
+### Diapositiva 27: *Diagnosis de GLMs*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Ajustar un GLM en R es facilísimo: una línea de código. Lo que separa a un buen analista de alguien que ejecuta código a ciegas es el **diagnóstico**: comprobar si el modelo que acabamos de ajustar realmente describe bien nuestros datos."*
+  * *"Vamos a organizar todo el diagnóstico alrededor de **tres preguntas claras**: (1) ¿es correcta la forma del modelo y el enlace?, (2) ¿hemos elegido bien la distribución y su dispersión?, y (3) ¿hay observaciones concretas que estén secuestrando nuestros coeficientes?"*
+* **Nivel técnico (qué señalar)**:
+  * Explica por qué los residuos crudos $e_i = y_i - \hat{\mu}_i$ son engañosos en GLMs: como la varianza depende de $\mu_i$, un residuo crudo de $+2$ cuando $\hat{\mu}_i = 1$ es enorme, mientras que cuando $\hat{\mu}_i = 100$ es minúsculo. Necesitamos residuos que escalen por la varianza esperada de cada observación.
+
+### Diapositiva 28: *Tipos de Residuos en GLMs*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Para arreglar esa escala variable usamos dos grandes familias de residuos. Los **residuos de Pearson** hacen exactamente lo que dicta la intuición: restan observado menos predicho y dividen por la desviación estándar teórica del punto."*
+  * *"Los **residuos deviance**, en cambio, miden cuánto contribuye cada observación individual a la deviance total, con el signo de si nos quedamos cortos o nos pasamos. Para hacer gráficos de diagnóstico, suelen comportarse mucho mejor que los de Pearson porque son más simétricos."*
+* **Nivel técnico (qué señalar)**:
+  * Lee y conecta ambas fórmulas con métricas que ya han visto o verán:
+    * Residuo de Pearson: $r_i = \frac{y_i - \hat{\mu}_i}{\sqrt{V(\hat{\mu}_i)}}$. Su suma de cuadrados da el estadístico chi-cuadrado de Pearson: $\sum_{i=1}^n r_i^2 = X^2_{\text{Pearson}}$ (clave en la Diapositiva 30 y 56).
+    * Residuo deviance: $d_i = \text{sign}(y_i - \hat{\mu}_i)\sqrt{2[\ell_i(y_i) - \ell_i(\hat{\mu}_i)]}$. Su suma de cuadrados recupera exactamente la deviance residual: $\sum_{i=1}^n d_i^2 = D$.
+  * Indica los comandos en R: `residuals(modelo, type = "deviance")` (es la opción por defecto en `glm()`) y `residuals(modelo, type = "pearson")`.
+
+### Diapositiva 29: *¿La Forma del Modelo es Correcta?*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Primera gran pregunta del diagnóstico: ¿hemos especificado bien la estructura $g(\mu) = \mathbf{X}\boldsymbol{\beta}$? Por ejemplo, ¿nos falta un término cuadrático $X^2$ o hemos elegido un enlace inadecuado?"*
+  * *"Lo primero que miramos es el gráfico de residuos deviance frente al predictor lineal ajustado $\hat{\eta}_i$. Si el modelo está bien, deberíamos ver una nube sin tendencia; si aparece una sonrisa o una curva clara, hay estructura sin capturar."*
+* **Nivel técnico (qué señalar)**:
+  * Explica por qué en GLMs se grafica frente a $\hat{\eta}_i$ (la escala lineal) en vez de frente a $\hat{\mu}_i$: al pasar por $g^{-1}$ (por ejemplo la exponencial en Poisson), los valores $\hat{\mu}_i$ suelen apiñarse a la izquierda y estirar unos pocos puntos a la derecha, ocultando patrones.
+  * Explica brevemente las otras dos herramientas:
+    * **Residuos parciales** (*component + residual plots*, `car::crPlots()`): permiten detectar no linealidad variable por variable.
+    * **Linktest** (test de Pregibon): reajustar el GLM usando como únicos predictores $\hat{\eta}$ y $\hat{\eta}^2$; si el coeficiente de $\hat{\eta}^2$ resulta significativo, sugiere que falta especificación o que la función de enlace es inadecuada.
+  * **Advertencia práctica para regresión logística binaria ($0/1$)**: en datos estrictamente binarios, el gráfico de residuos frente a $\hat{\eta}_i$ forma inevitablemente dos curvas paralelas (una para $y_i = 1$ y otra para $y_i = 0$) incluso cuando el modelo es perfecto; en ese caso conviene usar residuos agrupados (*binned residuals*) o residuos cuantílicos aleatorizados (paquete `DHARMa`).
+
+### Diapositiva 30: *¿La Distribución es Correcta?*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Segunda pregunta del diagnóstico: ¿la variabilidad real de nuestros datos encaja con la que promete la distribución elegida? El enemigo público número uno en datos de conteo es la **sobredispersión**: cuando la varianza real supera claramente lo que Poisson supone ($\text{Var}(Y) = \mu$)."*
+  * *"Recordad el peligro silencioso de la sobredispersión: los coeficientes $\hat{\boldsymbol{\beta}}$ suelen seguir siendo razonables, pero los errores estándar salen falsamente pequeños y el modelo nos hace creer en efectos que no existen."*
+* **Nivel técnico (qué señalar)**:
+  * Señala el estimador del parámetro de dispersión basado en residuos de Pearson:
+    $$\hat{\phi} = \frac{\sum_{i=1}^n r_i^2}{n - p}$$
+    donde $p$ es el número total de parámetros estimados (incluyendo intercepto). Bajo equidispersión (Poisson o Binomial sin sobredispersión), esperamos $\hat{\phi} \approx 1$; valores claramente mayores que $1$ (regla práctica habitual: $> 1.5$ o contrastados formalmente) revelan sobredispersión.
+  * Presenta el adelanto de la solución que desarrollaremos en el Bloque 6: la **Binomial Negativa**, cuya varianza $\text{Var}(Y) = \mu + \alpha\mu^2$ añade un término cuadrático flexible.
+  * **Matiz técnico clave**: en regresión logística **binaria pura** (datos individuales $0/1$, ensayos $m_i = 1$), la varianza de una Bernoulli está matemáticamente fijada a $p_i(1-p_i)$, por lo que la sobredispersión no es identificable del mismo modo que en datos Binomiales agrupados ($m_i > 1$) o de Poisson.
+
+### Diapositiva 31: *¿La Distribución es Correcta? (Gráfico Q-Q)*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Igual que en regresión lineal revisábamos el Q-Q plot para chequear la forma de los residuos, en GLMs podemos construir un Q-Q plot con los **residuos deviance**."*
+  * *"Aunque la variable $Y$ no sea normal, si la distribución elegida es correcta y no estamos ante conteos extremos muy pequeños, los residuos deviance tienden a aproximarse a una normal y los puntos deberían alinearse razonablemente sobre la diagonal."*
+* **Nivel técnico (qué señalar)**:
+  * **Matiz pedagógico imprescindible en esta diapositiva** (evita que los alumnos se asusten al ejecutar `plot(modelo)` en el laboratorio): esta aproximación normal de los residuos deviance funciona muy bien en modelos **Gamma**, **Normales** y **Poisson con medias moderadas o altas** ($\lambda$ no muy cercano a $0$), pero **NO se cumple en regresión logística binaria ($0/1$)** ni en Poisson con tasas muy bajas ($\lambda < 1$). En logística binaria, aunque el modelo sea 100% correcto, los residuos deviance se dividen en dos ramas y el Q-Q plot se curva sistemáticamente.
+  * Como referencia moderna para el laboratorio en R, menciona que para datos discretos binarios o conteos bajos se utilizan hoy **residuos cuantílicos aleatorizados** (por ejemplo, el paquete `DHARMa`), cuyo Q-Q plot sí debe quedar perfectamente recto bajo especificación correcta.
+
+### Diapositiva 32: *¿Hay Observaciones que Distorsionan el Modelo?*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Tercera y última pregunta del diagnóstico: ¿hay uno o dos datos extremos que estén tirando de todo el modelo hacia ellos? Como en regresión lineal, combinamos dos ingredientes: cuánto destaca un punto por sus predictores (**leverage**) y cuánto se equivoca el modelo en él (**residuo**). Un punto solo es verdaderamente peligroso si combina ambas cosas."*
+  * *"Regla de oro que debéis recordar siempre: detectar un punto influyente **nunca** significa borrarlo automáticamente. Primero se investiga si es un error de registro (por ejemplo, una edad de 250 años) o un caso real valioso que revela una limitación del modelo."*
+* **Nivel técnico (qué señalar)**:
+  * Recorre las tres medidas exactas en pantalla:
+    * **Leverage generalizado ($h_i$)**: diagonal de $\mathbf{H} = \mathbf{W}^{1/2}\mathbf{X}(\mathbf{X}^T\mathbf{W}\mathbf{X})^{-1}\mathbf{X}^T\mathbf{W}^{1/2}$. Nótese la diferencia clave con MCO: en un GLM el leverage depende de $\mathbf{X}$ **y también de los pesos $\mathbf{W}$** (así, en logística un punto extremo en $\mathbf{X}$ con $p_i \approx 0$ o $1$ tiene $w_i \approx 0$ y, por tanto, un leverage muy bajo).
+    * **Distancia de Cook para GLMs ($D_i$)**: lee ambas formas equivalentes proyectadas,
+      $$D_i = \frac{r_i^2 h_i}{p \hat{\phi} (1-h_i)^2} = \frac{r_{P,i}^2 h_i}{p(1-h_i)}, \quad \text{con } r_{P,i} = \frac{r_i}{\sqrt{\hat{\phi}(1-h_i)}}$$
+      explicando que $r_{P,i}$ es el residuo de Pearson *estandarizado* y que esta expresión es la aproximación de un paso (*one-step*) que calcula `cooks.distance(modelo)` en R.
+    * **DFBETAS**: cambio estandarizado en cada $\hat{\beta}_j$ al omitir la observación $i$ (`dfbetas(modelo)`).
+  * Señala el gráfico estándar en R: `plot(modelo, which = 5)` (*Residuals vs Leverage* con contornos de Cook).
+
+---
+
+## Bloque 4: Regresión Logística (Diapositivas 33 - 46)
+
+### Diapositiva 33: *Regresión Logística: Modelando Eventos Binarios*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Con toda la teoría general ya en el bolsillo, pasamos a ver en profundidad los dos GLM más utilizados en el mundo real. Empezamos por el rey absoluto de la clasificación probabilística: la **regresión logística**."*
+  * *"Siempre que vuestra variable objetivo tenga solo dos estados —cliente abandona o no, transacción fraudulenta o legítima, paciente diabético o sano— la regresión logística será vuestro punto de partida natural."*
+* **Nivel técnico (qué señalar)**:
+  * Recorre los 4 pilares de la diapositiva para anunciar la hoja de ruta del bloque: (1) fundamentos sigmoide/logit, (2) estimación MLE/IRLS + verificación en R, (3) interpretación vía Odds Ratios, y (4) bondad de ajuste y validación como clasificador (matriz de confusión y curva ROC/AUC).
+
+### Diapositiva 34: *Fundamentos: El Problema y la Función Sigmoide*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Si intentamos ajustar una recta $p = \beta_0 + \beta_1 X$ a un evento $0/1$, tarde o temprano la recta se sale por arriba de $1$ o por abajo de $0$: nos diría que un paciente tiene una probabilidad de enfermar del $-20\%$ o del $135\%$, lo cual no tiene ningún sentido."*
+  * *"La solución es doblar esa recta en forma de 'S' mediante la **función sigmoide** (o logística). Da igual lo grande o pequeño que sea el predictor lineal $\eta$: si $\eta \to +\infty$, la probabilidad se acerca suavemente a $1$ sin pasarlo nunca; si $\eta \to -\infty$, se acerca a $0$; y justo cuando $\eta = 0$, la probabilidad es exactamente $0.5$."*
+* **Nivel técnico (qué señalar)**:
+  * Señala la ecuación $P(Y = 1 \mid X) = \frac{1}{1 + e^{-\eta}} = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X_1 + \dots)}}$ y comenta la forma equivalente $\frac{e^\eta}{1 + e^\eta}$.
+  * Haz notar la derivada elegante de la sigmoide: si $p(\eta) = (1 + e^{-\eta})^{-1}$, entonces $\frac{dp}{d\eta} = p(1-p)$, que es máxima en $p = 0.5$ (pendiente máxima $= 0.25$) y tiende a $0$ en las colas —exactamente lo que explica por qué el efecto de aumentar $X_j$ una unidad sobre la *probabilidad* no es constante, sino que depende del punto de partida.
+
+### Diapositiva 35: *Fundamentos: La Función de Enlace Logit*
+
+* **Nivel conceptual (qué decir)**:
+  * *"La diapositiva anterior iba de $\eta$ hacia $p$ (la sigmoide). Esta diapositiva hace exactamente el viaje de vuelta, de $p$ hacia $\eta$: esa inversa es la **función de enlace logit**."*
+  * *"Gracias al logit, convertimos un problema acotado en el intervalo $(0,1)$ en una ecuación perfectamente lineal en toda la recta $(-\infty, +\infty)$."*
+* **Nivel técnico (qué señalar)**:
+  * Verifica la inversión paso a paso si ayuda al grupo:
+    $$p = \frac{e^\eta}{1 + e^\eta} \implies 1 - p = \frac{1}{1 + e^\eta} \implies \frac{p}{1-p} = e^\eta \implies \log\left(\frac{p}{1-p}\right) = \eta$$
+  * Recalca el dominio abierto $(0,1)$: en $p = 0$ el logit tiende a $-\infty$, en $p = 0.5$ vale $\log(1) = 0$, y en $p = 1$ tiende a $+\infty$. De nuevo, $\log$ es siempre logaritmo natural ($\ln$).
+
+### Diapositiva 36: *Estimación por Máxima Verosimilitud (MLE)*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Apliquemos ahora el principio MLE del Bloque 2 a una muestra binaria $y_i \in \{0,1\}$. La expresión $p_i^{y_i}(1-p_i)^{1-y_i}$ es un truco de escritura muy ingenioso: cuando $y_i = 1$ nos devuelve $p_i$, y cuando $y_i = 0$ nos devuelve $1-p_i$. Multiplicamos esas probabilidades para todos los individuos y tomamos logaritmos."*
+  * *"Al derivar e igualar a cero obtenemos una condición preciosa: la suma ponderada de los errores $(y_i - p_i)$ por cada predictor debe ser exactamente cero."*
+* **Nivel técnico (qué señalar)**:
+  * Verifica cómo se obtiene la forma compacta de $\ell(\boldsymbol{\beta})$ a partir de $L(\boldsymbol{\beta})$:
+    $$\sum_{i=1}^n \left[y_i \log p_i + (1-y_i)\log(1-p_i)\right] = \sum_{i=1}^n \left[y_i \log\frac{p_i}{1-p_i} + \log(1-p_i)\right] = \sum_{i=1}^n \left[y_i \mathbf{x}_i^T\boldsymbol{\beta} - \log(1 + e^{\mathbf{x}_i^T\boldsymbol{\beta}})\right]$$
+  * Señala las **ecuaciones de puntuación** (*score equations*): $\frac{\partial \ell}{\partial \beta_j} = \sum_{i=1}^n x_{ij}(y_i - p_i) = 0$.
+  * Detalle notable para el intercepto ($x_{i0} = 1$): la primera ecuación impone $\sum_{i=1}^n y_i = \sum_{i=1}^n \hat{p}_i$, es decir, la suma de las probabilidades predichas por el modelo siempre coincide exactamente con el número total de casos positivos observados en entrenamiento.
+  * Observa por qué no hay solución cerrada: $p_i = (1 + e^{-\mathbf{x}_i^T\boldsymbol{\beta}})^{-1}$ entra de manera no lineal en $\boldsymbol{\beta}$.
+
+### Diapositiva 37: *Implementación del Algoritmo IRLS*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Aquí vemos cómo se concreta el motor IRLS de la Diapositiva 17 para el caso particular de la regresión logística. En cada iteración recalculamos tres piezas: las probabilidades actuales $p_i^{(t)}$, los pesos $w_i = p_i(1-p_i)$ y una 'respuesta sintética' $z_i$, y resolvemos un mínimos cuadrados ponderados."*
+* **Nivel técnico (qué señalar)**:
+  * Conecta cada pieza con la teoría del Bloque 2:
+    * $w_i = p_i(1-p_i)$, ya deducido en la Diapositiva 16 a partir de $w_i = 1/(V(p_i)[g'(p_i)]^2)$.
+    * $z_i = \eta_i^{(t)} + \frac{y_i - p_i^{(t)}}{w_i^{(t)}}$ procede de la fórmula general de IRLS $z_i = \eta_i + (y_i - \mu_i)g'(\mu_i)$ (aproximación de Taylor de orden 1 de $g(y_i)$ alrededor de $\mu_i$), dado que para el logit $g'(p_i) = \frac{1}{p_i(1-p_i)} = \frac{1}{w_i}$.
+    * Actualización matricial: $\boldsymbol{\beta}^{(t+1)} = (\mathbf{X}^T\mathbf{W}^{(t)}\mathbf{X})^{-1}\mathbf{X}^T\mathbf{W}^{(t)}\mathbf{z}^{(t)}$, donde $\mathbf{W}^{(t)} = \text{diag}(w_1^{(t)}, \dots, w_n^{(t)})$.
+
+### Diapositiva 38: *Ejemplo: Verificación de la Estimación MLE en R*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Comprobemos que todo esto no se queda en álgebra de pizarra. En R tomamos el conjunto de datos médico `Pima.tr` (del paquete `MASS`, 200 mujeres de la tribu Pima evaluadas por diabetes) y ajustamos `glm(type ~ glu + bmi, data = Pima.tr, family = binomial)`."*
+  * *"Mirad lo rápido que trabaja IRLS: en tan solo **4 iteraciones** converge al óptimo global de la log-verosimilitud."*
+* **Nivel técnico (qué señalar)**:
+  * Lee exactamente los resultados de R proyectados:
+    * `(Intercept) = -8.21610630`, `glu = 0.03571601`, `bmi = 0.09001639`. (Ambos predictores tienen signo positivo: mayor glucosa y mayor índice de masa corporal aumentan el logit —y por tanto la probabilidad— de diabetes).
+    * `Log-verosimilitud en el óptimo: -99.2352`.
+    * `Iteraciones necesarias: 4` y `¿Convergió? TRUE`.
+  * Conexión directa con la Diapositiva 41: en datos binarios $0/1$, como la log-verosimilitud del modelo saturado es $0$, la deviance residual de este modelo es exactamente $D = -2 \times (-99.2352) = 198.47$ (frente a una deviance nula de $256.414$, lo que da un Pseudo $R^2$ de McFadden de $1 - 198.47/256.414 = 0.226$).
+
+### Diapositiva 39: *Interpretación: Probabilidad vs. Odds*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Acabamos de ver que `bmi` tiene un coeficiente de `0.090`. Si le decimos a un médico 'por cada punto de IMC el log-odds de diabetes sube 0.090', nos mirará con cara de póker. Necesitamos traducir los coeficientes a un lenguaje comprensible, y el primer paso es entender qué es un **odds**."*
+  * *"El odds no es más que el cociente entre lo que está a favor y lo que está en contra, exactamente como en las apuestas deportivas. Si la probabilidad de llover es $0.8$ (80%) y la de no llover es $0.2$ (20%), el odds es $0.8/0.2 = 4$: es **4 veces más probable** que llueva a que no llueva (4 a 1)."*
+* **Nivel técnico (qué señalar)**:
+  * Fija tres valores de referencia mentales para los estudiantes:
+    * $p = 0.5 \implies \text{odds} = 1$ (equilibrio 1 a 1; $\log(\text{odds}) = 0$).
+    * $p = 0.8 \implies \text{odds} = 4$ ($\log(4) > 0$).
+    * $p = 0.2 \implies \text{odds} = 0.25$ (1 a 4; $\log(0.25) < 0$).
+  * Señala el rango: mientras $p \in (0,1)$, $\text{odds} \in (0, +\infty)$, y al tomar logaritmo recuperamos $\log(\text{odds}) = \mathbf{X}\boldsymbol{\beta} \in (-\infty, +\infty)$.
+
+### Diapositiva 40: *Interpretación: El Odds Ratio (OR)*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Ahora viene el golpe maestro interpretativo de la regresión logística: si exponenciamos cualquier coeficiente, $e^{\beta_j}$, obtenemos el **Odds Ratio (OR)**. Mientras que en regresión lineal los coeficientes tenían un efecto **aditivo** (sumar $\beta_j$), en logística tienen un efecto **multiplicativo** sobre los odds."*
+  * *"Veamos el ejemplo en pantalla: si $\beta_{\text{BMI}} = 0.08$, entonces $\text{OR} = e^{0.08} \approx 1.083$. Eso significa que, manteniendo constantes el resto de variables, por cada unidad adicional de IMC los **odds** de diabetes se multiplican por $1.083$, es decir, aumentan un $8.3\%$."*
+  * **Pregunta trampa a la clase**: *"¿Puedo decir entonces que subir 1 punto de IMC aumenta la **probabilidad** de diabetes un $8.3\%$?"*
+  * *"¡Cuidado, error clásico de examen y de prensa! NO aumenta la probabilidad un $8.3\%$; aumenta los **odds** un $8.3\%$. Solo cuando el evento es muy raro ($p$ muy pequeña, por ejemplo $< 0.05$), $1-p \approx 1$ y el Odds Ratio se parece a la razón de probabilidades (riesgo relativo)."*
+* **Nivel técnico (qué señalar)**:
+  * Demuestra en dos líneas de pizarra por qué $e^{\beta_j}$ es el cociente de odds (*Odds Ratio*):
+    $$\frac{\text{odds}(X_j + 1)}{\text{odds}(X_j)} = \frac{e^{\beta_0 + \dots + \beta_j(X_j + 1) + \dots}}{e^{\beta_0 + \dots + \beta_j X_j + \dots}} = e^{\beta_j}$$
+  * Señala las tres zonas de decisión en pantalla: $\text{OR} > 1$ ($\beta_j > 0$, factor de riesgo / aumenta el odds), $\text{OR} < 1$ ($\beta_j < 0$, factor protector / reduce el odds), $\text{OR} = 1$ ($\beta_j = 0$, sin efecto).
+  * Conecta con la Diapositiva 38: en `Pima.tr` obtuvimos $\hat{\beta}_{\text{bmi}} = 0.090 \implies \text{OR} = e^{0.090} \approx 1.094$ ($+9.4\%$ en los odds por unidad de IMC) y $\hat{\beta}_{\text{glu}} = 0.0357 \implies \text{OR} \approx 1.036$ por mg/dl (o $e^{10 \times 0.0357} \approx 1.43$, es decir, $+43\%$ en los odds por cada $+10$ mg/dl de glucosa).
+
+### Diapositiva 41: *Bondad de Ajuste: Deviance y Pseudo $R^2$*
+
+* **Nivel conceptual (qué decir)**:
+  * *"En regresión lineal todos corríamos a mirar el $R^2$. En regresión logística el $R^2$ clásico deja de tener sentido porque la respuesta es $0/1$ y la varianza no es constante. En su lugar nos apoyamos en la **deviance binomial** y en una familia de índices llamados **Pseudo $R^2$**."*
+  * *"Una advertencia clave sobre los Pseudo $R^2$: **no** se leen como 'porcentaje de varianza explicada', sino como una medida relativa de cuánto mejora la verosimilitud de nuestro modelo respecto al modelo nulo sin predictores."*
+* **Nivel técnico (qué señalar)**:
+  * Señala la fórmula de la deviance binomial:
+    $$D = 2\sum_{i=1}^{n}\left[y_i \log\left(\frac{y_i}{\hat{p}_i}\right) + (1-y_i)\log\left(\frac{1-y_i}{1-\hat{p}_i}\right)\right]$$
+    con el convenio estándar $0\log 0 = 0$.
+  * Haz notar el caso binario $y_i \in \{0, 1\}$: los numeradores $y_i \log y_i$ y $(1-y_i)\log(1-y_i)$ valen ambos $0$, por lo que la fórmula se simplifica exactamente a:
+    $$D = -2\sum_{i=1}^{n}\left[y_i\log \hat{p}_i + (1-y_i)\log(1-\hat{p}_i)\right] = -2\ell(\hat{\boldsymbol{\beta}})$$
+    Conecta esto con *Machine Learning*: minimizar la deviance binomial equivale exactamente a minimizar la pérdida de **entropía cruzada binaria** (*binary cross-entropy* / *log-loss*).
+
+### Diapositiva 42: *Bondad de Ajuste: Tipos de Pseudo $R^2$*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Aquí tenéis las tres versiones de Pseudo $R^2$ que os encontraréis en artículos y paquetes de R. El más famoso es el **Pseudo $R^2$ de McFadden**, que simplemente mide qué proporción de la log-verosimilitud del modelo nulo hemos logrado reducir."*
+  * *"Fijaos en el rango orientativo de McFadden: a diferencia del $R^2$ lineal, donde un $0.30$ nos parecería flojo, en logística un McFadden entre **0.2 y 0.4** ya representa un ajuste excelente."*
+* **Nivel técnico (qué señalar)**:
+  * Compara las tres fórmulas:
+    * **McFadden**: $R^2_{\text{McFadden}} = 1 - \frac{\ell_{\text{modelo}}}{\ell_{\text{nulo}}}$. (Como $D = -2\ell$ en datos binarios, coincide con $1 - D_{\text{residual}}/D_{\text{nula}}$; en el modelo de la Diapositiva 38 vale $0.226$).
+    * **Cox-Snell**: $R^2_{\text{Cox-Snell}} = 1 - \left(\frac{L_{\text{nulo}}}{L_{\text{modelo}}}\right)^{2/n}$. Señala su limitación teórica: en modelos discretos, como $L_{\text{modelo}} \le 1$, su valor máximo alcanzable es $1 - (L_{\text{nulo}})^{2/n} < 1$, nunca puede llegar a $1$ ni siquiera en un ajuste perfecto.
+    * **Nagelkerke**: divide Cox-Snell por su techo teórico $1 - (L_{\text{nulo}})^{2/n}$ para reescalarlo exactamente al intervalo $[0, 1]$.
+
+### Diapositiva 43: *Validación: La Matriz de Confusión*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Hasta aquí hemos evaluado el ajuste interno del modelo. Pero en predicción aplicada lo que importa es cómo se comporta el modelo con datos **nuevos**. Recordad algo fundamental: la regresión logística devuelve **probabilidades** (por ejemplo $\hat{p}_i = 0.73$), no etiquetas binarias."*
+  * *"Para convertir esas probabilidades en una decisión ('Sí' / 'No') fijamos un **umbral de decisión** (por defecto $0.5$, aunque enseguida veremos que no siempre es el mejor) y cruzamos lo predicho contra la realidad en la **matriz de confusión**."*
+* **Nivel técnico (qué señalar)**:
+  * Recorre las cuatro celdas y su conexión con contrastes de hipótesis:
+    * **VP** (Verdaderos Positivos) y **VN** (Verdaderos Negativos): aciertos.
+    * **FP** (Falsos Positivos): falsa alarma (análogo al Error Tipo I).
+    * **FN** (Falsos Negativos): caso positivo no detectado (análogo al Error Tipo II).
+  * Enfatiza que el coste asimétrico de FP vs. FN depende del dominio: en cribado de cáncer o fraude bancario, un FN suele ser mucho más costoso que un FP, motivo por el cual el umbral $0.5$ es solo un punto de partida y no una ley universal.
+
+### Diapositiva 44: *Validación: Métricas de Clasificación*
+
+* **Nivel conceptual (qué decir)**:
+  * *"De esa tabla $2 \times 2$ nacen las tres métricas esenciales de clasificación."*
+  * **Pregunta a la clase**: *"Imaginad un banco donde solo el $1\%$ de las transacciones con tarjeta son fraude. Yo construyo un 'modelo' tonto que no usa ningún dato y siempre predice 'No fraude'. ¿Qué **Exactitud (Accuracy)** obtiene mi modelo inútil?"* (Respuesta inmediata: **$99\%$**, pero con **Sensibilidad = $0\%$** porque no atrapa ni un solo fraude).
+  * *"Por eso la Exactitud sola es peligrosa en datos desbalanceados y siempre debemos mirar conjuntamente la **Sensibilidad** (cuántos positivos reales cazamos) y la **Especificidad** (cuántos negativos reales descartamos bien)."*
+* **Nivel técnico (qué señalar)**:
+  * Verifica los denominadores de las tres fórmulas (suelen confundirse en exámenes):
+    * $\text{Exactitud} = \frac{VP + VN}{VP + VN + FP + FN}$.
+    * $\text{Sensibilidad (Recall / Tasa de VP)} = \frac{VP}{VP + FN}$ (denominador = **todos los positivos reales**).
+    * $\text{Especificidad (Tasa de VN)} = \frac{VN}{VN + FP}$ (denominador = **todos los negativos reales**).
+  * Anticipa el compromiso (*trade-off*): al bajar el umbral de decisión (ej. de $0.5$ a $0.2$), clasificamos más observaciones como positivas $\implies$ sube la Sensibilidad, pero baja la Especificidad (aumentan los FP). Ese compromiso motiva la diapositiva siguiente.
+
+### Diapositiva 45: *Validación: Curva ROC y AUC*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Como cada umbral de decisión produce una matriz de confusión distinta, ¿cómo evaluamos la calidad intrínseca de un modelo logístico **sin depender de un único umbral arbitrario**? Barriendo **todos** los umbrales posibles desde $1$ hasta $0$ y dibujando la **Curva ROC**."*
+  * *"La diagonal representa tirar una moneda al aire ($\text{AUC} = 0.5$). Cuanto más se abombe nuestra curva hacia la esquina superior izquierda (Sensibilidad $= 1$, Falsos Positivos $= 0$), mejor separa el modelo los casos positivos de los negativos."*
+* **Nivel técnico (qué señalar)**:
+  * Comprueba los ejes de la curva ROC:
+    * Eje Y: **Sensibilidad** ($\text{TPR}$).
+    * Eje X: **$1 - \text{Especificidad}$** ($\text{FPR}$, Tasa de Falsos Positivos).
+    * Extremos: umbral $\infty$ (todo se predice negativo) está en $(0,0)$; umbral $0$ (todo se predice positivo) está en $(1,1)$.
+  * Comparte la interpretación probabilística exacta del **AUC** (estadístico de Mann-Whitney-Wilcoxon): el AUC es exactamente la probabilidad de que, si elegimos al azar un individuo positivo y uno negativo, el modelo asigne una probabilidad predicha más alta al positivo que al negativo.
+  * Recuerda las referencias orientativas: $0.5$ azar, $0.7\text{--}0.8$ aceptable, $> 0.8$ buena discriminación, $1.0$ separación perfecta.
+
+### Diapositiva 46: *Caso Práctico: Resultados del Modelo Logístico*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Cerramos la regresión logística con un caso completo de principio a fin y con **validación real fuera de muestra**: entrenamos el modelo `type ~ npreg + glu + bmi` en `Pima.tr` (200 pacientes) y lo evaluamos en un conjunto completamente separado, `Pima.te` (332 pacientes)."*
+  * *"Fijaos en lo que nos cuentan los números y el gráfico juntos: la exactitud global es casi del $80\%$ (`0.798`) y el AUC alcanza `0.848`, lo que indica una buena capacidad discriminativa."*
+  * **Pregunta de análisis clínico a la clase**: *"Mirad la matriz de confusión de la izquierda con el umbral de $0.5$. De los $46 + 63 = 109$ pacientes que **sí** tienen diabetes, ¿cuántos detectamos y cuántos se nos escapan?"* (Detectamos $63$, es decir, sensibilidad del $57.8\%$, y se nos escapan $46$ falsos negativos, mientras que acertamos $202/223 = 90.6\%$ de los sanos). *"Si esto fuera una prueba de cribado hospitalario, ¿qué haríais con el umbral mirando la curva ROC de la derecha?"* (Bajarlo por debajo de $0.5$ para subir por la curva ROC hacia mayor sensibilidad aceptando un aumento controlado de falsos positivos).
+* **Nivel técnico (qué señalar)**:
+  * Verifica en voz alta las cifras exactas proyectadas en pantalla (`Pima.te`, $n = 332$):
+    * Matriz de confusión (`Predicted` en filas, `Actual` en columnas): $VN = 202$, $FN = 46$, $FP = 21$, $VP = 63$.
+    * Exactitud: $(202 + 63)/332 = 265/332 = 0.798$ (compárala con la prevalencia de la clase mayoritaria `No`: $223/332 = 67.2\%$, de modo que el modelo mejora claramente el clasificador base).
+    * Sensibilidad $= 63/109 = 57.8\%$; Especificidad $= 202/223 = 90.6\%$.
+    * Curva ROC a la derecha en ejes `1 - Especificidad` vs. `Sensibilidad`, con `AUC = 0.848` claramente abombada por encima de la diagonal gris.
+
+---
+
+## Bloque 5: Regresión de Poisson (Diapositivas 47 - 58)
+
+### Diapositiva 47: *Regresión de Poisson: Modelando Datos de Conteo*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Cambiamos completamente de naturaleza de dato: dejamos el $0/1$ y pasamos a **conteos de eventos** que ocurren en un intervalo fijo de tiempo o espacio —número de accidentes por intersección al mes, llamadas a un *call center* por hora, visitas a urgencias por día."*
+  * *"Estos valores son enteros no negativos ($0, 1, 2, \dots$), suelen ser asimétricos a la derecha y, cuando el conteo medio es bajo, tienen muchos ceros. La distribución natural de partida para modelarlos es la **distribución de Poisson**."*
+* **Nivel técnico (qué señalar)**:
+  * Señala la función de masa de probabilidad $P(Y = y) = \frac{e^{-\lambda}\lambda^y}{y!}$ para $y \in \{0, 1, 2, \dots\}$, con un único parámetro $\lambda > 0$ (la tasa media esperada).
+  * **Nota práctica útil**: cuando los conteos no se observan sobre el mismo intervalo o exposición (por ejemplo, accidentes en tramos de distinta longitud o casos en municipios con distinta población $E_i$), en R se incorpora un término **`offset(log(E_i))`** con coeficiente fijado a $1$ para modelar la tasa $\lambda_i / E_i$.
+
+### Diapositiva 48: *El Modelo de Regresión de Poisson*
+
+* **Nivel conceptual (qué decir)**:
+  * *"¿Por qué no modelamos directamente $\lambda = \beta_0 + \beta_1 X_1 + \dots$? Por el mismo motivo que fallaba la recta en logística: una combinación lineal puede dar valores **negativos**, y no puede haber $-3.2$ accidentes esperados en una intersección."*
+  * *"Al elegir la **función de enlace logarítmica** $\log(\lambda) = \mathbf{X}\boldsymbol{\beta}$, cuando despejamos la tasa obtenemos $\lambda = e^{\mathbf{X}\boldsymbol{\beta}}$, que es **automáticamente positiva** para cualquier valor de los predictores y de los coeficientes."*
+* **Nivel técnico (qué señalar)**:
+  * Señala el paso de $\log(\lambda) = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p$ a la forma exponencial $\lambda = e^{\beta_0}\cdot e^{\beta_1 X_1}\cdots e^{\beta_p X_p}$, que revela de inmediato la naturaleza **multiplicativa** del modelo (análogo a los odds en logística, pero aquí aplicado directamente a la media esperada $\lambda$).
+  * Recuerda que $\log$ es el enlace **canónico** de la distribución de Poisson (Diapositiva 13).
+
+### Diapositiva 49: *Supuestos y Limitaciones Clave*
+
+* **Nivel conceptual (qué decir)**:
+  * *"La distribución de Poisson es elegante porque tiene un solo parámetro $\lambda$, pero esa simplicidad tiene un precio muy exigente: impone que la **varianza sea exactamente igual a la media** (**equidispersión**)."*
+  * *"En los datos reales esa restricción se rompe con frecuencia por dos motivos principales: que haya más variabilidad de la esperada (**sobredispersión**, donde recurrimos a la **Binomial Negativa**) o que haya una avalancha anormal de ceros (**exceso de ceros**, donde usamos modelos **ZIP**, *Zero-Inflated Poisson*)."*
+* **Nivel técnico (qué señalar)**:
+  * **Matiz técnico fundamental (trampa frecuente en clase)**: la condición $E(Y) = \text{Var}(Y) = \lambda$ es una propiedad **condicional** dado el vector de predictores: $E(Y_i \mid \mathbf{x}_i) = \text{Var}(Y_i \mid \mathbf{x}_i) = \lambda_i$. **Nunca** se debe diagnosticar sobredispersión comparando simplemente la media marginal `mean(y)` con la varianza marginal `var(y)` de la columna $Y$ sin ajustar el modelo (como demostraremos con el ejemplo de la Diapositiva 58).
+  * Aclara brevemente la diferencia conceptual entre sobredispersión general (Binomial Negativa) y exceso estructural de ceros (ZIP: mezcla de dos procesos, uno que genera "ceros estructurales" —por ejemplo, personas que nunca conducen y tienen 0 accidentes siempre— y otro Poisson para quienes sí están expuestos).
+
+### Diapositiva 50: *Interpretación de Coeficientes*
+
+* **Nivel conceptual (qué decir)**:
+  * *"¡Buenas noticias! Si ya entendisteis el Odds Ratio en regresión logística, la interpretación en Poisson es igual de mecánica y **todavía más fácil de explicar**."*
+  * *"Exponenciamos el coeficiente y obtenemos el **IRR** (*Incidence Rate Ratio*, razón de tasas de incidencia): $\text{IRR} = e^{\beta_j}$. Y aquí sí multiplica **directamente la media esperada de eventos**, sin necesidad de hablar de odds: un IRR de $1.25$ significa exactamente un $+25\%$ en el número esperado de eventos por unidad adicional de $X_j$; un IRR de $0.80$, una reducción del $20\%$."*
+* **Nivel técnico (qué señalar)**:
+  * Comprueba la identidad $\frac{\lambda(X_j + 1)}{\lambda(X_j)} = \frac{e^{\beta_0 + \dots + \beta_j(X_j+1)}}{e^{\beta_0 + \dots + \beta_j X_j}} = e^{\beta_j}$ (manteniendo el resto de predictores constantes, *ceteris paribus*).
+  * Para un incremento de $\Delta$ unidades en $X_j$ (por ejemplo $+100$ vehículos en tráfico), el factor multiplicativo no es $1 + \Delta(\text{IRR}-1)$ sino $e^{\Delta \beta_j} = (\text{IRR})^\Delta$.
+
+### Diapositiva 51: *Estimación por Máxima Verosimilitud*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Repetimos exactamente la misma receta MLE que usamos en logística, ahora con la probabilidad de Poisson. Mirad la última línea de la diapositiva: al derivar la log-verosimilitud e igualar a cero, obtenemos $\sum x_{ij}(y_i - \lambda_i) = 0$."*
+  * *"¡Fijaos qué belleza matemática! Es **idéntica** a la ecuación de puntuación de la regresión logística ($\sum x_{ij}(y_i - p_i) = 0$) y a las ecuaciones normales de MCO ($\sum x_{ij}(y_i - \hat{y}_i) = 0$). Esa es la magia unificadora del enlace canónico en la familia exponencial."*
+* **Nivel técnico (qué señalar)**:
+  * Desglosa el paso de $L(\boldsymbol{\beta})$ a $\ell(\boldsymbol{\beta}) = \sum_{i=1}^n [y_i \mathbf{x}_i^T\boldsymbol{\beta} - e^{\mathbf{x}_i^T\boldsymbol{\beta}} - \log(y_i!)]$ subrayando que $\log(y_i!)$ es constante respecto a $\boldsymbol{\beta}$ y desaparece al derivar (aunque sí importa al evaluar el valor numérico de `logLik` y del `AIC`).
+  * Igual que en logística, al ser $x_{i0} = 1$ (intercepto), la primera ecuación garantiza que la suma de conteos predichos iguala a la suma de conteos observados: $\sum_{i=1}^n \hat{\lambda}_i = \sum_{i=1}^n y_i$.
+
+### Diapositiva 52: *Ejemplo Práctico: Salida del Modelo Poisson*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Veamos una salida real de R de `glm(accidentes ~ trafico + visibilidad, family = poisson)` sobre $n = 100$ tramos/observaciones. Queremos explicar el número de accidentes a partir del volumen de tráfico y la visibilidad en kilómetros."*
+  * *"Antes siquiera de exponenciar los coeficientes, mirad los signos: `trafico` tiene signo **positivo** (más tráfico $\implies$ más accidentes) y `visibilidad` tiene signo **negativo** (más visibilidad $\implies$ menos accidentes). Todo cuadra con el sentido físico del problema."*
+* **Nivel técnico (qué señalar)**:
+  * Lee exactamente las cifras de la salida proyectada:
+    * `(Intercept)`: `0.8213470` (SE `0.2331419`, $z = 3.5229$, $p = 0.0004268$).
+    * `trafico`: `0.0096965` (SE `0.0013990`, $z = 6.9310$, $p = 4.177\times 10^{-12}$).
+    * `visibilidad`: `-0.1968258` (SE `0.0213703`, $z = -9.2102$, $p < 2.2\times 10^{-16}$).
+  * Lee las métricas globales al pie y haz una lectura rápida de diagnóstico:
+    * `Null deviance: 240.94` (99 g.l., pues $n = 100$ y $100 - 1 = 99$).
+    * `Residual deviance: 110.63` (97 g.l., pues $100 - 3$ parámetros estimados $= 97$). La caída de deviance es de $240.94 - 110.63 = 130.31$ con solo $2$ grados de libertad: el modelo global es contundentemente significativo.
+    * `AIC: 385.23` (útil para comparar con modelos alternativos, como una Binomial Negativa).
+    * Primer indicio tranquilizador sobre la dispersión: el cociente `Residual deviance / df` vale $110.63 / 97 = 1.14 \approx 1$.
+
+### Diapositiva 53: *Ejemplo Práctico: Interpretación de Resultados*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Traduzcamos ahora esos coeficientes a español corriente usando el IRR. Por cada unidad adicional de tráfico, la tasa esperada de accidentes crece un **$1.0\%$**. Puede parecer poco de uno en uno, pero como el efecto es multiplicativo, subir $100$ unidades de tráfico no multiplica los accidentes por $1$, sino por $e^{100 \times 0.0097} \approx 2.64$: ¡más del doble y medio de accidentes!"*
+  * *"En cuanto a la visibilidad, cada kilómetro adicional de visibilidad **reduce** la tasa esperada de accidentes en un **$17.9\%$**, manteniendo el tráfico constante."*
+* **Nivel técnico (qué señalar)**:
+  * Verifica los dos cálculos exactos mostrados en pantalla:
+    * $\text{IRR}_{\text{tráfico}} = e^{0.0097} \approx 1.010 \implies (1.010 - 1)\times 100 = +1.0\%$.
+    * $\text{IRR}_{\text{visibilidad}} = e^{-0.1968} \approx 0.821 \implies (1 - 0.821)\times 100 = -17.9\%$.
+  * Recalca el valor pedagógico de escalar predictores con unidades pequeñas (como `trafico`): en la práctica, presentar el IRR por $+10$ o $+50$ unidades de tráfico (usando $e^{50\hat{\beta}}$) suele ser mucho más informativo para un informe técnico.
+
+### Diapositiva 54: *Implementación del Algoritmo IRLS para Poisson*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Al igual que en logística, el algoritmo IRLS toma una forma extraordinariamente sencilla en Poisson: el peso de cada observación es directamente su tasa esperada $\lambda_i$."*
+  * **Pregunta rápida a la clase**: *"Comparad esto con logística: allí pesaban más las observaciones intermedias ($p = 0.5$). Aquí, con $w_i = \lambda_i$, ¿qué observaciones reciben **más peso** en cada iteración de Poisson?"* (Las que tienen mayor tasa esperada $\lambda_i$, porque en escala logarítmica su varianza relativa $\text{Var}(\log \hat{\lambda}) \approx 1/\lambda_i$ es menor).
+* **Nivel técnico (qué señalar)**:
+  * Comprueba en un segundo que todo sale de las fórmulas generales del Bloque 2:
+    * Peso: con $V(\lambda) = \lambda$ y $g'(\lambda) = 1/\lambda$, se cumple $w_i = \frac{1}{\lambda_i \cdot (1/\lambda_i)^2} = \lambda_i$.
+    * Respuesta ajustada: $z_i = \eta_i^{(t)} + (y_i - \lambda_i^{(t)})g'(\lambda_i^{(t)}) = \log(\lambda_i^{(t)}) + \frac{y_i - \lambda_i^{(t)}}{\lambda_i^{(t)}}$.
+    * Actualización: $\boldsymbol{\beta}^{(t+1)} = (\mathbf{X}^T\mathbf{W}^{(t)}\mathbf{X})^{-1}\mathbf{X}^T\mathbf{W}^{(t)}\mathbf{z}^{(t)}$.
+
+### Diapositiva 55: *Propiedades Específicas de la Estimación Poisson*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Esta diapositiva resume las cuatro señas de identidad del modelo Poisson con enlace logarítmico: asume equidispersión, converge muy rápido en la práctica, garantiza numéricamente tasas siempre positivas y ofrece una interpretación multiplicativa limpia."*
+* **Nivel técnico (qué señalar)**:
+  * Matiz sobre el punto 2 (*convergencia rápida*): tanto Poisson como logística suelen converger en muy pocas iteraciones cuando el modelo está bien condicionado (en nuestros dos ejemplos de las diapositivas, logística convergió en 4 iteraciones en la Diapositiva 38 y Poisson en 5 en la Diapositiva 58); la ventaja adicional de Poisson frente a logística es que evita el problema clásico de separación completa binaria, aunque estratos categóricos con todos los conteos iguales a $0$ pueden generar coeficientes hacia $-\infty$.
+
+### Diapositiva 56: *Bondad de Ajuste en Regresión de Poisson*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Si solo pudierais hacer **una** comprobación obligatoria después de ajustar cualquier regresión de Poisson, sería esta: calcular el estadístico de dispersión $\hat{\phi}$."*
+  * *"Si $\hat{\phi}$ ronda $1$, respiramos tranquilos: el supuesto de equidispersión aguanta. Si $\hat{\phi}$ se dispara muy por encima de $1$ (por ejemplo $2$, $3$ o $10$), los p-valores de Poisson ya no son de fiar y toca saltar a la Binomial Negativa."*
+* **Nivel técnico (qué señalar)**:
+  * Lee la fórmula $\hat{\phi} = \frac{X^2_{\text{Pearson}}}{n - p}$, recordando que $X^2_{\text{Pearson}} = \sum_{i=1}^n \frac{(y_i - \hat{\lambda}_i)^2}{\hat{\lambda}_i}$ y $n - p$ son los grados de libertad residuales ($p =$ número total de parámetros, intercepto incluido).
+  * Comenta que en la práctica suele contrastarse también el cociente $\text{Residual deviance}/(n-p)$ y existen tests formales de sobredispersión (como `AER::dispersiontest()` en R). Menciona asimismo el caso contrario (menos frecuente): **infradispersión** ($\hat{\phi} < 1$), donde los errores estándar de Poisson son conservadores.
+
+### Diapositiva 57: *Validación del Modelo de Poisson*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Igual que en logística pasamos de las métricas de verosimilitud a la validación predictiva en un conjunto de prueba (matriz de confusión y ROC), en Poisson evaluamos la calidad predictiva en test midiendo el tamaño de los errores entre conteos reales y predichos: **RMSE** y **MAE**, junto con un gráfico de predichos frente a reales."*
+* **Nivel técnico (qué señalar)**:
+  * Compara ambas métricas en pantalla:
+    * $\text{RMSE} = \sqrt{\frac{1}{n}\sum(y_i - \hat{\mu}_i)^2}$ penaliza cuadráticamente los errores grandes.
+    * $\text{MAE} = \frac{1}{n}\sum|y_i - \hat{\mu}_i|$ es más robusta frente a valores atípicos.
+  * **Dos matices técnicos útiles**:
+    1. La diapositiva describe el RMSE intuitivamente como "desviación estándar de los residuos"; puntualiza oralmente que eso es exacto cuando el sesgo medio de los residuos es cero (en test, $\text{RMSE}^2 = \text{Sesgo}^2 + \text{Varianza}$ de los errores de predicción).
+    2. Como en Poisson la varianza crece con $\mu$, las observaciones con conteos muy altos dominan el RMSE; por ello, en evaluación avanzada también se utiliza la **deviance de Poisson en test** como función de pérdida propia (*proper scoring rule*).
+
+### Diapositiva 58: *Ejemplo Práctico: Diagnóstico del Modelo Poisson*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Cerremos el ejemplo de los accidentes haciendo exactamente el chequeo que acabamos de predicar. Mirad los resultados reales de R en pantalla: IRLS convergió en **5 iteraciones** (`TRUE`) y el estadístico de dispersión vale **$\hat{\phi} = 0.993$**, clavado en $1$. No hay ninguna señal de sobredispersión: el modelo de Poisson es totalmente adecuado."*
+  * **Anécdota didáctica poderosa para contar en voz alta**: *"Curiosamente, si calculamos en estos mismos 100 datos la media marginal de accidentes (`3.42`) y su varianza marginal (`8.79`), ¡la varianza es más del doble que la media! Alguien sin formación pensaría que Poisson falla estrepitosamente. ¿Por qué no falla? Porque esa varianza marginal alta se debe a que el tráfico y la visibilidad cambian mucho entre tramos; una vez que condicionamos en `trafico` y `visibilidad`, la dispersión residual cae a $\hat{\phi} = 0.993 \approx 1$."*
+* **Nivel técnico (qué señalar)**:
+  * Verifica cada cifra exacta impresa por R en la diapositiva:
+    * `Iteraciones necesarias: 5` | `¿Convergió?: TRUE`.
+    * `Estadístico Chi-cuadrado de Pearson: 96.34`.
+    * `Grados de libertad residuales (n-p): 97` ($n = 100$, $p = 3$: intercepto, `trafico`, `visibilidad`).
+    * `Estadístico de dispersión (phi_hat)`: $96.34 / 97 = 0.993$.
+  * Recuerda el código en R que los alumnos usarán en el laboratorio: `sum(residuals(m_pois, type = "pearson")^2) / m_pois$df.residual`.
+
+---
+
+## Bloque 6: Otros GLMs y Guía de Decisión (Diapositivas 59 - 64)
+
+### Diapositiva 59: *Otros GLMs: Adaptándose a la Realidad de los Datos*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Logística y Poisson cubren un porcentaje enorme de problemas reales, pero el mundo real es más rico y rebelde. En este bloque final completamos nuestra caja de herramientas con los tres grandes modelos que resuelven las dos situaciones donde más tropiezan los modelos básicos: conteos con **sobredispersión** (Binomial Negativa) y variables continuas **positivas y asimétricas** (Gamma e Inversa Gaussiana)."*
+* **Nivel técnico (qué señalar)**:
+  * Presenta las tres características de los datos que activan este bloque (sobredispersión, sesgo marcado a la derecha y dominio estrictamente positivo $Y > 0$) y su correspondencia exacta con las tres familias finales.
+
+### Diapositiva 60: *Regresión Binomial Negativa*
+
+* **Nivel conceptual (qué decir)**:
+  * *"¿Qué hacemos cuando un modelo de Poisson nos devuelve $\hat{\phi} = 4.2$? Las causas típicas en la vida real son muy fáciles de imaginar: faltan variables importantes que no medimos (heterogeneidad no observada), los eventos ocurren en rachas o agrupados, o hay demasiados ceros."*
+  * *"La **Regresión Binomial Negativa** resuelve esto rompiendo la camisa de fuerza $\text{Var}(Y) = \mu$ y añadiendo un parámetro extra $\alpha$ que deja crecer la varianza cuadráticamente: $\text{Var}(Y) = \mu + \alpha\mu^2$. Fijaos en la elegancia: si no hay sobredispersión ($\alpha = 0$), recuperamos exactamente Poisson."*
+* **Nivel técnico (qué señalar)**:
+  * Comenta la intuición jerárquica de la Binomial Negativa (mezcla Poisson-Gamma): si cada observación tiene su propia tasa latente $\tilde{\lambda}_i \sim \text{Gamma}$ alrededor de $\mu_i$ y $Y_i \mid \tilde{\lambda}_i \sim \text{Poisson}(\tilde{\lambda}_i)$, la distribución marginal resultante es exactamente una Binomial Negativa con $\text{Var}(Y_i) = \mu_i + \alpha\mu_i^2$.
+  * Menciona como alternativa rápida cuando solo se busca corregir los errores estándar sin cambiar la verosimilitud el modelo `family = quasipoisson` (que asume varianza lineal $\phi\mu$), aunque al carecer de verosimilitud plena no ofrece AIC ni probabilidades predictivas completas como sí hace la Binomial Negativa.
+
+### Diapositiva 61: *Interpretación y Comparación*
+
+* **Nivel conceptual (qué decir)**:
+  * *"La mejor noticia sobre la Binomial Negativa es que **no tenéis que aprender una interpretación nueva**: sigue usando enlace logarítmico, así que los coeficientes $\beta_j$ siguen leyéndose exactamente como **IRR** ($e^{\beta_j}$)."*
+  * *"El único detalle de software en el que debéis fijaros para no leerlo al revés es que R (`MASS::glm.nb()`) no imprime $\alpha$, sino su inverso $\theta = 1/\alpha$. Por eso, un $\theta$ **grande** significa poca sobredispersión (casi Poisson), y un $\theta$ **pequeño** significa mucha sobredispersión."*
+* **Nivel técnico (qué señalar)**:
+  * Verifica la relación inversa en la varianza: $\text{Var}(Y) = \mu + \frac{\mu^2}{\theta}$. Si $\theta \to \infty$, el término $\mu^2/\theta \to 0$ y se converge a Poisson; si $\theta$ es pequeño (ej. $\theta = 2$), el término $\mu^2/2$ domina rápidamente.
+  * **Matiz técnico riguroso**: estrictamente, la Binomial Negativa pertenece a la familia exponencial uniparamétrica solo para un $\theta$ **fijo**; al estimar $\theta$ y $\boldsymbol{\beta}$ conjuntamente, `MASS::glm.nb()` alterna entre IRLS para $\boldsymbol{\beta}$ y máxima verosimilitud para $\theta$ (motivo por el que vive en `MASS` y no en `stats::glm()`).
+  * Comparación de modelos: destaca el criterio del **AIC** en pantalla (menor AIC $\implies$ mejor equilibrio ajuste-complejidad). Si además se realiza un LRT entre Poisson y Binomial Negativa, recuerda que $H_0: \alpha = 0$ está en la frontera del espacio paramétrico ($\alpha \ge 0$), por lo que el p-valor asintótico riguroso corresponde a una mezcla $50:50$ de $\chi^2_0$ y $\chi^2_1$ (la mitad del p-valor habitual de $\chi^2_1$).
+
+### Diapositiva 62: *Modelos para Variables Continuas No Normales*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Pasamos al último escenario: variables **continuas**, estrictamente **positivas** y con cola larga a la derecha —piensen en el coste de un siniestro de coche, el salario, el tiempo de respuesta de un servidor o la duración de una estancia hospitalaria."*
+  * **Pregunta a la clase**: *"Muchos habréis oído el truco clásico de aplicar $\log(Y)$ y meterlo en una regresión lineal `lm(log(Y) ~ X)`. ¿Por qué suele ser mejor usar un GLM Gamma con enlace logarítmico en lugar de transformar $Y$?"*
+  * *"Por dos razones muy prácticas: primero, con `lm(log(Y) ~ X)` modelamos $E[\log(Y)\mid X]$, de modo que al deshacer el logaritmo con la exponencial obtenemos la **mediana** (y no la media) de $Y$, introduciendo sesgo si queremos predecir costes totales o esperados; en cambio, un GLM Gamma con enlace log modela directamente $\log(E[Y\mid X])$, prediciendo la **media real** sin sesgo de retransformación. Y segundo, el GLM Gamma modela explícitamente que la varianza crece con el cuadrado de la media."*
+* **Nivel técnico (qué señalar)**:
+  * Subraya la desigualdad de Jensen detrás de ese punto: $E[\log(Y)] \neq \log(E[Y])$. En `lm(log(Y) ~ X)` bajo errores normales $\sigma^2$, $E[Y \mid X] = \exp(\mathbf{x}^T\boldsymbol{\beta} + \sigma^2/2)$, mientras que en `glm(Y ~ X, family = Gamma(link = "log"))` tenemos directamente $E[Y \mid X] = \exp(\mathbf{x}^T\boldsymbol{\beta})$.
+
+### Diapositiva 63: *Comparación: Regresión Gamma vs. Inversa Gaussiana*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Dentro de las variables continuas positivas asimétricas, ¿cuándo elegimos Gamma y cuándo Inversa Gaussiana? La diferencia clave está en la rapidez con la que crece la dispersión cuando crece la media."*
+  * *"En **Gamma**, la desviación estándar es proporcional a la media ($V(\mu) = \mu^2$, es decir, coeficiente de variación constante: si un coste se duplica, su incertidumbre también se duplica). En la **Inversa Gaussiana**, la varianza crece con el **cubo** de la media ($V(\mu) = \mu^3$), pensada para colas todavía más extremas y tiempos de llegada o fallo."*
+* **Nivel técnico (qué señalar)**:
+  * Recorre las dos columnas y resalta un detalle importante de uso en R:
+    * **Gamma**: `glm(y ~ x, family = Gamma(link = "log"))`. Aunque el enlace por defecto en R es el inverso (`"inverse"`), en la práctica casi siempre se especifica `link = "log"` para evitar predicciones negativas y mantener una interpretación multiplicativa idéntica a Poisson ($e^{\beta_j}$ multiplica la media esperada).
+    * **Inversa Gaussiana**: `glm(y ~ x, family = inverse.gaussian(link = "1/mu^2"))` (o también `link = "log"` si se prioriza la interpretabilidad de coeficientes). Físicamente modela el tiempo de primer paso de un movimiento browniano con deriva hasta alcanzar un umbral.
+  * Para elegir entre Gamma e Inversa Gaussiana sobre un mismo conjunto de datos positivos, ambos se pueden comparar limpiamente mediante **AIC** y gráficos de residuos deviance / Q-Q.
+
+### Diapositiva 64: *Guía de Decisión: ¿Qué GLM Debo Usar?*
+
+* **Nivel conceptual (qué decir)**:
+  * *"Llegamos al final del Tema 5 con vuestro mapa de bolsillo para la vida profesional y para los proyectos de la asignatura. Cuando os entreguen un conjunto de datos nuevo, no empecéis eligiendo el algoritmo de moda: empezad mirando la **naturaleza física de la variable respuesta $Y$**."*
+  * *"Recorramos las cuatro ramas del árbol de decisión: binaria $\to$ Logística; conteo $\to$ Poisson y **siempre** comprobar sobredispersión ($\hat{\phi} > 1.5 \to$ Binomial Negativa, y si hay exceso estructural de ceros, ZIP); continua positiva sesgada $\to$ Gamma; asimetría extrema / tiempos hasta evento $\to$ Inversa Gaussiana."*
+  * *"Con esto cerramos la teoría del Tema 5. El siguiente paso natural es poner a prueba todo este árbol de decisión con datos reales en R en el laboratorio `lab5_modelos_generalizados` y consultar los desarrollos completos en el capítulo **Tema 5** del libro."*
+* **Nivel técnico (qué señalar)**:
+  * Repasa las 4 ramas exactas de la diapositiva subrayando el único umbral cuantitativo explícito que aparece como regla práctica: $\hat{\phi} > 1.5$ para pasar de Poisson a Binomial Negativa (siempre complementado con el criterio AIC y el análisis de residuos).
+  * Deja abierta una última conexión de síntesis: todo lo visto en las 64 diapositivas —desde `lm()` hasta Logística, Poisson, Binomial Negativa, Gamma e Inversa Gaussiana— obedece a la misma triple arquitectura de la Diapositiva 4 (**componente aleatorio + predictor lineal + función de enlace**) estimada por **MLE/IRLS**.
+
+\newpage
+
+## Anexo Docente: Matices Técnicos y Puntos de Atención (Revisión Global)
+
+Esta tabla recoge los principales matices conceptuales y de notación detectados al revisar las 64 diapositivas, pensados como chuleta rápida del docente para anticipar dudas o evitar imprecisiones en el aula:
+
+| Diapositivas | Punto clave a precisar en el aula |
+| :---: | :--- |
+| **5, 30, 32, 56, 58** | **Notación de $p$**: en la Diapositiva 5, $p$ cuenta los predictores ($\beta_0 + \beta_1 X_1 + \dots + \beta_p X_p$, i.e. $p+1$ parámetros); en los grados de libertad $n - p$ (Diapositivas 30, 32, 56 y 58), $p$ cuenta el **número total de parámetros estimados** (incluyendo el intercepto; p. ej., $100 - 3 = 97$ en la Diapositiva 58). |
+| **6, 35, 48** | **Base del logaritmo**: $\log(\cdot)$ denota siempre logaritmo **natural** ($\ln$, base $e$), coherente con las exponenciales $e^{\beta_j}$ de OR e IRR. |
+| **14, 63** | **Enlace canónico en Gamma e Inversa Gaussiana**: en Gamma el parámetro natural es $-1/\mu$, pero en práctica se usa `log` (o `1/mu`); en Inversa Gaussiana $\theta = -1/(2\mu^2)$, proporcional al enlace `1/mu^2` salvo el factor constante $-1/2$. |
+| **17** | **IRLS vs. Newton-Raphson**: en general IRLS equivale a **Fisher Scoring** (información esperada) y coincide exactamente con **Newton-Raphson** (información observada) bajo enlace **canónico**. |
+| **22, 24** | **Deviance escalada y LRT**: $2[\ell(\text{sat})-\ell(\text{prop})]$ es estrictamente la deviance escalada $D/a(\phi)$ (coincide con $D$ en Binomial y Poisson donde $a(\phi)=1$). El LRT $\chi^2$ exige modelos **anidados** sobre las **mismas observaciones** (cuidado con valores perdidos `NA`); con $\phi$ estimado se usa test $F$. |
+| **29, 30, 31** | **Diagnóstico en logística binaria ($0/1$)**: la sobredispersión no es identificable en datos Bernoulli sin agrupar ($m_i=1$) y el Q-Q plot de residuos deviance **no** resulta recto aunque el modelo esté perfectamente especificado; mencionar residuos agrupados o cuantílicos aleatorizados (`DHARMa`). |
+| **40** | **Odds Ratio vs. Riesgo Relativo**: $e^{\beta_j}$ mide el cambio multiplicativo en los **odds**, no en la probabilidad (solo coinciden aproximadamente cuando el evento es muy raro). |
+| **49, 58** | **Equidispersión condicional vs. marginal**: el supuesto de Poisson es $\text{Var}(Y_i \mid \mathbf{x}_i) = \lambda_i$. En el ejemplo de accidentes (Diapositivas 52 y 58), la varianza marginal (`8.79`) duplica la media marginal (`3.42`), pero tras ajustar el modelo $\hat{\phi} = 0.993 \approx 1$. |
+| **57** | **RMSE vs. desviación estándar de residuos**: $\text{RMSE} = \sqrt{\frac{1}{n}\sum (y_i - \hat{\mu}_i)^2}$ coincide con la desviación estándar de los residuos solo cuando el error medio es cero; en test captura conjuntamente sesgo y varianza. |
+| **61** | **Binomial Negativa y familia exponencial**: pertenece a la familia exponencial uniparamétrica solo para $\theta$ fijo; `MASS::glm.nb()` estima $\boldsymbol{\beta}$ y $\theta$ conjuntamente. |
+
+: {tbl-colwidths="[18,82]"}
