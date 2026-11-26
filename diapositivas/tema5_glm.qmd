@@ -57,7 +57,7 @@ Mientras que la regresión lineal clásica asume que la variable dependiente (Y)
 
 * **Binaria:** Éxito/Fracaso, Sí/No (ej. Regresión Logística).
 * **De Conteo:** Nº de eventos (ej. Regresión de Poisson).
-* **Continua y Positiva** con sesgo (ej. tiempos, costos).
+* **Continua y Positiva con Sesgo:** Tiempos, costos (ej. Regresión Gamma).
 
 El marco teórico unificador de los GLM es que la distribución de la variable dependiente siempre pertenece a la **familia exponencial**.
 
@@ -97,20 +97,13 @@ Donde $\eta$ es el predictor lineal y $\boldsymbol{\beta}$ son los coeficientes 
 
 # Componentes en Detalle: La Función de Enlace
 
-La función de enlace ($g$) conecta el predictor lineal ($\eta$) con la media de la variable dependiente ($\mu$). Es la clave de la flexibilidad del modelo.
-
-**Relación Fundamental:**
+La función de enlace ($g$) conecta el predictor lineal ($\eta$) con la media de la variable dependiente ($\mu$). Es la clave de la flexibilidad del modelo:
 $$g(\mu) = \eta$$
-Esta función transforma la media de Y para que la relación con los predictores se vuelva lineal.
+Esta función transforma la media de $Y$ para que la relación con los predictores sea lineal. Ejemplos principales:
 
-**Logística (Logit):** Para Regresión Logística.
-    $$g(\mu) = \log\left(\frac{\mu}{1 - \mu}\right)$$
-
-**Logarítmica:** Para Regresión de Poisson.
-    $$g(\mu) = \log(\mu)$$
-
-**Identidad:** Para Regresión Lineal estándar (el GLM más simple).
-    $$g(\mu) = \mu$$
+* **Logística (Logit)** *(Regresión Logística)*: $g(\mu) = \log\left(\dfrac{\mu}{1 - \mu}\right)$
+* **Logarítmica** *(Regresión de Poisson)*: $g(\mu) = \log(\mu)$
+* **Identidad** *(Regresión Lineal estándar)*: $g(\mu) = \mu$
 
 
 # Diferencias Clave: Regresión Lineal vs. GLM
@@ -209,19 +202,16 @@ Esta estructura unificada permite derivar propiedades generales para todos los G
 Estas son las distribuciones más frecuentes en la práctica.
 
 * **Normal**
-
     * **Uso Típico:** Datos continuos simétricos (es el GLM equivalente a la regresión lineal).
     * **Función de Varianza:** $V(\mu) = 1$ (varianza constante).
     * **Enlace Canónico:** Identidad ($g(\mu) = \mu$).
 
 * **Binomial**
-
     * **Uso Típico:** Proporciones, datos binarios (éxito/fracaso).
     * **Función de Varianza:** $V(\mu) = \mu(1-\mu)$.
     * **Enlace Canónico:** Logit ($g(\mu) = \log(\frac{\mu}{1-\mu})$).
 
 * **Poisson**
-
     * **Uso Típico:** Conteos de eventos.
     * **Función de Varianza:** $V(\mu) = \mu$.
     * **Enlace Canónico:** Log ($g(\mu) = \log(\mu)$).
@@ -246,15 +236,13 @@ Para datos continuos que son estrictamente positivos y tienen sesgo a la derecha
 
 Para entender y comparar los diferentes GLM, dos conceptos derivados de la familia exponencial son fundamentales:
 
-1. La Función de Varianza: $V(\mu)$
+1. **La Función de Varianza: $V(\mu)$**
+   * **Definición:** Es la **"firma"** de cada distribución; define la relación teórica entre la media ($\mu$) y la varianza.
+   * **Implicación Práctica:** Determina la **heterocedasticidad inherente** (ej. $V(\mu) = \mu$ en Poisson) e influye directamente en los **pesos** que el algoritmo IRLS asigna a cada observación.
 
-* **Definición:** Es la **"firma"** de cada distribución, ya que define la relación teórica entre la media ($\mu$) y la varianza.
-* **Implicación Práctica:** Determina la **heterocedasticidad inherente** de los datos (ej. $V(\mu) = \mu$ en Poisson) y, por tanto, influye directamente en los **pesos** que el algoritmo IRLS asigna a cada observación durante la estimación.
-
-2. El Enlace Canónico: $g(\mu)$
-
-* **Definición:** Es la función de enlace que surge de forma **"natural"** de la estructura matemática de cada distribución.
-* **Implicación Práctica:** Aunque en la práctica se pueden probar otros enlaces, el canónico suele garantizar las mejores propiedades estadísticas y una estimación computacionalmente más eficiente.
+2. **El Enlace Canónico: $g(\mu)$**
+   * **Definición:** Es la función de enlace que surge de forma **"natural"** de la estructura matemática de cada distribución.
+   * **Implicación Práctica:** Aunque se pueden probar otros enlaces, el canónico suele garantizar las mejores propiedades estadísticas y una estimación más eficiente.
 
 
 # La Función de Varianza
@@ -463,18 +451,219 @@ Se evalúa si la estructura básica del modelo, $g(\mu) = X\beta$, es adecuada p
 
 * **Test de Especificación de Enlace (Linktest):** Es una prueba formal. Si el predictor lineal al cuadrado ($\hat{\eta}^2$) resulta significativo al añadirlo al modelo, es evidencia de que la función de enlace está mal especificada.
 
+```{r diag-glm-setup}
+#| include: false
+suppressPackageStartupMessages({
+  library(ggplot2)
+  library(MASS)
+})
+
+# 1. Modelo Poisson de referencia (bien especificado)
+set.seed(2025)
+n_diag <- 120
+x_ok <- runif(n_diag, 0, 6)
+y_ok <- rpois(n_diag, lambda = exp(1.5 + 0.35 * x_ok))
+m_diag_ok <- glm(y_ok ~ x_ok, family = poisson)
+
+eta_ok <- predict(m_diag_ok, type = "link")
+res_dev_ok <- residuals(m_diag_ok, type = "deviance")
+res_pear_ok <- residuals(m_diag_ok, type = "pearson")
+lt_ok <- summary(glm(y_ok ~ eta_ok + I(eta_ok^2), family = poisson))$coefficients
+phi_ok <- sum(res_pear_ok^2) / m_diag_ok$df.residual
+pct_pear_ok <- mean(abs(res_pear_ok) > 2) * 100
+
+lev_ok <- hatvalues(m_diag_ok)
+rp_ok <- rstandard(m_diag_ok, type = "pearson")
+cook_ok <- cooks.distance(m_diag_ok)
+lev_thr_ok <- 2 * length(coef(m_diag_ok)) / n_diag
+
+# 2. Violacion: forma funcional no lineal omitida
+set.seed(2026)
+x_nl <- runif(n_diag, 0, 6)
+y_nl <- rpois(n_diag, lambda = exp(0.9 + 1.05 * x_nl - 0.13 * x_nl^2))
+m_diag_nolin <- glm(y_nl ~ x_nl, family = poisson)
+eta_nl <- predict(m_diag_nolin, type = "link")
+res_dev_nl <- residuals(m_diag_nolin, type = "deviance")
+lt_nl <- summary(glm(y_nl ~ eta_nl + I(eta_nl^2), family = poisson))$coefficients
+
+# 3. Violacion: sobredispersion / familia inadecuada (Binomial Negativa ajustada con Poisson)
+set.seed(2027)
+x_ov <- runif(n_diag, 0, 6)
+y_ov <- MASS::rnegbin(n_diag, mu = exp(1.5 + 0.35 * x_ov), theta = 2)
+m_diag_over <- glm(y_ov ~ x_ov, family = poisson)
+eta_ov <- predict(m_diag_over, type = "link")
+res_dev_ov <- residuals(m_diag_over, type = "deviance")
+res_pear_ov <- residuals(m_diag_over, type = "pearson")
+phi_ov <- sum(res_pear_ov^2) / m_diag_over$df.residual
+pct_pear_ov <- mean(abs(res_pear_ov) > 2) * 100
+
+# 4. Violacion: observaciones influyentes en GLM Poisson
+x_inf <- c(x_ok, 6.6, 6.9)
+y_inf <- c(y_ok, 4, 5)
+m_diag_inf <- glm(y_inf ~ x_inf, family = poisson)
+lev_inf <- hatvalues(m_diag_inf)
+rp_inf <- rstandard(m_diag_inf, type = "pearson")
+cook_inf <- cooks.distance(m_diag_inf)
+lev_thr_inf <- 2 * length(coef(m_diag_inf)) / length(x_inf)
+n_cook_inf <- sum(cook_inf > 0.5)
+```
+
+# Violación: Forma Funcional Incorrecta
+
+::::: columns
+::: {.column width="64%"}
+```{r diag-violacion-forma}
+#| fig-width: 5.4
+#| fig-height: 3.7
+#| out-width: "100%"
+ggplot(data.frame(eta = eta_nl, res = res_dev_nl), aes(x = eta, y = res)) +
+  geom_point(color = "#D55E00", alpha = 0.75, size = 2) +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 1.1) +
+  labs(
+    title = "PROBLEMA: Patrón Curvo en Residuos Deviance",
+    x = expression(paste("Predictor lineal ajustado (", hat(eta)[i], ")")),
+    y = "Residuos Deviance",
+    caption = "GLM Poisson lineal ajustado a datos con efecto cuadrático"
+  ) +
+  theme_classic(base_size = 11) +
+  theme(plot.title = element_text(size = 11.5, face = "bold"))
+```
+:::
+::: {.column width="34%"}
+**Problema detectado:**
+
+Ajustar un GLM Poisson lineal ($\eta = \beta_0 + \beta_1 x$) cuando la relación real es cuadrática.
+
+**¿Qué observamos?**
+
+* **Patrón en arco** en los residuos deviance.
+* La curva suavizada (roja) se aleja claramente del cero.
+* **Linktest ($\hat{\eta}^2$):** $z = `r round(lt_nl[3, 3], 2)`$, $p < 0.001$.
+
+**Solución:** Incluir términos no lineales ($x^2$, splines) o revisar el enlace.
+:::
+:::::
+
+# Verificación: Forma Funcional Correcta
+
+::::: columns
+::: {.column width="64%"}
+```{r diag-verificacion-forma}
+#| fig-width: 5.4
+#| fig-height: 3.7
+#| out-width: "100%"
+ggplot(data.frame(eta = eta_ok, res = res_dev_ok), aes(x = eta, y = res)) +
+  geom_point(color = "#0072B2", alpha = 0.75, size = 2) +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 0.9) +
+  labs(
+    title = "Correcto: Residuos Deviance sin Tendencia",
+    x = expression(paste("Predictor lineal ajustado (", hat(eta)[i], ")")),
+    y = "Residuos Deviance",
+    caption = "GLM Poisson bien especificado: dispersión aleatoria en torno a 0"
+  ) +
+  theme_classic(base_size = 11) +
+  theme(plot.title = element_text(size = 11.5, face = "bold"))
+```
+:::
+::: {.column width="34%"}
+**¿Qué evaluamos?**
+
+Si la estructura $\log(\mu) = \beta_0 + \beta_1 x$ captura bien la relación.
+
+**Resultados:**
+
+* **Gráfico:** Nube aleatoria y curva suavizada prácticamente horizontal.
+* **Linktest ($\hat{\eta}^2$):** $p = `r round(lt_ok[3, 4], 3)` > 0.05$.
+
+**Conclusión:** Sin evidencia de mala especificación funcional.
+:::
+:::::
+
 # ¿La Distribución es Correcta?
 
 Se evalúa si la elección de la familia de distribución (Poisson, Binomial, etc.) fue acertada, empezando por la relación entre la media y la varianza.
 
 **Sobredispersión:** Ocurre cuando la varianza real de los datos es **mayor** que la media, violando el supuesto de modelos como el de Poisson ($\text{Var}(Y) = \mu$).
 
-* **Consecuencia:** Invalida las inferencias (errores estándar demasiado pequeños, p-valores incorrectos).
+* **Consecuencia:** Invalida las inferencias (errores estándar demasiado pequeños y p-valores incorrectos).
+* **Detección:** Se calcula el **Estadístico de dispersión ($\hat{\phi}$)**. Si **$\hat{\phi} \gg 1$**, hay sobredispersión:
+  $$\hat{\phi} = \frac{\sum r_i^2}{n-p}$$
+* **Solución:** Pasar de **Poisson** a **Binomial Negativa**, que incorpora un parámetro ($\alpha$) para modelar la variabilidad extra: $\text{Var}(Y) = \mu + \alpha\mu^2$.
 
-* **Detección:** Se calcula el **Estadístico de dispersión ($\hat{\phi}$)**. Si **$\hat{\phi}$ es significativamente mayor que 1**, hay sobredispersión.
-    $$\hat{\phi} = \frac{\sum r_i^2}{n-p}$$
-* **Solución:** Cambiar a un modelo más flexible. El caso clásico es pasar de **Poisson** a **Binomial Negativo**, ya que este último incluye un parámetro ($\alpha$) para modelar la variabilidad extra: $\text{Var}(Y) = \mu + \alpha\mu^2$.
+# Violación: Sobredispersión en Poisson
 
+::::: columns
+::: {.column width="64%"}
+```{r diag-violacion-sobredisp}
+#| fig-width: 5.4
+#| fig-height: 3.7
+#| out-width: "100%"
+ggplot(data.frame(eta = eta_ov, res = res_pear_ov), aes(x = eta, y = res)) +
+  geom_point(color = "#D55E00", alpha = 0.75, size = 2) +
+  geom_hline(yintercept = 0, color = "gray40", linetype = "dashed") +
+  geom_hline(yintercept = c(-2, 2), color = "red", linetype = "dotted", linewidth = 0.9) +
+  labs(
+    title = "PROBLEMA: Sobredispersión Severa",
+    x = expression(paste("Predictor lineal ajustado (", hat(eta)[i], ")")),
+    y = "Residuos de Pearson",
+    caption = "Datos con varianza extra (Binomial Negativa) ajustados con Poisson"
+  ) +
+  theme_classic(base_size = 11) +
+  theme(plot.title = element_text(size = 11.5, face = "bold"))
+```
+:::
+::: {.column width="34%"}
+**Problema detectado:**
+
+La variabilidad observada supera ampliamente el supuesto $\text{Var}(Y) = \mu$.
+
+**Resultados cuantitativos:**
+
+* **$\hat{\phi} = `r round(phi_ov, 2)` \gg 1$** (esperado $\approx 1$).
+* **`r round(pct_pear_ov, 1)`%** de residuos fuera de $[-2, 2]$ (esperado $\approx 5\%$).
+
+**Solución:** Reemplazar Poisson por **Regresión Binomial Negativa**.
+:::
+:::::
+
+# Verificación: Equidispersión Cumplida
+
+::::: columns
+::: {.column width="64%"}
+```{r diag-verificacion-sobredisp}
+#| fig-width: 5.4
+#| fig-height: 3.7
+#| out-width: "100%"
+ggplot(data.frame(eta = eta_ok, res = res_pear_ok), aes(x = eta, y = res)) +
+  geom_point(color = "#0072B2", alpha = 0.75, size = 2) +
+  geom_hline(yintercept = 0, color = "gray40", linetype = "dashed") +
+  geom_hline(yintercept = c(-2, 2), color = "red", linetype = "dotted", linewidth = 0.9) +
+  coord_cartesian(ylim = c(-4, 4)) +
+  labs(
+    title = "Correcto: Dispersión Compatible con Poisson",
+    x = expression(paste("Predictor lineal ajustado (", hat(eta)[i], ")")),
+    y = "Residuos de Pearson",
+    caption = "La gran mayoría de residuos permanece dentro de la banda [-2, 2]"
+  ) +
+  theme_classic(base_size = 11) +
+  theme(plot.title = element_text(size = 11.5, face = "bold"))
+```
+:::
+::: {.column width="34%"}
+**¿Qué evaluamos?**
+
+Si los residuos de Pearson tienen amplitud homogénea cercana a $\pm 2$.
+
+**Resultados cuantitativos:**
+
+* **$\hat{\phi} = `r round(phi_ok, 3)` \approx 1$**.
+* Solo **`r round(pct_pear_ok, 1)`%** fuera de $[-2, 2]$.
+
+**Conclusión:** El supuesto de equidispersión se cumple; los errores estándar son fiables.
+:::
+:::::
 
 # ¿La Distribución es Correcta? (Gráfico Q-Q)
 
@@ -489,6 +678,76 @@ Un segundo aspecto para verificar la distribución es la forma general de los er
     * Se grafican los cuantiles de los residuos deviance contra los cuantiles teóricos de una distribución normal.
     * Los puntos deberían seguir de cerca la línea diagonal.
     * **Desviaciones sistemáticas** de la línea pueden indicar que la familia de distribución asumida (Poisson, Binomial, etc.) es incorrecta.
+
+# Violación: Q-Q Plot con Familia Inadecuada
+
+::::: columns
+::: {.column width="64%"}
+```{r diag-violacion-qq}
+#| fig-width: 5.4
+#| fig-height: 3.7
+#| out-width: "100%"
+ggplot(data.frame(res = res_dev_ov), aes(sample = res)) +
+  geom_qq(color = "#D55E00", alpha = 0.75, size = 2) +
+  geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed", linewidth = 0.9) +
+  labs(
+    title = "PROBLEMA: Desviación Fuerte en el Q-Q Plot",
+    x = "Cuantiles Teóricos N(0, 1)",
+    y = "Residuos Deviance",
+    caption = "Línea roja: diagonal teórica y = x (N(0, 1)); dispersión muy superior"
+  ) +
+  theme_classic(base_size = 11) +
+  theme(plot.title = element_text(size = 11.5, face = "bold"))
+```
+:::
+::: {.column width="34%"}
+**Problema detectado:**
+
+Los residuos deviance se alejan drásticamente de la referencia $N(0, 1)$.
+
+**¿Qué observamos?**
+
+* Pendiente mucho mayor que la diagonal teórica $y = x$.
+* Colas extremas superando ampliamente $\pm 4$ (hasta $+8$).
+
+**Diagnóstico:** La familia Poisson **no** captura la distribución real de los datos.
+:::
+:::::
+
+# Verificación: Q-Q Plot de Residuos Deviance
+
+::::: columns
+::: {.column width="64%"}
+```{r diag-verificacion-qq}
+#| fig-width: 5.4
+#| fig-height: 3.7
+#| out-width: "100%"
+ggplot(data.frame(res = res_dev_ok), aes(sample = res)) +
+  geom_qq(color = "#0072B2", alpha = 0.75, size = 2) +
+  geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed", linewidth = 0.9) +
+  labs(
+    title = "Correcto: Residuos Deviance Alineados",
+    x = "Cuantiles Teóricos N(0, 1)",
+    y = "Residuos Deviance",
+    caption = "GLM Poisson bien especificado: puntos alineados sobre y = x"
+  ) +
+  theme_classic(base_size = 11) +
+  theme(plot.title = element_text(size = 11.5, face = "bold"))
+```
+:::
+::: {.column width="34%"}
+**¿Qué evaluamos?**
+
+Si los residuos deviance siguen de cerca la línea diagonal teórica.
+
+**¿Qué observamos?**
+
+* Puntos bien alineados a lo largo de toda la recta.
+* Sin curvaturas sistemáticas ni colas anómalas.
+
+**Conclusión:** La familia Poisson elegida es coherente con los datos.
+:::
+:::::
 
 # ¿Hay Observaciones que Distorsionan el Modelo?
 
@@ -506,17 +765,121 @@ Finalmente, buscamos identificar puntos individuales que tienen una influencia d
 * La herramienta visual principal es el **gráfico de residuos vs. leverage**.
 * No eliminarlas automáticamente, sino **investigarlas** para entender su naturaleza.
 
+# Violación: Observaciones Influyentes
+
+::::: columns
+::: {.column width="64%"}
+```{r diag-violacion-influencia}
+#| fig-width: 5.4
+#| fig-height: 3.7
+#| out-width: "100%"
+p_inf <- length(coef(m_diag_inf))
+h_seq_inf <- seq(0.005, max(lev_inf) * 1.08, length.out = 200)
+cook_df_inf <- data.frame(
+  h = h_seq_inf,
+  c05_pos =  sqrt(0.5 * p_inf * (1 - h_seq_inf) / h_seq_inf),
+  c05_neg = -sqrt(0.5 * p_inf * (1 - h_seq_inf) / h_seq_inf),
+  c10_pos =  sqrt(1.0 * p_inf * (1 - h_seq_inf) / h_seq_inf),
+  c10_neg = -sqrt(1.0 * p_inf * (1 - h_seq_inf) / h_seq_inf)
+)
+df_inf_plot <- data.frame(
+  h = lev_inf,
+  rp = rp_inf,
+  cook = cook_inf,
+  critico = cook_inf > 0.5
+)
+
+ggplot(df_inf_plot, aes(x = h, y = rp)) +
+  geom_line(data = cook_df_inf, aes(x = h, y = c05_pos), color = "red", linetype = "dashed", alpha = 0.7, inherit.aes = FALSE) +
+  geom_line(data = cook_df_inf, aes(x = h, y = c05_neg), color = "red", linetype = "dashed", alpha = 0.7, inherit.aes = FALSE) +
+  geom_line(data = cook_df_inf, aes(x = h, y = c10_pos), color = "red", linetype = "solid", alpha = 0.85, inherit.aes = FALSE) +
+  geom_line(data = cook_df_inf, aes(x = h, y = c10_neg), color = "red", linetype = "solid", alpha = 0.85, inherit.aes = FALSE) +
+  geom_hline(yintercept = 0, color = "gray50", linetype = "dashed") +
+  geom_vline(xintercept = lev_thr_inf, color = "purple", linetype = "dotted", alpha = 0.8) +
+  geom_point(aes(color = critico), alpha = 0.8, size = 2.2, show.legend = FALSE) +
+  scale_color_manual(values = c("FALSE" = "#0072B2", "TRUE" = "#D55E00")) +
+  coord_cartesian(ylim = c(-7.5, 4.5)) +
+  labs(
+    title = "PROBLEMA: Puntos que Superan Cook > 1.0",
+    x = expression(paste("Leverage generalizado (", h[i], ")")),
+    y = expression(paste("Residuo Pearson estandarizado (", r[P*","*i], ")")),
+    caption = "Curvas rojas: Cook 0.5 (discontinua) y 1.0 (continua)"
+  ) +
+  theme_classic(base_size = 11) +
+  theme(plot.title = element_text(size = 11.5, face = "bold"))
+```
+:::
+::: {.column width="34%"}
+**Problema detectado:**
+
+Observaciones con **alto leverage** y **gran residuo** (en naranja) distorsionan la pendiente.
+
+**Resultados:**
+
+* **Leverage máx.:** `r round(max(lev_inf), 3)` (umbral $2p/n$: `r round(lev_thr_inf, 3)`).
+* **Cook máx.:** **`r round(max(cook_inf), 2)`** ($> 1.0$).
+* **Puntos con $D_i > 0.5$:** `r n_cook_inf`.
+
+**Acción:** Investigar estos registros y evaluar sensibilidad del ajuste.
+:::
+:::::
+
+# Verificación: Sin Observaciones Influyentes
+
+::::: columns
+::: {.column width="64%"}
+```{r diag-verificacion-influencia}
+#| fig-width: 5.4
+#| fig-height: 3.7
+#| out-width: "100%"
+p_ok <- length(coef(m_diag_ok))
+h_seq_ok <- seq(0.004, max(lev_ok) * 1.15, length.out = 200)
+cook_df_ok <- data.frame(
+  h = h_seq_ok,
+  c05_pos =  sqrt(0.5 * p_ok * (1 - h_seq_ok) / h_seq_ok),
+  c05_neg = -sqrt(0.5 * p_ok * (1 - h_seq_ok) / h_seq_ok)
+)
+
+ggplot(data.frame(h = lev_ok, rp = rp_ok), aes(x = h, y = rp)) +
+  geom_line(data = cook_df_ok, aes(x = h, y = c05_pos), color = "red", linetype = "dashed", alpha = 0.7, inherit.aes = FALSE) +
+  geom_line(data = cook_df_ok, aes(x = h, y = c05_neg), color = "red", linetype = "dashed", alpha = 0.7, inherit.aes = FALSE) +
+  geom_hline(yintercept = 0, color = "gray50", linetype = "dashed") +
+  geom_hline(yintercept = c(-2, 2), color = "orange", linetype = "dotted", alpha = 0.8) +
+  geom_vline(xintercept = lev_thr_ok, color = "purple", linetype = "dotted", alpha = 0.8) +
+  geom_point(color = "#0072B2", alpha = 0.75, size = 2) +
+  coord_cartesian(ylim = c(-5, 5)) +
+  labs(
+    title = "Correcto: Todos los Puntos en Zona Segura",
+    x = expression(paste("Leverage generalizado (", h[i], ")")),
+    y = expression(paste("Residuo Pearson estandarizado (", r[P*","*i], ")")),
+    caption = "Curva roja discontinua: Cook = 0.5 (ningún punto cercano)"
+  ) +
+  theme_classic(base_size = 11) +
+  theme(plot.title = element_text(size = 11.5, face = "bold"))
+```
+:::
+::: {.column width="34%"}
+**¿Qué evaluamos?**
+
+Que ningún punto combine alto leverage con residuo extremo.
+
+**Resultados:**
+
+* **Leverage máx.:** `r round(max(lev_ok), 3)` (umbral $2p/n$: `r round(lev_thr_ok, 3)`).
+* **Cook máx.:** **`r round(max(cook_ok), 3)`** ($\ll 0.5$).
+* **Esquinas críticas:** Vacías.
+
+**Conclusión:** Ninguna observación distorsiona el ajuste del modelo.
+:::
+:::::
+
 # Regresión Logística: Modelando Eventos Binarios
 
 La **regresión logística** es la herramienta fundamental de los GLM para modelar la probabilidad de ocurrencia de un **evento binario**.
 
-**Objetivo:**
+**Objetivo:** Modelar una variable dependiente que solo toma dos valores:
 
-Modelar una variable dependiente que solo toma dos valores:
-
-* **Éxito / Fracaso**
-* **Sí / No**
-* **Enfermo / Sano**
+* **Éxito / Fracaso** · **Sí / No** · **Enfermo / Sano**
 
 **Pilares del Tema:**
 
@@ -1040,15 +1403,11 @@ Los GLM nos ofrecen alternativas como la **Regresión Gamma** y la **Regresión 
 
 La elección del modelo depende casi exclusivamente de la naturaleza de tu variable respuesta (Y).
 
-* **¿Es Y binaria (0/1, Éxito/Fracaso)?**
-Usa **Regresión Logística**.
+* **¿Es Y binaria (0/1, Éxito/Fracaso)?** Usa **Regresión Logística**.
 
-* **¿Es Y un conteo de eventos (nº de accidentes, nº de clientes)?**
-  Empieza con una **Regresión de Poisson**.
+* **¿Es Y un conteo de eventos (nº de accidentes, nº de clientes)?** Empieza con una **Regresión de Poisson**.
     * **Importante:** Después, comprueba si hay **sobredispersión**. Si la hay ($\hat{\phi} > 1.5$), cambia a una **Regresión Binomial Negativa**.
 
-* **¿Es Y continua, positiva y con sesgo a la derecha (tiempos, costos)?**
-Usa **Regresión Gamma**. Es una excelente alternativa a transformar la variable con logaritmos y usar un modelo lineal.
+* **¿Es Y continua, positiva y con sesgo a la derecha (tiempos, costos)?** Usa **Regresión Gamma**. Es una excelente alternativa a transformar la variable con logaritmos y usar un modelo lineal.
 
-* **¿Es Y un tiempo hasta un evento con una asimetría muy pronunciada?**
-Considera una **Regresión Inversa Gaussiana**.
+* **¿Es Y un tiempo hasta un evento con una asimetría muy pronunciada?** Considera una **Regresión Inversa Gaussiana**.
